@@ -34,7 +34,9 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl"/>
     
     <p:variable name="input-uri" select="base-uri(/)"/>
-
+    
+    <!-- TODO: validate input DTBook -->
+    
     <p:xslt name="output-dir-uri">
         <p:with-param name="href" select="concat($output-dir,'/')"/>
         <p:input port="source">

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+    <start>
+        <ref name="dtbook"/>
+    </start>
+
+    <define name="dtbook">
+        <element name="dtbook" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <attribute name="xml:lang"/>
+            <attribute name="version">
+                <value>2005-3</value>
+            </attribute>
+            <ref name="i18n"/>
+            <ref name="externalNamespaces"/>
+            <ref name="dtbookcontent"/>
+        </element>
+    </define>
+
+    <!-- meta: require dtb:uid -->
+    <!-- meta, are these required or optional?
+            dtb:uid
+            dc:Title
+            dc:Creator
+            dc:Contributor
+            dc:Date with scheme attribute (YYYY-MM-DD)
+            dc:Publisher
+            dc:Language
+            dc:Rights
+            dc:Subject
+            dc:Type
+            track:Guidelines
+            track:Supplier
+    -->
+
+    <define name="sidebar">
+        <!-- 3.2 Annotation -->
+        <element name="sidebar" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="attrs"/>
+            <attribute name="render">
+                <choice>
+                    <value>required</value>
+                    <value>optional</value>
+                </choice>
+            </attribute>
+            <zeroOrMore>
+                <choice>
+                    <ref name="flow"/>
+                    <ref name="hd"/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="blockquote">
+        <!-- 3.4 Block Quotations -->
+        <element name="blockquote" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="attrs"/>
+            <optional>
+                <attribute name="cite"/>
+            </optional>
+            <zeroOrMore>
+                <choice>
+                    <ref name="pagenum"/>
+                    <ref name="block"/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="bodymatter">
+        <!-- 3.5 Bodymatter -->
+        <element name="bodymatter" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="attrs"/>
+            <zeroOrMore>
+                <choice>
+                    <ref name="level"/>
+                    <ref name="level1"/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="strong">
+        <!-- 3.6 Bold Emphasis -->
+        <element name="strong" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="attrs"/>
+            <ref name="inline"/>
+        </element>
+    </define>
+
+    <define name="docauthor">
+        <!-- 3.7 Book Author or Editor -->
+        <element name="docauthor" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="attrs"/>
+            <ref name="inline"/>
+        </element>
+    </define>
+
+    <define name="book">
+        <!-- 3.8 Book Content -->
+        <element name="book" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="attrs"/>
+            <optional>
+                <ref name="frontmatter"/>
+            </optional>
+            <optional>
+                <ref name="bodymatter"/>
+            </optional>
+            <optional>
+                <ref name="rearmatter"/>
+            </optional>
+        </element>
+    </define>
+
+    <define name="doctitle">
+        <!-- 3.9 Book Title -->
+        <element name="doctitle" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="attrs"/>
+            <ref name="inline"/>
+        </element>
+    </define>
+
+    <define name="note.chapter">
+        <!-- 3.10 Chapter Notes (endnotes) -->
+        <element name="note" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="attrsrqd"/>
+            <oneOrMore>
+                <ref name="block"/>
+                <ref name="inlineblock"/>
+            </oneOrMore>
+        </element>
+    </define>
+    
+    <define name="block-code">
+        <!-- 3.11 Code (block) -->
+        <element name="code" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <optional>
+                <attribute name="id"/>
+            </optional>
+            <optional>
+                <attribute name="class"/>
+            </optional>
+            <optional>
+                <attribute name="title"/>
+            </optional>
+            <attribute name="xml:space">
+                <value>preserve</value>
+            </attribute>
+            <ref name="externalNamespaces"/>
+            <ref name="i18n"/>
+            <optional>
+                <attribute name="smilref"/>
+            </optional>
+            <ref name="showin"/>
+        </element>
+    </define>
+    
+    <define name="inline-code">
+        <!-- 3.11 Code (inline) -->
+        <element name="code" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <optional>
+                <attribute name="id"/>
+            </optional>
+            <optional>
+                <attribute name="class"/>
+            </optional>
+            <optional>
+                <attribute name="title"/>
+            </optional>
+            <optional>
+                <attribute name="xml:space">
+                    <choice>
+                        <value>default</value>
+                        <value>preserve</value>
+                    </choice>
+                </attribute>
+            </optional>
+            <ref name="externalNamespaces"/>
+            <ref name="i18n"/>
+            <optional>
+                <attribute name="smilref"/>
+            </optional>
+            <ref name="showin"/>
+        </element>
+    </define>
+
+    <define name="head">
+        <!-- 3.12 Container for Bibliographic Information -->
+        <element name="head" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="i18n"/>
+            <optional>
+                <attribute name="profile"/>
+            </optional>
+            <ref name="headmisc"/>
+        </element>
+    </define>
+    
+    <define name="dd">
+        <!-- 3.13 Definition Data -->
+        <element name="dd" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="attrs"/>
+            <ref name="flow"/>
+        </element>
+    </define>
+    
+    <define name="dl">
+        <!-- 3.14 Definition List -->
+        <element name="dl" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="attrs"/>
+            <oneOrMore>
+                <choice>
+                    <ref name="dt"/>
+                    <ref name="dd"/>
+                    <ref name="pagenum"/>
+                </choice>
+            </oneOrMore>
+        </element>
+    </define>
+    
+    <define name="dt">
+        <!-- 3.15 Definition Term -->
+        <element name="dt" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="attrs"/>
+            <ref name="inline"/>
+        </element>
+    </define>
+    
+    <define name="note.footnote">
+        <!-- 3.16 Footnotes -->
+        <element name="note" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <attribute name="id"/>
+            <ref name="attrsrqd"/>
+            <oneOrMore>
+                <ref name="block"/>
+                <ref name="inlineblock"/>
+            </oneOrMore>
+        </element>
+    </define>
+    
+    <define name="note.endnote">
+        <!-- 3.10 Chapter Notes (endnotes) -->
+        <element name="note" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <attribute name="id"/>
+            <ref name="attrsrqd"/>
+            <oneOrMore>
+                <ref name="block"/>
+                <ref name="inlineblock"/>
+            </oneOrMore>
+        </element>
+    </define>
+
+</grammar>
