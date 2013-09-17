@@ -774,9 +774,10 @@
 <!-- =================== Imported Parameter Entity Names =================== -->
 <!-- Many parameter entities come from the [XHTML11STRICT] strict DTD. -->
 <!-- jpritchett@rfbd.org:  2006-07-06.  Removed definition of %StyleSheet, since it is no longer needed -->
-<grammar ns="http://www.daisy.org/z3986/2005/dtbook/" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar ns="http://www.w3.org/1999/xhtml" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+    xmlns:epub="http://www.idpf.org/2007/ops">
     <start>
-        <ref name="dtbook"/>
+        <ref name="dtbook"/> <!-- html -->
     </start>
     <define name="Character">
         <data type="string" datatypeLibrary=""/>
@@ -860,23 +861,23 @@
     <!-- jpritchett@rfbd.org:  2007-12-10.  Removed %dtbookblock; (no longer referenced) -->
     <define name="dtbookblocknoimggroup">
         <choice>
-            <ref name="author"/>
-            <ref name="prodnote"/>
-            <ref name="sidebar"/>
-            <ref name="note"/>
-            <ref name="annotation"/>
-            <ref name="externalblock"/>
+            <ref name="author"/> <!-- p -->
+            <ref name="prodnote"/> <!-- aside -->
+            <ref name="sidebar"/> <!-- section -->
+            <ref name="note"/> <!-- aside -->
+            <ref name="annotation"/> <!-- aside -->
+            <ref name="externalblock"/> <!-- () -->
         </choice>
     </define>
     <!-- block elements unique to dtbook without imggroup. -->
     <!-- HB: 2004-03-25 36f: caption: removed from % inlineinblock. -->
     <define name="inlineinblock">
         <choice>
-            <ref name="a"/>
-            <ref name="cite"/>
-            <ref name="samp"/>
-            <ref name="kbd"/>
-            <ref name="pagenum"/>
+            <ref name="a"/> <!-- a -->
+            <ref name="cite"/> <!-- cite -->
+            <ref name="samp"/> <!-- samp -->
+            <ref name="kbd"/> <!-- kbd -->
+            <ref name="pagenum"/> <!-- span -->
         </choice>
     </define>
     <!-- inlines that may alternatively be in block elements. -->
@@ -888,23 +889,23 @@
     <!-- jpritchett@rfbd.org:  2006-07-07.  Added %externalFlow; to %block; -->
     <define name="block">
         <choice>
-            <ref name="p"/>
-            <ref name="list"/>
-            <ref name="dl"/>
-            <ref name="div"/>
-            <ref name="blockquote"/>
-            <ref name="img"/>
-            <ref name="imggroup"/>
-            <ref name="poem"/>
-            <ref name="linegroup"/>
-            <ref name="byline"/>
-            <ref name="dateline"/>
-            <ref name="epigraph"/>
-            <ref name="table"/>
-            <ref name="address"/>
-            <ref name="line"/>
-            <ref name="dtbookblocknoimggroup"/>
-            <ref name="externalFlow"/>
+            <ref name="p"/> <!-- p -->
+            <ref name="list"/> <!-- ol, ul -->
+            <ref name="dl"/> <!-- dl -->
+            <ref name="div"/> <!-- div -->
+            <ref name="blockquote"/> <!-- blockquote -->
+            <ref name="img"/> <!-- img -->
+            <ref name="imggroup"/> <!-- figure -->
+            <ref name="poem"/> <!-- p -->
+            <ref name="linegroup"/> <!-- p -->
+            <ref name="byline"/> <!-- cite -->
+            <ref name="dateline"/> <!-- p -->
+            <ref name="epigraph"/> <!-- p -->
+            <ref name="table"/> <!-- table -->
+            <ref name="address"/> <!-- address -->
+            <ref name="line"/> <!-- span -->
+            <ref name="dtbookblocknoimggroup"/> <!-- p, aside, section -->
+            <ref name="externalFlow"/> <!-- () -->
         </choice>
     </define>
     <!--
@@ -922,20 +923,20 @@
   -->
     <define name="blocknoimggroup">
         <choice>
-            <ref name="p"/>
-            <ref name="list"/>
-            <ref name="dl"/>
-            <ref name="div"/>
-            <ref name="blockquote"/>
-            <ref name="poem"/>
-            <ref name="linegroup"/>
-            <ref name="byline"/>
-            <ref name="dateline"/>
-            <ref name="epigraph"/>
-            <ref name="table"/>
-            <ref name="address"/>
-            <ref name="line"/>
-            <ref name="dtbookblocknoimggroup"/>
+            <ref name="p"/> <!-- p -->
+            <ref name="list"/> <!-- ol, ul -->
+            <ref name="dl"/> <!-- dl -->
+            <ref name="div"/> <!-- div -->
+            <ref name="blockquote"/> <!-- blockquote -->
+            <ref name="poem"/> <!-- p -->
+            <ref name="linegroup"/> <!-- p -->
+            <ref name="byline"/> <!-- cite -->
+            <ref name="dateline"/> <!-- p -->
+            <ref name="epigraph"/> <!-- p -->
+            <ref name="table"/> <!-- table -->
+            <ref name="address"/> <!-- address -->
+            <ref name="line"/> <!-- span -->
+            <ref name="dtbookblocknoimggroup"/> <!-- p, aside, section -->
         </choice>
     </define>
     <!--
@@ -954,12 +955,12 @@
   -->
     <define name="docblockorinline">
         <choice>
-            <ref name="doctitle"/>
-            <ref name="docauthor"/>
-            <ref name="covertitle"/>
-            <ref name="bridgehead"/>
-            <ref name="block"/>
-            <ref name="inlineinblock"/>
+            <ref name="doctitle"/> <!-- h1 -->
+            <ref name="docauthor"/> <!-- p -->
+            <ref name="covertitle"/> <!-- h1 -->
+            <ref name="bridgehead"/> <!-- p -->
+            <ref name="block"/> <!-- p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section -->
+            <ref name="inlineinblock"/> <!-- a, cite, samp, kbd, span -->
         </choice>
     </define>
     <!-- common non-head elements for use with level or levelN -->
@@ -993,7 +994,7 @@
                 </choice>
             </attribute>
         </optional>
-        <ref name="externalNamespaces"/>
+        <ref name="externalNamespaces"/> <!-- () -->
     </define>
     <!--
     coreattrs are attributes permissible for most elements
@@ -1037,7 +1038,7 @@
     <!-- jpritchett@rfbd.org:  2006-07-07  Added comment deprecating @showin -->
     <define name="showin">
         <optional>
-            <attribute name="showin">
+            <attribute name="data-showin">
                 <choice>
                     <value>xxx</value>
                     <value>xxp</value>
@@ -1097,9 +1098,6 @@
     <define name="attrs">
         <ref name="coreattrs"/>
         <ref name="i18n"/>
-        <optional>
-            <attribute name="smilref"/>
-        </optional>
         <ref name="showin"/>
     </define>
     <!--
@@ -1144,12 +1142,9 @@
                 </choice>
             </attribute>
         </optional>
-        <optional>
-            <attribute name="smilref"/>
-        </optional>
         <ref name="i18n"/>
         <ref name="showin"/>
-        <ref name="externalNamespaces"/>
+        <ref name="externalNamespaces"/> <!-- () -->
     </define>
     <!--
     %attrsrqd; includes required id and implied class,
@@ -1172,8 +1167,8 @@
   -->
     <!-- ========================= Document Structure ========================== -->
     <define name="dtbookcontent">
-        <ref name="head"/>
-        <ref name="book"/>
+        <ref name="head"/> <!-- head -->
+        <ref name="book"/> <!-- body -->
     </define>
     <!--
     dtbookContent designates that each dtbook has a <head> of
@@ -1185,9 +1180,12 @@
     in <book>.
   -->
     <define name="dtbook">
-        <element name="dtbook">
+        <element name="html">
+            <attribute name="epub:prefix">
+                <value>z3998: http://www.daisy.org/z3998/2012/vocab/structure/#</value>
+            </attribute>
             <ref name="attlist.dtbook"/>
-            <ref name="dtbookcontent"/>
+            <ref name="dtbookcontent"/> <!-- head, body -->
         </element>
     </define>
     <!--
@@ -1223,20 +1221,15 @@
     <!-- jpritchett@rfbd.org:  2006-07-07.  Added %externalNamespaces; -->
     <!-- jpritchett@rfbd.org:  2007-12-07  updated @version to 2005-3 -->
     <define name="attlist.dtbook" combine="interleave">
-        <optional>
-            <attribute name="version" a:defaultValue="2005-3">
-                <value type="string" datatypeLibrary="">2005-3</value>
-            </attribute>
-        </optional>
         <ref name="i18n"/>
-        <ref name="externalNamespaces"/>
+        <ref name="externalNamespaces"/> <!-- () -->
     </define>
     <!-- ======================== Document Head Metadata ======================= -->
     <!-- HB: 2004-03-25 36: % headmisc: removed style. -->
     <define name="headmisc">
         <choice>
-            <ref name="meta"/>
-            <ref name="link"/>
+            <ref name="meta"/> <!-- meta -->
+            <ref name="link"/> <!-- link -->
         </choice>
     </define>
     <!-- optional head elements -->
@@ -1250,9 +1243,43 @@
     <define name="head">
         <element name="head">
             <ref name="attlist.head"/>
+            <element name="meta">
+                <attribute name="charset">
+                    <value>utf-8</value>
+                </attribute>
+            </element>
+            <element name="title">
+                <text/>
+            </element>
+            <element name="meta">
+                <attribute name="name">
+                    <value>viewport</value>
+                </attribute>
+                <attribute name="content">
+                    <value>width=device-width</value>
+                </attribute>
+            </element>
+            <element name="meta">
+                <attribute name="name">
+                    <value>track:Guidelines</value>
+                </attribute>
+                <attribute name="content">
+                    <value>2013-1</value>
+                </attribute>
+            </element>
             <zeroOrMore>
-                <ref name="headmisc"/>
+                <ref name="headmisc"/> <!-- meta, link -->
             </zeroOrMore>
+            <optional>
+                <element name="link">
+                    <attribute name="rel">
+                        <value>profile</value>
+                    </attribute>
+                    <attribute name="href">
+                        <ref name="URI"/>
+                    </attribute>
+                </element>
+            </optional>
         </element>
     </define>
     <!--
@@ -1263,11 +1290,7 @@
   -->
     <define name="attlist.head" combine="interleave">
         <ref name="i18n"/>
-        <optional>
-            <attribute name="profile">
-                <ref name="URI"/>
-            </attribute>
-        </optional>
+        <!-- NOTE: profile moved to head as link element -->
     </define>
     <!--
     HB: 2004-04-02 title: element removed from head,
@@ -1295,11 +1318,6 @@
     <define name="attlist.link" combine="interleave">
         <ref name="attrs"/>
         <optional>
-            <attribute name="charset">
-                <ref name="Charset"/>
-            </attribute>
-        </optional>
-        <optional>
             <attribute name="href">
                 <ref name="URI"/>
             </attribute>
@@ -1316,11 +1334,6 @@
         </optional>
         <optional>
             <attribute name="rel">
-                <ref name="LinkTypes"/>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="rev">
                 <ref name="LinkTypes"/>
             </attribute>
         </optional>
@@ -1397,22 +1410,18 @@
     <head>, which contains metadata, precedes <book>.
   -->
     <define name="book">
-        <element name="book">
-            <ref name="attlist.book"/>
-            <optional>
-                <ref name="frontmatter"/>
-            </optional>
-            <optional>
-                <ref name="bodymatter"/>
-            </optional>
-            <optional>
-                <ref name="rearmatter"/>
-            </optional>
+        <element name="body">
+            <choice>
+                <ref name="frontmatter"/> <!-- body -->
+                <ref name="bodymatter"/> <!-- body -->
+                <ref name="rearmatter"/> <!-- body -->
+            </choice>
+            <!--<ref name="attlist.book"/>-->
         </element>
     </define>
-    <define name="attlist.book" combine="interleave">
+    <!--<define name="attlist.book" combine="interleave">
         <ref name="attrs"/>
-    </define>
+    </define>-->
     <!-- ======================== Book Major Structures ======================== -->
     <!--
     Use: frontmatter usually contains <doctitle> and <docauthor>, as
@@ -1428,22 +1437,23 @@
     <!-- HB: 2004-04-08 frontmatter: added covertitle. -->
     <!-- jpritchett@rfbd.org:  2006-07-06 doctitle now required, order of doctitle, covertitle, docauthor fixed. -->
     <define name="frontmatter">
-        <element name="frontmatter">
-            <ref name="attlist.frontmatter"/>
-            <ref name="doctitle"/>
-            <optional>
-                <ref name="covertitle"/>
-            </optional>
-            <zeroOrMore>
-                <ref name="docauthor"/>
-            </zeroOrMore>
-            <zeroOrMore>
-                <choice>
-                    <ref name="level"/>
-                    <ref name="level1"/>
-                </choice>
-            </zeroOrMore>
-        </element>
+        <attribute name="epub:type">
+            <value>frontmatter</value>
+        </attribute>
+        <ref name="attlist.frontmatter"/>
+        <ref name="doctitle"/> <!-- h1 -->
+        <optional>
+            <ref name="covertitle"/> <!-- h1 -->
+        </optional>
+        <zeroOrMore>
+            <ref name="docauthor"/> <!-- p -->
+        </zeroOrMore>
+        <zeroOrMore>
+            <choice>
+                <ref name="level"/> <!-- section -->
+                <ref name="level1"/> <!-- section -->
+            </choice>
+        </zeroOrMore>
     </define>
     <define name="attlist.frontmatter" combine="interleave">
         <ref name="attrs"/>
@@ -1458,15 +1468,16 @@
     level or level1 container is required.
   -->
     <define name="bodymatter">
-        <element name="bodymatter">
-            <ref name="attlist.bodymatter"/>
-            <oneOrMore>
-                <choice>
-                    <ref name="level"/>
-                    <ref name="level1"/>
-                </choice>
-            </oneOrMore>
-        </element>
+        <attribute name="epub:type">
+            <value>bodymatter</value>
+        </attribute>
+        <ref name="attlist.bodymatter"/>
+        <oneOrMore>
+            <choice>
+                <ref name="level"/> <!-- section -->
+                <ref name="level1"/> <!-- section -->
+            </choice>
+        </oneOrMore>
     </define>
     <define name="attlist.bodymatter" combine="interleave">
         <ref name="attrs"/>
@@ -1481,15 +1492,16 @@
     level or level1 container is required.
   -->
     <define name="rearmatter">
-        <element name="rearmatter">
-            <ref name="attlist.rearmatter"/>
-            <oneOrMore>
-                <choice>
-                    <ref name="level"/>
-                    <ref name="level1"/>
-                </choice>
-            </oneOrMore>
-        </element>
+        <attribute name="epub:type">
+            <value>backmatter</value>
+        </attribute>
+        <ref name="attlist.rearmatter"/>
+        <oneOrMore>
+            <choice>
+                <ref name="level"/> <!-- section -->
+                <ref name="level1"/> <!-- section -->
+            </choice>
+        </oneOrMore>
     </define>
     <define name="attlist.rearmatter" combine="interleave">
         <ref name="attrs"/>
@@ -1521,31 +1533,31 @@
     content model was not valid.
   -->
     <define name="level">
-        <element name="level">
+        <element name="section">
             <ref name="attlist.level"/>
             <choice>
                 <group>
-                    <ref name="hd"/>
+                    <ref name="hd"/> <!-- h1 -->
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                 </group>
                 <group>
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                     <optional>
-                        <ref name="hd"/>
+                        <ref name="hd"/> <!-- h1 -->
                         <oneOrMore>
                             <choice>
-                                <ref name="docblockorinline"/>
-                                <ref name="level"/>
+                                <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                                <ref name="level"/> <!-- section -->
                             </choice>
                         </oneOrMore>
                     </optional>
@@ -1562,9 +1574,7 @@
   -->
     <define name="attlist.level" combine="interleave">
         <ref name="attrs"/>
-        <optional>
-            <attribute name="depth"/>
-        </optional>
+        <!-- depth is implicit -->
     </define>
     <!-- ============ dtbook Hierarchic Structure level1 ... level6 ============ -->
     <!--
@@ -1592,31 +1602,31 @@
     content model was not valid.
   -->
     <define name="level1">
-        <element name="level1">
+        <element name="section">
             <ref name="attlist.level1"/>
             <choice>
                 <group>
-                    <ref name="h1"/>
+                    <ref name="h1"/> <!-- h1 -->
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level2"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level2"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                 </group>
                 <group>
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level2"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level2"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                     <optional>
-                        <ref name="h1"/>
+                        <ref name="h1"/> <!-- h1 -->
                         <oneOrMore>
                             <choice>
-                                <ref name="docblockorinline"/>
-                                <ref name="level2"/>
+                                <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                                <ref name="level2"/> <!-- section -->
                             </choice>
                         </oneOrMore>
                     </optional>
@@ -1649,31 +1659,31 @@
     content model was not valid.
   -->
     <define name="level2">
-        <element name="level2">
+        <element name="section">
             <ref name="attlist.level2"/>
             <choice>
                 <group>
-                    <ref name="h2"/>
+                    <ref name="h2"/> <!-- h1 -->
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level3"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level3"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                 </group>
                 <group>
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level3"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level3"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                     <optional>
-                        <ref name="h2"/>
+                        <ref name="h2"/> <!-- h1 -->
                         <oneOrMore>
                             <choice>
-                                <ref name="docblockorinline"/>
-                                <ref name="level3"/>
+                                <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                                <ref name="level3"/> <!-- section -->
                             </choice>
                         </oneOrMore>
                     </optional>
@@ -1707,31 +1717,31 @@
     At most one heading <h3> may be used.
   -->
     <define name="level3">
-        <element name="level3">
+        <element name="section">
             <ref name="attlist.level3"/>
             <choice>
                 <group>
-                    <ref name="h3"/>
+                    <ref name="h3"/> <!-- h1 -->
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level4"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level4"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                 </group>
                 <group>
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level4"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level4"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                     <optional>
-                        <ref name="h3"/>
+                        <ref name="h3"/> <!-- h1 -->
                         <oneOrMore>
                             <choice>
-                                <ref name="docblockorinline"/>
-                                <ref name="level4"/>
+                                <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                                <ref name="level4"/> <!-- section -->
                             </choice>
                         </oneOrMore>
                     </optional>
@@ -1764,31 +1774,31 @@
     At most one heading <h4> may be used.
   -->
     <define name="level4">
-        <element name="level4">
+        <element name="section">
             <ref name="attlist.level4"/>
             <choice>
                 <group>
-                    <ref name="h4"/>
+                    <ref name="h4"/> <!-- h1 -->
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level5"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level5"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                 </group>
                 <group>
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level5"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level5"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                     <optional>
-                        <ref name="h4"/>
+                        <ref name="h4"/> <!-- h1 -->
                         <oneOrMore>
                             <choice>
-                                <ref name="docblockorinline"/>
-                                <ref name="level5"/>
+                                <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                                <ref name="level5"/> <!-- section -->
                             </choice>
                         </oneOrMore>
                     </optional>
@@ -1821,31 +1831,31 @@
     At most one heading <h5> may be used.
   -->
     <define name="level5">
-        <element name="level5">
+        <element name="section">
             <ref name="attlist.level5"/>
             <choice>
                 <group>
-                    <ref name="h5"/>
+                    <ref name="h5"/> <!-- h1 -->
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level6"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level6"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                 </group>
                 <group>
                     <oneOrMore>
                         <choice>
-                            <ref name="docblockorinline"/>
-                            <ref name="level6"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level6"/> <!-- section -->
                         </choice>
                     </oneOrMore>
                     <optional>
-                        <ref name="h5"/>
+                        <ref name="h5"/> <!-- h1 -->
                         <oneOrMore>
                             <choice>
-                                <ref name="docblockorinline"/>
-                                <ref name="level6"/>
+                                <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
+                                <ref name="level6"/> <!-- section -->
                             </choice>
                         </oneOrMore>
                     </optional>
@@ -1882,23 +1892,23 @@
     At most one heading <h6> may be used.
   -->
     <define name="level6">
-        <element name="level6">
+        <element name="section">
             <ref name="attlist.level6"/>
             <choice>
                 <group>
-                    <ref name="h6"/>
+                    <ref name="h6"/> <!-- h1 -->
                     <oneOrMore>
-                        <ref name="docblockorinline"/>
+                        <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
                     </oneOrMore>
                 </group>
                 <group>
                     <oneOrMore>
-                        <ref name="docblockorinline"/>
+                        <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
                     </oneOrMore>
                     <optional>
-                        <ref name="h6"/>
+                        <ref name="h6"/> <!-- h1 -->
                         <oneOrMore>
-                            <ref name="docblockorinline"/>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
                         </oneOrMore>
                     </optional>
                 </group>
@@ -1911,15 +1921,15 @@
     <!-- ============================= Text Markup ============================= -->
     <define name="phrase">
         <choice>
-            <ref name="em"/>
-            <ref name="strong"/>
-            <ref name="dfn"/>
-            <ref name="code"/>
-            <ref name="samp"/>
-            <ref name="kbd"/>
-            <ref name="cite"/>
-            <ref name="abbr"/>
-            <ref name="acronym"/>
+            <ref name="em"/> <!-- em -->
+            <ref name="strong"/> <!-- strong -->
+            <ref name="dfn"/> <!-- dfn -->
+            <ref name="code"/> <!-- code -->
+            <ref name="samp"/> <!-- samp -->
+            <ref name="kbd"/> <!-- kbd -->
+            <ref name="cite"/> <!-- cite -->
+            <ref name="abbr"/> <!-- abbr -->
+            <ref name="acronym"/> <!-- abbr -->
         </choice>
     </define>
     <!-- inline text elements -->
@@ -1929,15 +1939,15 @@
   -->
     <define name="special">
         <choice>
-            <ref name="a"/>
-            <ref name="img"/>
-            <ref name="imggroup"/>
-            <ref name="br"/>
-            <ref name="q"/>
-            <ref name="sub"/>
-            <ref name="sup"/>
-            <ref name="span"/>
-            <ref name="bdo"/>
+            <ref name="a"/> <!-- a -->
+            <ref name="img"/> <!-- img -->
+            <ref name="imggroup"/> <!-- figure -->
+            <ref name="br"/> <!-- br -->
+            <ref name="q"/> <!-- q -->
+            <ref name="sub"/> <!-- sub -->
+            <ref name="sup"/> <!-- sup -->
+            <ref name="span"/> <!-- span -->
+            <ref name="bdo"/> <!-- bdo -->
         </choice>
     </define>
     <!-- special inline text elements -->
@@ -1947,14 +1957,14 @@
   -->
     <define name="specialnoa">
         <choice>
-            <ref name="img"/>
-            <ref name="imggroup"/>
-            <ref name="br"/>
-            <ref name="q"/>
-            <ref name="sub"/>
-            <ref name="sup"/>
-            <ref name="span"/>
-            <ref name="bdo"/>
+            <ref name="img"/> <!-- img -->
+            <ref name="imggroup"/> <!-- figure -->
+            <ref name="br"/> <!-- br -->
+            <ref name="q"/> <!-- q -->
+            <ref name="sub"/> <!-- sub -->
+            <ref name="sup"/> <!-- sup -->
+            <ref name="span"/> <!-- span -->
+            <ref name="bdo"/> <!-- bdo -->
         </choice>
     </define>
     <!-- specialnoa inline text elements for anchor <a> -->
@@ -1962,23 +1972,23 @@
     <!-- jpritchett@rfbd.org:  2006-08-11.  Add %externalFlow to %dtbookinline; -->
     <define name="dtbookinline">
         <choice>
-            <ref name="sent"/>
-            <ref name="w"/>
-            <ref name="pagenum"/>
-            <ref name="prodnote"/>
-            <ref name="annoref"/>
-            <ref name="noteref"/>
-            <ref name="externalinline"/>
-            <ref name="externalFlow"/>
+            <ref name="sent"/> <!-- span -->
+            <ref name="w"/> <!-- span -->
+            <ref name="pagenum"/> <!-- span -->
+            <ref name="prodnote"/> <!-- aside -->
+            <ref name="annoref"/> <!-- a -->
+            <ref name="noteref"/> <!-- a -->
+            <ref name="externalinline"/> <!-- () -->
+            <ref name="externalFlow"/> <!-- () -->
         </choice>
     </define>
     <!-- dtbook added inline text elements -->
     <define name="inline">
         <choice>
             <text/>
-            <ref name="phrase"/>
-            <ref name="special"/>
-            <ref name="dtbookinline"/>
+            <ref name="phrase"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr -->
+            <ref name="special"/> <!-- a, img, figure, br, q, sub, sup, span, bdo -->
+            <ref name="dtbookinline"/> <!-- span, aside, a -->
         </choice>
     </define>
     <!-- inline text elements -->
@@ -1990,9 +2000,9 @@
     <define name="inlinenoa">
         <choice>
             <text/>
-            <ref name="phrase"/>
-            <ref name="specialnoa"/>
-            <ref name="dtbookinline"/>
+            <ref name="phrase"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr -->
+            <ref name="specialnoa"/> <!-- img, figure, br, q, sub, sup, span, bdo -->
+            <ref name="dtbookinline"/> <!-- span, aside, a -->
         </choice>
     </define>
     <!-- inlinenoa excludes nested <a> -->
@@ -2000,52 +2010,52 @@
     <define name="inlines">
         <choice>
             <text/>
-            <ref name="phrase"/>
-            <ref name="special"/>
-            <ref name="pagenum"/>
-            <ref name="w"/>
-            <ref name="prodnote"/>
-            <ref name="annoref"/>
-            <ref name="noteref"/>
-            <ref name="externalinline"/>
-            <ref name="externalFlow"/>
+            <ref name="phrase"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr -->
+            <ref name="special"/> <!-- a, img, figure, br, q, sub, sup, span, bdo -->
+            <ref name="pagenum"/> <!-- span -->
+            <ref name="w"/> <!-- span -->
+            <ref name="prodnote"/> <!-- aside -->
+            <ref name="annoref"/> <!-- a -->
+            <ref name="noteref"/> <!-- a -->
+            <ref name="externalinline"/> <!-- () -->
+            <ref name="externalFlow"/> <!-- () -->
         </choice>
     </define>
     <!-- inlines excludes direct nesting of sentences <sent> -->
     <define name="inlinew">
         <choice>
             <text/>
-            <ref name="phrase"/>
-            <ref name="special"/>
-            <ref name="externalinline"/>
-            <ref name="externalFlow"/>
+            <ref name="phrase"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr -->
+            <ref name="special"/> <!-- a, img, figure, br, q, sub, sup, span, bdo -->
+            <ref name="externalinline"/> <!-- () -->
+            <ref name="externalFlow"/> <!-- () -->
         </choice>
     </define>
     <!-- inlinew for word <w> excludes any of the %dtbookinline; -->
     <define name="inlinenopagenum">
         <choice>
             <text/>
-            <ref name="phrase"/>
-            <ref name="special"/>
-            <ref name="sent"/>
-            <ref name="w"/>
-            <ref name="annoref"/>
-            <ref name="noteref"/>
-            <ref name="externalinline"/>
+            <ref name="phrase"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr -->
+            <ref name="special"/> <!-- a, img, figure, br, q, sub, sup, span, bdo -->
+            <ref name="sent"/> <!-- span -->
+            <ref name="w"/> <!-- span -->
+            <ref name="annoref"/> <!-- a -->
+            <ref name="noteref"/> <!-- a -->
+            <ref name="externalinline"/> <!-- () -->
         </choice>
     </define>
     <!-- inlinenopagenum excludes direct <pagenum> in <table> <th> and <td>. -->
     <define name="inlinenoprodnote">
         <choice>
             <text/>
-            <ref name="phrase"/>
-            <ref name="special"/>
-            <ref name="sent"/>
-            <ref name="w"/>
-            <ref name="pagenum"/>
-            <ref name="annoref"/>
-            <ref name="noteref"/>
-            <ref name="externalinline"/>
+            <ref name="phrase"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr -->
+            <ref name="special"/> <!-- a, img, figure, br, q, sub, sup, span, bdo -->
+            <ref name="sent"/> <!-- span -->
+            <ref name="w"/> <!-- span -->
+            <ref name="pagenum"/> <!-- span -->
+            <ref name="annoref"/> <!-- a -->
+            <ref name="noteref"/> <!-- a -->
+            <ref name="externalinline"/> <!-- () -->
         </choice>
     </define>
     <!-- inlinenoprodnote excludes direct <prodnote>, as they shouldn't nest -->
@@ -2053,17 +2063,17 @@
     <!-- jpritchett@rfbd.org:  2006-07-07.  Added %externalFlow to %flow;, %flownopagenum; -->
     <define name="flow">
         <choice>
-            <ref name="inlinenoprodnote"/>
-            <ref name="blocknoimggroup"/>
-            <ref name="externalFlow"/>
+            <ref name="inlinenoprodnote"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo -->
+            <ref name="blocknoimggroup"/> <!-- p, ol, ul, dl, div, blockquote, cite, table, address, span -->
+            <ref name="externalFlow"/> <!-- () -->
         </choice>
     </define>
     <!-- flow elements add inlinenoprodnote to block -->
     <define name="flownopagenum">
         <choice>
-            <ref name="inlinenopagenum"/>
-            <ref name="blocknoimggroup"/>
-            <ref name="externalFlow"/>
+            <ref name="inlinenopagenum"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo -->
+            <ref name="blocknoimggroup"/> <!-- p, ol, ul, dl, div, blockquote, cite, table, address, span -->
+            <ref name="externalFlow"/> <!-- () -->
         </choice>
     </define>
     <!--
@@ -2092,15 +2102,19 @@
     conjunction with <linenum> in documents with numbered lines.
   -->
     <define name="line">
-        <element name="line">
+        <element name="span">
+            <attribute name="data-type">
+                <value>line</value>
+            </attribute>
             <ref name="attlist.line"/>
+            <optional>
+                <ref name="linenum"/> <!-- () -->
+            </optional>
             <zeroOrMore>
-                <choice>
-                    <ref name="inline"/>
-                    <ref name="linenum"/>
-                </choice>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
+        <ref name="br"/> <!-- br -->
     </define>
     <define name="attlist.line" combine="interleave">
         <ref name="attrs"/>
@@ -2108,13 +2122,7 @@
     <!-- HB: 2004-03-30 poem: added linenum use. -->
     <!-- Use: linenum contains a line number, for example in legal text, or <poem>. -->
     <define name="linenum">
-        <element name="linenum">
-            <ref name="attlist.linenum"/>
-            <text/>
-        </element>
-    </define>
-    <define name="attlist.linenum" combine="interleave">
-        <ref name="attrs"/>
+        <attribute name="value"/>
     </define>
     <!--
     Use: address contains a location at which a person or agency
@@ -2129,8 +2137,8 @@
             <ref name="attlist.address"/>
             <zeroOrMore>
                 <choice>
-                    <ref name="inline"/>
-                    <ref name="line"/>
+                    <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
+                    <ref name="line"/> <!-- span -->
                 </choice>
             </zeroOrMore>
         </element>
@@ -2153,7 +2161,7 @@
         <element name="div">
             <ref name="attlist.div"/>
             <oneOrMore>
-                <ref name="docblockorinline"/>
+                <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section, a, samp, kbd -->
             </oneOrMore>
         </element>
     </define>
@@ -2173,10 +2181,10 @@
     <!-- jpritchett@rfbd.org 2007-12-17:  Changed %coreattrs to %attrs -->
     <!-- jpritchett@rfbd.org 2007-12-17:  Expanded content model to include inlines -->
     <define name="title">
-        <element name="title">
+        <element name="h1">
             <ref name="attlist.title"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2189,10 +2197,13 @@
     <author> typically occurs within <poem>, <blockquote> or <cite>.
   -->
     <define name="author">
-        <element name="author">
+        <element name="p">
+            <attribute name="epub:type">
+                <value>z3998:author</value>
+            </attribute>
             <ref name="attlist.author"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2215,10 +2226,13 @@
     version.
   -->
     <define name="prodnote">
-        <element name="prodnote">
+        <element name="aside">
+            <attribute name="epub:type">
+                <value>z3998:production</value>
+            </attribute>
             <ref name="attlist.prodnote"/>
             <zeroOrMore>
-                <ref name="flow"/>
+                <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, cite, table, address, span -->
             </zeroOrMore>
         </element>
     </define>
@@ -2242,12 +2256,13 @@
   -->
     <define name="attlist.prodnote" combine="interleave">
         <ref name="attrs"/>
-        <optional>
-            <attribute name="imgref">
-                <data type="IDREFS"/>
-            </attribute>
-        </optional>
-        <attribute name="render">
+        <!--
+            @imgref removed. The relationship is stored in img/@longdesc.
+            NOTE: an alternative would be to use aria-describedat, linking from the image to the prodnote:
+            https://dvcs.w3.org/hg/aria-unofficial/raw-file/tip/describedat.html
+        -->
+        <attribute name="data-render">
+            <!-- TODO: any better way of defining skippability here? -->
             <choice>
                 <value>required</value>
                 <value>optional</value>
@@ -2260,12 +2275,15 @@
     from the main text block on a page. It may have a heading <hd>.
   -->
     <define name="sidebar">
-        <element name="sidebar">
+        <element name="section">
+            <attribute name="epub:type">
+                <value>sidebar</value>
+            </attribute>
             <ref name="attlist.sidebar"/>
             <zeroOrMore>
                 <choice>
-                    <ref name="flow"/>
-                    <ref name="hd"/>
+                    <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, cite, table, address, span -->
+                    <ref name="hd"/> <!-- h1 -->
                 </choice>
             </zeroOrMore>
         </element>
@@ -2278,7 +2296,8 @@
   -->
     <define name="attlist.sidebar" combine="interleave">
         <ref name="attrs"/>
-        <attribute name="render">
+        <attribute name="data-render">
+            <!-- TODO: any better way of defining skippability here? -->
             <choice>
                 <value>required</value>
                 <value>optional</value>
@@ -2290,12 +2309,15 @@
     <note id="yyy"> is by <noteref idref="#yyy">.
   -->
     <define name="note">
-        <element name="note">
+        <element name="aside">
+            <attribute name="epub:type">
+                <value>note</value>
+            </attribute>
             <ref name="attlist.note"/>
             <oneOrMore>
                 <choice>
-                    <ref name="block"/>
-                    <ref name="inlineinblock"/>
+                    <ref name="block"/> <!-- p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section -->
+                    <ref name="inlineinblock"/> <!-- a, cite, samp, kbd, span -->
                 </choice>
             </oneOrMore>
         </element>
@@ -2311,12 +2333,15 @@
     reference to <annotation id="xxx"> is by <annoref idref="#xxx">.
   -->
     <define name="annotation">
-        <element name="annotation">
+        <element name="aside">
+            <attribute name="epub:type">
+                <value>annotation</value>
+            </attribute>
             <ref name="attlist.annotation"/>
             <oneOrMore>
                 <choice>
-                    <ref name="block"/>
-                    <ref name="inlineinblock"/>
+                    <ref name="block"/> <!-- p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section -->
+                    <ref name="inlineinblock"/> <!-- a, cite, samp, kbd, span -->
                 </choice>
             </oneOrMore>
         </element>
@@ -2338,10 +2363,13 @@
   -->
     <!-- MM: 2005-04-22 epigraph - changed ATTLIST to %attrs; -->
     <define name="epigraph">
-        <element name="epigraph">
+        <element name="p">
+            <attribute name="epub:type">
+                <value>epigraph</value>
+            </attribute>
             <ref name="attlist.epigraph"/>
             <zeroOrMore>
-                <ref name="flow"/>
+                <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, cite, table, address, span -->
             </zeroOrMore>
         </element>
     </define>
@@ -2355,10 +2383,13 @@
   -->
     <!-- MM: 2005-04-22 byline - changed ATTLIST to %attrs; -->
     <define name="byline">
-        <element name="byline">
+        <element name="cite">
+            <attribute name="data-type">
+                <value>byline</value>
+            </attribute>
             <ref name="attlist.byline"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2372,10 +2403,13 @@
   -->
     <!-- MM: 2005-04-22 dateline - changed ATTLIST to %attrs; -->
     <define name="dateline">
-        <element name="dateline">
+        <element name="p">
+            <attribute name="data-type">
+                <value>dateline</value>
+            </attribute>
             <ref name="attlist.dateline"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2391,26 +2425,29 @@
   -->
     <!-- Use: linegroup provides means to group a set of lines of a <poem>. -->
     <define name="linegroup">
-        <element name="linegroup">
+        <element name="p">
+            <attribute name="data-type">
+                <value>linegroup</value>
+            </attribute>
             <ref name="attlist.linegroup"/>
             <zeroOrMore>
                 <choice>
-                    <ref name="hd"/>
-                    <ref name="dateline"/>
-                    <ref name="epigraph"/>
-                    <ref name="byline"/>
-                    <ref name="linegroup"/>
-                    <ref name="line"/>
-                    <ref name="pagenum"/>
-                    <ref name="prodnote"/>
-                    <ref name="noteref"/>
-                    <ref name="annoref"/>
-                    <ref name="note"/>
-                    <ref name="annotation"/>
-                    <ref name="p"/>
-                    <ref name="blockquote"/>
-                    <ref name="img"/>
-                    <ref name="imggroup"/>
+                    <ref name="hd"/> <!-- h1 -->
+                    <ref name="dateline"/> <!-- p -->
+                    <ref name="epigraph"/> <!-- p -->
+                    <ref name="byline"/> <!-- cite -->
+                    <ref name="linegroup"/> <!-- p -->
+                    <ref name="line"/> <!-- span -->
+                    <ref name="pagenum"/> <!-- span -->
+                    <ref name="prodnote"/> <!-- aside -->
+                    <ref name="noteref"/> <!-- a -->
+                    <ref name="annoref"/> <!-- a -->
+                    <ref name="note"/> <!-- aside -->
+                    <ref name="annotation"/> <!-- aside -->
+                    <ref name="p"/> <!-- p -->
+                    <ref name="blockquote"/> <!-- blockquote -->
+                    <ref name="img"/> <!-- img -->
+                    <ref name="imggroup"/> <!-- figure -->
                 </choice>
             </zeroOrMore>
         </element>
@@ -2428,22 +2465,25 @@
     <!-- Use: poem is a complete <poem> or fragment thereof. -->
     <!-- MM: 2005-04-22 poem - changed ATTLIST to %attrs; -->
     <define name="poem">
-        <element name="poem">
+        <element name="p">
+            <attribute name="epub:type">
+                <value>z3998:poem</value>
+            </attribute>
             <ref name="attlist.poem"/>
             <zeroOrMore>
                 <choice>
-                    <ref name="title"/>
-                    <ref name="author"/>
-                    <ref name="hd"/>
-                    <ref name="dateline"/>
-                    <ref name="epigraph"/>
-                    <ref name="byline"/>
-                    <ref name="linegroup"/>
-                    <ref name="line"/>
-                    <ref name="pagenum"/>
-                    <ref name="img"/>
-                    <ref name="imggroup"/>
-                    <ref name="sidebar"/>
+                    <ref name="title"/> <!-- h1 -->
+                    <ref name="author"/> <!-- p -->
+                    <ref name="hd"/> <!-- h1 -->
+                    <ref name="dateline"/> <!-- p -->
+                    <ref name="epigraph"/> <!-- p -->
+                    <ref name="byline"/> <!-- cite -->
+                    <ref name="linegroup"/> <!-- p -->
+                    <ref name="line"/> <!-- span -->
+                    <ref name="pagenum"/> <!-- span -->
+                    <ref name="img"/> <!-- img -->
+                    <ref name="imggroup"/> <!-- figure -->
+                    <ref name="sidebar"/> <!-- section -->
                 </choice>
             </zeroOrMore>
         </element>
@@ -2460,7 +2500,7 @@
         <element name="a">
             <ref name="attlist.a"/>
             <zeroOrMore>
-                <ref name="inlinenoa"/>
+                <ref name="inlinenoa"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, img, figure, br, q, sub, sup, span, bdo, aside, a -->
             </zeroOrMore>
         </element>
     </define>
@@ -2528,11 +2568,6 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="rev">
-                <ref name="LinkTypes"/>
-            </attribute>
-        </optional>
-        <optional>
             <attribute name="accesskey">
                 <ref name="Character"/>
             </attribute>
@@ -2543,11 +2578,8 @@
             </attribute>
         </optional>
         <optional>
-            <attribute name="external" a:defaultValue="false">
-                <choice>
-                    <value>true</value>
-                    <value>false</value>
-                </choice>
+            <attribute name="target">
+                <value>_blank</value>
             </attribute>
         </optional>
     </define>
@@ -2560,7 +2592,7 @@
         <element name="em">
             <ref name="attlist.em"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2575,7 +2607,7 @@
         <element name="strong">
             <ref name="attlist.strong"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2591,7 +2623,7 @@
         <element name="dfn">
             <ref name="attlist.dfn"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2606,7 +2638,7 @@
         <element name="kbd">
             <ref name="attlist.kbd"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2618,7 +2650,7 @@
         <element name="code">
             <ref name="attlist.code"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2650,11 +2682,8 @@
                 </choice>
             </attribute>
         </optional>
-        <ref name="externalNamespaces"/>
+        <ref name="externalNamespaces"/> <!-- () -->
         <ref name="i18n"/>
-        <optional>
-            <attribute name="smilref"/>
-        </optional>
         <ref name="showin"/>
     </define>
     <!--
@@ -2666,7 +2695,7 @@
         <element name="samp">
             <ref name="attlist.samp"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2698,11 +2727,8 @@
                 </choice>
             </attribute>
         </optional>
-        <ref name="externalNamespaces"/>
+        <ref name="externalNamespaces"/> <!-- () -->
         <ref name="i18n"/>
-        <optional>
-            <attribute name="smilref"/>
-        </optional>
         <ref name="showin"/>
     </define>
     <!-- Use: cite marks a reference (or citation) to another document. -->
@@ -2712,9 +2738,9 @@
             <ref name="attlist.cite"/>
             <zeroOrMore>
                 <choice>
-                    <ref name="inline"/>
-                    <ref name="title"/>
-                    <ref name="author"/>
+                    <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
+                    <ref name="title"/> <!-- h1 -->
+                    <ref name="author"/> <!-- p -->
                 </choice>
             </zeroOrMore>
         </element>
@@ -2731,7 +2757,7 @@
         <element name="abbr">
             <ref name="attlist.abbr"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2749,10 +2775,13 @@
     Contrast with <abbr>.
   -->
     <define name="acronym">
-        <element name="acronym">
+        <element name="abbr">
+            <attribute name="data-type">
+                <value>acronym</value>
+            </attribute>
             <ref name="attlist.acronym"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2768,11 +2797,8 @@
     <define name="attlist.acronym" combine="interleave">
         <ref name="attrs"/>
         <optional>
-            <attribute name="pronounce">
-                <choice>
-                    <value>yes</value>
-                    <value>no</value>
-                </choice>
+            <attribute name="style">
+                <value>-epub-speak-as: spell-out;</value>
             </attribute>
         </optional>
     </define>
@@ -2785,7 +2811,7 @@
         <element name="sub">
             <ref name="attlist.sub"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2801,7 +2827,7 @@
         <element name="sup">
             <ref name="attlist.sup"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2820,7 +2846,7 @@
         <element name="span">
             <ref name="attlist.span"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2835,7 +2861,7 @@
         <element name="bdo">
             <ref name="attlist.bdo"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -2862,18 +2888,18 @@
                 <value>rtl</value>
             </choice>
         </attribute>
-        <optional>
-            <attribute name="smilref"/>
-        </optional>
         <ref name="showin"/>
     </define>
     <!-- =================== dtbook Inline Sentence and Word =================== -->
     <!-- Use: sent marks a sentence. -->
     <define name="sent">
-        <element name="sent">
+        <element name="span">
+            <attribute name="epub:type">
+                <value>z3998:sentence</value>
+            </attribute>
             <ref name="attlist.sent"/>
             <zeroOrMore>
-                <ref name="inlines"/>
+                <ref name="inlines"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo -->
             </zeroOrMore>
         </element>
     </define>
@@ -2882,10 +2908,13 @@
     </define>
     <!-- Use: w marks a word. -->
     <define name="w">
-        <element name="w">
+        <element name="span">
+            <attribute name="epub:type">
+                <value>z3998:word</value>
+            </attribute>
             <ref name="attlist.w"/>
             <zeroOrMore>
-                <ref name="inlinew"/>
+                <ref name="inlinew"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo -->
             </zeroOrMore>
         </element>
     </define>
@@ -2903,7 +2932,10 @@
     preceding the first item of content on a new page.
   -->
     <define name="pagenum">
-        <element name="pagenum">
+        <element name="span">
+            <attribute name="epub:type">
+                <value>pagebreak</value>
+            </attribute>
             <ref name="attlist.pagenum"/>
             <text/>
         </element>
@@ -2923,11 +2955,11 @@
     <define name="attlist.pagenum" combine="interleave">
         <ref name="attrsrqd"/>
         <optional>
-            <attribute name="page" a:defaultValue="normal">
+            <attribute name="data-type" a:defaultValue="page-normal">
                 <choice>
-                    <value>front</value>
-                    <value>normal</value>
-                    <value>special</value>
+                    <value>page-front</value>
+                    <value>page-normal</value>
+                    <value>page-special</value>
                 </choice>
             </attribute>
         </optional>
@@ -2938,7 +2970,10 @@
     are independently skippable.
   -->
     <define name="noteref">
-        <element name="noteref">
+        <element name="a">
+            <attribute name="epub:type">
+                <value>noteref</value>
+            </attribute>
             <ref name="attlist.noteref"/>
             <text/>
         </element>
@@ -2959,7 +2994,7 @@
   -->
     <define name="attlist.noteref" combine="interleave">
         <ref name="attrs"/>
-        <attribute name="idref">
+        <attribute name="href">
             <ref name="URI"/>
         </attribute>
         <optional>
@@ -2976,7 +3011,10 @@
     be allowed to be turned off in a DTB application.
   -->
     <define name="annoref">
-        <element name="annoref">
+        <element name="a">
+            <attribute name="epub:type">
+                <value>annoref</value>
+            </attribute>
             <ref name="attlist.annoref"/>
             <text/>
         </element>
@@ -2997,7 +3035,7 @@
   -->
     <define name="attlist.annoref" combine="interleave">
         <ref name="attrs"/>
-        <attribute name="idref">
+        <attribute name="href">
             <ref name="URI"/>
         </attribute>
         <optional>
@@ -3016,7 +3054,7 @@
         <element name="q">
             <ref name="attlist.q"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3101,6 +3139,12 @@
             <ref name="Text"/>
         </attribute>
         <optional>
+            <!--
+                 As of March 2013, the longdesc attribute has been reinstated in HTML5
+                 as an extension specification, and is now available as the
+                 HTML5 Image Description Extension (W3C working draft):
+                 http://www.w3.org/TR/html-longdesc/
+            -->
             <attribute name="longdesc">
                 <ref name="URI"/>
             </attribute>
@@ -3137,14 +3181,14 @@
     4) one or more <pagenum> if the image group spans several pages.
   -->
     <define name="imggroup">
-        <element name="imggroup">
+        <element name="figure">
             <ref name="attlist.imggroup"/>
             <oneOrMore>
                 <choice>
-                    <ref name="prodnote"/>
-                    <ref name="img"/>
-                    <ref name="caption"/>
-                    <ref name="pagenum"/>
+                    <ref name="prodnote"/> <!-- aside -->
+                    <ref name="img"/> <!-- img -->
+                    <ref name="caption.figure"/> <!-- caption -->
+                    <ref name="pagenum"/> <!-- span -->
                 </choice>
             </oneOrMore>
         </element>
@@ -3160,9 +3204,9 @@
             <ref name="attlist.p"/>
             <zeroOrMore>
                 <choice>
-                    <ref name="inline"/>
-                    <ref name="list"/>
-                    <ref name="dl"/>
+                    <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
+                    <ref name="list"/> <!-- ol, ul -->
+                    <ref name="dl"/> <!-- dl -->
                 </choice>
             </zeroOrMore>
         </element>
@@ -3177,10 +3221,13 @@
     Contrast with covertitle.
   -->
     <define name="doctitle">
-        <element name="doctitle">
+        <element name="h1">
+            <attribute name="epub:type">
+                <value>fulltitle</value>
+            </attribute>
             <ref name="attlist.doctitle"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3193,10 +3240,13 @@
     or <cite>.
   -->
     <define name="docauthor">
-        <element name="docauthor">
+        <element name="p">
+            <attribute name="epub:type">
+                <value>z3998:author</value>
+            </attribute>
             <ref name="attlist.docauthor"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3209,10 +3259,13 @@
   -->
     <!-- HB: 2004-04-08 covertitle: element added -->
     <define name="covertitle">
-        <element name="covertitle">
+        <element name="h1">
+            <attribute name="epub:type">
+                <value>covertitle</value>
+            </attribute>
             <ref name="attlist.covertitle"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3228,7 +3281,7 @@
         <element name="h1">
             <ref name="attlist.h1"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3237,10 +3290,10 @@
     </define>
     <!-- Use: h2 contains the text of the heading for a <level2> structure. -->
     <define name="h2">
-        <element name="h2">
+        <element name="h1">
             <ref name="attlist.h2"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3249,10 +3302,10 @@
     </define>
     <!-- Use: h3 contains the text of the heading for a <level3> structure. -->
     <define name="h3">
-        <element name="h3">
+        <element name="h1">
             <ref name="attlist.h3"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3261,10 +3314,10 @@
     </define>
     <!-- Use: h4 contains the text of the heading for a <level4> structure. -->
     <define name="h4">
-        <element name="h4">
+        <element name="h1">
             <ref name="attlist.h4"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3273,10 +3326,10 @@
     </define>
     <!-- Use: h5 contains the text of the heading for a <level5> structure. -->
     <define name="h5">
-        <element name="h5">
+        <element name="h1">
             <ref name="attlist.h5"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3285,10 +3338,10 @@
     </define>
     <!-- Use: h6 contains the text of the heading for a <level6> structure. -->
     <define name="h6">
-        <element name="h6">
+        <element name="h1">
             <ref name="attlist.h6"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3310,10 +3363,13 @@
     See also <hd>.
   -->
     <define name="bridgehead">
-        <element name="bridgehead">
+        <element name="p">
+            <attribute name="epub:type">
+                <value>bridgehead</value>
+            </attribute>
             <ref name="attlist.bridgehead"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3325,10 +3381,10 @@
     or <sidebar>.
   -->
     <define name="hd">
-        <element name="hd">
+        <element name="h1">
             <ref name="attlist.hd"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3352,8 +3408,8 @@
             <ref name="attlist.blockquote"/>
             <zeroOrMore>
                 <choice>
-                    <ref name="pagenum"/>
-                    <ref name="block"/>
+                    <ref name="pagenum"/> <!-- span -->
+                    <ref name="block"/> <!-- p, ol, ul, dl, div, blockquote, img, figure, cite, table, address, span, aside, section -->
                 </choice>
             </zeroOrMore>
         </element>
@@ -3384,8 +3440,8 @@
             <oneOrMore>
                 <choice>
                     <ref name="dt"/>
-                    <ref name="dd"/>
-                    <ref name="pagenum"/>
+                    <ref name="dd"/> <!-- dd -->
+                    <ref name="pagenum"/> <!-- span -->
                 </choice>
             </oneOrMore>
         </element>
@@ -3401,7 +3457,7 @@
         <element name="dt">
             <ref name="attlist.dt"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3418,7 +3474,7 @@
         <element name="dd">
             <ref name="attlist.dd"/>
             <zeroOrMore>
-                <ref name="flow"/>
+                <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, cite, table, address, span -->
             </zeroOrMore>
         </element>
     </define>
@@ -3436,17 +3492,33 @@
     and ul for unordered, but not pl for preformatted.
   -->
     <define name="list">
-        <element name="list">
-            <ref name="attlist.list"/>
-            <oneOrMore>
+        <choice>
+            <element name="ol">
                 <choice>
-                    <ref name="hd"/>
-                    <ref name="prodnote"/>
-                    <ref name="li"/>
-                    <ref name="pagenum"/>
+                    <ref name="attlist.list.ordered"/>
+                    <ref name="attlist.list.preformatted"/>
                 </choice>
-            </oneOrMore>
-        </element>
+                <oneOrMore>
+                    <choice>
+                        <ref name="hd"/> <!-- h1 -->
+                        <ref name="prodnote"/> <!-- aside -->
+                        <ref name="li"/>
+                        <ref name="pagenum"/> <!-- span -->
+                    </choice>
+                </oneOrMore>
+            </element>
+            <element name="ul">
+                <ref name="attlist.list.unordered"/>
+                <oneOrMore>
+                    <choice>
+                        <ref name="hd"/> <!-- h1 -->
+                        <ref name="prodnote"/> <!-- aside -->
+                        <ref name="li"/>
+                        <ref name="pagenum"/> <!-- span -->
+                    </choice>
+                </oneOrMore>
+            </element>
+        </choice>
     </define>
     <!--
     HB: 2004-03-25 36d: list: added start attribute to indicate initial
@@ -3494,20 +3566,11 @@
     make any needed visual distinction for nested unordered lists, or if the
     list type is "pl" preformatted the bullet form may be there.
   -->
-    <define name="attlist.list" combine="interleave">
+    <define name="attlist.list.ordered" combine="interleave">
         <ref name="attrs"/>
-        <attribute name="type">
-            <choice>
-                <value>ol</value>
-                <value>ul</value>
-                <value>pl</value>
-            </choice>
-        </attribute>
+        <!-- ordered list -->
         <optional>
-            <attribute name="depth"/>
-        </optional>
-        <optional>
-            <attribute name="enum">
+            <attribute name="type">
                 <choice>
                     <value>1</value>
                     <value>a</value>
@@ -3520,6 +3583,20 @@
         <optional>
             <attribute name="start"/>
         </optional>
+        <!-- depth is implicit (count number of ancestor list elements + 1) -->
+    </define>
+    
+    <define name="attlist.list.preformatted" combine="interleave">
+        <ref name="attrs"/>
+        <attribute name="style">
+            <value>list-style-type: none;</value>
+        </attribute>
+        <!-- depth is implicit (count number of ancestor list elements + 1) -->
+    </define>
+    
+    <define name="attlist.list.unordered" combine="interleave">
+        <ref name="attrs"/>
+        <!-- depth is implicit (count number of ancestor list elements + 1) -->
     </define>
     <!--
     Use: li marks each list item in a <list>. <li> content may be
@@ -3534,8 +3611,8 @@
             <ref name="attlist.li"/>
             <zeroOrMore>
                 <choice>
-                    <ref name="flow"/>
-                    <ref name="lic"/>
+                    <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, cite, table, address, span -->
+                    <ref name="lic"/> <!-- span -->
                 </choice>
             </zeroOrMore>
         </element>
@@ -3552,10 +3629,13 @@
     occurrence for the current writing direction of the <li>.
   -->
     <define name="lic">
-        <element name="lic">
+        <element name="span">
+            <attribute name="data-type">
+                <value>lic</value>
+            </attribute>
             <ref name="attlist.lic"/>
             <zeroOrMore>
-                <ref name="inline"/>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, aside -->
             </zeroOrMore>
         </element>
     </define>
@@ -3619,28 +3699,19 @@
     If no Trules is present then assume:
     'none' if border is absent or border='0' otherwise 'all'.
   -->
-    <define name="cellhalign">
+    <define name="cellhvalign">
+        <!-- values supported in HTML5 are left, center, right and justify -->
         <optional>
-            <attribute name="align">
-                <choice>
-                    <value>left</value>
-                    <value>center</value>
-                    <value>right</value>
-                    <value>justify</value>
-                    <value>char</value>
-                </choice>
+            <attribute name="style">
+                <data type="string">
+                    <param name="pattern">^vertical-align: (top|middle|bottom|baseline); (text-align: (left|center|right|justify);|text-align: right; padding-right: \d+ch;)$</param>
+                    
+                    <!-- NOTE: text-align: "{char}" right; is not currently supported and may be removed from the CSS3 draft; using padding-right instead. -->
+                </data>
             </attribute>
         </optional>
-        <optional>
-            <attribute name="char">
-                <ref name="Character"/>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="charoff">
-                <ref name="Length"/>
-            </attribute>
-        </optional>
+        <!-- the char attribute from the DTBook is used when calculating the CSS padding -->
+        <!-- the charoff attribute is removed (TODO: is this a problem?) -->
     </define>
     <!--
     % cellhalign
@@ -3660,18 +3731,6 @@
     by user preference. The recommended default alignment for
     <th> is center, and for <td> is left.
   -->
-    <define name="cellvalign">
-        <optional>
-            <attribute name="valign">
-                <choice>
-                    <value>top</value>
-                    <value>middle</value>
-                    <value>bottom</value>
-                    <value>baseline</value>
-                </choice>
-            </attribute>
-        </optional>
-    </define>
     <!--
     % cellvalign
     valign sets vertical alignment of content in a table cell.
@@ -3699,30 +3758,30 @@
         <element name="table">
             <ref name="attlist.table"/>
             <optional>
-                <ref name="caption"/>
+                <ref name="caption.table"/> <!-- caption -->
             </optional>
             <choice>
                 <zeroOrMore>
-                    <ref name="col"/>
+                    <ref name="col"/> <!-- col -->
                 </zeroOrMore>
                 <zeroOrMore>
-                    <ref name="colgroup"/>
+                    <ref name="colgroup"/> <!-- colgroup -->
                 </zeroOrMore>
             </choice>
             <optional>
-                <ref name="thead"/>
+                <ref name="thead"/> <!-- thead -->
             </optional>
             <optional>
-                <ref name="tfoot"/>
+                <ref name="tfoot"/> <!-- tfoot -->
             </optional>
             <choice>
                 <oneOrMore>
-                    <ref name="tbody"/>
+                    <ref name="tbody"/> <!-- tbody -->
                 </oneOrMore>
                 <oneOrMore>
                     <choice>
-                        <ref name="tr"/>
-                        <ref name="pagenum"/>
+                        <ref name="tr"/> <!-- tr -->
+                        <ref name="pagenum"/> <!-- span -->
                     </choice>
                 </oneOrMore>
             </choice>
@@ -3740,41 +3799,12 @@
   -->
     <define name="attlist.table" combine="interleave">
         <ref name="attrs"/>
-        <optional>
-            <attribute name="summary">
-                <ref name="Text"/>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="width">
-                <ref name="Length"/>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="border">
-                <ref name="Pixels"/>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="frame">
-                <ref name="TFrame"/>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="rules">
-                <ref name="TRules"/>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="cellspacing">
-                <ref name="Length"/>
-            </attribute>
-        </optional>
-        <optional>
-            <attribute name="cellpadding">
-                <ref name="Length"/>
-            </attribute>
-        </optional>
+        <!-- summary moved into table/caption/p[@data-type='table-summary'] -->
+        <!--
+            Most attributes are deprecated. Convert to CSS according to Mozilla:
+            http://hg.mozilla.org/mozilla-central/file/3fd770ef6a65/layout/style/html.css
+        -->
+        <attribute name="style"/>
     </define>
     <!-- HB: 2004-03-25 36f: caption: removed use for <img>. -->
     <!-- MM: 2004-09-15: caption: changed content model to %flow;. -->
@@ -3783,11 +3813,27 @@
     <table> it must follow immediately after the <table> start tag. If used
     with <imggroup> it is not so constrained.
   -->
-    <define name="caption">
+    <define name="caption.table">
+        <element name="caption">
+            <ref name="attlist.caption"/>
+            <optional>
+                <element name="p">
+                    <attribute name="data-type">
+                        <value>table-summary</value>
+                    </attribute>
+                    <ref name="Text"/>
+                </element>
+            </optional>
+            <zeroOrMore>
+                <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, cite, table, address, span -->
+            </zeroOrMore>
+        </element>
+    </define>
+    <define name="caption.figure">
         <element name="caption">
             <ref name="attlist.caption"/>
             <zeroOrMore>
-                <ref name="flow"/>
+                <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, cite, table, address, span -->
             </zeroOrMore>
         </element>
     </define>
@@ -3803,11 +3849,11 @@
   -->
     <define name="attlist.caption" combine="interleave">
         <ref name="attrs"/>
-        <optional>
-            <attribute name="imgref">
-                <data type="IDREFS"/>
-            </attribute>
-        </optional>
+        <!--
+            the imgref attribute for images is deleted. It is assumed that
+            the caption is nested correctly so that the reference is implicit.
+            TODO: is this an ok assumption to make?
+        -->
     </define>
     <!--
     Use: thead marks header information in a <table>, consisting of
@@ -3819,14 +3865,13 @@
         <element name="thead">
             <ref name="attlist.thead"/>
             <oneOrMore>
-                <ref name="tr"/>
+                <ref name="tr"/> <!-- tr -->
             </oneOrMore>
         </element>
     </define>
     <define name="attlist.thead" combine="interleave">
         <ref name="attrs"/>
-        <ref name="cellhalign"/>
-        <ref name="cellvalign"/>
+        <ref name="cellhvalign"/>
     </define>
     <!--
     Use: tfoot marks footer information in a <table>, consisting of
@@ -3839,14 +3884,13 @@
         <element name="tfoot">
             <ref name="attlist.tfoot"/>
             <oneOrMore>
-                <ref name="tr"/>
+                <ref name="tr"/> <!-- tr -->
             </oneOrMore>
         </element>
     </define>
     <define name="attlist.tfoot" combine="interleave">
         <ref name="attrs"/>
-        <ref name="cellhalign"/>
-        <ref name="cellvalign"/>
+        <ref name="cellhvalign"/>
     </define>
     <!--
     Use: tbody marks a group of rows in the main body of a <table>. If
@@ -3862,16 +3906,15 @@
             <ref name="attlist.tbody"/>
             <oneOrMore>
                 <choice>
-                    <ref name="tr"/>
-                    <ref name="pagenum"/>
+                    <ref name="tr"/> <!-- tr -->
+                    <ref name="pagenum"/> <!-- span -->
                 </choice>
             </oneOrMore>
         </element>
     </define>
     <define name="attlist.tbody" combine="interleave">
         <ref name="attrs"/>
-        <ref name="cellhalign"/>
-        <ref name="cellvalign"/>
+        <ref name="cellhvalign"/>
     </define>
     <!--
     Use: colgroup groups adjacent columns <col> that are semantically
@@ -3881,7 +3924,7 @@
         <element name="colgroup">
             <ref name="attlist.colgroup"/>
             <zeroOrMore>
-                <ref name="col"/>
+                <ref name="col"/> <!-- col -->
             </zeroOrMore>
         </element>
     </define>
@@ -3918,13 +3961,8 @@
                 <data type="NMTOKEN"/>
             </attribute>
         </optional>
-        <optional>
-            <attribute name="width">
-                <ref name="MultiLength"/>
-            </attribute>
-        </optional>
-        <ref name="cellhalign"/>
-        <ref name="cellvalign"/>
+        <!-- TODO: add an optional 'width' to @style attribute -->
+        <ref name="cellhvalign"/>
     </define>
     <!--
     Use: col elements define the alignment properties for cells in
@@ -3964,13 +4002,8 @@
                 <data type="NMTOKEN"/>
             </attribute>
         </optional>
-        <optional>
-            <attribute name="width">
-                <ref name="MultiLength"/>
-            </attribute>
-        </optional>
-        <ref name="cellhalign"/>
-        <ref name="cellvalign"/>
+        <!-- TODO: add an optional 'width' to @style attribute -->
+        <ref name="cellhvalign"/>
     </define>
     <!-- Use: tr marks one row of a <table> containing <th> or <td> cells. -->
     <define name="tr">
@@ -3978,8 +4011,8 @@
             <ref name="attlist.tr"/>
             <oneOrMore>
                 <choice>
-                    <ref name="th"/>
-                    <ref name="td"/>
+                    <ref name="th"/> <!-- th -->
+                    <ref name="td"/> <!-- td -->
                 </choice>
             </oneOrMore>
         </element>
@@ -3999,15 +4032,14 @@
   -->
     <define name="attlist.tr" combine="interleave">
         <ref name="attrs"/>
-        <ref name="cellhalign"/>
-        <ref name="cellvalign"/>
+        <ref name="cellhvalign"/>
     </define>
     <!-- Use: th indicates a table cell containing header information. -->
     <define name="th">
         <element name="th">
             <ref name="attlist.th"/>
             <zeroOrMore>
-                <ref name="flownopagenum"/>
+                <ref name="flownopagenum"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address -->
             </zeroOrMore>
         </element>
     </define>
@@ -4041,14 +4073,19 @@
   -->
     <define name="attlist.th" combine="interleave">
         <ref name="attrs"/>
-        <optional>
+        
+        <!-- TODO: put in some ARIA attribute? -->
+        <!--<optional>
             <attribute name="abbr">
                 <ref name="Text"/>
             </attribute>
-        </optional>
-        <optional>
+        </optional>-->
+        
+        <!-- TODO: delete? -->
+        <!--<optional>
             <attribute name="axis"/>
-        </optional>
+        </optional>-->
+        
         <optional>
             <attribute name="headers">
                 <data type="IDREFS"/>
@@ -4069,15 +4106,14 @@
                 <data type="NMTOKEN"/>
             </attribute>
         </optional>
-        <ref name="cellhalign"/>
-        <ref name="cellvalign"/>
+        <ref name="cellhvalign"/>
     </define>
     <!-- Use: td indicates a table cell containing data. -->
     <define name="td">
         <element name="td">
             <ref name="attlist.td"/>
             <zeroOrMore>
-                <ref name="flownopagenum"/>
+                <ref name="flownopagenum"/> <!-- em, strong, dfn, code, samp, kbd, cite, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address -->
             </zeroOrMore>
         </element>
     </define>
@@ -4111,14 +4147,19 @@
   -->
     <define name="attlist.td" combine="interleave">
         <ref name="attrs"/>
-        <optional>
+        
+        <!-- TODO: put in some ARIA attribute? -->
+        <!--<optional>
             <attribute name="abbr">
                 <ref name="Text"/>
             </attribute>
-        </optional>
-        <optional>
+        </optional>-->
+        
+        <!-- TODO: delete? -->
+        <!--<optional>
             <attribute name="axis"/>
-        </optional>
+        </optional>-->
+        
         <optional>
             <attribute name="headers">
                 <data type="IDREFS"/>
@@ -4139,8 +4180,7 @@
                 <data type="NMTOKEN"/>
             </attribute>
         </optional>
-        <ref name="cellhalign"/>
-        <ref name="cellvalign"/>
+        <ref name="cellhvalign"/>
     </define>
 </grammar>
 <!-- End dtbook-2005-3.dtd -->
