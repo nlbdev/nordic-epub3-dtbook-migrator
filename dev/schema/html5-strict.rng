@@ -1433,9 +1433,20 @@
             <!-- HTML content model: a & abbr & address & article & aside & audio & b & bdi & bdo & blockquote & br & button & canvas & cite & code & data & datalist & del & details & dfn & dialog & div & dl & em & embed & fieldset & figure & footer & form & h1 & h2 & h3 & h4 & h5 & h6 & header & hr & i & iframe & img & input & ins & kbd & keygen & label & link & main & map & mark & math & menu & meta & meter & nav & noscript & object & ol & output & p & pre & progress & q & ruby & s & samp & script & section & select & small & span & strong & style & sub & sup & svg & table & template & textarea & time & u & ul & var & video & wbr & (text) -->
             <!-- Strict content model: (h1 p)? (section | article) -->
             <choice>
-                <ref name="frontmatter"/> <!-- h1, p, section, article -->
-                <ref name="bodymatter"/> <!-- section, article -->
-                <ref name="rearmatter"/> <!-- section, article -->
+                <choice>
+                    <ref name="frontmatter"/> <!-- h1, p, section, article -->
+                    <ref name="bodymatter"/> <!-- section, article -->
+                    <ref name="rearmatter"/> <!-- section, article -->
+                </choice>
+                <oneOrMore>
+                    <element name="section">
+                        <choice>
+                            <ref name="frontmatter"/> <!-- h1, p, section, article -->
+                            <ref name="bodymatter"/> <!-- section, article -->
+                            <ref name="rearmatter"/> <!-- section, article -->
+                        </choice>
+                    </element>
+                </oneOrMore>
             </choice>
             <!-- attributes defined by frontmatter/bodymatter/rearmatter -->
         </element>
@@ -3301,8 +3312,9 @@
         </attribute>
         <optional>
             <!--
-                 As of March 2013, the longdesc attribute has been reinstated in HTML5
-                 as an extension specification, and is now available as the
+                 The longdesc attribute was originally removed in the HTML5 specification.
+                 However, as of March 2013, the longdesc attribute has been reinstated
+                 in HTML5 as an extension specification, and is now available as the
                  HTML5 Image Description Extension (W3C working draft):
                  http://www.w3.org/TR/html-longdesc/
             -->
@@ -3345,7 +3357,7 @@
         <element name="figure">
             <!-- HTML content model: figcaption? ( a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text) )* figcaption? -->
             <!-- Strict content model: figcaption? (aside | img | span)* figcaption? -->
-            <!-- STRICT NOTE: In HTML there can be at most one figcaption per imggroup, and it must be either the first or last child of the imggroup. As a result, multiple captions in DTBook are merged into one figcaption in HTML. -->
+            <!-- STRICT NOTE: In HTML there can be at most one figcaption per figure, and it must be either the first or last child of the figure. As a result, multiple captions in DTBook must be merged into one figcaption in HTML. -->
             <ref name="attlist.imggroup"/>
             <choice>
                 <group>
@@ -3629,7 +3641,7 @@
             STRICT NOTE: spans (pagenum equivalent in HTML) are not allowed as direct children of dl.
             They are allowed as children of dt and dd however. The pagenums should be moved to its
             closest preceding dt or dd element as its last child (or as the first preceding sibling
-            of the dl element itself if it is the first child) when converting from dtbook to HTML,
+            of the dl element itself if it is the first child) when converting from DTBook to HTML,
             and vice versa.
         -->
         <optional>
@@ -4044,7 +4056,7 @@
     </define>
     <define name="caption.figure">
         <element name="figcaption">
-            <!-- STRICT NOTE: In DTBook, captions and images can appear in any order. In DTBook, the captions has to occur at the beginning or end of an imggroup. -->
+          <!-- STRICT NOTE: In DTBook, captions and images can appear in any order. In HTML5, the figcaption has to occur at the beginning or end of an imggroup. When transforming a DTBook with multiple captions in the same imggroup to HTML5, each caption will be wrapped in separate div elements inside the figcaption. If some images have captions and some don’t, then the empty captions should be represented as empty <div data-type=”caption”/> elements. This allows for proper conversion back to DTBook, as well as the ability to visually associate the captions and images using CSS. -->
             <choice>
                 <group>
                     <ref name="attlist.caption"/>
@@ -4084,8 +4096,8 @@
     <define name="attlist.caption" combine="interleave">
         <ref name="attrs"/>
         <!--
-            STRICT NOTE: the imgref attribute for images is deleted. It is assumed that
-            the caption is nested correctly so that the reference is implicit.
+            STRICT NOTE: the imgref attribute for images is deleted. The images now reference
+            the caption instead of the other way around, using the longdesc attribute (see the img element).
         -->
     </define>
     <!--
@@ -4140,7 +4152,7 @@
             <oneOrMore>
                 <choice>
                     <ref name="tr"/> <!-- tr -->
-                    <!-- STRICT NOTE: spans (HTML equivalent for pagenums) are not allowed as direct children of the table element in HTML. They must be moved to the preceding cell (th,td) or to before the table starts. -->
+                  <!-- STRICT NOTE: spans (HTML equivalent for pagenums) are not allowed as direct children of the tbody element in HTML. They must be moved to the preceding cell (th/td) or to before the table starts. -->
                 </choice>
             </oneOrMore>
         </element>
@@ -4308,9 +4320,9 @@
     <define name="attlist.th" combine="interleave">
         <ref name="attrs"/>
         
-        <!-- STRICT NOTE: The DTBook attribute "abbr" on the "th" element is ignored. -->
+        <!-- STRICT NOTE: The DTBook attribute "abbr" on the "th" element is ignored when converting to HTML5. It has no good equivalent in HTML5. -->
         
-        <!-- STRICT NOTE: The DTBook attribute "axis" on the "th" element is ignored. -->
+        <!-- STRICT NOTE: The DTBook attribute "axis" on the "th" element is ignored when converting to HTML5. -->
         
         <optional>
             <attribute name="headers">
@@ -4377,9 +4389,9 @@
     <define name="attlist.td" combine="interleave">
         <ref name="attrs"/>
         
-        <!-- STRICT NOTE: The DTBook attribute "abbr" on the "th" element is ignored. -->
+        <!-- STRICT NOTE: The DTBook attribute "abbr" on the "td" element is ignored when converting to HTML5. It has no good equivalent in HTML5. -->
         
-        <!-- STRICT NOTE: The DTBook attribute "axis" on the "td" element is ignored. -->
+        <!-- STRICT NOTE: The DTBook attribute "axis" on the "td" element is ignored when converting to HTML5. -->
         
         <optional>
             <attribute name="headers">
