@@ -1012,7 +1012,9 @@
             </attribute>
         </optional>
         <ref name="externalNamespaces"/> <!-- () -->
-        <attribute name="epub:type"/>
+        <optional>
+            <attribute name="epub:type"/>
+        </optional>
     </define>
     <!--
     coreattrs are attributes permissible for most elements

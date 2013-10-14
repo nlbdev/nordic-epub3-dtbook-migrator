@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/epub3-to-dtbook.xsl" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xslt-version="2.0">
+
+    <!-- dtbookblocknoimggroup -->
+    <!-- no point in testing -->
+
+    <!-- inlineinblock -->
+    <!-- no point in testing -->
+
+    <!-- block -->
+    <!-- no point in testing -->
+
+    <!-- blocknoimggroup -->
+    <!-- no point in testing -->
+    
+    <!-- blocknoimggroupnotable -->
+    <!-- no point in testing -->
+
+    <!-- docblockorinline -->
+    <!-- no point in testing -->
+
+    <!-- coreattrs -->
+
+    <!-- i18n -->
+    <x:scenario label="on a html element with the i18n attributes (xml:lang, dir)">
+        <x:context>
+            <html:html xml:lang="en" dir="ltr">...</html:html>
+        </x:context>
+        <x:expect label="the xml:lang attribute should be preserved" test="/*/@xml:lang='en'"/>
+        <x:expect label="the dir attribute should be preserved" test="/*/@dir='ltr'"/>
+    </x:scenario>
+
+    <!-- attrs -->
+
+    <!-- attrsrqd -->
+
+    <!-- dtbookcontent -->
+    <x:scenario label="dtbookcontent (head, body)">
+        <x:context>
+            <html:html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#">
+                <html:head>...</html:head>
+                <html:body>...</html:body>
+            </html:html>
+        </x:context>
+        <x:expect label="should be allowed inside the html element">
+            <dtbook:dtbook version="2005-3">
+                <dtbook:head>...</dtbook:head>
+                <dtbook:book>...</dtbook:book>
+            </dtbook:dtbook>
+        </x:expect>
+    </x:scenario>
+
+    <!-- dtbook -->
+    <x:scenario label="when processing a html element">
+        <x:context>
+            <html:html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#">...</html:html>
+        </x:context>
+        <x:expect label="the html element should be converted into a dtbook element and a version attribute should be added">
+            <dtbook:dtbook version="2005-3">...</dtbook:dtbook>
+        </x:expect>
+    </x:scenario>
+    <!-- dtbook -->
+
+    <!-- attlist.dtbook -->
+    <x:scenario label="on a html element with the epub:prefix attribute">
+        <x:context>
+            <html:html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#">...</html:html>
+        </x:context>
+        <x:expect label="the epub:prefix attribute should be removed" test="not(/*/@epub:prefix)"/>
+    </x:scenario>
+
+    <!-- headmisc -->
+    <!-- no point in testing headmisc -->
+
+    <!-- head -->
+    <x:scenario label="when processing a head element">
+        <x:context>
+            <html:head>...</html:head>
+        </x:context>
+        <x:expect label="the head element should be converted into a head element">
+            <dtbook:head>...</dtbook:head>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.head -->
+
+    <!-- link -->
+
+    <!-- attlist.link -->
+
+    <!-- meta -->
+
+    <!-- attlist.meta -->
+
+    <!-- book -->
+    <x:scenario label="when processing a body element">
+        <x:context>
+            <html:body>...</html:body>
+        </x:context>
+        <x:expect label="the body element should be converted into a book element">
+            <dtbook:book>...</dtbook:book>
+        </x:expect>
+    </x:scenario>
+
+    <!-- cover -->
+
+    <!-- frontmatter -->
+    <!-- frontmatter.titlepage -->
+    <!-- frontmatter.colophon -->
+    <!-- frontmatter.toc -->
+    <!-- frontmatter.foreword -->
+    <!-- frontmatter.introduction -->
+    <!-- frontmatter.other -->
+    <!-- frontmatter.generic -->
+
+    <!-- bodymatter -->
+    <!-- bodymatter.prologue -->
+    <!-- bodymatter.preface -->
+    <!-- bodymatter.part -->
+    <!-- bodymatter.chapter -->
+    <!-- bodymatter.conclusion -->
+    <!-- bodymatter.epilogue -->
+    <!-- bodymatter.generic -->
+
+    <!-- rearmatter -->
+    <!-- rearmatter.afterword -->
+    <!-- rearmatter.toc -->
+    <!-- rearmatter.index -->
+    <!-- rearmatter.appendix -->
+    <!-- rearmatter.glossary -->
+    <!-- rearmatter.footnotes -->
+    <!-- rearmatter.rearnotes -->
+    <!-- rearmatter.other -->
+    <!-- rearmatter.generic -->
+
+    <!-- level -->
+    <!-- level.content -->
+
+    <!-- attlist.level -->
+
+    <!-- level1 -->
+    <!-- level1.content -->
+    <!-- attlist.level1 -->
+
+    <!-- level2 -->
+    <!-- level2.content -->
+    <!-- attlist.level2 -->
+
+    <!-- level3 -->
+    <!-- level3.content -->
+    <!-- attlist.level3 -->
+
+    <!-- level4 -->
+    <!-- level4.content -->
+    <!-- attlist.level4 -->
+
+    <!-- level5 -->
+    <!-- level5.content -->
+    <!-- attlist.level5 -->
+
+    <!-- level6 -->
+    <!-- level6.content -->
+    <!-- attlist.level6 -->
+
+    <!-- phrase -->
+    <!-- phrasenodfn -->
+
+    <!-- special -->
+
+    <!-- specialnoa -->
+
+    <!-- dtbookinline -->
+    <!-- dtbookinlinenoa -->
+
+    <!-- inline -->
+
+    <!-- inlinenoa -->
+    <!-- inlinenodfn -->
+
+    <!-- inlines -->
+
+    <!-- inlinew -->
+
+    <!-- inlinenopagenum -->
+
+    <!-- inlinenoprodnote -->
+
+    <!-- flow -->
+
+    <!-- flownopagenum -->
+    <!-- flownotable -->
+
+    <!-- br -->
+
+    <!-- attlist.br -->
+
+    <!-- line -->
+    <!-- attlist.line -->
+
+    <!-- linenum -->
+
+    <!-- address -->
+    <!-- attlist.address -->
+
+    <!-- div -->
+
+    <!-- attlist.div -->
+
+    <!-- inlinetitle -->
+    <!-- title -->
+    <!-- title.content -->
+    <!-- attlist.title -->
+
+    <!-- author -->
+    <!-- attlist.author -->
+
+    <!-- prodnote -->
+
+    <!-- attlist.prodnote -->
+
+    <!-- sidebar -->
+
+    <!-- attlist.sidebar -->
+
+    <!-- note -->
+    <!-- attlist.note -->
+
+    <!-- annotation -->
+    <!-- attlist.annotation -->
+
+    <!-- epigraph -->
+    <!-- attlist.epigraph -->
+
+    <!-- byline -->
+    <!-- attlist.byline -->
+
+    <!-- dateline -->
+    <!-- attlist.dateline -->
+
+    <!-- linegroup -->
+
+    <!-- attlist.linegroup -->
+
+    <!-- poem -->
+    <!-- attlist.poem -->
+
+    <!-- a -->
+
+    <!-- attlist.a -->
+
+    <!-- em -->
+    <!-- attlist.em -->
+
+    <!-- strong -->
+    <!-- attlist.strong -->
+
+    <!-- dfn -->
+    <!-- attlist.dfn -->
+
+    <!-- kbd -->
+    <!-- attlist.kbd -->
+
+    <!-- code -->
+
+    <!-- attlist.code -->
+
+    <!-- samp -->
+
+    <!-- attlist.samp -->
+
+    <!-- cite -->
+    <!-- attlist.cite -->
+
+    <!-- abbr -->
+
+    <!-- attlist.abbr -->
+
+    <!-- acronym -->
+
+    <!-- attlist.acronym -->
+
+    <!-- sub -->
+    <!-- attlist.sub -->
+
+    <!-- sup -->
+    <!-- attlist.sup -->
+
+    <!-- span -->
+    <!-- attlist.span -->
+
+    <!-- bdo -->
+
+    <!-- attlist.bdo -->
+
+    <!-- sent -->
+    <!-- attlist.sent -->
+
+    <!-- w -->
+    <!-- attlist.w -->
+
+    <!-- pagenum -->
+
+    <!-- attlist.pagenum -->
+
+    <!-- noteref -->
+
+    <!-- attlist.noteref -->
+
+    <!-- annoref -->
+
+    <!-- attlist.annoref -->
+
+    <!-- q -->
+
+    <!-- attlist.q -->
+
+    <!-- Length -->
+
+    <!-- MultiLength -->
+
+    <!-- Pixels -->
+
+    <!-- img -->
+
+    <!-- attlist.img -->
+
+    <!-- imggroup -->
+    <!-- attlist.imggroup -->
+
+    <!-- p -->
+    <!-- attlist.p -->
+
+    <!-- doctitle -->
+    <!-- attlist.doctitle -->
+
+    <!-- docauthor -->
+    <!-- attlist.docauthor -->
+
+    <!-- covertitle -->
+    <!-- attlist.covertitle -->
+
+    <!-- h1 -->
+    <!-- attlist.h1 -->
+
+    <!-- h2 -->
+    <!-- attlist.h2 -->
+
+    <!-- h3 -->
+    <!-- attlist.h3 -->
+
+    <!-- h4 -->
+    <!-- attlist.h4 -->
+
+    <!-- h5 -->
+    <!-- attlist.h5 -->
+
+    <!-- h6 -->
+    <!-- attlist.h6 -->
+
+    <!-- bridgehead -->
+    <!-- attlist.bridgehead -->
+
+    <!-- hd -->
+    <!-- attlist.hd -->
+
+    <!-- blockquote -->
+
+    <!-- attlist.blockquote -->
+
+    <!-- dl -->
+    <!-- attlist.dl -->
+
+    <!-- dt -->
+    <!-- attlist.dt -->
+
+    <!-- dd -->
+    <!-- attlist.dd -->
+
+    <!-- list -->
+
+    <!-- attlist.list.ordered -->
+
+    <!-- attlist.list.preformatted -->
+
+    <!-- attlist.list.unordered -->
+
+    <!-- li -->
+    <!-- attlist.li -->
+
+    <!-- lic -->
+
+    <!-- attlist.lic -->
+
+    <!-- Scope -->
+
+    <!-- TFrame -->
+
+    <!-- TRules -->
+
+    <!-- cellhvalign -->
+
+    <!-- table -->
+
+    <!-- attlist.table -->
+
+    <!-- caption.table -->
+    <!-- caption.figure -->
+
+    <!-- attlist.caption -->
+
+    <!-- thead -->
+    <!-- attlist.thead -->
+
+    <!-- tfoot -->
+    <!-- attlist.tfoot -->
+
+    <!-- tbody -->
+    <!-- attlist.tbody -->
+
+    <!-- colgroup -->
+
+    <!-- attlist.colgroup -->
+
+    <!-- col -->
+
+    <!-- attlist.col -->
+
+    <!-- tr -->
+
+    <!-- attlist.tr -->
+
+    <!-- th -->
+
+    <!-- attlist.th -->
+
+    <!-- td -->
+
+    <!-- attlist.td -->
+
+</x:description>
