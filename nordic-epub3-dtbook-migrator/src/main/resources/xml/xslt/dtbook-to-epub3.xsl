@@ -336,6 +336,9 @@
             <xsl:with-param name="classes" select="if (@render) then concat('render-',@render) else ()" tunnel="yes"/>
         </xsl:call-template>
         <!-- @imgref is dropped, the relationship is preserved in the corresponding img/@longdesc -->
+        <xsl:if test="not(@id)">
+            <xsl:attribute name="id" select="generate-id(.)"/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="dtbook:sidebar">
@@ -682,79 +685,82 @@
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'noteref'" tunnel="yes"/>
         </xsl:call-template>
-        <xsl:attribute name="href" select="@idref"/> <!-- URI -->
+        <xsl:attribute name="href" select="@idref"/>
         <xsl:copy-of select="@type"/>
     </xsl:template>
 
-    <!--<xsl:template name="annoref">
-        <annoref>
+    <xsl:template match="dtbook:annoref">
+        <span>
             <xsl:call-template name="attlist.annoref"/>
-            <text/>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </span>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.annoref">
-        <xsl:call-template name="attrs"/>
-        <xsl:attribute name="idref" select="@idref"/> <!-\- URI -\->
-        <xsl:if test="@type">
-            <xsl:attribute name="type" select="@type"/> <!-\- ContentType -\->
-        </xsl:if>
-    </xsl:template>-->
+    <xsl:template name="attlist.annoref">
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="types" select="'annoref'" tunnel="yes"/>
+        </xsl:call-template>
+        <xsl:attribute name="href" select="@idref"/>
+        <xsl:copy-of select="@type"/>
+    </xsl:template>
 
-    <!--<xsl:template name="q">
+    <xsl:template match="dtbook:q">
         <q>
             <xsl:call-template name="attlist.q"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </q>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.q">
+    <xsl:template name="attlist.q">
         <xsl:call-template name="attrs"/>
-        <xsl:if test="@cite">
-            <xsl:attribute name="cite" select="@cite"/> <!-\- URI -\->
-        </xsl:if>
-    </xsl:template>-->
+        <xsl:copy-of select="@cite"/>
+    </xsl:template>
 
-    <!--<xsl:template name="img">
+    <xsl:template name="img">
         <img>
             <xsl:call-template name="attlist.img"/>
-            <empty/>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </img>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.img">
+    <xsl:template name="attlist.img">
         <xsl:call-template name="attrs"/>
-        <xsl:attribute name="src" select="@src"/> <!-\- URI -\->
-        <xsl:attribute name="alt" select="@alt"/> <!-\- Text -\->
-        <xsl:if test="@longdesc">
-            <xsl:attribute name="longdesc" select="@longdesc"/> <!-\- URI -\->
+        <xsl:copy-of select="@src|@alt|@longdesc|@height|@width"/>
+        <xsl:if test="not(@longdesc) and @id">
+            <xsl:variable name="id" select="@id"/>
+            <xsl:variable name="longdesc" select="(//dtbook:prodnote|//dtbook:caption)[tokenize(@imgref,'\s+')=$id]"/>
+            <xsl:if test="$longdesc">
+                <xsl:attribute name="longdesc" select="concat('#',$longdesc[1]/((@id,generate-id(.))[1]))"/>
+                <!-- if the image has multiple prodnotes or captions, only the first one will be referenced. -->
+            </xsl:if>
         </xsl:if>
-        <xsl:if test="@height">
-            <xsl:attribute name="height" select="@height"/> <!-\- Length -\->
-        </xsl:if>
-        <xsl:if test="@width">
-            <xsl:attribute name="width" select="@width"/> <!-\- Length -\->
-        </xsl:if>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="imggroup">
-        <imggroup>
+    <xsl:template name="imggroup">
+        <figure>
             <xsl:call-template name="attlist.imggroup"/>
-            <oneOrMore>
+            <xsl:apply-templates select="dtbook:prodnote|dtbook:img|dtbook:pagenum"/>
+            <xsl:if test="dtbook:caption">
+                <figcaption>
+                    <xsl:for-each select="dtbook:caption">
+                        <xsl:apply-templates select="."/>
+                    </xsl:for-each>
+                </figcaption>
+            </xsl:if>
+            <!--<oneOrMore>
                 <choice>
                     <xsl:call-template name="prodnote"/>
                     <xsl:call-template name="img"/>
                     <xsl:call-template name="caption"/>
                     <xsl:call-template name="pagenum"/>
                 </choice>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.imggroup">
+            </oneOrMore>-->
+        </figure>
+    </xsl:template>
+
+    <xsl:template name="attlist.imggroup">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
     <!--<xsl:template name="p">
         <p>
@@ -1153,13 +1159,23 @@
             </zeroOrMore>
         </element>
     </xsl:template>-->
-
-    <!--<xsl:template name="attlist.caption">
+    
+    <xsl:template match="dtbook:caption[parent::dtbook:imggroup]">
+        <div>
+            <xsl:call-template name="attlist.caption">
+                <xsl:with-param name="classes" select="'imggroup-caption'" tunnel="yes"/>
+            </xsl:call-template>
+            <xsl:apply-templates select="node()"/>
+        </div>
+    </xsl:template>
+    
+    <xsl:template name="attlist.caption">
         <xsl:call-template name="attrs"/>
-        <xsl:if test="@imgref">
-            <xsl:attribute name="imgref" select="@imgref"/> <!-\- IDREFS -\->
+        <!-- @imgref is dropped, the relationship is preserved in the corresponding img/@longdesc -->
+        <xsl:if test="not(@id)">
+            <xsl:attribute name="id" select="generate-id(.)"/>
         </xsl:if>
-    </xsl:template>-->
+    </xsl:template>
 
     <!--<xsl:template name="thead">
         <thead>

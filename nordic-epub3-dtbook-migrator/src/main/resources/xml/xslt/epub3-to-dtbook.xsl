@@ -253,6 +253,13 @@
                 <xsl:attribute name="render" select="'optional'"/>
             </xsl:when>
         </xsl:choose>
+        <xsl:if test="@id">
+            <xsl:variable name="id" select="@id"/>
+            <xsl:variable name="img" select="//html:img[replace(@longdesc,'^#','')=$id]"/>
+            <xsl:if test="$img">
+                <xsl:attribute name="imgref" select="string-join($img/((@id,generate-id(.))[1]),' ')"/>
+            </xsl:if>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="html:aside[f:types(.)='sidebar']">
@@ -486,7 +493,7 @@
             <xsl:apply-templates select="node()"/>
         </sub>
     </xsl:template>
-    
+
     <xsl:template name="attlist.sub">
         <xsl:call-template name="attrs"/>
     </xsl:template>
@@ -497,7 +504,7 @@
             <xsl:apply-templates select="node()"/>
         </sup>
     </xsl:template>
-    
+
     <xsl:template name="attlist.sup">
         <xsl:call-template name="attrs"/>
     </xsl:template>
@@ -531,7 +538,7 @@
             <xsl:apply-templates select="node()"/>
         </sent>
     </xsl:template>
-    
+
     <xsl:template name="attlist.sent">
         <xsl:call-template name="attrs"/>
     </xsl:template>
@@ -542,7 +549,7 @@
             <xsl:apply-templates select="node()"/>
         </w>
     </xsl:template>
-    
+
     <xsl:template name="attlist.w">
         <xsl:call-template name="attrs"/>
     </xsl:template>
@@ -571,101 +578,97 @@
     <xsl:template name="attlist.noteref">
         <xsl:call-template name="attrs"/>
         <xsl:attribute name="idref" select="@href"/>
-        <xsl:if test="@type">
-            <xsl:attribute name="type" select="@type"/> <!-- ContentType -->
+        <xsl:copy-of select="@type"/>
+    </xsl:template>
+
+    <xsl:template match="html:a[f:types(.)='annoref']">
+        <annoref>
+            <xsl:call-template name="attlist.annoref"/>
+            <xsl:apply-templates select="node()"/>
+        </annoref>
+    </xsl:template>
+
+    <xsl:template name="attlist.annoref">
+        <xsl:call-template name="attrs"/>
+        <xsl:attribute name="idref" select="@href"/>
+        <xsl:copy-of select="@type"/>
+    </xsl:template>
+
+    <xsl:template match="html:q">
+        <q>
+            <xsl:call-template name="attlist.q"/>
+            <xsl:apply-templates select="node()"/>
+        </q>
+    </xsl:template>
+
+    <xsl:template name="attlist.q">
+        <xsl:call-template name="attrs"/>
+        <xsl:copy-of select="@cite"/>
+    </xsl:template>
+
+    <xsl:template match="html:img">
+        <img>
+            <xsl:call-template name="attlist.img"/>
+            <xsl:apply-templates select="node()"/>
+        </img>
+    </xsl:template>
+
+    <xsl:template name="attlist.img">
+        <xsl:call-template name="attrs"/>
+        <xsl:copy-of select="@src|@alt|@longdesc|@height|@width"/>
+        <xsl:if test="not(@id)">
+            <xsl:attribute name="id" select="generate-id(.)"/>
         </xsl:if>
     </xsl:template>
 
-    <!--<xsl:template name="annoref">
-        <a>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='annoref'">The annotation reference must have an epub:type of 'annoref'</sch:assert>
-            </sch:rule>
-            <xsl:call-template name="attlist.annoref"/>
-            <text/>
-        </element>
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.annoref">
-        <xsl:call-template name="attrs"/>
-        <xsl:attribute name="href" select="@href"/> <!-\- URI -\->
-        <xsl:if test="@type">
-            <xsl:attribute name="type" select="@type"/> <!-\- ContentType -\->
-        </xsl:if>
-    </xsl:template>-->
-
-    <!--<xsl:template name="q">
-        <q>
-            <xsl:call-template name="attlist.q"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.q">
-        <xsl:call-template name="attrs"/>
-        <xsl:if test="@cite">
-            <xsl:attribute name="cite" select="@cite"/> <!-\- URI -\->
-        </xsl:if>
-    </xsl:template>-->
-
-    <!--<xsl:template name="img">
-        <img>
-            <xsl:call-template name="attlist.img"/>
-            <empty/>
-        </element>
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.img">
-        <xsl:call-template name="attrs"/>
-        <xsl:attribute name="src" select="@src"/> <!-\- URI -\->
-        <xsl:attribute name="alt" select="@alt"/> <!-\- Text -\->
-        <xsl:if test="@longdesc">
-
-            <xsl:attribute name="longdesc" select="@longdesc"/> <!-\- URI -\->
-        </xsl:if>
-        <xsl:if test="@height">
-            <xsl:attribute name="height" select="@height"/> <!-\- Length -\->
-        </xsl:if>
-        <xsl:if test="@width">
-            <xsl:attribute name="width" select="@width"/> <!-\- Length -\->
-        </xsl:if>
-    </xsl:template>-->
-
-    <!--<xsl:template name="imggroup">
-        <figure>
-
+    <xsl:template name="imggroup">
+        <imggroup>
             <xsl:call-template name="attlist.imggroup"/>
-            <choice>
-                <group>
-                    <optional>
-                        <xsl:call-template name="caption.figure"/>
-                    </xsl:if>
-                    <oneOrMore>
-                        <choice>
-                            <xsl:call-template name="prodnote"/>
-                            <xsl:call-template name="img"/>
-                            <xsl:call-template name="pagenum"/>
-                        </choice>
-                    </oneOrMore>
-                </group>
-                <group>
-                    <oneOrMore>
-                        <choice>
-                            <xsl:call-template name="prodnote"/>
-                            <xsl:call-template name="img"/>
-                            <xsl:call-template name="pagenum"/>
-                        </choice>
-                    </oneOrMore>
-                    <xsl:call-template name="caption.figure"/>
-                </group>
-            </choice>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.imggroup">
+            <xsl:variable name="caption-first" select="*[1]=html:figcaption"/>
+            <xsl:variable name="imggroup-captions" select="boolean(html:figcaption/html:div[f:classes(.)='imggroup-caption'])"/>
+            <xsl:choose>
+                <!-- multiple image captions - one for each image -->
+                <xsl:when test="$imggroup-captions">
+                    <xsl:variable name="images" select="count(html:img)"/>
+                    <xsl:variable name="captions" select="count($imggroup-captions)"/>
+                    <xsl:for-each select="node()">
+                        <xsl:choose>
+                            <xsl:when test="html:img">
+                                <xsl:variable name="position" select="count(preceding-sibling::html:img)+1"/>
+                                <xsl:if test="$caption-first">
+                                    <xsl:if test="$position=1">
+                                        <xsl:apply-templates select="$imggroup-captions[position()&lt;=($captions - $images)]"/>
+                                    </xsl:if>
+                                    <xsl:apply-templates select="$imggroup-captions[$position + max((0,$captions - $images))]"/>
+                                </xsl:if>
+                                
+                                <xsl:apply-templates select="."/>
+                                
+                                <xsl:if test="not($caption-first)">
+                                    <xsl:if test="$position=$images">
+                                        <xsl:apply-templates select="$imggroup-captions[position()&gt;=$position]"/>
+                                    </xsl:if>
+                                    <xsl:apply-templates select="$imggroup-captions[$position]"/>
+                                </xsl:if>
+                            </xsl:when>
+                            
+                            <xsl:otherwise>
+                                <xsl:apply-templates select="node()"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:for-each>
+                </xsl:when>
+                <!-- a single image caption for all images -->
+                <xsl:otherwise>
+                    <xsl:apply-templates select="node()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </imggroup>
+    </xsl:template>
+
+    <xsl:template name="attlist.imggroup">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
     <!--<xsl:template name="p">
         <p>
@@ -1061,40 +1064,27 @@
             </zeroOrMore>
         </element>
     </xsl:template>-->
-    <!--<xsl:template name="caption.figure">
-        <figcaption>
+    
+    <xsl:template match="html:figcaption">
+        <xsl:variable name="content" select="node()[not(self::div[f:classes(.)='imggroup-caption'])]"/>
+        <xsl:if test="$content">
+            <caption>
+                <xsl:call-template name="attlist.caption"/>
+                <xsl:apply-templates select="$content"/>
+            </caption>
+        </xsl:if>
+    </xsl:template>
+    
+    <xsl:template match="html:div[f:classes(.)='imggroup-caption']">
+        <caption>
+            <xsl:call-template name="attlist.caption"/>
+            <xsl:apply-templates select="node()"/>
+        </caption>
+    </xsl:template>
 
-            <choice>
-                <group>
-                    <xsl:call-template name="attlist.caption"/>
-                    <sch:rule context=".">
-                        <sch:assert test="tokenize(@class,' ')='caption'">Figure captions must have a 'caption' class.</sch:assert>
-                    </sch:rule>
-                    <zeroOrMore>
-                        <xsl:call-template name="flow"/>
-                    </zeroOrMore>
-                </group>
-                <group>
-                    <oneOrMore>
-                        <div>
-                            <xsl:call-template name="attlist.caption"/>
-                            <sch:rule context=".">
-                                <sch:assert test="tokenize(@class,' ')='caption'">Figure captions must have a 'caption' class.</sch:assert>
-                            </sch:rule>
-                            <zeroOrMore>
-                                <xsl:call-template name="flow"/>
-                            </zeroOrMore>
-                        </element>
-                    </oneOrMore>
-                </group>
-            </choice>
-        </element>
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.caption">
+    <xsl:template name="attlist.caption">
         <xsl:call-template name="attrs"/>
-
-    </xsl:template>-->
+    </xsl:template>
 
     <!--<xsl:template name="thead">
         <thead>
