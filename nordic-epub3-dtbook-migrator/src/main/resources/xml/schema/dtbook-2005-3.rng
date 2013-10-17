@@ -774,7 +774,8 @@
 <!-- =================== Imported Parameter Entity Names =================== -->
 <!-- Many parameter entities come from the [XHTML11STRICT] strict DTD. -->
 <!-- jpritchett@rfbd.org:  2006-07-06.  Removed definition of %StyleSheet, since it is no longer needed -->
-<grammar ns="http://www.daisy.org/z3986/2005/dtbook/" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+<grammar ns="http://www.daisy.org/z3986/2005/dtbook/" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
     <start>
         <ref name="dtbook"/>
     </start>
@@ -2922,15 +2923,13 @@
   -->
     <define name="attlist.pagenum" combine="interleave">
         <ref name="attrsrqd"/>
-        <optional>
-            <attribute name="page" a:defaultValue="normal">
-                <choice>
-                    <value>front</value>
-                    <value>normal</value>
-                    <value>special</value>
-                </choice>
-            </attribute>
-        </optional>
+        <attribute name="page" a:defaultValue="normal">
+            <choice>
+                <value>front</value>
+                <value>normal</value>
+                <value>special</value>
+            </choice>
+        </attribute>
     </define>
     <!--
     Use: noteref marks one or more characters that reference a footnote

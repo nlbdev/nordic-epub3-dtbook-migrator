@@ -1412,9 +1412,6 @@
             </attribute>
         </optional>
         <attribute name="content"/>
-        <optional>
-            <attribute name="scheme"/>
-        </optional>
     </define>
     <!-- HB: 2004-03-25 36: head: removed element style. -->
     <!-- ============================ Book Content ============================= -->
@@ -3258,8 +3255,8 @@
     <define name="pagenum">
         <element name="span">
             <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='pagebreak'">The pagebreak must have an epub:type of 'pagebreak'</sch:assert>
-        </sch:rule>
+                <sch:assert test="tokenize(@epub:type,' ')='pagebreak'">The pagebreak must have an epub:type of 'pagebreak'</sch:assert>
+            </sch:rule>
             <ref name="attlist.pagenum"/>
             <sch:rule context=".">
                 <sch:assert test="matches(@class,'(^|.* )(page-front|page-normal|page-special)( .*|$)')">Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special' class.</sch:assert>

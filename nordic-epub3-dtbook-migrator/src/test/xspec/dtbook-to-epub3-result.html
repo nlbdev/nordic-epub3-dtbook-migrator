@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><html xmlns:test="http://www.jenitennison.com/xslt/unit-test" xmlns="http://www.w3.org/1999/xhtml">
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-      <title>Test Report for home/jostein/nordic-epub3-dtbook-migrator/nordic-epub3-dtbook-migrator/src/main/resources/xml/xslt/dtbook-to-epub3.xsl (passed:7 / pending:0 / failed:0 / total:7)</title>
+      <title>Test Report for home/jostein/nordic-epub3-dtbook-migrator/nordic-epub3-dtbook-migrator/src/main/resources/xml/xslt/dtbook-to-epub3.xsl (passed:5 / pending:0 / failed:2 / total:7)</title>
       <link rel="stylesheet" type="text/css" href="file:/home/jostein/Oxygen%20XML%20Editor%2014/frameworks/xspec/src/reporter/test-report.css" />
    </head>
    <body>
       <h1>Test Report</h1>
       <p xmlns:oxy="http://www.oxygenxml.com/xslt/xspec">Stylesheet: <a href="file:/home/jostein/nordic-epub3-dtbook-migrator/nordic-epub3-dtbook-migrator/src/main/resources/xml/xslt/dtbook-to-epub3.xsl">home/jostein/nordic-epub3-dtbook-migrator/nordic-epub3-dtbook-migrator/src/main/resources/xml/xslt/dtbook-to-epub3.xsl</a></p>
-      <p xmlns:oxy="http://www.oxygenxml.com/xslt/xspec">Tested: 14 October 2013 at 16:25</p>
+      <p xmlns:oxy="http://www.oxygenxml.com/xslt/xspec">Tested: 16 October 2013 at 16:10</p>
       <h2 xmlns:oxy="http://www.oxygenxml.com/xslt/xspec">Contents</h2>
       <table xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" class="xspec">
          <col width="80%" />
@@ -18,9 +18,9 @@
          <thead>
             <tr>
                <th></th>
-               <th class="result">passed:7</th>
+               <th class="result">passed:5</th>
                <th class="result">pending:0</th>
-               <th class="result">failed:0</th>
+               <th class="result">failed:2</th>
                <th class="result">total:7</th>
             </tr>
          </thead>
@@ -32,39 +32,39 @@
                <th class="result">0</th>
                <th class="result">2</th>
             </tr>
+            <tr class="failed">
+               <th><a href="#d4e38">dtbookcontent (head, book)</a></th>
+               <th class="result">0</th>
+               <th class="result">0</th>
+               <th class="result">1</th>
+               <th class="result">1</th>
+            </tr>
             <tr class="successful">
-               <th><a href="#d4e37">dtbookcontent (head, book)</a></th>
+               <th><a href="#d4e86">when processing a dtbook element</a></th>
                <th class="result">1</th>
                <th class="result">0</th>
                <th class="result">0</th>
                <th class="result">1</th>
             </tr>
             <tr class="successful">
-               <th><a href="#d4e83">when processing a dtbook element</a></th>
+               <th><a href="#d4e116">on a dtbook element with with a version attribute</a></th>
                <th class="result">1</th>
                <th class="result">0</th>
                <th class="result">0</th>
                <th class="result">1</th>
             </tr>
             <tr class="successful">
-               <th><a href="#d4e112">on a dtbook element with with a version attribute</a></th>
+               <th><a href="#d4e140">when processing a head element</a></th>
                <th class="result">1</th>
                <th class="result">0</th>
                <th class="result">0</th>
                <th class="result">1</th>
             </tr>
-            <tr class="successful">
-               <th><a href="#d4e136">when processing a head element</a></th>
-               <th class="result">1</th>
+            <tr class="failed">
+               <th><a href="#d4e171">when processing a book element</a></th>
                <th class="result">0</th>
                <th class="result">0</th>
                <th class="result">1</th>
-            </tr>
-            <tr class="successful">
-               <th><a href="#d4e166">when processing a book element</a></th>
-               <th class="result">1</th>
-               <th class="result">0</th>
-               <th class="result">0</th>
                <th class="result">1</th>
             </tr>
          </tbody>
@@ -90,26 +90,59 @@
             </tbody>
          </table>
       </div>
-      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e37">
-         <h2 class="successful">dtbookcontent (head, book)<span class="scenario-totals">passed:1 / pending:0 / failed:0 / total:1</span></h2>
-         <table class="xspec" id="t-d4e37">
+      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e38">
+         <h2 class="failed">dtbookcontent (head, book)<span class="scenario-totals">passed:0 / pending:0 / failed:1 / total:1</span></h2>
+         <table class="xspec" id="t-d4e38">
             <col width="80%" />
             <col width="20%" />
             <tbody>
-               <tr class="successful">
+               <tr class="failed">
                   <th>dtbookcontent (head, book)</th>
-                  <th>passed:1 / pending:0 / failed:0 / total:1</th>
+                  <th>passed:0 / pending:0 / failed:1 / total:1</th>
                </tr>
-               <tr class="successful">
-                  <td>should be allowed inside the dtbook element</td>
-                  <td>Success</td>
+               <tr class="failed">
+                  <td><a href="#d4e67">should be allowed inside the dtbook element</a></td>
+                  <td>Failure</td>
+               </tr>
+            </tbody>
+         </table>
+         <h3 id="d4e38">dtbookcontent (head, book)</h3>
+         <h4 id="d4e67">should be allowed inside the dtbook element</h4>
+         <table class="xspecResult">
+            <thead>
+               <tr>
+                  <th>Result</th>
+                  <th>Expected Result</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td><pre>&lt;<span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="diff">html</span> xmlns="http://www.w3.org/1999/xhtml"
+         xmlns:pkg="http://expath.org/ns/pkg"
+         xmlns:impl="urn:x-xspec:compile:xslt:impl"
+         xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+         xmlns:epub="http://www.idpf.org/2007/ops"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         <span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="same">epub:prefix</span>="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#"&gt;
+   &lt;<span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="same">head</span>&gt;...&lt;/head&gt;
+   &lt;<span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="diff">body</span> <span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="diff">epub:type</span>=""&gt;...&lt;/body&gt;
+&lt;/html&gt;</pre></td>
+                  <td><pre>&lt;<span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="diff">html:html</span> xmlns:pkg="http://expath.org/ns/pkg"
+         xmlns:impl="urn:x-xspec:compile:xslt:impl"
+         xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+         xmlns:epub="http://www.idpf.org/2007/ops"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         <span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="same">epub:prefix</span>="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#"&gt;
+   &lt;<span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="same">html:head</span>&gt;<span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="same">...</span>&lt;/html:head&gt;
+   &lt;<span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="diff">html:body</span>&gt;<span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="same">...</span>&lt;/html:body&gt;
+&lt;/html:html&gt;</pre></td>
                </tr>
             </tbody>
          </table>
       </div>
-      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e83">
+      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e86">
          <h2 class="successful">when processing a dtbook element<span class="scenario-totals">passed:1 / pending:0 / failed:0 / total:1</span></h2>
-         <table class="xspec" id="t-d4e83">
+         <table class="xspec" id="t-d4e86">
             <col width="80%" />
             <col width="20%" />
             <tbody>
@@ -126,9 +159,9 @@
             </tbody>
          </table>
       </div>
-      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e112">
+      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e116">
          <h2 class="successful">on a dtbook element with with a version attribute<span class="scenario-totals">passed:1 / pending:0 / failed:0 / total:1</span></h2>
-         <table class="xspec" id="t-d4e112">
+         <table class="xspec" id="t-d4e116">
             <col width="80%" />
             <col width="20%" />
             <tbody>
@@ -143,9 +176,9 @@
             </tbody>
          </table>
       </div>
-      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e136">
+      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e140">
          <h2 class="successful">when processing a head element<span class="scenario-totals">passed:1 / pending:0 / failed:0 / total:1</span></h2>
-         <table class="xspec" id="t-d4e136">
+         <table class="xspec" id="t-d4e140">
             <col width="80%" />
             <col width="20%" />
             <tbody>
@@ -160,19 +193,45 @@
             </tbody>
          </table>
       </div>
-      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e166">
-         <h2 class="successful">when processing a book element<span class="scenario-totals">passed:1 / pending:0 / failed:0 / total:1</span></h2>
-         <table class="xspec" id="t-d4e166">
+      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e171">
+         <h2 class="failed">when processing a book element<span class="scenario-totals">passed:0 / pending:0 / failed:1 / total:1</span></h2>
+         <table class="xspec" id="t-d4e171">
             <col width="80%" />
             <col width="20%" />
             <tbody>
-               <tr class="successful">
+               <tr class="failed">
                   <th>when processing a book element</th>
-                  <th>passed:1 / pending:0 / failed:0 / total:1</th>
+                  <th>passed:0 / pending:0 / failed:1 / total:1</th>
                </tr>
-               <tr class="successful">
-                  <td>the book element should be converted into a body element</td>
-                  <td>Success</td>
+               <tr class="failed">
+                  <td><a href="#d4e188">the book element should be converted into a body element</a></td>
+                  <td>Failure</td>
+               </tr>
+            </tbody>
+         </table>
+         <h3 id="d4e171">when processing a book element</h3>
+         <h4 id="d4e188">the book element should be converted into a body element</h4>
+         <table class="xspecResult">
+            <thead>
+               <tr>
+                  <th>Result</th>
+                  <th>Expected Result</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td><pre>&lt;<span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="diff">body</span> xmlns="http://www.w3.org/1999/xhtml"
+         xmlns:pkg="http://expath.org/ns/pkg"
+         xmlns:impl="urn:x-xspec:compile:xslt:impl"
+         xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+         xmlns:epub="http://www.idpf.org/2007/ops"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         <span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="diff">epub:type</span>=""&gt;...&lt;/body&gt;</pre></td>
+                  <td><pre>&lt;<span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="diff">html:body</span> xmlns:pkg="http://expath.org/ns/pkg"
+         xmlns:impl="urn:x-xspec:compile:xslt:impl"
+         xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+         xmlns:epub="http://www.idpf.org/2007/ops"
+         xmlns:html="http://www.w3.org/1999/xhtml"&gt;<span xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pkg="http://expath.org/ns/pkg" class="same">...</span>&lt;/html:body&gt;</pre></td>
                </tr>
             </tbody>
          </table>

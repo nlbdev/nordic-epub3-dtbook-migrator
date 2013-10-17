@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><html xmlns:test="http://www.jenitennison.com/xslt/unit-test" xmlns="http://www.w3.org/1999/xhtml">
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-      <title>Test Report for home/jostein/nordic-epub3-dtbook-migrator/nordic-epub3-dtbook-migrator/src/main/resources/xml/xslt/epub3-to-dtbook.xsl (passed:7 / pending:0 / failed:0 / total:7)</title>
+      <title>Test Report for home/jostein/nordic-epub3-dtbook-migrator/nordic-epub3-dtbook-migrator/src/main/resources/xml/xslt/epub3-to-dtbook.xsl (passed:8 / pending:0 / failed:0 / total:8)</title>
       <link rel="stylesheet" type="text/css" href="file:/home/jostein/Oxygen%20XML%20Editor%2014/frameworks/xspec/src/reporter/test-report.css" />
    </head>
    <body>
       <h1>Test Report</h1>
       <p xmlns:oxy="http://www.oxygenxml.com/xslt/xspec">Stylesheet: <a href="file:/home/jostein/nordic-epub3-dtbook-migrator/nordic-epub3-dtbook-migrator/src/main/resources/xml/xslt/epub3-to-dtbook.xsl">home/jostein/nordic-epub3-dtbook-migrator/nordic-epub3-dtbook-migrator/src/main/resources/xml/xslt/epub3-to-dtbook.xsl</a></p>
-      <p xmlns:oxy="http://www.oxygenxml.com/xslt/xspec">Tested: 14 October 2013 at 16:25</p>
+      <p xmlns:oxy="http://www.oxygenxml.com/xslt/xspec">Tested: 15 October 2013 at 15:49</p>
       <h2 xmlns:oxy="http://www.oxygenxml.com/xslt/xspec">Contents</h2>
       <table xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" class="xspec">
          <col width="80%" />
@@ -18,50 +18,57 @@
          <thead>
             <tr>
                <th></th>
-               <th class="result">passed:7</th>
+               <th class="result">passed:8</th>
                <th class="result">pending:0</th>
                <th class="result">failed:0</th>
-               <th class="result">total:7</th>
+               <th class="result">total:8</th>
             </tr>
          </thead>
          <tbody>
             <tr class="successful">
-               <th><a href="#d4e4">on a html element with the i18n attributes (xml:lang, dir)</a></th>
+               <th><a href="#d4e4">on a span element with the coreattrs attributes (id, class, title, xml:space, epub:type)</a></th>
+               <th class="result">1</th>
+               <th class="result">0</th>
+               <th class="result">0</th>
+               <th class="result">1</th>
+            </tr>
+            <tr class="successful">
+               <th><a href="#d4e52">on a html element with the i18n attributes (xml:lang, dir)</a></th>
                <th class="result">2</th>
                <th class="result">0</th>
                <th class="result">0</th>
                <th class="result">2</th>
             </tr>
             <tr class="successful">
-               <th><a href="#d4e37">dtbookcontent (head, body)</a></th>
+               <th><a href="#d4e86">dtbookcontent (head, body)</a></th>
                <th class="result">1</th>
                <th class="result">0</th>
                <th class="result">0</th>
                <th class="result">1</th>
             </tr>
             <tr class="successful">
-               <th><a href="#d4e83">when processing a html element</a></th>
+               <th><a href="#d4e134">when processing a html element</a></th>
                <th class="result">1</th>
                <th class="result">0</th>
                <th class="result">0</th>
                <th class="result">1</th>
             </tr>
             <tr class="successful">
-               <th><a href="#d4e112">on a html element with the epub:prefix attribute</a></th>
+               <th><a href="#d4e164">on a html element with the epub:prefix attribute</a></th>
                <th class="result">1</th>
                <th class="result">0</th>
                <th class="result">0</th>
                <th class="result">1</th>
             </tr>
             <tr class="successful">
-               <th><a href="#d4e137">when processing a head element</a></th>
+               <th><a href="#d4e191">when processing a head element</a></th>
                <th class="result">1</th>
                <th class="result">0</th>
                <th class="result">0</th>
                <th class="result">1</th>
             </tr>
             <tr class="successful">
-               <th><a href="#d4e167">when processing a body element</a></th>
+               <th><a href="#d4e221">when processing a body element</a></th>
                <th class="result">1</th>
                <th class="result">0</th>
                <th class="result">0</th>
@@ -70,8 +77,27 @@
          </tbody>
       </table>
       <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e4">
-         <h2 class="successful">on a html element with the i18n attributes (xml:lang, dir)<span class="scenario-totals">passed:2 / pending:0 / failed:0 / total:2</span></h2>
+         <h2 class="successful">on a span element with the coreattrs attributes (id, class, title, xml:space, epub:type)<span class="scenario-totals">passed:1 / pending:0 / failed:0 / total:1</span></h2>
          <table class="xspec" id="t-d4e4">
+            <col width="80%" />
+            <col width="20%" />
+            <tbody>
+               <tr class="successful">
+                  <th>on a span element with the coreattrs attributes (id, class, title, xml:space, epub:type)</th>
+                  <th>passed:1 / pending:0 / failed:0 / total:1</th>
+               </tr>
+               <tr class="successful">
+                  <td>all the attributes should be preserved, except for the epub:type attribute which should
+                     be made into a class
+                  </td>
+                  <td>Success</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e52">
+         <h2 class="successful">on a html element with the i18n attributes (xml:lang, dir)<span class="scenario-totals">passed:2 / pending:0 / failed:0 / total:2</span></h2>
+         <table class="xspec" id="t-d4e52">
             <col width="80%" />
             <col width="20%" />
             <tbody>
@@ -90,9 +116,9 @@
             </tbody>
          </table>
       </div>
-      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e37">
+      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e86">
          <h2 class="successful">dtbookcontent (head, body)<span class="scenario-totals">passed:1 / pending:0 / failed:0 / total:1</span></h2>
-         <table class="xspec" id="t-d4e37">
+         <table class="xspec" id="t-d4e86">
             <col width="80%" />
             <col width="20%" />
             <tbody>
@@ -107,9 +133,9 @@
             </tbody>
          </table>
       </div>
-      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e83">
+      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e134">
          <h2 class="successful">when processing a html element<span class="scenario-totals">passed:1 / pending:0 / failed:0 / total:1</span></h2>
-         <table class="xspec" id="t-d4e83">
+         <table class="xspec" id="t-d4e134">
             <col width="80%" />
             <col width="20%" />
             <tbody>
@@ -126,9 +152,9 @@
             </tbody>
          </table>
       </div>
-      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e112">
+      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e164">
          <h2 class="successful">on a html element with the epub:prefix attribute<span class="scenario-totals">passed:1 / pending:0 / failed:0 / total:1</span></h2>
-         <table class="xspec" id="t-d4e112">
+         <table class="xspec" id="t-d4e164">
             <col width="80%" />
             <col width="20%" />
             <tbody>
@@ -143,9 +169,9 @@
             </tbody>
          </table>
       </div>
-      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e137">
+      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e191">
          <h2 class="successful">when processing a head element<span class="scenario-totals">passed:1 / pending:0 / failed:0 / total:1</span></h2>
-         <table class="xspec" id="t-d4e137">
+         <table class="xspec" id="t-d4e191">
             <col width="80%" />
             <col width="20%" />
             <tbody>
@@ -160,9 +186,9 @@
             </tbody>
          </table>
       </div>
-      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e167">
+      <div xmlns:oxy="http://www.oxygenxml.com/xslt/xspec" id="d4e221">
          <h2 class="successful">when processing a body element<span class="scenario-totals">passed:1 / pending:0 / failed:0 / total:1</span></h2>
-         <table class="xspec" id="t-d4e167">
+         <table class="xspec" id="t-d4e221">
             <col width="80%" />
             <col width="20%" />
             <tbody>
@@ -171,7 +197,7 @@
                   <th>passed:1 / pending:0 / failed:0 / total:1</th>
                </tr>
                <tr class="successful">
-                  <td>the book element should be converted into a body element</td>
+                  <td>the body element should be converted into a book element</td>
                   <td>Success</td>
                </tr>
             </tbody>

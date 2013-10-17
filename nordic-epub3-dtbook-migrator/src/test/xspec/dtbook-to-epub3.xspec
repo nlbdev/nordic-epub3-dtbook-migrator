@@ -18,6 +18,14 @@
     <!-- no point in testing -->
 
     <!-- coreattrs -->
+    <!--<x:scenario label="on a span element with the coreattrs attributes (id, class, title, xml:space, epub:type)">
+        <x:context>
+            <dtbook:span id="myid" class="myclass sentence topic-sentence" title="mytitle" xml:space="preserve">TEXT</dtbook:span>
+        </x:context>
+        <x:expect label="all the attributes should be preserved, but any classes matching any of the epub:types defined in either the default, the z3998 or organization-specific vocabularies should be mapped to epub:types instead">
+            <html:span id="myid" class="myclass" title="mytitle" xml:space="preserve" epub:type="z3998:sentence topic-sentence">TEXT</html:span>
+        </x:expect>
+    </x:scenario>-->
 
     <!-- i18n -->
     <x:scenario label="on a dtbook element with the i18n attributes (xml:lang, dir)">

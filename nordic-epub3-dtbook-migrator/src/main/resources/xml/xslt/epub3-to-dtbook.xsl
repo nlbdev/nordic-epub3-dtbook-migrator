@@ -1,111 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns="http://www.daisy.org/z3986/2005/dtbook/" xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/"
-    exclude-result-prefixes="#all" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml">
+<xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/" exclude-result-prefixes="#all" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <xsl:template name="dtbookblocknoimggroup">
-        <xsl:apply-templates select="*"/>
-        <!-- author, prodnote, sidebar, note, annotation, "externalblock" -->
-    </xsl:template>
-
-    <xsl:template name="inlineinblock">
-        <xsl:apply-templates select="*"/>
-        <!-- a, cite, samp, kbd, pagenum -->
-    </xsl:template>
-
-    <xsl:template name="block">
-        <xsl:apply-templates select="*"/>
-        <!-- p, list, dl, div, blockquote, img, imggroup, poem, linegroup, byline, dateline, epigraph, table, address, line, "dtbookblocknoimggroup", "externalFlow" -->
-    </xsl:template>
-
-    <xsl:template name="blocknoimggroup">
-        <xsl:apply-templates select="*"/>
-        <!-- p, list, dl, div, blockquote, poem, linegroup, byline, dateline, epigraph, table, address, line, "dtbookblocknoimggroup" -->
-    </xsl:template>
-
-    <xsl:template name="blocknoimggroupnotable">
-        <xsl:apply-templates select="*"/>
-        <!-- p, list, dl, div, blockquote, poem, linegroup, byline, dateline, epigraph, address, line, "dtbookblocknoimggroup" -->
-    </xsl:template>
-
-    <xsl:template name="docblockorinline">
-        <xsl:apply-templates select="*"/>
-        <!-- doctitle, docauthor, bridgehead, "block", "inlineblock" -->
+    <xsl:template match="text()|comment()">
+        <xsl:copy-of select="."/>
     </xsl:template>
 
     <xsl:template name="coreattrs">
-        <xsl:if test="@id">
-            <xsl:attribute name="id" select="@id"/>
-            <!-- ID -->
-        </xsl:if>
-        <xsl:if test="@class">
-            <xsl:variable name="classes" select="tokenize(@class,'\s+')"/>
-            <xsl:variable name="epub-type-classes">
-                <xsl:for-each select="tokenize(@epub:type,'\s+')">
-                    <xsl:choose>
-                        <xsl:when test=".='toc'">
-                            <xsl:sequence select="'toc'"/>
-                        </xsl:when>
-                        <!-- TODO: other epub:type mappings to classes -->
-                    </xsl:choose>
-                </xsl:for-each>> </xsl:variable>
-            <xsl:value-of select="string-join(distinct-values(($classes,$epub-type-classes)),' ')"/>
-        </xsl:if>
-        <xsl:if test="@title">
-            <xsl:attribute name="title" select="@title"/>
-            <!-- Text -->
-        </xsl:if>
-        <xsl:if test="@xml:space">
-            <xsl:attribute name="xml:space" select="@xml:space"/>
-            <!-- "default" or "preserve" -->
-        </xsl:if>
+        <xsl:copy-of select="@id|@title|@xml:space"/>
+        <xsl:call-template name="classes-and-types"/>
     </xsl:template>
 
     <xsl:template name="i18n">
-        <xsl:if test="@xml:lang">
-            <xsl:attribute name="xml:lang" select="@xml:lang"/>
-            <!-- LanguageCode -->
-        </xsl:if>
-        <xsl:if test="@dir">
-            <xsl:attribute name="dir" select="@dir"/>
-        </xsl:if>
+        <xsl:copy-of select="@xml:lang|@dir"/>
     </xsl:template>
 
-    <!--<xsl:template name="attrs">
+    <xsl:template name="classes-and-types">
+        <xsl:param name="classes" select="()" tunnel="yes"/>
+        <xsl:variable name="old-classes" select="f:classes(.)"/>
+
+        <xsl:variable name="showin" select="($old-classes[matches(.,'^showin-...$')])[1]/replace(.,'showin-','')"/>
+        <xsl:if test="$showin">
+            <xsl:attribute name="showin" select="$showin"/>
+        </xsl:if>
+
+        <xsl:variable name="epub-type-classes">
+            <xsl:for-each select="f:types(.)">
+                <xsl:choose>
+                    <xsl:when test=".='toc'">
+                        <!-- TODO: add epub:types that maps to different class strings here like this -->
+                        <xsl:sequence select="'toc'"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="tokenize(.,':')[last()]"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:attribute name="class" select="string-join(distinct-values(($classes, $old-classes[not(matches(.,concat('showin-',$showin)))], $epub-type-classes)),' ')"/>
+    </xsl:template>
+
+    <xsl:template name="attrs">
         <xsl:call-template name="coreattrs"/>
         <xsl:call-template name="i18n"/>
+    </xsl:template>
 
-    </xsl:template>-->
-
-    <!--<xsl:template name="attrsrqd">
-        <xsl:attribute name="id" select="@id"/> <!-\- ID -\->
-        <xsl:if test="@class">
-            <attribute name="class"/>
-        </xsl:if>
-        <xsl:if test="@title">
-            <xsl:attribute name="title" select="@title"/> <!-\- Text -\->
-        </xsl:if>
-        <xsl:if test="@xml:space">
-            <attribute name="xml:space">
-                <choice>
-                    <value>default</value>
-                    <value>preserve</value>
-                </choice>
-            </attribute>
-        </xsl:if>
+    <xsl:template name="attrsrqd">
+        <xsl:copy-of select="@id|@title|@xml:space"/>
+        <xsl:call-template name="classes-and-types"/>
         <xsl:call-template name="i18n"/>
-
-        
-    </xsl:template>-->
-
-    <xsl:template name="dtbookcontent">
-        <xsl:apply-templates select="*"/>
-        <!-- head, book -->
     </xsl:template>
 
     <xsl:template match="html:html">
         <dtbook version="2005-3">
             <xsl:call-template name="attlist.dtbook"/>
-            <xsl:call-template name="dtbookcontent"/>
+            <xsl:apply-templates select="node()"/>
         </dtbook>
     </xsl:template>
 
@@ -113,1412 +64,517 @@
         <xsl:call-template name="i18n"/>
     </xsl:template>
 
-    <xsl:template name="headmisc">
-        <xsl:apply-templates select="*"/>
-        <!-- html:title, meta, link -->
-        <!--<xsl:choose>
-            <xsl:when test="self::html:title">
-                <meta name="dc:title" content="{.}"/>
-            </xsl:when>
-            <xsl:when test="self::html:meta">
-                <meta name="{@name}" content="{@content}"/>
-            </xsl:when>
-            <xsl:when test="self::html:link">
-                <!-\- TODO -\->
-            </xsl:when>
-        </xsl:choose>-->
-    </xsl:template>
-
     <xsl:template match="html:head">
         <head>
-            <!--<xsl:call-template name="attlist.head"/>-->
-            <xsl:for-each select="*">
-                <xsl:call-template name="headmisc"/>
-            </xsl:for-each>
+            <xsl:call-template name="attlist.head"/>
+            <xsl:apply-templates select="node()"/>
             <!-- TODO: maybe add a default CSS here? -->
         </head>
     </xsl:template>
 
-    <!--<xsl:template name="attlist.head">
+    <xsl:template name="attlist.head">
         <xsl:call-template name="i18n"/>
+    </xsl:template>
 
-    </xsl:template>-->
-
-    <!--<xsl:template name="link">
+    <xsl:template match="link">
         <link>
             <xsl:call-template name="attlist.link"/>
-            <empty/>
-        </element>
-    </xsl:template>-->
+        </link>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.link">
+    <xsl:template name="attlist.link">
         <xsl:call-template name="attrs"/>
-        <xsl:if test="@href">
-            <xsl:attribute name="href" select="@href"/> <!-\- URI -\->
-        </xsl:if>
-        <xsl:if test="@hreflang">
-            <xsl:attribute name="hreflang" select="@hreflang"/> <!-\- LanguageCode -\->
-        </xsl:if>
-        <xsl:if test="@type">
-            <xsl:attribute name="type" select="@type"/> <!-\- ContentType -\->
-        </xsl:if>
-        <xsl:if test="@rel">
-            <xsl:attribute name="rel" select="@rel"/> <!-\- LinkTypes -\->
-        </xsl:if>
-        <xsl:if test="@media">
-            <xsl:attribute name="media" select="@media"/> <!-\- MediaDesc -\->
-        </xsl:if>
-    </xsl:template>-->
+        <xsl:copy-of select="@href|@hreflang|@type|@rel|@media"/>
+        <!-- @sizes are dropped -->
+    </xsl:template>
 
-    <!--<xsl:template name="meta">
+    <xsl:template match="html:meta">
         <meta>
             <xsl:call-template name="attlist.meta"/>
-            <empty/>
-        </element>
-    </xsl:template>-->
+        </meta>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.meta">
+    <xsl:template name="attlist.meta">
         <xsl:call-template name="i18n"/>
-        <xsl:if test="@http-equiv">
-            <xsl:attribute name="http-equiv" select="@http-equiv"/> <!-\- NMTOKEN -\->
-        </xsl:if>
-        <xsl:if test="@name">
-            <xsl:attribute name="name" select="@name"/> <!-\- NMTOKEN -\->
-        </xsl:if>
-        <attribute name="content"/>
-        <xsl:if test="@scheme">
-            <attribute name="scheme"/>
-        </xsl:if>
-    </xsl:template>-->
+        <xsl:copy-of select="@content|@http-equiv|@name"/>
+        <!-- @charset is dropped -->
+    </xsl:template>
 
     <xsl:template match="html:body">
         <book>
-            <xsl:apply-templates select="*"/>
-            <!-- section/article (cover, frontmatter, bodymatter, rearmatter) -->
+            <xsl:if test="*[f:types(.)=('cover','frontmatter')]">
+                <xsl:call-template name="frontmatter"/>
+            </xsl:if>
+            <xsl:if test="*[f:types(.)=('bodymatter')]">
+                <xsl:call-template name="bodymatter"/>
+            </xsl:if>
+            <xsl:if test="*[f:types(.)=('backmatter')]">
+                <xsl:call-template name="rearmatter"/>
+            </xsl:if>
+            <xsl:apply-templates select="*[last()]/following-sibling::node()"/>
         </book>
     </xsl:template>
 
-    <!--<xsl:template name="cover">
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='cover'">The cover must have an epub:type of 'cover'</sch:assert>
-        </sch:rule>
-        <xsl:call-template name="covertitle"/>
-        <oneOrMore>
-            <choice>
-                <xsl:call-template name="docblockorinline"/>
-                <xsl:call-template name="level"/>
-                <xsl:call-template name="level2"/>
-            </choice>
-        </oneOrMore>
-    </xsl:template>-->
+    <xsl:template name="frontmatter">
+        <frontmatter>
+            <xsl:for-each select="*[f:types(.)='titlepage']//html:h1[f:types(.)='fulltitle']">
+                <xsl:call-template name="doctitle"/>
+            </xsl:for-each>
+            <xsl:for-each select="*[f:types(.)='cover']//html:h1[f:types(.)='covertitle']">
+                <xsl:call-template name="covertitle"/>
+            </xsl:for-each>
+            <xsl:for-each select="*[f:types(.)='titlepage']//*[f:types(.)='z3998:author']">
+                <xsl:call-template name="docauthor"/>
+            </xsl:for-each>
+            <xsl:apply-templates select="*[f:types(.)=('cover','frontmatter')]"/>
+        </frontmatter>
+    </xsl:template>
 
-    <!--<xsl:template name="frontmatter">
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='frontmatter'">The frontmatter must have an epub:type of 'frontmatter'</sch:assert>
-        </sch:rule>
-        <choice>
-            <xsl:call-template name="frontmatter.titlepage"/>
-            <xsl:call-template name="frontmatter.colophon"/>
-            <xsl:call-template name="frontmatter.toc"/>
-            <xsl:call-template name="frontmatter.foreword"/>
-            <xsl:call-template name="frontmatter.introduction"/>
-            <xsl:call-template name="frontmatter.other"/>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="frontmatter.titlepage">
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='titlepage'">The titlepage must have an epub:type of 'titlepage'</sch:assert>
-        </sch:rule>
-        <zeroOrMore>
-            <xsl:call-template name="docauthor"/>
-        </zeroOrMore>
-        <xsl:call-template name="doctitle"/>
-        <oneOrMore>
-            <choice>
-                <xsl:call-template name="docblockorinline"/>
-                <xsl:call-template name="level"/>
-                <xsl:call-template name="level2"/>
-            </choice>
-        </oneOrMore>
-    </xsl:template>-->
-    <!--<xsl:template name="frontmatter.colophon">
-        <xsl:call-template name="frontmatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='colophon'">The titlepage must have an epub:type of 'colophon'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="frontmatter.toc">
-        <xsl:call-template name="frontmatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='toc'">The toc must have an epub:type of 'toc'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="frontmatter.foreword">
-        <xsl:call-template name="frontmatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='foreword'">The foreword must have an epub:type of 'foreword'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="frontmatter.introduction">
-        <xsl:call-template name="frontmatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='introduction'">The introduction must have an epub:type of 'introduction'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="frontmatter.other">
-        <xsl:call-template name="frontmatter.generic"/>
-    </xsl:template>-->
-    <!--<xsl:template name="frontmatter.generic">
-        <choice>
-            <xsl:call-template name="level.content"/>
-            <xsl:call-template name="level1.content"/>
-        </choice>
-    </xsl:template>-->
+    <xsl:template match="html:h1[f:types(.)='fulltitle' and ancestor::*[f:types(.)='titlepage']]"/>
+    <xsl:template match="html:h1[f:types(.)='covertitle' and ancestor::*[f:types(.)='cover']]"/>
+    <xsl:template match="*[f:types(.)='z3998:author'][ancestor::*[f:types(.)='titlepage']]"/>
 
-    <!--<xsl:template name="bodymatter">
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='bodymatter'">The bodymatter must have an epub:type of 'bodymatter'</sch:assert>
-        </sch:rule>
-        <choice>
-            <xsl:call-template name="bodymatter.prologue"/>
-            <xsl:call-template name="bodymatter.preface"/>
-            <xsl:call-template name="bodymatter.part"/>
-            <xsl:call-template name="bodymatter.chapter"/>
-            <xsl:call-template name="bodymatter.conclusion"/>
-            <xsl:call-template name="bodymatter.epilogue"/>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="bodymatter.prologue">
-        <xsl:call-template name="bodymatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='prologue'">The titlepage must have an epub:type of 'prologue'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="bodymatter.preface">
-        <xsl:call-template name="bodymatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='preface'">The titlepage must have an epub:type of 'preface'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="bodymatter.part">
-        <xsl:call-template name="bodymatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='part'">The part must have an epub:type of 'part'</sch:assert>
-            <sch:assert test="(section,article)/@epub:type='chapter'">The subsections of a part must have an epub:type of 'chapter'.</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="bodymatter.chapter">
-        <xsl:call-template name="bodymatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='chapter'">The chapter must have an epub:type of 'chapter'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="bodymatter.conclusion">
-        <xsl:call-template name="bodymatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='conclusion'">The conclusion must have an epub:type of 'conclusion'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="bodymatter.epilogue">
-        <xsl:call-template name="bodymatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='epilogue'">The titlepage must have an epub:type of 'epilogue'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="bodymatter.generic">
-        <choice>
-            <xsl:call-template name="level.content"/>
-            <xsl:call-template name="level1.content"/>
-        </choice>
-    </xsl:template>-->
+    <xsl:template name="bodymatter">
+        <bodymatter>
+            <xsl:apply-templates select="node()"/>
+        </bodymatter>
+    </xsl:template>
 
-    <!--<xsl:template name="rearmatter">
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='backmatter'">The backmatter must have an epub:type of 'backmatter'</sch:assert>
-        </sch:rule>
-        <choice>
-            <xsl:call-template name="rearmatter.afterword"/>
-            <xsl:call-template name="rearmatter.toc"/>
-            <xsl:call-template name="rearmatter.index"/>
-            <xsl:call-template name="rearmatter.appendix"/>
-            <xsl:call-template name="rearmatter.glossary"/>
-            <xsl:call-template name="rearmatter.footnotes"/>
-            <xsl:call-template name="rearmatter.rearnotes"/>
-            <xsl:call-template name="rearmatter.other"/>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="rearmatter.afterword">
-        <xsl:call-template name="rearmatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='afterword'">The afterword must have an epub:type of 'afterword'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="rearmatter.toc">
-        <xsl:call-template name="rearmatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='toc'">The toc must have an epub:type of 'toc'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="rearmatter.index">
-        <xsl:call-template name="rearmatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='index'">The index must have an epub:type of 'index'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="rearmatter.appendix">
-        <xsl:call-template name="rearmatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='appendix'">The appendix must have an epub:type of 'appendix'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="rearmatter.glossary">
-        <xsl:call-template name="rearmatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='glossary'">The glossary must have an epub:type of 'glossary'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="rearmatter.footnotes">
-        <xsl:call-template name="rearmatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='footnotes'">The footnotes must have an epub:type of 'footnotes'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="rearmatter.rearnotes">
-        <xsl:call-template name="rearmatter.generic"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='rearnotes'">The rearnotes must have an epub:type of 'rearnotes'</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-    <!--<xsl:template name="rearmatter.other">
-        <xsl:call-template name="rearmatter.generic"/>
-    </xsl:template>-->
-    <!--<xsl:template name="rearmatter.generic">
-        <choice>
-            <xsl:call-template name="level.content"/>
-            <xsl:call-template name="level1.content"/>
-        </choice>
-    </xsl:template>-->
+    <xsl:template name="rearmatter">
+        <rearmatter>
+            <xsl:apply-templates select="node()"/>
+        </rearmatter>
+    </xsl:template>
 
-    <!--<xsl:template name="level">
-        <choice>
-            <section>
-                <xsl:call-template name="level.content"/>
-            </element>
-            <article>
+    <xsl:template match="html:section | html:article">
+        <xsl:call-template name="copy-preceding-comments"/>
+        <xsl:element name="level{f:level(.)}">
+            <xsl:call-template name="attlist.level">
+                <xsl:with-param name="classes" select="if (self::html:article) then 'z3998:article' else ()" tunnel="yes"/>
+            </xsl:call-template>
+            <xsl:apply-templates select="node()"/>
+        </xsl:element>
+    </xsl:template>
 
-                <xsl:call-template name="level.content"/>
-            </element>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="level.content">
-
-        <xsl:call-template name="attlist.level"/>
-        <choice>
-            <group>
-                <xsl:call-template name="hd"/>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level"/>
-                    </choice>
-                </oneOrMore>
-            </group>
-            <group>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level"/>
-                    </choice>
-                </oneOrMore>
-                <optional>
-                    <xsl:call-template name="hd"/>
-                    <oneOrMore>
-                        <choice>
-                            <xsl:call-template name="docblockorinline"/>
-                            <xsl:call-template name="level"/>
-                        </choice>
-                    </oneOrMore>
-                </xsl:if>
-            </group>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.level">
+    <xsl:template name="attlist.level">
         <xsl:call-template name="attrs"/>
+    </xsl:template>
 
-    </xsl:template>-->
-
-    <!--<xsl:template name="level1">
-        <choice>
-            <section>
-                <xsl:call-template name="level1.content"/>
-            </element>
-            <article>
-
-                <xsl:call-template name="level1.content"/>
-            </element>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="level1.content">
-        <xsl:call-template name="attlist.level1"/>
-        <choice>
-            <group>
-                <xsl:call-template name="h1"/>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level2"/>
-                    </choice>
-                </oneOrMore>
-            </group>
-            <group>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level2"/>
-                    </choice>
-                </oneOrMore>
-                <optional>
-                    <xsl:call-template name="h1"/>
-                    <oneOrMore>
-                        <choice>
-                            <xsl:call-template name="docblockorinline"/>
-                            <xsl:call-template name="level2"/>
-                        </choice>
-                    </oneOrMore>
-                </xsl:if>
-            </group>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.level1">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="level2">
-        <choice>
-            <section>
-                <xsl:call-template name="level2.content"/>
-            </element>
-            <article>
-
-                <xsl:call-template name="level2.content"/>
-            </element>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="level2.content">
-        <xsl:call-template name="attlist.level2"/>
-        <choice>
-            <group>
-                <xsl:call-template name="h2"/>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level3"/>
-                    </choice>
-                </oneOrMore>
-            </group>
-            <group>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level3"/>
-                    </choice>
-                </oneOrMore>
-                <optional>
-                    <xsl:call-template name="h2"/>
-                    <oneOrMore>
-                        <choice>
-                            <xsl:call-template name="docblockorinline"/>
-                            <xsl:call-template name="level3"/>
-                        </choice>
-                    </oneOrMore>
-                </xsl:if>
-            </group>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.level2">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="level3">
-        <choice>
-            <section>
-                <xsl:call-template name="level3.content"/>
-            </element>
-            <article>
-
-                <xsl:call-template name="level3.content"/>
-            </element>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="level3.content">
-        <xsl:call-template name="attlist.level3"/>
-        <choice>
-            <group>
-                <xsl:call-template name="h3"/>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level4"/>
-                    </choice>
-                </oneOrMore>
-            </group>
-            <group>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level4"/>
-                    </choice>
-                </oneOrMore>
-                <optional>
-                    <xsl:call-template name="h3"/>
-                    <oneOrMore>
-                        <choice>
-                            <xsl:call-template name="docblockorinline"/>
-                            <xsl:call-template name="level4"/>
-                        </choice>
-                    </oneOrMore>
-                </xsl:if>
-            </group>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.level3">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="level4">
-        <choice>
-            <section>
-                <xsl:call-template name="level4.content"/>
-            </element>
-            <article>
-
-                <xsl:call-template name="level4.content"/>
-            </element>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="level4.content">
-        <xsl:call-template name="attlist.level4"/>
-        <choice>
-            <group>
-                <xsl:call-template name="h4"/>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level5"/>
-                    </choice>
-                </oneOrMore>
-            </group>
-            <group>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level5"/>
-                    </choice>
-                </oneOrMore>
-                <optional>
-                    <xsl:call-template name="h4"/>
-                    <oneOrMore>
-                        <choice>
-                            <xsl:call-template name="docblockorinline"/>
-                            <xsl:call-template name="level5"/>
-                        </choice>
-                    </oneOrMore>
-                </xsl:if>
-            </group>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.level4">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="level5">
-        <choice>
-            <section>
-                <xsl:call-template name="level5.content"/>
-            </element>
-            <article>
-
-                <xsl:call-template name="level5.content"/>
-            </element>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="level5.content">
-        <xsl:call-template name="attlist.level5"/>
-        <choice>
-            <group>
-                <xsl:call-template name="h5"/>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level6"/>
-                    </choice>
-                </oneOrMore>
-            </group>
-            <group>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="docblockorinline"/>
-                        <xsl:call-template name="level6"/>
-                    </choice>
-                </oneOrMore>
-                <optional>
-                    <xsl:call-template name="h5"/>
-                    <oneOrMore>
-                        <choice>
-                            <xsl:call-template name="docblockorinline"/>
-                            <xsl:call-template name="level6"/>
-                        </choice>
-                    </oneOrMore>
-                </xsl:if>
-            </group>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.level5">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="level6">
-        <choice>
-            <section>
-                <xsl:call-template name="level6.content"/>
-            </element>
-            <article>
-
-                <xsl:call-template name="level6.content"/>
-            </element>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="level6.content">
-        <xsl:call-template name="attlist.level6"/>
-        <choice>
-            <group>
-                <xsl:call-template name="h6"/>
-                <oneOrMore>
-                    <xsl:call-template name="docblockorinline"/>
-                </oneOrMore>
-            </group>
-            <group>
-                <oneOrMore>
-                    <xsl:call-template name="docblockorinline"/>
-                </oneOrMore>
-                <optional>
-                    <xsl:call-template name="h6"/>
-                    <oneOrMore>
-                        <xsl:call-template name="docblockorinline"/>
-                    </oneOrMore>
-                </xsl:if>
-            </group>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.level6">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="phrase">
-        <choice>
-            <xsl:call-template name="em"/>
-            <xsl:call-template name="strong"/>
-            <xsl:call-template name="dfn"/>
-            <xsl:call-template name="code"/>
-            <xsl:call-template name="samp"/>
-            <xsl:call-template name="kbd"/>
-            <xsl:call-template name="cite"/>
-            <xsl:call-template name="abbr"/>
-            <xsl:call-template name="acronym"/>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="phrasenodfn">
-        <choice>
-            <xsl:call-template name="em"/>
-            <xsl:call-template name="strong"/>
-            <xsl:call-template name="code"/>
-            <xsl:call-template name="samp"/>
-            <xsl:call-template name="kbd"/>
-            <xsl:call-template name="cite"/>
-            <xsl:call-template name="abbr"/>
-            <xsl:call-template name="acronym"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="special">
-        <choice>
-            <xsl:call-template name="a"/>
-            <xsl:call-template name="img"/>
-
-            <xsl:call-template name="br"/>
-            <xsl:call-template name="q"/>
-            <xsl:call-template name="sub"/>
-            <xsl:call-template name="sup"/>
-            <xsl:call-template name="span"/>
-            <xsl:call-template name="bdo"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="specialnoa">
-        <choice>
-            <xsl:call-template name="img"/>
-
-            <xsl:call-template name="br"/>
-            <xsl:call-template name="q"/>
-            <xsl:call-template name="sub"/>
-            <xsl:call-template name="sup"/>
-            <xsl:call-template name="span"/>
-            <xsl:call-template name="bdo"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="dtbookinline">
-        <choice>
-            <xsl:call-template name="dtbookinlinenoa"/>
-            <xsl:call-template name="annoref"/>
-            <xsl:call-template name="noteref"/>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="dtbookinlinenoa">
-        <choice>
-            <xsl:call-template name="sent"/>
-            <xsl:call-template name="w"/>
-            <xsl:call-template name="pagenum"/>
-
-            <xsl:call-template name="externalinline"/>
-            <xsl:call-template name="externalFlow"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="inline">
-        <choice>
-            <text/>
-            <xsl:call-template name="phrase"/>
-            <xsl:call-template name="special"/>
-            <xsl:call-template name="dtbookinline"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="inlinenoa">
-        <choice>
-            <text/>
-            <xsl:call-template name="phrase"/>
-            <xsl:call-template name="specialnoa"/>
-            <xsl:call-template name="dtbookinlinenoa"/>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="inlinenodfn">
-        <choice>
-            <text/>
-            <xsl:call-template name="phrasenodfn"/>
-            <xsl:call-template name="special"/>
-            <xsl:call-template name="dtbookinlinenoa"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="inlines">
-        <choice>
-            <text/>
-            <xsl:call-template name="phrase"/>
-            <xsl:call-template name="special"/>
-            <xsl:call-template name="pagenum"/>
-            <xsl:call-template name="w"/>
-            <xsl:call-template name="prodnote"/>
-            <xsl:call-template name="annoref"/>
-            <xsl:call-template name="noteref"/>
-            <xsl:call-template name="externalinline"/>
-            <xsl:call-template name="externalFlow"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="inlinew">
-        <choice>
-            <text/>
-            <xsl:call-template name="phrase"/>
-            <xsl:call-template name="special"/>
-            <xsl:call-template name="externalinline"/>
-            <xsl:call-template name="externalFlow"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="inlinenopagenum">
-        <choice>
-            <text/>
-            <xsl:call-template name="phrase"/>
-            <xsl:call-template name="special"/>
-            <xsl:call-template name="sent"/>
-            <xsl:call-template name="w"/>
-            <xsl:call-template name="annoref"/>
-            <xsl:call-template name="noteref"/>
-            <xsl:call-template name="externalinline"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="inlinenoprodnote">
-        <choice>
-            <text/>
-            <xsl:call-template name="phrase"/>
-            <xsl:call-template name="special"/>
-            <xsl:call-template name="sent"/>
-            <xsl:call-template name="w"/>
-            <xsl:call-template name="pagenum"/>
-            <xsl:call-template name="annoref"/>
-            <xsl:call-template name="noteref"/>
-            <xsl:call-template name="externalinline"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="flow">
-        <choice>
-            <xsl:call-template name="inlinenoprodnote"/>
-            <xsl:call-template name="blocknoimggroup"/>
-            <xsl:call-template name="externalFlow"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="flownopagenum">
-        <choice>
-            <xsl:call-template name="inlinenopagenum"/>
-            <xsl:call-template name="blocknoimggroup"/>
-            <xsl:call-template name="externalFlow"/>
-        </choice>
-    </xsl:template>-->
-    <!--<xsl:template name="flownotable">
-        <choice>
-            <xsl:call-template name="inlinenoprodnote"/>
-            <xsl:call-template name="blocknoimggroupnotable"/>
-            <xsl:call-template name="externalFlow"/>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="br">
+    <xsl:template match="html:br">
         <br>
             <xsl:call-template name="attlist.br"/>
-            <empty/>
-        </element>
-    </xsl:template>-->
+        </br>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.br">
+    <xsl:template name="attlist.br">
         <xsl:call-template name="coreattrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="line">
-        <p>
-
+    <xsl:template match="html:p[f:classes(.)='line']">
+        <line>
             <xsl:call-template name="attlist.line"/>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@class,' ')='line'">Lines must have a 'line' class.</sch:assert>
-            </sch:rule>
-            <optional>
-                <xsl:call-template name="linenum"/>
-            </xsl:if>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.line">
+            <xsl:apply-templates select="node()"/>
+        </line>
+    </xsl:template>
+
+    <xsl:template name="attlist.line">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="linenum">
-        <span>
-            <xsl:call-template name="attrs"/>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@class,' ')='linenum'">Line numbers must have a 'linenum' class.</sch:assert>
-            </sch:rule>
-            <text/>
-        </element>
-    </xsl:template>-->
+    <xsl:template match="html:span[f:classes(.)='linenum']">
+        <linenum>
+            <xsl:call-template name="attlist.linenum"/>
+            <xsl:apply-templates select="node()"/>
+        </linenum>
+    </xsl:template>
 
-    <!--<xsl:template name="address">
+    <xsl:template name="attlist.linenum">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="html:address">
         <address>
-
             <xsl:call-template name="attlist.address"/>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="inline"/>
-                    <xsl:call-template name="line"/>
-                </choice>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.address">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </address>
+    </xsl:template>
 
-    <!--<xsl:template name="div">
+    <xsl:template name="attlist.address">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="html:div">
         <div>
-
             <xsl:call-template name="attlist.div"/>
-            <oneOrMore>
-                <xsl:call-template name="docblockorinline"/>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </div>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.div">
+    <xsl:template name="attlist.div">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="inlinetitle">
-        <span>
-            <xsl:call-template name="title.content"/>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="title">
-        <h1>
+    <xsl:template match="html:*[f:classes(.)='title']">
+        <title>
+            <xsl:call-template name="attlist.title"/>
+            <xsl:apply-templates select="node()"/>
+        </title>
+    </xsl:template>
 
-            <xsl:call-template name="title.content"/>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="title.content">
-        <xsl:call-template name="attlist.title"/>
-        <sch:rule context=".">
-            <sch:assert test="tokenize(@class,' ')='title'">Titles must have a 'title' class.</sch:assert>
-        </sch:rule>
-        <zeroOrMore>
-            <xsl:call-template name="inline"/>
-        </zeroOrMore>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.title">
+    <xsl:template name="attlist.title">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="author">
-        <span>
-
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='z3998:author'">The name of the author must have an epub:type of 'z3998:author'</sch:assert>
-            </sch:rule>
+    <xsl:template match="*[f:types(.)='z3998:author']">
+        <author>
             <xsl:call-template name="attlist.author"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.author">
+            <xsl:apply-templates select="node()"/>
+        </author>
+    </xsl:template>
+
+    <xsl:template name="attlist.author">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="prodnote">
-        <aside>
-
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='z3998:production'">The production note must have an epub:type of 'z3998:production'</sch:assert>
-            </sch:rule>
+    <xsl:template match="html:aside[f:types(.)='z3998:production']">
+        <prodnote>
             <xsl:call-template name="attlist.prodnote"/>
-            <zeroOrMore>
-                <xsl:call-template name="flow"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </prodnote>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.prodnote">
+    <xsl:template name="attlist.prodnote">
         <xsl:call-template name="attrs"/>
+        <xsl:choose>
+            <xsl:when test="f:classes(.)='render-required'">
+                <xsl:attribute name="render" select="'required'"/>
+            </xsl:when>
+            <xsl:when test="f:classes(.)='render-optional'">
+                <xsl:attribute name="render" select="'optional'"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
 
-        <sch:rule context=".">
-            <sch:assert test="matches(@class,'(^|.* )(render-required|render-optional)( .*|$)')">Production notes must have either a 'required' or 'optional' class. If optional, some user preference
-                may allow skipping over the content.</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
-
-    <!--<xsl:template name="sidebar">
-        <section>
-
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='sidebar'">The sidebar must have an epub:type of 'sidebar'</sch:assert>
-            </sch:rule>
+    <xsl:template match="html:aside[f:types(.)='sidebar']">
+        <sidebar>
             <xsl:call-template name="attlist.sidebar"/>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="flow"/>
-                    <xsl:call-template name="hd"/>
-                </choice>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </sidebar>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.sidebar">
+    <xsl:template name="attlist.sidebar">
         <xsl:call-template name="attrs"/>
-        <sch:rule context=".">
-            <sch:assert test="matches(@class,'(^|.* )(render-required|render-optional)( .*|$)')">Sidebars must have either a 'required' or 'optional' class. If optional, some user preference may allow
-                skipping over the content.</sch:assert>
-        </sch:rule>
-    </xsl:template>-->
+        <xsl:choose>
+            <xsl:when test="f:classes(.)='render-required'">
+                <xsl:attribute name="render" select="'required'"/>
+            </xsl:when>
+            <xsl:when test="f:classes(.)='render-optional'">
+                <xsl:attribute name="render" select="'optional'"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
 
-    <!--<xsl:template name="note">
-        <aside>
-
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='note'">The note must have an epub:type of 'note'</sch:assert>
-            </sch:rule>
+    <xsl:template match="html:aside[f:types(.)='note']">
+        <note>
             <xsl:call-template name="attlist.note"/>
-            <oneOrMore>
-                <choice>
-                    <xsl:call-template name="block"/>
-                    <xsl:call-template name="inlineinblock"/>
-                </choice>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.note">
+            <xsl:apply-templates select="node()"/>
+        </note>
+    </xsl:template>
+
+    <xsl:template name="attlist.note">
         <xsl:call-template name="attrsrqd"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="annotation">
-        <aside>
+    <xsl:template match="html:aside[f:types(.)='annotation']">
+        <annotation>
+            <xsl:call-template name="attlist.note"/>
+            <xsl:apply-templates select="node()"/>
+        </annotation>
+    </xsl:template>
 
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='annotation'">The annotation must have an epub:type of 'annotation'</sch:assert>
-            </sch:rule>
-            <xsl:call-template name="attlist.annotation"/>
-            <oneOrMore>
-                <choice>
-                    <xsl:call-template name="block"/>
-                    <xsl:call-template name="inlineinblock"/>
-                </choice>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.annotation">
+    <xsl:template name="attlist.annotation">
         <xsl:call-template name="attrsrqd"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="epigraph">
-        <p>
-
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='epigraph'">The epigraph must have an epub:type of 'epigraph'</sch:assert>
-            </sch:rule>
+    <xsl:template match="html:aside[f:types(.)='epigraph']">
+        <epigraph>
             <xsl:call-template name="attlist.epigraph"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.epigraph">
+            <xsl:apply-templates select="node()"/>
+        </epigraph>
+    </xsl:template>
+
+    <xsl:template name="attlist.epigraph">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="byline">
-        <span>
-
+    <xsl:template match="html:span[f:classes(.)='byline']">
+        <byline>
             <xsl:call-template name="attlist.byline"/>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@class,' ')='byline'">Bylines must have a 'byline' class.</sch:assert>
-            </sch:rule>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.byline">
+            <xsl:apply-templates select="node()"/>
+        </byline>
+    </xsl:template>
+
+    <xsl:template name="attlist.byline">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="dateline">
-        <span>
-
+    <xsl:template match="html:span[f:classes(.)='dateline']">
+        <dateline>
             <xsl:call-template name="attlist.dateline"/>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@class,' ')='dateline'">Datelines must have a 'dateline' class.</sch:assert>
-            </sch:rule>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.dateline">
+            <xsl:apply-templates select="node()"/>
+        </dateline>
+    </xsl:template>
+
+    <xsl:template name="attlist.dateline">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="linegroup">
-        <section>
-
+    <xsl:template match="html:div[f:classes(.)='linegroup']">
+        <linegroup>
             <xsl:call-template name="attlist.linegroup"/>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@class,' ')='linegroup'">Linegroups must have a 'linegroup' class.</sch:assert>
-            </sch:rule>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="hd"/>
-                    <xsl:call-template name="dateline"/>
-                    <xsl:call-template name="epigraph"/>
-                    <xsl:call-template name="byline"/>
-                    <xsl:call-template name="linegroup"/>
-                    <xsl:call-template name="line"/>
-                    <xsl:call-template name="pagenum"/>
-                    <xsl:call-template name="prodnote"/>
-                    <xsl:call-template name="noteref"/>
-                    <xsl:call-template name="annoref"/>
-                    <xsl:call-template name="note"/>
-                    <xsl:call-template name="annotation"/>
-                    <xsl:call-template name="p"/>
-                    <xsl:call-template name="blockquote"/>
-                    <xsl:call-template name="img"/>
-                    <xsl:call-template name="imggroup"/>
-                </choice>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </linegroup>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.linegroup">
+    <xsl:template name="attlist.linegroup">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="poem">
-        <section>
-
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='z3998:poem'">The poem must have an epub:type of 'z3998:poem'</sch:assert>
-            </sch:rule>
+    <xsl:template match="html:div[f:types(.)='z3998:poem']">
+        <poem>
             <xsl:call-template name="attlist.poem"/>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="title"/>
-                    <xsl:call-template name="author"/>
-                    <xsl:call-template name="hd"/>
-                    <xsl:call-template name="dateline"/>
-                    <xsl:call-template name="epigraph"/>
-                    <xsl:call-template name="byline"/>
-                    <xsl:call-template name="linegroup"/>
-                    <xsl:call-template name="line"/>
-                    <xsl:call-template name="pagenum"/>
-                    <xsl:call-template name="img"/>
-                    <xsl:call-template name="imggroup"/>
-                    <xsl:call-template name="sidebar"/>
-                </choice>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.poem">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </poem>
+    </xsl:template>
 
-    <!--<xsl:template name="a">
+    <xsl:template name="attlist.poem">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="html:a">
         <a>
-
             <xsl:call-template name="attlist.a"/>
-            <zeroOrMore>
-                <xsl:call-template name="inlinenoa"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </a>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.a">
-        <xsl:call-template name="attrs"/>
-        <xsl:if test="@type">
-            <xsl:attribute name="type" select="@type"/> <!-\- ContentType -\->
-        </xsl:if>
-        <xsl:if test="@href">
-            <xsl:attribute name="href" select="@href"/> <!-\- URI -\->
-        </xsl:if>
-        <xsl:if test="@hreflang">
-            <xsl:attribute name="hreflang" select="@hreflang"/> <!-\- LanguageCode -\->
-        </xsl:if>
-        <xsl:if test="@rel">
-            <xsl:attribute name="rel" select="@rel"/> <!-\- LinkTypes -\->
-        </xsl:if>
-        <xsl:if test="@accesskey">
-            <xsl:attribute name="accesskey" select="@accesskey"/> <!-\- Character -\->
-        </xsl:if>
-        <xsl:if test="@tabindex">
-            <xsl:attribute name="tabindex" select="@tabindex"/> <!-\- Number -\->
-        </xsl:if>
-        <xsl:if test="@target">
-            <attribute name="target">
-                <value>_blank</value>
-            </attribute>
-        </xsl:if>
-    </xsl:template>-->
+    <xsl:template name="attlist.a">
+        <xsl:call-template name="attrs">
+            <!-- Preserve @target as class attribute. Assumes that only characters that are valid for class names are used. -->
+            <xsl:with-param name="classes" select="if (@target) then concat('target-',replace(@target,'_','-')) else ()" tunnel="yes"/>
+        </xsl:call-template>
+        <xsl:copy-of select="@type|@href|@hreflang|@rel|@accesskey|@tabindex"/>
+        <!-- @download, @media, @type is dropped - they don't have a good equivalent in DTBook -->
 
-    <!--<xsl:template name="em">
+        <xsl:choose>
+            <xsl:when test="f:classes(.)[matches(.,'^external-(true|false)')]">
+                <xsl:attribute name="external" select="replace((f:classes(.)[matches(.,'^external-(true|false)')])[1],'^external-','')"/>
+            </xsl:when>
+            <xsl:when test="@target='_blank' or matches(@href,'^(\w+:|/)')">
+                <xsl:attribute name="external" select="'true'"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="html:em">
         <em>
             <xsl:call-template name="attlist.em"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.em">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </em>
+    </xsl:template>
 
-    <!--<xsl:template name="strong">
+    <xsl:template name="attlist.em">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="html:strong">
         <strong>
             <xsl:call-template name="attlist.strong"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.strong">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </strong>
+    </xsl:template>
 
-    <!--<xsl:template name="dfn">
+    <xsl:template name="attlist.strong">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="html:dfn">
         <dfn>
             <xsl:call-template name="attlist.dfn"/>
-            <zeroOrMore>
-                <xsl:call-template name="inlinenodfn"/>
+            <xsl:apply-templates select="node()"/>
+        </dfn>
+    </xsl:template>
 
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.dfn">
+    <xsl:template name="attlist.dfn">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="kbd">
+    <xsl:template match="html:kbd">
         <kbd>
             <xsl:call-template name="attlist.kbd"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.kbd">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </kbd>
+    </xsl:template>
 
-    <!--<xsl:template name="code">
+    <xsl:template name="attlist.kbd">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="html:code">
         <code>
             <xsl:call-template name="attlist.code"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </code>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.code">
-        <xsl:if test="@id">
-            <xsl:attribute name="id" select="@id"/> <!-\- ID -\->
-        </xsl:if>
-        <xsl:if test="@class">
-            <attribute name="class"/>
-        </xsl:if>
-        <xsl:if test="@title">
-            <xsl:attribute name="title" select="@title"/> <!-\- Text -\->
-        </xsl:if>
-        <xsl:if test="@xml:space">
-            <attribute name="xml:space" a:defaultValue="preserve">
-                <choice>
-                    <value>default</value>
-                    <value>preserve</value>
-                </choice>
-            </attribute>
-        </xsl:if>
-        
+    <xsl:template name="attlist.code">
+        <xsl:call-template name="attrs"/>
         <xsl:call-template name="i18n"/>
+    </xsl:template>
 
-    </xsl:template>-->
-
-    <!--<xsl:template name="samp">
+    <xsl:template match="html:samp">
         <samp>
             <xsl:call-template name="attlist.samp"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </samp>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.samp">
-        <xsl:if test="@id">
-            <xsl:attribute name="id" select="@id"/> <!-\- ID -\->
-        </xsl:if>
-        <xsl:if test="@class">
-            <attribute name="class"/>
-        </xsl:if>
-        <xsl:if test="@title">
-            <xsl:attribute name="title" select="@title"/> <!-\- Text -\->
-        </xsl:if>
-        <xsl:if test="@xml:space">
-            <attribute name="xml:space" a:defaultValue="preserve">
-                <choice>
-                    <value>default</value>
-                    <value>preserve</value>
-                </choice>
-            </attribute>
-        </xsl:if>
-        
-        <xsl:call-template name="i18n"/>
-
-    </xsl:template>-->
-
-    <!--<xsl:template name="cite">
-        <span>
-            <xsl:call-template name="attlist.cite"/>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='z3998:nonresolving-citation'">The citation must have an epub:type of 'z3998:nonresolving-citation'</sch:assert>
-            </sch:rule>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="inline"/>
-                    <xsl:call-template name="inlinetitle"/>
-                    <xsl:call-template name="author"/>
-                </choice>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.cite">
+    <xsl:template name="attlist.samp">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+        <xsl:call-template name="i18n"/>
+    </xsl:template>
 
-    <!--<xsl:template name="abbr">
+    <xsl:template match="html:span[f:types(.)='z3998:nonresolving-citation']">
+        <cite>
+            <xsl:call-template name="attlist.cite"/>
+            <xsl:apply-templates select="node()"/>
+        </cite>
+    </xsl:template>
+
+    <xsl:template name="attlist.cite">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="html:abbr">
         <abbr>
             <xsl:call-template name="attlist.abbr"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </abbr>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.abbr">
+    <xsl:template name="attlist.abbr">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="acronym">
-        <abbr>
+    <xsl:template match="html:abbr[f:classes(.)='acronym']">
+        <acronym>
             <xsl:call-template name="attlist.acronym"/>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@class,' ')='acronym'">Acronyms must have a 'acronym' class.</sch:assert>
-            </sch:rule>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </acronym>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.acronym">
+    <xsl:template name="attlist.acronym">
         <xsl:call-template name="attrs"/>
-        <xsl:if test="@style">
-            <attribute name="style">
-                <value>-epub-speak-as: spell-out;</value>
-            </attribute>
+        <xsl:if test="f:classes(.)='spell-out' or matches(@style,'-epub-speak-as:\s*spell-out')">
+            <xsl:attribute name="pronounce" select="'no'"/>
         </xsl:if>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="sub">
+    <xsl:template match="html:sub">
         <sub>
             <xsl:call-template name="attlist.sub"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.sub">
+            <xsl:apply-templates select="node()"/>
+        </sub>
+    </xsl:template>
+    
+    <xsl:template name="attlist.sub">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="sup">
+    <xsl:template match="html:sup">
         <sup>
             <xsl:call-template name="attlist.sup"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.sup">
+            <xsl:apply-templates select="node()"/>
+        </sup>
+    </xsl:template>
+    
+    <xsl:template name="attlist.sup">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="span">
+    <xsl:template match="html:span">
         <span>
             <xsl:call-template name="attlist.span"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.span">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </span>
+    </xsl:template>
 
-    <!--<xsl:template name="bdo">
+    <xsl:template name="attlist.span">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="html:bdo">
         <bdo>
             <xsl:call-template name="attlist.bdo"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </bdo>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.bdo">
+    <xsl:template name="attlist.bdo">
         <xsl:call-template name="coreattrs"/>
-        <xsl:if test="@xml:lang">
-            <xsl:attribute name="xml:lang" select="@xml:lang"/> <!-\- LanguageCode -\->
-        </xsl:if>
-        <attribute name="dir">
-            <choice>
-                <value>ltr</value>
-                <value>rtl</value>
-            </choice>
-        </attribute>
+        <xsl:call-template name="i18n"/>
+    </xsl:template>
 
-    </xsl:template>-->
-
-    <!--<xsl:template name="sent">
-        <span>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='z3998:sentence'">The sentence must have an epub:type of 'z3998:sentence'</sch:assert>
-            </sch:rule>
+    <xsl:template match="html:span[f:types(.)='z3998:sentence']">
+        <sent>
             <xsl:call-template name="attlist.sent"/>
-            <zeroOrMore>
-                <xsl:call-template name="inlines"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.sent">
+            <xsl:apply-templates select="node()"/>
+        </sent>
+    </xsl:template>
+    
+    <xsl:template name="attlist.sent">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="w">
-        <span>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='z3998:word'">The word must have an epub:type of 'z3998:word'</sch:assert>
-            </sch:rule>
+    <xsl:template match="html:span[f:types(.)='z3998:word']">
+        <w>
             <xsl:call-template name="attlist.w"/>
-            <zeroOrMore>
-                <xsl:call-template name="inlinew"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.w">
+            <xsl:apply-templates select="node()"/>
+        </w>
+    </xsl:template>
+    
+    <xsl:template name="attlist.w">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="pagenum">
-        <span>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='pagebreak'">The pagebreak must have an epub:type of 'pagebreak'</sch:assert>
-            </sch:rule>
+    <xsl:template match="html:span[f:types(.)='pagebreak']">
+        <pagenum>
             <xsl:call-template name="attlist.pagenum"/>
-            <sch:rule context=".">
-                <sch:assert test="matches(@class,'(^|.* )(page-front|page-normal|page-special)( .*|$)')">Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special'
-                    class.</sch:assert>
-                <sch:assert test="matches(@title,'.+')">The title attribute must be used to describe the page number.</sch:assert>
-            </sch:rule>
-        </element>
-    </xsl:template>-->
+            <xsl:value-of select="@title"/>
+        </pagenum>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.pagenum">
-        <xsl:call-template name="attrsrqd"/>
-    </xsl:template>-->
+    <xsl:template name="attlist.pagenum">
+        <xsl:variable name="attributes-including-title">
+            <xsl:call-template name="attrsrqd"/>
+        </xsl:variable>
+        <xsl:copy-of select="$attributes-including-title[not(name()='title')]"/>
+    </xsl:template>
 
-    <!--<xsl:template name="noteref">
-        <a>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='noteref'">The note reference must have an epub:type of 'noteref'</sch:assert>
-            </sch:rule>
+    <xsl:template match="html:a[f:types(.)='noteref']">
+        <noteref>
             <xsl:call-template name="attlist.noteref"/>
-            <text/>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </noteref>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.noteref">
+    <xsl:template name="attlist.noteref">
         <xsl:call-template name="attrs"/>
-        <xsl:attribute name="href" select="@href"/> <!-\- URI -\->
+        <xsl:attribute name="idref" select="@href"/>
         <xsl:if test="@type">
-            <xsl:attribute name="type" select="@type"/> <!-\- ContentType -\->
+            <xsl:attribute name="type" select="@type"/> <!-- ContentType -->
         </xsl:if>
-    </xsl:template>-->
+    </xsl:template>
 
     <!--<xsl:template name="annoref">
         <a>
@@ -1552,18 +608,6 @@
         <xsl:if test="@cite">
             <xsl:attribute name="cite" select="@cite"/> <!-\- URI -\->
         </xsl:if>
-    </xsl:template>-->
-
-    <!--<xsl:template name="Length">
-        <data type="string" datatypeLibrary=""/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="MultiLength">
-        <data type="string" datatypeLibrary=""/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="Pixels">
-        <data type="string" datatypeLibrary=""/>
     </xsl:template>-->
 
     <!--<xsl:template name="img">
@@ -1644,48 +688,38 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>-->
 
-    <!--<xsl:template name="doctitle">
-        <h1>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='fulltitle'">The full title must have an epub:type of 'fulltitle'</sch:assert>
-            </sch:rule>
+    <xsl:template name="doctitle">
+        <doctitle>
             <xsl:call-template name="attlist.doctitle"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.doctitle">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </doctitle>
+    </xsl:template>
 
-    <!--<xsl:template name="docauthor">
-        <p>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='z3998:author'">The document author must have an epub:type of 'z3998:author'</sch:assert>
-            </sch:rule>
+    <xsl:template name="attlist.doctitle">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template name="docauthor">
+        <docauthor>
             <xsl:call-template name="attlist.docauthor"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.docauthor">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </docauthor>
+    </xsl:template>
 
-    <!--<xsl:template name="covertitle">
-        <h1>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='covertitle'">The cover title must have an epub:type of 'covertitle'</sch:assert>
-            </sch:rule>
-            <xsl:call-template name="attlist.covertitle"/>
-            <text/>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.covertitle">
+    <xsl:template name="attlist.docauthor">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
+
+    <xsl:template name="covertitle">
+        <covertitle>
+            <xsl:call-template name="attlist.covertitle"/>
+            <xsl:apply-templates select="node()"/>
+        </covertitle>
+    </xsl:template>
+
+    <xsl:template name="attlist.covertitle">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
 
     <!--<xsl:template name="h1">
         <h1>
@@ -1782,6 +816,7 @@
             </zeroOrMore>
         </element>
     </xsl:template>-->
+
     <!--<xsl:template name="attlist.hd">
         <xsl:call-template name="attrs"/>
     </xsl:template>-->
@@ -1956,39 +991,6 @@
 
     <!--<xsl:template name="attlist.lic">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="Scope">
-        <choice>
-            <value>row</value>
-            <value>col</value>
-            <value>rowgroup</value>
-            <value>colgroup</value>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="TFrame">
-        <choice>
-            <value>void</value>
-            <value>above</value>
-            <value>below</value>
-            <value>hsides</value>
-            <value>lhs</value>
-            <value>rhs</value>
-            <value>vsides</value>
-            <value>box</value>
-            <value>border</value>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="TRules">
-        <choice>
-            <value>none</value>
-            <value>groups</value>
-            <value>rows</value>
-            <value>cols</value>
-            <value>all</value>
-        </choice>
     </xsl:template>-->
 
     <!--<xsl:template name="cellhvalign">
@@ -2244,5 +1246,39 @@
         </xsl:if>
         <xsl:call-template name="cellhvalign"/>
     </xsl:template>-->
+
+    <xsl:template name="copy-preceding-comments">
+        <xsl:variable name="this" select="."/>
+        <xsl:apply-templates select="preceding-sibling::comment()[not(preceding-sibling::*) or preceding-sibling::*[1] = $this/preceding-sibling::*[1]]"/>
+    </xsl:template>
+
+    <xsl:function name="f:types" as="xs:string*">
+        <xsl:param name="element" as="element()"/>
+        <xsl:sequence select="tokenize($element/@epub:type,'\s+')"/>
+    </xsl:function>
+
+    <xsl:function name="f:classes" as="xs:string*">
+        <xsl:param name="element" as="element()"/>
+        <xsl:sequence select="tokenize($element/@class,'\s+')"/>
+    </xsl:function>
+
+    <xsl:function name="f:level" as="xs:integer">
+        <xsl:param name="element" as="element()"/>
+        <xsl:variable name="h" select="($element/descendant-or-self::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6])[1]"/>
+        <xsl:variable name="sections" select="$h/ancestor::*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body]"/>
+        <xsl:variable name="explicit-level" select="count($sections)-1"/>
+        <xsl:variable name="h-in-section" select="($h, $h/preceding::*[./preceding::*=$sections[1]])"/>
+        <xsl:variable name="h-in-section-levels" select="$h-in-section/number(replace(local-name(),'^h',''))"/>
+        <xsl:variable name="implicit-level"
+            select="count(distinct-values((for $i in (1 to count($h-in-section-levels)-1) return (if (not($h-in-section-levels[$i] > $h-in-section-levels[position()>$i])) then $h-in-section-levels[$i] else ()), $h-in-section-levels[last()])))"/>
+        <xsl:variable name="level" select="$explicit-level + $implicit-level"/>
+        <xsl:sequence select="min(($level, 6))"/>
+        <!--
+            NOTE: DTBook only supports 6 levels when using the explicit level1-level6 / h1-h6 elements,
+            so min(($level, 6)) is used to flatten deeper structures.
+            The implicit level / hd elements could be used in cases where the structures are deeper.
+            However, our tools would have to support those elements.
+        -->
+    </xsl:function>
 
 </xsl:stylesheet>
