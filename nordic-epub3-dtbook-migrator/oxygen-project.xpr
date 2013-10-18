@@ -14,7 +14,7 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xslt/dtbook-to-epub3.xsl</String>
+                                    <String>src/main/resources/xml/xslt/epub3-to-dtbook.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -29,7 +29,7 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xslt/epub3-to-dtbook.xsl</String>
+                                    <String>src/main/resources/xml/xslt/dtbook-to-epub3.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>

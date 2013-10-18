@@ -20,7 +20,7 @@
         <xsl:param name="classes" select="()" tunnel="yes"/>
         <xsl:variable name="old-classes" select="f:classes(.)"/>
 
-        <xsl:variable name="showin" select="($old-classes[matches(.,'^showin-...$')])[1]/replace(.,'showin-','')"/>
+        <xsl:variable name="showin" select="replace($old-classes[matches(.,'^showin-...$')][1],'showin-','')"/>
         <xsl:if test="$showin">
             <xsl:attribute name="showin" select="$showin"/>
         </xsl:if>
@@ -68,7 +68,7 @@
         <head>
             <xsl:call-template name="attlist.head"/>
             <xsl:apply-templates select="node()"/>
-            <!-- TODO: maybe add a default CSS here? -->
+            <!-- TODO: maybe add some default CSS styles here? -->
         </head>
     </xsl:template>
 
@@ -294,7 +294,7 @@
 
     <xsl:template match="html:aside[f:types(.)='annotation']">
         <annotation>
-            <xsl:call-template name="attlist.note"/>
+            <xsl:call-template name="attlist.annotation"/>
             <xsl:apply-templates select="node()"/>
         </annotation>
     </xsl:template>
@@ -336,7 +336,7 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <xsl:template match="html:div[f:classes(.)='linegroup']">
+    <xsl:template match="html:*[f:classes(.)='linegroup']">
         <linegroup>
             <xsl:call-template name="attlist.linegroup"/>
             <xsl:apply-templates select="node()"/>
@@ -347,7 +347,7 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <xsl:template match="html:div[f:types(.)='z3998:poem']">
+    <xsl:template match="html:*[f:types(.)='z3998:poem']">
         <poem>
             <xsl:call-template name="attlist.poem"/>
             <xsl:apply-templates select="node()"/>
@@ -371,7 +371,7 @@
             <xsl:with-param name="classes" select="if (@target) then concat('target-',replace(@target,'_','-')) else ()" tunnel="yes"/>
         </xsl:call-template>
         <xsl:copy-of select="@type|@href|@hreflang|@rel|@accesskey|@tabindex"/>
-        <!-- @download, @media, @type is dropped - they don't have a good equivalent in DTBook -->
+        <!-- @download, @media and @type is dropped - they don't have a good equivalent in DTBook -->
 
         <xsl:choose>
             <xsl:when test="f:classes(.)[matches(.,'^external-(true|false)')]">
@@ -621,11 +621,11 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template name="imggroup">
+    <xsl:template match="html:figure">
         <imggroup>
             <xsl:call-template name="attlist.imggroup"/>
             <xsl:variable name="caption-first" select="*[1]=html:figcaption"/>
-            <xsl:variable name="imggroup-captions" select="boolean(html:figcaption/html:div[f:classes(.)='imggroup-caption'])"/>
+            <xsl:variable name="imggroup-captions" select="html:figcaption/html:div[f:classes(.)='imggroup-caption']"/>
             <xsl:choose>
                 <!-- multiple image captions - one for each image -->
                 <xsl:when test="$imggroup-captions">
@@ -641,9 +641,9 @@
                                     </xsl:if>
                                     <xsl:apply-templates select="$imggroup-captions[$position + max((0,$captions - $images))]"/>
                                 </xsl:if>
-                                
+
                                 <xsl:apply-templates select="."/>
-                                
+
                                 <xsl:if test="not($caption-first)">
                                     <xsl:if test="$position=$images">
                                         <xsl:apply-templates select="$imggroup-captions[position()&gt;=$position]"/>
@@ -651,7 +651,7 @@
                                     <xsl:apply-templates select="$imggroup-captions[$position]"/>
                                 </xsl:if>
                             </xsl:when>
-                            
+
                             <xsl:otherwise>
                                 <xsl:apply-templates select="node()"/>
                             </xsl:otherwise>
@@ -670,26 +670,16 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <!--<xsl:template name="p">
+    <xsl:template match="html:p">
         <p>
             <xsl:call-template name="attlist.p"/>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="inline"/>
-                </choice>
-            </zeroOrMore>
-        </element>
+            <xsl:apply-templates select="node()"/>
+        </p>
+    </xsl:template>
 
-        <zeroOrMore>
-            <choice>
-                <xsl:call-template name="list"/>
-                <xsl:call-template name="dl"/>
-            </choice>
-        </zeroOrMore>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.p">
+    <xsl:template name="attlist.p">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
     <xsl:template name="doctitle">
         <doctitle>
@@ -724,347 +714,159 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <!--<xsl:template name="h1">
-        <h1>
-            <xsl:call-template name="attlist.h1"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h1">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    <xsl:template match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
+        <xsl:element name="{local-name()}">
+            <xsl:call-template name="attlist.h"/>
+            <xsl:apply-templates select="node()"/>
+        </xsl:element>
+    </xsl:template>
 
-    <!--<xsl:template name="h2">
-        <h2>
-            <xsl:call-template name="attlist.h2"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h2">
+    <xsl:template name="attlist.h">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="h3">
-        <h3>
-            <xsl:call-template name="attlist.h3"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h3">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="h4">
-        <h4>
-            <xsl:call-template name="attlist.h4"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h4">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="h5">
-        <h5>
-            <xsl:call-template name="attlist.h5"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h5">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="h6">
-        <h6>
-            <xsl:call-template name="attlist.h6"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h6">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="bridgehead">
-        <p>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='bridgehead'">The bridgehead must have an epub:type of 'bridgehead'</sch:assert>
-            </sch:rule>
+    <xsl:template match="html:p[f:types(.)='bridgehead']">
+        <bridgehead>
             <xsl:call-template name="attlist.bridgehead"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.bridgehead">
+            <xsl:apply-templates select="node()"/>
+        </bridgehead>
+    </xsl:template>
+
+    <xsl:template name="attlist.bridgehead">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="hd">
-        <h1>
-            <xsl:call-template name="attlist.hd"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.hd">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="blockquote">
+    <xsl:template match="html:blockquote">
         <blockquote>
             <xsl:call-template name="attlist.blockquote"/>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="pagenum"/>
-                    <xsl:call-template name="block"/>
-                </choice>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </blockquote>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.blockquote">
+    <xsl:template name="attlist.blockquote">
         <xsl:call-template name="attrs"/>
-        <xsl:if test="@cite">
-            <xsl:attribute name="cite" select="@cite"/> <!-\- URI -\->
-        </xsl:if>
-    </xsl:template>-->
+        <xsl:copy-of select="@cite"/>
+    </xsl:template>
 
-    <!--<xsl:template name="dl">
-
-        <optional>
-            <xsl:call-template name="pagenum"/>
-        </xsl:if>
+    <xsl:template match="html:dl">
         <dl>
             <xsl:call-template name="attlist.dl"/>
-            <zeroOrMore>
-                <group>
-                    <oneOrMore>
-                        <xsl:call-template name="dt"/>
-                    </oneOrMore>
-                    <oneOrMore>
-                        <xsl:call-template name="dd"/>
-                    </oneOrMore>
-                </group>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.dl">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </dl>
+    </xsl:template>
 
-    <!--<xsl:template name="dt">
+    <xsl:template name="attlist.dl">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="html:dt">
         <dt>
             <xsl:call-template name="attlist.dt"/>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="inline"/>
-                </choice>
-            </zeroOrMore>
-            <optional>
-                <xsl:call-template name="pagenum"/>
-            </xsl:if>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.dt">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </dt>
+    </xsl:template>
 
-    <!--<xsl:template name="dd">
+    <xsl:template name="attlist.dt">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="html:dd">
         <dd>
             <xsl:call-template name="attlist.dd"/>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="flow"/>
-                </choice>
-            </zeroOrMore>
-            <optional>
-                <xsl:call-template name="pagenum"/>
-            </xsl:if>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.dd">
+            <xsl:apply-templates select="node()"/>
+        </dd>
+    </xsl:template>
+
+    <xsl:template name="attlist.dd">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="list">
+    <xsl:template match="html:ol | html:ul">
+        <list>
+            <xsl:call-template name="attlist.list"/>
+            <xsl:apply-templates select="node()"/>
+        </list>
+    </xsl:template>
 
-        <choice>
-            <ol>
-                <choice>
-                    <xsl:call-template name="attlist.list.ordered"/>
-                    <xsl:call-template name="attlist.list.preformatted"/>
-                </choice>
-                <oneOrMore>
-
-                    <xsl:call-template name="li"/>
-                </oneOrMore>
-            </element>
-            <ul>
-                <xsl:call-template name="attlist.list.unordered"/>
-                <oneOrMore>
-
-                    <xsl:call-template name="li"/>
-                </oneOrMore>
-            </element>
-        </choice>
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.list.ordered">
+    <xsl:template name="attlist.list">
+        <xsl:attribute name="type" select="if (self::html:ul) then 'ul' else if (f:classes(.)='list-preformatted') then 'pl' else 'ol'"/>
         <xsl:call-template name="attrs"/>
-
+        <xsl:copy-of select="@start"/>
         <xsl:if test="@type">
-            <attribute name="type">
-                <choice>
-                    <value>1</value>
-                    <value>a</value>
-                    <value>A</value>
-                    <value>i</value>
-                    <value>I</value>
-                </choice>
-            </attribute>
+            <xsl:attribute name="enum" select="@type"/>
         </xsl:if>
-        <xsl:if test="@start">
-            <attribute name="start"/>
-        </xsl:if>
+        <xsl:attribute name="depth" select="count(ancestor::html:li)+1"/>
+    </xsl:template>
 
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.list.preformatted">
-        <xsl:call-template name="attrs"/>
-        <attribute name="style">
-            <value>list-style-type: none;</value>
-        </attribute>
-
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.list.unordered">
-        <xsl:call-template name="attrs"/>
-
-    </xsl:template>-->
-
-    <!--<xsl:template name="li">
+    <xsl:template match="html:li">
         <li>
-            <choice>
-                <group>
-                    <xsl:call-template name="attlist.li"/>
-                    <zeroOrMore>
-                        <choice>
-                            <xsl:call-template name="flow"/>
-                            <xsl:call-template name="lic"/>
-                        </choice>
-                    </zeroOrMore>
-                    <optional>
-                        <xsl:call-template name="pagenum"/>
-                    </xsl:if>
-                </group>
-                <xsl:call-template name="hd"/>
-                <xsl:call-template name="prodnote"/>
-            </choice>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.li">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:call-template name="attlist.li"/>
+            <xsl:apply-templates select="node()"/>
+        </li>
+    </xsl:template>
 
-    <!--<xsl:template name="lic">
-        <span>
+    <xsl:template name="attlist.li">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="html:span[f:classes(.)='lic']">
+        <lic>
             <xsl:call-template name="attlist.lic"/>
-            <sch:rule context=".">
-                <sch:assert test="tokenize(@class,' ')='lic'">List item components must have a 'lic' class.</sch:assert>
-            </sch:rule>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </lic>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.lic">
+    <xsl:template name="attlist.lic">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="cellhvalign">
+    <xsl:template name="cellhvalign">
+        <!--
+            the @cellhalign and @cellvalign attributes could potentially be inferred from the CSS here,
+            but it's probably not worth it so they are ignored for now.
+        -->
+    </xsl:template>
 
-        <xsl:if test="@style">
-            <attribute name="style">
-                <data type="string">
-                    <param name="pattern">^vertical-align: (top|middle|bottom|baseline); (text-align: (left|center|right|justify);|text-align: right; padding-right: \d+ch;)(| width: \w+;)$</param>
-
-                </data>
-            </attribute>
-        </xsl:if>
-
-    </xsl:template>-->
-
-    <!--<xsl:template name="table">
-        <optional>
-            <xsl:call-template name="pagenum"/>
-        </xsl:if>
+    <xsl:template match="html:table">
         <table>
             <xsl:call-template name="attlist.table"/>
-            <optional>
+            <xsl:for-each select="html:caption">
                 <xsl:call-template name="caption.table"/>
-            </xsl:if>
+            </xsl:for-each>
+            <xsl:apply-templates select="html:colgroup"/>
+            <xsl:apply-templates select="html:thead"/>
+            <xsl:apply-templates select="html:tfoot"/>
+            <xsl:apply-templates select="html:tbody | html:tr"/>
+        </table>
+    </xsl:template>
 
-            <zeroOrMore>
-                <xsl:call-template name="colgroup"/>
-            </zeroOrMore>
-            <optional>
-                <xsl:call-template name="thead"/>
-            </xsl:if>
-            <optional>
-                <xsl:call-template name="tfoot"/>
-            </xsl:if>
-            <choice>
-                <oneOrMore>
-                    <xsl:call-template name="tbody"/>
-                </oneOrMore>
-                <oneOrMore>
-                    <xsl:call-template name="tr"/>
-
-                </oneOrMore>
-            </choice>
-        </element>
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.table">
+    <xsl:template name="attlist.table">
         <xsl:call-template name="attrs"/>
+        <xsl:if test="html:caption/html:p[f:classes(.)='table-summary']">
+            <xsl:attribute name="summary" select="normalize-space(string-join(html:caption/html:p[f:classes(.)='table-summary']//text(),' '))"/>
+        </xsl:if>
+        <xsl:if test="f:classes(.)[matches(.,'^table-rules-')]">
+            <xsl:attribute name="rules" select="replace(f:classes(.)[matches(.,'^table-rules-')][1],'^table-rules-','')"/>
+        </xsl:if>
+        <xsl:if test="f:classes(.)[matches(.,'^table-frame-')]">
+            <xsl:attribute name="frame" select="replace(f:classes(.)[matches(.,'^table-frame-')][1],'^table-frame-','')"/>
+        </xsl:if>
+        <!--
+            @cellspacing, @cellpadding and @width could potentially be inferred from the CSS,
+            but it's probably not worth it so they are ignored for now
+        -->
+    </xsl:template>
 
-        <attribute name="style"/>
-    </xsl:template>-->
+    <xsl:template name="caption.table">
+        <xsl:variable name="content" select="node()[not(self::html:p[f:classes(.)='table-summary'])]"/>
+        <xsl:if test="$content">
+            <caption>
+                <xsl:call-template name="attlist.caption"/>
+                <xsl:apply-templates select="$content"/>
+            </caption>
+        </xsl:if>
+    </xsl:template>
 
-    <!--<xsl:template name="caption.table">
-        <caption>
-            <xsl:call-template name="attlist.caption"/>
-            <optional>
-                <p>
-
-                    <attribute name="class"/>
-                    <sch:rule context=".">
-                        <sch:assert test="matches(@class,'(^|.* )table-summary( .*|$)')">Table summaries must have a 'table-summary' class.</sch:assert>
-                    </sch:rule>
-                    <xsl:call-template name="Text"/>
-                </element>
-            </xsl:if>
-            <zeroOrMore>
-                <xsl:call-template name="flownotable"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    
     <xsl:template match="html:figcaption">
         <xsl:variable name="content" select="node()[not(self::div[f:classes(.)='imggroup-caption'])]"/>
         <xsl:if test="$content">
@@ -1074,7 +876,7 @@
             </caption>
         </xsl:if>
     </xsl:template>
-    
+
     <xsl:template match="html:div[f:classes(.)='imggroup-caption']">
         <caption>
             <xsl:call-template name="attlist.caption"/>
@@ -1086,156 +888,117 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <!--<xsl:template name="thead">
+    <xsl:template match="html:thead">
         <thead>
             <xsl:call-template name="attlist.thead"/>
-            <oneOrMore>
-                <xsl:call-template name="tr"/>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.thead">
+            <xsl:apply-templates select="node()"/>
+        </thead>
+    </xsl:template>
+
+    <xsl:template name="attlist.thead">
         <xsl:call-template name="attrs"/>
         <xsl:call-template name="cellhvalign"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="tfoot">
+    <xsl:template match="html:tfoot">
         <tfoot>
             <xsl:call-template name="attlist.tfoot"/>
-            <oneOrMore>
-                <xsl:call-template name="tr"/>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.tfoot">
+            <xsl:apply-templates select="node()"/>
+        </tfoot>
+    </xsl:template>
+
+    <xsl:template name="attlist.tfoot">
         <xsl:call-template name="attrs"/>
         <xsl:call-template name="cellhvalign"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="tbody">
+    <xsl:template match="html:tbody">
         <tbody>
             <xsl:call-template name="attlist.tbody"/>
-            <oneOrMore>
-                <choice>
-                    <xsl:call-template name="tr"/>
+            <xsl:apply-templates select="node()"/>
+        </tbody>
+    </xsl:template>
 
-                </choice>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.tbody">
+    <xsl:template name="attlist.tbody">
         <xsl:call-template name="attrs"/>
         <xsl:call-template name="cellhvalign"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="colgroup">
+    <xsl:template match="html:colgroup">
         <colgroup>
             <xsl:call-template name="attlist.colgroup"/>
-            <zeroOrMore>
-                <xsl:call-template name="col"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </colgroup>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.colgroup">
+    <xsl:template name="attlist.colgroup">
         <xsl:call-template name="attrs"/>
-        <xsl:if test="@span">
-            <xsl:attribute name="span" select="@span"/> <!-\- NMTOKEN, a:defaultValue="1" -\->
-        </xsl:if>
+        <xsl:copy-of select="@span"/>
         <xsl:call-template name="cellhvalign"/>
-    </xsl:template>-->
+        <!--
+            @width could potentially be inferred from the CSS,
+            but it's probably not worth it so they are ignored for now
+        -->
+    </xsl:template>
 
-    <!--<xsl:template name="col">
+    <xsl:template match="html:col">
         <col>
             <xsl:call-template name="attlist.col"/>
-            <empty/>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </col>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.col">
+    <xsl:template name="attlist.col">
         <xsl:call-template name="attrs"/>
-        <xsl:if test="@span">
-            <xsl:attribute name="span" select="@span"/> <!-\- NMTOKEN, a:defaultValue="1" -\->
-        </xsl:if>
+        <xsl:copy-of select="@span"/>
         <xsl:call-template name="cellhvalign"/>
-    </xsl:template>-->
+        <!--
+            @width could potentially be inferred from the CSS,
+            but it's probably not worth it so they are ignored for now
+        -->
+    </xsl:template>
 
-    <!--<xsl:template name="tr">
+    <xsl:template match="html:tr">
         <tr>
             <xsl:call-template name="attlist.tr"/>
-            <oneOrMore>
-                <choice>
-                    <xsl:call-template name="th"/>
-                    <xsl:call-template name="td"/>
-                </choice>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </tr>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.tr">
+    <xsl:template name="attlist.tr">
         <xsl:call-template name="attrs"/>
         <xsl:call-template name="cellhvalign"/>
-    </xsl:template>-->
+        <!--
+            @width could potentially be inferred from the CSS,
+            but it's probably not worth it so they are ignored for now
+        -->
+    </xsl:template>
 
-    <!--<xsl:template name="th">
+    <xsl:template match="html:th">
         <th>
             <xsl:call-template name="attlist.th"/>
-            <zeroOrMore>
-                <xsl:call-template name="flownopagenum"/>
-            </zeroOrMore>
-            <optional>
-                <xsl:call-template name="pagenum"/>
-            </xsl:if>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </th>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.th">
+    <xsl:template name="attlist.th">
         <xsl:call-template name="attrs"/>
-
-        <xsl:if test="@headers">
-            <xsl:attribute name="headers" select="@headers"/> <!-\- IDREFS -\->
-        </xsl:if>
-        <xsl:if test="@scope">
-            <xsl:attribute name="scope" select="@scope"/> <!-\- Scope -\->
-        </xsl:if>
-        <xsl:if test="@rowspan">
-            <xsl:attribute name="rowspan" select="@rowspan"/> <!-\- NMTOKEN, a:defaultValue="1" -\->
-        </xsl:if>
-        <xsl:if test="@colspan">
-            <xsl:attribute name="colspan" select="@colspan"/> <!-\- NMTOKEN, a:defaultValue="1" -\->
-        </xsl:if>
+        <xsl:copy-of select="@headers|@scope|@rowspan|@colspan"/>
         <xsl:call-template name="cellhvalign"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="td">
+    <xsl:template match="html:td">
         <td>
             <xsl:call-template name="attlist.td"/>
-            <zeroOrMore>
-                <xsl:call-template name="flownopagenum"/>
-            </zeroOrMore>
-            <optional>
-                <xsl:call-template name="pagenum"/>
-            </xsl:if>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </td>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.td">
+    <xsl:template name="attlist.td">
         <xsl:call-template name="attrs"/>
-
-        <xsl:if test="@headers">
-            <xsl:attribute name="headers" select="@headers"/> <!-\- IDREFS -\->
-        </xsl:if>
-        <xsl:if test="@scope">
-            <xsl:attribute name="scope" select="@scope"/> <!-\- Scope -\->
-        </xsl:if>
-        <xsl:if test="@rowspan">
-            <xsl:attribute name="rowspan" select="@rowspan"/> <!-\- NMTOKEN, a:defaultValue="1" -\->
-        </xsl:if>
-        <xsl:if test="@colspan">
-            <xsl:attribute name="colspan" select="@colspan"/> <!-\- NMTOKEN, a:defaultValue="1" -\->
-        </xsl:if>
+        <xsl:copy-of select="@headers|@scope|@rowspan|@colspan"/>
         <xsl:call-template name="cellhvalign"/>
-    </xsl:template>-->
+    </xsl:template>
 
     <xsl:template name="copy-preceding-comments">
         <xsl:variable name="this" select="."/>

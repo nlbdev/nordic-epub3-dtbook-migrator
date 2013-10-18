@@ -13,7 +13,9 @@
     </xsl:template>
 
     <xsl:template name="coreattrs">
-        <xsl:if test="(self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter)">
+        <xsl:param name="classes" tunnel="yes"/>
+        <xsl:variable name="is-first-level" select="boolean((self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter))"/>
+        <xsl:if test="$is-first-level">
             <!--
                 the frontmatter/bodymatter/rearmatter does not have corresponding elements in HTML and is removed;
                 try preserving the attributes on the closest sectioning element(s) when possible
@@ -24,11 +26,14 @@
             </xsl:if>
         </xsl:if>
         <xsl:copy-of select="@id|@title|@xml:space"/>
-        <xsl:call-template name="classes-and-types"/>
+        <xsl:call-template name="classes-and-types">
+            <xsl:with-param name="classes" select="(if ($is-first-level) then tokenize(parent::*/@class,'\s+') else (), $classes)" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template name="i18n">
-        <xsl:if test="(self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter)">
+        <xsl:variable name="is-first-level" select="boolean((self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter))"/>
+        <xsl:if test="$is-first-level">
             <!--
                 the frontmatter/bodymatter/rearmatter does not have corresponding elements in HTML and is removed;
                 try preserving the attributes on the closest sectioning element(s) when possible
@@ -71,7 +76,9 @@
     </xsl:template>
 
     <xsl:template name="attrsrqd">
-        <xsl:if test="(self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter)">
+        <xsl:param name="classes" tunnel="yes"/>
+        <xsl:variable name="is-first-level" select="boolean((self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter))"/>
+        <xsl:if test="$is-first-level">
             <!--
                 the frontmatter/bodymatter/rearmatter does not have corresponding elements in HTML and is removed;
                 try preserving the attributes on the closest sectioning element(s) when possible
@@ -82,7 +89,9 @@
             </xsl:if>
         </xsl:if>
         <xsl:copy-of select="@id|@title|@xml:space"/>
-        <xsl:call-template name="classes-and-types"/>
+        <xsl:call-template name="classes-and-types">
+            <xsl:with-param name="classes" select="(if ($is-first-level) then tokenize(parent::*/@class,'\s+') else (), $classes)" tunnel="yes"/>
+        </xsl:call-template>
         <!-- ignore @smilref -->
         <xsl:call-template name="i18n"/>
         <!-- @showin handled by classes-and-types -->
@@ -110,11 +119,30 @@
             <xsl:call-template name="attlist.head"/>
             <xsl:call-template name="headmisc"/>
             <style type="text/css">
-                //<![CDATA[
-                .spell-out{
-                    -epub-speak-as:spell-out;
-                }
-                //]]></style>
+                /*<![CDATA[*/
+                .spell-out { -epub-speak-as: spell-out; }
+                .list-preformatted { list-style-type: none; }
+                table[class^="table-rules-"], table[class*=" table-rules-"] { border-width: thin; border-style: hidden; }
+                table[class^="table-rules-"]:not(.table-rules-none), table[class*=" table-rules-"]:not(.table-rules-none) { border-collapse: collapse; }
+                table[class^="table-rules-"] td, table[class*=" table-rules-"] td { border-width: thin; border-style: none; }
+                table[class^="table-rules-"] th, table[class*=" table-rules-"] th { border-width: thin; border-style: none; }
+                table.table-rules-none td, table.table-rules-none th { border-width: thin; border-style: hidden; }
+                table.table-rules-all td, table.table-rules-all th { border-width: thin; border-style: solid; }
+                table.table-rules-cols td, table.table-rules-cols th { border-left-width: thin; border-right-width: thin; border-left-style: solid; border-right-style: solid; }
+                table.table-rules-rows tr { border-top-width: thin; border-bottom-width: thin; border-top-style: solid; border-bottom-style: solid; }
+                table.table-rules-groups colgroup { border-left-width: thin; border-right-width: thin; border-left-style: solid; border-right-style: solid; }
+                table.table-rules-groups tfoot, table.table-rules-groups thead, table.table-rules-groups tbody { border-top-width: thin; border-bottom-width: thin; border-top-style: solid; border-bottom-style: solid; }
+                table[class^="table-frame-"], table[class*=" table-frame-"] { border: thin hidden; }
+                table.table-frame-void { border-style: hidden; }
+                table.table-frame-above { border-style: outset hidden hidden hidden; }
+                table.table-frame-below { border-style: hidden hidden outset hidden; }
+                table.table-frame-lhs { border-style: hidden hidden hidden outset; }
+                table.table-frame-rhs { border-style: hidden outset hidden hidden; }
+                table.table-frame-hsides { border-style: outset hidden; }
+                table.table-frame-vsides { border-style: hidden outset; }
+                table.table-frame-box { border-style: outset; }
+                table.table-frame-border { border-style: outset; }
+                /*]]>*/</style>
         </head>
     </xsl:template>
 
@@ -172,20 +200,34 @@
         </section>
     </xsl:template>
 
+    <xsl:template name="titlepage">
+        <section>
+            <xsl:call-template name="attlist.frontmatter">
+                <xsl:with-param name="types" select="'titlepage'" tunnel="yes"/>
+            </xsl:call-template>
+            <xsl:for-each select="preceding-sibling::dtbook:doctitle">
+                <xsl:call-template name="doctitle"/>
+            </xsl:for-each>
+            <xsl:for-each select="preceding-sibling::dtbook:docauthor">
+                <xsl:call-template name="docauthor"/>
+            </xsl:for-each>
+            <xsl:apply-templates select="node()"/>
+        </section>
+    </xsl:template>
+
     <xsl:template match="dtbook:frontmatter">
-        <!-- all attributes on frontmatter will be lost -->
-        <xsl:choose>
-            <xsl:when test="dtbook:covertitle">
-                <xsl:apply-templates select="(*[f:classes(.)='cover'])[1]/preceding-sibling::node()"/>
-                <xsl:for-each select="(*[f:classes(.)='cover'])[1]">
-                    <xsl:call-template name="cover"/>
-                </xsl:for-each>
-                <xsl:apply-templates select="(*[f:classes(.)='cover'])[1]/following-sibling::node()"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="node()"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <!-- assumes that the cover is always preceding the titlepage (if both are present) -->
+        <xsl:apply-templates select="node()[not(preceding-sibling::*[f:classes(.)=('cover','titlepage')])]"/>
+        <xsl:for-each select="*[f:classes(.)='cover']">
+            <!-- if there is no cover page, then the covertitle is only stored in the metadata -->
+            <xsl:call-template name="cover"/>
+        </xsl:for-each>
+        <xsl:apply-templates select="node()[preceding-sibling::*[f:classes(.)=('cover')] and not(preceding-sibling::*[f:classes(.)=('titlepage')])]"/>
+        <xsl:for-each select="*[f:classes(.)='titlepage']">
+            <!-- if there is no title page, then the doctitle and docauthors are only stored in the metadata -->
+            <xsl:call-template name="titlepage"/>
+        </xsl:for-each>
+        <xsl:apply-templates select="node()[preceding-sibling::*[f:classes(.)=('cover','titlepage')]]"/>
     </xsl:template>
 
     <xsl:template name="attlist.frontmatter">
@@ -290,24 +332,16 @@
     </xsl:template>
 
     <xsl:template match="dtbook:title">
-        <xsl:choose>
-            <xsl:when test="parent::dtbook:poem">
-                <xsl:element name="h{f:level(.)}">
-                    <xsl:call-template name="attlist.title"/>
-                    <xsl:apply-templates select="node()"/>
-                </xsl:element>
-            </xsl:when>
-            <xsl:when test="parent::dtbook:cite">
-                <span>
-                    <xsl:call-template name="attlist.title"/>
-                    <xsl:apply-templates select="node()"/>
-                </span>
-            </xsl:when>
-        </xsl:choose>
+        <strong>
+            <xsl:call-template name="attlist.title"/>
+            <xsl:apply-templates select="node()"/>
+        </strong>
     </xsl:template>
 
     <xsl:template name="attlist.title">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="classes" select="'title'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="dtbook:author">
@@ -421,10 +455,10 @@
     </xsl:template>
 
     <xsl:template match="dtbook:linegroup">
-        <div>
+        <xsl:element name="{if (dtbook:hd) then 'section' else 'div'}">
             <xsl:call-template name="attlist.linegroup"/>
             <xsl:apply-templates select="node()"/>
-        </div>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template name="attlist.linegroup">
@@ -435,10 +469,10 @@
     </xsl:template>
 
     <xsl:template match="dtbook:poem">
-        <div>
+        <xsl:element name="{if (dtbook:hd) then 'section' else 'div'}">
             <xsl:call-template name="attlist.poem"/>
             <xsl:apply-templates select="node()"/>
-        </div>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template name="attlist.poem">
@@ -716,7 +750,7 @@
         <xsl:copy-of select="@cite"/>
     </xsl:template>
 
-    <xsl:template name="img">
+    <xsl:template match="dtbook:img">
         <img>
             <xsl:call-template name="attlist.img"/>
             <xsl:apply-templates select="node()"/>
@@ -736,7 +770,7 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template name="imggroup">
+    <xsl:template match="dtbook:imggroup">
         <figure>
             <xsl:call-template name="attlist.imggroup"/>
             <xsl:apply-templates select="dtbook:prodnote|dtbook:img|dtbook:pagenum"/>
@@ -747,14 +781,6 @@
                     </xsl:for-each>
                 </figcaption>
             </xsl:if>
-            <!--<oneOrMore>
-                <choice>
-                    <xsl:call-template name="prodnote"/>
-                    <xsl:call-template name="img"/>
-                    <xsl:call-template name="caption"/>
-                    <xsl:call-template name="pagenum"/>
-                </choice>
-            </oneOrMore>-->
         </figure>
     </xsl:template>
 
@@ -762,45 +788,60 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <!--<xsl:template name="p">
-        <p>
-            <xsl:call-template name="attlist.p"/>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="inline"/>
-                    <xsl:call-template name="list"/>
-                    <xsl:call-template name="dl"/>
-                </choice>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.p">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    <xsl:template match="dtbook:p">
+        <xsl:for-each-group select="node()" group-adjacent="not(self::list or self::dl)">
+            <xsl:choose>
+                <xsl:when test="current-grouping-key()">
+                    <p>
+                        <xsl:choose>
+                            <xsl:when test="position()=1">
+                                <xsl:call-template name="attlist.p"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:variable name="attributes">
+                                    <xsl:call-template name="attlist.p"/>
+                                </xsl:variable>
+                                <xsl:copy-of select="$attributes[not(name()='id')]"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:apply-templates select="current-group()"/>
+                    </p>
+                </xsl:when>
+                <xsl:otherwise>
+                    <!-- In HTML, lists are not allowed inside p. -->
+                    <xsl:apply-templates select="current-group()"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:for-each-group>
+    </xsl:template>
 
-    <!--<xsl:template name="doctitle">
-        <doctitle>
+    <xsl:template name="attlist.p">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template name="doctitle">
+        <h1>
             <xsl:call-template name="attlist.doctitle"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.doctitle">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </h1>
+    </xsl:template>
 
-    <!--<xsl:template name="docauthor">
+    <xsl:template name="attlist.doctitle">
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="types" select="'fulltitle'" tunnel="yes"/>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template name="docauthor">
         <docauthor>
             <xsl:call-template name="attlist.docauthor"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.docauthor">
+            <xsl:apply-templates select="node()"/>
+        </docauthor>
+    </xsl:template>
+
+    <xsl:template name="attlist.docauthor">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
     <xsl:template name="covertitle">
         <h1>
@@ -815,351 +856,244 @@
         </xsl:call-template>
     </xsl:template>
 
-    <!--<xsl:template name="h1">
-        <h1>
-            <xsl:call-template name="attlist.h1"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h1">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    <xsl:template match="dtbook:h1 | dtbook:h2 | dtbook:h3 | dtbook:h4 | dtbook:h5 | dtbook:h6 | dtbook:hd">
+        <xsl:element name="h{f:level(.)}">
+            <xsl:call-template name="attlist.h"/>
+            <xsl:apply-templates select="node()"/>
+        </xsl:element>
+    </xsl:template>
 
-    <!--<xsl:template name="h2">
-        <h2>
-            <xsl:call-template name="attlist.h2"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h2">
+    <xsl:template name="attlist.h">
         <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="h3">
-        <h3>
-            <xsl:call-template name="attlist.h3"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h3">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="h4">
-        <h4>
-            <xsl:call-template name="attlist.h4"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h4">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="h5">
-        <h5>
-            <xsl:call-template name="attlist.h5"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h5">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="h6">
-        <h6>
-            <xsl:call-template name="attlist.h6"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.h6">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="bridgehead">
-        <bridgehead>
+    <xsl:template match="dtbook:bridgehead">
+        <p>
             <xsl:call-template name="attlist.bridgehead"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.bridgehead">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </p>
+    </xsl:template>
 
-    <xsl:template name="hd">
-        <!--Use: hd marks the text of a heading in <level>, <poem>, <list>, <linegroup>,
-         or <sidebar>. -->
+    <xsl:template name="attlist.bridgehead">
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="types" select="'bridgehead'" tunnel="yes"/>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="dtbook:blockquote">
+        <blockquote>
+            <xsl:call-template name="attlist.blockquote"/>
+            <xsl:apply-templates select="node()"/>
+        </blockquote>
+    </xsl:template>
+
+    <xsl:template name="attlist.blockquote">
+        <xsl:call-template name="attrs"/>
+        <xsl:copy-of select="@cite"/>
+    </xsl:template>
+
+    <xsl:template match="dtbook:dl">
+        <xsl:apply-templates select="dtbook:pagenum[not(preceding-sibling::*[self::dtbook:dt or self::dtbook:dd])]"/>
+        <dl>
+            <xsl:call-template name="attlist.dl"/>
+            <xsl:apply-templates select="node()"/>
+        </dl>
+        <xsl:apply-templates select="dtbook:pagenum[preceding-sibling::*[self::dtbook:dt or self::dtbook:dd] and not(following-sibling::*[self::dtbook:dt or self::dtbook:dd])]"/>
+    </xsl:template>
+
+    <xsl:template name="attlist.dl">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="dtbook:dt">
+        <dt>
+            <xsl:call-template name="attlist.dt"/>
+            <xsl:apply-templates select="node()"/>
+            <xsl:variable name="this" select="."/>
+            <xsl:apply-templates select="following-sibling::dtbook:pagenum[preceding-sibling::dtbook:dt[1]=$this][following-sibling::*[self::dtbook:dt or self::dtbook:dd]]"/>
+        </dt>
+    </xsl:template>
+
+    <xsl:template name="attlist.dt">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="dtbook:dd">
+        <dd>
+            <xsl:call-template name="attlist.dd"/>
+            <xsl:apply-templates select="node()"/>
+            <xsl:variable name="this" select="."/>
+            <xsl:apply-templates select="following-sibling::dtbook:pagenum[preceding-sibling::dtbook:dd[1]=$this][following-sibling::*[self::dtbook:dt or self::dtbook:dd]]"/>
+        </dd>
+    </xsl:template>
+
+    <xsl:template name="attlist.dd">
+        <xsl:call-template name="attrs"/>
+    </xsl:template>
+
+    <xsl:template match="dtbook:list">
         <xsl:choose>
-            <xsl:when test="parent::dtbook:level">
-                <!-- TODO -->
-                <xsl:call-template name="attlist.hd"/>
-                <xsl:apply-templates select="node()"/>
+            <xsl:when test="dtbook:hd">
+                <section>
+                    <xsl:call-template name="list.content"/>
+                </section>
             </xsl:when>
-            <xsl:when test="parent::dtbook:poem">
-                <!-- TODO -->
-                <xsl:call-template name="attlist.hd"/>
-                <xsl:apply-templates select="node()"/>
-            </xsl:when>
-            <xsl:when test="parent::dtbook:list">
-                <!-- TODO -->
-                <xsl:call-template name="attlist.hd"/>
-                <xsl:apply-templates select="node()"/>
-            </xsl:when>
-            <xsl:when test="parent::dtbook:linegroup">
-                <!-- TODO -->
-                <xsl:call-template name="attlist.hd"/>
-                <xsl:apply-templates select="node()"/>
-            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="list.content"/>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="attlist.hd">
+    <xsl:template name="list.content">
+        <xsl:apply-templates select="dtbook:pagenum[not(preceding-sibling::*[self::dtbook:li])]"/>
+        <xsl:element name="{if (@type='ul') then 'ul' else 'ol'}">
+            <xsl:call-template name="attlist.list"/>
+            <xsl:apply-templates select="node()"/>
+        </xsl:element>
+        <xsl:apply-templates select="dtbook:pagenum[preceding-sibling::*[self::dtbook:li] and not(following-sibling::*[self::dtbook:li])]"/>
+    </xsl:template>
+
+    <xsl:template name="attlist.list">
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="classes" select="if (@type='pl') then 'list-preformatted' else ()" tunnel="yes"/>
+        </xsl:call-template>
+        <!-- @depth is implicit; ignore it -->
+        <xsl:if test="@enum">
+            <xsl:attribute name="type" select="@enum"/>
+        </xsl:if>
+        <xsl:copy-of select="@start"/>
+    </xsl:template>
+
+    <xsl:template match="dtbook:li">
+        <li>
+            <xsl:call-template name="attlist.li"/>
+            <xsl:apply-templates select="node()"/>
+            <xsl:variable name="this" select="."/>
+            <xsl:apply-templates select="following-sibling::dtbook:pagenum[preceding-sibling::dtbook:li[1]=$this][following-sibling::*[self::dtbook:li]]"/>
+        </li>
+    </xsl:template>
+
+    <xsl:template name="attlist.li">
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <!--<xsl:template name="blockquote">
-        <blockquote>
-            <xsl:call-template name="attlist.blockquote"/>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="pagenum"/>
-                    <xsl:call-template name="block"/>
-                </choice>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.blockquote">
-        <xsl:call-template name="attrs"/>
-        <xsl:if test="@cite">
-            <xsl:attribute name="cite" select="@cite"/> <!-\- URI -\->
-        </xsl:if>
-    </xsl:template>-->
-
-    <!--<xsl:template name="dl">
-        <dl>
-            <xsl:call-template name="attlist.dl"/>
-            <oneOrMore>
-                <choice>
-                    <xsl:call-template name="dt"/>
-                    <xsl:call-template name="dd"/>
-                    <xsl:call-template name="pagenum"/>
-                </choice>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.dl">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="dt">
-        <dt>
-            <xsl:call-template name="attlist.dt"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.dt">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="dd">
-        <dd>
-            <xsl:call-template name="attlist.dd"/>
-            <zeroOrMore>
-                <xsl:call-template name="flow"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.dd">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="list">
-        <list>
-            <xsl:call-template name="attlist.list"/>
-            <oneOrMore>
-                <choice>
-                    <xsl:call-template name="hd"/>
-                    <xsl:call-template name="prodnote"/>
-                    <xsl:call-template name="li"/>
-                    <xsl:call-template name="pagenum"/>
-                </choice>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
-
-    <!--<xsl:template name="attlist.list">
-        <xsl:call-template name="attrs"/>
-        <xsl:attribute name="type">
-            <choice>
-                <value>ol</value>
-                <value>ul</value>
-                <value>pl</value>
-            </choice>
-        </attribute>
-        <xsl:if test="@depth">
-            <xsl:attribute name="depth" select="@depth"/>
-        </xsl:if>
-        <xsl:if test="@enum">
-            <xsl:attribute name="enum">
-                <choice>
-                    <value>1</value>
-                    <value>a</value>
-                    <value>A</value>
-                    <value>i</value>
-                    <value>I</value>
-                </choice>
-            </attribute>
-        </xsl:if>
-        <xsl:if test="@start">
-            <xsl:attribute name="start" select="@start"/>
-        </xsl:if>
-    </xsl:template>-->
-
-    <!--<xsl:template name="li">
-        <li>
-            <xsl:call-template name="attlist.li"/>
-            <zeroOrMore>
-                <choice>
-                    <xsl:call-template name="flow"/>
-                    <xsl:call-template name="lic"/>
-                </choice>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.li">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
-
-    <!--<xsl:template name="lic">
-        <lic>
+    <xsl:template match="dtbook:lic">
+        <span>
             <xsl:call-template name="attlist.lic"/>
-            <zeroOrMore>
-                <xsl:call-template name="inline"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </span>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.lic">
-        <xsl:call-template name="attrs"/>
-    </xsl:template>-->
+    <xsl:template name="attlist.lic">
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="classes" select="'lic'" tunnel="yes"/>
+        </xsl:call-template>
+    </xsl:template>
 
-    <!--<xsl:template name="cellhalign">
-        <xsl:if test="@align">
-            <xsl:attribute name="align">
-                <choice>
-                    <value>left</value>
-                    <value>center</value>
-                    <value>right</value>
-                    <value>justify</value>
-                    <value>char</value>
-                </choice>
-            </attribute>
+    <xsl:template name="cellhalign">
+        <xsl:sequence select="if (@align and not(@align='char')) then concat('text-align: ',@align,';') else ()"/>
+        <xsl:if test="@align='char'">
+            <xsl:sequence select="'text-align: right;'"/>
+            <!--
+                NOTE: when align is “char”, we could set "padding" to an integer such that
+                the cells align horizontally according to the “char” character. For instance,'
+                if one cell contains “1.2” and the cell below it contains “1.25”, then the
+                padding for the first cell would be 1 and the padding for the last cell would be 0.
+                Unless someone requests this, we'll ignore this for now. The algorithm would be
+                padding = {length of longest postfix in column} - {length of postfix in current cell}.
+            -->
         </xsl:if>
-        <xsl:if test="@char">
+        <!--<xsl:if test="@char">
             <xsl:attribute name="char" select="@char"/> <!-\- Character -\->
         </xsl:if>
         <xsl:if test="@charoff">
             <xsl:attribute name="charoff" select="@charoff"/> <!-\- Length -\->
-        </xsl:if>
-    </xsl:template>-->
+        </xsl:if>-->
+    </xsl:template>
 
-    <!--<xsl:template name="cellvalign">
-        <xsl:if test="@valign">
-            <xsl:attribute name="valign">
-                <choice>
-                    <value>top</value>
-                    <value>middle</value>
-                    <value>bottom</value>
-                    <value>baseline</value>
-                </choice>
-            </attribute>
-        </xsl:if>
-    </xsl:template>-->
+    <xsl:template name="cellvalign">
+        <xsl:sequence select="if (@valign) then concat('vertical-align: ',@valign,';') else ()"/>
+    </xsl:template>
 
-    <!--<xsl:template name="table">
+    <xsl:template match="dtbook:table">
+        <xsl:apply-templates select="dtbook:pagenum[not(preceding-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:td])]"/>
+
         <table>
             <xsl:call-template name="attlist.table"/>
-            <optional>
-                <xsl:call-template name="caption"/>
+            <xsl:if test="@summary and not(dtbook:caption)">
+                <caption>
+                    <p class="table-summary">
+                        <xsl:value-of select="string(@summary)"/>
+                    </p>
+                </caption>
             </xsl:if>
-            <choice>
-                <zeroOrMore>
-                    <xsl:call-template name="col"/>
-                </zeroOrMore>
-                <zeroOrMore>
-                    <xsl:call-template name="colgroup"/>
-                </zeroOrMore>
-            </choice>
-            <optional>
-                <xsl:call-template name="thead"/>
+            <xsl:apply-templates select="dtbook:caption/preceding-sibling::comment() | dtbook:caption"/>
+            <xsl:if test="dtbook:col">
+                <colgroup>
+                    <xsl:for-each select="dtbook:col">
+                        <xsl:variable name="this" select="."/>
+                        <xsl:apply-templates select="preceding-sibling::comment()[following-sibling::*[1]=$this] | $this"/>
+                    </xsl:for-each>
+                </colgroup>
             </xsl:if>
-            <optional>
-                <xsl:call-template name="tfoot"/>
-            </xsl:if>
-            <choice>
-                <oneOrMore>
-                    <xsl:call-template name="tbody"/>
-                </oneOrMore>
-                <oneOrMore>
-                    <choice>
-                        <xsl:call-template name="tr"/>
-                        <xsl:call-template name="pagenum"/>
-                    </choice>
-                </oneOrMore>
-            </choice>
-        </element>
-    </xsl:template>-->
+            <xsl:for-each select="dtbook:colgroup">
+                <xsl:variable name="this" select="."/>
+                <xsl:apply-templates select="preceding-sibling::comment()[following-sibling::*[1]=$this] | $this"/>
+            </xsl:for-each>
+            <xsl:apply-templates select="node()[not(following-sibling::*[self::dtbook:caption or self::dtbook:col or self::dtbook:colgroup])][not(self::dtbook:pagenum)]"/>
+        </table>
 
-    <!--<xsl:template name="attlist.table">
-        <xsl:call-template name="attrs"/>
-        <xsl:if test="@summary">
-            <xsl:attribute name="summary" select="@summary"/> <!-\- Text -\->
-        </xsl:if>
-        <xsl:if test="@width">
-            <xsl:attribute name="width" select="@width"/> <!-\- Length -\->
-        </xsl:if>
-        <xsl:if test="@border">
-            <xsl:attribute name="border" select="@border"/> <!-\- Pixels -\->
-        </xsl:if>
-        <xsl:if test="@frame">
-            <xsl:attribute name="frame" select="@frame"/> <!-\- TFrame -\->
-        </xsl:if>
-        <xsl:if test="@rules">
-            <xsl:attribute name="rules" select="@rules"/> <!-\- TRules -\->
-        </xsl:if>
-        <xsl:if test="@cellspacing">
-            <xsl:attribute name="cellspacing" select="@cellspacing"/> <!-\- Length -\->
-        </xsl:if>
-        <xsl:if test="@cellpadding">
-            <xsl:attribute name="cellpadding" select="@cellpadding"/> <!-\- Length -\->
-        </xsl:if>
-    </xsl:template>-->
+        <xsl:apply-templates
+            select="dtbook:pagenum[preceding-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:td] and not(following-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:td])]"
+        />
+    </xsl:template>
 
-    <!--<xsl:template name="caption">
+    <xsl:template name="attlist.table">
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="classes"
+                select="(
+                if (@rules) then concat('table-rules-',@rules) else (),
+                if (@frame) then concat('table-frame-',@frame) else ()
+                )" tunnel="yes"
+            />
+        </xsl:call-template>
+        <!-- @summary handled the dtbook:table and dtbook:caption templates -->
+        <xsl:copy-of select="@border"/>
+        <xsl:variable name="style">
+            <xsl:if test="@cellspacing">
+                <xsl:if test="@width">
+                    <xsl:sequence select="concat('width: ',@width,if (not(ends-with(@width,'%'))) then 'px;' else ';')"/>
+                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="@cellspacing=('','0')">
+                        <xsl:sequence select="'border-collapse: collapse; border-spacing: 0;'"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="concat('border-collapse: separate; border-spacing: ',@cellspacing,'px;')"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:if>
+        </xsl:variable>
+        <xsl:if test="$style">
+            <xsl:attribute name="style" select="string-join($style,' ')"/>
+        </xsl:if>
+        <!-- @cellpadding is added to the @style attribute of descendant th and td elements -->
+    </xsl:template>
+
+    <xsl:template match="dtbook:caption[parent::dtbook:table]">
         <caption>
             <xsl:call-template name="attlist.caption"/>
-            <zeroOrMore>
-                <xsl:call-template name="flow"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
-    
+            <xsl:if test="parent::dtbook:table[@summary]">
+                <p class="table-summary">
+                    <xsl:value-of select="string(parent::dtbook:table/@summary)"/>
+                </p>
+            </xsl:if>
+            <xsl:apply-templates select="node()"/>
+            <xsl:apply-templates select="following-sibling::dtbook:pagenum[not(preceding-sibling::*[self::dtbook:thead or self::dtbook:tbody or self::dtbook:td])]"/>
+            <xsl:apply-templates select="if (not(following-sibling::dtbook:thead)) then following-sibling::dtbook:tbody/dtbook:pagenum[not(preceding-sibling::dtbook:tr)] else ()"/>
+        </caption>
+    </xsl:template>
+
     <xsl:template match="dtbook:caption[parent::dtbook:imggroup]">
         <div>
             <xsl:call-template name="attlist.caption">
@@ -1168,7 +1102,7 @@
             <xsl:apply-templates select="node()"/>
         </div>
     </xsl:template>
-    
+
     <xsl:template name="attlist.caption">
         <xsl:call-template name="attrs"/>
         <!-- @imgref is dropped, the relationship is preserved in the corresponding img/@longdesc -->
@@ -1177,186 +1111,169 @@
         </xsl:if>
     </xsl:template>
 
-    <!--<xsl:template name="thead">
+    <xsl:template match="dtbook:thead">
         <thead>
             <xsl:call-template name="attlist.thead"/>
-            <oneOrMore>
-                <xsl:call-template name="tr"/>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.thead">
-        <xsl:call-template name="attrs"/>
-        <xsl:call-template name="cellhalign"/>
-        <xsl:call-template name="cellvalign"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </thead>
+    </xsl:template>
 
-    <!--<xsl:template name="tfoot">
+    <xsl:template name="attlist.thead">
+        <xsl:call-template name="attrs"/>
+        <xsl:variable name="style">
+            <xsl:call-template name="cellhalign"/>
+            <xsl:call-template name="cellvalign"/>
+        </xsl:variable>
+        <xsl:if test="$style">
+            <xsl:attribute name="style" select="string-join($style,' ')"/>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="dtbook:tfoot">
         <tfoot>
             <xsl:call-template name="attlist.tfoot"/>
-            <oneOrMore>
-                <xsl:call-template name="tr"/>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.tfoot">
-        <xsl:call-template name="attrs"/>
-        <xsl:call-template name="cellhalign"/>
-        <xsl:call-template name="cellvalign"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </tfoot>
+    </xsl:template>
 
-    <!--<xsl:template name="tbody">
+    <xsl:template name="attlist.tfoot">
+        <xsl:call-template name="attrs"/>
+        <xsl:variable name="style">
+            <xsl:call-template name="cellhalign"/>
+            <xsl:call-template name="cellvalign"/>
+        </xsl:variable>
+        <xsl:if test="$style">
+            <xsl:attribute name="style" select="string-join($style,' ')"/>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="dtbook:tbody">
         <tbody>
             <xsl:call-template name="attlist.tbody"/>
-            <oneOrMore>
-                <choice>
-                    <xsl:call-template name="tr"/>
-                    <xsl:call-template name="pagenum"/>
-                </choice>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
-    <!--<xsl:template name="attlist.tbody">
-        <xsl:call-template name="attrs"/>
-        <xsl:call-template name="cellhalign"/>
-        <xsl:call-template name="cellvalign"/>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()[not(self::dtbook:pagenum)]"/>
+        </tbody>
+    </xsl:template>
 
-    <!--<xsl:template name="colgroup">
+    <xsl:template name="attlist.tbody">
+        <xsl:call-template name="attrs"/>
+        <xsl:variable name="style">
+            <xsl:call-template name="cellhalign"/>
+            <xsl:call-template name="cellvalign"/>
+        </xsl:variable>
+        <xsl:if test="$style">
+            <xsl:attribute name="style" select="string-join($style,' ')"/>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="dtbook:colgroup">
         <colgroup>
             <xsl:call-template name="attlist.colgroup"/>
-            <zeroOrMore>
-                <xsl:call-template name="col"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </colgroup>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.colgroup">
+    <xsl:template name="attlist.colgroup">
         <xsl:call-template name="attrs"/>
-        <xsl:if test="@span">
-            <xsl:attribute name="span"> <!-\-  a:defaultValue="1" -\->
-                <xsl:value-of select="."/> <!-\- NMTOKEN -\->
-            </attribute>
+        <xsl:copy-of select="@span"/>
+        <xsl:variable name="style">
+            <xsl:call-template name="cellhalign"/>
+            <xsl:call-template name="cellvalign"/>
+            <xsl:sequence select="if (@width) then concat('width: ',@width, if (not(ends-with(@width,'%'))) then 'px;' else ';') else ()"/>
+        </xsl:variable>
+        <xsl:if test="$style">
+            <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
-        <xsl:if test="@width">
-            <xsl:attribute name="width" select="@width"/> <!-\- MultiLength -\->
-        </xsl:if>
-        <xsl:call-template name="cellhalign"/>
-        <xsl:call-template name="cellvalign"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="col">
+    <xsl:template match="dtbook:col">
         <col>
             <xsl:call-template name="attlist.col"/>
-            <empty/>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </col>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.col">
+    <xsl:template name="attlist.col">
         <xsl:call-template name="attrs"/>
-        <xsl:if test="@span">
-            <xsl:attribute name="span"> <!-\-  a:defaultValue="1" -\->
-                <xsl:value-of select="."/> <!-\- NMTOKEN -\->
-            </attribute>
+        <xsl:copy-of select="@span"/>
+        <xsl:variable name="style">
+            <xsl:call-template name="cellhalign"/>
+            <xsl:call-template name="cellvalign"/>
+            <xsl:sequence select="if (@width) then concat('width: ',@width, if (not(ends-with(@width,'%'))) then 'px;' else ';') else ()"/>
+        </xsl:variable>
+        <xsl:if test="$style">
+            <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
-        <xsl:if test="@width">
-            <xsl:attribute name="width" select="@width"/> <!-\- MultiLength -\->
-        </xsl:if>
-        <xsl:call-template name="cellhalign"/>
-        <xsl:call-template name="cellvalign"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="tr">
+    <xsl:template name="tr">
         <tr>
             <xsl:call-template name="attlist.tr"/>
-            <oneOrMore>
-                <choice>
-                    <xsl:call-template name="th"/>
-                    <xsl:call-template name="td"/>
-                </choice>
-            </oneOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+        </tr>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.tr">
+    <xsl:template name="attlist.tr">
         <xsl:call-template name="attrs"/>
-        <xsl:call-template name="cellhalign"/>
-        <xsl:call-template name="cellvalign"/>
-    </xsl:template>-->
+        <xsl:variable name="style">
+            <xsl:call-template name="cellhalign"/>
+            <xsl:call-template name="cellvalign"/>
+        </xsl:variable>
+        <xsl:if test="$style">
+            <xsl:attribute name="style" select="string-join($style,' ')"/>
+        </xsl:if>
+    </xsl:template>
 
-    <!--<xsl:template name="th">
+    <xsl:template match="dtbook:th">
         <th>
             <xsl:call-template name="attlist.th"/>
-            <zeroOrMore>
-                <xsl:call-template name="flownopagenum"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+            <xsl:if test="not(following-sibling::dtbook:th)">
+                <xsl:apply-templates select="ancestor::dtbook:thead/following-sibling::dtbook:pagenum[not(preceding-sibling::*[self::dtbook:tbody or self::dtbook:td])]"/>
+                <xsl:apply-templates select="ancestor::dtbook:thead/following-sibling::dtbook:tbody/dtbook:pagenum[not(preceding-sibling::dtbook:tr)]"/>
+            </xsl:if>
+        </th>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.th">
+    <xsl:template name="attlist.th">
         <xsl:call-template name="attrs"/>
-        <xsl:if test="@abbr">
-            <xsl:attribute name="abbr" select="@abbr"/> <!-\- Text -\->
+        <xsl:copy-of select="@headers|@scope|@rowspan|@colspan"/>
+        <!-- @abbr and @axis are ignored as they have no good equivalent in HTML -->
+        <xsl:variable name="style">
+            <xsl:call-template name="cellhalign"/>
+            <xsl:call-template name="cellvalign"/>
+            <xsl:variable name="cellpadding" select="ancestor::dtbook:table[@cellpadding][1]/@cellpadding"/>
+            <xsl:sequence select="if ($cellpadding) then concat('padding: ',$cellpadding,if (not(ends-with($cellpadding,'%'))) then 'px;' else ';') else ()"/>
+        </xsl:variable>
+        <xsl:if test="$style">
+            <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
-        <xsl:if test="@axis">
-            <xsl:attribute name="axis" select="@axis"/>
-        </xsl:if>
-        <xsl:if test="@headers">
-            <xsl:attribute name="headers" select="@headers"/> <!-\- IDREFS -\->
-        </xsl:if>
-        <xsl:if test="@scope">
-            <xsl:attribute name="scope" select="@scope"/> <!-\- Scope -\->
-        </xsl:if>
-        <xsl:if test="@rowspan">
-            <xsl:attribute name="rowspan"> <!-\-  a:defaultValue="1" -\->
-                <xsl:value-of select="."/> <!-\- NMTOKEN -\->
-            </attribute>
-        </xsl:if>
-        <xsl:if test="@colspan">
-            <xsl:attribute name="colspan"> <!-\-  a:defaultValue="1" -\->
-                <xsl:value-of select="."/> <!-\- NMTOKEN -\->
-            </attribute>
-        </xsl:if>
-        <xsl:call-template name="cellhalign"/>
-        <xsl:call-template name="cellvalign"/>
-    </xsl:template>-->
+    </xsl:template>
 
-    <!--<xsl:template name="td">
+    <xsl:template match="dtbook:td">
         <td>
             <xsl:call-template name="attlist.td"/>
-            <zeroOrMore>
-                <xsl:call-template name="flownopagenum"/>
-            </zeroOrMore>
-        </element>
-    </xsl:template>-->
+            <xsl:apply-templates select="node()"/>
+            <xsl:if test="not(following-sibling::dtbook:td)">
+                <xsl:variable name="tr" select="parent::dtbook:tr"/>
+                <xsl:apply-templates select="parent::dtbook:tr[following-sibling::dtbook:tr]/following-sibling::dtbook:pagenum[preceding-sibling::dtbook:tr[1]=$tr]"/>
+            </xsl:if>
+        </td>
+    </xsl:template>
 
-    <!--<xsl:template name="attlist.td">
+    <xsl:template name="attlist.td">
         <xsl:call-template name="attrs"/>
-        <xsl:if test="@abbr">
-            <xsl:attribute name="abbr" select="@abbr"/> <!-\- Text -\->
+        <xsl:copy-of select="@headers|@scope|@rowspan|@colspan"/>
+        <!-- @abbr and @axis are ignored as they have no good equivalent in HTML -->
+        <xsl:variable name="style">
+            <xsl:call-template name="cellhalign"/>
+            <xsl:call-template name="cellvalign"/>
+            <xsl:variable name="cellpadding" select="ancestor::dtbook:table[@cellpadding][1]/@cellpadding"/>
+            <xsl:sequence select="if ($cellpadding) then concat('padding: ',$cellpadding,if (not(ends-with($cellpadding,'%'))) then 'px;' else ';') else ()"/>
+        </xsl:variable>
+        <xsl:if test="$style">
+            <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
-        <xsl:if test="@axis">
-            <xsl:attribute name="axis" select="@axis"/>
-        </xsl:if>
-        <xsl:if test="@headers">
-            <xsl:attribute name="headers" select="@headers"/> <!-\- IDREFS -\->
-        </xsl:if>
-        <xsl:if test="@scope">
-            <xsl:attribute name="scope" select="@scope"/> <!-\- Scope -\->
-        </xsl:if>
-        <xsl:if test="@rowspan">
-            <xsl:attribute name="rowspan"> <!-\-  a:defaultValue="1" -\->
-                <xsl:value-of select="."/> <!-\- NMTOKEN -\->
-            </attribute>
-        </xsl:if>
-        <xsl:if test="@colspan">
-            <xsl:attribute name="colspan"> <!-\-  a:defaultValue="1" -\->
-                <xsl:value-of select="."/> <!-\- NMTOKEN -\->
-            </attribute>
-        </xsl:if>
-        <xsl:call-template name="cellhalign"/>
-        <xsl:call-template name="cellvalign"/>
-    </xsl:template>-->
+    </xsl:template>
 
     <xsl:function name="f:classes" as="xs:string*">
         <xsl:param name="element" as="element()"/>
