@@ -11,41 +11,48 @@
     <xsl:template match="text()|comment()">
         <xsl:copy-of select="."/>
     </xsl:template>
+    
+    <xsl:template match="*">
+        <xsl:comment select="concat('No template for element: ',name())"/>
+    </xsl:template>
 
     <xsl:template name="coreattrs">
-        <xsl:param name="classes" tunnel="yes"/>
+        <xsl:param name="classes" select="()" tunnel="yes"/>
+        <xsl:param name="except" select="()" tunnel="yes"/>
         <xsl:variable name="is-first-level" select="boolean((self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter))"/>
         <xsl:if test="$is-first-level">
             <!--
                 the frontmatter/bodymatter/rearmatter does not have corresponding elements in HTML and is removed;
                 try preserving the attributes on the closest sectioning element(s) when possible
             -->
-            <xsl:copy-of select="parent::*/(@title|@xml:space)"/>
+            <xsl:copy-of select="parent::*/(@title|@xml:space)[not(name()=$except)]"/>
             <xsl:if test="not(preceding-sibling::dtbook:level or preceding-sibling::dtbook:level1)">
                 <xsl:copy-of select="parent::*/@id"/>
             </xsl:if>
         </xsl:if>
-        <xsl:copy-of select="@id|@title|@xml:space"/>
+        <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
         <xsl:call-template name="classes-and-types">
             <xsl:with-param name="classes" select="(if ($is-first-level) then tokenize(parent::*/@class,'\s+') else (), $classes)" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template name="i18n">
+        <xsl:param name="except" select="()" tunnel="yes"/>
         <xsl:variable name="is-first-level" select="boolean((self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter))"/>
         <xsl:if test="$is-first-level">
             <!--
                 the frontmatter/bodymatter/rearmatter does not have corresponding elements in HTML and is removed;
                 try preserving the attributes on the closest sectioning element(s) when possible
             -->
-            <xsl:copy-of select="parent::*/(@xml:lang|@dir)"/>
+            <xsl:copy-of select="parent::*/(@xml:lang|@dir)[not(name()=$except)]"/>
         </xsl:if>
-        <xsl:copy-of select="@xml:lang|@dir"/>
+        <xsl:copy-of select="(@xml:lang|@dir)[not(name()=$except)]"/>
     </xsl:template>
 
     <xsl:template name="classes-and-types">
         <xsl:param name="classes" select="()" tunnel="yes"/>
         <xsl:param name="types" select="()" tunnel="yes"/>
+        <xsl:param name="except" select="()" tunnel="yes"/>
         <xsl:variable name="showin" select="for $s in (@showin) return concat('showin-',$s)"/>
         <xsl:variable name="old-classes" select="tokenize(@class,'\s+')"/>
 
@@ -56,14 +63,14 @@
             </xsl:for-each>
             <xsl:value-of select="''"/>
         </xsl:variable>
-        <xsl:variable name="epub-types" select="($types, $epub-types)"/>
+        <xsl:variable name="epub-types" select="($types, $epub-types)[not(.='')]"/>
 
-        <xsl:variable name="classes" select="($classes, $old-classes[not(.=($vocab-default,$vocab-z3998))], $showin)"/>
+        <xsl:variable name="classes" select="($classes, $old-classes[not(.=($vocab-default,$vocab-z3998))], $showin)[not(.='')]"/>
 
-        <xsl:if test="$classes">
+        <xsl:if test="count($classes) and not('class'=$except)">
             <xsl:attribute name="class" select="string-join(distinct-values($classes),' ')"/>
         </xsl:if>
-        <xsl:if test="$epub-types">
+        <xsl:if test="count($epub-types) and not('epub:type'=$except)">
             <xsl:attribute name="epub:type" select="string-join(distinct-values($epub-types),' ')"/>
         </xsl:if>
     </xsl:template>
@@ -76,19 +83,20 @@
     </xsl:template>
 
     <xsl:template name="attrsrqd">
-        <xsl:param name="classes" tunnel="yes"/>
+        <xsl:param name="classes" select="()" tunnel="yes"/>
+        <xsl:param name="except" select="()" tunnel="yes"/>
         <xsl:variable name="is-first-level" select="boolean((self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter))"/>
         <xsl:if test="$is-first-level">
             <!--
                 the frontmatter/bodymatter/rearmatter does not have corresponding elements in HTML and is removed;
                 try preserving the attributes on the closest sectioning element(s) when possible
             -->
-            <xsl:copy-of select="parent::*/(@title|@xml:space)"/>
+            <xsl:copy-of select="parent::*/(@title|@xml:space)[not(name()=$except)]"/>
             <xsl:if test="not(preceding-sibling::dtbook:level or preceding-sibling::dtbook:level1)">
-                <xsl:copy-of select="parent::*/@id"/>
+                <xsl:copy-of select="parent::*/@id[not(name()=$except)]"/>
             </xsl:if>
         </xsl:if>
-        <xsl:copy-of select="@id|@title|@xml:space"/>
+        <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
         <xsl:call-template name="classes-and-types">
             <xsl:with-param name="classes" select="(if ($is-first-level) then tokenize(parent::*/@class,'\s+') else (), $classes)" tunnel="yes"/>
         </xsl:call-template>
@@ -118,8 +126,7 @@
         <head>
             <xsl:call-template name="attlist.head"/>
             <xsl:call-template name="headmisc"/>
-            <style type="text/css">
-                /*<![CDATA[*/
+            <style type="text/css"><![CDATA[
                 .spell-out { -epub-speak-as: spell-out; }
                 .list-preformatted { list-style-type: none; }
                 table[class^="table-rules-"], table[class*=" table-rules-"] { border-width: thin; border-style: hidden; }
@@ -142,7 +149,7 @@
                 table.table-frame-vsides { border-style: hidden outset; }
                 table.table-frame-box { border-style: outset; }
                 table.table-frame-border { border-style: outset; }
-                /*]]>*/</style>
+                ]]></style>
         </head>
     </xsl:template>
 
@@ -269,7 +276,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.level">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="types" select="if (ancestor::dtbook:frontmatter) then 'frontmatter' else if (ancestor::dtbook:bodymatter) then 'bodymatter' else 'backmatter'" tunnel="yes"/>
+        </xsl:call-template>
         <!-- @depth is removed, it is implicit anyway -->
     </xsl:template>
 
@@ -798,10 +807,9 @@
                                 <xsl:call-template name="attlist.p"/>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:variable name="attributes">
-                                    <xsl:call-template name="attlist.p"/>
-                                </xsl:variable>
-                                <xsl:copy-of select="$attributes[not(name()='id')]"/>
+                                <xsl:call-template name="attlist.p">
+                                    <xsl:with-param name="except" select="'id'" tunnel="yes"/>
+                                </xsl:call-template>
                             </xsl:otherwise>
                         </xsl:choose>
                         <xsl:apply-templates select="current-group()"/>
@@ -818,7 +826,8 @@
     <xsl:template name="attlist.p">
         <xsl:call-template name="attrs"/>
     </xsl:template>
-
+    
+    <xsl:template match="dtbook:doctitle"/>
     <xsl:template name="doctitle">
         <h1>
             <xsl:call-template name="attlist.doctitle"/>
@@ -831,7 +840,8 @@
             <xsl:with-param name="types" select="'fulltitle'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
-
+    
+    <xsl:template match="dtbook:docauthor"/>
     <xsl:template name="docauthor">
         <docauthor>
             <xsl:call-template name="attlist.docauthor"/>
@@ -842,7 +852,8 @@
     <xsl:template name="attlist.docauthor">
         <xsl:call-template name="attrs"/>
     </xsl:template>
-
+    
+    <xsl:template match="dtbook:covertitle"/>
     <xsl:template name="covertitle">
         <h1>
             <xsl:call-template name="attlist.covertitle"/>
@@ -1074,7 +1085,8 @@
                 </xsl:choose>
             </xsl:if>
         </xsl:variable>
-        <xsl:if test="$style">
+        <xsl:variable name="style" select="$style[not(.='')]"/>
+        <xsl:if test="count($style)">
             <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
         <!-- @cellpadding is added to the @style attribute of descendant th and td elements -->
@@ -1124,7 +1136,8 @@
             <xsl:call-template name="cellhalign"/>
             <xsl:call-template name="cellvalign"/>
         </xsl:variable>
-        <xsl:if test="$style">
+        <xsl:variable name="style" select="$style[not(.='')]"/>
+        <xsl:if test="count($style)">
             <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
     </xsl:template>
@@ -1142,7 +1155,8 @@
             <xsl:call-template name="cellhalign"/>
             <xsl:call-template name="cellvalign"/>
         </xsl:variable>
-        <xsl:if test="$style">
+        <xsl:variable name="style" select="$style[not(.='')]"/>
+        <xsl:if test="count($style)">
             <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
     </xsl:template>
@@ -1160,7 +1174,8 @@
             <xsl:call-template name="cellhalign"/>
             <xsl:call-template name="cellvalign"/>
         </xsl:variable>
-        <xsl:if test="$style">
+        <xsl:variable name="style" select="$style[not(.='')]"/>
+        <xsl:if test="count($style)">
             <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
     </xsl:template>
@@ -1180,7 +1195,8 @@
             <xsl:call-template name="cellvalign"/>
             <xsl:sequence select="if (@width) then concat('width: ',@width, if (not(ends-with(@width,'%'))) then 'px;' else ';') else ()"/>
         </xsl:variable>
-        <xsl:if test="$style">
+        <xsl:variable name="style" select="$style[not(.='')]"/>
+        <xsl:if test="count($style)">
             <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
     </xsl:template>
@@ -1200,12 +1216,13 @@
             <xsl:call-template name="cellvalign"/>
             <xsl:sequence select="if (@width) then concat('width: ',@width, if (not(ends-with(@width,'%'))) then 'px;' else ';') else ()"/>
         </xsl:variable>
-        <xsl:if test="$style">
+        <xsl:variable name="style" select="$style[not(.='')]"/>
+        <xsl:if test="count($style)">
             <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
     </xsl:template>
 
-    <xsl:template name="tr">
+    <xsl:template match="dtbook:tr">
         <tr>
             <xsl:call-template name="attlist.tr"/>
             <xsl:apply-templates select="node()"/>
@@ -1218,7 +1235,8 @@
             <xsl:call-template name="cellhalign"/>
             <xsl:call-template name="cellvalign"/>
         </xsl:variable>
-        <xsl:if test="$style">
+        <xsl:variable name="style" select="$style[not(.='')]"/>
+        <xsl:if test="count($style)">
             <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
     </xsl:template>
@@ -1244,7 +1262,8 @@
             <xsl:variable name="cellpadding" select="ancestor::dtbook:table[@cellpadding][1]/@cellpadding"/>
             <xsl:sequence select="if ($cellpadding) then concat('padding: ',$cellpadding,if (not(ends-with($cellpadding,'%'))) then 'px;' else ';') else ()"/>
         </xsl:variable>
-        <xsl:if test="$style">
+        <xsl:variable name="style" select="$style[not(.='')]"/>
+        <xsl:if test="count($style)">
             <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
     </xsl:template>
@@ -1270,7 +1289,8 @@
             <xsl:variable name="cellpadding" select="ancestor::dtbook:table[@cellpadding][1]/@cellpadding"/>
             <xsl:sequence select="if ($cellpadding) then concat('padding: ',$cellpadding,if (not(ends-with($cellpadding,'%'))) then 'px;' else ';') else ()"/>
         </xsl:variable>
-        <xsl:if test="$style">
+        <xsl:variable name="style" select="$style[not(.='')]"/>
+        <xsl:if test="count($style)">
             <xsl:attribute name="style" select="string-join($style,' ')"/>
         </xsl:if>
     </xsl:template>

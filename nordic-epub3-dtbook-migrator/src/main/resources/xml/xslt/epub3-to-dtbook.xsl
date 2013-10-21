@@ -4,42 +4,59 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xsl:template match="text()|comment()">
-        <xsl:copy-of select="."/>
+        <xsl:if test="not(self::comment())">
+            <!-- temp ^^ -->
+            <xsl:copy-of select="."/>
+        </xsl:if>
     </xsl:template>
 
+    <xsl:template match="*">
+        <xsl:comment select="concat('No template for element: ',name())"/>
+    </xsl:template>
+
+    <xsl:template match="html:style"/>
     <xsl:template name="coreattrs">
-        <xsl:copy-of select="@id|@title|@xml:space"/>
+        <xsl:param name="except" tunnel="yes"/>
+        
+        <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
         <xsl:call-template name="classes-and-types"/>
     </xsl:template>
 
     <xsl:template name="i18n">
-        <xsl:copy-of select="@xml:lang|@dir"/>
+        <xsl:param name="except" tunnel="yes"/>
+        
+        <xsl:copy-of select="(@xml:lang|@dir)[not(name()=$except)]"/>
     </xsl:template>
 
     <xsl:template name="classes-and-types">
         <xsl:param name="classes" select="()" tunnel="yes"/>
+        <xsl:param name="except" tunnel="yes"/>
+        
         <xsl:variable name="old-classes" select="f:classes(.)"/>
 
+
         <xsl:variable name="showin" select="replace($old-classes[matches(.,'^showin-...$')][1],'showin-','')"/>
-        <xsl:if test="$showin">
+        <xsl:if test="$showin and not('showin'=$except)">
             <xsl:attribute name="showin" select="$showin"/>
         </xsl:if>
 
-        <xsl:variable name="epub-type-classes">
-            <xsl:for-each select="f:types(.)">
-                <xsl:choose>
-                    <xsl:when test=".='toc'">
-                        <!-- TODO: add epub:types that maps to different class strings here like this -->
-                        <xsl:sequence select="'toc'"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:sequence select="tokenize(.,':')[last()]"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:for-each>
-        </xsl:variable>
+        <xsl:if test="not('class'=$except)">
+            <xsl:variable name="epub-type-classes">
+                <xsl:for-each select="f:types(.)">
+                    <xsl:choose>
+                        <xsl:when test=".='toc'">
+                            <!-- TODO: add epub:types that maps to different class strings here like this -->
+                            <xsl:sequence select="'toc'"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="tokenize(.,':')[last()]"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each>
+            </xsl:variable>
 
-        <xsl:attribute name="class" select="string-join(distinct-values(($classes, $old-classes[not(matches(.,concat('showin-',$showin)))], $epub-type-classes)),' ')"/>
+            <xsl:attribute name="class" select="string-join(distinct-values(($classes, $old-classes[not(matches(.,concat('showin-',$showin)))], $epub-type-classes)),' ')"/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="attrs">
@@ -48,7 +65,9 @@
     </xsl:template>
 
     <xsl:template name="attrsrqd">
-        <xsl:copy-of select="@id|@title|@xml:space"/>
+        <xsl:param name="except" tunnel="yes"/>
+        
+        <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
         <xsl:call-template name="classes-and-types"/>
         <xsl:call-template name="i18n"/>
     </xsl:template>
@@ -133,7 +152,6 @@
     <xsl:template match="html:h1[f:types(.)='fulltitle' and ancestor::*[f:types(.)='titlepage']]"/>
     <xsl:template match="html:h1[f:types(.)='covertitle' and ancestor::*[f:types(.)='cover']]"/>
     <xsl:template match="*[f:types(.)='z3998:author'][ancestor::*[f:types(.)='titlepage']]"/>
-
     <xsl:template name="bodymatter">
         <bodymatter>
             <xsl:apply-templates select="node()"/>
@@ -562,10 +580,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.pagenum">
-        <xsl:variable name="attributes-including-title">
-            <xsl:call-template name="attrsrqd"/>
-        </xsl:variable>
-        <xsl:copy-of select="$attributes-including-title[not(name()='title')]"/>
+        <xsl:call-template name="attrsrqd">
+            <xsl:with-param name="except" select="'title'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:a[f:types(.)='noteref']">
@@ -1017,13 +1034,26 @@
 
     <xsl:function name="f:level" as="xs:integer">
         <xsl:param name="element" as="element()"/>
-        <xsl:variable name="h" select="($element/descendant-or-self::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6])[1]"/>
+        <xsl:variable name="h" select="$element/descendant-or-self::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][1]"/>
         <xsl:variable name="sections" select="$h/ancestor::*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body]"/>
         <xsl:variable name="explicit-level" select="count($sections)-1"/>
-        <xsl:variable name="h-in-section" select="($h, $h/preceding::*[./preceding::*=$sections[1]])"/>
-        <xsl:variable name="h-in-section-levels" select="$h-in-section/number(replace(local-name(),'^h',''))"/>
-        <xsl:variable name="implicit-level"
-            select="count(distinct-values((for $i in (1 to count($h-in-section-levels)-1) return (if (not($h-in-section-levels[$i] > $h-in-section-levels[position()>$i])) then $h-in-section-levels[$i] else ()), $h-in-section-levels[last()])))"/>
+        <xsl:variable name="h-in-section" select="($h, $h/preceding::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][./preceding::*=$sections[1]])"/>
+        <xsl:variable name="h-in-section-levels" select="reverse($h-in-section/xs:integer(number(replace(local-name(),'^h',''))))"/>
+        <xsl:variable name="implicit-level" select="if ($h-in-section-levels[1] = 6) then 6 else ()"/>
+        <xsl:variable name="h-in-section-levels" select="$h-in-section-levels[not(.=6)]"/>
+        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels[1] = 5) then 5 else ())"/>
+        <xsl:variable name="h-in-section-levels" select="$h-in-section-levels[not(.=5)]"/>
+        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels[1] = 4) then 4 else ())"/>
+        <xsl:variable name="h-in-section-levels" select="$h-in-section-levels[not(.=4)]"/>
+        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels[1] = 3) then 3 else ())"/>
+        <xsl:variable name="h-in-section-levels" select="$h-in-section-levels[not(.=3)]"/>
+        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels[1] = 2) then 2 else ())"/>
+        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels = 1) then 1 else ())"/>
+        <xsl:variable name="implicit-level" select="count($implicit-level)"/>
+        
+        
+        <!--<xsl:variable name="implicit-level"
+            select="count(distinct-values((for $i in (1 to count($h-in-section-levels)-1) return (if (not($h-in-section-levels[$i] > $h-in-section-levels[position()>$i])) then $h-in-section-levels[$i] else ()), $h-in-section-levels[last()])))"/>-->
         <xsl:variable name="level" select="$explicit-level + $implicit-level"/>
         <xsl:sequence select="min(($level, 6))"/>
         <!--
@@ -1032,6 +1062,12 @@
             The implicit level / hd elements could be used in cases where the structures are deeper.
             However, our tools would have to support those elements.
         -->
+    </xsl:function>
+    
+    <xsl:function name="f:determine-implicit-level" as="xs:integer*">
+        <xsl:param name="levels" as="xs:integer*"/>
+        <xsl:variable name="filtered" select="(for $i in (1 to count($levels)-1) return if ($levels[$i] &lt; $levels[$i+1]) then $levels[$i] else (), $levels[last()])"/>
+        <xsl:sequence select="if (count($levels) = count($filtered)) then count($levels) else f:determine-implicit-level($filtered)"/>
     </xsl:function>
 
 </xsl:stylesheet>
