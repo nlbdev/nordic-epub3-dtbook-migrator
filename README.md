@@ -1,12 +1,37 @@
 Nordic EPUB3/DTBook Migrator
 ============================
 
-This project includes two Pipeline 2 modules:
+The main goal of this project is to provide a EPUB3 to DTBook conversion tool for the libraries in the Nordic countries providing accessible litterature to visually impaired readers
+([NLB](http://www.nlb.no/), [MTM](http://mtm.se/), [Celia](http://www.celia.fi/), [Nota](http://www.nota.nu/) and [SBS](http://sbs.ch/)).
+The conversion will be implemented in XProc and XSLT. As a tool, [DAISY Pipeline 2](http://www.daisy.org/pipeline2) is recommended,
+as the conversion will be made available as a Pipeline 2 script.
+This conversion will allow the organizations to continue to use their respective DTBook-based tools for production of Braille and Synthetic Speech, as long as those are necessary.
+
+The intention is also to create a 1:1 mapping between DTBook and EPUB3, and as a convenience, the reverse conversion, DTBook to EPUB3 will also be provided (strictly following the
+Nordic markup guidelines and limitations, as opposed to the more generic script bundled with the official Pipeline 2 distributions). First of all, this allows us generate some EPUB3 files
+similar to what we can expect to receive when in production (books marked up according to the Nordic markup requirements). Secondly, it allows us to migrate our existing DTBook files
+to EPUB3.
+
+While the EPUB3 will consist of multiple HTML files internally, an intermediate single-page HTML representation is useful for converting to and from DTBook. Steps for converting
+between the intermediate single-document and multi-document HTML representations will also be provided.
+
+This project will provide the following Pipeline 2 scripts:
 
  * EPUB3 to DTBook
  * DTBook to EPUB3
+ * HTML to DTBook
+ * DTBook to HTML
+ * HTML merger
+ * HTML splitter
 
-The grammar used in the EPUB3 and DTBook files is a strict subset of EPUB3 and DTBook, and is defined in the nordic markup guidelines.
+The HTML referred to here are HTML marked up according to the Nordic markup guidelines, and will most notably contain
+[epub:type attributes](http://www.idpf.org/accessibility/guidelines/content/semantics/epub-type.php) which will be used to determine where to split the single-page HTML and how to
+map the HTML to DTBook.
 
-The two converters are mainly implemented using XSLT, but XProc is used to make it easy to work with EPUB3 files, as well as to make the converter available through Pipeline 2.
+The grammar used in the EPUB3 and DTBook files is a strict subset of EPUB3 and DTBook, and is defined in the Nordic markup guidelines. Most DTBooks will work with these scripts, there
+are few limitations to the DTBook grammar. There are more limitations to the HTML/EPUB3 grammar however, which is there to allow for easy conversion to DTBook.
+Most notably, audio and video are not allowed in these EPUB3s.
 
+TODO: include or link to the Nordic markup guidelines.
+TODO: include or link to the mapping between DTBook and EPUB3 (possibly generate from XSLT?)
+TODO: include or link to a list of allowed HTML elements (or maybe they are / should be listed in the markup requirements?).
