@@ -7,13 +7,12 @@ The conversion will be implemented in XProc and XSLT. As a tool, [DAISY Pipeline
 as the conversion will be made available as a Pipeline 2 script.
 This conversion will allow the organizations to continue to use their respective DTBook-based tools for production of Braille and Synthetic Speech, as long as those are necessary.
 
-The intention is also to create a 1:1 mapping between DTBook and EPUB3, and as a convenience, the reverse conversion, DTBook to EPUB3 will also be provided (strictly following the
-Nordic markup guidelines and limitations, as opposed to the more generic script bundled with the official Pipeline 2 distributions). First of all, this allows us generate some EPUB3 files
-similar to what we can expect to receive when in production (books marked up according to the Nordic markup requirements). Secondly, it allows us to migrate our existing DTBook files
-to EPUB3.
+The intention is also to create a 1:1 mapping between DTBook and EPUB3. As a convenience the reverse conversion, DTBook to EPUB3, will also be provided (strictly following the
+Nordic markup guidelines and limitations, as opposed to the more generic script bundled with the official Pipeline 2 distribution). This allows us to generate some EPUB3 files
+similar to what we can expect to receive when in production (books marked up according to the Nordic markup requirements).
 
 While the EPUB3 will consist of multiple HTML files internally, an intermediate single-page HTML representation is useful for converting to and from DTBook. Steps for converting
-between the intermediate single-document and multi-document HTML representations will also be provided.
+between the intermediate single-document and multi-document HTML representations will also be provided, mainly so that those not familiar with XProc or XSLT can inspect the intermediate formats and help with testing the converter.
 
 This project will provide the following Pipeline 2 scripts:
 
@@ -24,14 +23,14 @@ This project will provide the following Pipeline 2 scripts:
  * HTML merger
  * HTML splitter
 
-The HTML referred to here are HTML marked up according to the Nordic markup guidelines, and will most notably contain
-[epub:type attributes](http://www.idpf.org/accessibility/guidelines/content/semantics/epub-type.php) which will be used to determine where to split the single-page HTML and how to
+The HTML referred to here are HTML marked up according to the Nordic markup guidelines, and will most notably make use of the
+[epub:type](http://www.idpf.org/accessibility/guidelines/content/semantics/epub-type.php) attribute, which will be used to determine where to split the single-page HTML and how to
 map the HTML to DTBook.
 
 The grammar used in the EPUB3 and DTBook files is a strict subset of EPUB3 and DTBook, and is defined in the Nordic markup guidelines. Most DTBooks will work with these scripts, there
-are few limitations to the DTBook grammar. There are more limitations to the HTML/EPUB3 grammar however, which is there to allow for easy conversion to DTBook.
+are few limitations to the DTBook grammar. There are more limitations to the HTML/EPUB3 grammar however, because there must be a way to convert it to DTBook.
 Most notably, audio and video are not allowed in these EPUB3s.
 
-TODO: include or link to the Nordic markup guidelines.
-TODO: include or link to the mapping between DTBook and EPUB3 (possibly generate from XSLT?)
-TODO: include or link to a list of allowed HTML elements (or maybe they are / should be listed in the markup requirements?).
+* TODO: include or link to the Nordic markup guidelines.
+* TODO: include or link to the mapping between DTBook and EPUB3 (possibly generate from XSLT?)
+* TODO: include or link to a list of allowed HTML elements (or maybe they are / should be listed in the markup requirements?).
