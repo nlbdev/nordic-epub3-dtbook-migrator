@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:library xmlns:p="http://www.w3.org/ns/xproc" version="1.0">
-    
-    <p:import href="html-to-dtbook.xpl"/>
-    <p:import href="dtbook-to-html.xpl"/>
-    
-<!--    <p:import href="html-merge.xpl"/>-->
-<!--    <p:import href="html-split.xpl"/>-->
-    
-<!--    <p:import href="epub3-to-dtbook.xpl"/>-->
-    <p:import href="dtbook-to-epub3.xpl"/>
-    
+
+    <p:import href="convert/html-to-dtbook.convert.xpl"/>
+    <p:import href="convert/dtbook-to-html.convert.xpl"/>
+
+    <p:import href="convert/html-merge.merge.xpl"/>
+    <p:import href="convert/html-split.split.xpl"/>
+
+    <p:import href="convert/epub3-to-dtbook.convert.xpl"/>
+    <p:import href="convert/dtbook-to-epub3.convert.xpl"/>
+
 </p:library>
