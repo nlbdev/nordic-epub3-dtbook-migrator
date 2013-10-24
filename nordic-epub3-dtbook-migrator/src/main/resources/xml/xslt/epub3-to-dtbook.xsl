@@ -1052,8 +1052,6 @@
         <xsl:variable name="implicit-level" select="count($implicit-level)"/>
         
         
-        <!--<xsl:variable name="implicit-level"
-            select="count(distinct-values((for $i in (1 to count($h-in-section-levels)-1) return (if (not($h-in-section-levels[$i] > $h-in-section-levels[position()>$i])) then $h-in-section-levels[$i] else ()), $h-in-section-levels[last()])))"/>-->
         <xsl:variable name="level" select="$explicit-level + $implicit-level"/>
         <xsl:sequence select="min(($level, 6))"/>
         <!--
@@ -1062,12 +1060,6 @@
             The implicit level / hd elements could be used in cases where the structures are deeper.
             However, our tools would have to support those elements.
         -->
-    </xsl:function>
-    
-    <xsl:function name="f:determine-implicit-level" as="xs:integer*">
-        <xsl:param name="levels" as="xs:integer*"/>
-        <xsl:variable name="filtered" select="(for $i in (1 to count($levels)-1) return if ($levels[$i] &lt; $levels[$i+1]) then $levels[$i] else (), $levels[last()])"/>
-        <xsl:sequence select="if (count($levels) = count($filtered)) then count($levels) else f:determine-implicit-level($filtered)"/>
     </xsl:function>
 
 </xsl:stylesheet>

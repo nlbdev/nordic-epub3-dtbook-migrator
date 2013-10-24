@@ -11,7 +11,7 @@
     <xsl:template match="text()|comment()">
         <xsl:copy-of select="."/>
     </xsl:template>
-    
+
     <xsl:template match="*">
         <xsl:comment select="concat('No template for element: ',name())"/>
     </xsl:template>
@@ -125,8 +125,10 @@
     <xsl:template match="dtbook:head">
         <head>
             <xsl:call-template name="attlist.head"/>
+            <meta charset="utf-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <xsl:call-template name="headmisc"/>
-            <style type="text/css"><![CDATA[
+            <style type="text/css" xml:space="preserve"><![CDATA[
                 .spell-out { -epub-speak-as: spell-out; }
                 .list-preformatted { list-style-type: none; }
                 table[class^="table-rules-"], table[class*=" table-rules-"] { border-width: thin; border-style: hidden; }
@@ -173,6 +175,12 @@
     </xsl:template>
 
     <xsl:template match="dtbook:meta">
+        <xsl:if test="matches(@name,'dc:title','i')">
+            <title>
+                <xsl:call-template name="i18n"/>
+                <xsl:value-of select="@content"/>
+            </title>
+        </xsl:if>
         <meta>
             <xsl:call-template name="attlist.meta"/>
         </meta>
@@ -826,7 +834,7 @@
     <xsl:template name="attlist.p">
         <xsl:call-template name="attrs"/>
     </xsl:template>
-    
+
     <xsl:template match="dtbook:doctitle"/>
     <xsl:template name="doctitle">
         <h1>
@@ -840,7 +848,7 @@
             <xsl:with-param name="types" select="'fulltitle'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
-    
+
     <xsl:template match="dtbook:docauthor"/>
     <xsl:template name="docauthor">
         <docauthor>
@@ -852,7 +860,7 @@
     <xsl:template name="attlist.docauthor">
         <xsl:call-template name="attrs"/>
     </xsl:template>
-    
+
     <xsl:template match="dtbook:covertitle"/>
     <xsl:template name="covertitle">
         <h1>

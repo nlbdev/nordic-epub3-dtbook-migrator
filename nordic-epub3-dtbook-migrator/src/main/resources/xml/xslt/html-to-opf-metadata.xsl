@@ -5,10 +5,10 @@
     <xsl:template match="/*">
         <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/">
 
-            <xsl:variable name="identifier" select="//html:head/html:meta[@name=('dc:identifier','dct:identifier','dcterms:identifier','dtb:uid')][1]"/>
+            <xsl:variable name="identifier" select="//html:head/html:meta[lower-case(@name)=('dc:identifier','dct:identifier','dcterms:identifier','dtb:uid')][1]"/>
             <dc:identifier id="pub-id">
                 <xsl:copy-of select="$identifier/@scheme"/>
-                <xsl:variable name="value" select="($identifier/@content,replace(replace(string(current-dateTime()),'\+.*',''),'[^\d]',''))[1]"/>
+                <xsl:value-of select="($identifier/@content,replace(replace(string(current-dateTime()),'\+.*',''),'[^\d]',''))[1]"/>
             </dc:identifier>
 
             <dc:format id="format">EPUB3</dc:format>
