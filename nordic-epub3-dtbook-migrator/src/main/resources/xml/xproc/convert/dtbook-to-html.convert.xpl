@@ -63,7 +63,6 @@
     <p:identity name="result.in-memory"/>
 
     <!-- TODO: validate output HTML -->
-
     <px:mkdir name="mkdir">
         <p:with-option name="href" select="$temp-dir"/>
     </px:mkdir>

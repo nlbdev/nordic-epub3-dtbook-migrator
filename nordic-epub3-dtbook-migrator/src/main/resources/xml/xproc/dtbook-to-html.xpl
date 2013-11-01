@@ -20,7 +20,9 @@
             <p px:role="desc">The resulting HTML fileset, marked up using the EPUB3 `epub:type` attribute.</p>
         </p:documentation>
     </p:option>
-
+    
+    <p:import href="library.xpl"/>
+    
     <p:variable name="base" select="replace(base-uri(/),'[^/]*$','')"/>
     <p:variable name="href" select="replace(base-uri(/),'^.*/([^/]*)$','$1')"/>
     <p:variable name="result-uri" select="concat($output-dir,if (ends-with($href,'.xml')) then replace($href,'\.xml$','.xhtml') else concat($href,'.xhtml'))"/>
@@ -38,7 +40,7 @@
             <p:pipe port="source" step="main"/>
         </p:input>
     </px:nordic-dtbook-to-html-convert>
-
+    
     <px:fileset-store>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="convert"/>

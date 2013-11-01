@@ -169,6 +169,11 @@
                 <p:pipe port="ncx" step="nav"/>
             </p:with-option>
         </px:fileset-create>
+        <px:message message="ncx base: $1">
+            <p:with-option name="param1" select="replace(base-uri(/*),'[^/]+$','')">
+                <p:pipe port="ncx" step="nav"/>
+            </p:with-option>
+        </px:message>
         <px:fileset-add-entry media-type="application/x-dtbncx+xml">
             <p:with-option name="href" select="'ncx.xml'"/>
         </px:fileset-add-entry>
@@ -259,6 +264,9 @@
                 <p:pipe port="in-memory" step="result.for-each"/>
             </p:input>
         </px:mediatype-detect>
+        <px:message message="epub-dir: $1">
+            <p:with-option name="param1" select="$epub-dir"/>
+        </px:message>
         <px:fileset-rebase>
             <p:with-option name="new-base" select="$epub-dir"/>
         </px:fileset-rebase>

@@ -20,8 +20,7 @@
 
   <!-- List of the modules to build all-at-once -->
   <modules>
-    <module>nordic-dtbook-to-epub3</module>
-    <module>nordic-epub3-to-dtbook</module>
+    <module>nordic-epub3-dtbook-migrator</module>
   </modules>
 
   <!-- BoM of the default script modules (for use in assemblies) -->

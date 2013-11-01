@@ -451,5 +451,50 @@
     <!-- td -->
 
     <!-- attlist.td -->
+    
+    
+    <!-- ########## Nordic tests ########## -->
+    
+    <!--
+        precedingemptyline class
+        discussion: https://github.com/josteinaj/nordic-epub3-dtbook-migrator/issues/2
+    -->
+    <x:scenario label="when processing a paragraph">
+        <x:scenario label="with a preceding hr and a precedingemptyline class">
+            <x:context>
+                <html:section epub:type="bodymatter">
+                    <html:p>Some text</html:p>
+                    <!-- thematic break occurs here -->
+                    <html:hr/>
+                    <html:p class="precedingemptyline">More text</html:p>
+                </html:section>
+            </x:context>
+            <x:expect label="the html version should add a preceding hr element">
+                <dtbook:level1 class="bodymatter">
+                    <dtbook:p>Some text</dtbook:p>
+                    <!-- thematic break occurs here -->
+                    <dtbook:p class="precedingemptyline">More text</dtbook:p>
+                </dtbook:level1>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="with a preceding hr but without a precedingemptyline class">
+            <x:context>
+                <html:section epub:type="bodymatter">
+                    <html:p>Some text</html:p>
+                    <!-- thematic break occurs here -->
+                    <html:hr/>
+                    <html:p>More text</html:p>
+                </html:section>
+            </x:context>
+            <x:expect label="the html version should add a preceding hr element">
+                <dtbook:level1 class="bodymatter">
+                    <dtbook:p>Some text</dtbook:p>
+                    <!-- thematic break occurs here -->
+                    <dtbook:p class="precedingemptyline">More text</dtbook:p>
+                </dtbook:level1>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
 
 </x:description>

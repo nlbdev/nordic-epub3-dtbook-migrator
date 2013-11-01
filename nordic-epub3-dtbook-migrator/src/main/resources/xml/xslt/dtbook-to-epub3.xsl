@@ -59,7 +59,7 @@
         <!-- assume that non-standard classes are fixed before running this XSLT (for instance, 'jacketcopy' => 'cover' and 'endnote' => 'rearnote') -->
         <xsl:variable name="epub-types">
             <xsl:for-each select="$old-classes">
-                <xsl:sequence select="if (.=$vocab-default) then . else concat('z3998:',.)"/>
+                <xsl:sequence select="if (.=$vocab-default) then . else if (.=$vocab-z3998) then concat('z3998:',.) else ()"/>
             </xsl:for-each>
             <xsl:value-of select="''"/>
         </xsl:variable>
@@ -806,18 +806,26 @@
     </xsl:template>
 
     <xsl:template match="dtbook:p">
+        <xsl:variable name="element" select="."/>
         <xsl:for-each-group select="node()" group-adjacent="not(self::list or self::dl)">
             <xsl:choose>
                 <xsl:when test="current-grouping-key()">
+                    <xsl:if test="position()=1 and f:classes($element)=('precedingemptyline')">
+                        <hr/>
+                    </xsl:if>
                     <p>
                         <xsl:choose>
                             <xsl:when test="position()=1">
-                                <xsl:call-template name="attlist.p"/>
+                                <xsl:for-each select="$element">
+                                    <xsl:call-template name="attlist.p"/>
+                                </xsl:for-each>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:call-template name="attlist.p">
-                                    <xsl:with-param name="except" select="'id'" tunnel="yes"/>
-                                </xsl:call-template>
+                                <xsl:for-each select="$element">
+                                    <xsl:call-template name="attlist.p">
+                                        <xsl:with-param name="except" select="'id'" tunnel="yes"/>
+                                    </xsl:call-template>
+                                </xsl:for-each>
                             </xsl:otherwise>
                         </xsl:choose>
                         <xsl:apply-templates select="current-group()"/>

@@ -3,22 +3,22 @@
 
   <!-- Scripts -->
   <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/dtbook-to-epub3.xpl" uri="../xml/xproc/dtbook-to-epub3.xpl" px:script="true"/>
-  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/epub3-to-dtbook.xpl" uri="../xml/xproc/epub3-to-dtbook.xpl" px:script="true"/>
-  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/dtbook-to-html.xpl" uri="../xml/xproc/dtbook-to-html.xpl" px:script="true"/>
-  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-to-dtbook.xpl" uri="../xml/xproc/html-to-dtbook.xpl" px:script="true"/>
-  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-split.xpl" uri="../xml/xproc/html-split.xpl" px:script="true"/>
-  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-merge.xpl" uri="../xml/xproc/html-merge.xpl" px:script="true"/>
-  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/epub3-validate.xpl" uri="../xml/xproc/epub3-validate.xpl" px:script="true"/>
-  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-validate.xpl" uri="../xml/xproc/html-validate.xpl" px:script="true"/>
-  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/dtbook-validate.xpl" uri="../xml/xproc/dtbook-validate.xpl" px:script="true"/>
+  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/epub3-to-dtbook.xpl" uri="../xml/xproc/epub3-to-dtbook.xpl" px:script="true"/> -->
+  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/dtbook-to-html.xpl" uri="../xml/xproc/dtbook-to-html.xpl" px:script="true"/> -->
+  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-to-dtbook.xpl" uri="../xml/xproc/html-to-dtbook.xpl" px:script="true"/> -->
+  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-split.xpl" uri="../xml/xproc/html-split.xpl" px:script="true"/> -->
+  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-merge.xpl" uri="../xml/xproc/html-merge.xpl" px:script="true"/> -->
+  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/epub3-validate.xpl" uri="../xml/xproc/epub3-validate.xpl" px:script="true"/> -->
+  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-validate.xpl" uri="../xml/xproc/html-validate.xpl" px:script="true"/> -->
+  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/dtbook-validate.xpl" uri="../xml/xproc/dtbook-validate.xpl" px:script="true"/> -->
 
   <!-- Converters -->
   <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/dtbook-to-epub3.convert.xpl" uri="../xml/xproc/convert/dtbook-to-epub3.convert.xpl"/>
-  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/epub3-to-dtbook.convert.xpl" uri="../xml/xproc/convert/epub3-to-dtbook.convert.xpl"/>
+  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/epub3-to-dtbook.convert.xpl" uri="../xml/xproc/convert/epub3-to-dtbook.convert.xpl"/> -->
   <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/dtbook-to-html.convert.xpl" uri="../xml/xproc/convert/dtbook-to-html.convert.xpl"/>
-  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-to-dtbook.convert.xpl" uri="../xml/xproc/convert/html-to-dtbook.convert.xpl"/>
+  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-to-dtbook.convert.xpl" uri="../xml/xproc/convert/html-to-dtbook.convert.xpl"/> -->
   <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-split.split.xpl" uri="../xml/xproc/convert/html-split.split.xpl"/>
-  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-merge.merge.xpl" uri="../xml/xproc/convert/html-merge.merge.xpl"/>
+  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-merge.merge.xpl" uri="../xml/xproc/convert/html-merge.merge.xpl"/> -->
 
   <nextCatalog catalog="org:daisy:pipeline:modules:epub3-nav-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils"/>

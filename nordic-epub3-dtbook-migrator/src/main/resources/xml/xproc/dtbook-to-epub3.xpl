@@ -42,7 +42,8 @@
         <p:input port="in-memory.in">
             <p:pipe port="source" step="main"/>
         </p:input>
-        <p:with-option name="temp-dir" select="$temp-dir"/>
+        <!--<p:with-option name="temp-dir" select="$temp-dir"/>-->
+        <p:with-option name="temp-dir" select="$output-dir"/>
         <p:with-option name="output-dir" select="$output-dir"/>
     </px:nordic-dtbook-to-epub3-convert>
 

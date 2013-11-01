@@ -408,5 +408,32 @@
     <!-- td -->
 
     <!-- attlist.td -->
+    
+    
+    <!-- ########## Nordic tests ########## -->
+    
+    <!--
+        precedingemptyline class
+        discussion: https://github.com/josteinaj/nordic-epub3-dtbook-migrator/issues/2
+    -->
+    <x:scenario label="when processing a paragraph with a precedingemptyline class">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:p>Some text</dtbook:p>
+                    <!-- thematic break occurs here -->
+                    <dtbook:p class="precedingemptyline">More text</dtbook:p>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the html version should add a preceding hr element">
+            <html:section epub:type="bodymatter">
+                <html:p>Some text</html:p>
+                <!-- thematic break occurs here -->
+                <html:hr/>
+                <html:p class="precedingemptyline">More text</html:p>
+            </html:section>
+        </x:expect>
+    </x:scenario>
 
 </x:description>

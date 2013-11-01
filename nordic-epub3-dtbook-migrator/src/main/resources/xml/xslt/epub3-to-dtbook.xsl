@@ -4,10 +4,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xsl:template match="text()|comment()">
-        <xsl:if test="not(self::comment())">
-            <!-- temp ^^ -->
-            <xsl:copy-of select="."/>
-        </xsl:if>
+        <xsl:copy-of select="."/>
     </xsl:template>
 
     <xsl:template match="*">
@@ -17,21 +14,21 @@
     <xsl:template match="html:style"/>
     <xsl:template name="coreattrs">
         <xsl:param name="except" tunnel="yes"/>
-        
+
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
         <xsl:call-template name="classes-and-types"/>
     </xsl:template>
 
     <xsl:template name="i18n">
         <xsl:param name="except" tunnel="yes"/>
-        
+
         <xsl:copy-of select="(@xml:lang|@dir)[not(name()=$except)]"/>
     </xsl:template>
 
     <xsl:template name="classes-and-types">
         <xsl:param name="classes" select="()" tunnel="yes"/>
         <xsl:param name="except" tunnel="yes"/>
-        
+
         <xsl:variable name="old-classes" select="f:classes(.)"/>
 
 
@@ -54,8 +51,11 @@
                     </xsl:choose>
                 </xsl:for-each>
             </xsl:variable>
-
-            <xsl:attribute name="class" select="string-join(distinct-values(($classes, $old-classes[not(matches(.,concat('showin-',$showin)))], $epub-type-classes)),' ')"/>
+            
+            <xsl:variable name="class-string" select="string-join(distinct-values(($classes, $old-classes[not(matches(.,concat('showin-',$showin)))], $epub-type-classes)[not(.='')]),' ')"/>
+            <xsl:if test="not($class-string='')">
+                <xsl:attribute name="class" select="$class-string"/>
+            </xsl:if>
         </xsl:if>
     </xsl:template>
 
@@ -66,7 +66,7 @@
 
     <xsl:template name="attrsrqd">
         <xsl:param name="except" tunnel="yes"/>
-        
+
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
         <xsl:call-template name="classes-and-types"/>
         <xsl:call-template name="i18n"/>
@@ -688,8 +688,11 @@
     </xsl:template>
 
     <xsl:template match="html:p">
+        <xsl:variable name="precedingemptyline" select="preceding-sibling::*[1]=preceding-sibling::html:hr[1]"/>
         <p>
-            <xsl:call-template name="attlist.p"/>
+            <xsl:call-template name="attlist.p">
+                <xsl:with-param name="classes" select="if ($precedingemptyline) then 'precedingemptyline' else ()" tunnel="yes"/>
+            </xsl:call-template>
             <xsl:apply-templates select="node()"/>
         </p>
     </xsl:template>
@@ -697,6 +700,8 @@
     <xsl:template name="attlist.p">
         <xsl:call-template name="attrs"/>
     </xsl:template>
+
+    <xsl:template match="html:hr"/>
 
     <xsl:template name="doctitle">
         <doctitle>
@@ -1037,7 +1042,8 @@
         <xsl:variable name="h" select="$element/descendant-or-self::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][1]"/>
         <xsl:variable name="sections" select="$h/ancestor::*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body]"/>
         <xsl:variable name="explicit-level" select="count($sections)-1"/>
-        <xsl:variable name="h-in-section" select="($h, $h/preceding::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][./preceding::*=$sections[1]])"/>
+        <xsl:variable name="h-in-section"
+            select="($h, $h/preceding::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][./preceding::*=$sections[1]])"/>
         <xsl:variable name="h-in-section-levels" select="reverse($h-in-section/xs:integer(number(replace(local-name(),'^h',''))))"/>
         <xsl:variable name="implicit-level" select="if ($h-in-section-levels[1] = 6) then 6 else ()"/>
         <xsl:variable name="h-in-section-levels" select="$h-in-section-levels[not(.=6)]"/>
@@ -1051,9 +1057,10 @@
         <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels = 1) then 1 else ())"/>
         <xsl:variable name="implicit-level" select="count($implicit-level)"/>
         
-        
+        <xsl:message select="concat('implicit-level: ',$implicit-level)"/>
+        <xsl:message select="concat('explicit-level: ',$explicit-level)"/>
         <xsl:variable name="level" select="$explicit-level + $implicit-level"/>
-        <xsl:sequence select="min(($level, 6))"/>
+        <xsl:sequence select="max((1,min(($level, 6))))"/>
         <!--
             NOTE: DTBook only supports 6 levels when using the explicit level1-level6 / h1-h6 elements,
             so min(($level, 6)) is used to flatten deeper structures.
