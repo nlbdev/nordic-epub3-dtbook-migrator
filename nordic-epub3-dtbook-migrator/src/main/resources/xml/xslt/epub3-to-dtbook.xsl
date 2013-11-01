@@ -124,7 +124,7 @@
             <xsl:if test="*[f:types(.)=('cover','frontmatter')]">
                 <xsl:call-template name="frontmatter"/>
             </xsl:if>
-            <xsl:if test="*[f:types(.)=('bodymatter')]">
+            <xsl:if test="*[f:types(.)=('bodymatter') or not(f:types(.)=('cover','frontmatter','bodymatter','backmatter'))]">
                 <xsl:call-template name="bodymatter"/>
             </xsl:if>
             <xsl:if test="*[f:types(.)=('backmatter')]">

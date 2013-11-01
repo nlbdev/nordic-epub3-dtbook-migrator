@@ -453,6 +453,24 @@
     <!-- attlist.td -->
     
     
+    <!-- ########## Regression tests ########## -->
+    
+    <x:scenario label="if first section element doesn't include an epub:type">
+        <x:context>
+            <html:body>
+                <html:section/>
+            </html:body>
+        </x:context>
+        <x:expect label="then the section should map to a 'bodymatter'-level1">
+            <dtbook:book>
+                <dtbook:bodymatter>
+                    <dtbook:level1/>
+                </dtbook:bodymatter>
+            </dtbook:book>
+        </x:expect>
+    </x:scenario>
+    
+    
     <!-- ########## Nordic tests ########## -->
     
     <!--
