@@ -42,8 +42,7 @@
         <p:input port="in-memory.in">
             <p:pipe port="source" step="main"/>
         </p:input>
-        <!--<p:with-option name="temp-dir" select="$temp-dir"/>-->
-        <p:with-option name="temp-dir" select="$output-dir"/>
+        <p:with-option name="temp-dir" select="$temp-dir"/>
         <p:with-option name="output-dir" select="$output-dir"/>
     </px:nordic-dtbook-to-epub3-convert>
 
@@ -51,7 +50,11 @@
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="convert"/>
         </p:input>
-        <p:with-option name="href" select="concat($output-dir,if (normalize-space(.)='') then 'no-title' else replace(normalize-space(.),'[^\w]',''),'.epub')">
+        <!--
+            commented out because the DP2 Web API doesn't support all characters yet. Issue: https://code.google.com/p/daisy-pipeline/issues/detail?id=370
+            <p:with-option name="href" select="concat($output-dir,if (normalize-space(.)='') then 'no-title' else replace(normalize-space(.),'[^\w]',''),'.epub')">
+        -->
+        <p:with-option name="href" select="concat($output-dir,if (normalize-space(.)='') then 'no-title' else replace(normalize-space(.),'[^a-zA-Z0-9_-]',''),'.epub')">
             <p:pipe port="result" step="title"/>
         </p:with-option>
     </px:epub3-store>
@@ -64,7 +67,7 @@
             <p:pipe port="in-memory.out" step="convert"/>
         </p:input>
     </px:fileset-load>
-    <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the resulding EPUB." error-code="NORDICDTBOOKEPUB002"/>
+    <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the resulting EPUB." error-code="NORDICDTBOOKEPUB002"/>
     <p:filter select="//dc:title" xmlns:dc="http://purl.org/dc/elements/1.1/"/>
     <px:assert test-count-min="1" test-count-max="1" message="The Package Document in the resulting EPUB must have exactly one dc:title element." error-code="NORDICDTBOOKEPUB003"/>
     <p:identity name="title"/>
