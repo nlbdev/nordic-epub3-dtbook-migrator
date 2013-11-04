@@ -16,7 +16,6 @@
     <p:option name="temp-dir" required="true"/>
     <p:option name="output-dir" required="true"/>
 
-    <p:import href="../library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/xproc/file-library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/logging-library.xpl"/>

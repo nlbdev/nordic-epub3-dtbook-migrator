@@ -28,7 +28,7 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="library.xpl"/>
+    <p:import href="convert/dtbook-to-epub3.convert.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl"/>
