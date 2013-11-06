@@ -29,18 +29,21 @@
     
     <!-- TODO: validate HTML -->
 
+    <p:xslt>
+        <p:with-param name="output-dir" select="$output-dir"/>
+        <p:input port="stylesheet">
+            <p:document href="../../xslt/split-html.annotate.xsl"/>
+        </p:input>
+    </p:xslt>
     <p:xslt name="split">
         <p:with-param name="output-dir" select="$output-dir"/>
         <p:input port="stylesheet">
             <p:document href="../../xslt/split-html.xsl"/>
         </p:input>
     </p:xslt>
-    <p:sink/>
     
     <p:for-each name="for-each">
-        <p:iteration-source>
-            <p:pipe port="secondary" step="split"/>
-        </p:iteration-source>
+        <p:iteration-source select="/*/*"/>
         <p:output port="html" primary="true" sequence="true">
             <p:pipe port="result" step="for-each.html"/>
         </p:output>

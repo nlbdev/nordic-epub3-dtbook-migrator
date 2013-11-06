@@ -31,6 +31,9 @@
             </xsl:if>
         </xsl:if>
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
+        <xsl:if test="not(@id) and not(name()=('span','p','div','tr','th','td'))">
+            <xsl:attribute name="id" select="generate-id()"/>
+        </xsl:if>
         <xsl:call-template name="classes-and-types">
             <xsl:with-param name="classes" select="(if ($is-first-level) then tokenize(parent::*/@class,'\s+') else (), $classes)" tunnel="yes"/>
         </xsl:call-template>

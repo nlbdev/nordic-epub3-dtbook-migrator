@@ -1057,8 +1057,6 @@
         <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels = 1) then 1 else ())"/>
         <xsl:variable name="implicit-level" select="count($implicit-level)"/>
         
-        <xsl:message select="concat('implicit-level: ',$implicit-level)"/>
-        <xsl:message select="concat('explicit-level: ',$explicit-level)"/>
         <xsl:variable name="level" select="$explicit-level + $implicit-level"/>
         <xsl:sequence select="max((1,min(($level, 6))))"/>
         <!--

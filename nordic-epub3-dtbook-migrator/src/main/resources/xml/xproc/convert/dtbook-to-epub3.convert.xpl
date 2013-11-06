@@ -29,7 +29,6 @@
 
     <p:variable name="epub-dir" select="concat($temp-dir,'epub/')"/>
     <p:variable name="publication-dir" select="concat($epub-dir,'EPUB/')"/>
-    <p:variable name="content-dir" select="concat($publication-dir,'Content/')"/>
 
     <px:fileset-load media-types="application/x-dtbook+xml">
         <p:input port="in-memory">
@@ -58,13 +57,13 @@
                 <p:pipe port="in-memory.in" step="main"/>
             </p:input>
             <p:with-option name="temp-dir" select="concat($temp-dir,'dtbook-to-html/')"/>
-            <p:with-option name="output-dir" select="$content-dir"/>
+            <p:with-option name="output-dir" select="$publication-dir"/>
         </px:nordic-dtbook-to-html-convert>
         <px:nordic-html-split-perform name="html">
             <p:input port="in-memory.in">
                 <p:pipe port="in-memory.out" step="single-html"/>
             </p:input>
-            <p:with-option name="output-dir" select="$content-dir"/>
+            <p:with-option name="output-dir" select="$publication-dir"/>
         </px:nordic-html-split-perform>
 
         <!-- Create spine -->
@@ -135,7 +134,10 @@
                 </p:with-option>
             </px:epub3-nav-aggregate>
             <p:add-attribute match="/*" attribute-name="xml:base">
-                <p:with-option name="attribute-value" select="concat($publication-dir,'navigation.xhtml')"/>
+                <p:with-option name="attribute-value" select="concat($publication-dir,'nav.xhtml')"/>
+            </p:add-attribute>
+            <p:add-attribute match="/*" attribute-name="epub:prefix" xmlns:epub="http://www.idpf.org/2007/ops">
+                <p:with-option name="attribute-value" select="'z3998: http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
             </p:add-attribute>
             <p:identity name="nav.html"/>
 
@@ -180,12 +182,13 @@
             <p:with-option name="href" select="'ncx.xml'"/>
         </px:fileset-add-entry>
         <p:identity name="ncx-fileset"/>
-        <px:fileset-join name="resource-fileset">
+        <px:fileset-join>
             <p:input port="source">
                 <p:pipe port="result" step="ncx-fileset"/>
                 <p:pipe port="result" step="html-filesets"/>
             </p:input>
         </px:fileset-join>
+        <px:mediatype-detect name="resource-fileset"/>
         <p:sink/>
 
         <px:epub3-pub-create-package-doc name="package">

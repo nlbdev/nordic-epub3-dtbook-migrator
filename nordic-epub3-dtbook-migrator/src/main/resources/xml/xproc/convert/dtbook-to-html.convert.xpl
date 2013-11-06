@@ -54,11 +54,10 @@
             </p:inline>
         </p:input>
     </p:insert>
-
+    
     <p:add-attribute match="/*" attribute-name="xml:base">
         <p:with-option name="attribute-value" select="concat($output-dir,'content.xhtml')"/>
     </p:add-attribute>
-    <p:delete match="/*/@xml:base"/>
     <p:identity name="result.in-memory"/>
 
     <!-- TODO: validate output HTML -->
@@ -106,11 +105,17 @@
     </p:identity>
     <p:sink/>
     
-    <px:fileset-filter not-media-types="application/x-dtbook+xml text/css" name="fileset.existing-resources">
+    <px:fileset-filter not-media-types="application/x-dtbook+xml text/css">
         <p:input port="source">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
     </px:fileset-filter>
+    <p:add-attribute match="//*" attribute-name="xml:base">
+        <!-- change the base of all files to the output directory -->
+        <p:with-option name="attribute-value" select="$output-dir"/>
+    </p:add-attribute>
+    <p:delete match="/*//*/@xml:base"/>
+    <p:identity name="fileset.existing-resources"/>
     
     <px:fileset-create>
         <p:with-option name="base" select="$output-dir"/>
@@ -145,8 +150,8 @@
     <p:identity name="fileset.new-resources"/>
     <px:fileset-join>
         <p:input port="source">
-            <p:pipe port="result" step="fileset.new-resources"/>
             <p:pipe port="result" step="fileset.existing-resources"/>
+            <p:pipe port="result" step="fileset.new-resources"/>
         </p:input>
     </px:fileset-join>
     <p:identity name="result.fileset" cx:depends-on="store-dependency"/>
