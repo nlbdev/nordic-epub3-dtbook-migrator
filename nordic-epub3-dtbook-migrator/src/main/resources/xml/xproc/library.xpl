@@ -7,7 +7,7 @@
     <!--<p:import href="convert/html-merge.merge.xpl"/>-->
     <p:import href="convert/html-split.split.xpl"/>
 
-    <!--<p:import href="convert/epub3-to-dtbook.convert.xpl"/>-->
+<!--    <p:import href="convert/epub3-to-dtbook.convert.xpl"/>-->
     <p:import href="convert/dtbook-to-epub3.convert.xpl"/>
     
     <!-- TODO script: validate EPUB + HTML (epubcheck + nordic markup requirements) -->

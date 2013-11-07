@@ -16,7 +16,7 @@
             <xsl:for-each select="/html:html/html:head/html:meta">
                 <xsl:variable name="lcname" select="lower-case(@name)"/>
                 <xsl:variable name="id"
-                    select="if (matches($lcname,'^dc:\w+$')) then concat(replace($lcname,'^dc:',''),'_',count(preceding-sibling::html:meta[lower-case(@name)=$lcname]+1)) else if (matches($lcname,'^dtb:\w+$')) then concat(replace($lcname,'dtb:','dtb-'),'_',count(preceding-sibling::html:meta[lower-case(@name)=$lcname])) else concat('meta_',count(preceding-sibling::html:meta)+1)"/>
+                    select="if (matches($lcname,'^dc:\w+$')) then concat(replace($lcname,'^dc:',''),'_',count(preceding-sibling::html:meta[lower-case(@name)=$lcname])+1) else if (matches($lcname,'^dtb:\w+$')) then concat(replace($lcname,'dtb:','dtb-'),'_',count(preceding-sibling::html:meta[lower-case(@name)=$lcname])) else concat('meta_',count(preceding-sibling::html:meta)+1)"/>
                 <xsl:choose>
                     <xsl:when test="@http-equiv"/>
                     <xsl:when test="string-length(normalize-space(@content)) = 0"/>
