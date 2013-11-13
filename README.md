@@ -20,7 +20,6 @@ This project will provide the following Pipeline 2 scripts:
  * DTBook to EPUB3
  * HTML to DTBook
  * DTBook to HTML
- * HTML merger
  * HTML splitter
 
 The HTML referred to here are HTML marked up according to the Nordic markup guidelines, and will most notably make use of the

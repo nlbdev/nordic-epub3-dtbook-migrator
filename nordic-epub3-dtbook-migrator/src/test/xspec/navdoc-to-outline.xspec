@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/navdoc-to-outline.xsl">
+
+    <x:scenario label="A full navigation document">
+        <x:context href="context/navdoc-to-outline.navdoc.xhtml"/>
+        <x:expect label="An outline of the single-page HTML document">
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/tmp/">
+                <head/>
+                <body>
+                    <section xml:base="chapter1.xhtml"/>
+                    <section xml:base="chapter1.xhtml"/>
+                    <section xml:base="chapter2.xhtml"/>
+                    <section xml:base="chapter3.xhtml"/>
+                    <section xml:base="chapter4.xhtml">
+                        <section xml:base="chapter4.xhtml"/>
+                        <section xml:base="chapter4.xhtml"/>
+                        <section xml:base="chapter4.xhtml"/>
+                        <section xml:base="chapter4.xhtml"/>
+                        <section xml:base="chapter4.xhtml"/>
+                        <section xml:base="chapter4.xhtml"/>
+                        <section xml:base="chapter4.xhtml"/>
+                        <section xml:base="chapter4.xhtml"/>
+                        <section xml:base="chapter4.xhtml">
+                            <section xml:base="chapter4.xhtml"/>
+                            <section xml:base="chapter4.xhtml"/>
+                            <section xml:base="chapter4.xhtml"/>
+                            <section xml:base="chapter4.xhtml"/>
+                            <section xml:base="chapter4.xhtml"/>
+                        </section>
+                        <section xml:base="chapter4.xhtml"/>
+                        <section xml:base="chapter4.xhtml"/>
+                    </section>
+                    <section xml:base="chapter5.xhtml"/>
+                    <section xml:base="chapter6.xhtml"/>
+                    <section xml:base="chapter7.xhtml">
+                        <section xml:base="chapter7.xhtml"/>
+                        <section xml:base="chapter7.xhtml"/>
+                        <section xml:base="chapter7.xhtml"/>
+                        <section xml:base="chapter7.xhtml"/>
+                    </section>
+                    <section>
+                        <h1>Chapter 8</h1>
+                        <section xml:base="chapter8.xhtml"/>
+                        <section>
+                            <h2 title="TITLE" lang="en" data-data="data">
+                                <code>Chapter 8.1</code>
+                            </h2>
+                            <section xml:base="chapter81"/>
+                            <section xml:base="chapter81"/>
+                        </section>
+                    </section>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

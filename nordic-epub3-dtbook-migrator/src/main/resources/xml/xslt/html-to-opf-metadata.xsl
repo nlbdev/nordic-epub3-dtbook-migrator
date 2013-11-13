@@ -75,6 +75,11 @@
                     '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01][Z]')"
                 />
             </meta>
+            <meta name="dcterms:modified"
+                content="{format-dateTime(
+                    adjust-dateTime-to-timezone(current-dateTime(),xs:dayTimeDuration('PT0H')),
+                    '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01][Z]')}"
+            />
         </metadata>
     </xsl:template>
 

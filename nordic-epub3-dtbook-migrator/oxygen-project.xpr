@@ -14,52 +14,7 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xproc/epub3-to-dtbook.xpl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>epub3-to-dtbook</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>XPROC</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>../../pipeline-modules/common-utils/fileset-utils/src/main/resources/xml/xproc/fileset-join.xpl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>fileset-join2</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>XPROC</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>src/main/resources/xml/xproc/convert/dtbook-to-html.convert.xpl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>nordic-dtbook-to-epub3</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>XPROC</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>src/main/resources/xml/xslt/split-html.annotate.xsl</String>
+                                    <String>src/main/resources/xml/xslt/opf-to-html-metadata.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -74,7 +29,37 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xslt/split-html.xsl</String>
+                                    <String>src/main/resources/xml/xproc/epub3-to-dtbook.xpl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>nordic-epub3-to-dtbook</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XPROC</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/main/resources/xml/xslt/navdoc-to-outline.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>XSpec-test in oXygen project</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>ANT</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/test/xspec/navdoc-to-outline.xspec</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -104,6 +89,66 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
+                                    <String>src/main/resources/xml/xslt/split-html.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>XSpec-test in oXygen project</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>ANT</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/main/resources/xml/xslt/split-html.annotate.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>XSpec-test in oXygen project</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>ANT</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/main/resources/xml/xproc/convert/dtbook-to-epub3.convert.xpl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>nordic-dtbook-to-epub3</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XPROC</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>../../pipeline-modules/common-utils/zip-utils/src/main/resources/xml/xproc/load.xpl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>px:zip-load</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XPROC</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
                                     <String>src/main/resources/xml/xproc/dtbook-to-epub3.xpl</String>
                                 </field>
                                 <field name="scenarioIds">
@@ -119,7 +164,22 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xproc/convert/dtbook-to-epub3.convert.xpl</String>
+                                    <String>../../pipeline-modules/common-utils/fileset-utils/src/main/resources/xml/xproc/fileset-join.xpl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>fileset-join2</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XPROC</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/main/resources/xml/xproc/convert/dtbook-to-html.convert.xpl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -955,34 +1015,7 @@
                             </xprocScenario>
                             <xprocScenario>
                                 <field name="inputPorts">
-                                    <xprocInputPort-array>
-                                        <xprocInputPort>
-                                            <field name="portName">
-                                                <String>source</String>
-                                            </field>
-                                            <field name="urls">
-                                                <String-array>
-                                                    <String>file:/home/jostein/Skrivebord/DTBook/551195.xml</String>
-                                                </String-array>
-                                            </field>
-                                        </xprocInputPort>
-                                        <xprocInputPort>
-                                            <field name="portName">
-                                                <String>fileset.in</String>
-                                            </field>
-                                            <field name="urls">
-                                                <String-array/>
-                                            </field>
-                                        </xprocInputPort>
-                                        <xprocInputPort>
-                                            <field name="portName">
-                                                <String>in-memory.in</String>
-                                            </field>
-                                            <field name="urls">
-                                                <String-array/>
-                                            </field>
-                                        </xprocInputPort>
-                                    </xprocInputPort-array>
+                                    <xprocInputPort-array/>
                                 </field>
                                 <field name="outputPorts">
                                     <xprocOutputPort-array>
@@ -1046,6 +1079,20 @@
                                             </field>
                                             <field name="value">
                                                 <String>file:/home/jostein/Skrivebord/nordic-dtbook-to-epub3.output/result/</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                        </xprocOption>
+                                        <xprocOption>
+                                            <field name="namespaceURI">
+                                                <String></String>
+                                            </field>
+                                            <field name="localName">
+                                                <String>dtbook</String>
+                                            </field>
+                                            <field name="value">
+                                                <String>file:/home/jostein/Skrivebord/dtbook/hauy_valid.xml</String>
                                             </field>
                                             <field name="defaultValue">
                                                 <null/>
@@ -1196,6 +1243,20 @@
                                                 <null/>
                                             </field>
                                         </xprocOption>
+                                        <xprocOption>
+                                            <field name="namespaceURI">
+                                                <String></String>
+                                            </field>
+                                            <field name="localName">
+                                                <String>output-dir</String>
+                                            </field>
+                                            <field name="value">
+                                                <String>file:/home/jostein/Skrivebord/nordic-epub3-to-dtbook.output-dir/</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                        </xprocOption>
                                     </xprocOption-array>
                                 </field>
                                 <field name="xprocParameters">
@@ -1214,7 +1275,7 @@
                                     <null/>
                                 </field>
                                 <field name="name">
-                                    <String>epub3-to-dtbook</String>
+                                    <String>nordic-epub3-to-dtbook</String>
                                 </field>
                                 <field name="baseURL">
                                     <null/>
@@ -1233,6 +1294,162 @@
                                 </field>
                                 <field name="inputXSLURL">
                                     <String>file:/home/jostein/nordic-epub3-dtbook-migrator/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/epub3-to-dtbook.xpl</String>
+                                </field>
+                                <field name="inputXMLURL">
+                                    <String></String>
+                                </field>
+                                <field name="defaultScenario">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="isFOPPerforming">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="type">
+                                    <String>XPROC</String>
+                                </field>
+                                <field name="saveAs">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="openInBrowser">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="outputFile">
+                                    <null/>
+                                </field>
+                                <field name="openOtherLocationInBrowser">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="locationToOpenInBrowserURL">
+                                    <null/>
+                                </field>
+                                <field name="openInEditor">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="showInHTMLPane">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="showInXMLPane">
+                                    <Boolean>true</Boolean>
+                                </field>
+                                <field name="showInSVGPane">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="showInResultSetPane">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="useXSLTInput">
+                                    <Boolean>false</Boolean>
+                                </field>
+                                <field name="xsltParams">
+                                    <list/>
+                                </field>
+                                <field name="cascadingStylesheets">
+                                    <String-array/>
+                                </field>
+                                <field name="xslTransformer">
+                                    <String>Calabash XProc</String>
+                                </field>
+                                <field name="extensionURLs">
+                                    <String-array/>
+                                </field>
+                            </xprocScenario>
+                            <xprocScenario>
+                                <field name="inputPorts">
+                                    <xprocInputPort-array/>
+                                </field>
+                                <field name="outputPorts">
+                                    <xprocOutputPort-array>
+                                        <xprocOutputPort>
+                                            <field name="portName">
+                                                <String>fileset.out</String>
+                                            </field>
+                                            <field name="url">
+                                                <null/>
+                                            </field>
+                                            <field name="showInSequenceView">
+                                                <Boolean>true</Boolean>
+                                            </field>
+                                        </xprocOutputPort>
+                                        <xprocOutputPort>
+                                            <field name="portName">
+                                                <String>in-memory.out</String>
+                                            </field>
+                                            <field name="url">
+                                                <null/>
+                                            </field>
+                                            <field name="showInSequenceView">
+                                                <Boolean>true</Boolean>
+                                            </field>
+                                        </xprocOutputPort>
+                                    </xprocOutputPort-array>
+                                </field>
+                                <field name="xprocOptions">
+                                    <xprocOption-array>
+                                        <xprocOption>
+                                            <field name="namespaceURI">
+                                                <String></String>
+                                            </field>
+                                            <field name="localName">
+                                                <String>href</String>
+                                            </field>
+                                            <field name="value">
+                                                <String>file:/home/jostein/Skrivebord/epub.epub</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                        </xprocOption>
+                                        <xprocOption>
+                                            <field name="namespaceURI">
+                                                <String></String>
+                                            </field>
+                                            <field name="localName">
+                                                <String>unzipped-basedir</String>
+                                            </field>
+                                            <field name="value">
+                                                <String>file:/tmp/</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                        </xprocOption>
+                                    </xprocOption-array>
+                                </field>
+                                <field name="xprocParameters">
+                                    <xprocParameterPort-array>
+                                        <xprocParameterPort>
+                                            <field name="portName">
+                                                <String>*</String>
+                                            </field>
+                                            <field name="parameters">
+                                                <xprocParameter-array/>
+                                            </field>
+                                        </xprocParameterPort>
+                                    </xprocParameterPort-array>
+                                </field>
+                                <field name="advancedOptionsMap">
+                                    <null/>
+                                </field>
+                                <field name="name">
+                                    <String>px:zip-load</String>
+                                </field>
+                                <field name="baseURL">
+                                    <null/>
+                                </field>
+                                <field name="footerURL">
+                                    <null/>
+                                </field>
+                                <field name="fOPMethod">
+                                    <null/>
+                                </field>
+                                <field name="fOProcessorName">
+                                    <null/>
+                                </field>
+                                <field name="headerURL">
+                                    <null/>
+                                </field>
+                                <field name="inputXSLURL">
+                                    <String>file:/home/jostein/pipeline-modules/common-utils/zip-utils/src/main/resources/xml/xproc/load.xpl</String>
                                 </field>
                                 <field name="inputXMLURL">
                                     <String></String>
