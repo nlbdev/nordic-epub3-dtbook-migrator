@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-epub3-to-dtbook-convert" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
+    type="px:nordic-epub3-to-html-convert" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
+    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
@@ -13,23 +13,11 @@
         <p:pipe port="result" step="in-memory"/>
     </p:output>
 
-    <!--<p:option name="temp-dir" required="true"/>
-    <p:option name="output-dir" required="true"/>
-    <p:option name="compatibility-mode" select="'true'"/>-->
-
-<!--    <p:import href="dtbook-to-html.convert.xpl"/>-->
-<!--    <p:import href="html-split.split.xpl"/>-->
-<!--    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl"/>-->
-<!--    <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/epub3-nav-library.xpl"/>-->
-<!--    <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/xproc/epub3-pub-library.xpl"/>-->
-<!--    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/logging-library.xpl"/>
-<!--    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl"/>-->
+    <!--    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl"/>-->
 
-    <!--<p:variable name="epub-dir" select="concat($temp-dir,'epub/')"/>
-    <p:variable name="publication-dir" select="concat($epub-dir,'EPUB/')"/>-->
-    
     <p:declare-step type="pxi:replace-sections-with-documents" name="replace-sections-with-documents">
         <p:input port="section" primary="true"/>
         <p:input port="fileset"/>
@@ -87,7 +75,7 @@
             </pxi:replace-sections-with-documents>
         </p:viewport>
     </p:declare-step>
-    
+
     <px:fileset-load media-types="application/oebps-package+xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
@@ -95,7 +83,7 @@
     </px:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
     <p:identity name="package-doc"/>
-    
+
     <p:filter select="/*/opf:manifest/opf:item[matches(@properties,'(^|\s)nav(\s|$)')]"/>
     <px:fileset-load>
         <p:input port="fileset">
@@ -123,8 +111,16 @@
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
     </pxi:replace-sections-with-documents>
+    <p:xslt>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:document href="../../xslt/make-uris-relative-to-document.xsl"/>
+        </p:input>
+    </p:xslt>
     <p:identity name="single-html.body"/>
-    
+
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>
@@ -137,7 +133,7 @@
         </p:input>
     </p:xslt>
     <p:identity name="single-html.metadata"/>
-    
+
     <p:replace match="//html:head">
         <p:input port="source">
             <p:pipe port="result" step="single-html.body"/>
@@ -146,10 +142,19 @@
             <p:pipe port="result" step="single-html.metadata"/>
         </p:input>
     </p:replace>
-    <p:identity name="single-html"/>
     <p:identity name="in-memory"/>
-    
-    <p:add-attribute attribute-name="xml:base" match="//*">
+
+    <px:html-to-fileset>
+        <p:input port="fileset.in">
+            <p:pipe port="fileset.in" step="main"/>
+        </p:input>
+    </px:html-to-fileset>
+    <px:fileset-add-entry>
+        <p:with-option name="href" select="base-uri(/*)">
+            <p:pipe port="result" step="in-memory"/>
+        </p:with-option>
+    </px:fileset-add-entry>
+    <!--<p:add-attribute attribute-name="xml:base" match="//*">
         <p:input port="source">
             <p:inline>
                 <d:fileset>
@@ -164,9 +169,9 @@
     </p:add-attribute>
     <p:add-attribute match="/*/*" attribute-name="href">
         <p:with-option name="attribute-value" select="replace(/*/@xml:base,'.*/([^/]*)$','$1')"/>
-    </p:add-attribute>
+    </p:add-attribute>-->
     <p:identity name="fileset"/>
-    
+
     <!--<p:group name="convert">
         <p:output port="fileset.out" primary="true">
             <p:pipe port="result" step="result.fileset"/>

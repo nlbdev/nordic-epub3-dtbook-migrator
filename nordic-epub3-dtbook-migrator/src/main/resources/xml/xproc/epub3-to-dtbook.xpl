@@ -29,30 +29,80 @@
     </p:option>
 
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/xproc/zip-library.xpl"/>
-    <p:import href="convert/epub3-to-dtbook.convert.xpl"/>
+    <p:import href="convert/epub3-to-html.convert.xpl"/>
+    <!--<p:import href="convert/html-to-dtbook.convert.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl"/>
     <!--    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/dtbook-utils-library.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl"/>
     <!--    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/logging-library.xpl"/>-->
     <!--    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/xproc/epub3-ocf-library.xpl"/>-->
 
-    <px:unzip-fileset name="load">
+    <px:unzip-fileset name="load.in-memory">
         <p:with-option name="href" select="$epub"/>
-        <p:with-option name="unzipped-basedir" select="$output-dir"/>
+        <p:with-option name="unzipped-basedir" select="$temp-dir"/>
     </px:unzip-fileset>
-
-    <px:nordic-epub3-to-dtbook-convert name="convert">
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="load"/>
+    
+    <px:fileset-store name="load.stored">
+        <p:input port="fileset.in">
+            <p:pipe port="fileset.out" step="load.in-memory"/>
         </p:input>
-    </px:nordic-epub3-to-dtbook-convert>
+        <p:input port="in-memory.in">
+            <p:pipe port="in-memory.out" step="load.in-memory"/>
+        </p:input>
+    </px:fileset-store>
 
+    <px:nordic-epub3-to-html-convert name="convert.html">
+        <p:input port="fileset.in">
+            <p:pipe port="fileset.out" step="load.stored"/>
+        </p:input>
+        <p:input port="in-memory.in">
+            <p:pipe port="in-memory.out" step="load.in-memory"/>
+        </p:input>
+    </px:nordic-epub3-to-html-convert>
+    
+    <!--<px:nordic-html-to-dtbook-convert name="convert.dtbook">
+        <p:input port="in-memory.in">
+            <p:pipe port="in-memory.out" step="convert.html"/>
+        </p:input>
+    </px:nordic-html-to-dtbook-convert>-->
+    
+    <px:fileset-rebase>
+        <p:with-option name="new-base" select="$temp-dir"/>
+    </px:fileset-rebase>
+    <p:viewport match="//d:file[not(@original-href)]">
+        <p:add-attribute match="/*" attribute-name="original-href">
+            <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri(/*))"/>
+        </p:add-attribute>
+    </p:viewport>
+    <p:add-attribute match="/*" attribute-name="xml:base">
+        <p:with-option name="attribute-value" select="$output-dir"/>
+    </p:add-attribute>
+    <p:identity name="result.fileset">
+        <p:log port="result" href="file:/tmp/fileset.xml"/>
+    </p:identity>
+    
+    <p:for-each>
+        <p:iteration-source>
+            <p:pipe port="in-memory.out" step="convert.html"/>
+        </p:iteration-source>
+        <p:variable name="old-base" select="base-uri(/*)"/>
+        <p:variable name="new-base" select="(//d:file[@original-href=$old-base])[1]/resolve-uri(@href,base-uri(.))">
+            <p:pipe port="result" step="result.fileset"/>
+        </p:variable>
+        <p:add-attribute match="/*" attribute-name="xml:base">
+            <p:with-option name="attribute-value" select="$new-base"/>
+        </p:add-attribute>
+    </p:for-each>
+    <p:identity name="result.in-memory">
+        <p:log port="result" href="file:/tmp/in-memory.xml"/>
+    </p:identity>
+    
     <px:fileset-store name="fileset-store">
         <p:input port="fileset.in">
-            <p:pipe port="fileset.out" step="convert"/>
+            <p:pipe port="result" step="result.fileset"/>
         </p:input>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="convert"/>
+            <p:pipe port="result" step="result.in-memory"/>
         </p:input>
     </px:fileset-store>
 
