@@ -18,42 +18,71 @@
     <!-- no point in testing -->
 
     <!-- coreattrs -->
-    <!--<x:scenario label="on a span element with the coreattrs attributes (id, class, title, xml:space, epub:type)">
+    <x:scenario label="on a span element with the coreattrs attributes (id, class, title, xml:space, epub:type)">
         <x:context>
             <dtbook:span id="myid" class="myclass sentence topic-sentence" title="mytitle" xml:space="preserve">TEXT</dtbook:span>
         </x:context>
-        <x:expect label="all the attributes should be preserved, but any classes matching any of the epub:types defined in either the default, the z3998 or organization-specific vocabularies should be mapped to epub:types instead">
+        <x:expect
+            label="all the attributes should be preserved, but any classes matching any of the epub:types defined in either the default, the z3998 or organization-specific vocabularies should be mapped to epub:types instead">
             <html:span id="myid" class="myclass" title="mytitle" xml:space="preserve" epub:type="z3998:sentence topic-sentence">TEXT</html:span>
         </x:expect>
-    </x:scenario>-->
+    </x:scenario>
 
     <!-- i18n -->
     <x:scenario label="on a dtbook element with the i18n attributes (xml:lang, dir)">
         <x:context>
-            <dtbook:dtbook xml:lang="en" dir="ltr">...</dtbook:dtbook>
+            <dtbook:dtbook xml:lang="en" dir="ltr"/>
         </x:context>
         <x:expect label="the xml:lang attribute should be preserved" test="/*/@xml:lang='en'"/>
         <x:expect label="the dir attribute should be preserved" test="/*/@dir='ltr'"/>
     </x:scenario>
 
     <!-- showin -->
+    <x:scenario label="when processing the showin attribute">
+        <x:context>
+            <dtbook:p>
+                <dtbook:span showin="xxx">xxx</dtbook:span>
+                <dtbook:span showin="xxp">xxp</dtbook:span>
+                <dtbook:span showin="xlx">xlx</dtbook:span>
+                <dtbook:span showin="xlp">xlp</dtbook:span>
+                <dtbook:span showin="bxx">bxx</dtbook:span>
+                <dtbook:span showin="bxp">bxp</dtbook:span>
+                <dtbook:span showin="blx">blx</dtbook:span>
+                <dtbook:span showin="blp">blp</dtbook:span>
+            </dtbook:p>
+        </x:context>
+        <x:expect label="the showin attribute should be converted to classes (showin-blp, etc.)">
+            <html:p>
+                <html:span class="showin-xxx">xxx</html:span>
+                <html:span class="showin-xxp">xxp</html:span>
+                <html:span class="showin-xlx">xlx</html:span>
+                <html:span class="showin-xlp">xlp</html:span>
+                <html:span class="showin-bxx">bxx</html:span>
+                <html:span class="showin-bxp">bxp</html:span>
+                <html:span class="showin-blx">blx</html:span>
+                <html:span class="showin-blp">blp</html:span>
+            </html:p>
+        </x:expect>
+    </x:scenario>
 
     <!-- attrs -->
+    <!-- covered by the coreattrs and i18n tests -->
 
     <!-- attrsrqd -->
+    <!-- covered by the coreattrs and i18n tests -->
 
     <!-- dtbookcontent -->
     <x:scenario label="dtbookcontent (head, book)">
         <x:context>
             <dtbook:dtbook version="2005-3">
-                <dtbook:head>...</dtbook:head>
-                <dtbook:book>...</dtbook:book>
+                <dtbook:head/>
+                <dtbook:book/>
             </dtbook:dtbook>
         </x:context>
         <x:expect label="should be allowed inside the dtbook element">
             <html:html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#">
                 <html:head>...</html:head>
-                <html:body>...</html:body>
+                <html:body id="...">...</html:body>
             </html:html>
         </x:expect>
     </x:scenario>
@@ -61,7 +90,7 @@
     <!-- dtbook -->
     <x:scenario label="when processing a dtbook element">
         <x:context>
-            <dtbook:dtbook version="2005-3">...</dtbook:dtbook>
+            <dtbook:dtbook version="2005-3"/>
         </x:context>
         <x:expect label="the dtbook element should be converted into a html element, and the only attribute should be the default epub:prefix attribute">
             <html:html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#">...</html:html>
@@ -82,7 +111,7 @@
     <!-- head -->
     <x:scenario label="when processing a head element">
         <x:context>
-            <dtbook:head>...</dtbook:head>
+            <dtbook:head/>
         </x:context>
         <x:expect label="the head element should be converted into a head element">
             <html:head>...</html:head>
@@ -90,101 +119,531 @@
     </x:scenario>
 
     <!-- attlist.head -->
+    <x:scenario label="when processing the head element attributes">
+        <x:context>
+            <dtbook:head profile="http://www.nlb.no/metadata-profile"/>
+        </x:context>
+        <x:expect label="the profile attribute should be converted to a link element">
+            <html:head>
+                <html:meta charset="utf-8"/>
+                <html:meta name="viewport" content="..."/>
+                <html:style type="text/css" xml:space="preserve">...</html:style>
+                <html:link rel="profile" href="http://www.nlb.no/metadata-profile"/>
+            </html:head>
+        </x:expect>
+    </x:scenario>
 
     <!-- link -->
+    <x:scenario label="when processing a link element">
+        <x:context>
+            <dtbook:head>
+                <dtbook:link/>
+            </dtbook:head>
+        </x:context>
+        <x:expect label="the link element should be converted into a link element">
+            <html:head>
+                <html:meta charset="utf-8"/>
+                <html:meta name="viewport" content="..."/>
+                <html:link/>
+                <html:style type="text/css" xml:space="preserve">...</html:style>
+            </html:head>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.link -->
+    <x:scenario label="when processing the link element attributes">
+        <x:context>
+            <dtbook:link charset="utf-8" href="theme.css" hreflang="en" media="print" rel="stylesheet" rev="parent" type="text/css"/>
+        </x:context>
+        <x:expect label="the charset and rev attributes are dropped; everything else is copied through (href/hreflang/media/rel/type)">
+            <html:link href="theme.css" hreflang="en" media="print" rel="stylesheet" type="text/css"/>
+        </x:expect>
+    </x:scenario>
 
     <!-- meta -->
+    <x:scenario label="when processing a meta element">
+        <x:scenario label="where the name attribute is dc:title">
+            <x:context>
+                <dtbook:meta name="dc:title" content="Title"/>
+            </x:context>
+            <x:expect label="the meta element should be converted into both a meta element and a title element">
+                <html:title>Title</html:title>
+                <html:meta name="dc:title" content="Title"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="where the name attribute is not dc:title">
+            <x:context>
+                <dtbook:meta/>
+            </x:context>
+            <x:expect label="the meta element should be converted into a meta element">
+                <html:meta/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
 
     <!-- attlist.meta -->
+    <x:scenario label="when processing the meta element attributes">
+        <x:context>
+            <dtbook:meta http-equiv="http-equiv" name="name" content="content" scheme="scheme"/>
+        </x:context>
+        <x:expect label="the http-equiv, name and content attributes should be copied but the scheme attribute should be dropped">
+            <html:meta http-equiv="http-equiv" name="name" content="content"/>
+        </x:expect>
+    </x:scenario>
 
     <!-- book -->
     <x:scenario label="when processing a book element">
         <x:context>
-            <dtbook:book>...</dtbook:book>
+            <dtbook:book/>
         </x:context>
         <x:expect label="the book element should be converted into a body element">
-            <html:body>...</html:body>
+            <html:body id="...">...</html:body>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.book -->
+    <!-- covered by attrs -->
+
+    <!-- frontmatter -->
+    <x:scenario label="when processing a frontmatter element">
+        <x:scenario label="with both a cover, a titlepage and other content">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <!-- COMMENT #1 -->
+                        <dtbook:level1 class="cover"/>
+                        <!-- COMMENT #2 -->
+                        <dtbook:level1 class="titlepage"/>
+                        <!-- COMMENT #3 -->
+                        <dtbook:level1/>
+                        <!-- COMMENT #4 -->
+                        <dtbook:level1/>
+                        <!-- COMMENT #5 -->
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the top-level frontmatter levels should become sections and given the appropriate epub:types">
+                <html:body id="...">
+                    <!-- COMMENT #1 -->
+                    <html:section id="..." epub:type="cover"/>
+                    <!-- COMMENT #2 -->
+                    <html:section id="..." epub:type="frontmatter titlepage"/>
+                    <!-- COMMENT #3 -->
+                    <html:section id="..." epub:type="frontmatter"/>
+                    <!-- COMMENT #4 -->
+                    <html:section id="..." epub:type="frontmatter"/>
+                    <!-- COMMENT #5 -->
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a cover but not a titlepage, and then other content">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <!-- COMMENT #1 -->
+                        <dtbook:level1 class="cover"/>
+                        <!-- COMMENT #3 -->
+                        <dtbook:level1/>
+                        <!-- COMMENT #4 -->
+                        <dtbook:level1/>
+                        <!-- COMMENT #5 -->
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the top-level frontmatter levels should become sections and given the appropriate epub:types">
+                <html:body id="...">
+                    <!-- COMMENT #1 -->
+                    <html:section id="..." epub:type="cover"/>
+                    <!-- COMMENT #3 -->
+                    <html:section id="..." epub:type="frontmatter"/>
+                    <!-- COMMENT #4 -->
+                    <html:section id="..." epub:type="frontmatter"/>
+                    <!-- COMMENT #5 -->
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a titlepage but not a cover, and then other content">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <!-- COMMENT #2 -->
+                        <dtbook:level1 class="titlepage"/>
+                        <!-- COMMENT #3 -->
+                        <dtbook:level1/>
+                        <!-- COMMENT #4 -->
+                        <dtbook:level1/>
+                        <!-- COMMENT #5 -->
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the top-level frontmatter levels should become sections and given the appropriate epub:types">
+                <html:body id="...">
+                    <!-- COMMENT #2 -->
+                    <html:section id="..." epub:type="frontmatter titlepage"/>
+                    <!-- COMMENT #3 -->
+                    <html:section id="..." epub:type="frontmatter"/>
+                    <!-- COMMENT #4 -->
+                    <html:section id="..." epub:type="frontmatter"/>
+                    <!-- COMMENT #5 -->
+                </html:body>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- attlist.frontmatter -->
+    <!-- the frontmatter element is unwrapped. see level1 for any inherited id and class values. -->
+
+    <!-- bodymatter -->
+    <x:scenario label="when processing a bodymatter element">
+        <x:context>
+            <dtbook:book>
+                <dtbook:bodymatter>
+                    <!-- COMMENT #1 -->
+                    <dtbook:level1/>
+                    <!-- COMMENT #2 -->
+                    <dtbook:level1/>
+                    <!-- COMMENT #3 -->
+                </dtbook:bodymatter>
+            </dtbook:book>
+        </x:context>
+        <x:expect label="the top-level bodymatter levels should become sections and given the appropriate epub:types">
+            <html:body id="...">
+                <!-- COMMENT #1 -->
+                <html:section id="..." epub:type="bodymatter"/>
+                <!-- COMMENT #2 -->
+                <html:section id="..." epub:type="bodymatter"/>
+                <!-- COMMENT #3 -->
+            </html:body>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.bodymatter -->
+    <!-- the bodymatter element is unwrapped. see level1 for any inherited id and class values. -->
+
+    <!-- rearmatter -->
+    <x:scenario label="when processing a rearmatter element">
+        <x:context>
+            <dtbook:book>
+                <dtbook:rearmatter>
+                    <!-- COMMENT #1 -->
+                    <dtbook:level1/>
+                    <!-- COMMENT #2 -->
+                    <dtbook:level1/>
+                    <!-- COMMENT #3 -->
+                </dtbook:rearmatter>
+            </dtbook:book>
+        </x:context>
+        <x:expect label="the top-level rearmatter levels should become sections and given the appropriate epub:types">
+            <html:body id="...">
+                <!-- COMMENT #1 -->
+                <html:section id="..." epub:type="backmatter"/>
+                <!-- COMMENT #2 -->
+                <html:section id="..." epub:type="backmatter"/>
+                <!-- COMMENT #3 -->
+            </html:body>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.rearmatter -->
+    <!-- the rearmatter element is unwrapped. see level1 for any inherited id and class values. -->
+
+    <!-- level -->
+    <x:scenario label="when processing a level element">
+        <x:scenario label="which has bodymatter as parent">
+            <x:context>
+                <dtbook:bodymatter>
+                    <dtbook:level/>
+                </dtbook:bodymatter>
+            </x:context>
+            <x:expect label="the resulting element should be a section with epub:type='bodymatter'">
+                <html:section id="..." epub:type="bodymatter"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which has another level as parent">
+            <x:context>
+                <dtbook:bodymatter>
+                    <dtbook:level>
+                        <dtbook:level/>
+                    </dtbook:level>
+                </dtbook:bodymatter>
+            </x:context>
+            <x:expect label="the resulting element should be a section with no implicit epub:type">
+                <html:section id="..." epub:type="bodymatter">
+                    <html:section id="..."/>
+                </html:section>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <!-- attlist.level -->
+    <!-- tested in level element test -->
+
+    <!-- titlepage -->
+    <!-- titlepage is tested in the frontmatter tests. see also the doctitle and docauthor tests. -->
+
+    <!-- level1 -->
+    <x:scenario label="when processing a level1 element (in bodymatter)">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1/>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a section with epub:type='bodymatter'">
+            <html:section id="..." epub:type="bodymatter"/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.level1 -->
+    <!-- implicit epub:type tested in the level1 test, "attrs" not necessary to test -->
+
+    <!-- level2 -->
+    <x:scenario label="when processing a level2 element">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:level2/>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a section with no implicit epub:types">
+            <html:section id="..." epub:type="bodymatter">
+                <html:section id="..."/>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.level2 -->
+    <!-- implicit epub:type tested in the level2 test, "attrs" not necessary to test -->
+
+    <!-- level3 -->
+    <x:scenario label="when processing a level3 element">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:level2>
+                        <dtbook:level3/>
+                    </dtbook:level2>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a section with no implicit epub:types">
+            <html:section id="..." epub:type="bodymatter">
+                <html:section id="...">
+                    <html:section id="..."/>
+                </html:section>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.level3 -->
+    <!-- implicit epub:type tested in the level3 test, "attrs" not necessary to test -->
+
+    <!-- level4 -->
+    <x:scenario label="when processing a level4 element">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:level2>
+                        <dtbook:level3>
+                            <dtbook:level4/>
+                        </dtbook:level3>
+                    </dtbook:level2>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a section with no implicit epub:types">
+            <html:section id="..." epub:type="bodymatter">
+                <html:section id="...">
+                    <html:section id="...">
+                        <html:section id="..."/>
+                    </html:section>
+                </html:section>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.level4 -->
+    <!-- implicit epub:type tested in the level4 test, "attrs" not necessary to test -->
+
+    <!-- level5 -->
+    <x:scenario label="when processing a level5 element">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:level2>
+                        <dtbook:level3>
+                            <dtbook:level4>
+                                <dtbook:level5/>
+                            </dtbook:level4>
+                        </dtbook:level3>
+                    </dtbook:level2>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a section with no implicit epub:types">
+            <html:section id="..." epub:type="bodymatter">
+                <html:section id="...">
+                    <html:section id="...">
+                        <html:section id="...">
+                            <html:section id="..."/>
+                        </html:section>
+                    </html:section>
+                </html:section>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.level5 -->
+    <!-- implicit epub:type tested in the level5 test, "attrs" not necessary to test -->
+
+    <!-- level6 -->
+    <x:scenario label="when processing a level6 element">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:level2>
+                        <dtbook:level3>
+                            <dtbook:level4>
+                                <dtbook:level5>
+                                    <dtbook:level6/>
+                                </dtbook:level5>
+                            </dtbook:level4>
+                        </dtbook:level3>
+                    </dtbook:level2>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a section with no implicit epub:types">
+            <html:section id="..." epub:type="bodymatter">
+                <html:section id="...">
+                    <html:section id="...">
+                        <html:section id="...">
+                            <html:section id="...">
+                                <html:section id="..."/>
+                            </html:section>
+                        </html:section>
+                    </html:section>
+                </html:section>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.level6 -->
+    <!-- implicit epub:type tested in the level6 test, "attrs" not necessary to test -->
+
+    <!-- phrase -->
+    <!-- no testing needed? -->
+
+    <!-- special -->
+    <!-- no testing needed? -->
+
+    <!-- specialnoa -->
+    <!-- no testing needed? -->
+
+    <!-- dtbookinline -->
+    <!-- no testing needed? -->
+
+    <!-- inline -->
+    <!-- no testing needed? -->
+
+    <!-- inlinenoa -->
+    <!-- no testing needed? -->
+
+    <!-- inlines -->
+    <!-- no testing needed? -->
+
+    <!-- inlinew -->
+    <!-- no testing needed? -->
+
+    <!-- inlinenopagenum -->
+    <!-- no testing needed? -->
+
+    <!-- inlinenoprodnote -->
+    <!-- no testing needed? -->
+
+    <!-- flow -->
+    <!-- no testing needed? -->
+
+    <!-- flownopagenum -->
+    <!-- no testing needed? -->
+
+    <!-- br -->
+    <x:scenario label="when processing a br element">
+        <x:context>
+            <dtbook:br/>
+        </x:context>
+        <x:expect label="the resulting element should be a br element">
+            <html:br/>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.br -->
+    <!-- test not needed (coreattrs) -->
+
+    <!-- line -->
+    <x:scenario label="when processing a line element">
+        <x:context>
+            <dtbook:line/>
+        </x:context>
+        <x:expect label="the resulting element should be a p element with an added line class">
+            <html:p class="line"/>
         </x:expect>
     </x:scenario>
     
-    <!-- attlist.book -->
-
-    <!-- frontmatter -->
-    <!-- attlist.frontmatter -->
-
-    <!-- bodymatter -->
-    <!-- attlist.bodymatter -->
-
-    <!-- rearmatter -->
-    <!-- attlist.rearmatter -->
-
-    <!-- level -->
-
-    <!-- attlist.level -->
-
-    <!-- level1 -->
-    <!-- attlist.level1 -->
-
-    <!-- level2 -->
-    <!-- attlist.level2 -->
-
-    <!-- level3 -->
-    <!-- attlist.level3 -->
-
-    <!-- level4 -->
-    <!-- attlist.level4 -->
-
-    <!-- level5 -->
-    <!-- attlist.level5 -->
-
-    <!-- level6 -->
-    <!-- attlist.level6 -->
-
-    <!-- phrase -->
-
-    <!-- special -->
-
-    <!-- specialnoa -->
-
-    <!-- dtbookinline -->
-
-    <!-- inline -->
-
-    <!-- inlinenoa -->
-
-    <!-- inlines -->
-
-    <!-- inlinew -->
-
-    <!-- inlinenopagenum -->
-
-    <!-- inlinenoprodnote -->
-
-    <!-- flow -->
-
-    <!-- flownopagenum -->
-
-    <!-- br -->
-
-    <!-- attlist.br -->
-
-    <!-- line -->
     <!-- attlist.line -->
+    <!-- implicit class tested in element test, otherwise nothing interesting to test -->
 
     <!-- linenum -->
+    <x:scenario label="when processing a linenum element">
+        <x:context>
+            <dtbook:linenum/>
+        </x:context>
+        <x:expect label="the resulting element should be a span element with an added linenum class">
+            <html:span class="linenum"/>
+        </x:expect>
+    </x:scenario>
+    
     <!-- attlist.linenum -->
+    <!-- implicit class tested in element test, otherwise nothing interesting to test -->
 
     <!-- address -->
+    <x:scenario label="when processing a address element">
+        <x:context>
+            <dtbook:address/>
+        </x:context>
+        <x:expect label="the resulting element should be a address element">
+            <html:address id="..."/>
+        </x:expect>
+    </x:scenario>
+    
     <!-- attlist.address -->
+    <!-- nothing interesting to test -->
 
     <!-- div -->
+    <x:scenario label="when processing a div element">
+        <x:context>
+            <dtbook:div/>
+        </x:context>
+        <x:expect label="the resulting element should be a div element">
+            <html:div/>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.div -->
+    <!-- nothing interesting to test -->
 
     <!-- title -->
+    <x:scenario label="when processing a title element">
+        <x:context>
+            <dtbook:title/>
+        </x:context>
+        <x:expect label="the resulting element should be a strong element with an added title class">
+            <html:strong class="title"/>
+        </x:expect>
+    </x:scenario>
+    
     <!-- attlist.title -->
+    <!-- implicit class tested in element test, otherwise nothing interesting to test -->
 
     <!-- author -->
     <!-- attlist.author -->
@@ -306,9 +765,43 @@
     <!-- attlist.p -->
 
     <!-- doctitle -->
+    <!--<x:scenario label="when processing a level1 element with the class 'titlepage'">
+        <x:context>
+            <dtbook:book>
+                <dtbook:frontmatter>
+                    <dtbook:level1 class="titlepage">
+                        
+                    </dtbook:level1>
+                </dtbook:frontmatter>
+            </dtbook:book>
+        </x:context>
+        <x:expect label="the top-level frontmatter levels should become sections and given the appropriate epub:types">
+            <html:body id="...">
+                <html:section id="..." epub:type="frontmatter titlepage"/>
+            </html:body>
+        </x:expect>
+    </x:scenario>-->
+
     <!-- attlist.doctitle -->
 
     <!-- docauthor -->
+    <!--<x:scenario label="when processing a level1 element with the class 'titlepage'">
+        <x:context>
+            <dtbook:book>
+                <dtbook:frontmatter>
+                    <dtbook:level1 class="titlepage">
+                        
+                    </dtbook:level1>
+                </dtbook:frontmatter>
+            </dtbook:book>
+        </x:context>
+        <x:expect label="the top-level frontmatter levels should become sections and given the appropriate epub:types">
+            <html:body id="...">
+                <html:section id="..." epub:type="frontmatter titlepage"/>
+            </html:body>
+        </x:expect>
+    </x:scenario>-->
+
     <!-- attlist.docauthor -->
 
     <!-- covertitle -->
@@ -408,10 +901,10 @@
     <!-- td -->
 
     <!-- attlist.td -->
-    
-    
+
+
     <!-- ########## Nordic tests ########## -->
-    
+
     <!--
         precedingemptyline class
         discussion: https://github.com/josteinaj/nordic-epub3-dtbook-migrator/issues/2
@@ -427,7 +920,7 @@
             </dtbook:bodymatter>
         </x:context>
         <x:expect label="the html version should add a preceding hr element">
-            <html:section epub:type="bodymatter">
+            <html:section id="..." epub:type="bodymatter">
                 <html:p>Some text</html:p>
                 <!-- thematic break occurs here -->
                 <html:hr/>
@@ -435,5 +928,8 @@
             </html:section>
         </x:expect>
     </x:scenario>
+
+    <!-- #### From MTMs DTBook schema #### -->
+    <!-- TODO: convert MTM-schema to XSpec tests here -->
 
 </x:description>

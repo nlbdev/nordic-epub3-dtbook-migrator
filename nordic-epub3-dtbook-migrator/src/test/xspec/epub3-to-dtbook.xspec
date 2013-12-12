@@ -104,8 +104,25 @@
     <!-- attlist.link -->
 
     <!-- meta -->
+    <x:scenario label="when processing a meta element">
+        <x:context>
+            <html:meta/>
+        </x:context>
+        <x:expect label="the meta element should be converted into a meta element">
+            <dtbook:meta/>
+        </x:expect>
+        <!-- TODO: add test in head element: if there is no html:meta/dc:title, use the title element for dtbook:meta/dc:title -->
+    </x:scenario>
 
     <!-- attlist.meta -->
+    <x:scenario label="when processing the meta element attributes">
+        <x:context>
+            <html:meta http-equiv="http-equiv" name="name" content="content" charset="charset"/>
+        </x:context>
+        <x:expect label="the http-equiv, name and content attributes should be copied but the charset attribute should be dropped">
+            <dtbook:meta http-equiv="http-equiv" name="name" content="content"/>
+        </x:expect>
+    </x:scenario>
 
     <!-- book -->
     <x:scenario label="when processing a body element">
@@ -118,6 +135,20 @@
     </x:scenario>
 
     <!-- cover -->
+    <x:scenario label="when processing a cover in a body">
+        <x:context>
+            <html:body>
+                <html:section epub:type="cover" class="classA classB"/>
+            </html:body>
+        </x:context>
+        <x:expect label="the resulting element should be a level1 inside the frontmatter">
+            <dtbook:book>
+                <dtbook:frontmatter>
+                    <dtbook:level1 class="classA classB cover"/>
+                </dtbook:frontmatter>
+            </dtbook:book>
+        </x:expect>
+    </x:scenario>
 
     <!-- frontmatter -->
     <!-- frontmatter.titlepage -->
@@ -451,10 +482,10 @@
     <!-- td -->
 
     <!-- attlist.td -->
-    
-    
+
+
     <!-- ########## Regression tests ########## -->
-    
+
     <x:scenario label="if first section element doesn't include an epub:type">
         <x:context>
             <html:body>
@@ -469,10 +500,10 @@
             </dtbook:book>
         </x:expect>
     </x:scenario>
-    
-    
+
+
     <!-- ########## Nordic tests ########## -->
-    
+
     <!--
         precedingemptyline class
         discussion: https://github.com/josteinaj/nordic-epub3-dtbook-migrator/issues/2
@@ -495,7 +526,7 @@
                 </dtbook:level1>
             </x:expect>
         </x:scenario>
-        
+
         <x:scenario label="with a preceding hr but without a precedingemptyline class">
             <x:context>
                 <html:section epub:type="bodymatter">
@@ -514,5 +545,8 @@
             </x:expect>
         </x:scenario>
     </x:scenario>
+    
+    <!-- #### From MTMs DTBook schema #### -->
+    <!-- TODO: convert MTM-schema to XSpec tests here -->
 
 </x:description>

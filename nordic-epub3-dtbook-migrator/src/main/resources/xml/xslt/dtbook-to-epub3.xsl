@@ -3,6 +3,8 @@
     xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+    <xsl:output indent="yes" exclude-result-prefixes="#all"/>
+
     <xsl:variable name="vocab-default"
         select="('acknowledgments','afterword','annoref','annotation','appendix','backmatter','biblioentry','bibliography','bodymatter','bridgehead','chapter','colophon','concluding-sentence','conclusion','contributors','copyright-page','cover','covertitle','dedication','division','epigraph','epilogue','errata','footnote','footnotes','foreword','frontmatter','fulltitle','glossary','glossdef','glossterm','halftitle','halftitlepage','help','imprimatur','imprint','index','introduction','keyword','landmarks','list','list-item','loi','lot','marginalia','note','noteref','notice','other-credits','pagebreak','page-list','part','practice','preamble','preface','prologue','rearnote','rearnotes','sidebar','subchapter','subtitle','table','table-cell','table-row','title','titlepage','toc','topic-sentence','volume','warning')"/>
     <xsl:variable name="vocab-z3998"
@@ -27,11 +29,11 @@
             -->
             <xsl:copy-of select="parent::*/(@title|@xml:space)[not(name()=$except)]"/>
             <xsl:if test="not(preceding-sibling::dtbook:level or preceding-sibling::dtbook:level1)">
-                <xsl:copy-of select="parent::*/@id"/>
+                <xsl:copy-of select="parent::*[not(name()=$except)]/@id"/>
             </xsl:if>
         </xsl:if>
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
-        <xsl:if test="not(@id) and not(name()=('span','p','div','tr','th','td'))">
+        <xsl:if test="not(@id) and not(local-name()=('span','p','div','tr','th','td','link','br','line','linenum','title') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/')">
             <xsl:attribute name="id" select="generate-id()"/>
         </xsl:if>
         <xsl:call-template name="classes-and-types">
@@ -86,25 +88,9 @@
     </xsl:template>
 
     <xsl:template name="attrsrqd">
-        <xsl:param name="classes" select="()" tunnel="yes"/>
-        <xsl:param name="except" select="()" tunnel="yes"/>
-        <xsl:variable name="is-first-level" select="boolean((self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter))"/>
-        <xsl:if test="$is-first-level">
-            <!--
-                the frontmatter/bodymatter/rearmatter does not have corresponding elements in HTML and is removed;
-                try preserving the attributes on the closest sectioning element(s) when possible
-            -->
-            <xsl:copy-of select="parent::*/(@title|@xml:space)[not(name()=$except)]"/>
-            <xsl:if test="not(preceding-sibling::dtbook:level or preceding-sibling::dtbook:level1)">
-                <xsl:copy-of select="parent::*/@id[not(name()=$except)]"/>
-            </xsl:if>
-        </xsl:if>
-        <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
-        <xsl:call-template name="classes-and-types">
-            <xsl:with-param name="classes" select="(if ($is-first-level) then tokenize(parent::*/@class,'\s+') else (), $classes)" tunnel="yes"/>
-        </xsl:call-template>
-        <!-- ignore @smilref -->
+        <xsl:call-template name="coreattrs"/>
         <xsl:call-template name="i18n"/>
+        <!-- ignore @smilref -->
         <!-- @showin handled by classes-and-types -->
     </xsl:template>
 
@@ -155,17 +141,18 @@
                 table.table-frame-box { border-style: outset; }
                 table.table-frame-border { border-style: outset; }
                 ]]></style>
+            <xsl:if test="@profile">
+                <link rel="profile" href="{@profile}"/>
+            </xsl:if>
         </head>
     </xsl:template>
 
     <xsl:template name="attlist.head">
         <xsl:call-template name="i18n"/>
-        <xsl:if test="@profile">
-            <link rel="profile" href="{@profile}"/>
-        </xsl:if>
+        <!-- @profile handled by main head element test -->
     </xsl:template>
 
-    <xsl:template name="dtbook:link">
+    <xsl:template match="dtbook:link">
         <link>
             <xsl:call-template name="attlist.link"/>
         </link>
@@ -208,7 +195,7 @@
 
     <xsl:template name="cover">
         <section>
-            <xsl:call-template name="attlist.frontmatter">
+            <xsl:call-template name="attrs">
                 <xsl:with-param name="types" select="'cover'" tunnel="yes"/>
             </xsl:call-template>
             <xsl:for-each select="preceding-sibling::dtbook:covertitle">
@@ -235,17 +222,50 @@
 
     <xsl:template match="dtbook:frontmatter">
         <!-- assumes that the cover is always preceding the titlepage (if both are present) -->
-        <xsl:apply-templates select="node()[not(preceding-sibling::*[f:classes(.)=('cover','titlepage')])]"/>
-        <xsl:for-each select="*[f:classes(.)='cover']">
-            <!-- if there is no cover page, then the covertitle is only stored in the metadata -->
-            <xsl:call-template name="cover"/>
-        </xsl:for-each>
-        <xsl:apply-templates select="node()[preceding-sibling::*[f:classes(.)=('cover')] and not(preceding-sibling::*[f:classes(.)=('titlepage')])]"/>
-        <xsl:for-each select="*[f:classes(.)='titlepage']">
-            <!-- if there is no title page, then the doctitle and docauthors are only stored in the metadata -->
-            <xsl:call-template name="titlepage"/>
-        </xsl:for-each>
-        <xsl:apply-templates select="node()[preceding-sibling::*[f:classes(.)=('cover','titlepage')]]"/>
+        <xsl:choose>
+            <xsl:when test="*[f:classes(.)='cover']">
+                <xsl:apply-templates select="node()[following-sibling::*/f:classes(.)='cover']"/>
+                
+                <xsl:for-each select="*[f:classes(.)='cover']">
+                    <!-- NOTE: if there is no cover page, then the covertitle is only stored in the metadata -->
+                    <xsl:call-template name="cover"/>
+                </xsl:for-each>
+                
+                <xsl:choose>
+                    <xsl:when test="*[f:classes(.)='titlepage']">
+                        <xsl:apply-templates select="node()[preceding-sibling::*/f:classes(.)='cover' and following-sibling::*/f:classes(.)='titlepage']"/>
+                        
+                        <xsl:for-each select="*[f:classes(.)='titlepage']">
+                            <!-- NOTE: if there is no title page, then the doctitle and docauthors are only stored in the metadata -->
+                            <xsl:call-template name="titlepage"/>
+                        </xsl:for-each>
+                        
+                        <xsl:apply-templates select="node()[preceding-sibling::*/f:classes(.)='titlepage']"/>
+                    </xsl:when>
+                    
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="node()[preceding-sibling::*/f:classes(.)='cover']"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+                
+            </xsl:when>
+            
+            <xsl:when test="*[f:classes(.)='titlepage']">
+                <xsl:apply-templates select="node()[following-sibling::*/f:classes(.)='titlepage']"/>
+                
+                <xsl:for-each select="*[f:classes(.)='titlepage']">
+                    <!-- NOTE: if there is no title page, then the doctitle and docauthors are only stored in the metadata -->
+                    <xsl:call-template name="titlepage"/>
+                </xsl:for-each>
+                
+                <xsl:apply-templates select="node()[preceding-sibling::*/f:classes(.)='titlepage']"/>
+            </xsl:when>
+            
+            <xsl:otherwise>
+                <xsl:apply-templates select="node()"/>
+            </xsl:otherwise>
+            
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.frontmatter">
@@ -288,7 +308,7 @@
 
     <xsl:template name="attlist.level">
         <xsl:call-template name="attrs">
-            <xsl:with-param name="types" select="if (ancestor::dtbook:frontmatter) then 'frontmatter' else if (ancestor::dtbook:bodymatter) then 'bodymatter' else 'backmatter'" tunnel="yes"/>
+            <xsl:with-param name="types" select="if (ancestor::*[self::dtbook:level or self::dtbook:level1 or self::dtbook:level2 or self::dtbook:level3 or self::dtbook:level4 or self::dtbook:level5 or self::dtbook:level6]) then () else if (ancestor::dtbook:frontmatter) then 'frontmatter' else if (ancestor::dtbook:bodymatter) then 'bodymatter' else 'backmatter'" tunnel="yes"/>
         </xsl:call-template>
         <!-- @depth is removed, it is implicit anyway -->
     </xsl:template>
@@ -744,10 +764,10 @@
     </xsl:template>
 
     <xsl:template match="dtbook:annoref">
-        <span>
+        <a>
             <xsl:call-template name="attlist.annoref"/>
             <xsl:apply-templates select="node()"/>
-        </span>
+        </a>
     </xsl:template>
 
     <xsl:template name="attlist.annoref">
@@ -862,14 +882,16 @@
 
     <xsl:template match="dtbook:docauthor"/>
     <xsl:template name="docauthor">
-        <docauthor>
+        <p>
             <xsl:call-template name="attlist.docauthor"/>
             <xsl:apply-templates select="node()"/>
-        </docauthor>
+        </p>
     </xsl:template>
 
     <xsl:template name="attlist.docauthor">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="types" select="'z3998:author'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="dtbook:covertitle"/>

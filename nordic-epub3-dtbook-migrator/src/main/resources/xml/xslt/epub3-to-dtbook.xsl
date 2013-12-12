@@ -2,7 +2,9 @@
 <xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns="http://www.daisy.org/z3986/2005/dtbook/"
     xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/" exclude-result-prefixes="#all" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
+    
+    <xsl:output indent="yes" exclude-result-prefixes="#all"/>
+    
     <xsl:template match="text()|comment()">
         <xsl:copy-of select="."/>
     </xsl:template>
