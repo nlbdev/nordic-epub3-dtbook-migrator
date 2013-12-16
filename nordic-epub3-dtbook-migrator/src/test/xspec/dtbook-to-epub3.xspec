@@ -589,7 +589,7 @@
             <html:p class="line"/>
         </x:expect>
     </x:scenario>
-    
+
     <!-- attlist.line -->
     <!-- implicit class tested in element test, otherwise nothing interesting to test -->
 
@@ -602,7 +602,7 @@
             <html:span class="linenum"/>
         </x:expect>
     </x:scenario>
-    
+
     <!-- attlist.linenum -->
     <!-- implicit class tested in element test, otherwise nothing interesting to test -->
 
@@ -615,7 +615,7 @@
             <html:address id="..."/>
         </x:expect>
     </x:scenario>
-    
+
     <!-- attlist.address -->
     <!-- nothing interesting to test -->
 
@@ -641,201 +641,1240 @@
             <html:strong class="title"/>
         </x:expect>
     </x:scenario>
-    
+
     <!-- attlist.title -->
     <!-- implicit class tested in element test, otherwise nothing interesting to test -->
 
     <!-- author -->
+    <x:scenario label="when processing a author element">
+        <x:context>
+            <dtbook:author/>
+        </x:context>
+        <x:expect label="the resulting element should be a span element with an added epub:type of z3998:author">
+            <html:span epub:type="z3998:author"/>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.author -->
+    <!-- implicit epub:type tested in element test, otherwise nothing interesting to test -->
 
     <!-- prodnote -->
+    <x:scenario label="when processing a prodnote element">
+        <x:context>
+            <dtbook:prodnote/>
+        </x:context>
+        <x:expect label="the resulting element should be a aside element with an added epub:type of z3998:production">
+            <html:aside id="..." epub:type="z3998:production"/>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.prodnote -->
+    <x:scenario label="when processing the prodnote element attributes">
+        <x:context>
+            <dtbook:imggroup>
+                <dtbook:img id="img" src="img.png"/>
+                <dtbook:prodnote id="prodnote" imgref="#img" render="optional"/>
+            </dtbook:imggroup>
+        </x:context>
+        <x:expect label="the render should become a class and imgref is replaced by the longdesc attribute on the corresponding img element.">
+            <html:figure id="...">
+                <html:img id="img" src="img.png" longdesc="#prodnote"/>
+                <html:aside id="prodnote" epub:type="z3998:production" class="render-optional"/>
+            </html:figure>
+        </x:expect>
+    </x:scenario>
 
     <!-- sidebar -->
+    <x:scenario label="when processing a sidebar element">
+        <x:context>
+            <dtbook:sidebar/>
+        </x:context>
+        <x:expect label="the resulting element should be a aside with an added epub:type of sidebar">
+            <html:aside id="..." epub:type="sidebar"/>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.sidebar -->
+    <!-- implicit epub:type tested in element test, otherwise nothing interesting to test -->
 
     <!-- note -->
+    <x:scenario label="when processing a note element">
+        <x:context>
+            <dtbook:note/>
+        </x:context>
+        <x:expect label="the resulting element should be a aside with an added epub:type of note">
+            <html:aside id="..." epub:type="note"/>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.note -->
+    <!-- implicit epub:type tested in element test, otherwise nothing interesting to test -->
 
     <!-- annotation -->
+    <x:scenario label="when processing a annotation element">
+        <x:context>
+            <dtbook:annotation/>
+        </x:context>
+        <x:expect label="the resulting element should be a aside with an added epub:type of annotation">
+            <html:aside id="..." epub:type="annotation"/>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.annotation -->
+    <!-- implicit epub:type tested in element test, otherwise nothing interesting to test -->
 
     <!-- epigraph -->
+    <x:scenario label="when processing a epigraph element">
+        <x:context>
+            <dtbook:epigraph/>
+        </x:context>
+        <x:expect label="the resulting element should be a p with an added epub:type of epigraph">
+            <html:p id="..." epub:type="epigraph"/>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.epigraph -->
+    <!-- implicit epub:type tested in element test, otherwise nothing interesting to test -->
 
     <!-- byline -->
+    <x:scenario label="when processing a byline element">
+        <x:context>
+            <dtbook:byline/>
+        </x:context>
+        <x:expect label="the resulting element should be a span with an added class of byline">
+            <html:span id="..." class="byline"/>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.byline -->
+    <!-- implicit class tested in element test, otherwise nothing interesting to test -->
 
     <!-- dateline -->
+    <x:scenario label="when processing a dateline element">
+        <x:context>
+            <dtbook:dateline/>
+        </x:context>
+        <x:expect label="the resulting element should be a span with an added class of dateline">
+            <html:span id="..." class="dateline"/>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.dateline -->
+    <!-- implicit class tested in element test, otherwise nothing interesting to test -->
 
     <!-- linegroup -->
+    <x:scenario label="when processing a linegroup element">
+        <x:scenario label="which contains a hd element">
+            <x:context>
+                <dtbook:bodymatter>
+                    <dtbook:level>
+                        <dtbook:hd>Headline 1</dtbook:hd>
+                        <dtbook:linegroup>
+                            <dtbook:hd>Headline 2</dtbook:hd>
+                        </dtbook:linegroup>
+                    </dtbook:level>
+                </dtbook:bodymatter>
+            </x:context>
+            <x:expect label="the resulting element should be a section with an added class of linegroup">
+                <html:section id="..." epub:type="bodymatter">
+                    <html:h1 id="...">Headline 1</html:h1>
+                    <html:section id="..." class="linegroup">
+                        <html:h2 id="...">Headline 2</html:h2>
+                    </html:section>
+                </html:section>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which does not contain a hd element">
+            <x:context>
+                <dtbook:linegroup/>
+            </x:context>
+            <x:expect label="the resulting element should be a div with an added class of linegroup">
+                <html:div id="..." class="linegroup"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which has a poem element as parent">
+            <x:context>
+                <dtbook:poem>
+                    <dtbook:linegroup/>
+                </dtbook:poem>
+            </x:context>
+            <x:expect label="the resulting element should be given an added epub:type of z3998:verse">
+                <html:div id="..." epub:type="z3998:poem">
+                    <html:div id="..." class="linegroup" epub:type="z3998:verse"/>
+                </html:div>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
 
     <!-- attlist.linegroup -->
+    <!-- implicit class and epub:type tested in element test, otherwise nothing interesting to test -->
 
     <!-- poem -->
+    <x:scenario label="when processing a poem element">
+        <x:scenario label="which contains a hd element">
+            <x:context>
+                <dtbook:bodymatter>
+                    <dtbook:level>
+                        <dtbook:hd>Headline 1</dtbook:hd>
+                        <dtbook:poem>
+                            <dtbook:hd>Headline 2</dtbook:hd>
+                        </dtbook:poem>
+                    </dtbook:level>
+                </dtbook:bodymatter>
+            </x:context>
+            <x:expect label="the resulting element should be a section with an added epub:type of z3998:poem">
+                <html:section id="..." epub:type="bodymatter">
+                    <html:h1 id="...">Headline 1</html:h1>
+                    <html:section id="..." epub:type="z3998:poem">
+                        <html:h2 id="...">Headline 2</html:h2>
+                    </html:section>
+                </html:section>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which does not contain a hd element">
+            <x:context>
+                <dtbook:poem/>
+            </x:context>
+            <x:expect label="the resulting element should be a div with an added epub:type of z3998:poem">
+                <html:div id="..." epub:type="z3998:poem"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
     <!-- attlist.poem -->
+    <!-- implicit epub:type tested in element test, otherwise nothing interesting to test -->
 
     <!-- a -->
+    <x:scenario label="when processing a a element">
+        <x:context>
+            <dtbook:a>TEXT</dtbook:a>
+        </x:context>
+        <x:expect label="the resulting element should be a a">
+            <html:a id="...">TEXT</html:a>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.a -->
+    <x:scenario label="when processing the a element attributes">
+        <x:context>
+            <dtbook:a class="myclass" external="true" type="text/plain" href="http://example.net/LICENSE.txt" hreflang="en" rel="license" rev="chapter" accesskey="x" tabindex="-1">TEXT</dtbook:a>
+        </x:context>
+        <x:expect label="the external and rev attributes are converted to classes, the external may also imply a target _blank, and the rest of the attributes are copied over as is">
+            <html:a id="..." class="external-true rev-chapter myclass" target="_blank" type="text/plain" href="http://example.net/LICENSE.txt" hreflang="en" rel="license" accesskey="x" tabindex="-1"
+                >TEXT</html:a>
+        </x:expect>
+    </x:scenario>
 
     <!-- em -->
+    <x:scenario label="when processing a em element">
+        <x:context>
+            <dtbook:em>TEXT</dtbook:em>
+        </x:context>
+        <x:expect label="the resulting element should be a em">
+            <html:em>TEXT</html:em>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.em -->
+    <!-- nothing interesting to test -->
 
     <!-- strong -->
+    <x:scenario label="when processing a strong element">
+        <x:context>
+            <dtbook:strong>TEXT</dtbook:strong>
+        </x:context>
+        <x:expect label="the resulting element should be a strong">
+            <html:strong>TEXT</html:strong>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.strong -->
+    <!-- nothing interesting to test -->
 
     <!-- dfn -->
+    <x:scenario label="when processing a dfn element">
+        <x:context>
+            <dtbook:dfn>TEXT</dtbook:dfn>
+        </x:context>
+        <x:expect label="the resulting element should be a dfn">
+            <html:dfn>TEXT</html:dfn>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.dfn -->
+    <!-- nothing interesting to test -->
 
     <!-- kbd -->
+    <x:scenario label="when processing a kbd element">
+        <x:context>
+            <dtbook:kbd>TEXT</dtbook:kbd>
+        </x:context>
+        <x:expect label="the resulting element should be a kbd">
+            <html:kbd>TEXT</html:kbd>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.kbd -->
+    <!-- nothing interesting to test -->
 
     <!-- code -->
+    <x:scenario label="when processing a code element">
+        <x:context>
+            <dtbook:code>TEXT</dtbook:code>
+        </x:context>
+        <x:expect label="the resulting element should be a code">
+            <html:code>TEXT</html:code>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.code -->
+    <x:scenario label="when processing the code element attributes">
+        <x:context>
+            <dtbook:code smilref="#">TEXT</dtbook:code>
+        </x:context>
+        <x:expect label="the smilref attribute should be dropped">
+            <html:code>TEXT</html:code>
+        </x:expect>
+    </x:scenario>
 
     <!-- samp -->
+    <x:scenario label="when processing a samp element">
+        <x:context>
+            <dtbook:samp>TEXT</dtbook:samp>
+        </x:context>
+        <x:expect label="the resulting element should be a samp">
+            <html:samp>TEXT</html:samp>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.samp -->
+    <x:scenario label="when processing the samp element attributes">
+        <x:context>
+            <dtbook:samp smilref="#">TEXT</dtbook:samp>
+        </x:context>
+        <x:expect label="the smilref attribute should be dropped">
+            <html:samp>TEXT</html:samp>
+        </x:expect>
+    </x:scenario>
 
     <!-- cite -->
+    <x:scenario label="when processing a cite element">
+        <x:context>
+            <dtbook:cite>TEXT</dtbook:cite>
+        </x:context>
+        <x:expect label="the resulting element should be a cite">
+            <html:cite>TEXT</html:cite>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.cite -->
+    <!-- nothing interesting to test -->
 
     <!-- abbr -->
+    <x:scenario label="when processing a abbr element">
+        <x:context>
+            <dtbook:abbr>TEXT</dtbook:abbr>
+        </x:context>
+        <x:expect label="the resulting element should be a abbr">
+            <html:abbr>TEXT</html:abbr>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.abbr -->
+    <!-- nothing interesting to test -->
 
     <!-- acronym -->
+    <x:scenario label="when processing a acronym element">
+        <x:context>
+            <dtbook:acronym/>
+        </x:context>
+        <x:expect label="the resulting element should be a abbr with an added epub:type of z3998:acronym">
+            <html:abbr epub:type="z3998:acronym"/>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.acronym -->
+    <x:scenario label="when processing the acronym element attributes">
+        <x:context>
+            <dtbook:acronym pronounce="no"/>
+        </x:context>
+        <x:expect label="the pronounce attribute should be converted to a class when present">
+            <html:abbr class="pronounce-no" epub:type="z3998:acronym"/>
+        </x:expect>
+    </x:scenario>
 
     <!-- sub -->
+    <x:scenario label="when processing a sub element">
+        <x:context>
+            <dtbook:sub>TEXT</dtbook:sub>
+        </x:context>
+        <x:expect label="the resulting element should be a sub">
+            <html:sub>TEXT</html:sub>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.sub -->
+    <!-- nothing interesting to test -->
 
     <!-- sup -->
+    <x:scenario label="when processing a sup element">
+        <x:context>
+            <dtbook:sup>TEXT</dtbook:sup>
+        </x:context>
+        <x:expect label="the resulting element should be a sup">
+            <html:sup>TEXT</html:sup>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.sup -->
+    <!-- nothing interesting to test -->
 
     <!-- span -->
+    <x:scenario label="when processing a span element">
+        <x:context>
+            <dtbook:span>TEXT</dtbook:span>
+        </x:context>
+        <x:expect label="the resulting element should be a span">
+            <html:span>TEXT</html:span>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.span -->
+    <!-- nothing interesting to test -->
 
     <!-- bdo -->
+    <x:scenario label="when processing a bdo element">
+        <x:context>
+            <dtbook:bdo>TEXT</dtbook:bdo>
+        </x:context>
+        <x:expect label="the resulting element should be a bdo">
+            <html:bdo>TEXT</html:bdo>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.bdo -->
+    <x:scenario label="when processing the bdo element attributes">
+        <x:context>
+            <dtbook:bdo smilref="#">TEXT</dtbook:bdo>
+        </x:context>
+        <x:expect label="the smilref attribute should be dropped">
+            <html:bdo>TEXT</html:bdo>
+        </x:expect>
+    </x:scenario>
 
     <!-- sent -->
+    <x:scenario label="when processing a sent element">
+        <x:context>
+            <dtbook:sent>TEXT</dtbook:sent>
+        </x:context>
+        <x:expect label="the resulting element should be a span with an added epub:type of z3998:sentence">
+            <html:span epub:type="z3998:sentence">TEXT</html:span>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.sent -->
+    <!-- implicit epub:type tested in element test, otherwise nothing interesting to test -->
 
     <!-- w -->
+    <x:scenario label="when processing a w element">
+        <x:context>
+            <dtbook:w>TEXT</dtbook:w>
+        </x:context>
+        <x:expect label="the resulting element should be a span with an added epub:type of z3998:word">
+            <html:span epub:type="z3998:word">TEXT</html:span>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.w -->
+    <!-- implicit epub:type tested in element test, otherwise nothing interesting to test -->
 
     <!-- pagenum -->
+    <x:scenario label="when processing a pagenum element">
+        <x:context>
+            <dtbook:pagenum>1</dtbook:pagenum>
+        </x:context>
+        <x:expect
+            label="the resulting element should be a span with an added epub:type of pagebreak, the page attribute converted into a class and the contents of the element moved into its title attribute">
+            <html:span class="page-normal" epub:type="pagebreak" title="1"/>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.pagenum -->
+    <x:scenario label="when processing the pagenum element attributes">
+        <x:context>
+            <dtbook:pagenum title="old title" page="special">2</dtbook:pagenum>
+        </x:context>
+        <x:expect label="the title attribute should be overwritten by the text node child of pagenum, the page attribute should be converted to a class">
+            <html:span class="page-special" epub:type="pagebreak" title="2"/>
+        </x:expect>
+    </x:scenario>
 
     <!-- noteref -->
+    <x:scenario label="when processing a noteref element">
+        <x:context>
+            <dtbook:noteref idref="#target">TEXT</dtbook:noteref>
+        </x:context>
+        <x:expect label="the resulting element should be a a">
+            <html:a id="..." epub:type="noteref" href="#target">TEXT</html:a>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.noteref -->
+    <x:scenario label="when processing the noteref element attributes">
+        <x:context>
+            <dtbook:noteref idref="#target" type="image/png">TEXT</dtbook:noteref>
+        </x:context>
+        <x:expect label="the type attribute should be copied when present">
+            <html:a id="..." epub:type="noteref" href="#target" type="image/png">TEXT</html:a>
+        </x:expect>
+    </x:scenario>
 
     <!-- annoref -->
+    <x:scenario label="when processing a annoref element">
+        <x:context>
+            <dtbook:annoref idref="#target">TEXT</dtbook:annoref>
+        </x:context>
+        <x:expect label="the resulting element should be a a">
+            <html:a id="..." epub:type="annoref" href="#target">TEXT</html:a>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.annoref -->
+    <x:scenario label="when processing the annoref element attributes">
+        <x:context>
+            <dtbook:annoref idref="#target" type="image/png">TEXT</dtbook:annoref>
+        </x:context>
+        <x:expect label="the type attribute should be copied when present">
+            <html:a id="..." epub:type="annoref" href="#target" type="image/png">TEXT</html:a>
+        </x:expect>
+    </x:scenario>
 
     <!-- q -->
+    <x:scenario label="when processing a q element">
+        <x:context>
+            <dtbook:q>TEXT</dtbook:q>
+        </x:context>
+        <x:expect label="the resulting element should be a q">
+            <html:q id="...">TEXT</html:q>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.q -->
+    <x:scenario label="when processing the q element attributes">
+        <x:context>
+            <dtbook:q cite="#target">TEXT</dtbook:q>
+        </x:context>
+        <x:expect label="the cite attribute should be copied when present">
+            <html:q id="..." cite="#target">TEXT</html:q>
+        </x:expect>
+    </x:scenario>
 
     <!-- Length -->
+    <!-- no point in testing -->
 
     <!-- MultiLength -->
+    <!-- no point in testing -->
 
     <!-- Pixels -->
+    <!-- no point in testing -->
 
     <!-- img -->
+    <x:scenario label="when processing a img element">
+        <x:context>
+            <dtbook:img/>
+        </x:context>
+        <x:expect label="the resulting element should be a img">
+            <html:img id="..."/>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.img -->
+    <x:scenario label="when processing the img element attributes">
+        <x:context>
+            <dtbook:img src="#target" alt="alt text" longdesc="#image-description" height="100" width="100" id="id"/>
+        </x:context>
+        <x:expect label="the resulting element should be a img">
+            <html:img src="#target" alt="alt text" longdesc="#image-description" height="100" width="100" id="id"/>
+        </x:expect>
+    </x:scenario>
 
     <!-- imggroup -->
+    <x:scenario label="when processing a imggroup element">
+        <x:scenario label="without any children">
+            <x:context>
+                <dtbook:imggroup/>
+            </x:context>
+            <x:expect label="the resulting element should be a figure">
+                <html:figure id="..."/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with the children [prodnote, img, pagenum, caption]">
+            <x:context>
+                <dtbook:imggroup>
+                    <dtbook:prodnote id="prodnote1" imgref="#img1"/>
+                    <dtbook:img id="img1"/>
+                    <dtbook:pagenum>1</dtbook:pagenum>
+                    <dtbook:caption id="caption1"/>
+                </dtbook:imggroup>
+            </x:context>
+            <x:expect label="the resulting element should be a figure">
+                <html:figure id="...">
+                    <html:aside id="prodnote1" epub:type="z3998:production"/>
+                    <html:img id="img1" longdesc="#prodnote1"/>
+                    <html:span epub:type="pagebreak" class="page-normal" title="1"/>
+                    <html:figcaption>
+                        <html:div id="caption1" class="imggroup-caption"/>
+                    </html:figcaption>
+                </html:figure>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with the children [img, prodnote, caption, img, caption, caption, img, img, caption, img]">
+            <x:context>
+                <dtbook:imggroup>
+                    <dtbook:img id="img1"/>
+                    <dtbook:prodnote id="prodnote1" imgref="#img1"/>
+                    <dtbook:caption id="caption1"/>
+                    <dtbook:img id="img2"/>
+                    <dtbook:caption id="caption2"/>
+                    <dtbook:caption id="caption3"/>
+                    <dtbook:img id="img3"/>
+                    <dtbook:img id="img4"/>
+                    <dtbook:caption id="caption4"/>
+                    <dtbook:img id="img5"/>
+                </dtbook:imggroup>
+            </x:context>
+            <x:expect label="the resulting element should be a figure">
+                <html:figure id="...">
+                    <html:img id="img1" longdesc="#prodnote1"/>
+                    <html:aside id="prodnote1" epub:type="z3998:production"/>
+                    <html:img id="img2"/>
+                    <html:img id="img3"/>
+                    <html:img id="img4"/>
+                    <html:img id="img5"/>
+                    <html:figcaption>
+                        <html:div id="caption1" class="imggroup-caption"/>
+                        <html:div id="caption2" class="imggroup-caption"/>
+                        <html:div id="caption3" class="imggroup-caption"/>
+                        <html:div id="caption4" class="imggroup-caption"/>
+                    </html:figcaption>
+                </html:figure>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
     <!-- attlist.imggroup -->
+    <!-- nothing interesting to test -->
 
     <!-- p -->
+    <x:scenario label="when processing a p element">
+        <x:scenario label="with some basic inline content">
+            <x:context>
+                <dtbook:p>TEXT</dtbook:p>
+            </x:context>
+            <x:expect label="the resulting element should be a p">
+                <html:p>TEXT</html:p>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a list and a dl">
+            <x:context>
+                <dtbook:p id="paragraph">
+                    <dtbook:span>A</dtbook:span>
+                    <dtbook:list/>
+                    <dtbook:span>B</dtbook:span>
+                    <dtbook:dl/>
+                    <dtbook:span>C</dtbook:span>
+                </dtbook:p>
+            </x:context>
+            <x:expect label="the lists should be unwrapped from the p">
+                <html:p id="paragraph">
+                    <html:span>A</html:span>
+                </html:p>
+                <html:ol id="..."/>
+                <html:p>
+                    <html:span>B</html:span>
+                </html:p>
+                <html:dl id="..."/>
+                <html:p>
+                    <html:span>C</html:span>
+                </html:p>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
     <!-- attlist.p -->
+    <!-- nothing interesting to test -->
 
     <!-- doctitle -->
-    <!--<x:scenario label="when processing a level1 element with the class 'titlepage'">
-        <x:context>
-            <dtbook:book>
-                <dtbook:frontmatter>
-                    <dtbook:level1 class="titlepage">
-                        
-                    </dtbook:level1>
-                </dtbook:frontmatter>
-            </dtbook:book>
-        </x:context>
-        <x:expect label="the top-level frontmatter levels should become sections and given the appropriate epub:types">
-            <html:body id="...">
-                <html:section id="..." epub:type="frontmatter titlepage"/>
-            </html:body>
-        </x:expect>
-    </x:scenario>-->
+    <x:scenario label="when processing a doctitle element">
+        <x:scenario label="where a level1 with the class titlepage is present in frontmatter and that level1 does not have a headline already">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:doctitle>TITLE</dtbook:doctitle>
+                        <dtbook:level1 class="titlepage"/>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the doctitle should be used as the headline for that level">
+                <html:body id="...">
+                    <html:section id="..." epub:type="frontmatter titlepage">
+                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                    </html:section>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="where a level with the class titlepage is present in frontmatter and that level does not have a headline already">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:doctitle>TITLE</dtbook:doctitle>
+                        <dtbook:level class="titlepage"/>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the doctitle should be used as the headline for that level">
+                <html:body id="...">
+                    <html:section id="..." epub:type="frontmatter titlepage">
+                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                    </html:section>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="where a level1 with the class titlepage is present in frontmatter and that level1 already has a headline">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:doctitle>TITLE</dtbook:doctitle>
+                        <dtbook:level1 class="titlepage">
+                            <dtbook:h1>OTHER TITLE</dtbook:h1>
+                        </dtbook:level1>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the doctitle should not be used as the headline for that level, the existing one should be used instead">
+                <html:body id="...">
+                    <html:section id="..." epub:type="frontmatter titlepage">
+                        <html:h1 id="...">OTHER TITLE</html:h1>
+                    </html:section>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="where a level1 with the class titlepage is not present in frontmatter">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:doctitle>TITLE</dtbook:doctitle>
+                        <dtbook:level1/>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the doctitle should not be used to create a titlepage">
+                <html:body id="...">
+                    <html:section id="..." epub:type="frontmatter"/>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
 
     <!-- attlist.doctitle -->
+    <!-- implicit epub:type and class tested in element test, otherwise nothing interesting to test -->
 
     <!-- docauthor -->
-    <!--<x:scenario label="when processing a level1 element with the class 'titlepage'">
-        <x:context>
-            <dtbook:book>
-                <dtbook:frontmatter>
-                    <dtbook:level1 class="titlepage">
-                        
-                    </dtbook:level1>
-                </dtbook:frontmatter>
-            </dtbook:book>
-        </x:context>
-        <x:expect label="the top-level frontmatter levels should become sections and given the appropriate epub:types">
-            <html:body id="...">
-                <html:section id="..." epub:type="frontmatter titlepage"/>
-            </html:body>
-        </x:expect>
-    </x:scenario>-->
+    <x:scenario label="when processing a docauthor element">
+        <x:scenario label="with a titlepage and doctitle present">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:doctitle>TITLE</dtbook:doctitle>
+                        <dtbook:docauthor>DOCAUTHOR</dtbook:docauthor>
+                        <dtbook:level1 class="titlepage"/>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the docauthor should be added as a paragraph after the headline for that level">
+                <html:body id="...">
+                    <html:section id="..." epub:type="frontmatter titlepage">
+                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                        <html:p class="docauthor" epub:type="z3998:author">DOCAUTHOR</html:p>
+                    </html:section>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a titlepage and a pre-existing headline (using a level instead of level1)">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:doctitle>TITLE</dtbook:doctitle>
+                        <dtbook:docauthor>DOCAUTHOR</dtbook:docauthor>
+                        <dtbook:level class="titlepage">
+                            <dtbook:h1>OTHER TITLE</dtbook:h1>
+                        </dtbook:level>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the docauthor should be added as a paragraph after the headline for that level">
+                <html:body id="...">
+                    <html:section id="..." epub:type="frontmatter titlepage">
+                        <html:h1 id="...">OTHER TITLE</html:h1>
+                        <html:p class="docauthor" epub:type="z3998:author">DOCAUTHOR</html:p>
+                    </html:section>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a titlepage and neither a doctitle nor a pre-existing headline">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:docauthor>DOCAUTHOR</dtbook:docauthor>
+                        <dtbook:level1 class="titlepage"/>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the docauthor should be added as a paragraph at the beginning of that level">
+                <html:body id="...">
+                    <html:section id="..." epub:type="frontmatter titlepage">
+                        <html:p class="docauthor" epub:type="z3998:author">DOCAUTHOR</html:p>
+                    </html:section>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="where a level1 with the class titlepage is not present in frontmatter">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:docauthor>DOCAUTHOR</dtbook:docauthor>
+                        <dtbook:level1/>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the docauthor should not be used to create a titlepage">
+                <html:body id="...">
+                    <html:section id="..." epub:type="frontmatter"/>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
 
     <!-- attlist.docauthor -->
+    <!-- implicit epub:type and class tested in element test, otherwise nothing interesting to test -->
 
     <!-- covertitle -->
+    <x:scenario label="when processing a covertitle element">
+        <x:scenario label="where a level1 with the class cover is present in frontmatter and that level1 does not have a headline already">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:covertitle>TITLE</dtbook:covertitle>
+                        <dtbook:level1 class="cover"/>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the covertitle should be used as the headline for that level">
+                <html:body id="...">
+                    <html:section id="..." epub:type="cover">
+                        <html:h1 id="..." epub:type="z3998:covertitle">TITLE</html:h1>
+                    </html:section>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="where a level with the class cover is present in frontmatter and that level does not have a headline already">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:covertitle>TITLE</dtbook:covertitle>
+                        <dtbook:level class="cover"/>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the covertitle should be used as the headline for that level">
+                <html:body id="...">
+                    <html:section id="..." epub:type="cover">
+                        <html:h1 id="..." epub:type="z3998:covertitle">TITLE</html:h1>
+                    </html:section>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="where a level1 with the class cover is present in frontmatter and that level1 already has a headline">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:covertitle>TITLE</dtbook:covertitle>
+                        <dtbook:level1 class="cover">
+                            <dtbook:h1>OTHER TITLE</dtbook:h1>
+                        </dtbook:level1>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the covertitle should not be used as the headline for that level, the existing one should be used instead">
+                <html:body id="...">
+                    <html:section id="..." epub:type="cover">
+                        <html:h1 id="...">OTHER TITLE</html:h1>
+                    </html:section>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="where a level1 with the class cover is not present in frontmatter">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:covertitle>TITLE</dtbook:covertitle>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the covertitle should not be used to create a cover">
+                <html:body id="..."/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
     <!-- attlist.covertitle -->
+    <!-- implicit epub:type and class tested in element test, otherwise nothing interesting to test -->
 
     <!-- h1 -->
+    <x:scenario label="when processing a h1 element">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:h1>h1</dtbook:h1>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a h1">
+            <html:section id="..." epub:type="bodymatter">
+                <html:h1 id="...">h1</html:h1>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.h1 -->
+    <!-- nothing interesting to test -->
 
     <!-- h2 -->
+    <x:scenario label="when processing a h2 element">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:h1>h1</dtbook:h1>
+                    <dtbook:level2>
+                        <dtbook:h2>h2</dtbook:h2>
+                    </dtbook:level2>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a h2">
+            <html:section id="..." epub:type="bodymatter">
+                <html:h1 id="...">h1</html:h1>
+                <html:section id="...">
+                    <html:h2 id="...">h2</html:h2>
+                </html:section>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.h2 -->
+    <!-- nothing interesting to test -->
 
     <!-- h3 -->
+    <x:scenario label="when processing a h3 element">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:h1>h1</dtbook:h1>
+                    <dtbook:level2>
+                        <dtbook:h2>h2</dtbook:h2>
+                        <dtbook:level3>
+                            <dtbook:h3>h3</dtbook:h3>
+                        </dtbook:level3>
+                    </dtbook:level2>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a h3">
+            <html:section id="..." epub:type="bodymatter">
+                <html:h1 id="...">h1</html:h1>
+                <html:section id="...">
+                    <html:h2 id="...">h2</html:h2>
+                    <html:section id="...">
+                        <html:h3 id="...">h3</html:h3>
+                    </html:section>
+                </html:section>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.h3 -->
+    <!-- nothing interesting to test -->
 
     <!-- h4 -->
+    <x:scenario label="when processing a h4 element">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:h1>h1</dtbook:h1>
+                    <dtbook:level2>
+                        <dtbook:h2>h2</dtbook:h2>
+                        <dtbook:level3>
+                            <dtbook:h3>h3</dtbook:h3>
+                            <dtbook:level4>
+                                <dtbook:h4>h4</dtbook:h4>
+                            </dtbook:level4>
+                        </dtbook:level3>
+                    </dtbook:level2>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a h4">
+            <html:section id="..." epub:type="bodymatter">
+                <html:h1 id="...">h1</html:h1>
+                <html:section id="...">
+                    <html:h2 id="...">h2</html:h2>
+                    <html:section id="...">
+                        <html:h3 id="...">h3</html:h3>
+                        <html:section id="...">
+                            <html:h4 id="...">h4</html:h4>
+                        </html:section>
+                    </html:section>
+                </html:section>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.h4 -->
+    <!-- nothing interesting to test -->
 
     <!-- h5 -->
+    <x:scenario label="when processing a h5 element">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:h1>h1</dtbook:h1>
+                    <dtbook:level2>
+                        <dtbook:h2>h2</dtbook:h2>
+                        <dtbook:level3>
+                            <dtbook:h3>h3</dtbook:h3>
+                            <dtbook:level4>
+                                <dtbook:h4>h4</dtbook:h4>
+                                <dtbook:level5>
+                                    <dtbook:h5>h5</dtbook:h5>
+                                </dtbook:level5>
+                            </dtbook:level4>
+                        </dtbook:level3>
+                    </dtbook:level2>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a h5">
+            <html:section id="..." epub:type="bodymatter">
+                <html:h1 id="...">h1</html:h1>
+                <html:section id="...">
+                    <html:h2 id="...">h2</html:h2>
+                    <html:section id="...">
+                        <html:h3 id="...">h3</html:h3>
+                        <html:section id="...">
+                            <html:h4 id="...">h4</html:h4>
+                            <html:section id="...">
+                                <html:h5 id="...">h5</html:h5>
+                            </html:section>
+                        </html:section>
+                    </html:section>
+                </html:section>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.h5 -->
+    <!-- nothing interesting to test -->
 
     <!-- h6 -->
+    <x:scenario label="when processing a h6 element">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level1>
+                    <dtbook:h1>h1</dtbook:h1>
+                    <dtbook:level2>
+                        <dtbook:h2>h2</dtbook:h2>
+                        <dtbook:level3>
+                            <dtbook:h3>h3</dtbook:h3>
+                            <dtbook:level4>
+                                <dtbook:h4>h4</dtbook:h4>
+                                <dtbook:level5>
+                                    <dtbook:h5>h5</dtbook:h5>
+                                    <dtbook:level6>
+                                        <dtbook:h6>h6</dtbook:h6>
+                                    </dtbook:level6>
+                                </dtbook:level5>
+                            </dtbook:level4>
+                        </dtbook:level3>
+                    </dtbook:level2>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be a h6">
+            <html:section id="..." epub:type="bodymatter">
+                <html:h1 id="...">h1</html:h1>
+                <html:section id="...">
+                    <html:h2 id="...">h2</html:h2>
+                    <html:section id="...">
+                        <html:h3 id="...">h3</html:h3>
+                        <html:section id="...">
+                            <html:h4 id="...">h4</html:h4>
+                            <html:section id="...">
+                                <html:h5 id="...">h5</html:h5>
+                                <html:section id="...">
+                                    <html:h6 id="...">h6</html:h6>
+                                </html:section>
+                            </html:section>
+                        </html:section>
+                    </html:section>
+                </html:section>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.h6 -->
+    <!-- nothing interesting to test -->
 
     <!-- bridgehead -->
+    <x:scenario label="when processing a bridgehead">
+        <x:context>
+            <dtbook:bridgehead>TEXT</dtbook:bridgehead>
+        </x:context>
+        <x:expect label="the result should be a p with a epub:type of bridgehead">
+            <html:p epub:type="bridgehead">TEXT</html:p>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.bridgehead -->
+    <!-- nothing interesting to test -->
 
     <!-- hd -->
+    <x:scenario label="when processing a hd element (seven levels deep)">
+        <x:context>
+            <dtbook:bodymatter>
+                <dtbook:level>
+                    <dtbook:hd>h1</dtbook:hd>
+                    <dtbook:level>
+                        <dtbook:hd>h2</dtbook:hd>
+                        <dtbook:level>
+                            <dtbook:hd>h3</dtbook:hd>
+                            <dtbook:level>
+                                <dtbook:hd>h4</dtbook:hd>
+                                <dtbook:level>
+                                    <dtbook:hd>h5</dtbook:hd>
+                                    <dtbook:level>
+                                        <dtbook:hd>h6</dtbook:hd>
+                                        <dtbook:level>
+                                            <dtbook:hd>h7</dtbook:hd>
+                                        </dtbook:level>
+                                    </dtbook:level>
+                                </dtbook:level>
+                            </dtbook:level>
+                        </dtbook:level>
+                    </dtbook:level>
+                </dtbook:level>
+            </dtbook:bodymatter>
+        </x:context>
+        <x:expect label="the resulting element should be h1,h2,h3,h4,h5,h6,h6 (h6 for level depth 6 and up)">
+            <html:section id="..." epub:type="bodymatter">
+                <html:h1 id="...">h1</html:h1>
+                <html:section id="...">
+                    <html:h2 id="...">h2</html:h2>
+                    <html:section id="...">
+                        <html:h3 id="...">h3</html:h3>
+                        <html:section id="...">
+                            <html:h4 id="...">h4</html:h4>
+                            <html:section id="...">
+                                <html:h5 id="...">h5</html:h5>
+                                <html:section id="...">
+                                    <html:h6 id="...">h6</html:h6>
+                                    <html:section id="...">
+                                        <html:h6 id="...">h7</html:h6>
+                                    </html:section>
+                                </html:section>
+                            </html:section>
+                        </html:section>
+                    </html:section>
+                </html:section>
+            </html:section>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.hd -->
+    <!-- nothing interesting to test -->
 
     <!-- blockquote -->
+    <x:scenario label="when processing a blockquote element">
+        <x:context>
+            <dtbook:blockquote>TEXT</dtbook:blockquote>
+        </x:context>
+        <x:expect label="the resulting element should be blockquote">
+            <html:blockquote id="...">TEXT</html:blockquote>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.blockquote -->
+    <x:scenario label="when processing the blockquote element attributes">
+        <x:context>
+            <dtbook:blockquote cite="#target">TEXT</dtbook:blockquote>
+        </x:context>
+        <x:expect label="the cite attribute should be copied when present">
+            <html:blockquote id="..." cite="#target">TEXT</html:blockquote>
+        </x:expect>
+    </x:scenario>
 
     <!-- dl -->
+    <x:scenario label="when processing a dl element">
+        <x:scenario label="without any pagenums">
+            <x:context>
+                <dtbook:dl>
+                    <dtbook:dt>dt</dtbook:dt>
+                    <dtbook:dd>dd</dtbook:dd>
+                </dtbook:dl>
+            </x:context>
+            <x:expect label="the resulting element should be dl">
+                <html:dl id="...">
+                    <html:dt id="...">dt</html:dt>
+                    <html:dd>dd</html:dd>
+                </html:dl>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with pagenum children">
+            <x:context>
+                <dtbook:dl>
+                    <dtbook:pagenum>1</dtbook:pagenum>
+                    <dtbook:pagenum>2</dtbook:pagenum>
+                    <dtbook:dt>dt #1</dtbook:dt>
+                    <dtbook:pagenum>3</dtbook:pagenum>
+                    <dtbook:pagenum>4</dtbook:pagenum>
+                    <dtbook:dd>dd #1</dtbook:dd>
+                    <dtbook:pagenum>5</dtbook:pagenum>
+                    <dtbook:pagenum>6</dtbook:pagenum>
+                    <dtbook:dt>dt #2</dtbook:dt>
+                    <dtbook:pagenum>7</dtbook:pagenum>
+                    <dtbook:pagenum>8</dtbook:pagenum>
+                    <dtbook:dd>dd #2</dtbook:dd>
+                    <dtbook:pagenum>9</dtbook:pagenum>
+                    <dtbook:pagenum>10</dtbook:pagenum>
+                </dtbook:dl>
+            </x:context>
+            <x:expect label="the resulting element should be dl">
+                <html:span epub:type="pagebreak" title="1" class="page-normal"/>
+                <html:span epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:dl id="...">
+                    <html:dt id="...">dt #1 <html:span epub:type="pagebreak" title="3" class="page-normal"/>
+                        <html:span epub:type="pagebreak" title="4" class="page-normal"/></html:dt>
+                    <html:dd>dd #1 <html:span epub:type="pagebreak" title="5" class="page-normal"/>
+                        <html:span epub:type="pagebreak" title="6" class="page-normal"/></html:dd>
+                    <html:dt id="...">dt #2 <html:span epub:type="pagebreak" title="7" class="page-normal"/>
+                        <html:span epub:type="pagebreak" title="8" class="page-normal"/></html:dt>
+                    <html:dd>dd #2</html:dd>
+                </html:dl>
+                <html:span epub:type="pagebreak" title="9" class="page-normal"/>
+                <html:span epub:type="pagebreak" title="10" class="page-normal"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
     <!-- attlist.dl -->
 
     <!-- dt -->

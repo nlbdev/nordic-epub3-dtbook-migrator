@@ -471,7 +471,7 @@
         <xsl:call-template name="i18n"/>
     </xsl:template>
 
-    <xsl:template match="html:span[f:types(.)='z3998:nonresolving-citation']">
+    <xsl:template match="html:cite">
         <cite>
             <xsl:call-template name="attlist.cite"/>
             <xsl:apply-templates select="node()"/>
