@@ -13,10 +13,10 @@
         <p:pipe port="result" step="in-memory"/>
     </p:output>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/logging-library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
 
     <p:declare-step type="pxi:replace-sections-with-documents" name="replace-sections-with-documents">
         <p:input port="section" primary="true"/>

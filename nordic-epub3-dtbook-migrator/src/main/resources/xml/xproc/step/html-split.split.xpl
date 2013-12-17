@@ -16,8 +16,8 @@
     
     <p:option name="output-dir" required="true"/>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/logging-library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     
     <px:fileset-load media-types="application/xhtml+xml">
         <p:input port="in-memory">

@@ -17,10 +17,10 @@
     
     <p:option name="temp-dir" required="true"/>
     
-<!--    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/html-library.xpl"/>-->
-<!--    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/xproc/fileset-library.xpl"/>-->
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/logging-library.xpl"/>
-<!--    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/mediatype.xpl"/>-->
+<!--    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>-->
+<!--    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+<!--    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>-->
     
     <px:fileset-filter media-types="application/epub+xml"/>
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one EPUB in the fileset." error-code="NORDICDTBOOKEPUB021"/>

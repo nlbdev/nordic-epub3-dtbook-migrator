@@ -849,36 +849,34 @@
 
     <xsl:template match="dtbook:p">
         <xsl:variable name="element" select="."/>
-        <xsl:for-each-group select="node()" group-adjacent="not(self::dtbook:list or self::dtbook:dl)">
-            <xsl:choose>
-                <xsl:when test="current-grouping-key()">
-                    <xsl:if test="position()=1 and f:classes($element)=('precedingemptyline')">
-                        <hr/>
-                    </xsl:if>
-                    <p>
+        <xsl:variable name="has-block-elements" select="if (dtbook:list or dtbook:dl or dtbook:imggroup) then true() else false()"/>
+        <xsl:if test="f:classes($element)=('precedingemptyline')">
+            <hr/>
+        </xsl:if>
+        <xsl:element name="{if ($has-block-elements) then 'div' else 'p'}" namespace="http://www.w3.org/1999/xhtml">
+            <!-- div allows the same attributes as p -->
+            <xsl:call-template name="attlist.p"/>
+            <xsl:for-each-group select="node()" group-adjacent="not(self::dtbook:list or self::dtbook:dl or self::dtbook:imggroup)">
+                <xsl:choose>
+                    <xsl:when test="current-grouping-key()">
                         <xsl:choose>
-                            <xsl:when test="position()=1">
-                                <xsl:for-each select="$element">
-                                    <xsl:call-template name="attlist.p"/>
-                                </xsl:for-each>
+                            <xsl:when test="$has-block-elements">
+                                <p>
+                                    <xsl:apply-templates select="current-group()"/>
+                                </p>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:for-each select="$element">
-                                    <xsl:call-template name="attlist.p">
-                                        <xsl:with-param name="except" select="'id'" tunnel="yes"/>
-                                    </xsl:call-template>
-                                </xsl:for-each>
+                                <xsl:apply-templates select="current-group()"/>
                             </xsl:otherwise>
                         </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- In HTML, lists and figures(imggroup) are not allowed inside p. -->
                         <xsl:apply-templates select="current-group()"/>
-                    </p>
-                </xsl:when>
-                <xsl:otherwise>
-                    <!-- In HTML, lists are not allowed inside p. -->
-                    <xsl:apply-templates select="current-group()"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:for-each-group>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each-group>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template name="attlist.p">
@@ -969,9 +967,12 @@
         <xsl:apply-templates select="node()[self::dtbook:pagenum|self::text()|self::comment()][not(preceding-sibling::*[self::dtbook:dt or self::dtbook:dd])]"/>
         <dl>
             <xsl:call-template name="attlist.dl"/>
-            <xsl:apply-templates select="dtbook:dt|dtbook:dd | (comment()|text())[preceding-sibling::*[self::dtbook:dt or self::dtbook:dd] and following-sibling::*[self::dtbook:dt or self::dtbook:dd]]"/>
+            <xsl:apply-templates
+                select="dtbook:dt|dtbook:dd | (comment()|text())[preceding-sibling::*[self::dtbook:dt or self::dtbook:dd] and following-sibling::*[self::dtbook:dt or self::dtbook:dd]]"/>
         </dl>
-        <xsl:apply-templates select="node()[self::dtbook:pagenum|self::text()|self::comment()][preceding-sibling::*[self::dtbook:dt or self::dtbook:dd] and not(following-sibling::*[self::dtbook:dt or self::dtbook:dd])]"/>
+        <xsl:apply-templates
+            select="node()[self::dtbook:pagenum|self::text()|self::comment()][preceding-sibling::*[self::dtbook:dt or self::dtbook:dd] and not(following-sibling::*[self::dtbook:dt or self::dtbook:dd])]"
+        />
     </xsl:template>
 
     <xsl:template name="attlist.dl">
@@ -983,7 +984,13 @@
             <xsl:call-template name="attlist.dt"/>
             <xsl:apply-templates select="node()"/>
             <xsl:variable name="this" select="."/>
-            <xsl:apply-templates select="following-sibling::node()[self::dtbook:pagenum|self::text()|self::comment()][preceding-sibling::dtbook:dt[1]=$this][following-sibling::*[self::dtbook:dt or self::dtbook:dd]]"/>
+            <xsl:for-each
+                select="following-sibling::node()[self::dtbook:pagenum|self::text()|self::comment()][preceding-sibling::*[self::dtbook:dd|self::dtbook:dt][1]=$this][following-sibling::*[self::dtbook:dt or self::dtbook:dd]]">
+                <xsl:if test="position()=1">
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+                <xsl:apply-templates select="."/>
+            </xsl:for-each>
         </dt>
     </xsl:template>
 
@@ -996,7 +1003,13 @@
             <xsl:call-template name="attlist.dd"/>
             <xsl:apply-templates select="node()"/>
             <xsl:variable name="this" select="."/>
-            <xsl:apply-templates select="following-sibling::node()[self::dtbook:pagenum|self::text()|self::comment()][preceding-sibling::dtbook:dd[1]=$this][following-sibling::*[self::dtbook:dt or self::dtbook:dd]]"/>
+            <xsl:for-each
+                select="following-sibling::node()[self::dtbook:pagenum|self::text()|self::comment()][preceding-sibling::*[self::dtbook:dd|self::dtbook:dt][1]=$this][following-sibling::*[self::dtbook:dt or self::dtbook:dd]]">
+                <xsl:if test="position()=1">
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+                <xsl:apply-templates select="."/>
+            </xsl:for-each>
         </dd>
     </xsl:template>
 
@@ -1113,7 +1126,7 @@
                 <xsl:variable name="this" select="."/>
                 <xsl:apply-templates select="preceding-sibling::comment()[following-sibling::*[1]=$this] | $this"/>
             </xsl:for-each>
-            <xsl:apply-templates select="node()[not(following-sibling::*[self::dtbook:caption or self::dtbook:col or self::dtbook:colgroup])][not(self::dtbook:pagenum)]"/>
+            <xsl:apply-templates select="node()[not((following-sibling::*|self::*)[self::dtbook:caption or self::dtbook:col or self::dtbook:colgroup])][not(self::dtbook:pagenum)]"/>
         </table>
 
         <xsl:apply-templates

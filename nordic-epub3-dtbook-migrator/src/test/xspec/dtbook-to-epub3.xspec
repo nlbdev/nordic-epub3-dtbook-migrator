@@ -1286,17 +1286,19 @@
                 </dtbook:p>
             </x:context>
             <x:expect label="the lists should be unwrapped from the p">
-                <html:p id="paragraph">
-                    <html:span>A</html:span>
-                </html:p>
-                <html:ol id="..."/>
-                <html:p>
-                    <html:span>B</html:span>
-                </html:p>
-                <html:dl id="..."/>
-                <html:p>
-                    <html:span>C</html:span>
-                </html:p>
+                <html:div id="paragraph">
+                    <html:p>
+                        <html:span>A</html:span>
+                    </html:p>
+                    <html:ol id="..."/>
+                    <html:p>
+                        <html:span>B</html:span>
+                    </html:p>
+                    <html:dl id="..."/>
+                    <html:p>
+                        <html:span>C</html:span>
+                    </html:p>
+                </html:div>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -1861,12 +1863,10 @@
                 <html:span epub:type="pagebreak" title="1" class="page-normal"/>
                 <html:span epub:type="pagebreak" title="2" class="page-normal"/>
                 <html:dl id="...">
-                    <html:dt id="...">dt #1 <html:span epub:type="pagebreak" title="3" class="page-normal"/>
-                        <html:span epub:type="pagebreak" title="4" class="page-normal"/></html:dt>
+                    <html:dt id="...">dt #1 <html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:dt>
                     <html:dd>dd #1 <html:span epub:type="pagebreak" title="5" class="page-normal"/>
                         <html:span epub:type="pagebreak" title="6" class="page-normal"/></html:dd>
-                    <html:dt id="...">dt #2 <html:span epub:type="pagebreak" title="7" class="page-normal"/>
-                        <html:span epub:type="pagebreak" title="8" class="page-normal"/></html:dt>
+                    <html:dt id="...">dt #2 <html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/></html:dt>
                     <html:dd>dd #2</html:dd>
                 </html:dl>
                 <html:span epub:type="pagebreak" title="9" class="page-normal"/>
@@ -1926,6 +1926,39 @@
     <!-- attlist.colgroup -->
 
     <!-- col -->
+    <!--<x:scenario label="when encountering a col outside a colgroup">
+        <x:context>
+            <dtbook:table border="1">
+                <dtbook:col align="center"/>
+                <dtbook:tbody>
+                    <dtbook:tr>
+                        <dtbook:td colspan="2">
+                            <dtbook:p xml:lang="en">
+                                <dtbook:strong>"DISABILITY, EXISTENCE AND PHYSICAL ACTIVITY" SEMI-STRUCTURED INTERVIEW GUIDE</dtbook:strong>
+                            </dtbook:p>
+                        </dtbook:td>
+                    </dtbook:tr>
+                </dtbook:tbody>
+            </dtbook:table>
+        </x:context>
+        <x:expect label="the col should be wrapped in a colgroup">
+            <html:table id="table_5" border="1">
+                <html:colgroup>
+                    <html:col id="col_1" span="1" style="text-align: center;"/>
+                </html:colgroup>
+                <html:col id="col_1" span="1" style="text-align: center;"/>
+                <html:tbody id="tbody_5">
+                    <html:tr>
+                        <html:td colspan="2" rowspan="1">
+                            <html:p xml:lang="en">
+                                <html:strong>"DISABILITY, EXISTENCE AND PHYSICAL ACTIVITY" SEMI-STRUCTURED INTERVIEW GUIDE</html:strong>
+                            </html:p>
+                        </html:td>
+                    </html:tr>
+                </html:tbody>
+            </html:table>
+        </x:expect>
+    </x:scenario>-->
 
     <!-- attlist.col -->
 
@@ -1970,5 +2003,44 @@
 
     <!-- #### From MTMs DTBook schema #### -->
     <!-- TODO: convert MTM-schema to XSpec tests here -->
+
+    <!-- ########## Regression tests ########## -->
+
+    <x:scenario label="when encountering a imggroup within a p">
+        <x:context>
+            <dtbook:div>
+                <dtbook:p xml:lang="no" id="id1" class="class1">
+                    <dtbook:imggroup>
+                        <dtbook:img id="rId101" src="900340%20(Reparert)-Picture%201.png" alt=""/>
+                    </dtbook:imggroup>
+                </dtbook:p>
+                <dtbook:p xml:lang="no" id="id2" class="class2">
+                    <dtbook:img id="rId101" src="900340%20(Reparert)-Picture%201.png" alt=""/>
+                </dtbook:p>
+                <dtbook:p xml:lang="no" id="id3" class="class3">TEXT<dtbook:imggroup>
+                        <dtbook:img id="rId101" src="900340%20(Reparert)-Picture%201.png" alt=""/>
+                    </dtbook:imggroup>TEXT</dtbook:p>
+            </dtbook:div>
+        </x:context>
+        <x:expect label="the p should be converted into a div and any text before and after the imggroup should be wrapped in new p elements (img without imggroup is allowed in p)">
+            <html:div>
+                <html:div xml:lang="no" id="id1" class="class1">
+                    <html:figure id="...">
+                        <html:img id="rId101" src="900340%20(Reparert)-Picture%201.png" alt=""/>
+                    </html:figure>
+                </html:div>
+                <html:p xml:lang="no" id="id2" class="class2">
+                    <html:img id="rId101" src="900340%20(Reparert)-Picture%201.png" alt=""/>
+                </html:p>
+                <html:div xml:lang="no" id="id3" class="class3">
+                    <html:p>TEXT</html:p>
+                    <html:figure id="...">
+                        <html:img id="rId101" src="900340%20(Reparert)-Picture%201.png" alt=""/>
+                    </html:figure>
+                    <html:p>TEXT</html:p>
+                </html:div>
+            </html:div>
+        </x:expect>
+    </x:scenario>
 
 </x:description>
