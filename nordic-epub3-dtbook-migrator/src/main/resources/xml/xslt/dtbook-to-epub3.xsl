@@ -36,7 +36,7 @@
         </xsl:if>
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
         <xsl:if
-            test="not(@id) and not(local-name()=('span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/')">
+            test="not(@id) and not(local-name()=('span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd','lic','thead','tfoot','tbody','colgroup','col') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/')">
             <xsl:attribute name="id" select="f:generate-pretty-id(.)"/>
         </xsl:if>
         <xsl:call-template name="classes-and-types">
@@ -1021,6 +1021,7 @@
         <xsl:choose>
             <xsl:when test="dtbook:hd">
                 <section>
+                    <xsl:attribute name="id" select="f:generate-pseudorandom-id(concat(f:generate-pretty-id(.),'_section'))"/>
                     <xsl:call-template name="list.content"/>
                 </section>
             </xsl:when>
@@ -1031,12 +1032,12 @@
     </xsl:template>
 
     <xsl:template name="list.content">
-        <xsl:apply-templates select="dtbook:pagenum[not(preceding-sibling::*[self::dtbook:li])]"/>
+        <xsl:apply-templates select="dtbook:pagenum[not(preceding-sibling::dtbook:li)]"/>
         <xsl:element name="{if (@type='ul') then 'ul' else 'ol'}">
             <xsl:call-template name="attlist.list"/>
-            <xsl:apply-templates select="node()"/>
+            <xsl:apply-templates select="dtbook:li|text()|comment()"/>
         </xsl:element>
-        <xsl:apply-templates select="dtbook:pagenum[preceding-sibling::*[self::dtbook:li] and not(following-sibling::*[self::dtbook:li])]"/>
+        <xsl:apply-templates select="dtbook:pagenum[preceding-sibling::dtbook:li and not(following-sibling::dtbook:li)]"/>
     </xsl:template>
 
     <xsl:template name="attlist.list">
@@ -1055,7 +1056,7 @@
             <xsl:call-template name="attlist.li"/>
             <xsl:apply-templates select="node()"/>
             <xsl:variable name="this" select="."/>
-            <xsl:apply-templates select="following-sibling::dtbook:pagenum[preceding-sibling::dtbook:li[1]=$this][following-sibling::*[self::dtbook:li]]"/>
+            <xsl:apply-templates select="following-sibling::dtbook:pagenum[preceding-sibling::dtbook:li[1]=$this][following-sibling::dtbook:li]"/>
         </li>
     </xsl:template>
 
@@ -1102,7 +1103,8 @@
     </xsl:template>
 
     <xsl:template match="dtbook:table">
-        <xsl:apply-templates select="dtbook:pagenum[not(preceding-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:td])]"/>
+        <xsl:apply-templates
+            select="dtbook:pagenum[not(preceding-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr])] | dtbook:tbody[not(preceding-sibling::dtbook:caption or preceding-sibling::dtbook:thead)]/dtbook:pagenum[not(preceding-sibling::dtbook:tr)]"/>
 
         <table>
             <xsl:call-template name="attlist.table"/>
@@ -1126,11 +1128,21 @@
                 <xsl:variable name="this" select="."/>
                 <xsl:apply-templates select="preceding-sibling::comment()[following-sibling::*[1]=$this] | $this"/>
             </xsl:for-each>
-            <xsl:apply-templates select="node()[not((following-sibling::*|self::*)[self::dtbook:caption or self::dtbook:col or self::dtbook:colgroup])][not(self::dtbook:pagenum)]"/>
+            <xsl:variable name="tbody" select="node()[not((following-sibling::*|self::*)[self::dtbook:caption or self::dtbook:col or self::dtbook:colgroup])][not(self::dtbook:pagenum)]"/>
+            <xsl:choose>
+                <xsl:when test="dtbook:tr">
+                    <tbody>
+                        <xsl:apply-templates select="$tbody"/>
+                    </tbody>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$tbody"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </table>
 
         <xsl:apply-templates
-            select="dtbook:pagenum[preceding-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:td] and not(following-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:td])]"
+            select="dtbook:pagenum[preceding-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr] and not(following-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr])] | dtbook:tbody/dtbook:pagenum[preceding-sibling::dtbook:tr and not(following-sibling::dtbook:tr)]"
         />
     </xsl:template>
 
@@ -1176,7 +1188,7 @@
                 </p>
             </xsl:if>
             <xsl:apply-templates select="node()"/>
-            <xsl:apply-templates select="following-sibling::dtbook:pagenum[not(preceding-sibling::*[self::dtbook:thead or self::dtbook:tbody or self::dtbook:td])]"/>
+            <xsl:apply-templates select="following-sibling::dtbook:pagenum[not(preceding-sibling::*[self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr])]"/>
             <xsl:apply-templates select="if (not(following-sibling::dtbook:thead)) then following-sibling::dtbook:tbody/dtbook:pagenum[not(preceding-sibling::dtbook:tr)] else ()"/>
         </caption>
     </xsl:template>
@@ -1316,52 +1328,44 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="dtbook:th">
-        <th>
-            <xsl:call-template name="attlist.th"/>
+    <xsl:template match="dtbook:th | dtbook:td">
+        <xsl:element name="{local-name()}">
+            <xsl:call-template name="attlist.th.td"/>
             <xsl:apply-templates select="node()"/>
-            <xsl:if test="not(following-sibling::dtbook:th)">
-                <xsl:apply-templates select="ancestor::dtbook:thead/following-sibling::dtbook:pagenum[not(preceding-sibling::*[self::dtbook:tbody or self::dtbook:td])]"/>
-                <xsl:apply-templates select="ancestor::dtbook:thead/following-sibling::dtbook:tbody/dtbook:pagenum[not(preceding-sibling::dtbook:tr)]"/>
+            <xsl:if test="not(following-sibling::dtbook:th or following-sibling::dtbook:td)">
+                <xsl:choose>
+                    <xsl:when test="parent::dtbook:tr/following-sibling::dtbook:tr">
+                        <!-- copy pagenums from between the tr elements -->
+                        <xsl:variable name="this" select="."/>
+                        <xsl:for-each select="parent::dtbook:tr/following-sibling::dtbook:pagenum[preceding-sibling::dtbook:tr[1]=$this]">
+                            <xsl:text> </xsl:text>
+                            <xsl:apply-templates select="."/>
+                        </xsl:for-each>
+                    </xsl:when>
+                    <xsl:when test="parent::dtbook:tr/parent::dtbook:thead">
+                        <!-- if thead => copy trailing pagenums from thead and leading pagenums from tbody -->
+                        <xsl:for-each select="parent::dtbook:tr/parent::dtbook:thead/following-sibling::dtbook:pagenum[not(preceding-sibling::dtbook:tr)]">
+                            <xsl:text> </xsl:text>
+                            <xsl:apply-templates select="."/>
+                        </xsl:for-each>
+                        <xsl:for-each select="parent::dtbook:tr/parent::dtbook:thead/following-sibling::dtbook:tbody/dtbook:pagenum[not(preceding-sibling::dtbook:tr)]">
+                            <xsl:text> </xsl:text>
+                            <xsl:apply-templates select="."/>
+                        </xsl:for-each>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:if>
-        </th>
+        </xsl:element>
     </xsl:template>
 
-    <xsl:template name="attlist.th">
+    <xsl:template name="attlist.th.td">
         <xsl:call-template name="attrs"/>
         <xsl:copy-of select="@headers|@scope|@rowspan|@colspan"/>
         <!-- @abbr and @axis are ignored as they have no good equivalent in HTML -->
         <xsl:variable name="style">
             <xsl:call-template name="cellhalign"/>
             <xsl:call-template name="cellvalign"/>
-            <xsl:variable name="cellpadding" select="ancestor::dtbook:table[@cellpadding][1]/@cellpadding"/>
-            <xsl:sequence select="if ($cellpadding) then concat('padding: ',$cellpadding,if (not(ends-with($cellpadding,'%'))) then 'px;' else ';') else ()"/>
-        </xsl:variable>
-        <xsl:variable name="style" select="$style[not(.='')]"/>
-        <xsl:if test="count($style)">
-            <xsl:attribute name="style" select="string-join($style,' ')"/>
-        </xsl:if>
-    </xsl:template>
-
-    <xsl:template match="dtbook:td">
-        <td>
-            <xsl:call-template name="attlist.td"/>
-            <xsl:apply-templates select="node()"/>
-            <xsl:if test="not(following-sibling::dtbook:td)">
-                <xsl:variable name="tr" select="parent::dtbook:tr"/>
-                <xsl:apply-templates select="parent::dtbook:tr[following-sibling::dtbook:tr]/following-sibling::dtbook:pagenum[preceding-sibling::dtbook:tr[1]=$tr]"/>
-            </xsl:if>
-        </td>
-    </xsl:template>
-
-    <xsl:template name="attlist.td">
-        <xsl:call-template name="attrs"/>
-        <xsl:copy-of select="@headers|@scope|@rowspan|@colspan"/>
-        <!-- @abbr and @axis are ignored as they have no good equivalent in HTML -->
-        <xsl:variable name="style">
-            <xsl:call-template name="cellhalign"/>
-            <xsl:call-template name="cellvalign"/>
-            <xsl:variable name="cellpadding" select="ancestor::dtbook:table[@cellpadding][1]/@cellpadding"/>
+            <xsl:variable name="cellpadding" select="ancestor::dtbook:table[1][@cellpadding][1]/@cellpadding"/>
             <xsl:sequence select="if ($cellpadding) then concat('padding: ',$cellpadding,if (not(ends-with($cellpadding,'%'))) then 'px;' else ';') else ()"/>
         </xsl:variable>
         <xsl:variable name="style" select="$style[not(.='')]"/>
@@ -1396,6 +1400,23 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:sequence select="if ($all-ids=$id) then generate-id($element) else $id"/>
+    </xsl:function>
+
+    <xsl:function name="f:generate-pseudorandom-id" as="xs:string">
+        <xsl:param name="prefix" as="xs:string"/>
+        <xsl:variable name="pseudorandom-id" select="concat($prefix,'_',replace(replace(string(current-time()),'\d+:\d+:([\d\.]+)(\+.*)?','$1'),'[^\d]',''))"/>
+        <xsl:choose>
+            <xsl:when test="$pseudorandom-id=$all-ids">
+                <!--
+                    Try again.
+                    WARNING: this is a theoretically infinite recursion. In practice however, this shouldn't happen.
+                -->
+                <xsl:sequence select="f:generate-pseudorandom-id($prefix)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$pseudorandom-id"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:function>
 
 </xsl:stylesheet>

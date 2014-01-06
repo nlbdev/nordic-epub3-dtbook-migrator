@@ -1876,103 +1876,523 @@
     </x:scenario>
 
     <!-- attlist.dl -->
+    <!-- nothing interesting to test -->
 
     <!-- dt -->
+    <x:scenario label="when processing a dt element">
+        <x:context>
+            <dtbook:dt>TEXT</dtbook:dt>
+        </x:context>
+        <x:expect label="the resulting element should be a dt">
+            <html:dt id="...">TEXT</html:dt>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.dt -->
+    <!-- nothing interesting to test -->
 
     <!-- dd -->
+    <x:scenario label="when processing a dd element">
+        <x:context>
+            <dtbook:dd>TEXT</dtbook:dd>
+        </x:context>
+        <x:expect label="the resulting element should be a dd">
+            <html:dd>TEXT</html:dd>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.dd -->
+    <!-- nothing interesting to test -->
 
     <!-- list -->
+    <x:scenario label="when processing a list element">
+        <x:scenario label="which has a headline">
+            <x:context>
+                <dtbook:list>
+                    <dtbook:hd>TEXT</dtbook:hd>
+                </dtbook:list>
+            </x:context>
+            <x:expect label="the resulting list should be wrapped in a section element">
+                <html:section id="...">...</html:section>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which is ordered">
+            <x:context>
+                <dtbook:list type="ol">
+                    <dtbook:li>TEXT</dtbook:li>
+                </dtbook:list>
+            </x:context>
+            <x:expect label="the resulting element should be a ol">
+                <html:ol id="...">
+                    <html:li id="...">TEXT</html:li>
+                </html:ol>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which is unordered">
+            <x:context>
+                <dtbook:list type="ul">
+                    <dtbook:li>TEXT</dtbook:li>
+                </dtbook:list>
+            </x:context>
+            <x:expect label="the resulting element should be a ul">
+                <html:ul id="...">
+                    <html:li id="...">TEXT</html:li>
+                </html:ul>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which is preformatted">
+            <x:context>
+                <dtbook:list type="pl">
+                    <dtbook:li>TEXT</dtbook:li>
+                </dtbook:list>
+            </x:context>
+            <x:expect label="the resulting element should be a ol with an added class named list-preformatted">
+                <html:ol id="..." class="list-preformatted">
+                    <html:li id="...">TEXT</html:li>
+                </html:ol>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
 
     <!-- attlist.list -->
+    <x:scenario label="when processing the list element attributes">
+        <x:context>
+            <dtbook:list type="pl" depth="1" enum="1" start="1">
+                <dtbook:li>TEXT</dtbook:li>
+            </dtbook:list>
+        </x:context>
+        <x:expect label="the resulting list should be wrapped in a section element">
+            <html:ol id="..." class="list-preformatted" type="1" start="1">
+                <html:li id="...">TEXT</html:li>
+            </html:ol>
+        </x:expect>
+    </x:scenario>
 
     <!-- li -->
+    <x:scenario label="when processing a li element">
+        <x:context>
+            <dtbook:li>TEXT</dtbook:li>
+        </x:context>
+        <x:expect label="the resulting element should be a li">
+            <html:li id="...">TEXT</html:li>
+        </x:expect>
+    </x:scenario>
+
     <!-- attlist.li -->
+    <!-- nothing interesting to test -->
 
     <!-- lic -->
+    <x:scenario label="when processing a lic element">
+        <x:context>
+            <dtbook:lic>TEXT</dtbook:lic>
+        </x:context>
+        <x:expect label="the resulting element should be a span with a class of lic">
+            <html:span class="lic">TEXT</html:span>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.lic -->
+    <!-- nothing interesting to test -->
 
     <!-- Scope -->
+    <!-- no point in testing -->
 
     <!-- TFrame -->
+    <!-- no point in testing -->
 
     <!-- TRules -->
+    <!-- no point in testing -->
 
     <!-- cellhalign -->
+    <!-- tested in attlist.td -->
 
     <!-- cellvalign -->
+    <!-- tested in attlist.td -->
 
     <!-- table -->
+    <x:scenario label="when processing a table element">
+        <x:scenario label="...just a basic one">
+            <x:context>
+                <dtbook:table>
+                    <dtbook:tr>
+                        <dtbook:td>TEXT</dtbook:td>
+                    </dtbook:tr>
+                </dtbook:table>
+            </x:context>
+            <x:expect label="the resulting element should be a table">
+                <html:table id="...">...</html:table>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with pagenum children">
+            <x:context>
+                <dtbook:table>
+                    <dtbook:pagenum>1</dtbook:pagenum>
+                    <dtbook:pagenum>2</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #1</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>3</dtbook:pagenum>
+                    <dtbook:pagenum>4</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #2</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>5</dtbook:pagenum>
+                    <dtbook:pagenum>6</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #3</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>7</dtbook:pagenum>
+                    <dtbook:pagenum>8</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #4</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>9</dtbook:pagenum>
+                    <dtbook:pagenum>10</dtbook:pagenum>
+                </dtbook:table>
+            </x:context>
+            <x:expect label="the resulting element should be dl">
+                <html:span epub:type="pagebreak" title="1" class="page-normal"/>
+                <html:span epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:table id="...">
+                    <html:tbody>
+                        <html:tr><html:td>td #1 <html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #2 <html:span epub:type="pagebreak" title="5" class="page-normal"/>
+                                <html:span epub:type="pagebreak" title="6" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #3 <html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #4</html:td></html:tr>
+                    </html:tbody>
+                </html:table>
+                <html:span epub:type="pagebreak" title="9" class="page-normal"/>
+                <html:span epub:type="pagebreak" title="10" class="page-normal"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with pagenum and caption children">
+            <x:context>
+                <dtbook:table>
+                    <dtbook:pagenum>1</dtbook:pagenum>
+                    <dtbook:pagenum>2</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #1</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>3</dtbook:pagenum>
+                    <dtbook:pagenum>4</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #2</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>5</dtbook:pagenum>
+                    <dtbook:pagenum>6</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #3</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>7</dtbook:pagenum>
+                    <dtbook:pagenum>8</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #4</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>9</dtbook:pagenum>
+                    <dtbook:pagenum>10</dtbook:pagenum>
+                </dtbook:table>
+            </x:context>
+            <x:expect label="the resulting element should be dl">
+                <html:span epub:type="pagebreak" title="1" class="page-normal"/>
+                <html:span epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:table id="...">
+                    <html:tbody>
+                        <html:tr><html:td>td #1 <html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #2 <html:span epub:type="pagebreak" title="5" class="page-normal"/>
+                                <html:span epub:type="pagebreak" title="6" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #3 <html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #4</html:td></html:tr>
+                    </html:tbody>
+                </html:table>
+                <html:span epub:type="pagebreak" title="9" class="page-normal"/>
+                <html:span epub:type="pagebreak" title="10" class="page-normal"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
 
     <!-- attlist.table -->
+    <x:scenario label="when processing the table element attributes">
+        <x:context>
+            <dtbook:table align="left" bgcolor="red" border="1" cellpadding="10" cellspacing="20" frame="box" rules="all" summary="SUMMARY" width="50%">
+                <dtbook:tr>
+                    <dtbook:td>TEXT</dtbook:td>
+                </dtbook:tr>
+            </dtbook:table>
+        </x:context>
+        <x:expect label="all the attributes except border (which remains) and summary (which becoms a caption paragraph) should be translated to CSS using either the style attribute or classes">
+            <html:table id="..." class="table-rules-all table-frame-box" border="1" style="width: 50%; border-collapse: separate; border-spacing: 20px;">
+                <html:caption>
+                    <html:p class="table-summary">SUMMARY</html:p>
+                </html:caption>
+                <html:tbody>
+                    <html:tr>
+                        <html:td style="padding: 10px;">TEXT</html:td>
+                    </html:tr>
+                </html:tbody>
+            </html:table>
+        </x:expect>
+    </x:scenario>
 
     <!-- caption -->
+    <x:scenario label="when processing the caption element">
+        <x:scenario label="in the context of a table">
+            <x:context>
+                <dtbook:table>
+                    <dtbook:caption>CAPTION</dtbook:caption>
+                </dtbook:table>
+            </x:context>
+            <x:expect label="the resulting element should be a caption">
+                <html:table id="...">
+                    <html:caption id="...">CAPTION</html:caption>
+                </html:table>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="in the context of a "/>
+    </x:scenario>
 
     <!-- attlist.caption -->
-
-    <!-- thead -->
-    <!-- attlist.thead -->
-
-    <!-- tfoot -->
-    <!-- attlist.tfoot -->
-
-    <!-- tbody -->
-    <!-- attlist.tbody -->
-
-    <!-- colgroup -->
-
-    <!-- attlist.colgroup -->
-
-    <!-- col -->
-    <!--<x:scenario label="when encountering a col outside a colgroup">
+    <x:scenario label="when processing the caption element attributes">
         <x:context>
-            <dtbook:table border="1">
-                <dtbook:col align="center"/>
+            <dtbook:table>
+                <dtbook:caption id="caption" imgref="#img"><!-- COMMENT --></dtbook:caption>
                 <dtbook:tbody>
                     <dtbook:tr>
-                        <dtbook:td colspan="2">
-                            <dtbook:p xml:lang="en">
-                                <dtbook:strong>"DISABILITY, EXISTENCE AND PHYSICAL ACTIVITY" SEMI-STRUCTURED INTERVIEW GUIDE</dtbook:strong>
-                            </dtbook:p>
+                        <dtbook:td>
+                            <dtbook:img id="img" src="img.png"/>
                         </dtbook:td>
                     </dtbook:tr>
                 </dtbook:tbody>
             </dtbook:table>
         </x:context>
-        <x:expect label="the col should be wrapped in a colgroup">
-            <html:table id="table_5" border="1">
-                <html:colgroup>
-                    <html:col id="col_1" span="1" style="text-align: center;"/>
-                </html:colgroup>
-                <html:col id="col_1" span="1" style="text-align: center;"/>
-                <html:tbody id="tbody_5">
+        <x:expect label="the imgref should be replaced by the longdesc attribute on the corresponding img element.">
+            <html:table id="...">
+                <html:caption id="caption"><!-- COMMENT --></html:caption>
+                <html:tbody>
                     <html:tr>
-                        <html:td colspan="2" rowspan="1">
-                            <html:p xml:lang="en">
-                                <html:strong>"DISABILITY, EXISTENCE AND PHYSICAL ACTIVITY" SEMI-STRUCTURED INTERVIEW GUIDE</html:strong>
-                            </html:p>
+                        <html:td>
+                            <html:img id="img" src="img.png" longdesc="#caption"/>
                         </html:td>
                     </html:tr>
                 </html:tbody>
             </html:table>
         </x:expect>
-    </x:scenario>-->
+    </x:scenario>
+
+    <!-- thead -->
+    <x:scenario label="when processing a thead element">
+        <x:context>
+            <dtbook:thead>
+                <dtbook:tr>
+                    <dtbook:td>TEXT</dtbook:td>
+                </dtbook:tr>
+            </dtbook:thead>
+        </x:context>
+        <x:expect label="the resulting element should be a thead">
+            <html:thead>...</html:thead>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.thead -->
+    <!-- nothing interesting to test. halign and valign tested in attlist.td. -->
+
+    <!-- tfoot -->
+    <x:scenario label="when processing a tfoot element">
+        <x:context>
+            <dtbook:tfoot>
+                <dtbook:tr>
+                    <dtbook:td>TEXT</dtbook:td>
+                </dtbook:tr>
+            </dtbook:tfoot>
+        </x:context>
+        <x:expect label="the resulting element should be a tfoot">
+            <html:tfoot>...</html:tfoot>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.tfoot -->
+    <!-- nothing interesting to test. halign and valign tested in attlist.td. -->
+
+    <!-- tbody -->
+    <x:scenario label="when processing a tbody element">
+        <x:context>
+            <dtbook:tbody>
+                <dtbook:tr>
+                    <dtbook:td>TEXT</dtbook:td>
+                </dtbook:tr>
+            </dtbook:tbody>
+        </x:context>
+        <x:expect label="the resulting element should be a tbody">
+            <html:tbody>...</html:tbody>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.tbody -->
+    <!-- nothing interesting to test. halign and valign tested in attlist.td. -->
+
+    <!-- colgroup -->
+    <x:scenario label="when processing a colgroup element">
+        <x:context>
+            <dtbook:colgroup><!-- COMMENT --></dtbook:colgroup>
+        </x:context>
+        <x:expect label="the resulting element should be a colgroup">
+            <html:colgroup><!-- COMMENT --></html:colgroup>
+        </x:expect>
+    </x:scenario>
+
+    <!-- attlist.colgroup -->
+    <x:scenario label="when processing the colgroup element attributes">
+        <!-- halign and valigh tested in attlist.td -->
+        <x:context>
+            <dtbook:colgroup span="2" width="10%"><!-- COMMENT --></dtbook:colgroup>
+        </x:context>
+        <x:expect label="the span attribute should be copied over, while the width attribute should be converted to CSS in the style attribute">
+            <html:colgroup span="2" style="width: 10%;"><!-- COMMENT --></html:colgroup>
+        </x:expect>
+    </x:scenario>
+
+    <!-- col -->
+    <x:scenario label="when processing a col element">
+        <x:scenario label="which is inside a colgroup">
+            <x:context>
+                <dtbook:table>
+                    <dtbook:colgroup id="abc">
+                        <dtbook:col align="center"/>
+                    </dtbook:colgroup>
+                    <dtbook:tr>
+                        <dtbook:td><!-- COMMENT --></dtbook:td>
+                    </dtbook:tr>
+                </dtbook:table>
+            </x:context>
+            <x:expect label="the col should remain in the colgroup">
+                <html:table id="...">
+                    <html:colgroup id="abc">
+                        <html:col style="text-align: center;"/>
+                    </html:colgroup>
+                    <html:tbody>
+                        <html:tr>
+                            <html:td><!-- COMMENT --></html:td>
+                        </html:tr>
+                    </html:tbody>
+                </html:table>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which is not inside a colgroup and does not have a colgroup sibling">
+            <x:context>
+                <dtbook:table>
+                    <dtbook:col/>
+                    <dtbook:tr>
+                        <dtbook:td><!-- COMMENT --></dtbook:td>
+                    </dtbook:tr>
+                </dtbook:table>
+            </x:context>
+            <x:expect label="the col should be wrapped in a colgroup">
+                <html:table id="...">
+                    <html:colgroup>
+                        <html:col/>
+                    </html:colgroup>
+                    <html:tbody>
+                        <html:tr>
+                            <html:td><!-- COMMENT --></html:td>
+                        </html:tr>
+                    </html:tbody>
+                </html:table>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
 
     <!-- attlist.col -->
+    <x:scenario label="when processing the col element attributes">
+        <!-- halign and valigh tested in attlist.td -->
+        <x:context>
+            <dtbook:col span="2" width="10%"><!-- COMMENT --></dtbook:col>
+        </x:context>
+        <x:expect label="the span attribute should be copied over, while the width attribute should be converted to CSS in the style attribute">
+            <html:col span="2" style="width: 10%;"><!-- COMMENT --></html:col>
+        </x:expect>
+    </x:scenario>
 
     <!-- tr -->
+    <x:scenario label="when processing a tr element">
+        <x:scenario label="with a tbody parent">
+            <x:context>
+                <dtbook:table>
+                    <dtbook:tbody>
+                        <dtbook:tr>
+                            <dtbook:td>TEXT</dtbook:td>
+                        </dtbook:tr>
+                    </dtbook:tbody>
+                </dtbook:table>
+            </x:context>
+            <x:expect label="the resulting element should be a tr with a tbody parent">
+                <html:table id="...">
+                    <html:tbody>
+                        <html:tr>...</html:tr>
+                    </html:tbody>
+                </html:table>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="without a tbody parent">
+            <x:context>
+                <dtbook:table>
+                    <dtbook:tr>
+                        <dtbook:td>TEXT</dtbook:td>
+                    </dtbook:tr>
+                    <dtbook:tr>
+                        <dtbook:td>TEXT</dtbook:td>
+                    </dtbook:tr>
+                </dtbook:table>
+            </x:context>
+            <x:expect label="the resulting tr elements should be wrapped inside a tbody parent">
+                <html:table id="...">
+                    <html:tbody>
+                        <html:tr>...</html:tr>
+                        <html:tr>...</html:tr>
+                    </html:tbody>
+                </html:table>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
 
     <!-- attlist.tr -->
+    <!-- nothing interesting to test. halign and valign tested in attlist.td. -->
 
     <!-- th -->
+    <x:scenario label="when processing a th element">
+        <x:context>
+            <dtbook:th>TEXT</dtbook:th>
+        </x:context>
+        <x:expect label="the resulting element should be a th">
+            <html:th>...</html:th>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.th -->
+    <!-- tested in attlist.td -->
 
     <!-- td -->
+    <x:scenario label="when processing a td element">
+        <x:context>
+            <dtbook:td>TEXT</dtbook:td>
+        </x:context>
+        <x:expect label="the resulting element should be a td">
+            <html:td>...</html:td>
+        </x:expect>
+    </x:scenario>
 
     <!-- attlist.td -->
+    <x:scenario label="when processing the td element attributes">
+        <x:context>
+            <dtbook:table>
+                <dtbook:thead>
+                    <dtbook:th id="id1"><!-- COMMENT 1 --></dtbook:th>
+                    <dtbook:th id="id2"><!-- COMMENT 2 --></dtbook:th>
+                </dtbook:thead>
+                <dtbook:tbody>
+                    <dtbook:tr>
+                        <dtbook:td abbr="ABBR TEXT" axis="name" headers="id1 id2" scope="col" rowspan="2" colspan="2" align="center" char="." charoff="4" valign="middle">TEXT</dtbook:td>
+                    </dtbook:tr>
+                </dtbook:tbody>
+            </dtbook:table>
+        </x:context>
+        <x:expect label="the abbr, axis, char and charoff attributes are dropped; the headers, scope, rowspan and colspan attributes are copied, the align and valign attributes are converted to CSS">
+            <html:table id="...">
+                <html:thead>
+                    <html:th id="id1"><!-- COMMENT 1 --></html:th>
+                    <html:th id="id2"><!-- COMMENT 2 --></html:th>
+                </html:thead>
+                <html:tbody>
+                    <html:tr>
+                        <html:td headers="id1 id2" scope="col" rowspan="2" colspan="2" style="text-align: center; vertical-align: middle;">TEXT</html:td>
+                    </html:tr>
+                </html:tbody>
+            </html:table>
+        </x:expect>
+    </x:scenario>
 
 
     <!-- ########## Nordic tests ########## -->
@@ -1998,6 +2418,148 @@
                 <html:hr/>
                 <html:p class="precedingemptyline">More text</html:p>
             </html:section>
+        </x:expect>
+    </x:scenario>
+
+    <!-- a typical toc -->
+    <x:scenario label="when processing a typical toc">
+        <x:context>
+            <dtbook:list type="pl" class="toc">
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:strong>Kapittel 1 Vitenskap: grunnleggende antakelser</dtbook:strong>
+                    </dtbook:lic>
+                    <dtbook:lic>13</dtbook:lic>
+                    <dtbook:list type="pl">
+                        <dtbook:li>
+                            <dtbook:lic>Hva er vitenskap?</dtbook:lic>
+                            <dtbook:lic>14</dtbook:lic>
+                        </dtbook:li>
+                        <dtbook:li>
+                            <dtbook:lic>Psykologi som vitenskap: tre tradisjoner</dtbook:lic>
+                            <dtbook:lic>17</dtbook:lic>
+                        </dtbook:li>
+                    </dtbook:list>
+                </dtbook:li>
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:strong>Del 1 Grunnleggende begreper og prinsipper</dtbook:strong>
+                    </dtbook:lic>
+                    <dtbook:lic>39</dtbook:lic>
+                    <dtbook:list type="pl">
+                        <dtbook:li>
+                            <dtbook:lic>
+                                <dtbook:strong>Kapittel 2 Vitenskapelig tenkning: validitet, begreper og teori</dtbook:strong>
+                            </dtbook:lic>
+                            <dtbook:lic>41</dtbook:lic>
+                            <dtbook:list type="pl">
+                                <dtbook:li>
+                                    <dtbook:lic>Validitet</dtbook:lic>
+                                    <dtbook:lic>41</dtbook:lic>
+                                </dtbook:li>
+                                <dtbook:li>
+                                    <dtbook:lic>Vitenskapelige begreper</dtbook:lic>
+                                    <dtbook:lic>46</dtbook:lic>
+                                </dtbook:li>
+                            </dtbook:list>
+                        </dtbook:li>
+                        <dtbook:li>
+                            <dtbook:lic>
+                                <dtbook:strong>Kapittel 3 Forskningsprosessen: fra spørsmål til svar</dtbook:strong>
+                            </dtbook:lic>
+                            <dtbook:lic>70</dtbook:lic>
+                            <dtbook:list type="pl">
+                                <dtbook:li>
+                                    <dtbook:lic>Hvor kommer ideer til forskning fra?</dtbook:lic>
+                                    <dtbook:lic>71</dtbook:lic>
+                                </dtbook:li>
+                                <dtbook:li>
+                                    <dtbook:lic>Psykologien som empirisk disiplin</dtbook:lic>
+                                    <dtbook:lic>75</dtbook:lic>
+                                </dtbook:li>
+                                <dtbook:li>
+                                    <dtbook:lic>Logikk i forskning</dtbook:lic>
+                                    <dtbook:lic>80</dtbook:lic>
+                                </dtbook:li>
+                                <dtbook:pagenum id="page-8" page="normal">8</dtbook:pagenum>
+                                <dtbook:li>
+                                    <dtbook:lic>Ideer til forskning: hypoteser og prediksjoner</dtbook:lic>
+                                    <dtbook:lic>83</dtbook:lic>
+                                </dtbook:li>
+                            </dtbook:list>
+                        </dtbook:li>
+                    </dtbook:list>
+                </dtbook:li>
+            </dtbook:list>
+        </x:context>
+        <x:expect label="the resulting toc should be as given">
+            <html:ol id="..." class="list-preformatted" epub:type="toc">
+                <html:li id="...">
+                    <html:span class="lic">
+                        <html:strong>Kapittel 1 Vitenskap: grunnleggende antakelser</html:strong>
+                    </html:span>
+                    <html:span class="lic">13</html:span>
+                    <html:ol id="..." class="list-preformatted">
+                        <html:li id="...">
+                            <html:span class="lic">Hva er vitenskap?</html:span>
+                            <html:span class="lic">14</html:span>
+                        </html:li>
+                        <html:li id="...">
+                            <html:span class="lic">Psykologi som vitenskap: tre tradisjoner</html:span>
+                            <html:span class="lic">17</html:span>
+                        </html:li>
+                    </html:ol>
+                </html:li>
+                <html:li id="...">
+                    <html:span class="lic">
+                        <html:strong>Del 1 Grunnleggende begreper og prinsipper</html:strong>
+                    </html:span>
+                    <html:span class="lic">39</html:span>
+                    <html:ol id="..." class="list-preformatted">
+                        <html:li id="...">
+                            <html:span class="lic">
+                                <html:strong>Kapittel 2 Vitenskapelig tenkning: validitet, begreper og teori</html:strong>
+                            </html:span>
+                            <html:span class="lic">41</html:span>
+                            <html:ol id="..." class="list-preformatted">
+                                <html:li id="...">
+                                    <html:span class="lic">Validitet</html:span>
+                                    <html:span class="lic">41</html:span>
+                                </html:li>
+                                <html:li id="...">
+                                    <html:span class="lic">Vitenskapelige begreper</html:span>
+                                    <html:span class="lic">46</html:span>
+                                </html:li>
+                            </html:ol>
+                        </html:li>
+                        <html:li id="...">
+                            <html:span class="lic">
+                                <html:strong>Kapittel 3 Forskningsprosessen: fra spørsmål til svar</html:strong>
+                            </html:span>
+                            <html:span class="lic">70</html:span>
+                            <html:ol id="..." class="list-preformatted">
+                                <html:li id="...">
+                                    <html:span class="lic">Hvor kommer ideer til forskning fra?</html:span>
+                                    <html:span class="lic">71</html:span>
+                                </html:li>
+                                <html:li id="...">
+                                    <html:span class="lic">Psykologien som empirisk disiplin</html:span>
+                                    <html:span class="lic">75</html:span>
+                                </html:li>
+                                <html:li id="...">
+                                    <html:span class="lic">Logikk i forskning</html:span>
+                                    <html:span class="lic">80</html:span>
+                                    <html:span epub:type="pagebreak" id="page-8" class="page-normal" title="8"/>
+                                </html:li>
+                                <html:li id="...">
+                                    <html:span class="lic">Ideer til forskning: hypoteser og prediksjoner</html:span>
+                                    <html:span class="lic">83</html:span>
+                                </html:li>
+                            </html:ol>
+                        </html:li>
+                    </html:ol>
+                </html:li>
+            </html:ol>
         </x:expect>
     </x:scenario>
 
