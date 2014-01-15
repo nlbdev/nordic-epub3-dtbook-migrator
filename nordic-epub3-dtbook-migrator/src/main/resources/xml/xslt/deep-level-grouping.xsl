@@ -50,7 +50,7 @@
                 </level>
             </level>
     -->
-    <xsl:param name="copy-wrapping-elements-into-result" select="false()" as="xs:boolean"/>
+    <xsl:param name="copy-wrapping-elements-into-result" select="'false'"/>
 
     <xsl:output indent="yes"/>
 
@@ -62,9 +62,9 @@
         <!-- deep-levels can be resource intensive for big documents; so only call the deep-levels template if necessary -->
         <xsl:choose>
             <xsl:when test="$level=0">
-                <xsl:element name="{$name}" namespace="{$namespace}">
+                <xsl:copy>
                     <xsl:apply-templates select="@*|node()"/>
-                </xsl:element>
+                </xsl:copy>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="deep-levels"/>
@@ -148,8 +148,8 @@
     <xsl:template name="make-level">
         <xsl:param name="content" as="node()*"/>
         <xsl:param name="root-level" as="node()"/>
-        <xsl:variable name="common-ancestor" select="if ($copy-wrapping-elements-into-result) then $root-level else ($content[1]/ancestor::*[not($content except .//node())])[last()]"/>
-        <xsl:element name="{$name}" namespace="{$namespace}">
+        <xsl:variable name="common-ancestor" select="if ($copy-wrapping-elements-into-result='true') then $root-level else ($content[1]/ancestor::*[not($content except .//node())])[last()]"/>
+        <xsl:element name="{local-name($root-level)}" namespace="{namespace-uri($root-level)}">
             <xsl:copy-of select="$content[1]/ancestor-or-self::*[f:is-level(.)]/@*"/>
             <xsl:for-each select="$common-ancestor/node()">
                 <xsl:choose>

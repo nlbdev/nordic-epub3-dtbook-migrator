@@ -79,7 +79,7 @@
         <p:with-option name="attribute-value" select="$output-dir"/>
     </p:add-attribute>
     <p:identity name="result.fileset">
-        <p:log port="result" href="file:/tmp/fileset.xml"/>
+<!--        <p:log port="result" href="file:/tmp/fileset.xml"/>-->
     </p:identity>
 
     <p:for-each>
@@ -95,7 +95,7 @@
         </p:add-attribute>
     </p:for-each>
     <p:identity name="result.in-memory">
-        <p:log port="result" href="file:/tmp/in-memory.xml"/>
+<!--        <p:log port="result" href="file:/tmp/in-memory.xml"/>-->
     </p:identity>
 
     <px:fileset-store name="fileset-store">

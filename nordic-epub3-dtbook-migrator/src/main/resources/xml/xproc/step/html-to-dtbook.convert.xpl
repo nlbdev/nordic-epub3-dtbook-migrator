@@ -30,9 +30,10 @@
     </p:variable>
 
     <p:identity>
-        <p:log port="result" href="file:/tmp/dtbook.input.fileset.xml"/>
+<!--        <p:log port="result" href="file:/tmp/html-to-dtbook.input.fileset.xml"/>-->
     </p:identity>
     <px:fileset-load media-types="application/xhtml+xml">
+<!--        <p:log port="result" href="file:/tmp/html-to-dtbook.input.in-memory.xml"/>-->
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>

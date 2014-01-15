@@ -14,7 +14,7 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xslt/dtbook-to-epub3.xsl</String>
+                                    <String>src/main/resources/xml/xslt/deep-level-grouping.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -30,6 +30,21 @@
                             <scenarioAssociation>
                                 <field name="url">
                                     <String>src/main/resources/xml/xslt/epub3-to-dtbook.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>XSpec-test in oXygen project</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>ANT</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/main/resources/xml/xslt/dtbook-to-epub3.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -488,6 +503,136 @@
                                             </field>
                                             <field name="possibleValues">
                                                 <null/>
+                                            </field>
+                                        </antParameter>
+                                        <antParameter>
+                                            <field name="name">
+                                                <String>webhelp.trial.license</String>
+                                            </field>
+                                            <field name="description">
+                                                <String>Set parameter for trial license</String>
+                                            </field>
+                                            <field name="value">
+                                                <String>yes</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>4</Integer>
+                                            </field>
+                                            <field name="isPredefined">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <String-array>
+                                                    <String>yes</String>
+                                                    <String>no</String>
+                                                </String-array>
+                                            </field>
+                                        </antParameter>
+                                        <antParameter>
+                                            <field name="name">
+                                                <String>webhelp.trial.license</String>
+                                            </field>
+                                            <field name="description">
+                                                <String>Set parameter for trial license</String>
+                                            </field>
+                                            <field name="value">
+                                                <String>yes</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>4</Integer>
+                                            </field>
+                                            <field name="isPredefined">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <String-array>
+                                                    <String>yes</String>
+                                                    <String>no</String>
+                                                </String-array>
+                                            </field>
+                                        </antParameter>
+                                        <antParameter>
+                                            <field name="name">
+                                                <String>webhelp.trial.license</String>
+                                            </field>
+                                            <field name="description">
+                                                <String>Set parameter for trial license</String>
+                                            </field>
+                                            <field name="value">
+                                                <String>yes</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>4</Integer>
+                                            </field>
+                                            <field name="isPredefined">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <String-array>
+                                                    <String>yes</String>
+                                                    <String>no</String>
+                                                </String-array>
+                                            </field>
+                                        </antParameter>
+                                        <antParameter>
+                                            <field name="name">
+                                                <String>webhelp.trial.license</String>
+                                            </field>
+                                            <field name="description">
+                                                <String>Set parameter for trial license</String>
+                                            </field>
+                                            <field name="value">
+                                                <String>yes</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>4</Integer>
+                                            </field>
+                                            <field name="isPredefined">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <String-array>
+                                                    <String>yes</String>
+                                                    <String>no</String>
+                                                </String-array>
+                                            </field>
+                                        </antParameter>
+                                        <antParameter>
+                                            <field name="name">
+                                                <String>webhelp.trial.license</String>
+                                            </field>
+                                            <field name="description">
+                                                <String>Set parameter for trial license</String>
+                                            </field>
+                                            <field name="value">
+                                                <String>yes</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>4</Integer>
+                                            </field>
+                                            <field name="isPredefined">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <String-array>
+                                                    <String>yes</String>
+                                                    <String>no</String>
+                                                </String-array>
                                             </field>
                                         </antParameter>
                                     </list>

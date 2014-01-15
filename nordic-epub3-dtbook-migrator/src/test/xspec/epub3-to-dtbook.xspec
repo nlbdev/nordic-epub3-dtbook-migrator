@@ -1295,15 +1295,18 @@
                     <html:h1 epub:type="fulltitle">h1</html:h1>
                 </html:section>
                 <html:section epub:type="bodymatter">
-                    <html:h2>h2</html:h2>
+                    <html:h1>h1</html:h1>
                     <html:section>
-                        <html:h3>h3</html:h3>
+                        <html:h2>h2</html:h2>
                         <html:section>
-                            <html:h4>h4</html:h4>
+                            <html:h3>h3</html:h3>
                             <html:section>
-                                <html:h5>h5</html:h5>
+                                <html:h4>h4</html:h4>
                                 <html:section>
-                                    <html:h6>h6</html:h6>
+                                    <html:h5>h5</html:h5>
+                                    <html:section>
+                                        <html:h6>h6</html:h6>
+                                    </html:section>
                                 </html:section>
                             </html:section>
                         </html:section>
@@ -1320,15 +1323,18 @@
                 </dtbook:frontmatter>
                 <dtbook:bodymatter>
                     <dtbook:level1>
-                        <dtbook:h1>h2</dtbook:h1>
+                        <dtbook:h1>h1</dtbook:h1>
                         <dtbook:level2>
-                            <dtbook:h2>h3</dtbook:h2>
+                            <dtbook:h2>h2</dtbook:h2>
                             <dtbook:level3>
-                                <dtbook:h3>h4</dtbook:h3>
+                                <dtbook:h3>h3</dtbook:h3>
                                 <dtbook:level4>
-                                    <dtbook:h4>h5</dtbook:h4>
+                                    <dtbook:h4>h4</dtbook:h4>
                                     <dtbook:level5>
-                                        <dtbook:h5>h6</dtbook:h5>
+                                        <dtbook:h5>h5</dtbook:h5>
+                                        <dtbook:level6>
+                                            <dtbook:h6>h6</dtbook:h6>
+                                        </dtbook:level6>
                                     </dtbook:level5>
                                 </dtbook:level4>
                             </dtbook:level3>
