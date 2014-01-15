@@ -9,7 +9,7 @@
     <xsl:param name="namespace" required="yes"/>
 
     <!-- The max allowed nesting depth, after which unnesting will begin -->
-    <xsl:param name="max-depth" required="yes" as="xs:int"/>
+    <xsl:param name="max-depth" required="yes" as="xs:integer"/>
     
     <!-- Whether wrapper elements should be copied into the resulting unwrapped elements.
         The default is false to ensure a valid content model. In many cases the content model
