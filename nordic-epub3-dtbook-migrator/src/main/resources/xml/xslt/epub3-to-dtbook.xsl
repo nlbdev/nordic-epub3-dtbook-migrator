@@ -2,9 +2,11 @@
 <xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns="http://www.daisy.org/z3986/2005/dtbook/"
     xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/" exclude-result-prefixes="#all" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    
+
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
-    
+
+    <xsl:variable name="all-ids" select="//@id"/>
+
     <xsl:template match="text()|comment()">
         <xsl:copy-of select="."/>
     </xsl:template>
@@ -24,24 +26,27 @@
     <xsl:template name="i18n">
         <xsl:param name="except" tunnel="yes"/>
 
-        <xsl:copy-of select="(@xml:lang|@dir)[not(name()=$except)]"/>
+        <xsl:copy-of select="(@dir)[not(name()=$except)]"/>
+        <xsl:if test="(@xml:lang|@lang) and not(('xml:lang','lang')=$except)">
+            <xsl:attribute name="xml:lang" select="(@xml:lang|@lang)[1]"/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="classes-and-types">
         <xsl:param name="classes" select="()" tunnel="yes"/>
-        <xsl:param name="except" tunnel="yes"/>
+        <xsl:param name="except" tunnel="yes" select="()"/>
+        <xsl:param name="except-classes" tunnel="yes" select="()"/>
 
         <xsl:variable name="old-classes" select="f:classes(.)"/>
 
-
         <xsl:variable name="showin" select="replace($old-classes[matches(.,'^showin-...$')][1],'showin-','')"/>
-        <xsl:if test="$showin and not('showin'=$except)">
+        <xsl:if test="$showin and not('_showin'=$except)">
             <xsl:attribute name="showin" select="$showin"/>
         </xsl:if>
 
-        <xsl:if test="not('class'=$except)">
+        <xsl:if test="not('_class'=$except)">
             <xsl:variable name="epub-type-classes">
-                <xsl:for-each select="f:types(.)">
+                <xsl:for-each select="f:types(.)[not(matches(.,'(^|:)(front|body|back)matter'))]">
                     <xsl:choose>
                         <xsl:when test=".='toc'">
                             <!-- TODO: add epub:types that maps to different class strings here like this -->
@@ -53,8 +58,9 @@
                     </xsl:choose>
                 </xsl:for-each>
             </xsl:variable>
-            
-            <xsl:variable name="class-string" select="string-join(distinct-values(($classes, $old-classes[not(matches(.,concat('showin-',$showin)))], $epub-type-classes)[not(.='')]),' ')"/>
+
+            <xsl:variable name="class-string"
+                select="string-join(distinct-values(($classes, $old-classes[not(matches(.,concat('showin-',$showin)))], $epub-type-classes)[not(.='') and not(.=$except-classes)]),' ')"/>
             <xsl:if test="not($class-string='')">
                 <xsl:attribute name="class" select="$class-string"/>
             </xsl:if>
@@ -93,11 +99,22 @@
         </head>
     </xsl:template>
 
-    <xsl:template name="attlist.head">
-        <xsl:call-template name="i18n"/>
+    <xsl:template match="html:title">
+        <xsl:if test="not(parent::*/html:meta[lower-case(@name)='dc:title'])">
+            <meta name="dc:title" content="{normalize-space(.)}">
+                <xsl:call-template name="i18n"/>
+            </meta>
+        </xsl:if>
     </xsl:template>
 
-    <xsl:template match="link">
+    <xsl:template name="attlist.head">
+        <xsl:call-template name="i18n"/>
+        <xsl:if test="html:link[@rel='profile' and @href]">
+            <xsl:attribute name="profile" select="(html:link[@rel='profile'][1])/@href"/>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="html:link">
         <link>
             <xsl:call-template name="attlist.link"/>
         </link>
@@ -123,13 +140,13 @@
 
     <xsl:template match="html:body">
         <book>
-            <xsl:if test="*[f:types(.)=('cover','frontmatter')]">
+            <xsl:if test="(html:section | html:article)[f:types(.)=('cover','frontmatter')] or *[not(self::html:section)]">
                 <xsl:call-template name="frontmatter"/>
             </xsl:if>
-            <xsl:if test="*[f:types(.)=('bodymatter') or not(f:types(.)=('cover','frontmatter','bodymatter','backmatter'))]">
+            <xsl:if test="(html:section | html:article)[f:types(.)=('bodymatter') or not(f:types(.)=('cover','frontmatter','bodymatter','backmatter'))]">
                 <xsl:call-template name="bodymatter"/>
             </xsl:if>
-            <xsl:if test="*[f:types(.)=('backmatter')]">
+            <xsl:if test="(html:section | html:article)[f:types(.)=('backmatter')]">
                 <xsl:call-template name="rearmatter"/>
             </xsl:if>
             <xsl:apply-templates select="*[last()]/following-sibling::node()"/>
@@ -137,32 +154,25 @@
     </xsl:template>
 
     <xsl:template name="frontmatter">
+        <xsl:call-template name="copy-preceding-comments"/>
         <frontmatter>
-            <xsl:for-each select="*[f:types(.)='titlepage']//html:h1[f:types(.)='fulltitle']">
-                <xsl:call-template name="doctitle"/>
+            <xsl:for-each select="html:header">
+                <xsl:call-template name="copy-preceding-comments"/>
+                <xsl:apply-templates select="node()"/>
             </xsl:for-each>
-            <xsl:for-each select="*[f:types(.)='cover']//html:h1[f:types(.)='covertitle']">
-                <xsl:call-template name="covertitle"/>
-            </xsl:for-each>
-            <xsl:for-each select="*[f:types(.)='titlepage']//*[f:types(.)='z3998:author']">
-                <xsl:call-template name="docauthor"/>
-            </xsl:for-each>
-            <xsl:apply-templates select="*[f:types(.)=('cover','frontmatter')]"/>
+            <xsl:apply-templates select="(html:section | html:article)[f:types(.)=('cover','frontmatter')]"/>
         </frontmatter>
     </xsl:template>
 
-    <xsl:template match="html:h1[f:types(.)='fulltitle' and ancestor::*[f:types(.)='titlepage']]"/>
-    <xsl:template match="html:h1[f:types(.)='covertitle' and ancestor::*[f:types(.)='cover']]"/>
-    <xsl:template match="*[f:types(.)='z3998:author'][ancestor::*[f:types(.)='titlepage']]"/>
     <xsl:template name="bodymatter">
         <bodymatter>
-            <xsl:apply-templates select="node()"/>
+            <xsl:apply-templates select="(html:section | html:article)[not(f:types(.)=('cover','frontmatter','backmatter'))]"/>
         </bodymatter>
     </xsl:template>
 
     <xsl:template name="rearmatter">
         <rearmatter>
-            <xsl:apply-templates select="node()"/>
+            <xsl:apply-templates select="(html:section | html:article)[f:types(.)=('backmatter')]"/>
         </rearmatter>
     </xsl:template>
 
@@ -198,7 +208,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.line">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'line'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:span[f:classes(.)='linenum']">
@@ -209,7 +221,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.linenum">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'linenum'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:address">
@@ -242,10 +256,12 @@
     </xsl:template>
 
     <xsl:template name="attlist.title">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'title'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="*[f:types(.)='z3998:author']">
+    <xsl:template match="html:*[f:types(.)='z3998:author' and not(f:classes(.)='docauthor')]">
         <author>
             <xsl:call-template name="attlist.author"/>
             <xsl:apply-templates select="node()"/>
@@ -253,7 +269,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.author">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'author'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:aside[f:types(.)='z3998:production']">
@@ -264,7 +282,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.prodnote">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="('production','render-required','render-optional')" tunnel="yes"/>
+        </xsl:call-template>
         <xsl:choose>
             <xsl:when test="f:classes(.)='render-required'">
                 <xsl:attribute name="render" select="'required'"/>
@@ -277,7 +297,7 @@
             <xsl:variable name="id" select="@id"/>
             <xsl:variable name="img" select="//html:img[replace(@longdesc,'^#','')=$id]"/>
             <xsl:if test="$img">
-                <xsl:attribute name="imgref" select="string-join($img/((@id,generate-id(.))[1]),' ')"/>
+                <xsl:attribute name="imgref" select="string-join($img/((@id,f:generate-pretty-id(.))[1]),' ')"/>
             </xsl:if>
         </xsl:if>
     </xsl:template>
@@ -290,7 +310,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.sidebar">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="('sidebar','render-required','render-optional')" tunnel="yes"/>
+        </xsl:call-template>
         <xsl:choose>
             <xsl:when test="f:classes(.)='render-required'">
                 <xsl:attribute name="render" select="'required'"/>
@@ -309,7 +331,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.note">
-        <xsl:call-template name="attrsrqd"/>
+        <xsl:call-template name="attrsrqd">
+            <xsl:with-param name="except-classes" select="'note'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:aside[f:types(.)='annotation']">
@@ -320,7 +344,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.annotation">
-        <xsl:call-template name="attrsrqd"/>
+        <xsl:call-template name="attrsrqd">
+            <xsl:with-param name="except-classes" select="'annotation'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:aside[f:types(.)='epigraph']">
@@ -331,7 +357,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.epigraph">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'epigraph'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:span[f:classes(.)='byline']">
@@ -342,7 +370,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.byline">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'byline'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:span[f:classes(.)='dateline']">
@@ -353,7 +383,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.dateline">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'dateline'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:*[f:classes(.)='linegroup']">
@@ -364,7 +396,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.linegroup">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'linegroup'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:*[f:types(.)='z3998:poem']">
@@ -375,7 +409,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.poem">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'poem'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:a">
@@ -389,9 +425,10 @@
         <xsl:call-template name="attrs">
             <!-- Preserve @target as class attribute. Assumes that only characters that are valid for class names are used. -->
             <xsl:with-param name="classes" select="if (@target) then concat('target-',replace(@target,'_','-')) else ()" tunnel="yes"/>
+            <xsl:with-param name="except-classes" select="('external-true','external-false',for $rev in (f:classes(.)[matches(.,'^rev-')]) return $rev )" tunnel="yes"/>
         </xsl:call-template>
         <xsl:copy-of select="@type|@href|@hreflang|@rel|@accesskey|@tabindex"/>
-        <!-- @download, @media and @type is dropped - they don't have a good equivalent in DTBook -->
+        <!-- @download and @media is dropped - they don't have a good equivalent in DTBook -->
 
         <xsl:choose>
             <xsl:when test="f:classes(.)[matches(.,'^external-(true|false)')]">
@@ -401,6 +438,10 @@
                 <xsl:attribute name="external" select="'true'"/>
             </xsl:when>
         </xsl:choose>
+
+        <xsl:if test="f:classes(.)[matches(.,'^rev-')]">
+            <xsl:attribute name="rev" select="replace((f:classes(.)[matches(.,'^rev-')])[1],'^rev-','')"/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="html:em">
@@ -493,7 +534,7 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <xsl:template match="html:abbr[f:classes(.)='acronym']">
+    <xsl:template match="html:abbr[f:types(.)='acronym']">
         <acronym>
             <xsl:call-template name="attlist.acronym"/>
             <xsl:apply-templates select="node()"/>
@@ -501,7 +542,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.acronym">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'acronym'" tunnel="yes"/>
+        </xsl:call-template>
         <xsl:if test="f:classes(.)='spell-out' or matches(@style,'-epub-speak-as:\s*spell-out')">
             <xsl:attribute name="pronounce" select="'no'"/>
         </xsl:if>
@@ -560,7 +603,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.sent">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'sentence'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:span[f:types(.)='z3998:word']">
@@ -571,10 +616,12 @@
     </xsl:template>
 
     <xsl:template name="attlist.w">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'word'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="html:span[f:types(.)='pagebreak']">
+    <xsl:template match="html:*[self::html:span or self::html:div][f:types(.)='pagebreak']">
         <pagenum>
             <xsl:call-template name="attlist.pagenum"/>
             <xsl:value-of select="@title"/>
@@ -584,7 +631,9 @@
     <xsl:template name="attlist.pagenum">
         <xsl:call-template name="attrsrqd">
             <xsl:with-param name="except" select="'title'" tunnel="yes"/>
+            <xsl:with-param name="except-classes" select="('page-front','page-normal','page-special','pagebreak')" tunnel="yes"/>
         </xsl:call-template>
+        <xsl:attribute name="page" select="replace((f:classes(.)[starts-with(.,'page-')],'page-normal')[1], '^page-', '')"/>
     </xsl:template>
 
     <xsl:template match="html:a[f:types(.)='noteref']">
@@ -595,7 +644,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.noteref">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'noteref'" tunnel="yes"/>
+        </xsl:call-template>
         <xsl:attribute name="idref" select="@href"/>
         <xsl:copy-of select="@type"/>
     </xsl:template>
@@ -608,7 +659,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.annoref">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'annoref'" tunnel="yes"/>
+        </xsl:call-template>
         <xsl:attribute name="idref" select="@href"/>
         <xsl:copy-of select="@type"/>
     </xsl:template>
@@ -636,50 +689,51 @@
         <xsl:call-template name="attrs"/>
         <xsl:copy-of select="@src|@alt|@longdesc|@height|@width"/>
         <xsl:if test="not(@id)">
-            <xsl:attribute name="id" select="generate-id(.)"/>
+            <xsl:attribute name="id" select="f:generate-pretty-id(.)"/>
         </xsl:if>
     </xsl:template>
 
     <xsl:template match="html:figure">
         <imggroup>
             <xsl:call-template name="attlist.imggroup"/>
-            <xsl:variable name="caption-first" select="*[1]=html:figcaption"/>
-            <xsl:variable name="imggroup-captions" select="html:figcaption/html:div[f:classes(.)='imggroup-caption']"/>
             <xsl:choose>
-                <!-- multiple image captions - one for each image -->
-                <xsl:when test="$imggroup-captions">
-                    <xsl:variable name="images" select="count(html:img)"/>
-                    <xsl:variable name="captions" select="count($imggroup-captions)"/>
-                    <xsl:for-each select="node()">
+                <xsl:when test="not(html:figcaption) or html:figcaption/*[not(self::html:div[f:classes(.)='img-caption'])]">
+                    <!-- no figcaption present or figcaption does not follow the convention that lets it be matched against individual images -->
+                    <xsl:apply-templates select="node()"/>
+                </xsl:when>
+
+                <xsl:otherwise>
+                    <xsl:variable name="precede" select="if (html:img[1]/preceding-sibling::html:figcaption) then true() else false()"/>
+                    <xsl:for-each select="node()[not(self::html:figcaption)]">
                         <xsl:choose>
-                            <xsl:when test="html:img">
+                            <xsl:when test="self::html:img">
                                 <xsl:variable name="position" select="count(preceding-sibling::html:img)+1"/>
-                                <xsl:if test="$caption-first">
-                                    <xsl:if test="$position=1">
-                                        <xsl:apply-templates select="$imggroup-captions[position()&lt;=($captions - $images)]"/>
-                                    </xsl:if>
-                                    <xsl:apply-templates select="$imggroup-captions[$position + max((0,$captions - $images))]"/>
-                                </xsl:if>
-
-                                <xsl:apply-templates select="."/>
-
-                                <xsl:if test="not($caption-first)">
-                                    <xsl:if test="$position=$images">
-                                        <xsl:apply-templates select="$imggroup-captions[position()&gt;=$position]"/>
-                                    </xsl:if>
-                                    <xsl:apply-templates select="$imggroup-captions[$position]"/>
-                                </xsl:if>
+                                <xsl:choose>
+                                    <xsl:when test="$precede">
+                                        <xsl:for-each select="parent::html:figure/html:figcaption/html:div[$position]/*">
+                                            <caption>
+                                                <xsl:call-template name="attlist.caption"/>
+                                                <xsl:apply-templates select="node()"/>
+                                            </caption>
+                                        </xsl:for-each>
+                                        <xsl:apply-templates select="."/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:apply-templates select="."/>
+                                        <xsl:for-each select="parent::html:figure/html:figcaption/html:div[$position]/*">
+                                            <caption>
+                                                <xsl:call-template name="attlist.caption"/>
+                                                <xsl:apply-templates select="node()"/>
+                                            </caption>
+                                        </xsl:for-each>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:when>
-
                             <xsl:otherwise>
-                                <xsl:apply-templates select="node()"/>
+                                <xsl:apply-templates select="."/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each>
-                </xsl:when>
-                <!-- a single image caption for all images -->
-                <xsl:otherwise>
-                    <xsl:apply-templates select="node()"/>
                 </xsl:otherwise>
             </xsl:choose>
         </imggroup>
@@ -690,7 +744,7 @@
     </xsl:template>
 
     <xsl:template match="html:p">
-        <xsl:variable name="precedingemptyline" select="preceding-sibling::*[1]=preceding-sibling::html:hr[1]"/>
+        <xsl:variable name="precedingemptyline" select="preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]"/>
         <p>
             <xsl:call-template name="attlist.p">
                 <xsl:with-param name="classes" select="if ($precedingemptyline) then 'precedingemptyline' else ()" tunnel="yes"/>
@@ -705,7 +759,7 @@
 
     <xsl:template match="html:hr"/>
 
-    <xsl:template name="doctitle">
+    <xsl:template match="html:*[f:types(.)='fulltitle']">
         <doctitle>
             <xsl:call-template name="attlist.doctitle"/>
             <xsl:apply-templates select="node()"/>
@@ -713,10 +767,12 @@
     </xsl:template>
 
     <xsl:template name="attlist.doctitle">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'fulltitle'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
-    <xsl:template name="docauthor">
+    <xsl:template match="html:*[f:types(.)='z3998:author' and f:classes(.)='docauthor']">
         <docauthor>
             <xsl:call-template name="attlist.docauthor"/>
             <xsl:apply-templates select="node()"/>
@@ -724,10 +780,12 @@
     </xsl:template>
 
     <xsl:template name="attlist.docauthor">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="('author','docauthor')" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
-    <xsl:template name="covertitle">
+    <xsl:template match="html:*[f:types(.)='z3998:covertitle']">
         <covertitle>
             <xsl:call-template name="attlist.covertitle"/>
             <xsl:apply-templates select="node()"/>
@@ -735,11 +793,13 @@
     </xsl:template>
 
     <xsl:template name="attlist.covertitle">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="'covertitle'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
-        <xsl:element name="{local-name()}">
+        <xsl:element name="h{f:level(.)}">
             <xsl:call-template name="attlist.h"/>
             <xsl:apply-templates select="node()"/>
         </xsl:element>
@@ -892,7 +952,7 @@
     </xsl:template>
 
     <xsl:template match="html:figcaption">
-        <xsl:variable name="content" select="node()[not(self::div[f:classes(.)='imggroup-caption'])]"/>
+        <xsl:variable name="content" select="node()[not(self::div[f:classes(.)='img-caption'])]"/>
         <xsl:if test="$content">
             <caption>
                 <xsl:call-template name="attlist.caption"/>
@@ -901,12 +961,12 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="html:div[f:classes(.)='imggroup-caption']">
+    <!--<xsl:template match="html:div[f:classes(.)='img-caption']">
         <caption>
             <xsl:call-template name="attlist.caption"/>
             <xsl:apply-templates select="node()"/>
         </caption>
-    </xsl:template>
+    </xsl:template>-->
 
     <xsl:template name="attlist.caption">
         <xsl:call-template name="attrs"/>
@@ -1026,7 +1086,7 @@
 
     <xsl:template name="copy-preceding-comments">
         <xsl:variable name="this" select="."/>
-        <xsl:apply-templates select="preceding-sibling::comment()[not(preceding-sibling::*) or preceding-sibling::*[1] = $this/preceding-sibling::*[1]]"/>
+        <xsl:apply-templates select="preceding-sibling::comment()[not($this/preceding-sibling::*) or preceding-sibling::*[1] is $this/preceding-sibling::*[1]]"/>
     </xsl:template>
 
     <xsl:function name="f:types" as="xs:string*">
@@ -1042,10 +1102,10 @@
     <xsl:function name="f:level" as="xs:integer">
         <xsl:param name="element" as="element()"/>
         <xsl:variable name="h" select="$element/descendant-or-self::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][1]"/>
-        <xsl:variable name="sections" select="$h/ancestor::*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body]"/>
+        <xsl:variable name="sections" select="$h/ancestor::*[self::html:section or self::html:article or self::html:aside or self::html:nav]"/>
         <xsl:variable name="explicit-level" select="count($sections)-1"/>
         <xsl:variable name="h-in-section"
-            select="($h, $h/preceding::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][./preceding::*=$sections[1]])"/>
+            select="($h, ($h/preceding::* intersect $sections[last()]//*)[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6])"/>
         <xsl:variable name="h-in-section-levels" select="reverse($h-in-section/xs:integer(number(replace(local-name(),'^h',''))))"/>
         <xsl:variable name="implicit-level" select="if ($h-in-section-levels[1] = 6) then 6 else ()"/>
         <xsl:variable name="h-in-section-levels" select="$h-in-section-levels[not(.=6)]"/>
@@ -1058,7 +1118,7 @@
         <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels[1] = 2) then 2 else ())"/>
         <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels = 1) then 1 else ())"/>
         <xsl:variable name="implicit-level" select="count($implicit-level)"/>
-        
+
         <xsl:variable name="level" select="$explicit-level + $implicit-level"/>
         <xsl:sequence select="max((1,min(($level, 6))))"/>
         <!--
@@ -1067,6 +1127,22 @@
             The implicit level / hd elements could be used in cases where the structures are deeper.
             However, our tools would have to support those elements.
         -->
+    </xsl:function>
+
+    <xsl:function name="f:generate-pretty-id" as="xs:string">
+        <xsl:param name="element" as="element()"/>
+        <xsl:variable name="id">
+            <xsl:choose>
+                <xsl:when test="$element[self::html:blockquote or self::html:q]">
+                    <xsl:sequence select="concat('quote_',count($element/preceding::*[self::html:blockquote or self::html:q])+1)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="element-name" select="local-name($element)"/>
+                    <xsl:sequence select="concat($element-name,'_',count($element/preceding::*[local-name()=$element-name])+1)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:sequence select="if ($all-ids=$id) then generate-id($element) else $id"/>
     </xsl:function>
 
 </xsl:stylesheet>

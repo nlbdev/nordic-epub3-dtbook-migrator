@@ -211,9 +211,9 @@
                 <dtbook:book>
                     <dtbook:frontmatter>
                         <!-- COMMENT #1 -->
-                        <dtbook:level1 class="cover"/>
-                        <!-- COMMENT #2 -->
                         <dtbook:level1 class="titlepage"/>
+                        <!-- COMMENT #2 -->
+                        <dtbook:level1 class="cover"/>
                         <!-- COMMENT #3 -->
                         <dtbook:level1/>
                         <!-- COMMENT #4 -->
@@ -225,9 +225,9 @@
             <x:expect label="the top-level frontmatter levels should become sections and given the appropriate epub:types">
                 <html:body id="...">
                     <!-- COMMENT #1 -->
-                    <html:section id="..." epub:type="cover"/>
-                    <!-- COMMENT #2 -->
                     <html:section id="..." epub:type="frontmatter titlepage"/>
+                    <!-- COMMENT #2 -->
+                    <html:section id="..." epub:type="cover"/>
                     <!-- COMMENT #3 -->
                     <html:section id="..." epub:type="frontmatter"/>
                     <!-- COMMENT #4 -->
@@ -672,14 +672,16 @@
     <x:scenario label="when processing the prodnote element attributes">
         <x:context>
             <dtbook:imggroup>
-                <dtbook:img id="img" src="img.png"/>
-                <dtbook:prodnote id="prodnote" imgref="#img" render="optional"/>
+                <dtbook:prodnote id="prodnote" imgref="img1 img2" render="optional"/>
+                <dtbook:img id="img1" src="#"/>
+                <dtbook:img id="img2" src="#"/>
             </dtbook:imggroup>
         </x:context>
         <x:expect label="the render should become a class and imgref is replaced by the longdesc attribute on the corresponding img element.">
             <html:figure id="...">
-                <html:img id="img" src="img.png" longdesc="#prodnote"/>
                 <html:aside id="prodnote" epub:type="z3998:production" class="render-optional"/>
+                <html:img id="img1" src="#" longdesc="#prodnote"/>
+                <html:img id="img2" src="#" longdesc="#prodnote"/>
             </html:figure>
         </x:expect>
     </x:scenario>
@@ -1211,7 +1213,7 @@
         <x:scenario label="with the children [prodnote, img, pagenum, caption]">
             <x:context>
                 <dtbook:imggroup>
-                    <dtbook:prodnote id="prodnote1" imgref="#img1"/>
+                    <dtbook:prodnote id="prodnote1" imgref="img1"/>
                     <dtbook:img id="img1"/>
                     <dtbook:pagenum>1</dtbook:pagenum>
                     <dtbook:caption id="caption1"/>
@@ -1223,7 +1225,9 @@
                     <html:img id="img1" longdesc="#prodnote1"/>
                     <html:span epub:type="pagebreak" class="page-normal" title="1"/>
                     <html:figcaption>
-                        <html:div id="caption1" class="imggroup-caption"/>
+                        <html:div class="img-caption">
+                            <html:div id="caption1"/>
+                        </html:div>
                     </html:figcaption>
                 </html:figure>
             </x:expect>
@@ -1232,7 +1236,7 @@
             <x:context>
                 <dtbook:imggroup>
                     <dtbook:img id="img1"/>
-                    <dtbook:prodnote id="prodnote1" imgref="#img1"/>
+                    <dtbook:prodnote id="prodnote1" imgref="img1"/>
                     <dtbook:caption id="caption1"/>
                     <dtbook:img id="img2"/>
                     <dtbook:caption id="caption2"/>
@@ -1252,11 +1256,54 @@
                     <html:img id="img4"/>
                     <html:img id="img5"/>
                     <html:figcaption>
-                        <html:div id="caption1" class="imggroup-caption"/>
-                        <html:div id="caption2" class="imggroup-caption"/>
-                        <html:div id="caption3" class="imggroup-caption"/>
-                        <html:div id="caption4" class="imggroup-caption"/>
+                        <html:div class="img-caption">
+                            <html:div id="caption1"/>
+                        </html:div>
+                        <html:div class="img-caption">
+                            <html:div id="caption2"/>
+                            <html:div id="caption3"/>
+                        </html:div>
+                        <html:div class="img-caption"/>
+                        <html:div class="img-caption">
+                            <html:div id="caption4"/>
+                        </html:div>
+                        <html:div class="img-caption"/>
                     </html:figcaption>
+                </html:figure>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with the children [caption, img, caption, caption, img, img, caption, img]">
+            <x:context>
+                <dtbook:imggroup>
+                    <dtbook:caption id="caption1"/>
+                    <dtbook:img id="img1"/>
+                    <dtbook:caption id="caption2"/>
+                    <dtbook:caption id="caption3"/>
+                    <dtbook:img id="img2"/>
+                    <dtbook:img id="img3"/>
+                    <dtbook:caption id="caption4"/>
+                    <dtbook:img id="img4"/>
+                </dtbook:imggroup>
+            </x:context>
+            <x:expect label="the resulting element should be a figure">
+                <html:figure id="...">
+                    <html:figcaption>
+                        <html:div class="img-caption">
+                            <html:div id="caption1"/>
+                        </html:div>
+                        <html:div class="img-caption">
+                            <html:div id="caption2"/>
+                            <html:div id="caption3"/>
+                        </html:div>
+                        <html:div class="img-caption"/>
+                        <html:div class="img-caption">
+                            <html:div id="caption4"/>
+                        </html:div>
+                    </html:figcaption>
+                    <html:img id="img1"/>
+                    <html:img id="img2"/>
+                    <html:img id="img3"/>
+                    <html:img id="img4"/>
                 </html:figure>
             </x:expect>
         </x:scenario>
@@ -1317,11 +1364,12 @@
                     </dtbook:frontmatter>
                 </dtbook:book>
             </x:context>
-            <x:expect label="the doctitle should be used as the headline for that level">
+            <x:expect label="the top-level doctitle should not be used as the headline for that level">
                 <html:body id="...">
-                    <html:section id="..." epub:type="frontmatter titlepage">
+                    <html:header>
                         <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
-                    </html:section>
+                    </html:header>
+                    <html:section id="..." epub:type="frontmatter titlepage"/>
                 </html:body>
             </x:expect>
         </x:scenario>
@@ -1334,11 +1382,12 @@
                     </dtbook:frontmatter>
                 </dtbook:book>
             </x:context>
-            <x:expect label="the doctitle should be used as the headline for that level">
+            <x:expect label="the doctitle should not be used as the headline for that level">
                 <html:body id="...">
-                    <html:section id="..." epub:type="frontmatter titlepage">
+                    <html:header>
                         <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
-                    </html:section>
+                    </html:header>
+                    <html:section id="..." epub:type="frontmatter titlepage"/>
                 </html:body>
             </x:expect>
         </x:scenario>
@@ -1353,8 +1402,11 @@
                     </dtbook:frontmatter>
                 </dtbook:book>
             </x:context>
-            <x:expect label="the doctitle should not be used as the headline for that level, the existing one should be used instead">
+            <x:expect label="the doctitle should be used as the main h1; the level1/h1 should be used for the titlepage h1">
                 <html:body id="...">
+                    <html:header>
+                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                    </html:header>
                     <html:section id="..." epub:type="frontmatter titlepage">
                         <html:h1 id="...">OTHER TITLE</html:h1>
                     </html:section>
@@ -1372,7 +1424,38 @@
             </x:context>
             <x:expect label="the doctitle should not be used to create a titlepage">
                 <html:body id="...">
+                    <html:header>
+                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                    </html:header>
                     <html:section id="..." epub:type="frontmatter"/>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="where the doctitle is not a direct child of frontmatter">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:level1>
+                            <dtbook:doctitle>book/frontmatter/level1/doctitle</dtbook:doctitle>
+                        </dtbook:level1>
+                    </dtbook:frontmatter>
+                    <dtbook:bodymatter>
+                        <dtbook:level1>
+                            <dtbook:h1>headline</dtbook:h1>
+                            <dtbook:doctitle>book/bodymatter/level1/doctitle</dtbook:doctitle>
+                        </dtbook:level1>
+                    </dtbook:bodymatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the doctitle should become a p">
+                <html:body id="...">
+                    <html:section id="..." epub:type="frontmatter">
+                        <html:p id="..." epub:type="fulltitle">book/frontmatter/level1/doctitle</html:p>
+                    </html:section>
+                    <html:section id="..." epub:type="bodymatter">
+                        <html:h1 id="...">headline</html:h1>
+                        <html:p id="..." epub:type="fulltitle">book/bodymatter/level1/doctitle</html:p>
+                    </html:section>
                 </html:body>
             </x:expect>
         </x:scenario>
@@ -1393,12 +1476,13 @@
                     </dtbook:frontmatter>
                 </dtbook:book>
             </x:context>
-            <x:expect label="the docauthor should be added as a paragraph after the headline for that level">
+            <x:expect label="the docauthor should be added as a paragraph after the headline for that level with an epub:type of 'z3998:author' and a class of 'docauthor'">
                 <html:body id="...">
-                    <html:section id="..." epub:type="frontmatter titlepage">
+                    <html:header>
                         <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
-                        <html:p class="docauthor" epub:type="z3998:author">DOCAUTHOR</html:p>
-                    </html:section>
+                        <html:p epub:type="z3998:author" class="docauthor">DOCAUTHOR</html:p>
+                    </html:header>
+                    <html:section id="..." epub:type="frontmatter titlepage"/>
                 </html:body>
             </x:expect>
         </x:scenario>
@@ -1414,16 +1498,19 @@
                     </dtbook:frontmatter>
                 </dtbook:book>
             </x:context>
-            <x:expect label="the docauthor should be added as a paragraph after the headline for that level">
+            <x:expect label="the docauthor should not be added as a paragraph after the headline for that level">
                 <html:body id="...">
+                    <html:header>
+                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                        <html:p epub:type="z3998:author" class="docauthor">DOCAUTHOR</html:p>
+                    </html:header>
                     <html:section id="..." epub:type="frontmatter titlepage">
                         <html:h1 id="...">OTHER TITLE</html:h1>
-                        <html:p class="docauthor" epub:type="z3998:author">DOCAUTHOR</html:p>
                     </html:section>
                 </html:body>
             </x:expect>
         </x:scenario>
-        <x:scenario label="with a titlepage and neither a doctitle nor a pre-existing headline">
+        <x:scenario label="with a titlepage and neither a doctitle nor a pre-existing titlepage h1">
             <x:context>
                 <dtbook:book>
                     <dtbook:frontmatter>
@@ -1432,11 +1519,12 @@
                     </dtbook:frontmatter>
                 </dtbook:book>
             </x:context>
-            <x:expect label="the docauthor should be added as a paragraph at the beginning of that level">
+            <x:expect label="the docauthor should not be added as a paragraph at the beginning of that level, it should still only be in the header">
                 <html:body id="...">
-                    <html:section id="..." epub:type="frontmatter titlepage">
-                        <html:p class="docauthor" epub:type="z3998:author">DOCAUTHOR</html:p>
-                    </html:section>
+                    <html:header>
+                        <html:p epub:type="z3998:author" class="docauthor">DOCAUTHOR</html:p>
+                    </html:header>
+                    <html:section id="..." epub:type="frontmatter titlepage"/>
                 </html:body>
             </x:expect>
         </x:scenario>
@@ -1451,8 +1539,25 @@
             </x:context>
             <x:expect label="the docauthor should not be used to create a titlepage">
                 <html:body id="...">
+                    <html:header>
+                        <html:p epub:type="z3998:author" class="docauthor">DOCAUTHOR</html:p>
+                    </html:header>
                     <html:section id="..." epub:type="frontmatter"/>
                 </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="where the docauthor is not a direct child of frontmatter">
+            <x:context>
+                <dtbook:frontmatter>
+                    <dtbook:level1>
+                        <dtbook:docauthor>frontmatter/level1/docauthor</dtbook:docauthor>
+                    </dtbook:level1>
+                </dtbook:frontmatter>
+            </x:context>
+            <x:expect label="the docauthor should become a p">
+                <html:section epub:type="frontmatter" id="...">
+                    <html:p epub:type="z3998:author" class="docauthor">frontmatter/level1/docauthor</html:p>
+                </html:section>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -1471,11 +1576,12 @@
                     </dtbook:frontmatter>
                 </dtbook:book>
             </x:context>
-            <x:expect label="the covertitle should be used as the headline for that level">
+            <x:expect label="the covertitle should not be used as the headline for that level">
                 <html:body id="...">
-                    <html:section id="..." epub:type="cover">
-                        <html:h1 id="..." epub:type="z3998:covertitle">TITLE</html:h1>
-                    </html:section>
+                    <html:header>
+                        <html:p id="..." epub:type="z3998:covertitle">TITLE</html:p>
+                    </html:header>
+                    <html:section id="..." epub:type="cover"/>
                 </html:body>
             </x:expect>
         </x:scenario>
@@ -1488,11 +1594,12 @@
                     </dtbook:frontmatter>
                 </dtbook:book>
             </x:context>
-            <x:expect label="the covertitle should be used as the headline for that level">
+            <x:expect label="the covertitle should not be used as the headline for that level">
                 <html:body id="...">
-                    <html:section id="..." epub:type="cover">
-                        <html:h1 id="..." epub:type="z3998:covertitle">TITLE</html:h1>
-                    </html:section>
+                    <html:header>
+                        <html:p id="..." epub:type="z3998:covertitle">TITLE</html:p>
+                    </html:header>
+                    <html:section id="..." epub:type="cover"/>
                 </html:body>
             </x:expect>
         </x:scenario>
@@ -1509,6 +1616,9 @@
             </x:context>
             <x:expect label="the covertitle should not be used as the headline for that level, the existing one should be used instead">
                 <html:body id="...">
+                    <html:header>
+                        <html:p id="..." epub:type="z3998:covertitle">TITLE</html:p>
+                    </html:header>
                     <html:section id="..." epub:type="cover">
                         <html:h1 id="...">OTHER TITLE</html:h1>
                     </html:section>
@@ -1524,13 +1634,109 @@
                 </dtbook:book>
             </x:context>
             <x:expect label="the covertitle should not be used to create a cover">
-                <html:body id="..."/>
+                <html:body id="...">
+                    <html:header>
+                        <html:p id="..." epub:type="z3998:covertitle">TITLE</html:p>
+                    </html:header>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="where the covertitle is not a direct child of frontmatter">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:level1>
+                            <dtbook:covertitle>book/frontmatter/level1/covertitle</dtbook:covertitle>
+                        </dtbook:level1>
+                    </dtbook:frontmatter>
+                    <dtbook:bodymatter>
+                        <dtbook:level1>
+                            <dtbook:h1>headline 1</dtbook:h1>
+                            <dtbook:covertitle>book/bodymatter/level1[1]/covertitle</dtbook:covertitle>
+                        </dtbook:level1>
+                        <dtbook:level1>
+                            <dtbook:doctitle>headline 2</dtbook:doctitle>
+                            <dtbook:covertitle>book/bodymatter/level1[2]/covertitle</dtbook:covertitle>
+                        </dtbook:level1>
+                    </dtbook:bodymatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the covertitle should become a p">
+                <html:body id="...">
+                    <html:section id="..." epub:type="frontmatter">
+                        <html:p id="..." epub:type="z3998:covertitle">book/frontmatter/level1/covertitle</html:p>
+                    </html:section>
+                    <html:section id="..." epub:type="bodymatter">
+                        <html:h1 id="...">headline 1</html:h1>
+                        <html:p id="..." epub:type="z3998:covertitle">book/bodymatter/level1[1]/covertitle</html:p>
+                    </html:section>
+                    <html:section id="..." epub:type="bodymatter">
+                        <html:p id="..." epub:type="fulltitle">headline 2</html:p>
+                        <html:p id="..." epub:type="z3998:covertitle">book/bodymatter/level1[2]/covertitle</html:p>
+                    </html:section>
+                </html:body>
             </x:expect>
         </x:scenario>
     </x:scenario>
 
     <!-- attlist.covertitle -->
     <!-- implicit epub:type and class tested in element test, otherwise nothing interesting to test -->
+
+    <!-- h1 -->
+    <x:scenario label="when processing the h1-h6 elements">
+        <x:context>
+            <dtbook:book>
+                <dtbook:frontmatter>
+                    <dtbook:doctitle>doctitle</dtbook:doctitle>
+                </dtbook:frontmatter>
+                <dtbook:bodymatter>
+                    <dtbook:level1>
+                        <dtbook:h1>h1</dtbook:h1>
+                        <dtbook:level2>
+                            <dtbook:h2>h2</dtbook:h2>
+                            <dtbook:level3>
+                                <dtbook:h3>h3</dtbook:h3>
+                                <dtbook:level4>
+                                    <dtbook:h4>h4</dtbook:h4>
+                                    <dtbook:level5>
+                                        <dtbook:h5>h5</dtbook:h5>
+                                        <dtbook:level6>
+                                            <dtbook:h6>h6</dtbook:h6>
+                                        </dtbook:level6>
+                                    </dtbook:level5>
+                                </dtbook:level4>
+                            </dtbook:level3>
+                        </dtbook:level2>
+                    </dtbook:level1>
+                </dtbook:bodymatter>
+            </dtbook:book>
+        </x:context>
+        <x:expect label="the resulting element should be h1-h6 elements">
+            <html:body id="...">
+                <html:header>
+                    <html:h1 id="..." epub:type="fulltitle">doctitle</html:h1>
+                </html:header>
+                <html:section id="..." epub:type="bodymatter">
+                    <html:h1 id="...">h1</html:h1>
+                    <html:section id="...">
+                        <html:h2 id="...">h2</html:h2>
+                        <html:section id="...">
+                            <html:h3 id="...">h3</html:h3>
+                            <html:section id="...">
+                                <html:h4 id="...">h4</html:h4>
+                                <html:section id="...">
+                                    <html:h5 id="...">h5</html:h5>
+                                    <html:section id="...">
+                                        <html:h6 id="...">h6</html:h6>
+                                    </html:section>
+                                </html:section>
+                            </html:section>
+                        </html:section>
+                    </html:section>
+                </html:section>
+            </html:body>
+        </x:expect>
+    </x:scenario>
 
     <!-- h1 -->
     <x:scenario label="when processing a h1 element">
@@ -2139,7 +2345,7 @@
     <x:scenario label="when processing the caption element attributes">
         <x:context>
             <dtbook:table>
-                <dtbook:caption id="caption" imgref="#img"><!-- COMMENT --></dtbook:caption>
+                <dtbook:caption id="caption" imgref="img"><!-- COMMENT --></dtbook:caption>
                 <dtbook:tbody>
                     <dtbook:tr>
                         <dtbook:td>
@@ -2416,7 +2622,7 @@
                 <html:p>Some text</html:p>
                 <!-- thematic break occurs here -->
                 <html:hr/>
-                <html:p class="precedingemptyline">More text</html:p>
+                <html:p>More text</html:p>
             </html:section>
         </x:expect>
     </x:scenario>
@@ -2427,7 +2633,7 @@
             <dtbook:list type="pl" class="toc">
                 <dtbook:li>
                     <dtbook:lic>
-                        <dtbook:strong>Kapittel 1 Vitenskap: grunnleggende antakelser</dtbook:strong>
+                        <dtbook:strong><![CDATA[Kapittel 1 Vitenskap: grunnleggende antakelser]]></dtbook:strong>
                     </dtbook:lic>
                     <dtbook:lic>13</dtbook:lic>
                     <dtbook:list type="pl">
@@ -2449,7 +2655,7 @@
                     <dtbook:list type="pl">
                         <dtbook:li>
                             <dtbook:lic>
-                                <dtbook:strong>Kapittel 2 Vitenskapelig tenkning: validitet, begreper og teori</dtbook:strong>
+                                <dtbook:strong><![CDATA[Kapittel 2 Vitenskapelig tenkning: validitet, begreper og teori]]></dtbook:strong>
                             </dtbook:lic>
                             <dtbook:lic>41</dtbook:lic>
                             <dtbook:list type="pl">
@@ -2465,7 +2671,7 @@
                         </dtbook:li>
                         <dtbook:li>
                             <dtbook:lic>
-                                <dtbook:strong>Kapittel 3 Forskningsprosessen: fra spørsmål til svar</dtbook:strong>
+                                <dtbook:strong><![CDATA[Kapittel 3 Forskningsprosessen: fra spørsmål til svar]]></dtbook:strong>
                             </dtbook:lic>
                             <dtbook:lic>70</dtbook:lic>
                             <dtbook:list type="pl">
@@ -2483,7 +2689,7 @@
                                 </dtbook:li>
                                 <dtbook:pagenum id="page-8" page="normal">8</dtbook:pagenum>
                                 <dtbook:li>
-                                    <dtbook:lic>Ideer til forskning: hypoteser og prediksjoner</dtbook:lic>
+                                    <dtbook:lic><![CDATA[Ideer til forskning: hypoteser og prediksjoner]]></dtbook:lic>
                                     <dtbook:lic>83</dtbook:lic>
                                 </dtbook:li>
                             </dtbook:list>
@@ -2505,7 +2711,7 @@
                             <html:span class="lic">14</html:span>
                         </html:li>
                         <html:li id="...">
-                            <html:span class="lic">Psykologi som vitenskap: tre tradisjoner</html:span>
+                            <html:span class="lic"><![CDATA[Psykologi som vitenskap: tre tradisjoner]]></html:span>
                             <html:span class="lic">17</html:span>
                         </html:li>
                     </html:ol>
@@ -2518,7 +2724,7 @@
                     <html:ol id="..." class="list-preformatted">
                         <html:li id="...">
                             <html:span class="lic">
-                                <html:strong>Kapittel 2 Vitenskapelig tenkning: validitet, begreper og teori</html:strong>
+                                <html:strong><![CDATA[Kapittel 2 Vitenskapelig tenkning: validitet, begreper og teori]]></html:strong>
                             </html:span>
                             <html:span class="lic">41</html:span>
                             <html:ol id="..." class="list-preformatted">
@@ -2534,16 +2740,16 @@
                         </html:li>
                         <html:li id="...">
                             <html:span class="lic">
-                                <html:strong>Kapittel 3 Forskningsprosessen: fra spørsmål til svar</html:strong>
+                                <html:strong><![CDATA[Kapittel 3 Forskningsprosessen: fra spørsmål til svar]]></html:strong>
                             </html:span>
                             <html:span class="lic">70</html:span>
                             <html:ol id="..." class="list-preformatted">
                                 <html:li id="...">
-                                    <html:span class="lic">Hvor kommer ideer til forskning fra?</html:span>
+                                    <html:span class="lic"><![CDATA[Hvor kommer ideer til forskning fra?]]></html:span>
                                     <html:span class="lic">71</html:span>
                                 </html:li>
                                 <html:li id="...">
-                                    <html:span class="lic">Psykologien som empirisk disiplin</html:span>
+                                    <html:span class="lic"><![CDATA[Psykologien som empirisk disiplin]]></html:span>
                                     <html:span class="lic">75</html:span>
                                 </html:li>
                                 <html:li id="...">
@@ -2552,7 +2758,7 @@
                                     <html:span epub:type="pagebreak" id="page-8" class="page-normal" title="8"/>
                                 </html:li>
                                 <html:li id="...">
-                                    <html:span class="lic">Ideer til forskning: hypoteser og prediksjoner</html:span>
+                                    <html:span class="lic"><![CDATA[Ideer til forskning: hypoteser og prediksjoner]]></html:span>
                                     <html:span class="lic">83</html:span>
                                 </html:li>
                             </html:ol>
@@ -2563,8 +2769,13 @@
         </x:expect>
     </x:scenario>
 
+    <!-- TODO: test that class="jacketcopy" are treated the same as class="cover" -->
+
+
     <!-- #### From MTMs DTBook schema #### -->
-    <!-- TODO: convert MTM-schema to XSpec tests here -->
+
+    <!-- TODO: go through MTM-schema and add corresponding XSpec tests here where applicable -->
+
 
     <!-- ########## Regression tests ########## -->
 

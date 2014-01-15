@@ -42,7 +42,18 @@
     <p:split-sequence initial-only="true" test="position()=1"/>
 
     <!-- TODO: validate input HTML -->
-
+    
+    <!-- Make sure only sections corresponding to html:h[1-6] are used. Since html:h1 becomes dtbook:doctitle, dtbook:h6 won't be used (html:h6 becomes dtbook:h5 etc) -->
+    <p:xslt>
+        <p:with-param name="name" select="'section article'"/>
+        <p:with-param name="namespace" select="'http://www.w3.org/1999/xhtml'"/>
+        <p:with-param name="max-depth" select="5"/>
+        <p:with-param name="copy-wrapping-elements-into-result" select="true()"/>
+        <p:input port="stylesheet">
+            <p:document href="http://www.daisy.org/pipeline/modules/common-utils/deep-level-grouping.xsl"/>
+        </p:input>
+    </p:xslt>
+    
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>

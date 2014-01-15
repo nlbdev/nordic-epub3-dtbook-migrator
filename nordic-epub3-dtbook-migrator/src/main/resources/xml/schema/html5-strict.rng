@@ -972,7 +972,8 @@
   -->
     <define name="docblockorinline">
         <choice>
-            <ref name="doctitle"/> <!-- h1 -->
+            <ref name="doctitle"/> <!-- p -->
+            <ref name="covertitle"/> <!-- p -->
             <ref name="docauthor"/> <!-- p -->
             <!-- covertitle used in html/head/title when doctitle is not present -->
             <ref name="bridgehead"/> <!-- p -->
@@ -1264,7 +1265,6 @@
                     <sch:assert test="normalize-space(.) = normalize-space(string-join((//(html:h1,html:h2,html:h3,html:h4,html:h5,html:h6))[1]/text(),' '))">The title element must contain the same text as the first headline in the document.</sch:assert>
                 </sch:rule>
             </element>
-            <ref name="covertitle"/> <!-- TODO -->
             <element name="meta">
                 <attribute name="name">
                     <value>viewport</value>
@@ -1431,27 +1431,40 @@
                     <ref name="bodymatter"/>
                     <ref name="rearmatter"/>
                 </choice>
-                <oneOrMore>
-                    <choice>
-                        <element name="section">
-                            <choice>
-                                <ref name="cover"/>
-                                <ref name="frontmatter"/>
-                                <ref name="bodymatter"/>
-                                <ref name="rearmatter"/>
-                            </choice>
+                <group>
+                    <optional>
+                        <element name="header">
+                            <ref name="doctitle.headline"/> <!-- p -->
+                            <optional>
+                                <ref name="covertitle"/> <!-- p -->
+                            </optional>
+                            <zeroOrMore>
+                                <ref name="docauthor"/> <!-- p -->
+                            </zeroOrMore>
                         </element>
-                        <element name="article">
-                            <!-- "article" should be used for magazine or newspaper articles. Otherwise, "section" should be used. -->
-                            <choice>
-                                <ref name="cover"/>
-                                <ref name="frontmatter"/>
-                                <ref name="bodymatter"/>
-                                <ref name="rearmatter"/>
-                            </choice>
-                        </element>
-                    </choice>
-                </oneOrMore>
+                    </optional>
+                    <oneOrMore>
+                        <choice>
+                           <element name="section">
+                               <choice>
+                                   <ref name="cover"/>
+                                   <ref name="frontmatter"/>
+                                   <ref name="bodymatter"/>
+                                   <ref name="rearmatter"/>
+                               </choice>
+                           </element>
+                           <element name="article">
+                               <!-- "article" should be used for magazine or newspaper articles. Otherwise, "section" should be used. -->
+                               <choice>
+                                   <ref name="cover"/>
+                                   <ref name="frontmatter"/>
+                                   <ref name="bodymatter"/>
+                                   <ref name="rearmatter"/>
+                               </choice>
+                           </element>
+                       </choice>
+                   </oneOrMore>
+                </group>
             </choice>
             <!-- attributes defined by frontmatter/bodymatter/rearmatter -->
         </element>
@@ -1461,7 +1474,6 @@
         <sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='cover'">The cover must have an epub:type of 'cover'</sch:assert>
         </sch:rule>
-        <ref name="covertitle"/> <!-- h1 -->
         <oneOrMore>
             <choice>
                 <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
@@ -1500,10 +1512,6 @@
         <sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='titlepage'">The titlepage must have an epub:type of 'titlepage'</sch:assert>
         </sch:rule>
-        <zeroOrMore>
-            <ref name="docauthor"/> <!-- p -->
-        </zeroOrMore>
-        <ref name="doctitle"/> <!-- h1 -->
         <oneOrMore>
             <choice>
                 <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
@@ -3561,10 +3569,21 @@
     Contrast with covertitle.
   -->
     <define name="doctitle">
+        <element name="p">
+            <sch:rule context=".">
+                <sch:assert test="tokenize(@epub:type,' ')='fulltitle'">The full title must have an epub:type of 'fulltitle'</sch:assert>
+            </sch:rule>
+            <ref name="attlist.doctitle"/>
+            <zeroOrMore>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
+            </zeroOrMore>
+        </element>
+    </define>
+    <define name="doctitle.headline">
         <element name="h1">
             <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='fulltitle'">The full title must have an epub:type of 'fulltitle'</sch:assert>
-        </sch:rule>
+                <sch:assert test="tokenize(@epub:type,' ')='fulltitle'">The full title must have an epub:type of 'fulltitle'</sch:assert>
+            </sch:rule>
             <ref name="attlist.doctitle"/>
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
@@ -3582,7 +3601,8 @@
     <define name="docauthor">
         <element name="p">
             <sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='z3998:author'">The document author must have an epub:type of 'z3998:author'</sch:assert>
+                <sch:assert test="tokenize(@epub:type,' ')='z3998:author'">The document author must have an epub:type of 'z3998:author'</sch:assert>
+                <sch:assert test="tokenize(@class,' ')='docauthor'">The document author must have a class of 'docauthor'</sch:assert>
         </sch:rule>
             <ref name="attlist.docauthor"/>
             <zeroOrMore>
@@ -3599,7 +3619,7 @@
   -->
     <!-- HB: 2004-04-08 covertitle: element added -->
     <define name="covertitle">
-        <element name="h1">
+        <element name="p">
             <sch:rule context=".">
                 <sch:assert test="tokenize(@epub:type,' ')='covertitle'">The cover title must have an epub:type of 'covertitle'</sch:assert>
             </sch:rule>

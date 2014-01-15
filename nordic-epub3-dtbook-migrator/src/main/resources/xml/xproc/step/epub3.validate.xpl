@@ -138,4 +138,11 @@
     <px:mediatype-detect/>
     <p:identity name="fileset"/>-->
     
+    <!--
+        TODO:
+        * report whether the HTML is single-page or one of many
+        * if single page;
+        * if multi-page:
+    -->
+    
 </p:declare-step>

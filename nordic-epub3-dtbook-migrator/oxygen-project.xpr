@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="14.2">
+<project version="15.1">
     <meta>
         <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
         <options>
-            <serialized version="14.2" xml:space="preserve">
+            <serialized version="15.1" xml:space="preserve">
                 <map>
                     <entry>
                         <String>enable.project.master.files.support</String>
@@ -44,11 +44,11 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xproc/epub3-validate.xpl</String>
+                                    <String>src/main/resources/xml/xproc/epub3-to-dtbook.xpl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>epub3-validate</String>
+                                        <String>nordic-epub3-to-dtbook</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -59,11 +59,11 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xproc/epub3-to-dtbook.xpl</String>
+                                    <String>src/main/resources/xml/xproc/epub3-validate.xpl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>nordic-epub3-to-dtbook</String>
+                                        <String>epub3-validate</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -510,6 +510,9 @@
                                 <field name="workingDir">
                                     <String>${frameworksDir}/xspec/</String>
                                 </field>
+                                <field name="showConsoleAlways">
+                                    <Boolean>true</Boolean>
+                                </field>
                                 <field name="advancedOptionsMap">
                                     <null/>
                                 </field>
@@ -949,9 +952,6 @@
                                             <field name="value">
                                                 <String>file:/home/jostein/Skrivebord/Valentin%20Hauy%20-%20the%20father%20of%20the%20education%20for%20the%20blind.epub</String>
                                             </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
                                         </xprocOption>
                                         <xprocOption>
                                             <field name="namespaceURI">
@@ -963,9 +963,6 @@
                                             <field name="value">
                                                 <String>file:/home/jostein/epub3-validate/temp/</String>
                                             </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
                                         </xprocOption>
                                         <xprocOption>
                                             <field name="namespaceURI">
@@ -976,9 +973,6 @@
                                             </field>
                                             <field name="value">
                                                 <String>file:/home/jostein/epub3-validate/output/</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <null/>
                                             </field>
                                         </xprocOption>
                                     </xprocOption-array>
@@ -1258,9 +1252,6 @@
                                             <field name="value">
                                                 <String>file:/home/jostein/Skrivebord/nordic-dtbook-to-epub3.output/tmp/</String>
                                             </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
                                         </xprocOption>
                                         <xprocOption>
                                             <field name="namespaceURI">
@@ -1272,9 +1263,6 @@
                                             <field name="value">
                                                 <String>file:/home/jostein/Skrivebord/nordic-dtbook-to-epub3.output/result/</String>
                                             </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
                                         </xprocOption>
                                         <xprocOption>
                                             <field name="namespaceURI">
@@ -1285,9 +1273,6 @@
                                             </field>
                                             <field name="value">
                                                 <String>file:/home/jostein/Skrivebord/dtbook/hauy_valid.xml</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <null/>
                                             </field>
                                         </xprocOption>
                                     </xprocOption-array>
@@ -1417,9 +1402,6 @@
                                             <field name="value">
                                                 <String>file:/home/jostein/Skrivebord/epub.epub</String>
                                             </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
                                         </xprocOption>
                                         <xprocOption>
                                             <field name="namespaceURI">
@@ -1431,9 +1413,6 @@
                                             <field name="value">
                                                 <String>file:/tmp/</String>
                                             </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
                                         </xprocOption>
                                         <xprocOption>
                                             <field name="namespaceURI">
@@ -1444,9 +1423,6 @@
                                             </field>
                                             <field name="value">
                                                 <String>file:/home/jostein/Skrivebord/nordic-epub3-to-dtbook.output-dir/</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <null/>
                                             </field>
                                         </xprocOption>
                                     </xprocOption-array>
@@ -1587,9 +1563,6 @@
                                             <field name="value">
                                                 <String>file:/home/jostein/Skrivebord/epub.epub</String>
                                             </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
                                         </xprocOption>
                                         <xprocOption>
                                             <field name="namespaceURI">
@@ -1600,9 +1573,6 @@
                                             </field>
                                             <field name="value">
                                                 <String>file:/tmp/</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <null/>
                                             </field>
                                         </xprocOption>
                                     </xprocOption-array>

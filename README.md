@@ -18,9 +18,15 @@ This project will provide the following Pipeline 2 scripts:
 
  * EPUB3 to DTBook
  * DTBook to EPUB3
+ * EPUB3 Validator
+
+The project might also result in the following Pipeline 2 scripts:
+
  * HTML to DTBook
  * DTBook to HTML
  * HTML splitter
+ * HTML merger
+ * DTBook Validator
 
 The HTML referred to here are HTML marked up according to the Nordic markup guidelines, and will most notably make use of the
 [epub:type](http://www.idpf.org/accessibility/guidelines/content/semantics/epub-type.php) attribute, which will be used to determine where to split the single-page HTML and how to
