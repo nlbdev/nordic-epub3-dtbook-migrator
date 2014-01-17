@@ -78,9 +78,7 @@
     <p:add-attribute match="/*" attribute-name="xml:base">
         <p:with-option name="attribute-value" select="$output-dir"/>
     </p:add-attribute>
-    <p:identity name="result.fileset">
-<!--        <p:log port="result" href="file:/tmp/fileset.xml"/>-->
-    </p:identity>
+    <p:identity name="result.fileset"/>
 
     <p:for-each>
         <p:iteration-source>
@@ -94,9 +92,7 @@
             <p:with-option name="attribute-value" select="$new-base"/>
         </p:add-attribute>
     </p:for-each>
-    <p:identity name="result.in-memory">
-<!--        <p:log port="result" href="file:/tmp/in-memory.xml"/>-->
-    </p:identity>
+    <p:identity name="result.in-memory"/>
 
     <px:fileset-store name="fileset-store">
         <p:input port="fileset.in">

@@ -22,18 +22,14 @@
 
     <p:variable name="href" select="(//d:file[@media-type='application/xhtml+xml'])[1]/resolve-uri(@href,base-uri(.))"/>
     <p:variable name="new-href" select="concat($temp-dir,replace(if (matches($href,'.x?html?')) then replace($href,'\.x?html?$','.xml') else concat($href,'.xml'),'^.*/([^/]*)$','$1'))"/>
-    
+
     <p:variable name="doc-base" select="base-uri(/)">
         <p:inline>
             <irrelevant/>
         </p:inline>
     </p:variable>
 
-    <p:identity>
-<!--        <p:log port="result" href="file:/tmp/html-to-dtbook.input.fileset.xml"/>-->
-    </p:identity>
     <px:fileset-load media-types="application/xhtml+xml">
-<!--        <p:log port="result" href="file:/tmp/html-to-dtbook.input.in-memory.xml"/>-->
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
@@ -43,7 +39,7 @@
     <p:split-sequence initial-only="true" test="position()=1"/>
 
     <!-- TODO: validate input HTML -->
-    
+
     <!-- Make sure only sections corresponding to html:h[1-6] are used. Since html:h1 becomes dtbook:doctitle, dtbook:h6 won't be used (html:h6 becomes dtbook:h5 etc) -->
     <p:xslt>
         <p:with-param name="name" select="'section article'"/>
@@ -54,7 +50,7 @@
             <p:document href="http://www.daisy.org/pipeline/modules/common-utils/deep-level-grouping.xsl"/>
         </p:input>
     </p:xslt>
-    
+
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>
@@ -63,8 +59,8 @@
             <p:document href="../../xslt/epub3-to-dtbook.xsl"/>
         </p:input>
     </p:xslt>
-    
-    <p:xslt>
+
+    <!--<p:xslt>
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -78,7 +74,7 @@
                 </xsl:stylesheet>
             </p:inline>
         </p:input>
-    </p:xslt>
+    </p:xslt>-->
 
     <p:add-attribute match="/*" attribute-name="xml:base">
         <p:with-option name="attribute-value" select="$new-href"/>
@@ -91,11 +87,11 @@
     <px:mkdir name="mkdir">
         <p:with-option name="href" select="$temp-dir"/>
     </px:mkdir>
-    <px:copy-resource name="store-css" cx:depends-on="mkdir">
+    <!--<px:copy-resource name="store-css" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/dtbook.2005.basic.css',$doc-base)"/>
         <p:with-option name="target" select="$temp-dir"/>
-    </px:copy-resource>
-    
+    </px:copy-resource>-->
+
     <px:fileset-create>
         <p:with-option name="base" select="replace($new-href,'[^/]+$','')"/>
     </px:fileset-create>
@@ -107,7 +103,7 @@
         <p:with-option name="original-href" select="concat($temp-dir,'dtbook.2005.basic.css')"/>
     </px:fileset-add-entry>
     <p:identity name="fileset.new-resources"/>
-    
+
     <px:fileset-rebase>
         <p:input port="source">
             <p:pipe port="fileset.in" step="main"/>
@@ -124,7 +120,7 @@
         <p:with-option name="attribute-value" select="$temp-dir"/>
     </p:add-attribute>
     <p:identity name="fileset.existing-resources"/>
-    
+
     <px:fileset-join name="result.fileset">
         <p:input port="source">
             <p:pipe port="result" step="fileset.new-resources"/>

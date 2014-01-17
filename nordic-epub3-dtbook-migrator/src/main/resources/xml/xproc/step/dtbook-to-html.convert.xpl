@@ -36,8 +36,6 @@
     <px:assert test-count-min="1" message="There must be a DTBook file in the fileset." error-code="NORDICDTBOOKEPUB004"/>
     <p:split-sequence initial-only="true" test="position()=1"/>
 
-    <!-- TODO: validate input DTBook -->
-
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>
@@ -54,13 +52,12 @@
             </p:inline>
         </p:input>
     </p:insert>
-    
+
     <p:add-attribute match="/*" attribute-name="xml:base">
         <p:with-option name="attribute-value" select="concat($output-dir,'content.xhtml')"/>
     </p:add-attribute>
     <p:identity name="result.in-memory"/>
 
-    <!-- TODO: validate output HTML -->
     <px:mkdir name="mkdir">
         <p:with-option name="href" select="$temp-dir"/>
     </px:mkdir>
@@ -104,7 +101,7 @@
         </p:input>
     </p:identity>
     <p:sink/>
-    
+
     <px:fileset-filter not-media-types="application/x-dtbook+xml text/css">
         <p:input port="source">
             <p:pipe port="fileset.in" step="main"/>
@@ -116,7 +113,7 @@
     </p:add-attribute>
     <p:delete match="/*//*/@xml:base"/>
     <p:identity name="fileset.existing-resources"/>
-    
+
     <px:fileset-create>
         <p:with-option name="base" select="$output-dir"/>
     </px:fileset-create>

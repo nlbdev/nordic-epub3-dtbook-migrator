@@ -3,7 +3,7 @@
     xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/" exclude-result-prefixes="#all" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <xsl:output indent="yes" exclude-result-prefixes="#all"/>
+    <xsl:output indent="yes" exclude-result-prefixes="#all" doctype-public="-//NISO//DTD dtbook 2005-3//EN" doctype-system="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
 
     <xsl:variable name="all-ids" select="//@id"/>
 
@@ -1101,22 +1101,23 @@
 
     <xsl:function name="f:level" as="xs:integer">
         <xsl:param name="element" as="element()"/>
-        <xsl:variable name="h" select="$element/descendant-or-self::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][1]"/>
-        <xsl:variable name="sections" select="$h/ancestor::*[self::html:section or self::html:article or self::html:aside or self::html:nav]"/>
+        <xsl:variable name="level" select="($element/ancestor-or-self::html:*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body])[last()]"/>
+        <xsl:variable name="level-nodes" select="f:level-nodes($level)"/>
+        <xsl:variable name="h-in-section" select="$level-nodes[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]"/>
+        <xsl:variable name="h" select="$h-in-section[1]"/>
+        <xsl:variable name="sections" select="$level/ancestor-or-self::*[self::html:section or self::html:article or self::html:aside or self::html:nav]"/>
         <xsl:variable name="explicit-level" select="count($sections)-1"/>
-        <xsl:variable name="h-in-section"
-            select="($h, ($h/preceding::* intersect $sections[last()]//*)[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6])"/>
-        <xsl:variable name="h-in-section-levels" select="reverse($h-in-section/xs:integer(number(replace(local-name(),'^h',''))))"/>
-        <xsl:variable name="implicit-level" select="if ($h-in-section-levels[1] = 6) then 6 else ()"/>
-        <xsl:variable name="h-in-section-levels" select="$h-in-section-levels[not(.=6)]"/>
-        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels[1] = 5) then 5 else ())"/>
-        <xsl:variable name="h-in-section-levels" select="$h-in-section-levels[not(.=5)]"/>
-        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels[1] = 4) then 4 else ())"/>
-        <xsl:variable name="h-in-section-levels" select="$h-in-section-levels[not(.=4)]"/>
-        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels[1] = 3) then 3 else ())"/>
-        <xsl:variable name="h-in-section-levels" select="$h-in-section-levels[not(.=3)]"/>
-        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels[1] = 2) then 2 else ())"/>
-        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-section-levels = 1) then 1 else ())"/>
+        <xsl:variable name="h-in-level-numbers" select="reverse($h-in-section/xs:integer(number(replace(local-name(),'^h',''))))"/>
+        <xsl:variable name="implicit-level" select="if ($h-in-level-numbers[1] = 6) then 6 else ()"/>
+        <xsl:variable name="h-in-level-numbers" select="$h-in-level-numbers[not(.=6)]"/>
+        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-level-numbers[1] = 5) then 5 else ())"/>
+        <xsl:variable name="h-in-level-numbers" select="$h-in-level-numbers[not(.=5)]"/>
+        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-level-numbers[1] = 4) then 4 else ())"/>
+        <xsl:variable name="h-in-level-numbers" select="$h-in-level-numbers[not(.=4)]"/>
+        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-level-numbers[1] = 3) then 3 else ())"/>
+        <xsl:variable name="h-in-level-numbers" select="$h-in-level-numbers[not(.=3)]"/>
+        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-level-numbers[1] = 2) then 2 else ())"/>
+        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-level-numbers = 1) then 1 else ())"/>
         <xsl:variable name="implicit-level" select="count($implicit-level)"/>
 
         <xsl:variable name="level" select="$explicit-level + $implicit-level"/>
@@ -1127,6 +1128,13 @@
             The implicit level / hd elements could be used in cases where the structures are deeper.
             However, our tools would have to support those elements.
         -->
+    </xsl:function>
+    
+    <xsl:function name="f:level-nodes" as="node()*">
+        <xsl:param name="level" as="element()"/>
+        <xsl:variable name="level-levels" select="$level//html:*[(self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body) and ((ancestor::html:*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body])[last()] intersect $level)]"/>
+        <xsl:variable name="level-nodes" select="$level//node()[not(ancestor-or-self::* intersect $level-levels)]"/>
+        <xsl:sequence select="$level-nodes"/>
     </xsl:function>
 
     <xsl:function name="f:generate-pretty-id" as="xs:string">

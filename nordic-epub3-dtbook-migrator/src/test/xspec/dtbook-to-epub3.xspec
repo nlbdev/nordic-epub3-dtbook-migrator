@@ -1688,6 +1688,12 @@
             <dtbook:book>
                 <dtbook:frontmatter>
                     <dtbook:doctitle>doctitle</dtbook:doctitle>
+                    <dtbook:level1>
+                        <dtbook:h1>h1</dtbook:h1>
+                        <dtbook:level2>
+                            <dtbook:h2>h2</dtbook:h2>
+                        </dtbook:level2>
+                    </dtbook:level1>
                 </dtbook:frontmatter>
                 <dtbook:bodymatter>
                     <dtbook:level1>
@@ -1716,6 +1722,12 @@
                 <html:header>
                     <html:h1 id="..." epub:type="fulltitle">doctitle</html:h1>
                 </html:header>
+                <html:section id="..." epub:type="frontmatter">
+                    <html:h1 id="...">h1</html:h1>
+                    <html:section id="...">
+                        <html:h2 id="...">h2</html:h2>
+                    </html:section>
+                </html:section>
                 <html:section id="..." epub:type="bodymatter">
                     <html:h1 id="...">h1</html:h1>
                     <html:section id="...">
