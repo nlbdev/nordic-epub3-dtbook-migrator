@@ -14,21 +14,6 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xproc/dtbook-validate.xpl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>epub3-validate</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>XPROC</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
                                     <String>src/main/resources/xml/xproc/dtbook-to-epub3.xpl</String>
                                 </field>
                                 <field name="scenarioIds">
@@ -45,6 +30,21 @@
                             <scenarioAssociation>
                                 <field name="url">
                                     <String>src/main/resources/xml/xproc/epub3-validate.xpl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>epub3-validate</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XPROC</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/main/resources/xml/xproc/dtbook-validate.xpl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>

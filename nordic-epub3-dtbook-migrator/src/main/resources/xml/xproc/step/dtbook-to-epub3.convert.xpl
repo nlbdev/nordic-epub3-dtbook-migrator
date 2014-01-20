@@ -28,7 +28,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
 
     <p:variable name="epub-dir" select="concat($temp-dir,'epub/')"/>
-    <p:variable name="publication-dir" select="concat($epub-dir,'EPUB/')"/>
+    <p:variable name="publication-dir" select="concat($epub-dir,'OEBPS/')"/>
 
     <px:fileset-load media-types="application/x-dtbook+xml">
         <p:input port="in-memory">

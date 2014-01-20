@@ -7,7 +7,7 @@
   <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/dtbook-to-html.xpl" uri="../xml/xproc/dtbook-to-html.xpl" px:script="true"/> -->
   <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-to-dtbook.xpl" uri="../xml/xproc/html-to-dtbook.xpl" px:script="true"/> -->
   <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-split.xpl" uri="../xml/xproc/html-split.xpl" px:script="true"/> -->
-  <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/epub3-validate.xpl" uri="../xml/xproc/epub3-validate.xpl" px:script="true"/> -->
+  <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/epub3-validate.xpl" uri="../xml/xproc/epub3-validate.xpl" px:script="true"/>
   <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-validate.xpl" uri="../xml/xproc/html-validate.xpl" px:script="true"/> -->
   <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/dtbook-validate.xpl" uri="../xml/xproc/dtbook-validate.xpl" px:script="true"/>
 
