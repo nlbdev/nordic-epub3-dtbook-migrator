@@ -4,21 +4,40 @@
 	xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:f="http://www.daisy.org/ns/pipeline/internal-function">
 
 	<xsl:output indent="yes" exclude-result-prefixes="#all"/>
-
+	
 	<xsl:template match="/*">
 		<d:document-validation-report>
+			<xsl:text>
+    </xsl:text>
 			<d:document-info>
+				<xsl:text>
+        </xsl:text>
 				<d:document-name>
 					<xsl:value-of select="base-uri(/*)"/>
 				</d:document-name>
+				<xsl:text>
+        </xsl:text>
 				<d:document-type>Nordic EPUB3 Package Document</d:document-type>
+				<xsl:text>
+        </xsl:text>
 				<d:document-path>
 					<xsl:value-of select="base-uri(/*)"/>
 				</d:document-path>
+				<xsl:text>
+        </xsl:text>
 				<d:error-count>Number of errors as an integer</d:error-count>
+				<xsl:text>
+    </xsl:text>
 			</d:document-info>
+			<xsl:text>
+    </xsl:text>
 			<d:reports>
+				<xsl:text>
+        </xsl:text>
 				<d:report>
+					<xsl:text>
+</xsl:text>
+
 					<!-- ########## Document assertions ########## -->
 
 					<xsl:if test="not(ends-with(base-uri(/*),'.opf'))">
@@ -52,7 +71,7 @@
 					</xsl:call-template>
 
 					<xsl:choose>
-						<xsl:when test="*/metadata/dc:identifier">
+						<xsl:when test="/*/metadata/dc:identifier">
 							<xsl:call-template name="assert-equals">
 								<xsl:with-param name="expect" select="'pub-identifier'"/>
 								<xsl:with-param name="actual" select="/*/metadata/dc:identifier/@id"/>
@@ -70,7 +89,7 @@
 					</xsl:choose>
 
 					<xsl:choose>
-						<xsl:when test="*/metadata/dc:title">
+						<xsl:when test="/*/metadata/dc:title">
 							<xsl:call-template name="assert-equals">
 								<xsl:with-param name="expect" select="'pub-title'"/>
 								<xsl:with-param name="actual" select="/*/metadata/dc:title/@id"/>
@@ -98,7 +117,8 @@
 							<xsl:for-each select="/*/metadata/dc:language">
 								<xsl:if test="not(matches(text(),'^[a-z]{2,3}(-[A-Z]{2})?$'))">
 									<xsl:call-template name="error">
-										<xsl:with-param name="desc" select="'the language codes in the &quot;dc:language&quot; elements must start with a two or three-letter language code (lowercase), and then optionally end with a dash (-) and a two-letter country code (uppercase).'"/>
+										<xsl:with-param name="desc"
+											select="'the language codes in the &quot;dc:language&quot; elements must start with a two or three-letter language code (lowercase), and then optionally end with a dash (-) and a two-letter country code (uppercase).'"/>
 										<xsl:with-param name="context" select="."/>
 									</xsl:call-template>
 								</xsl:if>
@@ -114,12 +134,6 @@
 
 					<xsl:choose>
 						<xsl:when test="/*/metadata/dc:date">
-							<xsl:call-template name="assert-equals">
-								<xsl:with-param name="expect" select="'YYYY-MM-DD'"/>
-								<xsl:with-param name="actual" select="/*/metadata/dc:date/@scheme"/>
-								<xsl:with-param name="context" select="/*/metadata/dc:date"/>
-								<xsl:with-param name="desc" select="'the scheme attribute'"/>
-							</xsl:call-template>
 							<xsl:if test="not(matches(/*/metadata/dc:date/text(), '\d\d\d\d-[01]\d-[0123]\d'))">
 								<xsl:call-template name="error">
 									<xsl:with-param name="desc" select="'the &quot;dc:date&quot; metadata element must contain a date which matches the scheme &quot;YYYY-MM-DD&quot;'"/>
@@ -194,10 +208,10 @@
 							</xsl:call-template>
 						</xsl:otherwise>
 					</xsl:choose>
-					
-					
+
+
 					<!-- ########## Manifest assertions ########## -->
-					
+
 					<xsl:choose>
 						<xsl:when test="/*/manifest/item[@media-type='application/x-dtbncx+xml']">
 							<xsl:call-template name="assert-equals">
@@ -214,19 +228,24 @@
 							</xsl:call-template>
 						</xsl:otherwise>
 					</xsl:choose>
-					
+
 					<xsl:for-each select="/*/manifest/item[starts-with(@media-type,'image/')]">
-						<!-- TODO: are subfolders under 'images/' allowed? Are there any format restrictions? -->
+						<!-- TODO: Are there any format restrictions? -->
 						<xsl:if test="not(matches(@href,'^images/[^/]+$'))">
 							<xsl:call-template name="error">
-								<xsl:with-param name="desc" select="concat('all images must be stored in the directory &quot;OEBPS/images/&quot;, but the href attribue for the image is &quot;',@href,'&quot;')"/>
+								<xsl:with-param name="desc"
+									select="concat('all images must be stored in the directory &quot;OEBPS/images/&quot;, but the href attribute for the image (which is relative to the package document) is &quot;',@href,'&quot;')"/>
 								<xsl:with-param name="context" select="."/>
 							</xsl:call-template>
 						</xsl:if>
 					</xsl:for-each>
 					
-				</d:report>
-			</d:reports>
+					<xsl:text>
+        </xsl:text>
+				</d:report><xsl:text>
+    </xsl:text>
+			</d:reports><xsl:text>
+</xsl:text>
 		</d:document-validation-report>
 	</xsl:template>
 
@@ -234,7 +253,9 @@
 		<xsl:param name="desc" as="xs:string" required="yes"/>
 		<xsl:param name="context" required="yes"/>
 		<xsl:param name="include-xpath" select="true()" required="no"/>
-		<d:error>
+		<xsl:text>            </xsl:text>
+		<d:error><xsl:text>
+                </xsl:text>
 			<d:desc>
 				<xsl:value-of select="$desc"/>
 				<xsl:if test="$include-xpath"> (at <xsl:value-of select="f:xpath($context)"/>)</xsl:if>
@@ -242,7 +263,10 @@
 			<!--<d:file>
 				<xsl:value-of select="base-uri(/*)"/>
 			</d:file>-->
-		</d:error>
+			<xsl:text>
+            </xsl:text>
+		</d:error><xsl:text>
+</xsl:text>
 	</xsl:template>
 
 	<xsl:function name="f:xpath">
@@ -264,7 +288,8 @@
 		<xsl:param name="desc"/>
 		<xsl:if test="not($actual = $expect)">
 			<xsl:call-template name="error">
-				<xsl:with-param name="desc" select="concat('The value of ',$desc,' must be &quot;',$expect,'&quot;, but it was ',if ($actual) then concat('&quot;',$actual,'&quot;') else 'not defined', '.')"/>
+				<xsl:with-param name="desc"
+					select="concat('The value of ',$desc,' must be &quot;',$expect,'&quot;, but it was ',if ($actual) then concat('&quot;',$actual,'&quot;') else 'not defined', '.')"/>
 				<xsl:with-param name="context" select="$context"/>
 			</xsl:call-template>
 		</xsl:if>

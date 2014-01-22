@@ -3,6 +3,8 @@
     type="px:nordic-epub3-validate.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
     
+    <p:serialization port="report.out" indent="true"/>
+    
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
         <p:empty/>
@@ -12,11 +14,9 @@
     </p:input>
 
     <p:output port="fileset.out" primary="true">
-        <!--<p:pipe port="result" step="fileset"/>-->
         <p:pipe port="fileset" step="unzip"/>
     </p:output>
     <p:output port="in-memory.out" sequence="true">
-        <!--<p:pipe port="result" step="in-memory"/>-->
         <p:pipe port="in-memory" step="unzip"/>
     </p:output>
     <p:output port="report.out" sequence="true">
@@ -25,8 +25,9 @@
     </p:output>
 
     <p:option name="temp-dir" required="true"/>
+    
+    <p:variable name="basedir" select="if (/*/d:file[@media-type='application/epub+zip']) then $temp-dir else base-uri(/*)"/>
 
-    <!--    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
@@ -87,7 +88,7 @@
         </p:input>
     </p:xslt>
     <p:string-replace match="//d:document-name/text()">
-        <p:with-option name="replace" select="concat('substring(//d:document-name/text(),',string-length($temp-dir)+1,')')"/>
+        <p:with-option name="replace" select="concat('substring(//d:document-name/text(),',string-length($basedir)+1,')')"/>
     </p:string-replace>
     <p:string-replace match="//d:error-count/text()">
         <p:with-option name="replace" select="count(//d:error)"/>
