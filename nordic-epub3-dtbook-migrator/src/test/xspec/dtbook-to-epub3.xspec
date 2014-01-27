@@ -125,7 +125,7 @@
         </x:context>
         <x:expect label="the profile attribute should be converted to a link element">
             <html:head>
-                <html:meta charset="utf-8"/>
+                <html:meta charset="UTF-8"/>
                 <html:meta name="viewport" content="..."/>
                 <html:style type="text/css" xml:space="preserve">...</html:style>
                 <html:link rel="profile" href="http://www.nlb.no/metadata-profile"/>
@@ -142,7 +142,7 @@
         </x:context>
         <x:expect label="the link element should be converted into a link element">
             <html:head>
-                <html:meta charset="utf-8"/>
+                <html:meta charset="UTF-8"/>
                 <html:meta name="viewport" content="..."/>
                 <html:link/>
                 <html:style type="text/css" xml:space="preserve">...</html:style>
@@ -153,7 +153,7 @@
     <!-- attlist.link -->
     <x:scenario label="when processing the link element attributes">
         <x:context>
-            <dtbook:link charset="utf-8" href="theme.css" hreflang="en" media="print" rel="stylesheet" rev="parent" type="text/css"/>
+            <dtbook:link charset="UTF-8" href="theme.css" hreflang="en" media="print" rel="stylesheet" rev="parent" type="text/css"/>
         </x:context>
         <x:expect label="the charset and rev attributes are dropped; everything else is copied through (href/hreflang/media/rel/type)">
             <html:link href="theme.css" hreflang="en" media="print" rel="stylesheet" type="text/css"/>

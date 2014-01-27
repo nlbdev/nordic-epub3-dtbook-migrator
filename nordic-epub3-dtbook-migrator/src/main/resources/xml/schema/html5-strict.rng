@@ -1255,7 +1255,7 @@
             <ref name="attlist.head"/>
             <element name="meta">
                 <attribute name="charset">
-                    <value>utf-8</value>
+                    <value>UTF-8</value>
                 </attribute>
             </element>
             <element name="title">

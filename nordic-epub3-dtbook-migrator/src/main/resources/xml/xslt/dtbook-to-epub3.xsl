@@ -119,7 +119,7 @@
     <xsl:template match="dtbook:head">
         <head>
             <xsl:call-template name="attlist.head"/>
-            <meta charset="utf-8"/>
+            <meta charset="UTF-8"/>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <xsl:call-template name="headmisc"/>
             <style type="text/css" xml:space="preserve"><![CDATA[

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-epub3-to-dtbook" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:pxp="http://exproc.org/proposed/steps">
+    type="px:nordic-epub3-to-dtbook" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:pxp="http://exproc.org/proposed/steps" xpath-version="2.0">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic EPUB3 to DTBook</h1>
@@ -39,12 +39,16 @@
 
     <px:unzip-fileset name="load.in-memory">
         <p:with-option name="href" select="$epub"/>
-        <p:with-option name="unzipped-basedir" select="$temp-dir"/>
+        <p:with-option name="unzipped-basedir" select="concat($temp-dir,'unzipped-epub/')"/>
     </px:unzip-fileset>
-
+    
+    <!-- This is a workaround for a bug that should be fixed in Pipeline v1.8
+         see: https://github.com/daisy-consortium/pipeline-modules-common/pull/49 -->
+    <p:delete match="/*/*[ends-with(@href,'/')]" name="load.in-memory.fileset-fix"/>
+    
     <px:fileset-store name="load.stored">
         <p:input port="fileset.in">
-            <p:pipe port="fileset.out" step="load.in-memory"/>
+            <p:pipe port="result" step="load.in-memory.fileset-fix"/>
         </p:input>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load.in-memory"/>

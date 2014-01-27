@@ -51,6 +51,7 @@
         <p:with-option name="href" select="replace($epub,'^.*/([^/]*)$','$1')"/>
     </px:fileset-add-entry>
     
+    <px:message message="Remember to also validate the EPUB using epubcheck." severity="WARN"/>
     <px:nordic-epub3-validate.step name="validate.nordic">
         <p:with-option name="temp-dir" select="concat($temp-dir,'validate/')"/>
     </px:nordic-epub3-validate.step>

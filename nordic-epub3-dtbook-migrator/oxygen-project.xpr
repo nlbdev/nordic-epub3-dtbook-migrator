@@ -14,7 +14,37 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xproc/step/epub3.validate.xpl</String>
+                                    <String>src/test/xprocspec/html-to-dtbook.convert.xprocspec</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>xprocspec-test in oXygen project</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XPROC</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/test/xprocspec/epub3-to-dtbook.xprocspec</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>xprocspec-test in oXygen project</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XPROC</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/test/xprocspec/epub3-validate.xprocspec</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -33,7 +63,7 @@
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>Basic xprocspec test</String>
+                                        <String>xprocspec-test in oXygen project</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -44,11 +74,11 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xproc/dtbook-to-epub3.xpl</String>
+                                    <String>src/main/resources/xml/xproc/epub3-to-dtbook.xpl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>nordic-dtbook-to-epub3</String>
+                                        <String>xprocspec-test in oXygen project</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -64,6 +94,51 @@
                                 <field name="scenarioIds">
                                     <list>
                                         <String>epub3-validate</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XPROC</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/main/resources/xml/xslt/epub3-to-dtbook.xsl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>XSpec-test in oXygen project</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>ANT</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/main/resources/xml/xproc/step/epub3.validate.xpl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>xprocspec-test in oXygen project</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XPROC</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>src/main/resources/xml/xproc/dtbook-to-epub3.xpl</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>nordic-dtbook-to-epub3</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -104,21 +179,6 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xslt/epub3-to-dtbook.xsl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>XSpec-test in oXygen project</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>ANT</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
                                     <String>src/main/resources/xml/xslt/dtbook-to-epub3.xsl</String>
                                 </field>
                                 <field name="scenarioIds">
@@ -129,21 +189,6 @@
                                 <field name="scenarioTypes">
                                     <list>
                                         <String>ANT</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>src/main/resources/xml/xproc/epub3-to-dtbook.xpl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>nordic-epub3-to-dtbook</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>XPROC</String>
                                     </list>
                                 </field>
                             </scenarioAssociation>
@@ -506,6 +551,32 @@
                                         </antParameter>
                                         <antParameter>
                                             <field name="name">
+                                                <String>webhelp.trial.license</String>
+                                            </field>
+                                            <field name="description">
+                                                <String>Set parameter for trial license</String>
+                                            </field>
+                                            <field name="value">
+                                                <String>yes</String>
+                                            </field>
+                                            <field name="defaultValue">
+                                                <null/>
+                                            </field>
+                                            <field name="type">
+                                                <Integer>4</Integer>
+                                            </field>
+                                            <field name="isPredefined">
+                                                <Boolean>false</Boolean>
+                                            </field>
+                                            <field name="possibleValues">
+                                                <String-array>
+                                                    <String>yes</String>
+                                                    <String>no</String>
+                                                </String-array>
+                                            </field>
+                                        </antParameter>
+                                        <antParameter>
+                                            <field name="name">
                                                 <String>xspec.project.dir</String>
                                             </field>
                                             <field name="description">
@@ -548,110 +619,6 @@
                                             </field>
                                             <field name="possibleValues">
                                                 <null/>
-                                            </field>
-                                        </antParameter>
-                                        <antParameter>
-                                            <field name="name">
-                                                <String>webhelp.trial.license</String>
-                                            </field>
-                                            <field name="description">
-                                                <String>Set parameter for trial license</String>
-                                            </field>
-                                            <field name="value">
-                                                <String>yes</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
-                                            <field name="type">
-                                                <Integer>4</Integer>
-                                            </field>
-                                            <field name="isPredefined">
-                                                <Boolean>false</Boolean>
-                                            </field>
-                                            <field name="possibleValues">
-                                                <String-array>
-                                                    <String>yes</String>
-                                                    <String>no</String>
-                                                </String-array>
-                                            </field>
-                                        </antParameter>
-                                        <antParameter>
-                                            <field name="name">
-                                                <String>webhelp.trial.license</String>
-                                            </field>
-                                            <field name="description">
-                                                <String>Set parameter for trial license</String>
-                                            </field>
-                                            <field name="value">
-                                                <String>yes</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
-                                            <field name="type">
-                                                <Integer>4</Integer>
-                                            </field>
-                                            <field name="isPredefined">
-                                                <Boolean>false</Boolean>
-                                            </field>
-                                            <field name="possibleValues">
-                                                <String-array>
-                                                    <String>yes</String>
-                                                    <String>no</String>
-                                                </String-array>
-                                            </field>
-                                        </antParameter>
-                                        <antParameter>
-                                            <field name="name">
-                                                <String>webhelp.trial.license</String>
-                                            </field>
-                                            <field name="description">
-                                                <String>Set parameter for trial license</String>
-                                            </field>
-                                            <field name="value">
-                                                <String>yes</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
-                                            <field name="type">
-                                                <Integer>4</Integer>
-                                            </field>
-                                            <field name="isPredefined">
-                                                <Boolean>false</Boolean>
-                                            </field>
-                                            <field name="possibleValues">
-                                                <String-array>
-                                                    <String>yes</String>
-                                                    <String>no</String>
-                                                </String-array>
-                                            </field>
-                                        </antParameter>
-                                        <antParameter>
-                                            <field name="name">
-                                                <String>webhelp.trial.license</String>
-                                            </field>
-                                            <field name="description">
-                                                <String>Set parameter for trial license</String>
-                                            </field>
-                                            <field name="value">
-                                                <String>yes</String>
-                                            </field>
-                                            <field name="defaultValue">
-                                                <null/>
-                                            </field>
-                                            <field name="type">
-                                                <Integer>4</Integer>
-                                            </field>
-                                            <field name="isPredefined">
-                                                <Boolean>false</Boolean>
-                                            </field>
-                                            <field name="possibleValues">
-                                                <String-array>
-                                                    <String>yes</String>
-                                                    <String>no</String>
-                                                </String-array>
                                             </field>
                                         </antParameter>
                                         <antParameter>
@@ -743,7 +710,7 @@
                                     <Boolean>true</Boolean>
                                 </field>
                                 <field name="openInBrowser">
-                                    <Boolean>true</Boolean>
+                                    <Boolean>false</Boolean>
                                 </field>
                                 <field name="outputFile">
                                     <null/>

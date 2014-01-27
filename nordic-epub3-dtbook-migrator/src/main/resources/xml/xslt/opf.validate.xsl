@@ -58,7 +58,7 @@
 							<xsl:with-param name="context" select="/*"/>
 						</xsl:call-template>
 					</xsl:if>
-					<!-- TODO: the package document must have the xml declaration `<?xml version="1.0" encoding="utf-8"?>` -->
+					<!-- TODO: the package document must have the xml declaration `<?xml version="1.0" encoding="UTF-8"?>` -->
 
 
 					<!-- ########## Metadata assertions ########## -->
