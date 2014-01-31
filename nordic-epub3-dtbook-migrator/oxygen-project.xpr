@@ -14,7 +14,7 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/test/xprocspec/html-to-dtbook.convert.xprocspec</String>
+                                    <String>src/test/xprocspec/epub3-to-dtbook.xprocspec</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -29,7 +29,7 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/test/xprocspec/epub3-to-dtbook.xprocspec</String>
+                                    <String>src/main/resources/xml/xproc/step/epub3.validate.xpl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -74,11 +74,11 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xproc/epub3-to-dtbook.xpl</String>
+                                    <String>src/main/resources/xml/xproc/epub3-validate.xpl</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>xprocspec-test in oXygen project</String>
+                                        <String>epub3-validate</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -89,11 +89,11 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>src/main/resources/xml/xproc/epub3-validate.xpl</String>
+                                    <String>src/test/xprocspec/html-to-dtbook.convert.xprocspec</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
-                                        <String>epub3-validate</String>
+                                        <String>xprocspec-test in oXygen project</String>
                                     </list>
                                 </field>
                                 <field name="scenarioTypes">
@@ -114,21 +114,6 @@
                                 <field name="scenarioTypes">
                                     <list>
                                         <String>ANT</String>
-                                    </list>
-                                </field>
-                            </scenarioAssociation>
-                            <scenarioAssociation>
-                                <field name="url">
-                                    <String>src/main/resources/xml/xproc/step/epub3.validate.xpl</String>
-                                </field>
-                                <field name="scenarioIds">
-                                    <list>
-                                        <String>xprocspec-test in oXygen project</String>
-                                    </list>
-                                </field>
-                                <field name="scenarioTypes">
-                                    <list>
-                                        <String>XPROC</String>
                                     </list>
                                 </field>
                             </scenarioAssociation>

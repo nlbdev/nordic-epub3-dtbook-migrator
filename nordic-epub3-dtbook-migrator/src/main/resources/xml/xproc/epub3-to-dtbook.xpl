@@ -32,20 +32,19 @@
     <p:import href="step/html-to-dtbook.convert.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <!--    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <!--    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>-->
+    <p:import href="step/fileset-move.xpl"/>
 
     <px:unzip-fileset name="load.in-memory">
         <p:with-option name="href" select="$epub"/>
-        <p:with-option name="unzipped-basedir" select="concat($temp-dir,'unzipped-epub/')"/>
+        <p:with-option name="unzipped-basedir" select="$temp-dir"/>
     </px:unzip-fileset>
-    
+
     <!-- This is a workaround for a bug that should be fixed in Pipeline v1.8
          see: https://github.com/daisy-consortium/pipeline-modules-common/pull/49 -->
     <p:delete match="/*/*[ends-with(@href,'/')]" name="load.in-memory.fileset-fix"/>
-    
+
     <px:fileset-store name="load.stored">
         <p:input port="fileset.in">
             <p:pipe port="result" step="load.in-memory.fileset-fix"/>
@@ -65,45 +64,25 @@
     </px:nordic-epub3-to-html-convert>
 
     <px:nordic-html-to-dtbook-convert name="convert.dtbook">
-        <p:with-option name="temp-dir" select="concat($temp-dir,'dtbook/')"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="convert.html"/>
         </p:input>
     </px:nordic-html-to-dtbook-convert>
 
-    <px:fileset-rebase>
-        <p:with-option name="new-base" select="concat($temp-dir,'dtbook/')"/>
-    </px:fileset-rebase>
-    <p:viewport match="//d:file[not(@original-href)]">
-        <p:add-attribute match="/*" attribute-name="original-href">
-            <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri(/*))"/>
-        </p:add-attribute>
-    </p:viewport>
-    <p:add-attribute match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="$output-dir"/>
-    </p:add-attribute>
-    <p:identity name="result.fileset"/>
-
-    <p:for-each>
-        <p:iteration-source>
+    <px:fileset-move name="move">
+<!--        <p:with-option name="new-base" select="$output-dir"/>-->
+        <p:with-option name="new-base" select="concat($output-dir,(//d:file[@media-type='application/x-dtbook+xml'])[1]/replace(replace(@href,'.*/',''),'^(.[^\.]*).*?$','$1/'))"/>
+        <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="convert.dtbook"/>
-        </p:iteration-source>
-        <p:variable name="old-base" select="base-uri(/*)"/>
-        <p:variable name="new-base" select="(//d:file[@original-href=$old-base])[1]/resolve-uri(@href,base-uri(.))">
-            <p:pipe port="result" step="result.fileset"/>
-        </p:variable>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="$new-base"/>
-        </p:add-attribute>
-    </p:for-each>
-    <p:identity name="result.in-memory"/>
+        </p:input>
+    </px:fileset-move>
 
     <px:fileset-store name="fileset-store">
         <p:input port="fileset.in">
-            <p:pipe port="result" step="result.fileset"/>
+            <p:pipe port="fileset.out" step="move"/>
         </p:input>
         <p:input port="in-memory.in">
-            <p:pipe port="result" step="result.in-memory"/>
+            <p:pipe port="in-memory.out" step="move"/>
         </p:input>
     </px:fileset-store>
 

@@ -4,7 +4,7 @@
 	xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:f="http://www.daisy.org/ns/pipeline/internal-function">
 
 	<xsl:output indent="yes" exclude-result-prefixes="#all"/>
-	
+
 	<xsl:template match="/*">
 		<d:document-validation-report>
 			<xsl:text>
@@ -52,9 +52,9 @@
 							<xsl:with-param name="context" select="/*"/>
 						</xsl:call-template>
 					</xsl:if>
-					<xsl:if test="not(matches(base-uri(/*),'OEBPS/package.opf'))">
+					<xsl:if test="not(matches(base-uri(/*),'EPUB/package.opf'))">
 						<xsl:call-template name="error">
-							<xsl:with-param name="desc" select="'the OPF must be contained in a folder named OEBPS'"/>
+							<xsl:with-param name="desc" select="'the OPF must be contained in a folder named EPUB'"/>
 							<xsl:with-param name="context" select="/*"/>
 						</xsl:call-template>
 					</xsl:if>
@@ -230,21 +230,22 @@
 					</xsl:choose>
 
 					<xsl:for-each select="/*/manifest/item[starts-with(@media-type,'image/')]">
-						<!-- TODO: Are there any format restrictions? -->
 						<xsl:if test="not(matches(@href,'^images/[^/]+$'))">
 							<xsl:call-template name="error">
 								<xsl:with-param name="desc"
-									select="concat('all images must be stored in the directory &quot;OEBPS/images/&quot;, but the href attribute for the image (which is relative to the package document) is &quot;',@href,'&quot;')"/>
+									select="concat('all images must be stored in the directory &quot;EPUB/images/&quot;, but the href attribute for the image (which is relative to the package document) is &quot;',@href,'&quot;')"/>
 								<xsl:with-param name="context" select="."/>
 							</xsl:call-template>
 						</xsl:if>
 					</xsl:for-each>
-					
+
 					<xsl:text>
         </xsl:text>
-				</d:report><xsl:text>
+				</d:report>
+				<xsl:text>
     </xsl:text>
-			</d:reports><xsl:text>
+			</d:reports>
+			<xsl:text>
 </xsl:text>
 		</d:document-validation-report>
 	</xsl:template>
@@ -254,7 +255,8 @@
 		<xsl:param name="context" required="yes"/>
 		<xsl:param name="include-xpath" select="true()" required="no"/>
 		<xsl:text>            </xsl:text>
-		<d:error><xsl:text>
+		<d:error>
+			<xsl:text>
                 </xsl:text>
 			<d:desc>
 				<xsl:value-of select="$desc"/>
@@ -265,7 +267,8 @@
 			</d:file>-->
 			<xsl:text>
             </xsl:text>
-		</d:error><xsl:text>
+		</d:error>
+		<xsl:text>
 </xsl:text>
 	</xsl:template>
 

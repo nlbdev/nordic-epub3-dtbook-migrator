@@ -142,14 +142,39 @@
             <p:pipe port="result" step="single-html.metadata"/>
         </p:input>
     </p:replace>
+    <p:add-attribute attribute-name="xml:base" match="/*">
+        <p:with-option name="attribute-value" select="replace(base-uri(/*),'[^/]+$',concat((/*/html:head/html:meta[lower-case(@name)=('dc:identifier','dct:identifier','dtb:uid','dc:title')]/string(@content), /*/html:head/html:title/normalize-space(.))[1],'.xhtml'))"/>
+    </p:add-attribute>
+    <p:identity name="in-memory.original-imgrefs"/>
+    <p:viewport match="//html:img[@src]">
+        <p:add-attribute match="/*" attribute-name="src">
+            <p:with-option name="attribute-value" select="replace(/*/@src,'^images/','')"/>
+        </p:add-attribute>
+    </p:viewport>
+    <p:viewport match="//html:object[@data and (starts-with(@type,'image/') or ends-with(@data,'.svg'))]">
+        <p:add-attribute match="/*" attribute-name="data">
+            <p:with-option name="attribute-value" select="replace(/*/@data,'^images/','')"/>
+        </p:add-attribute>
+    </p:viewport>
     <p:identity name="in-memory"/>
 
     <px:html-to-fileset>
+        <p:input port="source">
+            <p:pipe port="result" step="in-memory.original-imgrefs"/>
+        </p:input>
         <p:input port="fileset.in">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
     </px:html-to-fileset>
-    <px:fileset-add-entry>
+    <p:viewport match="//d:file[starts-with(@media-type,'image/')]">
+        <p:add-attribute match="/*" attribute-name="original-href">
+            <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri(/*))"/>
+        </p:add-attribute>
+        <p:add-attribute match="/*" attribute-name="href">
+            <p:with-option name="attribute-value" select="replace(/*/@href,'^images/','')"/>
+        </p:add-attribute>
+    </p:viewport>
+    <px:fileset-add-entry media-type="application/xhtml+xml">
         <p:with-option name="href" select="base-uri(/*)">
             <p:pipe port="result" step="in-memory"/>
         </p:with-option>

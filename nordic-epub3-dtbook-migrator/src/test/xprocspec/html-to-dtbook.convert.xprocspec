@@ -4,19 +4,19 @@
     xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf">
 
-    <x:scenario label="px:nordic-epub3-validate.step">
+    <x:scenario label="px:nordic-epub3-validate.step" pending="not implemented">
         <x:call step="px:nordic-epub3-validate.step">
 
             <x:input port="fileset.in">
                 <x:document type="inline" xml:base="test-epub/">
                     <d:fileset>
-                        <d:file href="OEBPS/chapter1.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="EPUB/chapter1.xhtml" media-type="application/xhtml+xml"/>
                     </d:fileset>
                 </x:document>
             </x:input>
 
             <x:input port="in-memory.in">
-                <x:document href="test-epub/OEBPS/chapter1.xhtml" type="file" method="xml"/>
+                <x:document href="test-epub/EPUB/chapter1.xhtml" type="file" method="xml"/>
             </x:input>
 
             <x:option name="temp-dir" select="$temp-dir"/>
@@ -34,16 +34,16 @@
             <x:document type="port" port="in-memory.out"/>
         </x:context>
         <x:expect type="compare" label="the in-memory.out port should contain the same documents as was received on the in-memory.in port">
-            <x:document href="test-epub/OEBPS/package.opf" type="file" method="xml"/>
-            <x:document href="test-epub/OEBPS/nav.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/OEBPS/chapter1.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/OEBPS/chapter2.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/OEBPS/chapter3.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/OEBPS/chapter4.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/OEBPS/chapter5.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/OEBPS/chapter6.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/OEBPS/chapter7.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/OEBPS/toc.ncx" type="file" method="xml"/>
+            <x:document href="test-epub/EPUB/package.opf" type="file" method="xml"/>
+            <x:document href="test-epub/EPUB/nav.xhtml" type="file" method="xml"/>
+            <x:document href="test-epub/EPUB/chapter1.xhtml" type="file" method="xml"/>
+            <x:document href="test-epub/EPUB/chapter2.xhtml" type="file" method="xml"/>
+            <x:document href="test-epub/EPUB/chapter3.xhtml" type="file" method="xml"/>
+            <x:document href="test-epub/EPUB/chapter4.xhtml" type="file" method="xml"/>
+            <x:document href="test-epub/EPUB/chapter5.xhtml" type="file" method="xml"/>
+            <x:document href="test-epub/EPUB/chapter6.xhtml" type="file" method="xml"/>
+            <x:document href="test-epub/EPUB/chapter7.xhtml" type="file" method="xml"/>
+            <x:document href="test-epub/EPUB/toc.ncx" type="file" method="xml"/>
         </x:expect>
 
         <x:context label="report.out">
