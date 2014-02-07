@@ -231,7 +231,7 @@
     </xsl:template>
 
     <xsl:function name="f:xpath-string" as="xs:string">
-        <xsl:param name="node" required="yes"/>
+        <xsl:param name="node"/>
         <xsl:sequence
             select="concat('/',string-join(for $n in ($node/ancestor-or-self::node()[not(. intersect /)]) return concat(if ($n/self::*) then $n/name() else if ($n/self::text()) then 'text()' else if ($n/self::comment()) then 'comment()' else 'node()','[',1+count(if ($n/self::*) then $n/preceding-sibling::*[name()=$n/name()] else if ($n/self::text()) then $n/preceding-sibling::text() else if ($n/self::comment()) then $n/preceding-sibling::comment() else $n/preceding-sibling::node()),']'),'/'))"
         />
