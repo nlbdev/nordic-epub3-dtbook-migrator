@@ -55,9 +55,9 @@
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
-    <px:nordic-dtbook-validate.validate name="validate">
+    <px:nordic-dtbook-validate.step name="validate">
         <p:with-option name="input-dtbook" select="$input-dtbook"/>
-    </px:nordic-dtbook-validate.validate>
+    </px:nordic-dtbook-validate.step>
     
     <px:validation-report-to-html name="html">
         <p:input port="source">

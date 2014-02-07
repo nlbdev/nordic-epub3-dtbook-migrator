@@ -1238,6 +1238,7 @@
         <choice>
             <ref name="meta"/> <!-- meta -->
             <ref name="link"/> <!-- link -->
+            <ref name="style"/>
         </choice>
     </define>
     <!-- optional head elements -->
@@ -1260,10 +1261,11 @@
             </element>
             <element name="title">
                 <text/>
-                <sch:rule context=".">
+                <!--<sch:rule context=".">
                     <sch:ns uri="http://www.w3.org/1999/xhtml" prefix="html"/>
-                    <sch:assert test="normalize-space(.) = normalize-space(string-join((//(html:h1,html:h2,html:h3,html:h4,html:h5,html:h6))[1]/text(),' '))">The title element must contain the same text as the first headline in the document.</sch:assert>
-                </sch:rule>
+                    <sch:assert test="not(text()) or not(normalize-space(.) = '')">The title element must not be empty.</sch:assert>
+                    <sch:assert test="normalize-space(.) = normalize-space((//h1)[1])">The title element must contain the same text as the first headline in the document.</sch:assert>
+                </sch:rule>-->
             </element>
             <element name="meta">
                 <attribute name="name">
@@ -1284,16 +1286,6 @@
             <zeroOrMore>
                 <ref name="headmisc"/> <!-- meta, link -->
             </zeroOrMore>
-            <optional>
-                <element name="link">
-                    <attribute name="rel">
-                        <value>profile</value>
-                    </attribute>
-                    <attribute name="href">
-                        <ref name="URI"/>
-                    </attribute>
-                </element>
-            </optional>
         </element>
     </define>
     <!--
@@ -1413,7 +1405,26 @@
         </optional>
         <attribute name="content"/>
     </define>
+    
     <!-- HB: 2004-03-25 36: head: removed element style. -->
+    <define name="style">
+        <element name="style">
+            <ref name="attlist.style"/>
+            <empty/>
+        </element>
+    </define>
+    <define name="attlist.style" combine="interleave">
+        <ref name="attrs"/>
+        <attribute name="type"/>
+        <optional>
+            <attribute name="media"/>
+        </optional>
+        <optional>
+            <attribute name="scoped"/>
+        </optional>
+        <text/>
+    </define>
+    
     <!-- ============================ Book Content ============================= -->
     <!--
     Use: book surrounds the actual content of the document, which
@@ -1426,23 +1437,23 @@
             <!-- Strict content model: (h1 p)? (section | article) -->
             <choice>
                 <choice>
+                    <!-- multi-page HTML -->
                     <ref name="cover"/>
                     <ref name="frontmatter"/>
                     <ref name="bodymatter"/>
                     <ref name="rearmatter"/>
                 </choice>
                 <group>
-                    <optional>
-                        <element name="header">
-                            <ref name="doctitle.headline"/> <!-- p -->
-                            <optional>
-                                <ref name="covertitle"/> <!-- p -->
-                            </optional>
-                            <zeroOrMore>
-                                <ref name="docauthor"/> <!-- p -->
-                            </zeroOrMore>
-                        </element>
-                    </optional>
+                    <!-- single-page HTML -->
+                    <element name="header">
+                        <ref name="doctitle.headline"/> <!-- p -->
+                        <optional>
+                            <ref name="covertitle"/> <!-- p -->
+                        </optional>
+                        <zeroOrMore>
+                            <ref name="docauthor"/> <!-- p -->
+                        </zeroOrMore>
+                    </element>
                     <oneOrMore>
                         <choice>
                            <element name="section">
@@ -1465,20 +1476,33 @@
                        </choice>
                    </oneOrMore>
                 </group>
+                <group>
+                    <!-- navigation document -->
+                    <oneOrMore>
+                        <element name="nav">
+                            <attribute name="epub:type"/>
+                            <optional>
+                                <attribute name="hidden"/>
+                            </optional>
+                            <ref name="h1"/>
+                            <ref name="list"/>
+                        </element>
+                    </oneOrMore>
+                </group>
             </choice>
             <!-- attributes defined by frontmatter/bodymatter/rearmatter -->
         </element>
     </define>
     <!-- ======================== Book Major Structures ======================== -->
     <define name="cover">
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='cover'">The cover must have an epub:type of 'cover'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
         <oneOrMore>
             <choice>
                 <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
                 <ref name="level"/> <!-- section, article -->
-                <ref name="level2"/> <!-- section, article -->
+                <ref name="level1"/> <!-- section, article -->
             </choice>
         </oneOrMore>
     </define>
@@ -1496,9 +1520,9 @@
     <!-- HB: 2004-04-08 frontmatter: added covertitle. -->
     <!-- jpritchett@rfbd.org:  2006-07-06 doctitle now required, order of doctitle, covertitle, docauthor fixed. -->
     <define name="frontmatter">
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='frontmatter'">The frontmatter must have an epub:type of 'frontmatter'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
         <choice>
             <ref name="frontmatter.titlepage"/>
             <ref name="frontmatter.colophon"/>
@@ -1509,40 +1533,40 @@
         </choice>
     </define>
     <define name="frontmatter.titlepage">
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='titlepage'">The titlepage must have an epub:type of 'titlepage'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
         <oneOrMore>
             <choice>
                 <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
                 <ref name="level"/> <!-- section, article -->
-                <ref name="level2"/> <!-- section, article -->
+                <ref name="level1"/> <!-- section, article -->
             </choice>
         </oneOrMore>
     </define>
     <define name="frontmatter.colophon">
         <ref name="frontmatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='colophon'">The titlepage must have an epub:type of 'colophon'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="frontmatter.toc">
         <ref name="frontmatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='toc'">The toc must have an epub:type of 'toc'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="frontmatter.foreword">
         <ref name="frontmatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='foreword'">The foreword must have an epub:type of 'foreword'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="frontmatter.introduction">
         <ref name="frontmatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='introduction'">The introduction must have an epub:type of 'introduction'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="frontmatter.other">
         <ref name="frontmatter.generic"/>
@@ -1563,9 +1587,9 @@
     level or level1 container is required.
   -->
     <define name="bodymatter">
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='bodymatter'">The bodymatter must have an epub:type of 'bodymatter'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
         <choice>
             <ref name="bodymatter.prologue"/>
             <ref name="bodymatter.preface"/>
@@ -1577,40 +1601,40 @@
     </define>
     <define name="bodymatter.prologue">
         <ref name="bodymatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='prologue'">The titlepage must have an epub:type of 'prologue'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="bodymatter.preface">
         <ref name="bodymatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='preface'">The titlepage must have an epub:type of 'preface'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="bodymatter.part">
         <ref name="bodymatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='part'">The part must have an epub:type of 'part'</sch:assert>
             <sch:assert test="(section,article)/@epub:type='chapter'">The subsections of a part must have an epub:type of 'chapter'.</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="bodymatter.chapter">
         <ref name="bodymatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='chapter'">The chapter must have an epub:type of 'chapter'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="bodymatter.conclusion">
         <ref name="bodymatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='conclusion'">The conclusion must have an epub:type of 'conclusion'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="bodymatter.epilogue">
         <ref name="bodymatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='epilogue'">The titlepage must have an epub:type of 'epilogue'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="bodymatter.generic">
         <choice>
@@ -1628,9 +1652,9 @@
     level or level1 container is required.
   -->
     <define name="rearmatter">
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='backmatter'">The backmatter must have an epub:type of 'backmatter'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
         <choice>
             <ref name="rearmatter.afterword"/>
             <ref name="rearmatter.toc"/>
@@ -1644,45 +1668,45 @@
     </define>
     <define name="rearmatter.afterword">
         <ref name="rearmatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='afterword'">The afterword must have an epub:type of 'afterword'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="rearmatter.toc">
         <ref name="rearmatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='toc'">The toc must have an epub:type of 'toc'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="rearmatter.index">
         <ref name="rearmatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='index'">The index must have an epub:type of 'index'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="rearmatter.appendix">
         <ref name="rearmatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='appendix'">The appendix must have an epub:type of 'appendix'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="rearmatter.glossary">
         <ref name="rearmatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='glossary'">The glossary must have an epub:type of 'glossary'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="rearmatter.footnotes">
         <ref name="rearmatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='footnotes'">The footnotes must have an epub:type of 'footnotes'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="rearmatter.rearnotes">
         <ref name="rearmatter.generic"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='rearnotes'">The rearnotes must have an epub:type of 'rearnotes'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <define name="rearmatter.other">
         <ref name="rearmatter.generic"/>
@@ -2392,9 +2416,9 @@
             <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
             <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
             <ref name="attlist.line"/>
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@class,' ')='line'">Lines must have a 'line' class.</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <optional>
                 <ref name="linenum"/> <!-- () -->
             </optional>
@@ -2411,9 +2435,9 @@
     <define name="linenum">
         <element name="span">
             <ref name="attrs"/>
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@class,' ')='linenum'">Line numbers must have a 'linenum' class.</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <text/>
         </element>
     </define>
@@ -2456,11 +2480,23 @@
         <element name="div">
             <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
             <!-- Strict content model: (h1 | p | ol | ul | dl | div | blockquote | img | figure | table | address | span | aside | section | a | samp | kbd)+ -->
-            <!-- STRICT NOTE: There has to be at least one child inside div. Text content is not allowed, they have to be wrapped in one of the inline elements. -->
+            <!-- STRICT NOTE: If the div does not represent a pagebreak, then there has to be at least one child inside div. Text content is not allowed, they have to be wrapped in one of the inline elements. -->
             <ref name="attlist.div"/>
-            <oneOrMore>
-                <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
-            </oneOrMore>
+            <choice>
+                <group>
+                    <oneOrMore>
+                        <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
+                    </oneOrMore>
+                </group>
+                <group>
+                    <!--<sch:rule context=".">
+                        <sch:assert test="tokenize(@epub:type,' ')='pagebreak'">The pagebreak must have an epub:type of 'pagebreak'</sch:assert>
+                        <sch:assert test="matches(@class,'(^|.* )(page-front|page-normal|page-special)( .*|$)')">Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special' class.</sch:assert>
+                        <sch:assert test="matches(@title,'.+')">The title attribute must be used to describe the page number.</sch:assert>
+                    </sch:rule>-->
+                    <empty/>
+                </group>
+            </choice>
         </element>
     </define>
     <!--
@@ -2484,17 +2520,34 @@
         </element>
     </define>
     <define name="title">
-        <element name="h1">
-            <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
-            <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
-            <ref name="title.content"/>
-        </element>
+        <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
+        <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
+        <choice>
+            <element name="h1">
+                <ref name="title.content"/>
+            </element>
+            <element name="h2">
+                <ref name="title.content"/>
+            </element>
+            <element name="h3">
+                <ref name="title.content"/>
+            </element>
+            <element name="h4">
+                <ref name="title.content"/>
+            </element>
+            <element name="h5">
+                <ref name="title.content"/>
+            </element>
+            <element name="h6">
+                <ref name="title.content"/>
+            </element>
+        </choice>
     </define>
     <define name="title.content">
         <ref name="attlist.title"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="tokenize(@class,' ')='title'">Titles must have a 'title' class.</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
         <zeroOrMore>
             <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
         </zeroOrMore>
@@ -2511,9 +2564,9 @@
         <element name="span">
             <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
             <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@epub:type,' ')='z3998:author'">The name of the author must have an epub:type of 'z3998:author'</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <ref name="attlist.author"/>
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
@@ -2542,9 +2595,9 @@
         <element name="aside">
             <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
             <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | figure | br | q | sub | sup | span | bdo | p | ol | ul | dl | div | blockquote | table | address | (text))* -->
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='z3998:production'">The production note must have an epub:type of 'z3998:production'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.prodnote"/>
             <zeroOrMore>
                 <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
@@ -2576,9 +2629,9 @@
             NOTE: an alternative would be to use aria-describedat, linking from the image to the prodnote:
             https://dvcs.w3.org/hg/aria-unofficial/raw-file/tip/describedat.html
         -->
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="matches(@class,'(^|.* )(render-required|render-optional)( .*|$)')">Production notes must have either a 'required' or 'optional' class. If optional, some user preference may allow skipping over the content.</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <!--
     Use: sidebar contains information supplementary to the main
@@ -2589,9 +2642,9 @@
         <element name="section">
             <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
             <!-- Strict content model: (h1 | em | strong | dfn | code | samp | kbd | abbr | a | img | figure | br | q | sub | sup | span | bdo | p | ol | ul | dl | div | blockquote | table | address | (text))* -->
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='sidebar'">The sidebar must have an epub:type of 'sidebar'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.sidebar"/>
             <zeroOrMore>
                 <choice>
@@ -2609,9 +2662,9 @@
   -->
     <define name="attlist.sidebar" combine="interleave">
         <ref name="attrs"/>
-        <sch:rule context=".">
+        <!--<sch:rule context=".">
             <sch:assert test="matches(@class,'(^|.* )(render-required|render-optional)( .*|$)')">Sidebars must have either a 'required' or 'optional' class. If optional, some user preference may allow skipping over the content.</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
     </define>
     <!--
     Use: note marks a footnote, endnote, etc. Any local reference to
@@ -2621,9 +2674,9 @@
         <element name="aside">
             <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
             <!-- Strict content model: (p | ol | ul | dl | div | blockquote | img | figure | table | address | span | aside | section | a | samp | kbd)+ -->
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='note'">The note must have an epub:type of 'note'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.note"/>
             <oneOrMore>
                 <choice>
@@ -2647,9 +2700,9 @@
         <element name="aside">
             <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
             <!-- Strict content model: (p | ol | ul | dl | div | blockquote | img | figure | table | address | span | aside | section | a | samp | kbd)+ -->
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='annotation'">The annotation must have an epub:type of 'annotation'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.annotation"/>
             <oneOrMore>
                 <choice>
@@ -2679,9 +2732,9 @@
         <element name="p">
             <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
             <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='epigraph'">The epigraph must have an epub:type of 'epigraph'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.epigraph"/>
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
@@ -2702,9 +2755,9 @@
             <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
             <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
             <ref name="attlist.byline"/>
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@class,' ')='byline'">Bylines must have a 'byline' class.</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
             </zeroOrMore>
@@ -2724,9 +2777,9 @@
             <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
             <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
             <ref name="attlist.dateline"/>
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@class,' ')='dateline'">Datelines must have a 'dateline' class.</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
             </zeroOrMore>
@@ -2748,9 +2801,9 @@
             <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
             <!-- Strict content model: (h1 | span | p | section | aside | a | ul | ol | dl | blockquote | img | figure)* -->
             <ref name="attlist.linegroup"/>
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@class,' ')='linegroup'">Linegroups must have a 'linegroup' class.</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <zeroOrMore>
                 <choice>
                     <ref name="hd"/> <!-- h1 -->
@@ -2789,9 +2842,9 @@
         <element name="section">
             <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
             <!-- Strict content model: (h1 | span | p | section | img | figure)* -->
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='z3998:poem'">The poem must have an epub:type of 'z3998:poem'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.poem"/>
             <zeroOrMore>
                 <choice>
@@ -3062,9 +3115,9 @@
     <define name="cite">
         <element name="span">
             <ref name="attlist.cite"/>
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='z3998:nonresolving-citation'">The citation must have an epub:type of 'z3998:nonresolving-citation'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <zeroOrMore>
                 <choice>
                     <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
@@ -3106,9 +3159,9 @@
     <define name="acronym">
         <element name="abbr">
             <ref name="attlist.acronym"/>
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@class,' ')='acronym'">Acronyms must have a 'acronym' class.</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
             </zeroOrMore>
@@ -3223,9 +3276,9 @@
     <!-- Use: sent marks a sentence. -->
     <define name="sent">
         <element name="span">
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='z3998:sentence'">The sentence must have an epub:type of 'z3998:sentence'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.sent"/>
             <zeroOrMore>
                 <ref name="inlines"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
@@ -3238,9 +3291,9 @@
     <!-- Use: w marks a word. -->
     <define name="w">
         <element name="span">
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='z3998:word'">The word must have an epub:type of 'z3998:word'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.w"/>
             <zeroOrMore>
                 <ref name="inlinew"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
@@ -3262,14 +3315,14 @@
   -->
     <define name="pagenum">
         <element name="span">
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@epub:type,' ')='pagebreak'">The pagebreak must have an epub:type of 'pagebreak'</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <ref name="attlist.pagenum"/>
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="matches(@class,'(^|.* )(page-front|page-normal|page-special)( .*|$)')">Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special' class.</sch:assert>
                 <sch:assert test="matches(@title,'.+')">The title attribute must be used to describe the page number.</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
         </element>
     </define>
     <!--
@@ -3294,9 +3347,9 @@
   -->
     <define name="noteref">
         <element name="a">
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='noteref'">The note reference must have an epub:type of 'noteref'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.noteref"/>
             <text/>
         </element>
@@ -3335,9 +3388,9 @@
   -->
     <define name="annoref">
         <element name="a">
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='annoref'">The annotation reference must have an epub:type of 'annoref'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.annoref"/>
             <text/>
         </element>
@@ -3570,9 +3623,9 @@
   -->
     <define name="doctitle">
         <element name="p">
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@epub:type,' ')='fulltitle'">The full title must have an epub:type of 'fulltitle'</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <ref name="attlist.doctitle"/>
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
@@ -3581,9 +3634,9 @@
     </define>
     <define name="doctitle.headline">
         <element name="h1">
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@epub:type,' ')='fulltitle'">The full title must have an epub:type of 'fulltitle'</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <ref name="attlist.doctitle"/>
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
@@ -3600,10 +3653,10 @@
   -->
     <define name="docauthor">
         <element name="p">
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@epub:type,' ')='z3998:author'">The document author must have an epub:type of 'z3998:author'</sch:assert>
                 <sch:assert test="tokenize(@class,' ')='docauthor'">The document author must have a class of 'docauthor'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.docauthor"/>
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
@@ -3620,9 +3673,9 @@
     <!-- HB: 2004-04-08 covertitle: element added -->
     <define name="covertitle">
         <element name="p">
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@epub:type,' ')='covertitle'">The cover title must have an epub:type of 'covertitle'</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <ref name="attlist.covertitle"/>
             <text/>
         </element>
@@ -3722,9 +3775,9 @@
   -->
     <define name="bridgehead">
         <element name="p">
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='bridgehead'">The bridgehead must have an epub:type of 'bridgehead'</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
             <ref name="attlist.bridgehead"/>
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
@@ -4014,9 +4067,9 @@
     <define name="lic">
         <element name="span">
             <ref name="attlist.lic"/>
-            <sch:rule context=".">
+            <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@class,' ')='lic'">List item components must have a 'lic' class.</sch:assert>
-            </sch:rule>
+            </sch:rule>-->
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
             </zeroOrMore>
@@ -4184,7 +4237,9 @@
             Most attributes are deprecated. Convert to CSS according to Mozilla:
             http://hg.mozilla.org/mozilla-central/file/3fd770ef6a65/layout/style/html.css
         -->
-        <attribute name="style"/>
+        <optional>
+            <attribute name="style"/>
+        </optional>
     </define>
     <!-- HB: 2004-03-25 36f: caption: removed use for <img>. -->
     <!-- MM: 2004-09-15: caption: changed content model to %flow;. -->
@@ -4200,9 +4255,9 @@
                 <element name="p">
                     <!-- STRICT NOTE: Table summary attribute not allowed in HTML. Will be presented as a paragraph here instead. -->
                     <attribute name="class"/>
-                    <sch:rule context=".">
+                    <!--<sch:rule context=".">
                         <sch:assert test="matches(@class,'(^|.* )table-summary( .*|$)')">Table summaries must have a 'table-summary' class.</sch:assert>
-                    </sch:rule>
+                    </sch:rule>-->
                     <ref name="Text"/>
                 </element>
             </optional>
@@ -4217,9 +4272,9 @@
             <choice>
                 <group>
                     <ref name="attlist.caption"/>
-                    <sch:rule context=".">
+                    <!--<sch:rule context=".">
                         <sch:assert test="tokenize(@class,' ')='caption'">Figure captions must have a 'caption' class.</sch:assert>
-                    </sch:rule>
+                    </sch:rule>-->
                     <zeroOrMore>
                         <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
                     </zeroOrMore>
@@ -4228,9 +4283,9 @@
                     <oneOrMore>
                         <element name="div">
                             <ref name="attlist.caption"/>
-                            <sch:rule context=".">
+                            <!--<sch:rule context=".">
                                 <sch:assert test="tokenize(@class,' ')='caption'">Figure captions must have a 'caption' class.</sch:assert>
-                            </sch:rule>
+                            </sch:rule>-->
                             <zeroOrMore>
                                 <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
                             </zeroOrMore>

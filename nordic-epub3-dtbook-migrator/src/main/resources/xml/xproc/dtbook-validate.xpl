@@ -54,10 +54,10 @@
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <px:nordic-dtbook-validate.validate name="validate">
+    <px:nordic-dtbook-validate.step name="validate">
         <p:with-option name="input-dtbook" select="$input-dtbook"/>
         <!--<p:with-option name="check-images" select="$check-images"/>-->
-    </px:nordic-dtbook-validate.validate>
+    </px:nordic-dtbook-validate.step>
     <p:sink/>
 
     <px:validation-report-to-html name="html">

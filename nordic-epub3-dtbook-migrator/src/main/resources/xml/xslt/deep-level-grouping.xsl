@@ -9,8 +9,9 @@
     <xsl:param name="namespace" required="yes"/>
 
     <!-- The max allowed nesting depth, after which unnesting will begin -->
-    <xsl:param name="max-depth" required="yes" as="xs:integer"/>
-    
+    <xsl:param name="max-depth" required="yes"/>
+    <xsl:variable name="max-depth-int" select="xs:integer($max-depth)"/>
+
     <!-- Whether wrapper elements should be copied into the resulting unwrapped elements.
         The default is false to ensure a valid content model. In many cases the content model
         are fine with this set to true as well, and it would be less lossy.
@@ -57,16 +58,18 @@
     <xsl:variable name="tokenized-names" select="tokenize($name,'\s+')"/>
 
     <xsl:template match="*[f:is-level(.)]">
-        <xsl:variable name="level" select="count(ancestor::*[f:is-level(.)])"/>
+        <xsl:variable name="level" select="count(ancestor::*[f:is-level(.)])+1"/>
 
         <!-- deep-levels can be resource intensive for big documents; so only call the deep-levels template if necessary -->
         <xsl:choose>
-            <xsl:when test="$level=0">
+            <xsl:when test="$level &lt; $max-depth-int">
+                <xsl:message select="concat('level is less than ',$max-depth-int,', will not unwrap; at: ',f:xpath-string(.))"/>
                 <xsl:copy>
                     <xsl:apply-templates select="@*|node()"/>
                 </xsl:copy>
             </xsl:when>
             <xsl:otherwise>
+                <xsl:message select="concat('level is more than or equal to ',$max-depth-int,', will unwrap; at: ',f:xpath-string(.))"/>
                 <xsl:call-template name="deep-levels"/>
             </xsl:otherwise>
         </xsl:choose>
@@ -75,10 +78,12 @@
     <xsl:template name="deep-levels">
         <xsl:variable name="this" select="."/>
         <xsl:variable name="deep-levels" select=".//*[f:is-level(.)] | .//*[f:is-level(.)]/following-sibling::*[not(.//*[f:is-level(.)])][1][not(self::*[f:is-level(.)])]"/>
+        <xsl:message select="concat('found ',count($deep-levels),' deep levels at: ',f:xpath-string(.))"/>
         <xsl:choose>
 
             <xsl:when test="not($deep-levels)">
                 <!-- no deep levels -->
+                <xsl:message select="concat('no deep levels: ',f:xpath-string(.))"/>
                 <xsl:call-template name="make-level">
                     <xsl:with-param name="content" select="node()"/>
                     <xsl:with-param name="root-level" select="$this"/>
@@ -101,6 +106,7 @@
                     <xsl:choose>
                         <xsl:when test="self::*[f:is-level(.)] and not(.//*[f:is-level(.)])">
                             <!-- no deeper levels -->
+                            <xsl:message select="concat('no deeper levels: ',f:xpath-string(.))"/>
                             <xsl:call-template name="make-level">
                                 <xsl:with-param name="content" select="node()"/>
                                 <xsl:with-param name="root-level" select="$this"/>
@@ -109,6 +115,7 @@
 
                         <xsl:when test="self::*[f:is-level(.)]">
                             <!-- content in start of sublevel -->
+                            <xsl:message select="concat('content in start of sublevel: ',f:xpath-string(.))"/>
                             <xsl:variable name="this-level" select="."/>
                             <xsl:variable name="next-level" select="(.//*[f:is-level(.)])[1]"/>
                             <xsl:variable name="content" select="$this-level//node()[not(descendant-or-self::*[f:is-level(.)])][$next-level >> .]"/>
@@ -121,8 +128,8 @@
 
                         <xsl:when test="following::*[f:is-level(.)] intersect ancestor::*[f:is-level(.)][1]//*[f:is-level(.)]">
                             <!-- content in the middle of a sublevel -->
-                            <xsl:variable name="content"
-                                select="(. | following::node()) intersect (. | following-sibling::*)//descendant-or-self::*[f:is-level(.)]/preceding::node()"/>
+                            <xsl:message select="concat('content in the middle of a sublevel: ',f:xpath-string(.))"/>
+                            <xsl:variable name="content" select="(. | following::node()) intersect (. | following-sibling::*)//descendant-or-self::*[f:is-level(.)]/preceding::node()"/>
                             <xsl:variable name="content" select="$content[not(./ancestor::node()=$content)]"/>
                             <xsl:call-template name="make-level">
                                 <xsl:with-param name="content" select="$content"/>
@@ -132,6 +139,7 @@
 
                         <xsl:otherwise>
                             <!-- content at the end of a sublevel -->
+                            <xsl:message select="concat('content at the end of a sublevel: ',f:xpath-string(.))"/>
                             <xsl:variable name="content" select="(. | following::node()) intersect ancestor::*[f:is-level(.)][1]//node()"/>
                             <xsl:variable name="content" select="$content[not(./ancestor::node()=$content)]"/>
                             <xsl:call-template name="make-level">
@@ -148,7 +156,7 @@
     <xsl:template name="make-level">
         <xsl:param name="content" as="node()*"/>
         <xsl:param name="root-level" as="node()"/>
-        <xsl:variable name="common-ancestor" select="if ($copy-wrapping-elements-into-result='true') then $root-level else ($content[1]/ancestor::*[not($content except .//node())])[last()]"/>
+        <xsl:variable name="common-ancestor" select="if (xs:string($copy-wrapping-elements-into-result)='true') then $root-level else ($content[1]/ancestor::*[not($content except .//node())])[last()]"/>
         <xsl:element name="{local-name($root-level)}" namespace="{namespace-uri($root-level)}">
             <xsl:copy-of select="$content[1]/ancestor-or-self::*[f:is-level(.)]/@*"/>
             <xsl:for-each select="$common-ancestor/node()">
@@ -218,9 +226,15 @@
 
     <xsl:template match="@*|node()">
         <xsl:copy>
-            <xsl:apply-templates select="@*"/>
-            <xsl:apply-templates select="node()"/>
+            <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
+
+    <xsl:function name="f:xpath-string" as="xs:string">
+        <xsl:param name="node" required="yes"/>
+        <xsl:sequence
+            select="concat('/',string-join(for $n in ($node/ancestor-or-self::node()[not(. intersect /)]) return concat(if ($n/self::*) then $n/name() else if ($n/self::text()) then 'text()' else if ($n/self::comment()) then 'comment()' else 'node()','[',1+count(if ($n/self::*) then $n/preceding-sibling::*[name()=$n/name()] else if ($n/self::text()) then $n/preceding-sibling::text() else if ($n/self::comment()) then $n/preceding-sibling::comment() else $n/preceding-sibling::node()),']'),'/'))"
+        />
+    </xsl:function>
 
 </xsl:stylesheet>

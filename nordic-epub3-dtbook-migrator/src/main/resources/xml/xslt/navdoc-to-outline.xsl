@@ -11,6 +11,7 @@
     <xsl:template match="/*">
         <xsl:copy>
             <xsl:attribute name="xml:base" select="base-uri(/*)"/>
+            <xsl:attribute name="epub:prefix" select="'z3998: http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
             <head/>
             <body>
                 <xsl:apply-templates select="//nav[matches(@epub:type,'(^|\s)toc(\s|$)')]/ol"/>

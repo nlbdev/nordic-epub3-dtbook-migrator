@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-dtbook-validate.validate" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
+    type="px:nordic-dtbook-validate.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:l="http://xproc.org/library">
 
     <p:documentation>Validates and loads the DTBook at the href $input-dtbook according to generic and nordic guidelines.</p:documentation>
@@ -81,7 +81,7 @@
             <px:message message="Validating DTBook according to Nordic specification..."/>
             <l:relax-ng-report name="validate.input-dtbook.nordic.validation">
                 <p:input port="schema">
-                    <p:document href="../../schema/dtbook-2005-3.rng"/>
+                    <p:document href="../../schema/nordic-dtbook-2005-3.rng"/>
                 </p:input>
                 <p:with-option name="dtd-attribute-values" select="'false'"/>
                 <p:with-option name="dtd-id-idref-warnings" select="'false'"/>

@@ -134,6 +134,45 @@
     </p:xslt>
     <p:identity name="single-html.metadata"/>
 
+    <p:string-replace match="//html:h1/text()">
+        <p:input port="source">
+            <p:inline exclude-inline-prefixes="#all">
+                <header xmlns="http://www.w3.org/1999/xhtml">
+                    <h1 epub:type="fulltitle">FULLTITLE</h1>
+                </header>
+            </p:inline>
+        </p:input>
+        <p:with-option name="replace" select="concat('&quot;',replace(//html:title/text(),'&quot;','&amp;quot;'),'&quot;')">
+            <p:pipe port="result" step="single-html.metadata"/>
+        </p:with-option>
+    </p:string-replace>
+    <p:insert match="/*" position="last-child">
+        <p:input port="insertion" select="//html:meta[@name='dc:creator']">
+            <p:pipe port="result" step="single-html.metadata"/>
+        </p:input>
+    </p:insert>
+    <p:insert match="/*" position="last-child">
+        <p:input port="insertion" select="//html:meta[@name='z3998:covertitle']">
+            <p:pipe port="result" step="single-html.metadata"/>
+        </p:input>
+    </p:insert>
+    <p:rename match="/*/html:meta" new-name="p" new-namespace="http://www.w3.org/1999/xhtml"/>
+    <p:insert match="//html:p" position="first-child">
+        <p:input port="insertion">
+            <p:inline exclude-inline-prefixes="#all">
+                <html:span>TEXT</html:span>
+            </p:inline>
+        </p:input>
+    </p:insert>
+    <p:unwrap match="//html:p/html:span"/>
+    <p:viewport match="//html:p">
+        <p:string-replace match="/*/text()" replace="/*/@content"/>
+    </p:viewport>
+    <p:add-attribute match="//html:p[@name='dc:creator']" attribute-name="epub:type" attribute-value="z3998:author"/>
+    <p:add-attribute match="//html:p[@name='z3998:covertitle']" attribute-name="epub:type" attribute-value="z3998:covertitle"/>
+    <p:delete match="//html:p/@*[not(name()='epub:type')]"/>
+    <p:identity name="single-html.body.header"/>
+
     <p:replace match="//html:head">
         <p:input port="source">
             <p:pipe port="result" step="single-html.body"/>
@@ -142,20 +181,20 @@
             <p:pipe port="result" step="single-html.metadata"/>
         </p:input>
     </p:replace>
+    <p:insert match="/*/html:body" position="first-child">
+        <p:input port="insertion">
+            <p:pipe port="result" step="single-html.body.header"/>
+        </p:input>
+    </p:insert>
+    <p:add-attribute match="/*" attribute-name="xml:lang">
+        <p:with-option name="attribute-value" select="/*/html:head/html:meta[@name='dc:language']/@content"/>
+    </p:add-attribute>
     <p:add-attribute attribute-name="xml:base" match="/*">
-        <p:with-option name="attribute-value" select="replace(base-uri(/*),'[^/]+$',concat((/*/html:head/html:meta[lower-case(@name)=('dc:identifier','dct:identifier','dtb:uid','dc:title')]/string(@content), /*/html:head/html:title/normalize-space(.))[1],'.xhtml'))"/>
+        <p:with-option name="attribute-value"
+            select="replace(base-uri(/*),'[^/]+$',concat((/*/html:head/html:meta[lower-case(@name)=('dc:identifier','dct:identifier','dtb:uid','dc:title')]/string(@content), /*/html:head/html:title/normalize-space(.))[1],'.xhtml'))"
+        />
     </p:add-attribute>
     <p:identity name="in-memory.original-imgrefs"/>
-    <p:viewport match="//html:img[@src]">
-        <p:add-attribute match="/*" attribute-name="src">
-            <p:with-option name="attribute-value" select="replace(/*/@src,'^images/','')"/>
-        </p:add-attribute>
-    </p:viewport>
-    <p:viewport match="//html:object[@data and (starts-with(@type,'image/') or ends-with(@data,'.svg'))]">
-        <p:add-attribute match="/*" attribute-name="data">
-            <p:with-option name="attribute-value" select="replace(/*/@data,'^images/','')"/>
-        </p:add-attribute>
-    </p:viewport>
     <p:identity name="in-memory"/>
 
     <px:html-to-fileset>
@@ -166,6 +205,7 @@
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
     </px:html-to-fileset>
+    <p:delete match="//d:file[preceding-sibling::d:file/resolve-uri(@href,base-uri(.))=resolve-uri(@href,base-uri(.))]"/>
     <p:viewport match="//d:file[starts-with(@media-type,'image/')]">
         <p:add-attribute match="/*" attribute-name="original-href">
             <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri(/*))"/>

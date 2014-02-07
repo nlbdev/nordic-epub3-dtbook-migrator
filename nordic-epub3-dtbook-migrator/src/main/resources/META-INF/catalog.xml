@@ -18,7 +18,13 @@
   <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/dtbook.validate.xpl" uri="../xml/xproc/step/dtbook.validate.xpl"/>
   <!-- <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-to-dtbook.convert.xpl" uri="../xml/xproc/step/html-to-dtbook.convert.xpl"/> -->
   <uri name="http://www.daisy.org/pipeline/modules/nordic/dtbook-to-epub3/xproc/html-split.split.xpl" uri="../xml/xproc/step/html-split.split.xpl"/>
-
+  
+  <!-- Schemas -->
+  <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic-dtbook-2005-3.rng" uri="../xml/schema/nordic-dtbook-2005-3.rng"/>
+  <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng" uri="../xml/schema/nordic-html5.rng"/>
+  <uri name="http://www.daisy.org/pipeline/modules/nordic/tpb2011-1.sch" uri="../xml/schema/tpb2011-1.sch"/>
+  <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch" uri="../xml/schema/nordic2015-1.sch"/>
+  
   <!-- TODO: This XSLT will be included in Pipeline 2 from v1.8 onwards. Until then, we keep a copy of it in this repo as well. -->
   <uri name="http://www.daisy.org/pipeline/modules/common-utils/deep-level-grouping.xsl" uri="../xml/xslt/deep-level-grouping.xsl"/>
 

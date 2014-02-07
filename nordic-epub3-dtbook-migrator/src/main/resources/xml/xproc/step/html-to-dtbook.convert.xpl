@@ -7,26 +7,16 @@
     <p:input port="in-memory.in" sequence="true"/>
 
     <p:output port="fileset.out" primary="true">
-        <!--        <p:pipe port="fileset" step="result"/>-->
         <p:pipe port="result" step="result.fileset"/>
     </p:output>
     <p:output port="in-memory.out" sequence="true">
-        <!--        <p:pipe port="in-memory" step="result"/>-->
         <p:pipe port="result" step="result.in-memory"/>
     </p:output>
-
-    <!--    <p:option name="temp-dir" required="true"/>-->
 
     <p:import href="../library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-
-    <!--<p:variable name="doc-base" select="base-uri(/)">
-        <p:inline>
-            <irrelevant/>
-        </p:inline>
-    </p:variable>-->
 
     <px:fileset-load media-types="application/xhtml+xml">
         <p:input port="in-memory">
@@ -36,9 +26,10 @@
     <px:assert test-count-max="1" message="There are multiple HTML files in the fileset; only the first one will be converted."/>
     <px:assert test-count-min="1" message="There must be a HTML file in the fileset." error-code="NORDICDTBOOKEPUB005"/>
     <p:split-sequence initial-only="true" test="position()=1"/>
+    <px:assert message="The HTML file must have a file extension." error-code="NORDICDTBOOKEPUB006">
+        <p:with-option name="test" select="matches(base-uri(/*),'.*[^\.]\.[^\.]*$')"/>
+    </px:assert>
     <p:identity name="input-html"/>
-
-    <!-- TODO: should the input HTML be validated here ? -->
 
     <!-- Make sure only sections corresponding to html:h[1-6] are used. -->
     <p:xslt>
@@ -50,7 +41,7 @@
             <p:document href="http://www.daisy.org/pipeline/modules/common-utils/deep-level-grouping.xsl"/>
         </p:input>
     </p:xslt>
-
+    
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>
@@ -65,9 +56,15 @@
             <p:pipe port="result" step="input-html"/>
         </p:with-option>
     </p:add-attribute>
+    <p:xslt>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:document href="../xslt/pretty-print.xsl"/>
+        </p:input>
+    </p:xslt>
     <p:identity name="result.in-memory"/>
-
-    <!-- TODO: validate output DTBook ? -->
 
     <p:identity>
         <p:input port="source">
@@ -76,13 +73,19 @@
     </p:identity>
     <p:delete match="//d:file[@media-type=('application/xhtml+xml','text/css')]"/>
     <px:fileset-add-entry media-type="application/x-dtbook+xml">
-        <p:with-option name="href" select="base-uri(/*)">
-            <p:pipe port="result" step="result.in-memory"/>
+        <p:with-option name="href" select="(/*/d:file[@media-type='application/xhtml+xml'])[1]/replace(replace(@href,'.*/',''),'\.[^\.]*$','.xml')">
+            <p:pipe port="fileset.in" step="main"/>
         </p:with-option>
     </px:fileset-add-entry>
     <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-public" attribute-value="-//NISO//DTD dtbook 2005-3//EN"/>
     <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-system" attribute-value="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
     <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="omit-xml-declaration" attribute-value="false"/>
+    <p:xslt>
+        <p:with-param name="preserve-empty-whitespace" select="'false'"/>
+        <p:input port="stylesheet">
+            <p:document href="../xslt/pretty-print.xsl"/>
+        </p:input>
+    </p:xslt>
     <p:identity name="result.fileset"/>
 
 </p:declare-step>
