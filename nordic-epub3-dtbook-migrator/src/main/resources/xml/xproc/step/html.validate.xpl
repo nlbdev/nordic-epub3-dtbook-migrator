@@ -23,6 +23,8 @@
         <p:pipe port="report.in" step="main"/>
         <p:pipe port="result" step="report"/>
     </p:output>
+    
+    <p:option name="document-type" required="false" select="'Nordic HTML'"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -61,7 +63,8 @@
     </p:validate-with-schematron>
     <p:sink/>
     
-    <px:combine-validation-reports document-type="Nordic HTML">
+    <px:combine-validation-reports>
+        <p:with-option name="document-type" select="$document-type"/>
         <p:input port="source">
             <p:pipe port="report" step="validate.rng"/>
             <p:pipe port="report" step="validate.sch"/>

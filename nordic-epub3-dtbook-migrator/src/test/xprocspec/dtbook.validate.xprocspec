@@ -6,7 +6,7 @@
 
     <x:scenario label="px:nordic-dtbook-validate.step">
         <x:call step="px:nordic-dtbook-validate.step">
-            <x:option name="input-dtbook" select="resolve-uri('DTBook/C00000.xml')"/>
+            <x:option name="dtbook" select="resolve-uri('DTBook/C00000.xml')"/>
             <x:input port="report.in"/>
         </x:call>
 

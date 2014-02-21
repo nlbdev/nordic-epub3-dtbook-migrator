@@ -21,7 +21,7 @@
                         <d:file href="EPUB/chapter5.xhtml" media-type="application/xhtml+xml"/>
                         <d:file href="EPUB/chapter6.xhtml" media-type="application/xhtml+xml"/>
                         <d:file href="EPUB/chapter7.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/toc.ncx" media-type="application/xhtml+xml"/>
+                        <d:file href="EPUB/toc.ncx" media-type="application/x-dtbncx+xml"/>
                         <d:file href="EPUB/images/valentin.jpg" media-type="image/jpeg"/>
                         <d:file href="EPUB/css/accessibility.css" media-type="text/css"/>
                         <d:file href="EPUB/css/fonts/opendyslexic/OpenDyslexic-Bold.otf"/>

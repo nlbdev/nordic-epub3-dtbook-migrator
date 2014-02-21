@@ -2,7 +2,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0" xmlns:d="http://www.daisy.org/ns/pipeline/data"
 	xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns="http://www.idpf.org/2007/opf" xpath-default-namespace="http://www.idpf.org/2007/opf"
 	xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:f="http://www.daisy.org/ns/pipeline/internal-function">
-
+	
+	<!-- TODO: This XSLT should probably be converted to Schematron -->
+	
 	<xsl:output indent="yes" exclude-result-prefixes="#all"/>
 
 	<xsl:template match="/*">

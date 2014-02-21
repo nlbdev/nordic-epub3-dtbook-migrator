@@ -14,8 +14,6 @@
         <p:pipe port="result" step="in-memory.resources"/>
     </p:output>
     
-    <p:option name="output-dir" required="true"/>
-
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     
@@ -27,16 +25,18 @@
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one HTML file in the fileset." error-code="NORDICDTBOOKEPUB006"/>
     <p:identity name="html"/>
     
-    <!-- TODO: validate HTML -->
-
     <p:xslt>
-        <p:with-param name="output-dir" select="$output-dir"/>
+        <p:with-param name="output-dir" select="replace(base-uri(/*),'[^/]+$','')">
+            <p:pipe port="result" step="html"/>
+        </p:with-param>
         <p:input port="stylesheet">
             <p:document href="../../xslt/split-html.annotate.xsl"/>
         </p:input>
     </p:xslt>
     <p:xslt name="split">
-        <p:with-param name="output-dir" select="$output-dir"/>
+        <p:with-param name="output-dir" select="replace(base-uri(/*),'[^/]+$','')">
+            <p:pipe port="result" step="html"/>
+        </p:with-param>
         <p:input port="stylesheet">
             <p:document href="../../xslt/split-html.xsl"/>
         </p:input>
@@ -53,7 +53,6 @@
         
         <p:variable name="base" select="base-uri(/*)"/>
         
-        <!-- TODO: validate HTML -->
         <p:identity name="for-each.html"/>
         
         <px:fileset-create>

@@ -9,14 +9,14 @@
     <xsl:template match="text()"/>
 
     <xsl:template match="opf:metadata">
-        <head xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+        <head xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:nordic="http://www.mtm.se/epub/">
             <xsl:copy-of select="namespace::*[not(.=('http://www.w3.org/1999/xhtml','http://www.idpf.org/2007/opf'))]"/>
             <meta charset="UTF-8"/>
             <title>
                 <xsl:copy-of select="dc:title[1]/(@scheme|@http-equiv|@xml:lang|@dir|namespace::*[not(.=('http://www.w3.org/1999/xhtml','http://www.idpf.org/2007/opf'))]|node())"/>
             </title>
             <meta name="viewport" content="width=device-width" />
-            <meta name="track:Guidelines" content="2015-1" />
+            <meta name="nordic:guidelines" content="2015-1" />
             <xsl:for-each select="*[not(self::opf:*) and not(self::dc:title)]">
                 <meta name="{name()}" content="{normalize-space(.)}">
                     <xsl:copy-of select="@scheme|@http-equiv|@xml:lang|@dir|namespace::*[not(.=('http://www.w3.org/1999/xhtml','http://www.idpf.org/2007/opf'))]"/>

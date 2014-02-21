@@ -251,11 +251,11 @@
   	</sch:rule>
   </sch:pattern>
 
-  <!-- Rule 43: dc:Publisher must be 'TPB', 'SPSM', 'Nota', 'NLB' or 'Celia' -->
+  <!-- Rule 43: dc:Publisher must be 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia', or 'SBS' -->
   <sch:pattern  id="dtbook_TPB_43">
     <sch:rule context="dtbk:head">
       <!-- dc:Publisher -->
-      <sch:assert test="count(dtbk:meta[@name='dc:Publisher' and (@content='MTM' or @content='SPSM' or @content='Nota' or @content='NLB' or @content='Celia')])=1">[tpb43] Meta dc:Publisher must exist and have value 'MTM', 'SPSM', 'Nota', 'NLB' or 'Celia'</sch:assert>
+      <sch:assert test="dtbk:meta[@name='dc:Publisher' and (@content='TPB' or @content='MTM' or @content='SPSM' or @content='Nota' or @content='NLB' or @content='Celia' or @content='SBS')]">[tpb43] Meta dc:Publisher must exist and have value 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia' or 'SBS'.</sch:assert>
     </sch:rule>
   </sch:pattern>
 
@@ -415,16 +415,16 @@
   <!-- Rule 123 (39): No class attributes on level[2-6]. level1 allows 'part', 'nonstandardpagination', 'colophon' (if located in frontmatter) and 'jacketcopy' (if located in frontmatter and immediately after docauthor or doctitle) -->
   <sch:pattern  id="dtbook_TPB_123">
   	<sch:rule context="dtbk:level1">
-  		<sch:assert test="not(@class) or @class='part' or @class='jacketcopy' or @class='colophon' or @class='nonstandardpagination'">[tpb123] No class attributes except 'part', 'jacketcopy', 'colophon' and 'nonstandardpagination' are allowed on level1</sch:assert>
+  		<!--<sch:assert test="not(@class) or @class='part' or @class='jacketcopy' or @class='colophon' or @class='nonstandardpagination'">[tpb123] No class attributes except 'part', 'jacketcopy', 'colophon' and 'nonstandardpagination' are allowed on level1</sch:assert>-->
 
   		<sch:report test="@class='jacketcopy' and (not(parent::dtbk:frontmatter))">[tpb123] Jacket copy must be in frontmatter</sch:report>
   		<sch:report test="@class='jacketcopy' and (not(preceding-sibling::*[1][self::dtbk:docauthor or self::dtbk:doctitle]))">[tpb123] Jacket copy must follow immediately after docauthor or doctitle</sch:report>
 
   		<sch:report test="@class='colophon' and parent::dtbk:bodymatter">[tpb123] Colophon is not allowed in bodymatter</sch:report>
   	</sch:rule>
-  	<sch:rule context="dtbk:*[self::dtbk:level2 or self::dtbk:level3 or self::dtbk:level4 or self::dtbk:level5 or self::dtbk:level6]">
+  	<!--<sch:rule context="dtbk:*[self::dtbk:level2 or self::dtbk:level3 or self::dtbk:level4 or self::dtbk:level5 or self::dtbk:level6]">
   		<sch:assert test="not(@class)">[tpb123] No class attributes are allowed on level2 to level6</sch:assert>
-  	</sch:rule>
+  	</sch:rule>-->
   </sch:pattern>
 
   <!-- Rule 124 (106): All documents must have at least one pagenum -->

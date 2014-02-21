@@ -25,6 +25,7 @@
                 <xsl:variable name="body" select="."/>
 
                 <html>
+                    <xsl:namespace name="nordic" select="'http://www.mtm.se/epub/'"/>
                     <xsl:copy-of select="/*/@* | @xml:base"/>
                     <head>
                         <xsl:copy-of select="/html/head/@*"/>

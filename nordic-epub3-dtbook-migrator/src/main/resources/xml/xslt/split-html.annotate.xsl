@@ -15,7 +15,7 @@
             <xsl:for-each select="body">
                 <xsl:copy>
                     <xsl:copy-of select="@*"/>
-                    <xsl:for-each select="*">
+                    <xsl:for-each select="section | article">
                         <xsl:copy>
                             <xsl:variable name="content-type" select="(f:types(.)[.=$split-types],'chapter')[1]"/>
                             <xsl:variable name="position">

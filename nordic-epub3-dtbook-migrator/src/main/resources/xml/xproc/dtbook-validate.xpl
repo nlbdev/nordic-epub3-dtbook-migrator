@@ -20,7 +20,7 @@
         <p px:role="desc">Validates an dtbook publication according to the nordic markup guidelines.</p>
     </p:documentation>
 
-    <p:option name="input-dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
+    <p:option name="dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">DTBook</h2>
             <p px:role="desc">DTBook marked up according to the nordic markup guidelines.</p>
@@ -55,7 +55,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
     <px:nordic-dtbook-validate.step name="validate">
-        <p:with-option name="input-dtbook" select="$input-dtbook"/>
+        <p:with-option name="dtbook" select="$dtbook"/>
         <!--<p:with-option name="check-images" select="$check-images"/>-->
     </px:nordic-dtbook-validate.step>
     <p:sink/>

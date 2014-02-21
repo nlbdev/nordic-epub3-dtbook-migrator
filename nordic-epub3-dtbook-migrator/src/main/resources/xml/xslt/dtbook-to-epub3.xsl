@@ -36,7 +36,7 @@
         </xsl:if>
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
         <xsl:if
-            test="not(@id) and not(local-name()=('span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd','lic','thead','tfoot','tbody','colgroup','col') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/')">
+            test="not(@id) and not(local-name()=('book','span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd','lic','thead','tfoot','tbody','colgroup','col') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/')">
             <xsl:attribute name="id" select="f:generate-pretty-id(.)"/>
         </xsl:if>
         <xsl:call-template name="classes-and-types">
@@ -74,6 +74,8 @@
             <xsl:value-of select="''"/>
         </xsl:variable>
         <xsl:variable name="epub-types" select="($types, $epub-types)[not(.='') and not(.=$except-types)]"/>
+        <xsl:variable name="epub-types"
+            select="($epub-types, if ($epub-types='bodymatter' and not($epub-types=('prologue','preface','part','chapter','conclusion','epilogue'))) then 'chapter' else ())"/>
 
         <xsl:variable name="classes" select="($classes, $old-classes[not(.=($vocab-default,$vocab-z3998))], $showin)[not(.='') and not(.=$except-classes)]"/>
 
@@ -101,6 +103,7 @@
 
     <xsl:template match="dtbook:dtbook">
         <html>
+            <xsl:namespace name="nordic" select="'http://www.mtm.se/epub/'"/>
             <xsl:attribute name="epub:prefix" select="'z3998: http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
             <xsl:call-template name="attlist.dtbook"/>
             <xsl:apply-templates select="node()"/>
@@ -120,7 +123,14 @@
         <head>
             <xsl:call-template name="attlist.head"/>
             <meta charset="UTF-8"/>
-            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <title>
+                <xsl:value-of select="string((dtbook:meta[matches(@name,'dc:title','i')])[1]/@content)"/>
+            </title>
+            <meta name="viewport" content="width=device-width"/>
+            <meta name="nordic:guidelines" content="2015-1"/>
+            <xsl:for-each select="dtbook:meta[starts-with(@name,'track:') and not(@name='track:Guidelines')]">
+                <meta name="nordic:{substring-after(@name,'track:')}" content="{@content}"/>
+            </xsl:for-each>
             <xsl:call-template name="headmisc"/>
             <style type="text/css" xml:space="preserve"><![CDATA[
                 .pronounce-no { -epub-speak-as: spell-out; }
@@ -170,12 +180,7 @@
     </xsl:template>
 
     <xsl:template match="dtbook:meta">
-        <xsl:if test="matches(@name,'dc:title','i')">
-            <title>
-                <xsl:call-template name="i18n"/>
-                <xsl:value-of select="@content"/>
-            </title>
-        </xsl:if>
+        <xsl:if test="matches(@name,'dc:title','i') or starts-with(@name,'track:')"/>
         <meta>
             <xsl:call-template name="attlist.meta"/>
         </meta>
@@ -183,7 +188,15 @@
 
     <xsl:template name="attlist.meta">
         <xsl:call-template name="i18n"/>
-        <xsl:copy-of select="@content|@http-equiv|@name"/>
+        <xsl:copy-of select="@content|@http-equiv"/>
+        <xsl:choose>
+            <xsl:when test="matches(@name,'dc:.*','i')">
+                <xsl:attribute name="name" select="lower-case(@name)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="name" select="@name"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <!-- @scheme is dropped -->
     </xsl:template>
 
@@ -195,7 +208,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.book">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except" select="'id'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template name="cover">
@@ -790,7 +805,8 @@
 
     <xsl:template name="attlist.img">
         <xsl:call-template name="attrs"/>
-        <xsl:copy-of select="@src|@alt|@longdesc|@height|@width"/>
+        <xsl:attribute name="src" select="concat('images/',@src)"/>
+        <xsl:copy-of select="@alt|@longdesc|@height|@width"/>
         <xsl:if test="not(@longdesc) and @id">
             <xsl:variable name="id" select="@id"/>
             <xsl:variable name="longdesc" select="(//dtbook:prodnote|//dtbook:caption)[tokenize(@imgref,'\s+')=$id]"/>
@@ -810,13 +826,15 @@
                     <figcaption>
                         <xsl:for-each select="dtbook:img">
                             <div class="img-caption">
-                                <xsl:if test="position()=1">
-                                    <xsl:apply-templates select="./preceding-sibling::dtbook:caption"/>
-                                </xsl:if>
-                                <xsl:apply-templates select="./preceding-sibling::dtbook:caption intersect ./preceding-sibling::dtbook:img[1]/following-sibling::dtbook:caption"/>
-                                <xsl:if test="position()=last()">
-                                    <xsl:apply-templates select="./following-sibling::dtbook:caption"/>
-                                </xsl:if>
+                                <xsl:variable name="captions" select="(if (position()=1) then ./preceding-sibling::dtbook:caption else (), ./preceding-sibling::dtbook:caption intersect ./preceding-sibling::dtbook:img[1]/following-sibling::dtbook:caption, if (position()=last()) then ./following-sibling::dtbook:caption else ())"/>
+                                
+                                <xsl:for-each select="$captions[1]">
+                                    <xsl:call-template name="attlist.caption">
+                                        <xsl:with-param name="classes" select="'img-caption'" tunnel="yes"/>
+                                    </xsl:call-template>
+                                </xsl:for-each>
+                                
+                                <xsl:apply-templates select="$captions"/>
                             </div>
                         </xsl:for-each>
                     </figcaption>
@@ -829,10 +847,15 @@
                     <figcaption>
                         <xsl:for-each select="dtbook:img">
                             <div class="img-caption">
-                                <xsl:apply-templates select="./following-sibling::dtbook:caption intersect ./following-sibling::dtbook:img[1]/preceding-sibling::dtbook:caption"/>
-                                <xsl:if test="position()=last()">
-                                    <xsl:apply-templates select="./following-sibling::dtbook:caption"/>
-                                </xsl:if>
+                                <xsl:variable name="captions" select="(./following-sibling::dtbook:caption intersect ./following-sibling::dtbook:img[1]/preceding-sibling::dtbook:caption, if (position()=last()) then ./following-sibling::dtbook:caption else ())"/>
+                                
+                                <xsl:for-each select="$captions[1]">
+                                    <xsl:call-template name="attlist.caption">
+                                        <xsl:with-param name="classes" select="'img-caption'" tunnel="yes"/>
+                                    </xsl:call-template>
+                                </xsl:for-each>
+                                
+                                <xsl:apply-templates select="$captions"/>
                             </div>
                         </xsl:for-each>
                     </figcaption>
@@ -1195,10 +1218,11 @@
     </xsl:template>
 
     <xsl:template match="dtbook:caption[parent::dtbook:imggroup]">
-        <div>
+        <xsl:apply-templates select="node()"/>
+        <!--<div>
             <xsl:call-template name="attlist.caption"/>
-            <xsl:apply-templates select="node()"/>
-        </div>
+            
+        </div>-->
     </xsl:template>
 
     <xsl:template name="attlist.caption">

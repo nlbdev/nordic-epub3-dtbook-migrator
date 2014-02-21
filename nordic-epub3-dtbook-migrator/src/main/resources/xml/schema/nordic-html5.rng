@@ -1252,7 +1252,7 @@
     <define name="head">
         <element name="head">
             <!-- HTML content model: title & base? & (link | meta | noscript | script | style | template)* -->
-            <!-- Strict content model: meta[charset] title meta[name=viewport] meta[name=track:Guidelines] (meta | link)* link[rel=profile]? -->
+            <!-- Strict content model: meta[charset] title meta[name=viewport] meta[name=nordic:guidelines] (meta | link)* link[rel=profile]? -->
             <ref name="attlist.head"/>
             <element name="meta">
                 <attribute name="charset">
@@ -1277,7 +1277,7 @@
             </element>
             <element name="meta">
                 <attribute name="name">
-                    <value>track:Guidelines</value>
+                    <value>nordic:guidelines</value>
                 </attribute>
                 <attribute name="content">
                     <value>2015-1</value>
@@ -1761,7 +1761,7 @@
         <ref name="attlist.level"/>
         <choice>
             <group>
-                <ref name="hd"/> <!-- h1 -->
+                <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
                 <oneOrMore>
                     <choice>
                         <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
@@ -1777,7 +1777,7 @@
                     </choice>
                 </oneOrMore>
                 <optional>
-                    <ref name="hd"/> <!-- h1 -->
+                    <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
                     <oneOrMore>
                         <choice>
                             <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
@@ -2649,7 +2649,7 @@
             <zeroOrMore>
                 <choice>
                     <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
-                    <ref name="hd"/> <!-- h1 -->
+                    <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
                 </choice>
             </zeroOrMore>
         </element>
@@ -2806,7 +2806,7 @@
             </sch:rule>-->
             <zeroOrMore>
                 <choice>
-                    <ref name="hd"/> <!-- h1 -->
+                    <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
                     <ref name="dateline"/> <!-- span -->
                     <ref name="epigraph"/> <!-- p -->
                     <ref name="byline"/> <!-- span -->
@@ -2848,9 +2848,9 @@
             <ref name="attlist.poem"/>
             <zeroOrMore>
                 <choice>
-                    <ref name="title"/> <!-- h1 -->
+                    <ref name="title"/> <!-- h1, h2, h3, h4, h5, h6 -->
                     <ref name="author"/> <!-- span -->
-                    <ref name="hd"/> <!-- h1 -->
+                    <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
                     <ref name="dateline"/> <!-- span -->
                     <ref name="epigraph"/> <!-- p -->
                     <ref name="byline"/> <!-- span -->
@@ -3792,12 +3792,44 @@
     or <sidebar>.
   -->
     <define name="hd">
-        <element name="h1">
-            <ref name="attlist.hd"/>
-            <zeroOrMore>
-                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
-            </zeroOrMore>
-        </element>
+        <choice>
+            <element name="h1">
+                <ref name="attlist.hd"/>
+                <zeroOrMore>
+                    <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
+                </zeroOrMore>
+            </element>
+            <element name="h2">
+                <ref name="attlist.hd"/>
+                <zeroOrMore>
+                    <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
+                </zeroOrMore>
+            </element>
+            <element name="h3">
+                <ref name="attlist.hd"/>
+                <zeroOrMore>
+                    <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
+                </zeroOrMore>
+            </element>
+            <element name="h4">
+                <ref name="attlist.hd"/>
+                <zeroOrMore>
+                    <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
+                </zeroOrMore>
+            </element>
+            <element name="h5">
+                <ref name="attlist.hd"/>
+                <zeroOrMore>
+                    <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
+                </zeroOrMore>
+            </element>
+            <element name="h6">
+                <ref name="attlist.hd"/>
+                <zeroOrMore>
+                    <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
+                </zeroOrMore>
+            </element>
+        </choice>
     </define>
     <define name="attlist.hd" combine="interleave">
         <ref name="attrs"/>
@@ -4048,7 +4080,7 @@
                         <ref name="pagenum"/> <!-- span -->
                     </optional>
                 </group>
-                <ref name="hd"/> <!-- h1 -->
+                <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
                 <ref name="prodnote"/> <!-- aside -->
             </choice>
         </element>
@@ -4209,15 +4241,15 @@
             <optional>
                 <ref name="tfoot"/> <!-- tfoot -->
             </optional>
-            <choice>
+            <!--<choice>-->
                 <oneOrMore>
                     <ref name="tbody"/> <!-- tbody -->
                 </oneOrMore>
-                <oneOrMore>
-                    <ref name="tr"/> <!-- tr -->
-                    <!-- STRICT NOTE: spans (HTML equivalent for pagenums) are not allowed as direct children of the table element in HTML. They must be moved to the preceding cell (th,td) or to before the table starts. -->
+                <!--<oneOrMore>
+                    <ref name="tr"/> <!-\- tr -\->
+                    <!-\- STRICT NOTE: spans (HTML equivalent for pagenums) are not allowed as direct children of the table element in HTML. They must be moved to the preceding cell (th,td) or to before the table starts. -\->
                 </oneOrMore>
-            </choice>
+            </choice>-->
         </element>
     </define>
     <!--

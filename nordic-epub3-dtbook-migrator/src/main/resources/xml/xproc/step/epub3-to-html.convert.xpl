@@ -85,15 +85,24 @@
     <p:identity name="package-doc"/>
 
     <p:filter select="/*/opf:manifest/opf:item[matches(@properties,'(^|\s)nav(\s|$)')]"/>
-    <px:fileset-load>
-        <p:input port="fileset">
-            <p:pipe port="fileset.in" step="main"/>
-        </p:input>
-        <p:input port="in-memory">
-            <p:pipe port="in-memory.in" step="main"/>
-        </p:input>
-        <p:with-option name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
-    </px:fileset-load>
+    <p:group>
+        <p:variable name="nav-href" select="resolve-uri(/*/@href,base-uri(/*))"/>
+        <px:message message="Loading Navigation Document: $1">
+            <p:with-option name="param1" select="$nav-href"/>
+        </px:message>
+        <px:fileset-load>
+            <p:input port="fileset">
+                <p:pipe port="fileset.in" step="main"/>
+            </p:input>
+            <p:input port="in-memory">
+                <p:pipe port="in-memory.in" step="main"/>
+            </p:input>
+            <p:with-option name="href" select="$nav-href"/>
+        </px:fileset-load>
+        <px:assert test-count-min="1" test-count-max="1" message="The Navigation Document must exist: $1" error-code="NORDICDTBOOKEPUB013">
+            <p:with-option name="param1" select="$nav-href"/>
+        </px:assert>
+    </p:group>
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>
@@ -194,12 +203,11 @@
             select="replace(base-uri(/*),'[^/]+$',concat((/*/html:head/html:meta[lower-case(@name)=('dc:identifier','dct:identifier','dtb:uid','dc:title')]/string(@content), /*/html:head/html:title/normalize-space(.))[1],'.xhtml'))"
         />
     </p:add-attribute>
-    <p:identity name="in-memory.original-imgrefs"/>
     <p:identity name="in-memory"/>
 
     <px:html-to-fileset>
         <p:input port="source">
-            <p:pipe port="result" step="in-memory.original-imgrefs"/>
+            <p:pipe port="result" step="in-memory"/>
         </p:input>
         <p:input port="fileset.in">
             <p:pipe port="fileset.in" step="main"/>

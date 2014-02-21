@@ -14,8 +14,8 @@
     </p:output>
 
     <p:option name="temp-dir" required="true"/>
-    <p:option name="output-dir" required="true"/>
 
+    <p:import href="fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -35,6 +35,7 @@
     <px:assert test-count-max="1" message="There are multiple DTBooks in the fileset; only the first one will be converted."/>
     <px:assert test-count-min="1" message="There must be a DTBook file in the fileset." error-code="NORDICDTBOOKEPUB004"/>
     <p:split-sequence initial-only="true" test="position()=1"/>
+    <p:identity name="dtbook"/>
 
     <p:xslt>
         <p:input port="parameters">
@@ -54,40 +55,42 @@
     </p:insert>
 
     <p:add-attribute match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="concat($output-dir,'content.xhtml')"/>
+        <p:with-option name="attribute-value" select="concat($temp-dir,(//dtbook:meta[@name='dtb:uid']/@content,'missing-uid')[1],'.xhtml')">
+            <p:pipe port="result" step="dtbook"/>
+        </p:with-option>
     </p:add-attribute>
     <p:identity name="result.in-memory"/>
 
     <px:mkdir name="mkdir">
-        <p:with-option name="href" select="$temp-dir"/>
+        <p:with-option name="href" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
     </px:mkdir>
     <px:copy-resource name="store1" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/accessibility.css',$doc-base)"/>
-        <p:with-option name="target" select="$temp-dir"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/')"/>
     </px:copy-resource>
     <px:copy-resource name="store2" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-Regular.otf',$doc-base)"/>
-        <p:with-option name="target" select="$temp-dir"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
     </px:copy-resource>
     <px:copy-resource name="store3" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-Italic.otf',$doc-base)"/>
-        <p:with-option name="target" select="$temp-dir"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
     </px:copy-resource>
     <px:copy-resource name="store4" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-Bold.otf',$doc-base)"/>
-        <p:with-option name="target" select="$temp-dir"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
     </px:copy-resource>
     <px:copy-resource name="store5" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf',$doc-base)"/>
-        <p:with-option name="target" select="$temp-dir"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
     </px:copy-resource>
     <px:copy-resource name="store6" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf',$doc-base)"/>
-        <p:with-option name="target" select="$temp-dir"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
     </px:copy-resource>
     <px:copy-resource name="store7" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/LICENSE.txt',$doc-base)"/>
-        <p:with-option name="target" select="$temp-dir"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
     </px:copy-resource>
     <p:identity name="store-dependency">
         <p:input port="source">
@@ -107,42 +110,34 @@
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
     </px:fileset-filter>
-    <p:add-attribute match="//*" attribute-name="xml:base">
-        <!-- change the base of all files to the output directory -->
-        <p:with-option name="attribute-value" select="$output-dir"/>
-    </p:add-attribute>
-    <p:delete match="/*//*/@xml:base"/>
+    <px:fileset-move>
+        <p:with-option name="new-base" select="$temp-dir"/>
+    </px:fileset-move>
+    <p:viewport match="/*/*[starts-with(@media-type,'image/')]">
+        <p:add-attribute match="/*" attribute-name="href">
+            <p:with-option name="attribute-value" select="concat('images/',/*/@href)"/>
+        </p:add-attribute>
+    </p:viewport>
     <p:identity name="fileset.existing-resources"/>
 
     <px:fileset-create>
-        <p:with-option name="base" select="$output-dir"/>
+        <p:with-option name="base" select="$temp-dir"/>
     </px:fileset-create>
+    <px:fileset-add-entry media-type="text/css" href="css/accessibility.css"/>
+    <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Regular.otf"/>
+    <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Italic.otf"/>
+    <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Bold.otf"/>
+    <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf"/>
+    <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"/>
+    <p:viewport match="/*/*">
+        <p:add-attribute match="/*" attribute-name="original-href">
+            <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri(/*))"/>
+        </p:add-attribute>
+    </p:viewport>
     <px:fileset-add-entry media-type="application/xhtml+xml">
-        <p:with-option name="href" select="concat($output-dir,'content.xhtml')"/>
-    </px:fileset-add-entry>
-    <px:fileset-add-entry media-type="text/css">
-        <p:with-option name="href" select="'css/accessibility.css'"/>
-        <p:with-option name="original-href" select="concat($temp-dir,'accessibility.css')"/>
-    </px:fileset-add-entry>
-    <px:fileset-add-entry media-type="application/x-font-opentype">
-        <p:with-option name="href" select="'css/fonts/opendyslexic/OpenDyslexic-Regular.otf'"/>
-        <p:with-option name="original-href" select="concat($temp-dir,'OpenDyslexic-Regular.otf')"/>
-    </px:fileset-add-entry>
-    <px:fileset-add-entry media-type="application/x-font-opentype">
-        <p:with-option name="href" select="'css/fonts/opendyslexic/OpenDyslexic-Italic.otf'"/>
-        <p:with-option name="original-href" select="concat($temp-dir,'OpenDyslexic-Italic.otf')"/>
-    </px:fileset-add-entry>
-    <px:fileset-add-entry media-type="application/x-font-opentype">
-        <p:with-option name="href" select="'css/fonts/opendyslexic/OpenDyslexic-Bold.otf'"/>
-        <p:with-option name="original-href" select="concat($temp-dir,'OpenDyslexic-Bold.otf')"/>
-    </px:fileset-add-entry>
-    <px:fileset-add-entry media-type="application/x-font-opentype">
-        <p:with-option name="href" select="'css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf'"/>
-        <p:with-option name="original-href" select="concat($temp-dir,'OpenDyslexic-BoldItalic.otf')"/>
-    </px:fileset-add-entry>
-    <px:fileset-add-entry media-type="application/x-font-opentype">
-        <p:with-option name="href" select="'css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf'"/>
-        <p:with-option name="original-href" select="concat($temp-dir,'OpenDyslexicMono-Regular.otf')"/>
+        <p:with-option name="href" select="base-uri(/*)">
+            <p:pipe port="result" step="result.in-memory"/>
+        </p:with-option>
     </px:fileset-add-entry>
     <p:identity name="fileset.new-resources"/>
     <px:fileset-join>

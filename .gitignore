@@ -1,3 +1,5 @@
 target/
 */src/test/xspec/*.html
+*/src/test/xspec/xspec/*
 */src/test/xprocspec/*.html
+*.xpr

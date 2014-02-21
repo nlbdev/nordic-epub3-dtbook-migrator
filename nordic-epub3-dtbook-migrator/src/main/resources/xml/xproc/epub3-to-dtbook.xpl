@@ -39,8 +39,23 @@
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output directory</h2>
+            <h2 px:role="name">DTBook</h2>
             <p px:role="desc">Output directory for the DTBook.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="discard-intermediary-html" required="false" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Discard intermediary HTML</h2>
+            <p px:role="desc">Whether or not to include the intermediary HTML in the output (does not include external resources such as images). Set to false to include the HTML.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="assert-valid" required="false" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Stop processing on validation error</h2>
+            <p px:role="desc">Whether or not to stop the conversion when a validation error occurs. Setting this to false may be useful for debugging or if the validation error is a minor one. The
+                output is not guaranteed to be valid if this option is set to false.</p>
         </p:documentation>
     </p:option>
 
@@ -55,7 +70,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="step/fileset-move.xpl"/>
-    
+
     <p:variable name="epub-href" select="resolve-uri($epub,base-uri(/*))">
         <p:inline>
             <irrelevant/>
@@ -91,7 +106,7 @@
     </p:group>
 
     <p:choose>
-        <p:when test="/*/@result='error'">
+        <p:when test="/*/@result='error' and $assert-valid='true'">
             <p:output port="result" sequence="true">
                 <p:pipe port="report.out" step="validate.epub3"/>
             </p:output>
@@ -104,11 +119,11 @@
                 <p:with-option name="href" select="$epub-href"/>
                 <p:with-option name="unzipped-basedir" select="concat($temp-dir,'epub/')"/>
             </px:unzip-fileset>
-            
+
             <!-- This is a workaround for a bug that should be fixed in Pipeline v1.8
                  see: https://github.com/daisy-consortium/pipeline-modules-common/pull/49 -->
             <p:delete match="/*/*[ends-with(@href,'/')]" name="load.in-memory.fileset-fix"/>
-            
+
             <p:for-each>
                 <p:iteration-source>
                     <p:pipe port="in-memory.out" step="unzip"/>
@@ -146,7 +161,7 @@
                 </p:input>
             </px:nordic-epub3-to-html-convert>
 
-            <px:nordic-html-validate.step name="validate.html">
+            <px:nordic-html-validate.step name="validate.html" document-type="Nordic HTML (intermediary single-document)">
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.out" step="convert.html"/>
                 </p:input>
@@ -169,7 +184,38 @@
             </p:group>
 
             <p:choose>
-                <p:when test="/*/@result='error'">
+                <p:when test="$discard-intermediary-html='false' or (/*/@result='error' and $assert-valid='true')">
+                    <px:fileset-load media-types="application/xhtml+xml">
+                        <p:input port="fileset">
+                            <p:pipe port="fileset.out" step="convert.html"/>
+                        </p:input>
+                        <p:input port="in-memory">
+                            <p:pipe port="in-memory.out" step="convert.html"/>
+                        </p:input>
+                    </px:fileset-load>
+                    <px:assert message="There should be exactly one intermediary HTML file" test-count-min="1" test-count-max="1"/>
+                    <p:store name="intermediary.store">
+                        <p:with-option name="href" select="concat($output-dir,replace(base-uri(/*),'^.*/([^/]+?)\.?[^\./]*$','$1/'),replace(base-uri(/*),'.*/',''))"/>
+                    </p:store>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:pipe port="result" step="intermediary.store"/>
+                        </p:input>
+                    </p:identity>
+                </p:when>
+                <p:otherwise>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+            <p:sink/>
+
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe port="result" step="status.html"/>
+                </p:input>
+            </p:identity>
+            <p:choose>
+                <p:when test="/*/@result='error' and $assert-valid='true'">
                     <p:output port="result" sequence="true">
                         <p:pipe port="report.out" step="validate.epub3"/>
                         <p:pipe port="report.out" step="validate.html"/>
@@ -209,7 +255,7 @@
                     </px:fileset-store>
 
                     <px:nordic-dtbook-validate.step name="validate.dtbook">
-                        <p:with-option name="input-dtbook" select="(/*/d:file[@media-type='application/x-dtbook+xml'])[1]/resolve-uri(@href,base-uri(.))">
+                        <p:with-option name="dtbook" select="(/*/d:file[@media-type='application/x-dtbook+xml'])[1]/resolve-uri(@href,base-uri(.))">
                             <p:pipe port="fileset.out" step="fileset-store"/>
                         </p:with-option>
                     </px:nordic-dtbook-validate.step>

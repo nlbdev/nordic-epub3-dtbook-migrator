@@ -3,7 +3,7 @@
     type="px:nordic-dtbook-validate.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:l="http://xproc.org/library">
 
-    <p:documentation>Validates and loads the DTBook at the href $input-dtbook according to generic and nordic guidelines.</p:documentation>
+    <p:documentation>Validates and loads the DTBook at the href $dtbook according to generic and nordic guidelines.</p:documentation>
 
     <p:input port="report.in" primary="false" sequence="true">
         <p:empty/>
@@ -20,7 +20,7 @@
         <p:pipe port="report" step="choose"/>
     </p:output>
 
-    <p:option name="input-dtbook" required="true"/>
+    <p:option name="dtbook" required="true"/>
     <p:option name="check-images" required="false" select="'false'"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -34,7 +34,7 @@
 
     <px:message message="Validating DTBook according to DTBook specification..."/>
     <px:dtbook-validator name="validate.input-dtbook.generic">
-        <p:with-option name="input-dtbook" select="$input-dtbook"/>
+        <p:with-option name="input-dtbook" select="$dtbook"/>
         <p:with-option name="check-images" select="$check-images"/>
     </px:dtbook-validator>
 
@@ -54,10 +54,10 @@
             </p:output>
 
             <px:fileset-create>
-                <p:with-option name="base" select="replace($input-dtbook,'[^/]+$','')"/>
+                <p:with-option name="base" select="replace($dtbook,'[^/]+$','')"/>
             </px:fileset-create>
             <px:fileset-add-entry media-type="application/x-dtbook+xml">
-                <p:with-option name="href" select="$input-dtbook"/>
+                <p:with-option name="href" select="$dtbook"/>
             </px:fileset-add-entry>
             <p:identity name="invalid-fileset"/>
         </p:when>
@@ -75,7 +75,7 @@
             </p:output>
 
             <p:load name="input-dtbook">
-                <p:with-option name="href" select="$input-dtbook"/>
+                <p:with-option name="href" select="$dtbook"/>
             </p:load>
 
             <px:message message="Validating DTBook according to Nordic specification..."/>
@@ -111,13 +111,13 @@
                         </c:errors>
                     </p:inline>
                 </p:input>
-                <p:with-option name="document-name" select="replace($input-dtbook,'.*/','')">
+                <p:with-option name="document-name" select="replace($dtbook,'.*/','')">
                     <p:empty/>
                 </p:with-option>
                 <p:with-option name="document-type" select="'Nordic DTBook'">
                     <p:empty/>
                 </p:with-option>
-                <p:with-option name="document-path" select="$input-dtbook">
+                <p:with-option name="document-path" select="$dtbook">
                     <p:empty/>
                 </p:with-option>
             </px:combine-validation-reports>

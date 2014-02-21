@@ -24,7 +24,7 @@
         <p:pipe port="result" step="status"/>
     </p:output>
 
-    <p:option name="input-dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
+    <p:option name="dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">DTBook</h2>
             <p px:role="desc">Input DTBook to be converted.</p>
@@ -45,8 +45,26 @@
         </p:documentation>
     </p:option>
 
+    <p:option name="discard-intermediary-html" required="false" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Discard intermediary HTML</h2>
+            <p px:role="desc">Whether or not to include the intermediary HTML in the output (does not include external resources such as images). Set to false to include the HTML.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="assert-valid" required="false" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Stop processing on validation error</h2>
+            <p px:role="desc">Whether or not to stop the conversion when a validation error occurs. Setting this to false may be useful for debugging or if the validation error is a minor one. The
+                output is not guaranteed to be valid if this option is set to false.</p>
+        </p:documentation>
+    </p:option>
+
     <p:import href="step/dtbook.validate.xpl"/>
-    <p:import href="step/dtbook-to-epub3.convert.xpl"/>
+    <p:import href="step/html.validate.xpl"/>
+    <p:import href="step/epub3.validate.xpl"/>
+    <p:import href="step/dtbook-to-html.convert.xpl"/>
+    <p:import href="step/html-to-epub3.convert.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -55,8 +73,235 @@
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
+    <p:variable name="dtbook-href" select="resolve-uri($dtbook,base-uri(/*))">
+        <p:inline>
+            <irrelevant/>
+        </p:inline>
+    </p:variable>
+
+    <!--    <px:message message="Remember to also validate the resulting EPUB using epubcheck." severity="WARN"/>-->
+    <px:nordic-dtbook-validate.step name="validate.dtbook">
+        <p:with-option name="dtbook" select="$dtbook-href"/>
+    </px:nordic-dtbook-validate.step>
+    <p:sink/>
+
+    <p:group name="status.dtbook">
+        <p:output port="result"/>
+        <p:for-each>
+            <p:iteration-source select="/d:document-validation-report/d:document-info/d:error-count">
+                <p:pipe port="report.out" step="validate.dtbook"/>
+            </p:iteration-source>
+            <p:identity/>
+        </p:for-each>
+        <p:wrap-sequence wrapper="d:validation-status"/>
+        <p:add-attribute attribute-name="result" match="/*">
+            <p:with-option name="attribute-value" select="if (sum(/*/*/number(.))&gt;0) then 'error' else 'ok'"/>
+        </p:add-attribute>
+        <p:delete match="/*/node()"/>
+    </p:group>
+
+    <p:choose>
+        <p:when test="/*/@result='error' and $assert-valid='true'">
+            <p:output port="result" sequence="true">
+                <p:pipe port="report.out" step="validate.dtbook"/>
+            </p:output>
+            <p:sink/>
+        </p:when>
+        <p:otherwise>
+            <p:output port="result" sequence="true"/>
+
+            <px:nordic-dtbook-to-html-convert name="single-html">
+                <p:input port="fileset.in">
+                    <p:pipe port="fileset.out" step="validate.dtbook"/>
+                </p:input>
+                <p:input port="in-memory.in">
+                    <p:pipe port="in-memory.out" step="validate.dtbook"/>
+                </p:input>
+                <p:with-option name="temp-dir" select="concat($temp-dir,'html/')"/>
+            </px:nordic-dtbook-to-html-convert>
+
+            <px:nordic-html-validate.step name="validate.html" document-type="Nordic HTML (intermediary single-document)">
+                <p:input port="in-memory.in">
+                    <p:pipe port="in-memory.out" step="single-html"/>
+                </p:input>
+            </px:nordic-html-validate.step>
+            <p:sink/>
+
+            <p:group name="status.html">
+                <p:output port="result"/>
+                <p:for-each>
+                    <p:iteration-source select="/d:document-validation-report/d:document-info/d:error-count">
+                        <p:pipe port="report.out" step="validate.html"/>
+                    </p:iteration-source>
+                    <p:identity/>
+                </p:for-each>
+                <p:wrap-sequence wrapper="d:validation-status"/>
+                <p:add-attribute attribute-name="result" match="/*">
+                    <p:with-option name="attribute-value" select="if (sum(/*/*/number(.))&gt;0) then 'error' else 'ok'"/>
+                </p:add-attribute>
+                <p:delete match="/*/node()"/>
+            </p:group>
+
+            <p:choose>
+                <p:when test="$discard-intermediary-html='false' or (/*/@result='error' and $assert-valid='true')">
+                    <px:fileset-load media-types="application/xhtml+xml">
+                        <p:input port="fileset">
+                            <p:pipe port="fileset.out" step="single-html"/>
+                        </p:input>
+                        <p:input port="in-memory">
+                            <p:pipe port="in-memory.out" step="single-html"/>
+                        </p:input>
+                    </px:fileset-load>
+                    <px:assert message="There should be exactly one intermediary HTML file" test-count-min="1" test-count-max="1"/>
+                    <p:store name="intermediary.store">
+                        <p:with-option name="href" select="concat($output-dir,/*/@content,'.xhtml')">
+                            <p:pipe port="result" step="identifier"/>
+                        </p:with-option>
+                    </p:store>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:pipe port="result" step="intermediary.store"/>
+                        </p:input>
+                    </p:identity>
+                </p:when>
+                <p:otherwise>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+            <p:sink/>
+
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe port="result" step="status.html"/>
+                </p:input>
+            </p:identity>
+            <p:choose>
+                <p:when test="/*/@result='error' and $assert-valid='true'">
+                    <p:output port="result" sequence="true">
+                        <p:pipe port="report.out" step="validate.dtbook"/>
+                        <p:pipe port="report.out" step="validate.html"/>
+                    </p:output>
+                    <p:sink/>
+                </p:when>
+                <p:otherwise>
+                    <p:output port="result" sequence="true">
+                        <p:pipe port="report.out" step="validate.dtbook"/>
+                        <p:pipe port="report.out" step="validate.html"/>
+                        <p:pipe port="report.out" step="validate.epub3"/>
+                    </p:output>
+
+                    <px:nordic-html-to-epub3-convert name="convert.epub3">
+                        <p:input port="fileset.in">
+                            <p:pipe port="fileset.out" step="single-html"/>
+                        </p:input>
+                        <p:input port="in-memory.in">
+                            <p:pipe port="in-memory.out" step="single-html"/>
+                        </p:input>
+                        <p:with-option name="temp-dir" select="concat($temp-dir,'epub/')"/>
+                        <p:with-option name="compatibility-mode" select="'true'"/>
+                    </px:nordic-html-to-epub3-convert>
+
+                    <px:epub3-store name="store.epub3">
+                        <p:input port="fileset.in">
+                            <p:pipe port="fileset.out" step="convert.epub3"/>
+                        </p:input>
+                        <p:input port="in-memory.in">
+                            <p:pipe port="in-memory.out" step="convert.epub3"/>
+                        </p:input>
+                        <p:with-option name="href" select="concat($output-dir,/*/@content,'.epub')">
+                            <p:pipe port="result" step="identifier"/>
+                        </p:with-option>
+                    </px:epub3-store>
+
+                    <px:fileset-create>
+                        <p:with-option name="base" select="$output-dir">
+                            <p:pipe port="result" step="store.epub3"/>
+                        </p:with-option>
+                    </px:fileset-create>
+                    <px:fileset-add-entry media-type="application/epub+zip">
+                        <p:with-option name="href" select="concat(/*/@content,'.epub')">
+                            <p:pipe port="result" step="identifier"/>
+                        </p:with-option>
+                    </px:fileset-add-entry>
+                    <px:nordic-epub3-validate.step name="validate.epub3" cx:depends-on="store.epub3">
+                        <p:with-option name="temp-dir" select="concat($temp-dir,'validate-epub/')"/>
+                        <p:input port="in-memory.in">
+                            <p:pipe port="in-memory.out" step="convert.epub3"/>
+                        </p:input>
+                    </px:nordic-epub3-validate.step>
+                    <p:sink/>
+
+                </p:otherwise>
+            </p:choose>
+
+        </p:otherwise>
+    </p:choose>
+    <p:identity name="reports"/>
+
+    <px:validation-report-to-html toc="false"/>
+    <p:xslt>
+        <!-- pretty print to make debugging easier -->
+        <p:with-param name="preserve-empty-whitespace" select="'false'"/>
+        <p:input port="stylesheet">
+            <p:document href="xslt/pretty-print.xsl"/>
+        </p:input>
+    </p:xslt>
+    <p:identity name="html"/>
+
+    <p:group name="status">
+        <p:output port="result"/>
+        <p:for-each>
+            <p:iteration-source select="/d:document-validation-report/d:document-info/d:error-count">
+                <p:pipe port="result" step="reports"/>
+            </p:iteration-source>
+            <p:identity/>
+        </p:for-each>
+        <p:wrap-sequence wrapper="d:validation-status"/>
+        <p:add-attribute attribute-name="result" match="/*">
+            <p:with-option name="attribute-value" select="if (sum(/*/*/number(.))&gt;0) then 'error' else 'ok'"/>
+        </p:add-attribute>
+        <p:delete match="/*/node()"/>
+    </p:group>
+
+    <!-- get metadata (used to determine the filename) -->
+    <p:group name="identifier">
+        <p:output port="result"/>
+        <px:fileset-load media-types="application/x-dtbook+xml">
+            <p:input port="fileset">
+                <p:pipe port="fileset.out" step="validate.dtbook"/>
+            </p:input>
+            <p:input port="in-memory">
+                <p:pipe port="in-memory.out" step="validate.dtbook"/>
+            </p:input>
+        </px:fileset-load>
+        <px:assert message="There must be exactly one DTBook in the input fileset" test-count-min="1" test-count-max="1" error-code="NORDICDTBOOKEPUB008"/>
+        <p:for-each>
+            <p:iteration-source select="//dtbook:head/dtbook:meta[@name='dtb:uid']"/>
+            <p:identity/>
+        </p:for-each>
+        <px:assert message="The DTBook have a 'dtb:uid' meta element" test-count-min="1" test-count-max="1" error-code="NORDICDTBOOKEPUB009"/>
+    </p:group>
+    <p:sink/>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--<p:variable name="dtbook-href" select="resolve-uri($dtbook,base-uri(/*))">
+        <p:inline>
+            <irrelevant/>
+        </p:inline>
+    </p:variable>
+    
     <px:nordic-dtbook-validate.step name="validate">
-        <p:with-option name="input-dtbook" select="$input-dtbook"/>
+        <p:with-option name="dtbook" select="$dtbook-href"/>
     </px:nordic-dtbook-validate.step>
     
     <px:validation-report-to-html name="html">
@@ -68,7 +313,7 @@
         </p:with-option>
     </px:validation-report-to-html>
     
-    <p:group name="status">
+    <p:group name="status.dtbook">
         <p:output port="result"/>
         <p:for-each>
             <p:iteration-source select="/d:document-validation-report/d:document-info/d:error-count">
@@ -123,7 +368,7 @@
             </px:epub3-store>
             
             
-            <!-- get metadata (used to determine the filename) -->
+            <!-\- get metadata (used to determine the filename) -\->
             <p:group name="identifier">
                 <p:output port="result"/>
                 <px:fileset-load media-types="application/x-dtbook+xml">
@@ -143,8 +388,8 @@
             <p:sink/>
 
         </p:otherwise>
-    </p:choose>
-    
-    
+    </p:choose>-->
+
+
 
 </p:declare-step>
