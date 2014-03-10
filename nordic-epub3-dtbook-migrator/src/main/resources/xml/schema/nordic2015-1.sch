@@ -678,12 +678,24 @@
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 253: figcaption captions -->
+  <!-- Rule 253: figures and captions -->
   <sch:pattern id="epub_nordic_253">
-    <sch:rule context="html:div[parent::html:figcaption]">
-      <sch:assert test="tokenize(@class,' ')='img-caption'">[nordic253] divs in figcaptions must use the "img-caption" class.</sch:assert>
-      <!--<sch:assert test="html:div[tokenize(@class,' ')='caption'] and not(tokenize(@class,' ')='caption')">[nordic253] figcaptions which contains div elements with the "caption" class must not themselves also use the "caption" class.</sch:assert>
-      <sch:assert test="not(html:div[tokenize(@class,' ')='caption']) and tokenize(@class,' ')='caption'">[nordic253] figcaptions which does not contain div elements with the "caption" class must themselves use the "caption" class.</sch:assert>-->
+    <sch:rule context="html:figure">
+      <sch:assert test="count(html:figcaption) &lt;= 1">[nordic253] There cannot be more than one figure caption in a single figure element.</sch:assert>
+      <sch:assert test="not(html:img and html:figure)">[nordic253] Figures cannot contain both a figure and a img.</sch:assert>
+      <sch:assert test="not(html:figcaption and html:figure)">[nordic253] Figures cannot contain both a figure and a figcaption.</sch:assert>
+      <sch:assert test="html:img or html:figure">[nordic253] Figures must contain either an img element or one or more figure elements (sub-figures).</sch:assert>
+    </sch:rule>
+    <sch:rule context="html:figure[not(.//html:figure)]">
+      <sch:assert test="count(.//html:img) = 1">[nordic253] Figures without sub-figures must contain exactly one img.</sch:assert>
+    </sch:rule>
+    <sch:rule context="html:figure[.//html:figure]">
+      <sch:assert test="count(html:img) = 0">[nordic253] Figures with sub-figures cannot contain img childen.</sch:assert>
+    </sch:rule>
+    <sch:rule context="html:figure[ancestor::html:figure]">
+      <sch:assert test="count(ancestor::html:figure)">[nordic253] Figures cannot be nested more than two levels deep.</sch:assert>
+      <sch:assert test="count(html:img) = 1">[nordic253] Figures that are nested must contain an img.</sch:assert>
+      <sch:assert test="count(html:figure) = 0">[nordic253] Figures that are nested cannot contain a figure.</sch:assert>
     </sch:rule>
   </sch:pattern>
 
@@ -694,6 +706,5 @@
         z3998:production, sidebar, note, annotation, epigraph</sch:assert>
     </sch:rule>
   </sch:pattern>
-
-
+  
 </sch:schema>

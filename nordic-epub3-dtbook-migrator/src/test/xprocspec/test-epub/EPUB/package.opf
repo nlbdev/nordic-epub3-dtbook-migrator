@@ -20,7 +20,7 @@
                                 <item id="item_5" media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf"/>
                                 <item id="item_6" media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"/>
                                 <item id="item_7" media-type="image/jpeg" href="images/valentin.jpg"/>
-                                <item id="item_8" media-type="application/x-dtbncx+xml" href="toc.ncx"/>
+                                <item id="item_8" media-type="application/x-dtbncx+xml" href="nav.ncx"/>
                                 <item media-type="application/xhtml+xml" id="item_9" href="chapter1.xhtml"/>
                                 <item media-type="application/xhtml+xml" id="item_10" href="chapter2.xhtml"/>
                                 <item media-type="application/xhtml+xml" id="item_11" href="chapter3.xhtml"/>

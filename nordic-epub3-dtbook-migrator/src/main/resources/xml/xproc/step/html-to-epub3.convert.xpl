@@ -133,7 +133,7 @@
             </p:input>
         </p:xslt>
         <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="concat($publication-dir,'toc.ncx')"/>
+            <p:with-option name="attribute-value" select="concat($publication-dir,'nav.ncx')"/>
         </p:add-attribute>
         <p:identity name="nav.ncx"/>
     </p:group>
@@ -162,7 +162,7 @@
         </p:with-option>
     </px:message>
     <px:fileset-add-entry media-type="application/x-dtbncx+xml">
-        <p:with-option name="href" select="'toc.ncx'"/>
+        <p:with-option name="href" select="'nav.ncx'"/>
     </px:fileset-add-entry>
     <p:identity name="ncx-fileset"/>
     <px:fileset-join>

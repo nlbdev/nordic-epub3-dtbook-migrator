@@ -3565,26 +3565,25 @@
             <ref name="attlist.imggroup"/>
             <choice>
                 <group>
-                    <optional>
-                        <ref name="caption.figure"/> <!-- figcaption -->
-                    </optional>
+                    <!-- nesting restriction: max nesting depth = 2 -->
                     <oneOrMore>
                         <choice>
-                            <ref name="prodnote"/> <!-- aside -->
-                            <ref name="img"/> <!-- img -->
-                            <ref name="pagenum"/> <!-- span -->
+                           <ref name="pagenum"/> <!-- span -->
+                           <ref name="prodnote"/> <!-- aside -->
+                           <ref name="imggroup"/> <!-- figure -->
                         </choice>
                     </oneOrMore>
                 </group>
                 <group>
+                    <!-- count restriction: img aside* figcaption? span* -->
                     <oneOrMore>
                         <choice>
-                            <ref name="prodnote"/> <!-- aside -->
-                            <ref name="img"/> <!-- img -->
-                            <ref name="pagenum"/> <!-- span -->
+                           <ref name="pagenum"/> <!-- span -->
+                           <ref name="prodnote"/> <!-- aside -->
+                           <ref name="img"/> <!-- img -->
+                           <ref name="caption.figure"/> <!-- figcaption -->
                         </choice>
                     </oneOrMore>
-                    <ref name="caption.figure"/> <!-- figcaption -->
                 </group>
             </choice>
         </element>

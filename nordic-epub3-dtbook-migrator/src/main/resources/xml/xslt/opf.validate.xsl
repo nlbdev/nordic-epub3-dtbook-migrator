@@ -217,7 +217,7 @@
 					<xsl:choose>
 						<xsl:when test="/*/manifest/item[@media-type='application/x-dtbncx+xml']">
 							<xsl:call-template name="assert-equals">
-								<xsl:with-param name="expect" select="'toc.ncx'"/>
+								<xsl:with-param name="expect" select="'nav.ncx'"/>
 								<xsl:with-param name="actual" select="/*/manifest/item[@media-type='application/x-dtbncx+xml']/@href"/>
 								<xsl:with-param name="context" select="/*/manifest/item[@media-type='application/x-dtbncx+xml']"/>
 								<xsl:with-param name="desc" select="'the href attribute for the NCX document'"/>
