@@ -1275,14 +1275,6 @@
                     <value>width=device-width</value>
                 </attribute>
             </element>
-            <element name="meta">
-                <attribute name="name">
-                    <value>nordic:guidelines</value>
-                </attribute>
-                <attribute name="content">
-                    <value>2015-1</value>
-                </attribute>
-            </element>
             <zeroOrMore>
                 <ref name="headmisc"/> <!-- meta, link -->
             </zeroOrMore>

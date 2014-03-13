@@ -4,9 +4,7 @@
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic DTBook Validator</h1>
-        <p px:role="desc">Validates an dtbook publication according to the nordic markup guidelines.</p>
-        <h1 px:role="name">DTBook Validator</h1>
-        <p px:role="desc">Validates DTBook documents. Supports inclusion of MathML.</p>
+        <p px:role="desc">Validates an dtbook publication according to the nordic markup guidelines. ${version-description}</p>
         <a px:role="homepage" href="https://github.com/josteinaj/nordic-epub3-dtbook-migrator">https://github.com/josteinaj/nordic-epub3-dtbook-migrator</a>
         <div px:role="author maintainer">
             <p px:role="name">Jostein Austvik Jacobsen</p>
@@ -27,12 +25,12 @@
         </p:documentation>
     </p:option>
 
-    <!--<p:option name="check-images" required="false" px:type="boolean" select="'false'">
+    <p:option name="ignore-missing-images" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Check that images exist</h2>
-            <p px:role="desc">Check to see that referenced images exist on disk.</p>
+            <h2 px:role="name">Ignore non-existing images</h2>
+            <p px:role="desc">Whether or not to see that referenced images exist on disk.</p>
         </p:documentation>
-    </p:option>-->
+    </p:option>
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -51,23 +49,21 @@
     </p:output>
 
     <p:import href="step/dtbook.validate.xpl"/>
+    <p:import href="step/format-html-report.step.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
     <px:nordic-dtbook-validate.step name="validate">
         <p:with-option name="dtbook" select="$dtbook"/>
-        <!--<p:with-option name="check-images" select="$check-images"/>-->
+        <p:with-option name="check-images" select="if ($ignore-missing-images='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
     <p:sink/>
 
-    <px:validation-report-to-html name="html">
+    <px:nordic-format-html-report.step name="html">
         <p:input port="source">
             <p:pipe port="report.out" step="validate"/>
         </p:input>
-        <p:with-option name="toc" select="'false'">
-            <p:empty/>
-        </p:with-option>
-    </px:validation-report-to-html>
+    </px:nordic-format-html-report.step>
 
     <p:group name="status">
         <p:output port="result"/>

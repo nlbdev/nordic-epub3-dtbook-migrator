@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-dtbook-to-epub3" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions">
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic DTBook to EPUB3</h1>
-        <p px:role="desc">Transforms a DTBook document into an EPUB3 publication according to the nordic markup guidelines.</p>
+        <p px:role="desc">Transforms a DTBook document into an EPUB3 publication according to the nordic markup guidelines. ${version-description}</p>
     </p:documentation>
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
@@ -65,6 +65,8 @@
     <p:import href="step/epub3.validate.xpl"/>
     <p:import href="step/dtbook-to-html.convert.xpl"/>
     <p:import href="step/html-to-epub3.convert.xpl"/>
+    <p:import href="step/format-html-report.step.xpl"/>
+    <p:import href="step/fileset-store.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -79,8 +81,7 @@
         </p:inline>
     </p:variable>
 
-    <!--    <px:message message="Remember to also validate the resulting EPUB using epubcheck." severity="WARN"/>-->
-    <px:nordic-dtbook-validate.step name="validate.dtbook">
+    <px:nordic-dtbook-validate.step name="validate.dtbook" check-images="true">
         <p:with-option name="dtbook" select="$dtbook-href"/>
     </px:nordic-dtbook-validate.step>
     <p:sink/>
@@ -144,7 +145,7 @@
 
             <p:choose>
                 <p:when test="$discard-intermediary-html='false' or (/*/@result='error' and $assert-valid='true')">
-                    <px:fileset-load media-types="application/xhtml+xml">
+                    <px:fileset-load media-types="application/xhtml+xml" method="xml">
                         <p:input port="fileset">
                             <p:pipe port="fileset.out" step="single-html"/>
                         </p:input>
@@ -200,8 +201,33 @@
                         <p:with-option name="temp-dir" select="concat($temp-dir,'epub/')"/>
                         <p:with-option name="compatibility-mode" select="'true'"/>
                     </px:nordic-html-to-epub3-convert>
-
-                    <px:epub3-store name="store.epub3">
+                    
+                    <p:group name="store.epub3">
+                        <!-- TODO: replace this p:group with px:epub3-store when pxi:fileset-store is released in the next pipeline 2 version -->
+                        
+                        <p:output port="result" primary="false">
+                            <p:pipe port="result" step="zip"/>
+                        </p:output>
+                        
+                        <pxi:fileset-store name="fileset-store">
+                            <p:input port="fileset.in">
+                                <p:pipe port="fileset.out" step="convert.epub3"/>
+                            </p:input>
+                            <p:input port="in-memory.in">
+                                <p:pipe port="in-memory.out" step="convert.epub3"/>
+                            </p:input>
+                        </pxi:fileset-store>
+                        
+                        <px:epub3-ocf-zip name="zip" cx:depends-on="fileset-store">
+                            <p:with-option name="target" select="concat($output-dir,/*/@content,'.epub')">
+                                <p:pipe port="result" step="identifier"/>
+                            </p:with-option>
+                            <p:input port="source">
+                                <p:pipe port="fileset.out" step="fileset-store"/>
+                            </p:input>
+                        </px:epub3-ocf-zip>
+                    </p:group>
+                    <!--<px:epub3-store name="store.epub3">
                         <p:input port="fileset.in">
                             <p:pipe port="fileset.out" step="convert.epub3"/>
                         </p:input>
@@ -211,7 +237,7 @@
                         <p:with-option name="href" select="concat($output-dir,/*/@content,'.epub')">
                             <p:pipe port="result" step="identifier"/>
                         </p:with-option>
-                    </px:epub3-store>
+                    </px:epub3-store>-->
 
                     <px:fileset-create>
                         <p:with-option name="base" select="$output-dir">
@@ -238,7 +264,7 @@
     </p:choose>
     <p:identity name="reports"/>
 
-    <px:validation-report-to-html toc="false"/>
+    <px:nordic-format-html-report.step/>
     <p:xslt>
         <!-- pretty print to make debugging easier -->
         <p:with-param name="preserve-empty-whitespace" select="'false'"/>
@@ -282,114 +308,5 @@
         <px:assert message="The DTBook have a 'dtb:uid' meta element" test-count-min="1" test-count-max="1" error-code="NORDICDTBOOKEPUB009"/>
     </p:group>
     <p:sink/>
-
-
-
-
-
-
-
-
-
-
-
-
-    <!--<p:variable name="dtbook-href" select="resolve-uri($dtbook,base-uri(/*))">
-        <p:inline>
-            <irrelevant/>
-        </p:inline>
-    </p:variable>
-    
-    <px:nordic-dtbook-validate.step name="validate">
-        <p:with-option name="dtbook" select="$dtbook-href"/>
-    </px:nordic-dtbook-validate.step>
-    
-    <px:validation-report-to-html name="html">
-        <p:input port="source">
-            <p:pipe port="report.out" step="validate"/>
-        </p:input>
-        <p:with-option name="toc" select="'false'">
-            <p:empty/>
-        </p:with-option>
-    </px:validation-report-to-html>
-    
-    <p:group name="status.dtbook">
-        <p:output port="result"/>
-        <p:for-each>
-            <p:iteration-source select="/d:document-validation-report/d:document-info/d:error-count">
-                <p:pipe port="report.out" step="validate"/>
-            </p:iteration-source>
-            <p:identity/>
-        </p:for-each>
-        <p:wrap-sequence wrapper="d:validation-status"/>
-        <p:add-attribute attribute-name="result" match="/*">
-            <p:with-option name="attribute-value" select="if (sum(/*/*/number(.))&gt;0) then 'error' else 'ok'"/>
-        </p:add-attribute>
-        <p:delete match="/*/node()"/>
-    </p:group>
-    <p:sink/>
-
-    <p:choose>
-        <p:xpath-context>
-            <p:pipe port="result" step="status"/>
-        </p:xpath-context>
-        <p:when test="not(/*/@result='ok')">
-            <p:sink>
-                <p:input port="source">
-                    <p:empty/>
-                </p:input>
-            </p:sink>
-        </p:when>
-        
-        <p:otherwise>
-            
-            <px:nordic-dtbook-to-epub3-convert name="convert">
-                <p:input port="fileset.in">
-                    <p:pipe port="fileset.out" step="validate"/>
-                </p:input>
-                <p:input port="in-memory.in">
-                    <p:pipe port="in-memory.out" step="validate"/>
-                </p:input>
-                <p:with-option name="temp-dir" select="$temp-dir"/>
-                <p:with-option name="output-dir" select="$output-dir"/>
-            </px:nordic-dtbook-to-epub3-convert>
-            
-            <px:epub3-store>
-                <p:input port="fileset.in">
-                    <p:pipe port="fileset.out" step="convert"/>
-                </p:input>
-                <p:input port="in-memory.in">
-                    <p:pipe port="in-memory.out" step="convert"/>
-                </p:input>
-                <p:with-option name="href"
-                    select="concat($output-dir,replace(normalize-space((//dtbook:meta[lower-case(@name)=('dtb:uid','dc:identifier','dct:identifier')]/string(@content),'missing-identifier')[1]),'[^\s\w_\-\.]',''),'.epub')">
-                    <p:pipe port="result" step="identifier"/>
-                </p:with-option>
-            </px:epub3-store>
-            
-            
-            <!-\- get metadata (used to determine the filename) -\->
-            <p:group name="identifier">
-                <p:output port="result"/>
-                <px:fileset-load media-types="application/x-dtbook+xml">
-                    <p:input port="fileset">
-                        <p:pipe port="fileset.out" step="validate"/>
-                    </p:input>
-                    <p:input port="in-memory">
-                        <p:pipe port="in-memory.out" step="validate"/>
-                    </p:input>
-                </px:fileset-load>
-                <px:assert message="There must be exactly one DTBook in the input fileset" test-count-min="1" test-count-max="1"/>
-                <p:for-each>
-                    <p:iteration-source select="//dtbook:head"/>
-                    <p:identity/>
-                </p:for-each>
-            </p:group>
-            <p:sink/>
-
-        </p:otherwise>
-    </p:choose>-->
-
-
 
 </p:declare-step>

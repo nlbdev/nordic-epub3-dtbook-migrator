@@ -24,7 +24,7 @@
   </modules>
 
   <!-- BoM of the default script modules (for use in assemblies) -->
-  <dependencyManagement>
+  <!--<dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -37,6 +37,6 @@
         <version>1.0.0-SNAPSHOT</version>
       </dependency>
     </dependencies>
-  </dependencyManagement>
+  </dependencyManagement>-->
 
 </project>

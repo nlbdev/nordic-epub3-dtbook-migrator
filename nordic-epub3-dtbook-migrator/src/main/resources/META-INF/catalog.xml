@@ -24,6 +24,7 @@
   <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng" uri="../xml/schema/nordic-html5.rng"/>
   <uri name="http://www.daisy.org/pipeline/modules/nordic/tpb2011-1.sch" uri="../xml/schema/tpb2011-1.sch"/>
   <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch" uri="../xml/schema/nordic2015-1.sch"/>
+  <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.opf.sch" uri="../xml/schema/nordic2015-1.opf.sch"/>
   
   <!-- TODO: This XSLT will be included in Pipeline 2 from v1.8 onwards. Until then, we keep a copy of it in this repo as well. -->
   <uri name="http://www.daisy.org/pipeline/modules/common-utils/deep-level-grouping.xsl" uri="../xml/xslt/deep-level-grouping.xsl"/>

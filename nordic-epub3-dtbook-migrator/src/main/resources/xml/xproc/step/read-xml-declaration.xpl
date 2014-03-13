@@ -8,7 +8,8 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Example usage:</p>
         <pre xml:space="preserve">
-            &lt;px:read-xml-declaration href="..."/&gt;
+            &lt;!-- provide a single document on the primary input port --&gt;
+            &lt;px:read-xml-declaration/&gt;
         </pre>
         <p>Example output:</p>
         <pre xml:space="preserve">

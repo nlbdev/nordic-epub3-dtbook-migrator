@@ -250,7 +250,7 @@
 
   <!-- Rule 43: dc:publisher must be 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia' or 'SBS' -->
   <sch:pattern id="dtbook_TPB_43">
-    <sch:rule context="html:head">
+    <sch:rule context="html:head[//html:body/html:header]">
       <!-- dc:publisher -->
       <sch:assert test="count(html:meta[@name='dc:publisher' and @content=('TPB','MTM','SPSM','Nota','NLB','Celia','SBS')])=1">[tpb43] Meta dc:publisher must exist and have value 'TPB', 'MTM', 'SPSM',
         'Nota', 'NLB', 'Celia' or 'SBS'.</sch:assert>
@@ -393,7 +393,7 @@
 
   <!-- Rule 123 (39): No class attributes on level[2-6]. level1 allows 'part', 'nonstandardpagination', 'colophon' (if located in frontmatter) and 'cover' (if located in frontmatter and immediately after docauthor or doctitle) -->
   <sch:pattern id="dtbook_TPB_123">
-    <sch:rule context="html:*[(self::html:section or self::html:article) and /*/html:body/html:header and count(ancestor::html:section | ancestor::html:article) = 0]">
+    <sch:rule context="html:*[(self::html:section or self::html:article) and //html:body/html:header and count(ancestor::html:section | ancestor::html:article) = 0]">
       <sch:assert test="not(@class) or @class='part' or @class='cover' or @class='colophon' or @class='nonstandardpagination'">[tpb123] No class attributes except 'part', 'cover', 'colophon' and
         'nonstandardpagination' are allowed on level1</sch:assert>
 
@@ -439,21 +439,24 @@
     <sch:rule context="html:*[@class='toc']">
       <sch:assert test="self::html:nav[parent::html:body or parent::html:section/parent::html:body/html:header]">[tpb127] The "toc" class is only allowed on the main nav element.</sch:assert>
       <sch:assert test="self::html:nav/tokenize(@epub:type,' ')='nav'">[tpb127] The main nav element must use the epub:type "nav".</sch:assert>
-      <!--<sch:assert test="parent::html:*[(self::html:section or self::html:article) and /*/html:body/html:header and count(ancestor::html:section | ancestor::html:article) = 0]">[tpb127] Table of contents (&lt;list class="toc"&gt;)must be inside a level1</sch:assert>
+      <!--<sch:assert test="parent::html:*[(self::html:section or self::html:article) and //html:body/html:header and count(ancestor::html:section | ancestor::html:article) = 0]">[tpb127] Table of contents (&lt;list class="toc"&gt;)must be inside a level1</sch:assert>
       <sch:report test="ancestor::html:*[self::html:ul or self::html:ol][@class='toc']">[tpb127] Nested lists in table of contents must not have a 'toc' attribute</sch:report>-->
     </sch:rule>
   </sch:pattern>
 
   <!-- Rule 128: tracking metadata must exist (nordic:guidelines) -->
   <sch:pattern id="dtbook_TPB_128">
-    <sch:rule context="html:html">
-      <sch:assert test="namespace-uri-for-prefix('nordic',/*)='http://www.mtm.se/epub/'">[tpb128] xmlns:nordic="http://www.mtm.se/epub/" must be defined on the root html element.</sch:assert>
+    <sch:rule context="html:html[//html:body/html:header]">
+      <sch:assert test="namespace-uri-for-prefix('nordic',.)='http://www.mtm.se/epub/'">[tpb128] xmlns:nordic="http://www.mtm.se/epub/" must be defined on the root html element.</sch:assert>
     </sch:rule>
-    <sch:rule context="html:head">
+    <sch:rule context="html:head[//html:body/html:header]">
       <sch:assert test="count(html:meta[@name='nordic:guidelines'])=1">[tpb128] nordic:guidelines metadata must occur once.</sch:assert>
     </sch:rule>
-    <sch:rule context="html:meta[@name='nordic:guidelines']">
+    <sch:rule context="html:meta[//html:body/html:header][@name='nordic:guidelines']">
       <sch:assert test="@content='2015-1'">[tpb128] nordic:guidelines metadata value must be 2015-1.</sch:assert>
+    </sch:rule>
+    <sch:rule context="html:head[//html:body/html:header]">
+      <sch:assert test="count(html:meta[@name='nordic:supplier'])=1">[tpb128] nordic:supplier metadata must occur once.</sch:assert>
     </sch:rule>
   </sch:pattern>
 

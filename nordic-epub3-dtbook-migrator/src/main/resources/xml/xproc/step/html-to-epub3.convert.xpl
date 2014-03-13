@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-html-to-epub3-convert" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
@@ -42,15 +43,16 @@
     </px:fileset-move>
 
     <!-- Create spine -->
-    <px:fileset-filter media-types="application/xhtml+xml" name="spine"/>
+    <px:fileset-filter media-types="application/xhtml+xml"/>
+    <p:identity name="spine"/>
 
-    <px:fileset-load name="spine-html">
+    <px:fileset-load name="spine-html" method="xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.out" step="html-split.moved"/>
         </p:input>
     </px:fileset-load>
 
-    <px:fileset-load media-types="application/xhtml+xml">
+    <px:fileset-load media-types="application/xhtml+xml" method="xml">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
@@ -194,11 +196,28 @@
     </px:epub3-pub-create-package-doc>
     <p:add-attribute match="/*" attribute-name="unique-identifier" attribute-value="pub-identifier"/>
     <p:add-attribute match="//dc:identifier[not(preceding::dc:identifier)]" attribute-name="id" attribute-value="pub-identifier"/>
-    <p:add-attribute match="//dc:title[not(preceding::dc:title)]" attribute-name="id" attribute-value="pub-title"/>
-    <p:add-attribute match="//dc:language[not(preceding::dc:language)]" attribute-name="id" attribute-value="pub-language"/>
-    <p:add-attribute match="//dc:creator[not(preceding::dc:creator)]" attribute-name="id" attribute-value="pub-creator"/>
-    <p:add-attribute match="//dc:contributor[not(preceding::dc:contributor)]" attribute-name="id" attribute-value="pub-contributor"/>
-    <p:add-attribute match="//dc:source[not(preceding::dc:source)]" attribute-name="id" attribute-value="source-id"/>
+    <p:add-attribute match="/*" attribute-name="prefix" attribute-value="nordic: http://www.mtm.se/epub/"/>
+    <p:delete match="/*//*/@prefix"/>
+    <p:xslt>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:inline>
+                <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                    <xsl:template match="/*">
+                        <xsl:copy>
+                            <xsl:namespace name="dc" select="'http://purl.org/dc/elements/1.1/'"/>
+                            <xsl:copy-of select="@*|node()"/>
+                        </xsl:copy>
+                    </xsl:template>
+                </xsl:stylesheet>
+            </p:inline>
+        </p:input>
+    </p:xslt>
+    <p:add-attribute match="/*" attribute-name="xml:base">
+        <p:with-option name="attribute-value" select="concat($publication-dir,'package.opf')"/>
+    </p:add-attribute>
     <p:identity name="package"/>
 
     <p:identity name="result.in-memory-without-ocf-files">
@@ -251,6 +270,9 @@
             <p:pipe port="result" step="result.fileset-without-ocf-files"/>
         </p:input>
     </px:fileset-join>
+    <p:add-attribute match="//d:file[@href='META-INF/container.xml']" attribute-name="media-type" attribute-value="application/xml"/>
+    <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="omit-xml-declaration" attribute-value="false"/>
+    <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="method" attribute-value="xml"/>
     <p:identity name="result.fileset"/>
     <p:sink/>
 

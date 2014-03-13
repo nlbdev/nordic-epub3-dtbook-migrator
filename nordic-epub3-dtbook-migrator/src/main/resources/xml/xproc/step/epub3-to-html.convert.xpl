@@ -29,7 +29,7 @@
                     <p:variable name="base-uri" select="resolve-uri(/*/@xml:base,base-uri(/*))"/>
                     <p:identity name="section"/>
                     <p:rename match="/*" new-name="d:section-wrapper" name="section-wrapped"/>
-                    <px:fileset-load name="content">
+                    <px:fileset-load name="content" method="xml">
                         <p:with-option name="href" select="$base-uri"/>
                         <p:input port="fileset">
                             <p:pipe port="fileset" step="replace-sections-with-documents"/>
@@ -90,7 +90,7 @@
         <px:message message="Loading Navigation Document: $1">
             <p:with-option name="param1" select="$nav-href"/>
         </px:message>
-        <px:fileset-load>
+        <px:fileset-load method="xml">
             <p:input port="fileset">
                 <p:pipe port="fileset.in" step="main"/>
             </p:input>
@@ -227,6 +227,9 @@
             <p:pipe port="result" step="in-memory"/>
         </p:with-option>
     </px:fileset-add-entry>
+    <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="omit-xml-declaration" attribute-value="false"/>
+    <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="version" attribute-value="1.0"/>
+    <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="encoding" attribute-value="utf-8"/>
     <px:mediatype-detect/>
     <p:identity name="fileset"/>
 

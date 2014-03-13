@@ -150,6 +150,10 @@
                 <xsl:attribute name="name" select="'track:Guidelines'"/>
                 <xsl:attribute name="content" select="'2011-2'"/>
             </xsl:when>
+            <xsl:when test="@name='nordic:supplier'">
+                <xsl:attribute name="name" select="'track:Supplier'"/>
+                <xsl:attribute name="content" select="@content"/>
+            </xsl:when>
             <xsl:when test="lower-case(@name)='dc:format'">
                 <xsl:attribute name="name" select="'dc:Format'"/>
                 <xsl:attribute name="content" select="'DTBook'"/>

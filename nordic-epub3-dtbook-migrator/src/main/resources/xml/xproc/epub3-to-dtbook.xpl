@@ -4,7 +4,7 @@
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic EPUB3 to DTBook</h1>
-        <p px:role="desc">Transforms an EPUB3 publication into DTBook according to the nordic markup guidelines.</p>
+        <p px:role="desc">Transforms an EPUB3 publication into DTBook according to the nordic markup guidelines. ${version-description}</p>
     </p:documentation>
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
@@ -64,6 +64,7 @@
     <p:import href="step/dtbook.validate.xpl"/>
     <p:import href="step/epub3-to-html.convert.xpl"/>
     <p:import href="step/html-to-dtbook.convert.xpl"/>
+    <p:import href="step/format-html-report.step.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -185,7 +186,7 @@
 
             <p:choose>
                 <p:when test="$discard-intermediary-html='false' or (/*/@result='error' and $assert-valid='true')">
-                    <px:fileset-load media-types="application/xhtml+xml">
+                    <px:fileset-load media-types="application/xhtml+xml" method="xml">
                         <p:input port="fileset">
                             <p:pipe port="fileset.out" step="convert.html"/>
                         </p:input>
@@ -268,7 +269,7 @@
     </p:choose>
     <p:identity name="reports"/>
 
-    <px:validation-report-to-html toc="false"/>
+    <px:nordic-format-html-report.step/>
     <p:xslt>
         <!-- pretty print to make debugging easier -->
         <p:with-param name="preserve-empty-whitespace" select="'false'"/>

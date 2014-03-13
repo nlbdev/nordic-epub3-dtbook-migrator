@@ -15,7 +15,14 @@
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Nordic DTBook to EPUB3</name>
-
+  
+  <properties>
+    <timestamp>${maven.build.timestamp}</timestamp>
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+    <buildNr></buildNr>
+    <version-description>Version: ${pom.version}${buildNr}, build date: ${timestamp}.</version-description>
+  </properties>
+  
   <repositories>
       <repository>
           <id>central</id>
@@ -39,6 +46,12 @@
   </pluginRepositories>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources/xml/xproc/</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <plugins>
       <!--<plugin>
         <groupId>org.daisy.maven</groupId>

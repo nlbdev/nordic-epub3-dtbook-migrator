@@ -3,7 +3,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all" version="2.0">
 
     <xsl:template match="/*">
-        <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/">
+        <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" prefix="nordic: http://www.mtm.se/epub/">
 
             <xsl:variable name="identifier" select="//html:head/html:meta[lower-case(@name)=('dc:identifier','dct:identifier','dcterms:identifier','dtb:uid')][1]"/>
             <dc:identifier id="pub-id">
@@ -18,9 +18,16 @@
                 <xsl:variable name="id"
                     select="if (matches($lcname,'^dc:\w+$')) then concat(replace($lcname,'^dc:',''),'_',count(preceding-sibling::html:meta[lower-case(@name)=$lcname])+1) else if (matches($lcname,'^dtb:\w+$')) then concat(replace($lcname,'dtb:','dtb-'),'_',count(preceding-sibling::html:meta[lower-case(@name)=$lcname])) else concat('meta_',count(preceding-sibling::html:meta)+1)"/>
                 <xsl:choose>
-                    <xsl:when test="@http-equiv"/>
-                    <xsl:when test="string-length(normalize-space(@content)) = 0"/>
-                    <xsl:when test="$lcname=('dc:identifier','dct:identifier','dcterms:identifier','dtb:uid','dcterms:modified','dc:format')"/>
+                    <xsl:when test="@http-equiv">
+                        <xsl:message select="'Dropping empty meta element with http-equiv'"/>
+                    </xsl:when>
+                    <xsl:when test="string-length(normalize-space(@content)) = 0">
+                        <xsl:message select="concat('Dropping empty meta element: ',@name)"/>
+                    </xsl:when>
+                    <xsl:when test="$lcname=('dc:identifier','dct:identifier','dcterms:identifier','dtb:uid')"/>
+                    <xsl:when test="$lcname=('dcterms:modified','dc:format')">
+                        <xsl:message select="concat('Discarding pre-existing meta element (it will be replaced with a new one): ',@name)"/>
+                    </xsl:when>
                     <xsl:when test="matches($lcname,'^dc:')">
                         <xsl:element name="{$lcname}">
                             <xsl:attribute name="id" select="$id"/>
@@ -64,7 +71,17 @@
                             <xsl:value-of select="@content"/>
                         </meta>
                     </xsl:when>
-                    <xsl:otherwise/>
+                    <xsl:when test="@name='track:Guidelines'">
+                        <meta property="nordic:guidelines">2015-1</meta>
+                    </xsl:when>
+                    <xsl:when test="@name='track:Supplier'">
+                        <meta property="nordic:supplier">
+                            <xsl:value-of select="@content"/>
+                        </meta>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message select="concat('Discarding meta element: ',@name)"/>
+                    </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
 

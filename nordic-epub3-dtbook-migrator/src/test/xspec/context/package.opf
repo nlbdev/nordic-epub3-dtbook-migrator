@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id">
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" prefix="nordic: http://www.mtm.se/epub/">
                 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/">
                                 <dc:identifier id="pub-id">C00000</dc:identifier>
                                 <dc:format id="format">EPUB3</dc:format>
@@ -8,8 +8,12 @@
                                 <dc:publisher id="publisher_0">TPB</dc:publisher>
                                 <dc:language id="language_0">en-GB</dc:language>
                                 <dc:date id="date_0">2006-03-23</dc:date>
+                                <meta property="nordic:guidelines">2015-1</meta>
+                                <meta name="nordic:guidelines" content="2015-1"/>
+                                <meta property="nordic:supplier">MTM</meta>
+                                <meta name="nordic:supplier" content="MTM"/>
                                 <meta property="dcterms:modified">2013-11-07T10:05:30Z</meta>
-                                <meta content="2013-11-07T10:05:30Z" name="dcterms:modified"/>
+                                <meta name="dcterms:modified" content="2013-11-07T10:05:30Z"/>
                 </metadata>
                 <manifest>
                                 <item id="item_1" media-type="text/css" href="css/accessibility.css"/>

@@ -4,7 +4,7 @@
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic DTBook to EPUB3</h1>
-        <p px:role="desc">Transforms a DTBook document into an HTML document according to the nordic markup guidelines.</p>
+        <p px:role="desc">Transforms a DTBook document into an HTML document according to the nordic markup guidelines. ${version-description}</p>
     </p:documentation>
 
     <p:input port="source" primary="true" px:name="source" px:media-type="application/x-dtbook+xml">
