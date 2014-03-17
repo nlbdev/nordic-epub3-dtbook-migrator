@@ -631,7 +631,7 @@
 
   <!-- Rule 225: pagebreak -->
   <sch:pattern id="epub_nordic_225">
-    <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak']">
+    <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak' and text()]">
       <sch:assert test="matches(@title,'.+')">[nordic225] The title attribute must be used to describe the page number.</sch:assert>
     </sch:rule>
   </sch:pattern>

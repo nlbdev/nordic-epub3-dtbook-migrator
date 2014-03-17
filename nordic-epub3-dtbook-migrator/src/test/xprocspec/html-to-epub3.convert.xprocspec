@@ -32,19 +32,25 @@
         </x:context>
         <x:expect type="compare" label="all files should have their appropriate attributes set">
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/chapter1.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-1-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/chapter2.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-2-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/chapter3.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-3-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/chapter4.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-4-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/chapter5.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-5-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+            </x:document>
+            <x:document type="inline" base-uri="temp-dir">
+                <d:file href="EPUB/C00000-6-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+            </x:document>
+            <x:document type="inline" base-uri="temp-dir">
+                <d:file href="EPUB/C00000-7-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
                 <d:file href="EPUB/nav.ncx" method="xml" omit-xml-declaration="false" media-type="application/x-dtbncx+xml"/>

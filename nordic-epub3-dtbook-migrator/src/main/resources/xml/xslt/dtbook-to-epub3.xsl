@@ -133,29 +133,99 @@
             </xsl:for-each>
             <xsl:call-template name="headmisc"/>
             <style type="text/css" xml:space="preserve"><![CDATA[
-                .pronounce-no { -epub-speak-as: spell-out; }
-                .list-preformatted { list-style-type: none; }
-                table[class^="table-rules-"], table[class*=" table-rules-"] { border-width: thin; border-style: hidden; }
-                table[class^="table-rules-"]:not(.table-rules-none), table[class*=" table-rules-"]:not(.table-rules-none) { border-collapse: collapse; }
-                table[class^="table-rules-"] td, table[class*=" table-rules-"] td { border-width: thin; border-style: none; }
-                table[class^="table-rules-"] th, table[class*=" table-rules-"] th { border-width: thin; border-style: none; }
-                table.table-rules-none td, table.table-rules-none th { border-width: thin; border-style: hidden; }
-                table.table-rules-all td, table.table-rules-all th { border-width: thin; border-style: solid; }
-                table.table-rules-cols td, table.table-rules-cols th { border-left-width: thin; border-right-width: thin; border-left-style: solid; border-right-style: solid; }
-                table.table-rules-rows tr { border-top-width: thin; border-bottom-width: thin; border-top-style: solid; border-bottom-style: solid; }
-                table.table-rules-groups colgroup { border-left-width: thin; border-right-width: thin; border-left-style: solid; border-right-style: solid; }
-                table.table-rules-groups tfoot, table.table-rules-groups thead, table.table-rules-groups tbody { border-top-width: thin; border-bottom-width: thin; border-top-style: solid; border-bottom-style: solid; }
-                table[class^="table-frame-"], table[class*=" table-frame-"] { border: thin hidden; }
-                table.table-frame-void { border-style: hidden; }
-                table.table-frame-above { border-style: outset hidden hidden hidden; }
-                table.table-frame-below { border-style: hidden hidden outset hidden; }
-                table.table-frame-lhs { border-style: hidden hidden hidden outset; }
-                table.table-frame-rhs { border-style: hidden outset hidden hidden; }
-                table.table-frame-hsides { border-style: outset hidden; }
-                table.table-frame-vsides { border-style: hidden outset; }
-                table.table-frame-box { border-style: outset; }
-                table.table-frame-border { border-style: outset; }
-                ]]></style>
+                .pronounce-no{
+                    -epub-speak-as:spell-out;
+                }
+                .list-preformatted{
+                    list-style-type:none;
+                }
+                table[class ^= "table-rules-"],
+                table[class *= " table-rules-"]{
+                    border-width:thin;
+                    border-style:hidden;
+                }
+                table[class ^= "table-rules-"]:not(.table-rules-none),
+                table[class *= " table-rules-"]:not(.table-rules-none){
+                    border-collapse:collapse;
+                }
+                table[class ^= "table-rules-"] td,
+                table[class *= " table-rules-"] td{
+                    border-width:thin;
+                    border-style:none;
+                }
+                table[class ^= "table-rules-"] th,
+                table[class *= " table-rules-"] th{
+                    border-width:thin;
+                    border-style:none;
+                }
+                table.table-rules-none td,
+                table.table-rules-none th{
+                    border-width:thin;
+                    border-style:hidden;
+                }
+                table.table-rules-all td,
+                table.table-rules-all th{
+                    border-width:thin;
+                    border-style:solid;
+                }
+                table.table-rules-cols td,
+                table.table-rules-cols th{
+                    border-left-width:thin;
+                    border-right-width:thin;
+                    border-left-style:solid;
+                    border-right-style:solid;
+                }
+                table.table-rules-rows tr{
+                    border-top-width:thin;
+                    border-bottom-width:thin;
+                    border-top-style:solid;
+                    border-bottom-style:solid;
+                }
+                table.table-rules-groups colgroup{
+                    border-left-width:thin;
+                    border-right-width:thin;
+                    border-left-style:solid;
+                    border-right-style:solid;
+                }
+                table.table-rules-groups tfoot,
+                table.table-rules-groups thead,
+                table.table-rules-groups tbody{
+                    border-top-width:thin;
+                    border-bottom-width:thin;
+                    border-top-style:solid;
+                    border-bottom-style:solid;
+                }
+                table[class ^= "table-frame-"],
+                table[class *= " table-frame-"]{
+                    border:thin hidden;
+                }
+                table.table-frame-void{
+                    border-style:hidden;
+                }
+                table.table-frame-above{
+                    border-style:outset hidden hidden hidden;
+                }
+                table.table-frame-below{
+                    border-style:hidden hidden outset hidden;
+                }
+                table.table-frame-lhs{
+                    border-style:hidden hidden hidden outset;
+                }
+                table.table-frame-rhs{
+                    border-style:hidden outset hidden hidden;
+                }
+                table.table-frame-hsides{
+                    border-style:outset hidden;
+                }
+                table.table-frame-vsides{
+                    border-style:hidden outset;
+                }
+                table.table-frame-box{
+                    border-style:outset;
+                }
+                table.table-frame-border{
+                    border-style:outset;
+                }]]></style>
             <xsl:if test="@profile">
                 <link rel="profile" href="{@profile}"/>
             </xsl:if>
@@ -826,14 +896,15 @@
                     <figcaption>
                         <xsl:for-each select="dtbook:img">
                             <div class="img-caption">
-                                <xsl:variable name="captions" select="(if (position()=1) then ./preceding-sibling::dtbook:caption else (), ./preceding-sibling::dtbook:caption intersect ./preceding-sibling::dtbook:img[1]/following-sibling::dtbook:caption, if (position()=last()) then ./following-sibling::dtbook:caption else ())"/>
-                                
+                                <xsl:variable name="captions"
+                                    select="(if (position()=1) then ./preceding-sibling::dtbook:caption else (), ./preceding-sibling::dtbook:caption intersect ./preceding-sibling::dtbook:img[1]/following-sibling::dtbook:caption, if (position()=last()) then ./following-sibling::dtbook:caption else ())"/>
+
                                 <xsl:for-each select="$captions[1]">
                                     <xsl:call-template name="attlist.caption">
                                         <xsl:with-param name="classes" select="'img-caption'" tunnel="yes"/>
                                     </xsl:call-template>
                                 </xsl:for-each>
-                                
+
                                 <xsl:apply-templates select="$captions"/>
                             </div>
                         </xsl:for-each>
@@ -847,14 +918,15 @@
                     <figcaption>
                         <xsl:for-each select="dtbook:img">
                             <div class="img-caption">
-                                <xsl:variable name="captions" select="(./following-sibling::dtbook:caption intersect ./following-sibling::dtbook:img[1]/preceding-sibling::dtbook:caption, if (position()=last()) then ./following-sibling::dtbook:caption else ())"/>
-                                
+                                <xsl:variable name="captions"
+                                    select="(./following-sibling::dtbook:caption intersect ./following-sibling::dtbook:img[1]/preceding-sibling::dtbook:caption, if (position()=last()) then ./following-sibling::dtbook:caption else ())"/>
+
                                 <xsl:for-each select="$captions[1]">
                                     <xsl:call-template name="attlist.caption">
                                         <xsl:with-param name="classes" select="'img-caption'" tunnel="yes"/>
                                     </xsl:call-template>
                                 </xsl:for-each>
-                                
+
                                 <xsl:apply-templates select="$captions"/>
                             </div>
                         </xsl:for-each>

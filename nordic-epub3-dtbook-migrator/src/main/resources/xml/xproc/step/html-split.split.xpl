@@ -64,6 +64,7 @@
         <p:add-attribute match="//d:file" attribute-name="omit-xml-declaration" attribute-value="false"/>
         <p:add-attribute match="//d:file" attribute-name="version" attribute-value="1.0"/>
         <p:add-attribute match="//d:file" attribute-name="encoding" attribute-value="utf-8"/>
+        <p:add-attribute match="//d:file" attribute-name="method" attribute-value="xml"/>
         <p:identity name="for-each.fileset"/>
     </p:for-each>
     <p:identity name="in-memory.html"/>

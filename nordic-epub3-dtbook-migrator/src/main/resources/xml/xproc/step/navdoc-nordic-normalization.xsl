@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all" version="2.0" xmlns:epub="http://www.idpf.org/2007/ops"
     xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml">
 
+    <xsl:param name="identifier" required="yes"/>
     <xsl:param name="supplier" select="''"/>
     <xsl:param name="publisher" required="yes"/>
     <xsl:variable name="lang" select="string((/html/head/meta[@name='dc:language']/@content, /*/@xml:lang, /*/@lang)[1])"/>
@@ -30,6 +31,7 @@
                 <xsl:value-of select="normalize-space(string-join((//h1|//h2|//h3|//h4|//h5|//h6)[1]//text(),' '))"/>
             </title>
             <meta name="viewport" content="width=device-width"/>
+            <meta name="dc:identifier" content="{$identifier}"/>
             <meta name="nordic:guidelines" content="2015-1"/>
             <xsl:if test="$supplier!=''">
                 <meta name="nordic:supplier" content="{$supplier}"/>

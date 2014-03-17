@@ -105,13 +105,14 @@
             <d:reports>
                 <d:report>
                     <xsl:for-each select="repInfo/messages/message">
-                        <xsl:variable name="severity" select="lower-case(replace(.,'^([^:]*):\s*.*?$','$1'))"/>
+                        <xsl:variable name="severity" select="if (contains(.,':')) then tokenize(.,':')[1] else 'error'"/>
                         <xsl:variable name="message" select="replace(.,'^[^:]*:\s*(.*?)$','$1')"/>
                         <xsl:variable name="message-regex" select="'^(|/[^:]*?)(()|\(([^\)]*)\)): (.*)$'"/>
                         <xsl:variable name="file" select="if ($severity='exception') then '' else replace($message,$message-regex,'$1')"/>
                         <xsl:variable name="location" select="if ($severity='exception') then '' else replace($message,$message-regex,'$4')"/>
                         <xsl:variable name="message-text" select="if ($severity='exception') then $message else replace($message,$message-regex,'$5')"/>
-                        <xsl:element name="{if ($severity='warn' and $report-warning-as-error='true' or $severity='exception') then 'd:error' else concat('d:',$severity)}">
+                        <xsl:variable name="element-name" select="if ($severity='warn' and $report-warning-as-error='true' or $severity='exception') then 'd:error' else concat('d:',$severity)"/>
+                        <xsl:element name="{$element-name}">
                             <d:desc>
                                 <xsl:value-of select="$message-text"/>
                             </d:desc>

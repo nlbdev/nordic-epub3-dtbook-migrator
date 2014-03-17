@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-epub3-validate" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:pxp="http://exproc.org/proposed/steps" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
+    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:cx="http://xmlcalabash.com/ns/extensions">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic EPUB3 Validator</h1>
-        <p px:role="desc">Validates an EPUB3 publication according to the nordic markup guidelines. ${version-description}</p>
+        <p px:role="desc">Validates an EPUB3 publication according to the nordic markup guidelines.</p>
     </p:documentation>
 
     <p:option name="epub" required="true" px:type="anyFileURI" px:media-type="application/epub+zip">
@@ -44,7 +44,13 @@
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <px:fileset-create>
+    <px:message message="$1" name="nordic-version-message">
+        <p:with-option name="param1" select="/*">
+            <p:document href="../version-description.xml"/>
+        </p:with-option>
+    </px:message>
+
+    <px:fileset-create cx:depends-on="nordic-version-message">
         <p:with-option name="base" select="replace($epub,'[^/]+$','')"/>
     </px:fileset-create>
     <px:fileset-add-entry media-type="application/epub+zip">

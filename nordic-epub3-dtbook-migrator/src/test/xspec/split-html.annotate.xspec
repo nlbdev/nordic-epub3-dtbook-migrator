@@ -9,6 +9,7 @@
             <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/content.xhtml">
                 <head>
                     <title>Single-page title</title>
+                    <meta name="dc:identifier" content="UID"/>
                 </head>
                 <body>
                     <section epub:type="cover">
@@ -27,10 +28,6 @@
                         <h1>toc</h1>
                         <p>toctoctoc</p>
                     </section>
-                    <section epub:type="part">
-                        <h1>part</h1>
-                        <p>partpartpart</p>
-                    </section>
                     <section epub:type="chapter">
                         <h1>chapter</h1>
                         <p>chapterchapterchapter</p>
@@ -42,14 +39,14 @@
                     <section epub:type="part">
                         <h1>part</h1>
                         <p>partpartpart</p>
-                    </section>
-                    <section epub:type="chapter">
-                        <h1>chapter</h1>
-                        <p>chapterchapterchapter</p>
-                    </section>
-                    <section epub:type="chapter">
-                        <h1>chapter</h1>
-                        <p>chapterchapterchapter</p>
+                        <section epub:type="chapter">
+                            <h1>chapter</h1>
+                            <p>chapterchapterchapter</p>
+                        </section>
+                        <section epub:type="chapter">
+                            <h1>chapter</h1>
+                            <p>chapterchapterchapter</p>
+                        </section>
                     </section>
                     <section epub:type="index">
                         <h1>index</h1>
@@ -82,69 +79,66 @@
             <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/content.xhtml">
                 <head>
                     <title>Single-page title</title>
+                    <meta name="dc:identifier" content="UID"/>
                 </head>
                 <body>
-                    <section epub:type="cover" xml:base="file:/tmp/cover.xhtml">
+                    <section epub:type="cover" xml:base="file:/tmp/UID-01-cover.xhtml">
                         <h1>cover</h1>
                         <p>covercovercover</p>
                     </section>
-                    <section epub:type="titlepage" xml:base="file:/tmp/titlepage.xhtml">
+                    <section epub:type="titlepage" xml:base="file:/tmp/UID-02-titlepage.xhtml">
                         <h1>titlepage</h1>
                         <p>titlepagetitlepagetitlepage</p>
                     </section>
-                    <section epub:type="colophon" xml:base="file:/tmp/colophon.xhtml">
+                    <section epub:type="colophon" xml:base="file:/tmp/UID-03-colophon.xhtml">
                         <h1>colophon</h1>
                         <p>colophoncolophoncolophon</p>
                     </section>
-                    <section epub:type="toc" xml:base="file:/tmp/toc.xhtml">
+                    <section epub:type="toc" xml:base="file:/tmp/UID-04-toc.xhtml">
                         <h1>toc</h1>
                         <p>toctoctoc</p>
                     </section>
-                    <section epub:type="part" xml:base="file:/tmp/part1.xhtml">
+                    <section epub:type="chapter" xml:base="file:/tmp/UID-05-chapter.xhtml">
+                        <h1>chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </section>
+                    <section epub:type="chapter" xml:base="file:/tmp/UID-06-chapter.xhtml">
+                        <h1>chapter</h1>
+                        <p>chapterchapterchapter</p>
+                    </section>
+                    <section epub:type="part" xml:base="file:/tmp/UID-07-part.xhtml">
                         <h1>part</h1>
                         <p>partpartpart</p>
                     </section>
-                    <section epub:type="chapter" xml:base="file:/tmp/chapter1.xhtml">
+                    <section epub:type="chapter" xml:base="file:/tmp/UID-08-chapter.xhtml">
                         <h1>chapter</h1>
                         <p>chapterchapterchapter</p>
                     </section>
-                    <section epub:type="chapter" xml:base="file:/tmp/chapter2.xhtml">
+                    <section epub:type="chapter" xml:base="file:/tmp/UID-09-chapter.xhtml">
                         <h1>chapter</h1>
                         <p>chapterchapterchapter</p>
                     </section>
-                    <section epub:type="part" xml:base="file:/tmp/part2.xhtml">
-                        <h1>part</h1>
-                        <p>partpartpart</p>
-                    </section>
-                    <section epub:type="chapter" xml:base="file:/tmp/chapter3.xhtml">
-                        <h1>chapter</h1>
-                        <p>chapterchapterchapter</p>
-                    </section>
-                    <section epub:type="chapter" xml:base="file:/tmp/chapter4.xhtml">
-                        <h1>chapter</h1>
-                        <p>chapterchapterchapter</p>
-                    </section>
-                    <section epub:type="index" xml:base="file:/tmp/index.xhtml">
+                    <section epub:type="index" xml:base="file:/tmp/UID-10-index.xhtml">
                         <h1>index</h1>
                         <p>indexindexindex</p>
                     </section>
-                    <section epub:type="appendix" xml:base="file:/tmp/appendix1.xhtml">
+                    <section epub:type="appendix" xml:base="file:/tmp/UID-11-appendix.xhtml">
                         <h1>appendix</h1>
                         <p>appendixappendixappendix</p>
                     </section>
-                    <section epub:type="appendix" xml:base="file:/tmp/appendix2.xhtml">
+                    <section epub:type="appendix" xml:base="file:/tmp/UID-12-appendix.xhtml">
                         <h1>appendix</h1>
                         <p>appendixappendixappendix</p>
                     </section>
-                    <section epub:type="glossary" xml:base="file:/tmp/glossary.xhtml">
+                    <section epub:type="glossary" xml:base="file:/tmp/UID-13-glossary.xhtml">
                         <h1>glossary</h1>
                         <p>glossaryglossaryglossary</p>
                     </section>
-                    <section epub:type="footnotes" xml:base="file:/tmp/footnotes.xhtml">
+                    <section epub:type="footnotes" xml:base="file:/tmp/UID-14-footnotes.xhtml">
                         <h1>footnotes</h1>
                         <p>footnotesfootnotesfootnotes</p>
                     </section>
-                    <section epub:type="rearnotes" xml:base="file:/tmp/rearnotes.xhtml">
+                    <section epub:type="rearnotes" xml:base="file:/tmp/UID-15-rearnotes.xhtml">
                         <h1>rearnotes</h1>
                         <p>rearnotesrearnotesrearnotes</p>
                     </section>

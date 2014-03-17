@@ -21,6 +21,8 @@
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <buildNr></buildNr>
     <version-description>Version: ${pom.version}${buildNr}, build date: ${timestamp}.</version-description>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
   
   <repositories>
@@ -44,12 +46,19 @@
           <url>http://oss.sonatype.org/content/repositories/snapshots/</url>
       </pluginRepository>
   </pluginRepositories>
-
+  
   <build>
     <resources>
       <resource>
-        <directory>src/main/resources/xml/xproc/</directory>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
         <filtering>true</filtering>
+        <includes>
+          <include>xml/version-description.xml</include>
+        </includes>
       </resource>
     </resources>
     <plugins>

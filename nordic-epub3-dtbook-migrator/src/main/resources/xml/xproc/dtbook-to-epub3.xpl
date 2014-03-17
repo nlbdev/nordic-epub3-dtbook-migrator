@@ -5,7 +5,7 @@
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic DTBook to EPUB3</h1>
-        <p px:role="desc">Transforms a DTBook document into an EPUB3 publication according to the nordic markup guidelines. ${version-description}</p>
+        <p px:role="desc">Transforms a DTBook document into an EPUB3 publication according to the nordic markup guidelines.</p>
     </p:documentation>
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
@@ -80,8 +80,14 @@
             <irrelevant/>
         </p:inline>
     </p:variable>
-
-    <px:nordic-dtbook-validate.step name="validate.dtbook" check-images="true">
+    
+    <px:message message="$1" name="nordic-version-message">
+        <p:with-option name="param1" select="/*">
+            <p:document href="../version-description.xml"/>
+        </p:with-option>
+    </px:message>
+    
+    <px:nordic-dtbook-validate.step name="validate.dtbook" check-images="true" cx:depends-on="nordic-version-message">
         <p:with-option name="dtbook" select="$dtbook-href"/>
     </px:nordic-dtbook-validate.step>
     <p:sink/>

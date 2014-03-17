@@ -3,6 +3,7 @@
     type="px:nordic-html-to-epub3-convert" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
+    
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
@@ -20,7 +21,8 @@
     <p:import href="html-split.split.xpl"/>
     <p:import href="fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
+    <p:import href="epub3-nav-utils/xproc/epub3-nav-library.xpl"/>
+    <!--<p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -83,25 +85,25 @@
             <p:pipe port="result" step="nav.ncx"/>
         </p:output>
 
-        <px:epub3-nav-create-toc name="nav.toc">
+        <pxi:epub3-nav-create-toc name="nav.toc">
             <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
                 <p:pipe port="result" step="single-html"/>
             </p:with-option>
             <p:input port="source">
                 <p:pipe port="in-memory.out" step="html-split"/>
             </p:input>
-        </px:epub3-nav-create-toc>
+        </pxi:epub3-nav-create-toc>
 
-        <px:epub3-nav-create-page-list name="nav.page-list">
+        <pxi:epub3-nav-create-page-list name="nav.page-list">
             <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
                 <p:pipe port="result" step="single-html"/>
             </p:with-option>
             <p:input port="source">
                 <p:pipe port="in-memory.out" step="html-split"/>
             </p:input>
-        </px:epub3-nav-create-page-list>
+        </pxi:epub3-nav-create-page-list>
 
-        <px:epub3-nav-aggregate>
+        <pxi:epub3-nav-aggregate>
             <p:input port="source">
                 <p:pipe step="nav.toc" port="result"/>
                 <p:pipe step="nav.page-list" port="result"/>
@@ -109,11 +111,14 @@
             <p:with-option name="language" select="/*/(@xml:lang,@lang)[1]">
                 <p:pipe port="result" step="single-html"/>
             </p:with-option>
-        </px:epub3-nav-aggregate>
+        </pxi:epub3-nav-aggregate>
         <p:add-attribute match="/*" attribute-name="xml:base">
             <p:with-option name="attribute-value" select="concat($publication-dir,'nav.xhtml')"/>
         </p:add-attribute>
         <p:xslt>
+            <p:with-param name="identifier" select="/*/html:head/html:meta[@name='dc:identifier']/@content">
+                <p:pipe port="result" step="single-html"/>
+            </p:with-param>
             <p:with-param name="supplier" select="/*/html:head/html:meta[@name='nordic:supplier']/@content">
                 <p:pipe port="result" step="single-html"/>
             </p:with-param>

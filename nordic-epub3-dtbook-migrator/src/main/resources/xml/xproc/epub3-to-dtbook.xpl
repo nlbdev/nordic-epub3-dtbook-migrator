@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-epub3-to-dtbook" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:pxp="http://exproc.org/proposed/steps" xpath-version="2.0">
+    type="px:nordic-epub3-to-dtbook" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:pxp="http://exproc.org/proposed/steps" xpath-version="2.0"
+    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:cx="http://xmlcalabash.com/ns/extensions">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic EPUB3 to DTBook</h1>
-        <p px:role="desc">Transforms an EPUB3 publication into DTBook according to the nordic markup guidelines. ${version-description}</p>
+        <p px:role="desc">Transforms an EPUB3 publication into DTBook according to the nordic markup guidelines.</p>
     </p:documentation>
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
@@ -71,6 +72,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="step/fileset-move.xpl"/>
+    <p:import href="step/fileset-store.xpl"/>
 
     <p:variable name="epub-href" select="resolve-uri($epub,base-uri(/*))">
         <p:inline>
@@ -78,7 +80,13 @@
         </p:inline>
     </p:variable>
 
-    <px:fileset-create>
+    <px:message message="$1" name="nordic-version-message">
+        <p:with-option name="param1" select="/*">
+            <p:document href="../version-description.xml"/>
+        </p:with-option>
+    </px:message>
+
+    <px:fileset-create cx:depends-on="nordic-version-message">
         <p:with-option name="base" select="replace($epub-href,'[^/]+$','')"/>
     </px:fileset-create>
     <px:fileset-add-entry media-type="application/epub+zip">
@@ -144,14 +152,14 @@
             </p:for-each>
             <p:identity name="load.in-memory"/>
 
-            <px:fileset-store name="load.stored">
+            <pxi:fileset-store name="load.stored">
                 <p:input port="fileset.in">
                     <p:pipe port="result" step="load.in-memory.fileset-fix"/>
                 </p:input>
                 <p:input port="in-memory.in">
                     <p:pipe port="result" step="load.in-memory"/>
                 </p:input>
-            </px:fileset-store>
+            </pxi:fileset-store>
 
             <px:nordic-epub3-to-html-convert name="convert.html">
                 <p:input port="fileset.in">
@@ -246,14 +254,14 @@
                         </p:input>
                     </px:fileset-move>
 
-                    <px:fileset-store name="fileset-store">
+                    <pxi:fileset-store name="fileset-store">
                         <p:input port="fileset.in">
                             <p:pipe port="fileset.out" step="move"/>
                         </p:input>
                         <p:input port="in-memory.in">
                             <p:pipe port="in-memory.out" step="move"/>
                         </p:input>
-                    </px:fileset-store>
+                    </pxi:fileset-store>
 
                     <px:nordic-dtbook-validate.step name="validate.dtbook">
                         <p:with-option name="dtbook" select="(/*/d:file[@media-type='application/x-dtbook+xml'])[1]/resolve-uri(@href,base-uri(.))">

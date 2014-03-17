@@ -25,6 +25,7 @@
         <p:pipe port="result" step="epubcheck.validate"/>
         <p:pipe port="result" step="opf.validate"/>
         <p:pipe port="result" step="html.validate"/>
+        <p:pipe port="result" step="id.validate"/>
     </p:output>
 
     <p:option name="temp-dir" required="true"/>
@@ -286,11 +287,7 @@
             </p:inline>
         </p:input>
     </p:insert>
-    <p:string-replace match="/*/d:document-info/d:document-name/text()">
-        <p:with-option name="replace" select="concat('&quot;',replace(base-uri(/*),'^.*/([^/]*)/?$','$1'),'&quot;')">
-            <p:pipe port="fileset" step="unzip"/>
-        </p:with-option>
-    </p:string-replace>
+    <p:string-replace match="/*/d:document-info/d:document-name/text()" replace="'All XML files (XHTML, OPF, NCX, SMIL, etc.)'"/>
     <p:string-replace match="/*/d:document-info/d:document-path/text()">
         <p:with-option name="replace" select="concat('&quot;',base-uri(/*),'&quot;')">
             <p:pipe port="fileset" step="unzip"/>
@@ -300,11 +297,72 @@
     <p:identity name="xml-declaration.validate"/>
     <p:sink/>
 
-    <!--
-        TODO:
-        * report whether the HTML is single-page or one of many
-        * if single page;
-        * if multi-page:
-    -->
+    <px:fileset-load media-types="application/oebps-package+xml application/xhtml+xml">
+        <p:input port="fileset">
+            <p:pipe port="fileset" step="unzip"/>
+        </p:input>
+        <p:input port="in-memory">
+            <p:pipe port="in-memory" step="unzip"/>
+        </p:input>
+    </px:fileset-load>
+    <p:for-each>
+        <p:add-attribute match="/*" attribute-name="xml:base">
+            <p:with-option name="attribute-value" select="base-uri(/*)"/>
+        </p:add-attribute>
+    </p:for-each>
+    <p:wrap-sequence wrapper="c:result"/>
+    <p:add-attribute match="/*" attribute-name="xml:base">
+        <p:with-option name="attribute-value" select="base-uri(/*)">
+            <p:pipe port="fileset" step="unzip"/>
+        </p:with-option>
+    </p:add-attribute>
+    <p:add-xml-base relative="true"/>
+    <p:viewport match="/*/*">
+        <p:add-attribute match="//*" attribute-name="xml:base">
+            <p:with-option name="attribute-value" select="/*/@xml:base"/>
+        </p:add-attribute>
+    </p:viewport>
+    <p:for-each>
+        <p:iteration-source select="//*[@id]"/>
+        <p:delete match="/*//node()"/>
+    </p:for-each>
+    <p:wrap-sequence wrapper="c:result"/>
+    <p:add-attribute match="/*" attribute-name="xml:base">
+        <p:with-option name="attribute-value" select="base-uri(/*)">
+            <p:pipe port="fileset" step="unzip"/>
+        </p:with-option>
+    </p:add-attribute>
+    <p:xslt>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:document href="../../xslt/compare-ids.xsl"/>
+        </p:input>
+    </p:xslt>
+    <p:wrap-sequence wrapper="d:report"/>
+    <p:wrap-sequence wrapper="d:reports"/>
+    <p:wrap-sequence wrapper="d:document-validation-report"/>
+    <p:insert match="/*" position="first-child">
+        <p:input port="insertion">
+            <p:inline>
+                <d:document-info>
+                    <d:document-name>PLACEHOLDER</d:document-name>
+                    <d:document-type>EPUB3 Unique IDs</d:document-type>
+                    <d:document-path>PLACEHOLDER</d:document-path>
+                    <d:error-count>PLACEHOLDER</d:error-count>
+                </d:document-info>
+            </p:inline>
+        </p:input>
+    </p:insert>
+    <p:string-replace match="/*/d:document-info/d:document-name/text()" replace="'All XHTML files and the OPF'"/>
+    <p:string-replace match="/*/d:document-info/d:document-path/text()">
+        <p:with-option name="replace" select="concat('&quot;',base-uri(/*),'&quot;')">
+            <p:pipe port="fileset" step="unzip"/>
+        </p:with-option>
+    </p:string-replace>
+    <p:string-replace match="/*/d:document-info/d:error-count/text()" replace="count(//d:error)"/>
+    <p:identity name="id.validate"/>
+    <p:sink/>
 
 </p:declare-step>
