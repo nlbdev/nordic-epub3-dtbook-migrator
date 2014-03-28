@@ -13,6 +13,12 @@
 
             <dc:format id="format">EPUB3</dc:format>
 
+            <xsl:if test="not(/html:html/html:head/html:meta[lower-case(@name)='dc:title'])">
+                <dc:title>
+                    <xsl:value-of select="/html:html/html:head/html:title/text()"/>
+                </dc:title>
+            </xsl:if>
+
             <xsl:for-each select="/html:html/html:head/html:meta">
                 <xsl:variable name="lcname" select="lower-case(@name)"/>
                 <xsl:variable name="id"
@@ -76,6 +82,12 @@
                     </xsl:when>
                     <xsl:when test="@name='track:Supplier'">
                         <meta property="nordic:supplier">
+                            <xsl:value-of select="@content"/>
+                        </meta>
+                    </xsl:when>
+                    <xsl:when test="starts-with(@name,'nordic:')">
+                        <meta property="{@name}">
+                            <xsl:copy-of select="@scheme"/>
                             <xsl:value-of select="@content"/>
                         </meta>
                     </xsl:when>

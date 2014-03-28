@@ -30,7 +30,7 @@
         </x:context>
         <x:expect type="compare" label="all files should have their appropriate attributes set">
             <x:document type="inline" xml:base="single-html/">
-                <d:file href="C00000-1-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="C00000-1-frontmatter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" xml:base="single-html/">
                 <d:file href="C00000-2-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
@@ -45,10 +45,10 @@
                 <d:file href="C00000-5-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" xml:base="single-html/">
-                <d:file href="C00000-6-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="C00000-6-conclusion.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" xml:base="single-html/">
-                <d:file href="C00000-7-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="C00000-7-backmatter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
         </x:expect>
 
@@ -66,7 +66,7 @@
         <x:context label="the 1st document on the in-memory.out port">
             <x:document type="port" port="in-memory.out" position="1"/>
         </x:context>
-        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-1-chapter.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-1-chapter.xhtml')"/>
+        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-1-frontmatter.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-1-frontmatter.xhtml')"/>
         
         <x:context label="the 2nd document on the in-memory.out port">
             <x:document type="port" port="in-memory.out" position="2"/>
@@ -91,12 +91,12 @@
         <x:context label="the 6th document on the in-memory.out port">
             <x:document type="port" port="in-memory.out" position="6"/>
         </x:context>
-        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-6-chapter.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-6-chapter.xhtml')"/>
+        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-6-conclusion.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-6-conclusion.xhtml')"/>
         
         <x:context label="the 7th document on the in-memory.out port">
             <x:document type="port" port="in-memory.out" position="7"/>
         </x:context>
-        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-7-chapter.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-7-chapter.xhtml')"/>
+        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-7-backmatter.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-7-backmatter.xhtml')"/>
     </x:scenario>
 
 </x:description>

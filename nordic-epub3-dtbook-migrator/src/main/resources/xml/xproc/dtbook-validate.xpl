@@ -31,6 +31,13 @@
             <p px:role="desc">Whether or not to see that referenced images exist on disk.</p>
         </p:documentation>
     </p:option>
+    
+    <p:option name="no-legacy" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Disallow legacy markup</h2>
+            <p px:role="desc">If set to false, will upgrade DTBook versions earlier than 2005-3 to 2005-3, and fix some non-standard practices that appear in older DTBooks.</p>
+        </p:documentation>
+    </p:option>
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -62,6 +69,7 @@
     <px:nordic-dtbook-validate.step name="validate" cx:depends-on="nordic-version-message">
         <p:with-option name="dtbook" select="$dtbook"/>
         <p:with-option name="check-images" select="if ($ignore-missing-images='false') then 'true' else 'false'"/>
+        <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
     <p:sink/>
 

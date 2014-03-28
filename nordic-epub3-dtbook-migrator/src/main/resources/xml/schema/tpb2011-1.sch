@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+<sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
 
   <sch:title>DTBook 2005 Schematron tests for TPB 2010-1 rules</sch:title>
 
@@ -210,13 +210,13 @@
   	                    following-sibling::dtbk:kbd or following-sibling::dtbk:linenum or following-sibling::dtbk:noteref or
   	                    following-sibling::dtbk:q      or following-sibling::dtbk:samp or following-sibling::dtbk:sent    or following-sibling::dtbk:span    or
   	                    following-sibling::dtbk:strong or following-sibling::dtbk:sub  or following-sibling::dtbk:sup     or following-sibling::dtbk:w       or
-  	                    normalize-space(following-sibling::text())!=''">Block element as sibling to inline element</sch:report>
+  	                    normalize-space(string-join(following-sibling::text(),''))!=''">Block element as sibling to inline element</sch:report>
   	  <sch:report test="preceding-sibling::dtbk:a      or preceding-sibling::dtbk:abbr or preceding-sibling::dtbk:acronym or preceding-sibling::dtbk:annoref or
   	                    preceding-sibling::dtbk:bdo    or preceding-sibling::dtbk:code or preceding-sibling::dtbk:dfn     or preceding-sibling::dtbk:em      or
   	                    preceding-sibling::dtbk:kbd or preceding-sibling::dtbk:linenum or preceding-sibling::dtbk:noteref or
   	                    preceding-sibling::dtbk:q      or preceding-sibling::dtbk:samp or preceding-sibling::dtbk:sent    or preceding-sibling::dtbk:span    or
   	                    preceding-sibling::dtbk:strong or preceding-sibling::dtbk:sub  or preceding-sibling::dtbk:sup     or preceding-sibling::dtbk:w       or
-  	                    normalize-space(preceding-sibling::text())!=''">[tpb29] Block element <sch:name/> as sibling to inline element</sch:report>
+  	                    normalize-space(string-join(preceding-sibling::text(),''))!=''">[tpb29] Block element <sch:name/> as sibling to inline element</sch:report>
   	</sch:rule>
   </sch:pattern>
 
@@ -486,7 +486,8 @@
   <!-- Rule 131 (35): Allowed values in xml:lang -->
   <sch:pattern  id="dtbook_TPB_131">
   	<sch:rule context="*[@xml:lang]">
-  		<sch:assert test="@xml:lang='sv' or @xml:lang='en' or @xml:lang='da' or @xml:lang='it' or @xml:lang='la' or @xml:lang='el' or @xml:lang='de' or @xml:lang='fr' or @xml:lang='es' or @xml:lang='fi' or @xml:lang='no' or @xml:lang='is'">[tpb131] xml:lang must be one of: 'sv', 'en', 'da', 'it', 'la', 'el', 'de', 'fr', 'es', 'fi', 'no' or 'is'</sch:assert>
+  		<!--<sch:assert test="@xml:lang='sv' or @xml:lang='en' or @xml:lang='da' or @xml:lang='it' or @xml:lang='la' or @xml:lang='el' or @xml:lang='de' or @xml:lang='fr' or @xml:lang='es' or @xml:lang='fi' or @xml:lang='no' or @xml:lang='is'">[tpb131] xml:lang must be one of: 'sv', 'en', 'da', 'it', 'la', 'el', 'de', 'fr', 'es', 'fi', 'no' or 'is'</sch:assert>-->
+  	  <sch:assert test="matches(@xml:lang,'^[a-z][a-z](-[A-Z][A-Z]+)?$')">[tpb131] xml:lang must match '^[a-z][a-z](-[A-Z][A-Z]+)?$'</sch:assert>
   	</sch:rule>
   </sch:pattern>
 

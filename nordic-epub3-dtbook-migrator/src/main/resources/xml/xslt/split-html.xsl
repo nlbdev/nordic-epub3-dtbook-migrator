@@ -4,11 +4,9 @@
     xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Math/MathML">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-<!--    <xsl:import href="../../../../test/xspec/mock/uri-functions.xsl"/>-->
+    <!--    <xsl:import href="../../../../test/xspec/mock/uri-functions.xsl"/>-->
 
     <xsl:param name="output-dir" required="yes"/>
-
-    <xsl:variable name="split-types" select="('cover','titlepage','colophon','toc','part','chapter','index','appendix','glossary','footnotes','rearnotes')"/>
 
     <xsl:template match="@*|node()">
         <xsl:copy>
@@ -31,12 +29,6 @@
                         <xsl:copy-of select="/html/head/@*"/>
                         <xsl:for-each select="/html/head/*">
                             <xsl:choose>
-                                <xsl:when test="self::title">
-                                    <title>
-                                        <xsl:copy-of select="@*"/>
-                                        <xsl:value-of select="normalize-space(string-join(($body//(h1|h2|h3|h4|h5|h6))[1]//text(),' '))"/>
-                                    </title>
-                                </xsl:when>
                                 <xsl:when test="self::link[@rel=('prev','next')]"/>
                                 <xsl:otherwise>
                                     <xsl:copy-of select="."/>
@@ -51,7 +43,7 @@
                         </xsl:if>
                     </head>
                     <body>
-                        <xsl:copy-of select="$body/@*[not(name()='xml:base')]"/>
+                        <xsl:apply-templates select="$body/(@* except @xml:base)"/>
                         <xsl:apply-templates select="$body/*"/>
                     </body>
                 </html>

@@ -6,11 +6,13 @@
     <xsl:param name="xspec" select="false()"/>
 
     <xsl:template match="/*">
-        
-        <xsl:variable name="split-types" select="('cover','titlepage','colophon','toc','part','chapter','index','appendix','glossary','footnotes','rearnotes')"/>
+
+        <xsl:variable name="partition-types" select="('cover','frontmatter','bodymatter','backmatter')"/>
+        <xsl:variable name="division-types"
+            select="('acknowledgments','afterword','appendix','assessment','bibliography','z3998:biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue','errata','z3998:filmography','footnotes','foreword','glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works','z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','standard','subchapter','z3998:subsection','titlepage','toc','z3998:translator-note','volume','warning')"/>
         <xsl:variable name="identifier" select="(//html/head/meta[@name='dc:identifier']/string(@content))[1]"/>
         <xsl:variable name="padding-size" select="string-length(string(count(/*/body/(section|article|section[tokenize(@epub:type,'\s+')='part']/(section|article)))))"/>
-        
+
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:attribute name="xml:base" select="base-uri(/*)"/>
@@ -20,14 +22,18 @@
                     <xsl:copy-of select="@*"/>
                     <xsl:for-each select="section | article | section[tokenize(@epub:type,'\s+')='part']/(section|article)">
                         <xsl:copy>
-                            <xsl:variable name="content-type" select="(f:types(.)[.=$split-types],'chapter')[1]"/>
-                            <xsl:variable name="filename" select="concat($identifier,'-',f:zero-pad(string(position()),$padding-size),'-',$content-type)"/>
+                            <xsl:variable name="types" select="f:types(.)"/>
+                            <xsl:variable name="partition" select="(f:types(.)[.=$partition-types], 'bodymatter')[1]"/>
+                            <xsl:variable name="division" select="if (count($types[.=$division-types])) then ($types[.=$division-types])[1] else if ($partition='bodymatter') then 'chapter' else ()"/>
+                            <xsl:variable name="filename"
+                                select="concat($identifier,'-',f:zero-pad(string(position()),$padding-size),'-',if ($division) then tokenize($division,':')[last()] else $partition)"/>
 
                             <xsl:copy-of select="@*"/>
                             <xsl:attribute name="xml:base" select="concat($output-dir,$filename,'.xhtml')"/>
+                            <xsl:attribute name="epub:type" select="string-join(($partition, $division, $types[not(.=($partition-types,$division-types))]),' ')"/>
 
                             <xsl:choose>
-                                <xsl:when test="$content-type='part'">
+                                <xsl:when test="$division='part'">
                                     <xsl:copy-of select="node() except (section | article)"/>
 
                                 </xsl:when>

@@ -36,16 +36,16 @@
             <assert test="count(dc:language[not(@refines)]) = 1">exactly one dc:language (without a "refines" attribute) must be present</assert>
             <assert test="matches(dc:language, '^[a-z][a-z](-[A-Z][A-Z])?$')">the language code must be either a "two-letter lower case" code or a "two-letter lower case + hyphen + two-letter upper
                 case" code</assert>
-            <assert test="dc:language = ('no','nn-NO','nb-NO','sv','sv-FI','fi','da','en','de','de-CH','fr')" flag="warning">the language code should be one of: 'no' (Norwegian), 'nn-NO' (Norwegian
+            <!--<assert test="dc:language = ('no','nn-NO','nb-NO','sv','sv-FI','fi','da','en','de','de-CH','fr')" flag="warning">the language code should be one of: 'no' (Norwegian), 'nn-NO' (Norwegian
                 Nynorsk), 'nb-NO' (Norwegian Bokmål), 'sv' (Swedish), 'sv-FI' (Swedish (Finland)), 'fi' (Finnish), 'da' (Danish), 'en' (English), 'de' (German), 'de-CH' (German (Switzerland)), 'fr'
-                (French)</assert>
+                (French)</assert>-->
 
             <assert test="count(dc:date[not(@refines)]) = 1">exactly one dc:date (without a "refines" attribute) must be present</assert>
             <assert test="matches(dc:date[not(@refines)], '\d\d\d\d-\d\d-\d\d')">the dc:date must be of the format YYYY-MM-DD (year-month-day)</assert>
 
             <assert test="count(dc:publisher[not(@refines)]) = 1">exactly one dc:publisher (without a "refines" attribute) must be present</assert>
-            <assert test="dc:publisher[not(@refines)] = ('TPB','MTM','SPSM','Nota','NLB','Celia','SBS')" flag="warning">the publisher should be one of:
-                'TPB','MTM','SPSM','Nota','NLB','Celia','SBS'</assert>
+            <!--<assert test="dc:publisher[not(@refines)] = ('TPB','MTM','SPSM','Nota','NLB','Celia','SBS')" flag="warning">the publisher should be one of:
+                'TPB','MTM','SPSM','Nota','NLB','Celia','SBS'</assert>-->
 
             <assert test="opf:meta[@property='dcterms:modified' and not(@refines)]">a last modified date must be present</assert>
             <assert test="matches(opf:meta[@property='dcterms:modified' and not(@refines)], '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ')">the last modified date must be use UTC time and be on the form
@@ -81,9 +81,6 @@
             <assert test="opf:item[@media-type='application/x-dtbncx+xml']">a NCX must be present in the manifest (media-type="application/x-dtbncx+xml")</assert>
             <assert test="opf:item[@media-type='application/x-dtbncx+xml']/@href = 'nav.ncx'">the NCX must be located in the same directory as the package document, and must be named
                 'nav.ncx'</assert>
-
-            <report test="opf:item[starts-with(@media-type,'image/') and not(matches(@href,'^images/[^/]+$'))]">all images must be stored in the "images" directory (which is a subdirectory relative to
-                the package document)</report>
         </rule>
     </pattern>
 
@@ -91,6 +88,26 @@
         <rule context="opf:spine">
             <assert test="@toc">the toc attribute must be present</assert>
             <assert test="/opf:package/opf:manifest/opf:item/@id = @toc">the toc attribute must refer to an item in the manifest</assert>
+        </rule>
+    </pattern>
+
+    <pattern id="opf_nordic_7">
+        <rule context="opf:item[@media-type='application/xhtml+xml' and tokenize(@properties,'\s+')='nav']">
+            <assert test="@href = 'nav.xhtml'">the Navigation Document must be located in the same directory as the package document, and must be named 'nav.xhtml'</assert>
+        </rule>
+    </pattern>
+
+    <pattern id="opf_nordic_8">
+        <rule context="opf:item[starts-with(@media-type,'image/')]">
+            <assert test="matches(@href,'^images/[^/]+$')">all images must be stored in the "images" directory (which is a subdirectory relative to the package document)</assert>
+        </rule>
+    </pattern>
+
+    <pattern id="opf_nordic_9">
+        <rule context="opf:item[@media-type='application/xhtml+xml' and not(tokenize(@properties,'\s+')='nav')]">
+            <report test="contains(@href,'/')">all content files must be located in the same directory as the package document</report>
+            <assert test="matches(@href,'^[^-]+-\d+-\w+.xhtml$')">all content files must have a filename matching "[identifier]-[position]-[type].xhtml"; for instance
+                "C00000-03-chapter.xhtml"</assert>
         </rule>
     </pattern>
 

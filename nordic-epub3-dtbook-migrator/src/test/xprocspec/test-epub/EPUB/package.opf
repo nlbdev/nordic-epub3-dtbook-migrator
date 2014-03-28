@@ -27,13 +27,13 @@
         <item id="item_6" media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"/>
         <item id="item_7" media-type="image/jpeg" href="images/valentin.jpg"/>
         <item id="item_8" media-type="application/x-dtbncx+xml" href="nav.ncx"/>
-        <item media-type="application/xhtml+xml" id="item_9" href="chapter1.xhtml"/>
-        <item media-type="application/xhtml+xml" id="item_10" href="chapter2.xhtml"/>
-        <item media-type="application/xhtml+xml" id="item_11" href="chapter3.xhtml"/>
-        <item media-type="application/xhtml+xml" id="item_12" href="chapter4.xhtml"/>
-        <item media-type="application/xhtml+xml" id="item_13" href="chapter5.xhtml"/>
-        <item media-type="application/xhtml+xml" id="item_14" href="chapter6.xhtml"/>
-        <item id="item_15" media-type="application/xhtml+xml" href="chapter7.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_9" href="C00000-1-frontmatter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_10" href="C00000-2-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_11" href="C00000-3-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_12" href="C00000-4-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_13" href="C00000-5-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_14" href="C00000-6-conclusion.xhtml"/>
+        <item id="item_15" media-type="application/xhtml+xml" href="C00000-7-backmatter.xhtml"/>
         <item properties="nav" id="item_16" media-type="application/xhtml+xml" href="nav.xhtml"/>
     </manifest>
     <spine toc="item_8">

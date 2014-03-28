@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-epub3-validate.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:cx="http://xmlcalabash.com/ns/extensions">
+    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/">
 
     <p:serialization port="report.out" indent="true"/>
 
@@ -29,6 +30,7 @@
     </p:output>
 
     <p:option name="temp-dir" required="true"/>
+    <p:option name="strict" select="'true'"/>
 
     <p:import href="html.validate.xpl"/>
     <p:import href="read-xml-declaration.xpl"/>
@@ -188,6 +190,10 @@
             <p:input port="in-memory.in">
                 <p:pipe port="in-memory" step="unzip"/>
             </p:input>
+            <p:with-option name="title" select="/opf:package/opf:metadata[1]/dc:title[1]/text()">
+                <p:pipe port="result" step="opf"/>
+            </p:with-option>
+            <p:with-option name="strict" select="$strict"/>
         </px:nordic-html-validate.step>
         <p:identity>
             <p:input port="source">
@@ -272,28 +278,7 @@
             </p:otherwise>
         </p:choose>
     </p:for-each>
-    <p:wrap-sequence wrapper="d:report"/>
-    <p:wrap-sequence wrapper="d:reports"/>
-    <p:wrap-sequence wrapper="d:document-validation-report"/>
-    <p:insert match="/*" position="first-child">
-        <p:input port="insertion">
-            <p:inline>
-                <d:document-info>
-                    <d:document-name>PLACEHOLDER</d:document-name>
-                    <d:document-type>EPUB3 XML Declaration</d:document-type>
-                    <d:document-path>PLACEHOLDER</d:document-path>
-                    <d:error-count>PLACEHOLDER</d:error-count>
-                </d:document-info>
-            </p:inline>
-        </p:input>
-    </p:insert>
-    <p:string-replace match="/*/d:document-info/d:document-name/text()" replace="'All XML files (XHTML, OPF, NCX, SMIL, etc.)'"/>
-    <p:string-replace match="/*/d:document-info/d:document-path/text()">
-        <p:with-option name="replace" select="concat('&quot;',base-uri(/*),'&quot;')">
-            <p:pipe port="fileset" step="unzip"/>
-        </p:with-option>
-    </p:string-replace>
-    <p:string-replace match="/*/d:document-info/d:error-count/text()" replace="count(//d:error)"/>
+    <p:wrap-sequence wrapper="d:errors"/>
     <p:identity name="xml-declaration.validate"/>
     <p:sink/>
 
@@ -340,28 +325,7 @@
             <p:document href="../../xslt/compare-ids.xsl"/>
         </p:input>
     </p:xslt>
-    <p:wrap-sequence wrapper="d:report"/>
-    <p:wrap-sequence wrapper="d:reports"/>
-    <p:wrap-sequence wrapper="d:document-validation-report"/>
-    <p:insert match="/*" position="first-child">
-        <p:input port="insertion">
-            <p:inline>
-                <d:document-info>
-                    <d:document-name>PLACEHOLDER</d:document-name>
-                    <d:document-type>EPUB3 Unique IDs</d:document-type>
-                    <d:document-path>PLACEHOLDER</d:document-path>
-                    <d:error-count>PLACEHOLDER</d:error-count>
-                </d:document-info>
-            </p:inline>
-        </p:input>
-    </p:insert>
-    <p:string-replace match="/*/d:document-info/d:document-name/text()" replace="'All XHTML files and the OPF'"/>
-    <p:string-replace match="/*/d:document-info/d:document-path/text()">
-        <p:with-option name="replace" select="concat('&quot;',base-uri(/*),'&quot;')">
-            <p:pipe port="fileset" step="unzip"/>
-        </p:with-option>
-    </p:string-replace>
-    <p:string-replace match="/*/d:document-info/d:error-count/text()" replace="count(//d:error)"/>
+    <p:rename match="/*" new-name="d:errors"/>
     <p:identity name="id.validate"/>
     <p:sink/>
 

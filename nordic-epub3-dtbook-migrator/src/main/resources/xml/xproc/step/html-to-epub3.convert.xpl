@@ -3,7 +3,7 @@
     type="px:nordic-html-to-epub3-convert" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
-    
+
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
@@ -117,6 +117,9 @@
         </p:add-attribute>
         <p:xslt>
             <p:with-param name="identifier" select="/*/html:head/html:meta[@name='dc:identifier']/@content">
+                <p:pipe port="result" step="single-html"/>
+            </p:with-param>
+            <p:with-param name="title" select="/*/html:head/html:title/text()">
                 <p:pipe port="result" step="single-html"/>
             </p:with-param>
             <p:with-param name="supplier" select="/*/html:head/html:meta[@name='nordic:supplier']/@content">

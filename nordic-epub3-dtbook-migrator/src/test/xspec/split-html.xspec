@@ -82,7 +82,7 @@
             <wrapper xml:base="file:/tmp/content.xhtml">
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/cover.xhtml">
                     <head>
-                        <title>cover</title>
+                        <title>Single-page title</title>
                         <link rel="next" href="titlepage.xhtml"/>
                     </head>
                     <body epub:type="cover">
@@ -92,7 +92,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/titlepage.xhtml">
                     <head>
-                        <title>titlepage</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="cover.xhtml"/>
                         <link rel="next" href="colophon.xhtml"/>
                     </head>
@@ -103,7 +103,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/colophon.xhtml">
                     <head>
-                        <title>colophon</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="titlepage.xhtml"/>
                         <link rel="next" href="toc.xhtml"/>
                     </head>
@@ -114,7 +114,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/toc.xhtml">
                     <head>
-                        <title>toc</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="colophon.xhtml"/>
                         <link rel="next" href="part1.xhtml"/>
                     </head>
@@ -125,7 +125,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/part1.xhtml">
                     <head>
-                        <title>part</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="toc.xhtml"/>
                         <link rel="next" href="chapter1.xhtml"/>
                     </head>
@@ -136,7 +136,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter1.xhtml">
                     <head>
-                        <title>chapter</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="part1.xhtml"/>
                         <link rel="next" href="chapter2.xhtml"/>
                     </head>
@@ -147,7 +147,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter2.xhtml">
                     <head>
-                        <title>chapter</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="chapter1.xhtml"/>
                         <link rel="next" href="part2.xhtml"/>
                     </head>
@@ -158,7 +158,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/part2.xhtml">
                     <head>
-                        <title>part</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="chapter2.xhtml"/>
                         <link rel="next" href="chapter3.xhtml"/>
                     </head>
@@ -169,7 +169,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter3.xhtml">
                     <head>
-                        <title>chapter</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="part2.xhtml"/>
                         <link rel="next" href="chapter4.xhtml"/>
                     </head>
@@ -180,7 +180,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter4.xhtml">
                     <head>
-                        <title>chapter</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="chapter3.xhtml"/>
                         <link rel="next" href="index.xhtml"/>
                     </head>
@@ -191,7 +191,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/index.xhtml">
                     <head>
-                        <title>index</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="chapter4.xhtml"/>
                         <link rel="next" href="appendix1.xhtml"/>
                     </head>
@@ -202,7 +202,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/appendix1.xhtml">
                     <head>
-                        <title>appendix</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="index.xhtml"/>
                         <link rel="next" href="appendix2.xhtml"/>
                     </head>
@@ -213,7 +213,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/appendix2.xhtml">
                     <head>
-                        <title>appendix</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="appendix1.xhtml"/>
                         <link rel="next" href="glossary.xhtml"/>
                     </head>
@@ -224,7 +224,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/glossary.xhtml">
                     <head>
-                        <title>glossary</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="appendix2.xhtml"/>
                         <link rel="next" href="footnotes.xhtml"/>
                     </head>
@@ -235,7 +235,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/footnotes.xhtml">
                     <head>
-                        <title>footnotes</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="glossary.xhtml"/>
                         <link rel="next" href="rearnotes.xhtml"/>
                     </head>
@@ -246,7 +246,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/rearnotes.xhtml">
                     <head>
-                        <title>rearnotes</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="footnotes.xhtml"/>
                     </head>
                     <body epub:type="rearnotes">
@@ -287,7 +287,7 @@
             <wrapper xml:base="file:/tmp/content.xhtml">
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter1.xhtml">
                     <head>
-                        <title>chapter</title>
+                        <title>Single-page title</title>
                         <link rel="next" href="chapter2.xhtml"/>
                     </head>
                     <body epub:type="chapter">
@@ -304,7 +304,7 @@
                 </html>
                 <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter2.xhtml">
                     <head>
-                        <title>chapter</title>
+                        <title>Single-page title</title>
                         <link rel="prev" href="chapter1.xhtml"/>
                     </head>
                     <body id="chapter2" epub:type="chapter">

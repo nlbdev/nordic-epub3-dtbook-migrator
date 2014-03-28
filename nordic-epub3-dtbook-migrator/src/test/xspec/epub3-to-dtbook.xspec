@@ -23,18 +23,18 @@
     <!-- coreattrs -->
     <x:scenario label="when processing a span element with the coreattrs attributes (id, class, title, xml:space, epub:type)">
         <x:context>
-            <html:span id="myid" class="myclass" title="mytitle" xml:space="preserve" epub:type="fulltitle">
+            <html:span id="myid" class="myclass precedingemptyline" title="mytitle" xml:space="preserve" epub:type="fulltitle">
                 <html:span id="default" epub:type="acknowledgments afterword annoref annotation appendix backmatter biblioentry bibliography bodymatter bridgehead chapter colophon concluding-sentence conclusion contributors copyright-page cover covertitle dedication division epigraph epilogue errata footnote footnotes foreword frontmatter fulltitle glossary glossdef glossterm halftitle halftitlepage help imprimatur imprint index introduction keyword landmarks list list-item loi lot marginalia note noteref notice other-credits pagebreak page-list part practice preamble preface prologue rearnote rearnotes sidebar subchapter subtitle table table-cell table-row title titlepage toc topic-sentence volume warning"/>
                 <html:span id="z3998" epub:type="z3998:abbreviations z3998:acknowledgments z3998:acronym z3998:actor z3998:afterword z3998:alteration z3998:annoref z3998:annotation z3998:appendix z3998:article z3998:aside z3998:attribution z3998:author z3998:award z3998:backmatter z3998:bcc z3998:bibliography z3998:biographical-note z3998:bodymatter z3998:cardinal z3998:catalogue z3998:cc z3998:chapter z3998:citation z3998:clarification z3998:collection z3998:colophon z3998:commentary z3998:commentator z3998:compound z3998:concluding-sentence z3998:conclusion z3998:continuation z3998:continuation-of z3998:contributors z3998:coordinate z3998:correction z3998:covertitle z3998:currency z3998:decimal z3998:decorative z3998:dedication z3998:diary z3998:diary-entry z3998:discography z3998:division z3998:drama z3998:dramatis-personae z3998:editor z3998:editorial-note z3998:email z3998:email-message z3998:epigraph z3998:epilogue z3998:errata z3998:essay z3998:event z3998:example z3998:family-name z3998:fiction z3998:figure z3998:filmography z3998:footnote z3998:footnotes z3998:foreword z3998:fraction z3998:from z3998:frontispiece z3998:frontmatter z3998:ftp z3998:fulltitle z3998:gallery z3998:general-editor z3998:geographic z3998:given-name z3998:glossary z3998:grant-acknowledgment z3998:grapheme z3998:halftitle z3998:halftitle-page z3998:help z3998:homograph z3998:http z3998:hymn z3998:illustration z3998:image-placeholder z3998:imprimatur z3998:imprint z3998:index z3998:initialism z3998:introduction z3998:introductory-note z3998:ip z3998:isbn z3998:keyword z3998:letter z3998:loi z3998:lot z3998:lyrics z3998:marginalia z3998:measure z3998:mixed z3998:morpheme z3998:name-title z3998:nationality z3998:non-fiction z3998:nonresolving-citation z3998:nonresolving-reference z3998:note z3998:noteref z3998:notice z3998:orderedlist z3998:ordinal z3998:organization z3998:other-credits z3998:pagebreak z3998:page-footer z3998:page-header z3998:part z3998:percentage z3998:persona z3998:personal-name z3998:pgroup z3998:phone z3998:phoneme z3998:photograph z3998:phrase z3998:place z3998:plate z3998:poem z3998:portmanteau z3998:postal z3998:postal-code z3998:postscript z3998:practice z3998:preamble z3998:preface z3998:prefix z3998:presentation z3998:primary z3998:product z3998:production z3998:prologue z3998:promotional-copy z3998:published-works z3998:publisher-address z3998:publisher-logo z3998:range z3998:ratio z3998:rearnote z3998:rearnotes z3998:recipient z3998:recto z3998:reference z3998:republisher z3998:resolving-reference z3998:result z3998:role-description z3998:roman z3998:root z3998:salutation z3998:scene z3998:secondary z3998:section z3998:sender z3998:sentence z3998:sidebar z3998:signature z3998:song z3998:speech z3998:stage-direction z3998:stem z3998:structure z3998:subchapter z3998:subject z3998:subsection z3998:subtitle z3998:suffix z3998:surname z3998:taxonomy z3998:tertiary z3998:text z3998:textbook z3998:t-form z3998:timeline z3998:title z3998:title-page z3998:to z3998:toc z3998:topic-sentence z3998:translator z3998:translator-note z3998:truncation z3998:unorderedlist z3998:valediction z3998:verse z3998:verso z3998:v-form z3998:volume z3998:warning z3998:weight z3998:word"/>
             </html:span>
         </x:context>
-        <x:expect label="all the attributes should be preserved, except for the epub:type attribute which should be made into a class">
-            <dtbook:span id="myid" class="myclass fulltitle" title="mytitle" xml:space="preserve">...</dtbook:span>
+        <x:expect label="all the attributes should be preserved, except for the epub:type attribute which should be made into a class. also only allowed classes should be kept">
+            <dtbook:span id="myid" class="precedingemptyline fulltitle" title="mytitle" xml:space="preserve">...</dtbook:span>
         </x:expect>
         <x:expect label="all the epub:type values in the default vocabulary should be made into classes"
             test="/*/*[@id='default']/@class='acknowledgments afterword annoref annotation appendix biblioentry bibliography bridgehead chapter colophon concluding-sentence conclusion contributors copyright-page jacketcopy covertitle dedication division epigraph epilogue errata footnote footnotes foreword fulltitle glossary glossdef glossterm halftitle halftitlepage help imprimatur imprint index introduction keyword landmarks list list-item loi lot marginalia note noteref notice other-credits pagebreak page-list part practice preamble preface prologue rearnote rearnotes sidebar subchapter subtitle table table-cell table-row title titlepage toc topic-sentence volume warning'"/>
         <x:expect label="all the epub:type values in the z3998 vocabulary should be made into classes"
-            test="/*/*[@id='z3998']/@class='abbreviations acknowledgments acronym actor afterword alteration annoref annotation appendix article aside attribution author award bcc bibliography biographical-note cardinal catalogue cc chapter citation clarification collection colophon commentary commentator compound concluding-sentence conclusion continuation continuation-of contributors coordinate correction covertitle currency decimal decorative dedication diary diary-entry discography division drama dramatis-personae editor editorial-note email email-message epigraph epilogue errata essay event example family-name fiction figure filmography footnote footnotes foreword fraction from frontispiece ftp fulltitle gallery general-editor geographic given-name glossary grant-acknowledgment grapheme halftitle halftitle-page help homograph http hymn illustration image-placeholder imprimatur imprint index initialism introduction introductory-note ip isbn keyword letter loi lot lyrics marginalia measure mixed morpheme name-title nationality non-fiction nonresolving-citation nonresolving-reference note noteref notice orderedlist ordinal organization other-credits pagebreak page-footer page-header part percentage persona personal-name pgroup phone phoneme photograph phrase place plate poem portmanteau postal postal-code postscript practice preamble preface prefix presentation primary product production prologue promotional-copy published-works publisher-address publisher-logo range ratio rearnote rearnotes recipient recto reference republisher resolving-reference result role-description roman root salutation scene secondary section sender sentence sidebar signature song speech stage-direction stem structure subchapter subject subsection subtitle suffix surname taxonomy tertiary text textbook t-form timeline title title-page to toc topic-sentence translator translator-note truncation unorderedlist valediction verse verso v-form volume warning weight word'"
+            test="/*/*[@id='z3998']/@class='abbreviations acknowledgments acronym actor afterword alteration annoref annotation appendix article aside attribution author award bcc bibliography biographical-note cardinal catalogue cc chapter citation clarification collection colophon commentary commentator compound concluding-sentence conclusion continuation continuation-of contributors coordinate correction covertitle currency decimal decorative dedication diary diary-entry discography division drama dramatis-personae editor editorial-note email email-message epigraph epilogue errata essay event example family-name fiction figure filmography footnote footnotes foreword fraction from frontispiece ftp fulltitle gallery general-editor geographic given-name glossary grant-acknowledgment grapheme halftitle halftitlepage help homograph http hymn illustration image-placeholder imprimatur imprint index initialism introduction introductory-note ip isbn keyword letter loi lot lyrics marginalia measure mixed morpheme name-title nationality non-fiction nonresolving-citation nonresolving-reference note noteref notice orderedlist ordinal organization other-credits pagebreak page-footer page-header part percentage persona personal-name pgroup phone phoneme photograph phrase place plate poem portmanteau postal postal-code postscript practice preamble preface prefix presentation primary product production prologue promotional-copy published-works publisher-address publisher-logo range ratio rearnote rearnotes recipient recto reference republisher resolving-reference result role-description roman root salutation scene secondary section sender sentence sidebar signature song speech stage-direction stem structure subchapter subject subsection subtitle suffix surname taxonomy tertiary text textbook t-form timeline title titlepage to toc topic-sentence translator translator-note truncation unorderedlist valediction verse verso v-form volume warning weight word'"
         />
     </x:scenario>
 
@@ -58,7 +58,7 @@
             <html:span class="other showin-blp" epub:type="z3998:acronym warning frontmatter bodymatter backmatter">...</html:span>
         </x:context>
         <x:expect label="the epub:types should be converted to classes (except frontmatter, bodymatter and rearmatter) and the showin-* class should be converted to a showin attribute">
-            <dtbook:span class="other acronym warning" showin="blp">...</dtbook:span>
+            <dtbook:span class="acronym warning" showin="blp">...</dtbook:span>
         </x:expect>
     </x:scenario>
 
@@ -241,7 +241,7 @@
         <x:expect label="the resulting element should be a level1 inside the frontmatter">
             <dtbook:book>
                 <dtbook:frontmatter>
-                    <dtbook:level1 class="classA classB jacketcopy">
+                    <dtbook:level1 class="jacketcopy">
                         <dtbook:p/>
                     </dtbook:level1>
                 </dtbook:frontmatter>
@@ -640,24 +640,27 @@
     </x:scenario>
 
     <!-- sidebar -->
-    <x:scenario label="when processing a aside element with an epub:type of sidebar">
-        <x:context>
-            <html:aside epub:type="sidebar"/>
-        </x:context>
-        <x:expect label="the resulting element should be a sidebar">
-            <dtbook:sidebar render="optional"/>
-        </x:expect>
+    <x:scenario label="when the element has epub:type='sidebar'">
+        <x:scenario label="and is an aside element">
+            <x:context>
+                <html:aside epub:type="sidebar"/>
+            </x:context>
+            <x:expect label="the resulting element should be a sidebar with render='optional'">
+                <dtbook:sidebar render="optional"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="and is a figure element">
+            <x:context>
+                <html:figure epub:type="sidebar"/>
+            </x:context>
+            <x:expect label="the resulting element should be a sidebar with render='required'">
+                <dtbook:sidebar render="required"/>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.sidebar -->
-    <x:scenario label="when processing the attributes of an aside element with a epub:type of sidebar">
-        <x:context>
-            <html:aside epub:type="sidebar" class="render-optional"/>
-        </x:context>
-        <x:expect label="any render-* class should become a 'required' attribute">
-            <dtbook:sidebar render="optional"/>
-        </x:expect>
-    </x:scenario>
+    <!-- test not needed; @required mapping is tested in element scenario -->
 
     <!-- note -->
     <x:scenario label="when processing a aside element with an epub:type of note">
@@ -771,8 +774,8 @@
         <x:context>
             <html:a/>
         </x:context>
-        <x:expect label="the resulting element should be a a">
-            <dtbook:span class="a"/>
+        <x:expect label="the resulting element should be a span">
+            <dtbook:span/>
         </x:expect>
     </x:scenario>
 
@@ -782,8 +785,8 @@
             <html:a id="a-id" class="external-true rev-chapter myclass" target="_blank" type="text/plain" href="http://example.net/LICENSE.txt" hreflang="en" rel="license" accesskey="x" tabindex="-1"
                 >TEXT</html:a>
         </x:context>
-        <x:expect label="classes (except external-*, rev-*) are copied over, the target attribute are converted to a class, the id are preserved but the reset of the attributes are dropped">
-            <dtbook:span id="a-id" class="a target--blank myclass">TEXT</dtbook:span>
+        <x:expect label="the id are preserved but the rest of the attributes are dropped">
+            <dtbook:span id="a-id">TEXT</dtbook:span>
         </x:expect>
         <!--<x:expect
             label="any external-* and rev-* classes are converted to attributes, the target attribute are converted to a class, the download and media attributes are dropped, and the rest of the attributes are copied over as is">
@@ -889,12 +892,37 @@
             <html:abbr/>
         </x:context>
         <x:expect label="the resulting element should be a abbr">
-            <dtbook:span class="abbr"/>
+            <dtbook:span class="acronym"/>
         </x:expect>
     </x:scenario>
 
     <!-- attlist.abbr -->
-    <!-- test not needed (attrs) -->
+    <x:scenario label="when processing the abbr element attributes">
+        <x:scenario label="when the epub:type is 'z3998:acronym'">
+            <x:context>
+                <html:abbr epub:type="z3998:acronym"/>
+            </x:context>
+            <x:expect label="the resulting element should be a span with class 'acronym'">
+                <dtbook:span class="acronym"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="when the epub:type is 'z3998:initialism'">
+            <x:context>
+                <html:abbr epub:type="z3998:initialism"/>
+            </x:context>
+            <x:expect label="the resulting element should be a span with class 'initialism'">
+                <dtbook:span class="initialism"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="when the epub:type is 'z3998:truncation'">
+            <x:context>
+                <html:abbr epub:type="z3998:truncation"/>
+            </x:context>
+            <x:expect label="the resulting element should be a span with class 'truncation'">
+                <dtbook:span class="truncation"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
 
     <!-- acronym -->
     <x:scenario label="when processing a abbr element with an epub:type of acronym">

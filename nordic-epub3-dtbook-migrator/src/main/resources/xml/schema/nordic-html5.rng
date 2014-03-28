@@ -1275,6 +1275,14 @@
                     <value>width=device-width</value>
                 </attribute>
             </element>
+            <element name="meta">
+                <attribute name="name">
+                    <value>dc:identifier</value>
+                </attribute>
+                <attribute name="content">
+                    <text/>
+                </attribute>
+            </element>
             <zeroOrMore>
                 <ref name="headmisc"/> <!-- meta, link -->
             </zeroOrMore>
@@ -2361,6 +2369,9 @@
             <ref name="inlinenoprodnote"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
             <ref name="blocknoimggroup"/> <!-- p, ol, ul, dl, div, blockquote, table, address, span, section -->
             <ref name="externalFlow"/> <!-- () -->
+            
+            <!-- STRICT NOTE: "figure" is not allowed in HTML as inline content so it is not included in "inlinenoprodnote". We explicitly include it here instead. -->
+            <ref name="imggroup"/>
         </choice>
     </define>
     <!-- flow elements add inlinenoprodnote to block -->
@@ -2369,6 +2380,9 @@
             <ref name="inlinenopagenum"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
             <ref name="blocknoimggroup"/> <!-- p, ol, ul, dl, div, blockquote, table, address, span, section -->
             <ref name="externalFlow"/> <!-- () -->
+            
+            <!-- STRICT NOTE: "figure" is not allowed in HTML as inline content so it is not included in "inlinenopagenum". We explicitly include it here instead. -->
+            <ref name="imggroup"/>
         </choice>
     </define>
     <define name="flownotable">
@@ -2376,6 +2390,9 @@
             <ref name="inlinenoprodnote"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
             <ref name="blocknoimggroupnotable"/> <!-- p, ol, ul, dl, div, blockquote, address, span, section -->
             <ref name="externalFlow"/> <!-- () -->
+            
+            <!-- STRICT NOTE: "figure" is not allowed in HTML as inline content so it is not included in "inlinenoprodnote". We explicitly include it here instead. -->
+            <ref name="imggroup"/>
         </choice>
     </define>
     <!--
@@ -2631,20 +2648,31 @@
     from the main text block on a page. It may have a heading <hd>.
   -->
     <define name="sidebar">
-        <element name="section">
-            <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
-            <!-- Strict content model: (h1 | em | strong | dfn | code | samp | kbd | abbr | a | img | figure | br | q | sub | sup | span | bdo | p | ol | ul | dl | div | blockquote | table | address | (text))* -->
-            <!--<sch:rule context=".">
-            <sch:assert test="tokenize(@epub:type,' ')='sidebar'">The sidebar must have an epub:type of 'sidebar'</sch:assert>
-        </sch:rule>-->
-            <ref name="attlist.sidebar"/>
-            <zeroOrMore>
-                <choice>
-                    <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
-                    <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
-                </choice>
-            </zeroOrMore>
-        </element>
+        <choice>
+            <element name="aside">
+                <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
+                <!-- Strict content model: (h1 | em | strong | dfn | code | samp | kbd | abbr | a | img | figure | br | q | sub | sup | span | bdo | p | ol | ul | dl | div | blockquote | table | address | (text))* -->
+                <!-- in schematron: aside elements must have one of the following epub:types: z3998:production, note, annotation, sidebar. In this case, it should be "sidebar" -->
+                <ref name="attlist.sidebar"/>
+                <zeroOrMore>
+                    <choice>
+                        <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
+                        <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
+                    </choice>
+                </zeroOrMore>
+            </element>
+            <element name="figure">
+                <!-- in schematron: require figure elements to either have epub:type="sidebar", class="image-series" or class="image". In this case it should be epub:type="sidebar" -->
+                <ref name="attlist.sidebar"/>
+                <zeroOrMore>
+                    <choice>
+                       <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
+                       <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
+                    </choice>
+                </zeroOrMore>
+            </element>
+        </choice>
+
     </define>
     <!--
     HB: 2004-03-25 35g: sidebar: use render="required" to achieve the explicit
@@ -3553,31 +3581,68 @@
         <element name="figure">
             <!-- HTML content model: figcaption? ( a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text) )* figcaption? -->
             <!-- Strict content model: figcaption? (aside | img | span)* figcaption? -->
-            <!-- STRICT NOTE: In HTML there can be at most one figcaption per figure, and it must be either the first or last child of the figure. As a result, multiple captions in DTBook must be merged into one figcaption in HTML. -->
+            <!-- STRICT NOTE: In HTML there can be at most one figcaption per figure, and it must be either the first or last child of the figure. As a result, we wrap each (img caption*)-group in figure elements. -->
             <ref name="attlist.imggroup"/>
+            
             <choice>
                 <group>
-                    <!-- nesting restriction: max nesting depth = 2 -->
-                    <oneOrMore>
+                    <!-- A single image -->
+                    
+                    <zeroOrMore>
                         <choice>
-                           <ref name="pagenum"/> <!-- span -->
-                           <ref name="prodnote"/> <!-- aside -->
-                           <ref name="imggroup"/> <!-- figure -->
+                            <ref name="pagenum"/> <!-- span -->
+                            <ref name="prodnote"/> <!-- aside -->
                         </choice>
-                    </oneOrMore>
+                    </zeroOrMore>
+                    
+                    <ref name="img"/> <!-- img -->
+                    <optional>
+                        <ref name="caption.figure"/> <!-- figcaption -->
+                    </optional>
                 </group>
+                
                 <group>
-                    <!-- count restriction: img aside* figcaption? span* -->
-                    <oneOrMore>
+                    <!-- Image series -->
+                    
+                    <optional>
+                        <ref name="caption.figure"/> <!-- figcaption -->
+                    </optional>
+                    
+                    <zeroOrMore>
                         <choice>
-                           <ref name="pagenum"/> <!-- span -->
-                           <ref name="prodnote"/> <!-- aside -->
-                           <ref name="img"/> <!-- img -->
-                           <ref name="caption.figure"/> <!-- figcaption -->
+                            <ref name="pagenum"/> <!-- span -->
+                            <ref name="prodnote"/> <!-- aside -->
                         </choice>
+                    </zeroOrMore>
+                    
+                    <oneOrMore>
+                        
+                        <element name="figure">
+                            <ref name="attlist.imggroup"/>
+                            <zeroOrMore>
+                                <choice>
+                                    <ref name="pagenum"/> <!-- span -->
+                                    <ref name="prodnote"/> <!-- aside -->
+                                </choice>
+                            </zeroOrMore>
+                            
+                            <ref name="img"/> <!-- img -->
+                            <optional>
+                                <ref name="caption.figure"/> <!-- figcaption -->
+                            </optional>
+                        </element>
+                        
+                        <zeroOrMore>
+                            <choice>
+                                <ref name="pagenum"/> <!-- span -->
+                                <ref name="prodnote"/> <!-- aside -->
+                            </choice>
+                        </zeroOrMore>
                     </oneOrMore>
+                    
                 </group>
             </choice>
+            
         </element>
     </define>
     <define name="attlist.imggroup" combine="interleave">

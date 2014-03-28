@@ -16,59 +16,59 @@
                         <h1>cover</h1>
                         <p>covercovercover</p>
                     </section>
-                    <section epub:type="titlepage">
+                    <section epub:type="frontmatter titlepage">
                         <h1>titlepage</h1>
                         <p>titlepagetitlepagetitlepage</p>
                     </section>
-                    <section epub:type="colophon">
+                    <section epub:type="frontmatter colophon">
                         <h1>colophon</h1>
                         <p>colophoncolophoncolophon</p>
                     </section>
-                    <section epub:type="toc">
+                    <section epub:type="frontmatter toc">
                         <h1>toc</h1>
                         <p>toctoctoc</p>
                     </section>
-                    <section epub:type="chapter">
+                    <section epub:type="bodymatter chapter">
                         <h1>chapter</h1>
                         <p>chapterchapterchapter</p>
                     </section>
-                    <section epub:type="chapter">
+                    <section epub:type="bodymatter chapter">
                         <h1>chapter</h1>
                         <p>chapterchapterchapter</p>
                     </section>
-                    <section epub:type="part">
+                    <section epub:type="bodymatter part">
                         <h1>part</h1>
                         <p>partpartpart</p>
-                        <section epub:type="chapter">
+                        <section epub:type="bodymatter chapter">
                             <h1>chapter</h1>
                             <p>chapterchapterchapter</p>
                         </section>
-                        <section epub:type="chapter">
+                        <section epub:type="bodymatter chapter">
                             <h1>chapter</h1>
                             <p>chapterchapterchapter</p>
                         </section>
                     </section>
-                    <section epub:type="index">
+                    <section epub:type="backmatter index">
                         <h1>index</h1>
                         <p>indexindexindex</p>
                     </section>
-                    <section epub:type="appendix">
+                    <section epub:type="backmatter appendix">
                         <h1>appendix</h1>
                         <p>appendixappendixappendix</p>
                     </section>
-                    <section epub:type="appendix">
+                    <section epub:type="backmatter appendix">
                         <h1>appendix</h1>
                         <p>appendixappendixappendix</p>
                     </section>
-                    <section epub:type="glossary">
+                    <section epub:type="backmatter glossary">
                         <h1>glossary</h1>
                         <p>glossaryglossaryglossary</p>
                     </section>
-                    <section epub:type="footnotes">
+                    <section epub:type="backmatter footnotes">
                         <h1>footnotes</h1>
                         <p>footnotesfootnotesfootnotes</p>
                     </section>
-                    <section epub:type="rearnotes">
+                    <section epub:type="backmatter rearnotes">
                         <h1>rearnotes</h1>
                         <p>rearnotesrearnotesrearnotes</p>
                     </section>
@@ -86,59 +86,59 @@
                         <h1>cover</h1>
                         <p>covercovercover</p>
                     </section>
-                    <section epub:type="titlepage" xml:base="file:/tmp/UID-02-titlepage.xhtml">
+                    <section epub:type="frontmatter titlepage" xml:base="file:/tmp/UID-02-titlepage.xhtml">
                         <h1>titlepage</h1>
                         <p>titlepagetitlepagetitlepage</p>
                     </section>
-                    <section epub:type="colophon" xml:base="file:/tmp/UID-03-colophon.xhtml">
+                    <section epub:type="frontmatter colophon" xml:base="file:/tmp/UID-03-colophon.xhtml">
                         <h1>colophon</h1>
                         <p>colophoncolophoncolophon</p>
                     </section>
-                    <section epub:type="toc" xml:base="file:/tmp/UID-04-toc.xhtml">
+                    <section epub:type="frontmatter toc" xml:base="file:/tmp/UID-04-toc.xhtml">
                         <h1>toc</h1>
                         <p>toctoctoc</p>
                     </section>
-                    <section epub:type="chapter" xml:base="file:/tmp/UID-05-chapter.xhtml">
+                    <section epub:type="bodymatter chapter" xml:base="file:/tmp/UID-05-chapter.xhtml">
                         <h1>chapter</h1>
                         <p>chapterchapterchapter</p>
                     </section>
-                    <section epub:type="chapter" xml:base="file:/tmp/UID-06-chapter.xhtml">
+                    <section epub:type="bodymatter chapter" xml:base="file:/tmp/UID-06-chapter.xhtml">
                         <h1>chapter</h1>
                         <p>chapterchapterchapter</p>
                     </section>
-                    <section epub:type="part" xml:base="file:/tmp/UID-07-part.xhtml">
+                    <section epub:type="bodymatter part" xml:base="file:/tmp/UID-07-part.xhtml">
                         <h1>part</h1>
                         <p>partpartpart</p>
                     </section>
-                    <section epub:type="chapter" xml:base="file:/tmp/UID-08-chapter.xhtml">
+                    <section epub:type="bodymatter chapter" xml:base="file:/tmp/UID-08-chapter.xhtml">
                         <h1>chapter</h1>
                         <p>chapterchapterchapter</p>
                     </section>
-                    <section epub:type="chapter" xml:base="file:/tmp/UID-09-chapter.xhtml">
+                    <section epub:type="bodymatter chapter" xml:base="file:/tmp/UID-09-chapter.xhtml">
                         <h1>chapter</h1>
                         <p>chapterchapterchapter</p>
                     </section>
-                    <section epub:type="index" xml:base="file:/tmp/UID-10-index.xhtml">
+                    <section epub:type="backmatter index" xml:base="file:/tmp/UID-10-index.xhtml">
                         <h1>index</h1>
                         <p>indexindexindex</p>
                     </section>
-                    <section epub:type="appendix" xml:base="file:/tmp/UID-11-appendix.xhtml">
+                    <section epub:type="backmatter appendix" xml:base="file:/tmp/UID-11-appendix.xhtml">
                         <h1>appendix</h1>
                         <p>appendixappendixappendix</p>
                     </section>
-                    <section epub:type="appendix" xml:base="file:/tmp/UID-12-appendix.xhtml">
+                    <section epub:type="backmatter appendix" xml:base="file:/tmp/UID-12-appendix.xhtml">
                         <h1>appendix</h1>
                         <p>appendixappendixappendix</p>
                     </section>
-                    <section epub:type="glossary" xml:base="file:/tmp/UID-13-glossary.xhtml">
+                    <section epub:type="backmatter glossary" xml:base="file:/tmp/UID-13-glossary.xhtml">
                         <h1>glossary</h1>
                         <p>glossaryglossaryglossary</p>
                     </section>
-                    <section epub:type="footnotes" xml:base="file:/tmp/UID-14-footnotes.xhtml">
+                    <section epub:type="backmatter footnotes" xml:base="file:/tmp/UID-14-footnotes.xhtml">
                         <h1>footnotes</h1>
                         <p>footnotesfootnotesfootnotes</p>
                     </section>
-                    <section epub:type="rearnotes" xml:base="file:/tmp/UID-15-rearnotes.xhtml">
+                    <section epub:type="backmatter rearnotes" xml:base="file:/tmp/UID-15-rearnotes.xhtml">
                         <h1>rearnotes</h1>
                         <p>rearnotesrearnotesrearnotes</p>
                     </section>

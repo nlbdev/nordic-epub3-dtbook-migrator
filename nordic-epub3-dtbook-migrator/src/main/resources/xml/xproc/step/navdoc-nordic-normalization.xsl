@@ -3,6 +3,7 @@
     xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml">
 
     <xsl:param name="identifier" required="yes"/>
+    <xsl:param name="title" required="yes"/>
     <xsl:param name="supplier" select="''"/>
     <xsl:param name="publisher" required="yes"/>
     <xsl:variable name="lang" select="string((/html/head/meta[@name='dc:language']/@content, /*/@xml:lang, /*/@lang)[1])"/>
@@ -28,7 +29,7 @@
         <head>
             <meta charset="UTF-8"/>
             <title>
-                <xsl:value-of select="normalize-space(string-join((//h1|//h2|//h3|//h4|//h5|//h6)[1]//text(),' '))"/>
+                <xsl:value-of select="$title"/>
             </title>
             <meta name="viewport" content="width=device-width"/>
             <meta name="dc:identifier" content="{$identifier}"/>
@@ -40,32 +41,102 @@
             <meta name="dc:language" content="{$lang}"/>
             <xsl:apply-templates select="*[not(self::meta | self::title)] | meta[not(@charset) and not(@name=('nordic:guidelines','nordic:supplier','dc:publisher','dc:language'))]"/>
             <style type="text/css" xml:space="preserve"><![CDATA[
-                .pronounce-no { -epub-speak-as: spell-out; }
-                .list-preformatted { list-style-type: none; }
-                table[class^="table-rules-"], table[class*=" table-rules-"] { border-width: thin; border-style: hidden; }
-                table[class^="table-rules-"]:not(.table-rules-none), table[class*=" table-rules-"]:not(.table-rules-none) { border-collapse: collapse; }
-                table[class^="table-rules-"] td, table[class*=" table-rules-"] td { border-width: thin; border-style: none; }
-                table[class^="table-rules-"] th, table[class*=" table-rules-"] th { border-width: thin; border-style: none; }
-                table.table-rules-none td, table.table-rules-none th { border-width: thin; border-style: hidden; }
-                table.table-rules-all td, table.table-rules-all th { border-width: thin; border-style: solid; }
-                table.table-rules-cols td, table.table-rules-cols th { border-left-width: thin; border-right-width: thin; border-left-style: solid; border-right-style: solid; }
-                table.table-rules-rows tr { border-top-width: thin; border-bottom-width: thin; border-top-style: solid; border-bottom-style: solid; }
-                table.table-rules-groups colgroup { border-left-width: thin; border-right-width: thin; border-left-style: solid; border-right-style: solid; }
-                table.table-rules-groups tfoot, table.table-rules-groups thead, table.table-rules-groups tbody { border-top-width: thin; border-bottom-width: thin; border-top-style: solid; border-bottom-style: solid; }
-                table[class^="table-frame-"], table[class*=" table-frame-"] { border: thin hidden; }
-                table.table-frame-void { border-style: hidden; }
-                table.table-frame-above { border-style: outset hidden hidden hidden; }
-                table.table-frame-below { border-style: hidden hidden outset hidden; }
-                table.table-frame-lhs { border-style: hidden hidden hidden outset; }
-                table.table-frame-rhs { border-style: hidden outset hidden hidden; }
-                table.table-frame-hsides { border-style: outset hidden; }
-                table.table-frame-vsides { border-style: hidden outset; }
-                table.table-frame-box { border-style: outset; }
-                table.table-frame-border { border-style: outset; }
-                ]]></style>
+                .pronounce-no{
+                    -epub-speak-as:spell-out;
+                }
+                .list-preformatted{
+                    list-style-type:none;
+                }
+                table[class ^= "table-rules-"],
+                table[class *= " table-rules-"]{
+                    border-width:thin;
+                    border-style:hidden;
+                }
+                table[class ^= "table-rules-"]:not(.table-rules-none),
+                table[class *= " table-rules-"]:not(.table-rules-none){
+                    border-collapse:collapse;
+                }
+                table[class ^= "table-rules-"] td,
+                table[class *= " table-rules-"] td{
+                    border-width:thin;
+                    border-style:none;
+                }
+                table[class ^= "table-rules-"] th,
+                table[class *= " table-rules-"] th{
+                    border-width:thin;
+                    border-style:none;
+                }
+                table.table-rules-none td,
+                table.table-rules-none th{
+                    border-width:thin;
+                    border-style:hidden;
+                }
+                table.table-rules-all td,
+                table.table-rules-all th{
+                    border-width:thin;
+                    border-style:solid;
+                }
+                table.table-rules-cols td,
+                table.table-rules-cols th{
+                    border-left-width:thin;
+                    border-right-width:thin;
+                    border-left-style:solid;
+                    border-right-style:solid;
+                }
+                table.table-rules-rows tr{
+                    border-top-width:thin;
+                    border-bottom-width:thin;
+                    border-top-style:solid;
+                    border-bottom-style:solid;
+                }
+                table.table-rules-groups colgroup{
+                    border-left-width:thin;
+                    border-right-width:thin;
+                    border-left-style:solid;
+                    border-right-style:solid;
+                }
+                table.table-rules-groups tfoot,
+                table.table-rules-groups thead,
+                table.table-rules-groups tbody{
+                    border-top-width:thin;
+                    border-bottom-width:thin;
+                    border-top-style:solid;
+                    border-bottom-style:solid;
+                }
+                table[class ^= "table-frame-"],
+                table[class *= " table-frame-"]{
+                    border:thin hidden;
+                }
+                table.table-frame-void{
+                    border-style:hidden;
+                }
+                table.table-frame-above{
+                    border-style:outset hidden hidden hidden;
+                }
+                table.table-frame-below{
+                    border-style:hidden hidden outset hidden;
+                }
+                table.table-frame-lhs{
+                    border-style:hidden hidden hidden outset;
+                }
+                table.table-frame-rhs{
+                    border-style:hidden outset hidden hidden;
+                }
+                table.table-frame-hsides{
+                    border-style:outset hidden;
+                }
+                table.table-frame-vsides{
+                    border-style:hidden outset;
+                }
+                table.table-frame-box{
+                    border-style:outset;
+                }
+                table.table-frame-border{
+                    border-style:outset;
+                }]]></style>
         </head>
     </xsl:template>
-    
+
     <!-- delete empty ol elements (this probably stems from a bug in epub3-nav-utils) -->
     <xsl:template match="ol[not(*)]"/>
 

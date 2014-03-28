@@ -10,14 +10,14 @@
                         <a href="link1"/>
                         <img src="img/img2"/>
                     </section>
-                    <section xml:base="file:/tmp/dir/chapter/b.xhtml">
+                    <section xml:base="file:/tmp/dir/b.xhtml">
                         <a href="link2"/>
                         <img src="img/img2"/>
                     </section>
                 </body>
             </html>
         </x:context>
-        <x:expect label="URIs should be made relative to the document instead of the element and xml:base attributes should be removed">
+        <x:expect label="xml:base attributes should be removed">
             <html xml:base="file:/tmp/dir/file.xhtml">
                 <head/>
                 <body>
@@ -26,8 +26,8 @@
                         <img src="img/img2"/>
                     </section>
                     <section>
-                        <a href="chapter/link2"/>
-                        <img src="chapter/img/img2"/>
+                        <a href="link2"/>
+                        <img src="img/img2"/>
                     </section>
                 </body>
             </html>
@@ -40,11 +40,11 @@
                 <head/>
                 <body id="outlineid">
                     <section xml:base="file:/tmp/dir/a.xhtml" id="id1">
-                        <a href="chapter/b.xhtml#id1"/>
+                        <a href="b.xhtml#id2"/>
                     </section>
-                    <section xml:base="file:/tmp/dir/chapter/b.xhtml">
-                        <h2 id="id1">Headline</h2>
-                        <a href="../a.xhtml#id1"/>
+                    <section xml:base="file:/tmp/dir/b.xhtml">
+                        <h2 id="id2">Headline</h2>
+                        <a href="a.xhtml#id1"/>
                     </section>
                 </body>
             </html>
@@ -52,13 +52,13 @@
         <x:expect label="Internal links should be used (starting with '#')">
             <html xml:base="file:/tmp/dir/file.xhtml">
                 <head/>
-                <body id="doc0_outlineid">
-                    <section id="doc1_id1">
-                        <a href="#doc2_id1"/>
+                <body id="outlineid">
+                    <section id="id1">
+                        <a href="#id2"/>
                     </section>
                     <section>
-                        <h2 id="doc2_id1">Headline</h2>
-                        <a href="#doc1_id1"/>
+                        <h2 id="id2">Headline</h2>
+                        <a href="#id1"/>
                     </section>
                 </body>
             </html>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-epub3-to-dtbook" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:pxp="http://exproc.org/proposed/steps" xpath-version="2.0"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:cx="http://xmlcalabash.com/ns/extensions">
+    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:html="http://www.w3.org/1999/xhtml">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic EPUB3 to DTBook</h1>
@@ -59,6 +59,14 @@
                 output is not guaranteed to be valid if this option is set to false.</p>
         </p:documentation>
     </p:option>
+    
+    <p:option name="strict" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Extra strict markup</h2>
+            <p px:role="desc">Some validation rules are considered extra strict and can be disabled using this option. Examples of extra strict rules are pagebreaks being required in all documents and
+                only a predefined list of languages, suppliers and publishers being allowed.</p>
+        </p:documentation>
+    </p:option>
 
     <p:import href="step/epub3.validate.xpl"/>
     <p:import href="step/html.validate.xpl"/>
@@ -96,6 +104,7 @@
     <px:message message="Remember to also validate the EPUB using epubcheck." severity="WARN"/>
     <px:nordic-epub3-validate.step name="validate.epub3">
         <p:with-option name="temp-dir" select="concat($temp-dir,'validate/')"/>
+        <p:with-option name="strict" select="$strict"/>
     </px:nordic-epub3-validate.step>
     <p:sink/>
 
@@ -174,6 +183,10 @@
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.out" step="convert.html"/>
                 </p:input>
+                <p:with-option name="title" select="(/*/html:body/html:header//html:h1[tokenize(@epub:type,'\s+')='fulltitle']/text())[1]">
+                    <p:pipe port="in-memory.out" step="convert.html"/>
+                </p:with-option>
+                <p:with-option name="strict" select="$strict"/>
             </px:nordic-html-validate.step>
             <p:sink/>
 

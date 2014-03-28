@@ -60,6 +60,21 @@
         </p:documentation>
     </p:option>
 
+    <p:option name="no-legacy" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Disallow legacy markup</h2>
+            <p px:role="desc">If set to false, will upgrade DTBook versions earlier than 2005-3 to 2005-3, and fix some non-standard practices that appear in older DTBooks.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="strict" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Extra strict markup</h2>
+            <p px:role="desc">Some validation rules are considered extra strict and can be disabled using this option. Examples of extra strict rules are pagebreaks being required in all documents and
+                only a predefined list of languages, suppliers and publishers being allowed.</p>
+        </p:documentation>
+    </p:option>
+
     <p:import href="step/dtbook.validate.xpl"/>
     <p:import href="step/html.validate.xpl"/>
     <p:import href="step/epub3.validate.xpl"/>
@@ -80,15 +95,16 @@
             <irrelevant/>
         </p:inline>
     </p:variable>
-    
+
     <px:message message="$1" name="nordic-version-message">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
-    
+
     <px:nordic-dtbook-validate.step name="validate.dtbook" check-images="true" cx:depends-on="nordic-version-message">
         <p:with-option name="dtbook" select="$dtbook-href"/>
+        <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
     <p:sink/>
 
@@ -131,6 +147,10 @@
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.out" step="single-html"/>
                 </p:input>
+                <p:with-option name="title" select="/*/@content">
+                    <p:pipe port="title" step="metadata"/>
+                </p:with-option>
+                <p:with-option name="strict" select="$strict"/>
             </px:nordic-html-validate.step>
             <p:sink/>
 
@@ -162,7 +182,7 @@
                     <px:assert message="There should be exactly one intermediary HTML file" test-count-min="1" test-count-max="1"/>
                     <p:store name="intermediary.store">
                         <p:with-option name="href" select="concat($output-dir,/*/@content,'.xhtml')">
-                            <p:pipe port="result" step="identifier"/>
+                            <p:pipe port="identifier" step="metadata"/>
                         </p:with-option>
                     </p:store>
                     <p:identity>
@@ -207,14 +227,14 @@
                         <p:with-option name="temp-dir" select="concat($temp-dir,'epub/')"/>
                         <p:with-option name="compatibility-mode" select="'true'"/>
                     </px:nordic-html-to-epub3-convert>
-                    
+
                     <p:group name="store.epub3">
                         <!-- TODO: replace this p:group with px:epub3-store when pxi:fileset-store is released in the next pipeline 2 version -->
-                        
+
                         <p:output port="result" primary="false">
                             <p:pipe port="result" step="zip"/>
                         </p:output>
-                        
+
                         <pxi:fileset-store name="fileset-store">
                             <p:input port="fileset.in">
                                 <p:pipe port="fileset.out" step="convert.epub3"/>
@@ -223,10 +243,10 @@
                                 <p:pipe port="in-memory.out" step="convert.epub3"/>
                             </p:input>
                         </pxi:fileset-store>
-                        
+
                         <px:epub3-ocf-zip name="zip" cx:depends-on="fileset-store">
                             <p:with-option name="target" select="concat($output-dir,/*/@content,'.epub')">
-                                <p:pipe port="result" step="identifier"/>
+                                <p:pipe port="identifier" step="metadata"/>
                             </p:with-option>
                             <p:input port="source">
                                 <p:pipe port="fileset.out" step="fileset-store"/>
@@ -241,7 +261,7 @@
                             <p:pipe port="in-memory.out" step="convert.epub3"/>
                         </p:input>
                         <p:with-option name="href" select="concat($output-dir,/*/@content,'.epub')">
-                            <p:pipe port="result" step="identifier"/>
+                            <p:pipe port="identifier" step="metadata"/>
                         </p:with-option>
                     </px:epub3-store>-->
 
@@ -252,7 +272,7 @@
                     </px:fileset-create>
                     <px:fileset-add-entry media-type="application/epub+zip">
                         <p:with-option name="href" select="concat(/*/@content,'.epub')">
-                            <p:pipe port="result" step="identifier"/>
+                            <p:pipe port="identifier" step="metadata"/>
                         </p:with-option>
                     </px:fileset-add-entry>
                     <px:nordic-epub3-validate.step name="validate.epub3" cx:depends-on="store.epub3">
@@ -260,6 +280,7 @@
                         <p:input port="in-memory.in">
                             <p:pipe port="in-memory.out" step="convert.epub3"/>
                         </p:input>
+                        <p:with-option name="strict" select="$strict"/>
                     </px:nordic-epub3-validate.step>
                     <p:sink/>
 
@@ -295,9 +316,14 @@
         <p:delete match="/*/node()"/>
     </p:group>
 
-    <!-- get metadata (used to determine the filename) -->
-    <p:group name="identifier">
-        <p:output port="result"/>
+    <!-- get metadata -->
+    <p:group name="metadata">
+        <p:output port="identifier">
+            <p:pipe port="result" step="metadata.identifier"/>
+        </p:output>
+        <p:output port="title">
+            <p:pipe port="result" step="metadata.title"/>
+        </p:output>
         <px:fileset-load media-types="application/x-dtbook+xml">
             <p:input port="fileset">
                 <p:pipe port="fileset.out" step="validate.dtbook"/>
@@ -307,12 +333,26 @@
             </p:input>
         </px:fileset-load>
         <px:assert message="There must be exactly one DTBook in the input fileset" test-count-min="1" test-count-max="1" error-code="NORDICDTBOOKEPUB008"/>
+        <p:identity name="metadata.dtbook"/>
+        <p:sink/>
+
         <p:for-each>
-            <p:iteration-source select="//dtbook:head/dtbook:meta[@name='dtb:uid']"/>
+            <p:iteration-source select="//dtbook:head/dtbook:meta[@name='dtb:uid']">
+                <p:pipe port="result" step="metadata.dtbook"/>
+            </p:iteration-source>
             <p:identity/>
         </p:for-each>
-        <px:assert message="The DTBook have a 'dtb:uid' meta element" test-count-min="1" test-count-max="1" error-code="NORDICDTBOOKEPUB009"/>
+        <px:assert message="The DTBook must have a 'dtb:uid' meta element" test-count-min="1" test-count-max="1" error-code="NORDICDTBOOKEPUB009"/>
+        <p:identity name="metadata.identifier"/>
+
+        <p:for-each>
+            <p:iteration-source select="//dtbook:head/dtbook:meta[@name='dc:Title']">
+                <p:pipe port="result" step="metadata.dtbook"/>
+            </p:iteration-source>
+            <p:identity/>
+        </p:for-each>
+        <px:assert message="The DTBook must have a 'dc:Title' meta element" test-count-min="1" test-count-max="1" error-code="NORDICDTBOOKEPUB010"/>
+        <p:identity name="metadata.title"/>
     </p:group>
-    <p:sink/>
 
 </p:declare-step>

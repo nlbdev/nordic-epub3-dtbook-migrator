@@ -3,7 +3,17 @@
     xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/" exclude-result-prefixes="#all" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+    <xsl:param name="allow-links" select="false()"/>
+
     <xsl:output indent="yes" exclude-result-prefixes="#all" doctype-public="-//NISO//DTD dtbook 2005-3//EN" doctype-system="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
+
+    <xsl:variable name="vocab-default"
+        select="('acknowledgments','afterword','annoref','annotation','appendix','backmatter','biblioentry','bibliography','bodymatter','bridgehead','chapter','colophon','concluding-sentence','conclusion','contributors','copyright-page','cover','covertitle','dedication','division','epigraph','epilogue','errata','footnote','footnotes','foreword','frontmatter','fulltitle','glossary','glossdef','glossterm','halftitle','halftitlepage','help','imprimatur','imprint','index','introduction','keyword','landmarks','list','list-item','loi','lot','marginalia','note','noteref','notice','other-credits','pagebreak','page-list','part','practice','preamble','preface','prologue','rearnote','rearnotes','sidebar','subchapter','subtitle','table','table-cell','table-row','title','titlepage','toc','topic-sentence','volume','warning')"/>
+    <xsl:variable name="vocab-z3998"
+        select="('abbreviations','acknowledgments','acronym','actor','afterword','alteration','annoref','annotation','appendix','article','aside','attribution','author','award','backmatter','bcc','bibliography','biographical-note','bodymatter','cardinal','catalogue','cc','chapter','citation','clarification','collection','colophon','commentary','commentator','compound','concluding-sentence','conclusion','continuation','continuation-of','contributors','coordinate','correction','covertitle','currency','decimal','decorative','dedication','diary','diary-entry','discography','division','drama','dramatis-personae','editor','editorial-note','email','email-message','epigraph','epilogue','errata','essay','event','example','family-name','fiction','figure','filmography','footnote','footnotes','foreword','fraction','from','frontispiece','frontmatter','ftp','fulltitle','gallery','general-editor','geographic','given-name','glossary','grant-acknowledgment','grapheme','halftitle','halftitle-page','help','homograph','http','hymn','illustration','image-placeholder','imprimatur','imprint','index','initialism','introduction','introductory-note','ip','isbn','keyword','letter','loi','lot','lyrics','marginalia','measure','mixed','morpheme','name-title','nationality','non-fiction','nonresolving-citation','nonresolving-reference','note','noteref','notice','orderedlist','ordinal','organization','other-credits','pagebreak','page-footer','page-header','part','percentage','persona','personal-name','pgroup','phone','phoneme','photograph','phrase','place','plate','poem','portmanteau','postal','postal-code','postscript','practice','preamble','preface','prefix','presentation','primary','product','production','prologue','promotional-copy','published-works','publisher-address','publisher-logo','range','ratio','rearnote','rearnotes','recipient','recto','reference','republisher','resolving-reference','result','role-description','roman','root','salutation','scene','secondary','section','sender','sentence','sidebar','signature','song','speech','stage-direction','stem','structure','subchapter','subject','subsection','subtitle','suffix','surname','taxonomy','tertiary','text','textbook','t-form','timeline','title','title-page','to','toc','topic-sentence','translator','translator-note','truncation','unorderedlist','valediction','verse','verso','v-form','volume','warning','weight','word')"/>
+    <xsl:variable name="special-classes"
+        select="('part','cover','colophon','nonstandardpagination','jacketcopy','precedingemptyline','precedingseparator','byline','dateline','address','definition','keyboard','initialism','truncation','cite','bdo','quote')"/>
+    <xsl:variable name="allowed-classes" select="($special-classes, $vocab-default, $vocab-z3998)"/>
 
     <xsl:variable name="all-ids" select="//@id"/>
 
@@ -51,8 +61,13 @@
                     <xsl:for-each select="f:types(.)[not(matches(.,'(^|:)(front|body|back)matter'))]">
                         <xsl:choose>
                             <xsl:when test=".='cover'">
-                                <!-- TODO: add epub:types that maps to different class strings here like this -->
                                 <xsl:sequence select="'jacketcopy'"/>
+                            </xsl:when>
+                            <xsl:when test=".='z3998:halftitle-page'">
+                                <xsl:sequence select="'halftitlepage'"/>
+                            </xsl:when>
+                            <xsl:when test=".='z3998:title-page'">
+                                <xsl:sequence select="'titlepage'"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:sequence select="tokenize(.,':')[last()]"/>
@@ -62,7 +77,7 @@
                 </xsl:variable>
 
                 <xsl:variable name="class-string"
-                    select="string-join(distinct-values(($classes, if (preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]) then 'precedingemptyline' else (), $old-classes[not(matches(.,concat('showin-',$showin)))], $epub-type-classes)[not(.='') and not(.=$except-classes)]),' ')"/>
+                    select="string-join(distinct-values(($classes[.=$allowed-classes], if (preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]) then 'precedingemptyline' else (), $old-classes[.=$allowed-classes], $epub-type-classes)[not(.='') and not(.=$except-classes)]),' ')"/>
                 <xsl:if test="not($class-string='')">
                     <xsl:attribute name="class" select="$class-string"/>
                 </xsl:if>
@@ -100,7 +115,6 @@
             <xsl:call-template name="attlist.head"/>
             <meta name="dtb:uid" content="{(html:meta[lower-case(@name)=('dtb:uid','dc:identifier')])[1]/@content}"/>
             <xsl:apply-templates select="node()"/>
-            <!-- TODO: maybe add some default CSS styles here? -->
         </head>
     </xsl:template>
 
@@ -335,7 +349,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="html:aside[f:types(.)='z3998:production']">
+    <xsl:template match="html:aside[f:types(.)='z3998:production'] | html:section[parent::*/f:types(.)='cover']">
         <prodnote>
             <xsl:call-template name="attlist.prodnote"/>
             <xsl:apply-templates select="node()"/>
@@ -367,7 +381,7 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="html:aside[f:types(.)='sidebar']">
+    <xsl:template match="html:aside[f:types(.)='sidebar'] | html:figure[f:types(.)='sidebar']">
         <sidebar>
             <xsl:call-template name="attlist.sidebar"/>
             <xsl:apply-templates select="node()"/>
@@ -376,17 +390,13 @@
 
     <xsl:template name="attlist.sidebar">
         <xsl:call-template name="attrs">
-            <xsl:with-param name="except-classes" select="('sidebar','render-required','render-optional')" tunnel="yes"/>
+            <xsl:with-param name="except-classes" select="'sidebar'" tunnel="yes"/>
         </xsl:call-template>
         <xsl:choose>
-            <xsl:when test="f:classes(.)='render-required'">
+            <xsl:when test="self::html:figure">
                 <xsl:attribute name="render" select="'required'"/>
             </xsl:when>
-            <xsl:when test="f:classes(.)='render-optional'">
-                <xsl:attribute name="render" select="'optional'"/>
-            </xsl:when>
             <xsl:otherwise>
-                <!-- let's make "optional" the default -->
                 <xsl:attribute name="render" select="'optional'"/>
             </xsl:otherwise>
         </xsl:choose>
@@ -503,35 +513,54 @@
 
     <!-- <a> is not allowed in nordic DTBook. Replacing with span. -->
     <xsl:template match="html:a">
-        <xsl:message select="'&lt;a&gt; is not allowed in nordic DTBook. Replacing with span and a &quot;a&quot; class.'"/>
-        <span>
-            <xsl:call-template name="attlist.a"/>
-            <xsl:apply-templates select="node()"/>
-        </span>
+        <xsl:choose>
+            <xsl:when test="$allow-links">
+                <a>
+                    <xsl:call-template name="attlist.a"/>
+                    <xsl:apply-templates select="node()"/>
+                </a>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message select="'&lt;a&gt; is not allowed in nordic DTBook. Replacing with span and a &quot;a&quot; class.'"/>
+                <span>
+                    <xsl:call-template name="attlist.a"/>
+                    <xsl:apply-templates select="node()"/>
+                </span>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <!-- <a> is not allowed in nordic DTBook. Replacing with span and a "a" class. -->
     <xsl:template name="attlist.a">
+
         <xsl:call-template name="attrs">
-            <!-- Preserve @target as class attribute. Assumes that only characters that are valid for class names are used. -->
+            <xsl:with-param name="classes" select="'a'" tunnel="yes"/>
+
+            <!--
+            <!-\- Preserve @target as class attribute. Assumes that only characters that are valid for class names are used. -\->
             <xsl:with-param name="classes" select="('a', if (@target) then concat('target-',replace(@target,'_','-')) else ())" tunnel="yes"/>
-            <xsl:with-param name="except-classes" select="('external-true','external-false',for $rev in (f:classes(.)[matches(.,'^rev-')]) return $rev )" tunnel="yes"/>
+            <xsl:with-param name="except-classes" select="for $rev in (f:classes(.)[matches(.,'^rev-')]) return $rev" tunnel="yes"/>
+            -->
         </xsl:call-template>
-        <!--<xsl:copy-of select="@type|@href|@hreflang|@rel|@accesskey|@tabindex"/>
-        <!-\- @download and @media is dropped - they don't have a good equivalent in DTBook -\->
 
-        <xsl:choose>
-            <xsl:when test="f:classes(.)[matches(.,'^external-(true|false)')]">
-                <xsl:attribute name="external" select="replace((f:classes(.)[matches(.,'^external-(true|false)')])[1],'^external-','')"/>
-            </xsl:when>
-            <xsl:when test="@target='_blank' or matches(@href,'^(\w+:|/)')">
-                <xsl:attribute name="external" select="'true'"/>
-            </xsl:when>
-        </xsl:choose>
+        <xsl:if test="$allow-links">
+            <xsl:copy-of select="@type|@href|@hreflang|@rel|@accesskey|@tabindex"/>
+            <!-- @download and @media is dropped - they don't have a good equivalent in DTBook -->
 
-        <xsl:if test="f:classes(.)[matches(.,'^rev-')]">
-            <xsl:attribute name="rev" select="replace((f:classes(.)[matches(.,'^rev-')])[1],'^rev-','')"/>
-        </xsl:if>-->
+            <xsl:choose>
+                <xsl:when test="@target='_blank' or matches(@href,'^(\w+:|/)')">
+                    <xsl:attribute name="external" select="'true'"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="external" select="'false'"/>
+                </xsl:otherwise>
+            </xsl:choose>
+
+            <!--<xsl:if test="f:classes(.)[matches(.,'^rev-')]">
+                <xsl:attribute name="rev" select="replace((f:classes(.)[matches(.,'^rev-')])[1],'^rev-','')"/>
+            </xsl:if>-->
+        </xsl:if>
+
     </xsl:template>
 
     <xsl:template match="html:em">
@@ -634,7 +663,7 @@
     </xsl:template>
 
     <!-- abbr is disallowed in nordic dtbooks, using span instead -->
-    <xsl:template match="html:abbr">
+    <xsl:template match="html:abbr[f:types(.)='z3998:truncation']">
         <span>
             <xsl:call-template name="attlist.abbr"/>
             <xsl:apply-templates select="node()"/>
@@ -642,13 +671,11 @@
     </xsl:template>
 
     <xsl:template name="attlist.abbr">
-        <xsl:call-template name="attrs">
-            <xsl:with-param name="classes" select="'abbr'" tunnel="yes"/>
-        </xsl:call-template>
+        <xsl:call-template name="attrs"/>
     </xsl:template>
 
     <!-- acronym is disallowed in nordic dtbooks, using span instead -->
-    <xsl:template match="html:abbr[f:types(.)='z3998:acronym']">
+    <xsl:template match="html:abbr">
         <span>
             <xsl:call-template name="attlist.acronym"/>
             <xsl:apply-templates select="node()"/>
@@ -658,10 +685,10 @@
     <!-- acronym is disallowed in nordic dtbooks, using span instead and thus not setting the pronounce attribute -->
     <xsl:template name="attlist.acronym">
         <xsl:call-template name="attrs">
-            <xsl:with-param name="classes" select="'acronym'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="if (not(f:types(.)='z3998:initialism')) then 'acronym' else ()" tunnel="yes"/>
         </xsl:call-template>
-        <!--<xsl:if test="f:classes(.)='spell-out' or matches(@style,'-epub-speak-as:\s*spell-out')">
-            <xsl:attribute name="pronounce" select="'no'"/>
+        <!--<xsl:if test="">
+            <xsl:attribute name="pronounce" select="if (f:types(.)='z3998:initialism') then 'yes' else 'no'"/>
         </xsl:if>-->
     </xsl:template>
 
@@ -1084,11 +1111,11 @@
                 <xsl:call-template name="caption.table"/>
             </xsl:for-each>
             <xsl:apply-templates select="html:colgroup"/>
-            
+
             <xsl:apply-templates select="html:thead/html:tr"/>
             <xsl:apply-templates select="html:tbody/html:tr | html:tr"/>
             <xsl:apply-templates select="html:tfoot/html:tr"/>
-            
+
             <!--<xsl:apply-templates select="html:thead"/>
             <xsl:apply-templates select="html:tfoot"/>
             <xsl:apply-templates select="html:tbody | html:tr"/>-->
@@ -1323,11 +1350,11 @@
         <xsl:variable name="id">
             <xsl:choose>
                 <xsl:when test="$element[self::html:blockquote or self::html:q]">
-                    <xsl:sequence select="concat('quote_',count($element/preceding::*[self::html:blockquote or self::html:q])+1)"/>
+                    <xsl:sequence select="concat('quote_',count($element/(ancestor::*|preceding::*)[self::html:blockquote or self::html:q])+1)"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:variable name="element-name" select="local-name($element)"/>
-                    <xsl:sequence select="concat($element-name,'_',count($element/preceding::*[local-name()=$element-name])+1)"/>
+                    <xsl:sequence select="concat($element-name,'_',count($element/(ancestor::*|preceding::*)[local-name()=$element-name])+1)"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>

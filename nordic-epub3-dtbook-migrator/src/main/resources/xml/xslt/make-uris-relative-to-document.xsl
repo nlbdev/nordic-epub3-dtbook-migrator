@@ -2,10 +2,8 @@
     xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-    <!--    <xsl:import href="../../../../test/xspec/mock/uri-functions.xsl"/>-->
-
     <xsl:variable name="doc-base" select="if (/html/head/base[@href][1]) then resolve-uri(normalize-space(/html/head/base[@href][1]/@href),base-uri(/*)) else base-uri(/*)"/>
+    <xsl:variable name="xml-bases" select="//@xml:base"/>
 
     <xsl:template match="/*|@*|node()">
         <xsl:copy>
@@ -15,37 +13,15 @@
 
     <xsl:template match="/*//*/@xml:base"/>
 
-    <xsl:template match="@id">
-        <xsl:attribute name="id" select="f:element-id(parent::*)"/>
-    </xsl:template>
-
     <xsl:template match="@href|@src|@xlink:href|@altimg|@data[parent::object]">
-        <xsl:variable name="href" select="resolve-uri(.,base-uri(.))"/>
-        <xsl:variable name="href">
-            <xsl:choose>
-                <xsl:when test="tokenize($href,'#')[1]=//@xml:base">
-                    <xsl:choose>
-                        <xsl:when test="contains($href,'#')">
-                            <xsl:variable name="fragment" select="tokenize($href,'#')[last()]"/>
-                            <xsl:variable name="target" select="//*[@xml:base=tokenize($href,'#')[1]]/descendant-or-self::*[@id=$fragment]"/>
-                            <xsl:sequence select="concat('#',f:element-id($target))"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:sequence select="'#'"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="pf:relativize-uri($href,base-uri(/*))"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:attribute name="{name()}" select="$href"/>
+        <xsl:choose>
+            <xsl:when test="matches(.,'^[^/]+\.xhtml(#.*)?$')">
+                <xsl:attribute name="{name()}" select="concat('#',substring-after(.,'#'))"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="."/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
-
-    <xsl:function name="f:element-id" as="xs:string">
-        <xsl:param name="element" as="element()"/>
-        <xsl:value-of select="if ($element/@id) then concat('doc',count(($element|$element/preceding::*|$element/ancestor::*)[@xml:base])-1,'_',$element/@id) else generate-id($element)"/>
-    </xsl:function>
 
 </xsl:stylesheet>

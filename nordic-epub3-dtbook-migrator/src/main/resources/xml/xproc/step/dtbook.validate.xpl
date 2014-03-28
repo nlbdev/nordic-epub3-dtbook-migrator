@@ -22,6 +22,7 @@
 
     <p:option name="dtbook" required="true"/>
     <p:option name="check-images" required="false" select="'false'"/>
+    <p:option name="allow-legacy" required="false" select="'false'"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -74,9 +75,30 @@
                 <p:pipe port="result" step="input-dtbook.fileset"/>
             </p:output>
 
-            <p:load name="input-dtbook">
+            <p:load>
                 <p:with-option name="href" select="$dtbook"/>
             </p:load>
+            <p:choose>
+                <p:when test="$allow-legacy='true'">
+                    <px:upgrade-dtbook>
+                        <p:input port="parameters">
+                            <p:empty/>
+                        </p:input>
+                    </px:upgrade-dtbook>
+                    <p:xslt>
+                        <p:input port="parameters">
+                            <p:empty/>
+                        </p:input>
+                        <p:input port="stylesheet">
+                            <p:document href="../../xslt/dtbook-legacy-fix.xsl"/>
+                        </p:input>
+                    </p:xslt>
+                </p:when>
+                <p:otherwise>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+            <p:identity name="input-dtbook"/>
 
             <px:message message="Validating DTBook according to Nordic specification..."/>
             <l:relax-ng-report name="validate.input-dtbook.nordic.validation">

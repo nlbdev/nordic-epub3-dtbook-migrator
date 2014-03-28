@@ -19,7 +19,7 @@
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 8: Only allow pagenum[@front] in frontmatter -->
+  <!-- Rule 8: Only allow pagebreak w/page-front in frontmatter -->
   <sch:pattern id="dtbook_TPB_8">
     <sch:rule context="html:span[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front']">
       <sch:assert test="ancestor::html:*[self::html:section or self::html:article or self::html:body]/tokenize(@epub:type,'\s+') = ('frontmatter','cover')">[tpb08] &lt;span epub:type="pagebreak"
@@ -128,20 +128,20 @@
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 23: Increasing pagenum[tokenize(@class,' ')='page-normal'] values -->
+  <!-- Rule 23: Increasing pagebreak values for page-normal -->
   <sch:pattern id="dtbook_TPB_23">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-normal' and preceding::html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-normal']]">
-      <sch:assert test="number(current()/@title) > number(preceding::html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-normal'][1]/@title)">[tpb23] pagenum[tokenize(@class,'
-        ')='page-normal'] values must increase</sch:assert>
+      <sch:assert test="number(current()/@title) > number(preceding::html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-normal'][1]/@title)">[tpb23] pagebreak values must increase
+        for page-normal</sch:assert>
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 24: Values of pagenum[tokenize(@class,' ')='page-front'] must be unique -->
+  <!-- Rule 24: Values of pagebreak must be unique for page-front -->
   <sch:pattern id="dtbook_TPB_24">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front']">
-      <!--  		<sch:assert test="count(key('pageFrontValues', .))=1">[tpb24] pagenum[tokenize(@class,' ')='page-front'] values must be unique</sch:assert>-->
-      <sch:assert test="count(//html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front' and @title=current()/@title])=1">[tpb24] pagenum[tokenize(@class,' ')='page-front']
-        values must be unique</sch:assert>
+      <!--  		<sch:assert test="count(key('pageFrontValues', .))=1">[tpb24] pagebreak values must be unique for page-front</sch:assert>-->
+      <sch:assert test="count(//html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front' and @title=current()/@title])=1">[tpb24] pagebreak values must be unique for
+        page-front</sch:assert>
     </sch:rule>
   </sch:pattern>
 
@@ -197,7 +197,7 @@
         test="following-sibling::html:a      or following-sibling::html:abbr or following-sibling::html:acronym or following-sibling::html:a[tokenize(@epub:type,' ')='annoref'] or
   	                    following-sibling::html:bdo    or following-sibling::html:code or following-sibling::html:dfn     or following-sibling::html:em      or
   	                    following-sibling::html:kbd or following-sibling::html:p[tokenize(@class,' ')='linenum'] or following-sibling::html:a[tokenize(@epub:type,' ')='noteref'] or
-  	                    following-sibling::html:q      or following-sibling::html:samp or following-sibling::html:span[tokenize(@epub:type,' ')='z3998:sentence']    or following-sibling::html:span[not(tokenize(@epub:type,'\s+')='pagebreak')]    or
+  	                    following-sibling::html:q      or following-sibling::html:samp or following-sibling::html:span[tokenize(@epub:type,' ')='z3998:sentence']    or following-sibling::html:span[not(tokenize(@epub:type,'\s+')='pagebreak') and not(tokenize(@class,'\s+')='lic')]    or
   	                    following-sibling::html:strong or following-sibling::html:sub  or following-sibling::html:sup     or following-sibling::html:span[tokenize(@epub:type,' ')='z3998:word']       or
   	                    (following-sibling::text()/normalize-space()!='' and not(parent::html:li))"
         >Block element as sibling to inline element</sch:report>
@@ -205,7 +205,7 @@
         test="preceding-sibling::html:a      or preceding-sibling::html:abbr or preceding-sibling::html:acronym or preceding-sibling::html:a[tokenize(@epub:type,' ')='annoref'] or
   	                    preceding-sibling::html:bdo    or preceding-sibling::html:code or preceding-sibling::html:dfn     or preceding-sibling::html:em      or
   	                    preceding-sibling::html:kbd or preceding-sibling::html:p[tokenize(@class,' ')='linenum'] or preceding-sibling::html:a[tokenize(@epub:type,' ')='noteref'] or
-  	                    preceding-sibling::html:q      or preceding-sibling::html:samp or preceding-sibling::html:span[tokenize(@epub:type,' ')='z3998:sentence']    or preceding-sibling::html:span[not(tokenize(@epub:type,'\s+')='pagebreak')]    or
+  	                    preceding-sibling::html:q      or preceding-sibling::html:samp or preceding-sibling::html:span[tokenize(@epub:type,' ')='z3998:sentence']    or preceding-sibling::html:span[not(tokenize(@epub:type,'\s+')='pagebreak') and not(tokenize(@class,'\s+')='lic')]    or
   	                    preceding-sibling::html:strong or preceding-sibling::html:sub  or preceding-sibling::html:sup     or preceding-sibling::html:span[tokenize(@epub:type,' ')='z3998:word']       or
   	                    (preceding-sibling::text()/normalize-space(.)!='' and not(parent::html:li))"
         >[tpb29] Block element <sch:name/> as sibling to inline element</sch:report>
@@ -215,7 +215,7 @@
   <!-- Rule 29: No block elements in inline context - continued -->
   <sch:pattern id="dtbook_TPB_29c">
     <sch:rule
-      context="html:aside[tokenize(@epub:type,' ')='z3998:production'][ancestor::html:a        or ancestor::html:abbr       or ancestor::html:acronym    or ancestor::html:a[tokenize(@epub:type,' ')='annoref']   or
+      context="html:*[tokenize(@epub:type,' ')='z3998:production'][ancestor::html:a        or ancestor::html:abbr       or ancestor::html:acronym    or ancestor::html:a[tokenize(@epub:type,' ')='annoref']   or
                                      ancestor::html:bdo      or ancestor::html:code       or ancestor::html:dfn        or ancestor::html:em        or
                                      ancestor::html:kbd      or ancestor::html:p[tokenize(@class,' ')='linenum']    or ancestor::html:a[tokenize(@epub:type,' ')='noteref']    or
                                      ancestor::html:q        or ancestor::html:samp       or ancestor::html:span[tokenize(@epub:type,' ')='z3998:sentence']       or ancestor::html:span      or
@@ -239,7 +239,7 @@
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 40: No page numbering gaps for pagenum[tokenize(@class,' ')='page-normal'] -->
+  <!-- Rule 40: No page numbering gaps for pagebreak w/page-normal -->
   <sch:pattern id="dtbook_TPB_40">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-normal']">
       <sch:report
@@ -248,20 +248,15 @@
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 43: dc:publisher must be 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia' or 'SBS' -->
-  <sch:pattern id="dtbook_TPB_43">
-    <sch:rule context="html:head[//html:body/html:header]">
-      <!-- dc:publisher -->
-      <sch:assert test="count(html:meta[@name='dc:publisher' and @content=('TPB','MTM','SPSM','Nota','NLB','Celia','SBS')])=1">[tpb43] Meta dc:publisher must exist and have value 'TPB', 'MTM', 'SPSM',
-        'Nota', 'NLB', 'Celia' or 'SBS'.</sch:assert>
-    </sch:rule>
-  </sch:pattern>
-
   <!-- Rule 50: image alt attribute -->
   <sch:pattern id="dtbook_TPB_50">
-    <sch:rule context="html:img">
-      <sch:report test="lang('sv') and @alt!='illustration'">[tpb50] an image in swedish language context must have attribute alt="illustration"</sch:report>
-      <sch:report test="lang('en') and @alt!='image'">[tpb50] an image in english language context must have attribute alt="image"</sch:report>
+    <sch:rule context="html:img[parent::html:figure/tokenize(@class,'\s+')='image']">
+      <sch:report test="lang('sv') and @alt!='illustration'">[tpb50] an image inside a figure with class='image' in swedish language context must have attribute alt="illustration"</sch:report>
+      <sch:report test="lang('en') and @alt!='image'">[tpb50] an image inside a figure with class='image' in english language context must have attribute alt="image"</sch:report>
+      <sch:report test="not(lang('sv') or lang('en')) and not(@alt)">[tpb50] an image inside a figure with class='image' must have a non-empty alt attribute</sch:report>
+    </sch:rule>
+    <sch:rule context="html:img[not(parent::html:figure/tokenize(@class,'\s+')='image')]">
+      <sch:report test="string(@alt)!=''">[tpb50] an image which is not inside a figure with class='image' is irrelevant or redundant with regards to the understanding of the book, so the alt attribute must be present but empty</sch:report>
     </sch:rule>
   </sch:pattern>
 
@@ -279,7 +274,7 @@
   <!-- Rule 59: No pagegnum between a term and a definition in definition lists -->
   <sch:pattern id="dtbook_TPB_59">
     <sch:rule context="html:dl/html:*[tokenize(@epub:type,' ')='pagebreak']">
-      <sch:assert test="not(parent::*/html:dd or parent::*/html:dt)">[tpb59] pagenum in definition list must not occur as siblings to dd or dt</sch:assert>
+      <sch:assert test="not(parent::*/html:dd or parent::*/html:dt)">[tpb59] pagebreak in definition list must not occur as siblings to dd or dt</sch:assert>
     </sch:rule>
   </sch:pattern>
 
@@ -325,25 +320,25 @@
 
   <!-- Rule 96: no nested prodnotes or image groups -->
   <sch:pattern id="dtbook_TPB_96">
-    <sch:rule context="html:aside[tokenize(@epub:type,' ')='z3998:production']">
-      <sch:report test="ancestor::html:aside[tokenize(@epub:type,' ')='z3998:production']">[tpb96] nested production notes are not allowed</sch:report>
+    <sch:rule context="html:*[tokenize(@epub:type,' ')='z3998:production']">
+      <sch:report test="ancestor::html:*[tokenize(@epub:type,' ')='z3998:production']">[tpb96] nested production notes are not allowed</sch:report>
     </sch:rule>
-    <sch:rule context="html:figure">
-      <sch:report test="ancestor::html:figure">[tpb96] nested figures are not allowed</sch:report>
+    <sch:rule context="html:figure[tokenize(@class,'\s+')='image-series']">
+      <sch:report test="ancestor::html:figure[tokenize(@class,'\s+')='image-series']">[tpb96] nested image-series are not allowed</sch:report>
     </sch:rule>
   </sch:pattern>
 
   <!-- Rule 101: All imggroup elements must have a img element -->
   <sch:pattern id="dtbook_TPB_101">
-    <sch:rule context="html:figure">
-      <sch:assert test="html:img">[tpb101] There must be an img element in every figure</sch:assert>
+    <sch:rule context="html:figure[tokenize(@class,'\s+')='image']">
+      <sch:assert test="html:img">[tpb101] There must be an img element in every figure with class="image"</sch:assert>
     </sch:rule>
   </sch:pattern>
 
   <!-- Rule 103: No img without imggroup -->
   <sch:pattern id="dtbook_TPB_103">
-    <sch:rule context="html:img">
-      <sch:assert test="parent::html:figure">[tpb103] There must be a figure element wrapping every img</sch:assert>
+    <sch:rule context="html:img[string-length(@alt)!=0]">
+      <sch:assert test="parent::html:figure">[tpb103] There must be a figure element wrapping every img with a non-empty alt text</sch:assert>
     </sch:rule>
   </sch:pattern>
 
@@ -354,29 +349,29 @@
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 105: Page attribute must appear on all pagenum elements -->
+  <!-- Rule 105: Page attribute must appear on all pagebreak elements -->
   <sch:pattern id="dtbook_TPB_105">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak']">
       <sch:assert test="tokenize(@class,' ')=('page-front','page-normal','page-special')">[tpb105] Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special' class.</sch:assert>
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 110: pagenum in headings -->
+  <!-- Rule 110: pagebreak in headings -->
   <sch:pattern id="dtbook_TPB_110">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak']">
-      <sch:report test="ancestor::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]">[tpb110] pagenum elements are not allowed in
+      <sch:report test="ancestor::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]">[tpb110] pagebreak elements are not allowed in
         headings</sch:report>
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 116: Don't allow arabic numbers in pagenum/@class="page-front" -->
+  <!-- Rule 116: Don't allow arabic numbers in pagebreak w/page-front -->
   <sch:pattern id="dtbook_TPB_116">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak']">
       <sch:report test="tokenize(@class,' ')='page-front' and translate(.,'0123456789','xxxxxxxxxx')!=.">[tpb116] Arabic numbers when @class="page-front" are not allowed</sch:report>
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 120:  Allow only pagenum before hx in levelx -->
+  <!-- Rule 120:  Allow only pagebreak before hx in section/article -->
   <sch:pattern id="dtbook_TPB_120">
     <sch:rule context="html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]">
       <sch:assert test="not(preceding-sibling::html:*) or preceding-sibling::html:*[tokenize(@epub:type,' ')='pagebreak']">[tpb120] Only pagebreaks are allowed before the heading
@@ -384,10 +379,11 @@
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 121:  pagenum in tables must not occur between table rows -->
+  <!-- Rule 121:  pagebreaks in tables must not occur between table rows -->
   <sch:pattern id="dtbook_TPB_121">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:table]">
-      <sch:assert test="not(parent::*[self::html:table or self::html:thead or self::html:tfoot or self::html:tbody or self::html:tr])">[tpb121] Page numbers in tables must not be placed between table rows.</sch:assert>
+      <sch:assert test="not(parent::*[self::html:table or self::html:thead or self::html:tfoot or self::html:tbody or self::html:tr])">[tpb121] Page numbers in tables must not be placed between table
+        rows.</sch:assert>
     </sch:rule>
   </sch:pattern>
 
@@ -409,13 +405,6 @@
     </sch:rule>-->
   </sch:pattern>
 
-  <!-- Rule 124 (106): All documents must have at least one pagenum -->
-  <sch:pattern id="dtbook_TPB_124">
-    <sch:rule context="html:body[not(html:nav)]">
-      <sch:assert test="count(//html:*[tokenize(@epub:type,' ')='pagebreak'])>=1">[tpb124] All documents in the spine must contain page numbers</sch:assert>
-    </sch:rule>
-  </sch:pattern>
-
   <!-- Rule 125 (109): Only allow images in JPG format -->
   <sch:pattern id="dtbook_TPB_125">
     <sch:rule context="html:img">
@@ -424,13 +413,13 @@
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 126: pagenum must not occur directly after hx unless the hx is preceded by a pagenum -->
+  <!-- Rule 126: pagebreak must not occur directly after hx unless the hx is preceded by a pagebreak -->
   <sch:pattern id="dtbook_TPB_126">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak']">
       <sch:report
         test="preceding-sibling::*[1][self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6] and
   		                  not(preceding-sibling::*[2][self::html:*[tokenize(@epub:type,' ')='pagebreak']])"
-        >[tpb126] pagenum must not occur directly after hx unless the hx is preceded by a pagenum</sch:report>
+        >[tpb126] pagebreak must not occur directly after hx unless the hx is preceded by a pagebreak</sch:report>
     </sch:rule>
   </sch:pattern>
 
@@ -480,9 +469,7 @@
   <!-- Rule 131 (35): Allowed values in xml:lang -->
   <sch:pattern id="dtbook_TPB_131">
     <sch:rule context="*[@xml:lang]">
-      <sch:assert
-        test="@xml:lang='sv' or @xml:lang='en' or @xml:lang='da' or @xml:lang='it' or @xml:lang='la' or @xml:lang='el' or @xml:lang='de' or @xml:lang='fr' or @xml:lang='es' or @xml:lang='fi' or @xml:lang='no' or @xml:lang='is'"
-        >[tpb131] xml:lang must be one of: 'sv', 'en', 'da', 'it', 'la', 'el', 'de', 'fr', 'es', 'fi', 'no' or 'is'</sch:assert>
+      <sch:assert test="matches(@xml:lang,'^[a-z][a-z](-[A-Z][A-Z]+)?$')">[tpb131] xml:lang must match '^[a-z][a-z](-[A-Z][A-Z]+)?$'</sch:assert>
     </sch:rule>
   </sch:pattern>
 
@@ -543,19 +530,19 @@
 
   <!-- Rule 140: Jacket copy must contain at least one prodnote, at most one of each @class value and no other elements -->
   <sch:pattern id="dtbook_TPB_140">
-    <sch:rule context="html:section[@class='cover']">
-      <sch:assert test="count(*)=count(html:aside[tokenize(@epub:type,' ')='z3998:production'])">[tpb140] Only prodnote allowed in jacket copy</sch:assert>
-      <sch:assert test="count(html:aside[tokenize(@epub:type,' ')='z3998:production'])>=1">[tpb140] There must be at least one prodnote in jacket copy</sch:assert>
-      <sch:report test="count(html:aside[tokenize(@epub:type,' ')='z3998:production'][@class='frontcover'])>1">[tpb140] Too many prodnotes with @class='frontcover' in jacket copy</sch:report>
-      <sch:report test="count(html:aside[tokenize(@epub:type,' ')='z3998:production'][@class='rearcover'])>1">[tpb140] Too many prodnotes with @class='rearcover' in jacket copy</sch:report>
-      <sch:report test="count(html:aside[tokenize(@epub:type,' ')='z3998:production'][@class='leftflap'])>1">[tpb140] Too many prodnotes with @class='leftflap' in jacket copy</sch:report>
-      <sch:report test="count(html:aside[tokenize(@epub:type,' ')='z3998:production'][@class='rightflap'])>1">[tpb140] Too many prodnotes with @class='rightflap' in jacket copy</sch:report>
+    <sch:rule context="html:body[tokenize(@epub:type,'\s+')='cover'] | html:section[tokenize(@epub:type,'\s+')='cover']">
+      <sch:assert test="count(*)=count(html:section)">[tpb140] Only prodnote allowed in jacket copy</sch:assert>
+      <sch:assert test="count(html:section)>=1">[tpb140] There must be at least one prodnote in jacket copy</sch:assert>
+      <sch:report test="count(html:section[@class='frontcover'])>1">[tpb140] Too many prodnotes with @class='frontcover' in jacket copy</sch:report>
+      <sch:report test="count(html:section[@class='rearcover'])>1">[tpb140] Too many prodnotes with @class='rearcover' in jacket copy</sch:report>
+      <sch:report test="count(html:section[@class='leftflap'])>1">[tpb140] Too many prodnotes with @class='leftflap' in jacket copy</sch:report>
+      <sch:report test="count(html:section[@class='rightflap'])>1">[tpb140] Too many prodnotes with @class='rightflap' in jacket copy</sch:report>
     </sch:rule>
   </sch:pattern>
 
   <!-- Rule 141: Prodnotes in jacket copy must contain text and have a @class=['frontcover', 'rearcover', 'leftflap' or 'rightflap'] -->
   <sch:pattern id="dtbook_TPB_141">
-    <sch:rule context="html:aside[tokenize(@epub:type,' ')='z3998:production'][parent::html:section[@class='cover']]">
+    <sch:rule context="html:section[tokenize(parent::*/@epub:type,' ')='cover']">
       <sch:assert test="@class='frontcover' or @class='rearcover' or @class='leftflap' or @class='rightflap'">[tpb141] prodnote in jacket copy must have a class attribute with one of 'frontcover',
         'rearcover', 'leftflap' or 'rightflap'</sch:assert>
     </sch:rule>
@@ -568,10 +555,10 @@
     </sch:rule>
   </sch:pattern>
 
-  <!-- Rule 143: Don't allow pagenum last in a list -->
+  <!-- Rule 143: Don't allow pagebreak last in a list -->
   <sch:pattern id="dtbook_TPB_143">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:*[self::html:ul or self::html:ol]]">
-      <sch:report test="not(following-sibling::*)">[tpb143] pagenum is not allowed last in a list</sch:report>
+      <sch:report test="not(following-sibling::*)">[tpb143] pagebreak is not allowed last in a list</sch:report>
     </sch:rule>
   </sch:pattern>
 
@@ -579,7 +566,7 @@
   <sch:pattern id="epub_nordic_200">
     <sch:rule context="html:title">
       <sch:assert test="text() and not(normalize-space(.)='')">[nordic200] The title element must not be empty.</sch:assert>
-      <sch:assert test="normalize-space(.) = normalize-space((//html:h1)[1])">[nordic200] The title element must contain the same text as the first headline in the document.</sch:assert>
+      <!--<sch:assert test="normalize-space(.) = normalize-space((//html:h1)[1])">[nordic200] The title element must contain the same text as the first headline in the document.</sch:assert>-->
     </sch:rule>
   </sch:pattern>
 
@@ -601,17 +588,21 @@
   <sch:pattern id="epub_nordic_208">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='bodymatter']">
       <!-- types can be prologue, preface, part, chapter, conclusion, epilogue -->
-      <sch:assert test="tokenize(@epub:type,' ')=('prologue','preface','part','chapter','conclusion','epilogue')">[nordic208] top-level sectioning elements with the type "bodymatter" must also have
-        one of the types "prologue", "preface", "part", "chapter", "conclusion" or "epilogue"</sch:assert>
+      <sch:assert
+        test="tokenize(@epub:type,' ')=('acknowledgments','afterword','appendix','assessment','bibliography','z3998:biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue','errata','z3998:filmography','footnotes','foreword','z3998:glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works','z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','standard','subchapter','z3998:subsection','titlepage','toc','z3998:translator-note','volume','warning')"
+        >[nordic208] top-level sectioning elements with the type "bodymatter" must also have one of the types
+        'acknowledgments','afterword','appendix','assessment','bibliography','z3998:biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue','errata','z3998:filmography','footnotes','foreword','z3998:glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works','z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','standard','subchapter','z3998:subsection','titlepage','toc','z3998:translator-note','volume','warning'</sch:assert>
     </sch:rule>
   </sch:pattern>
 
   <!-- Rule 211: bodymatter.part -->
   <sch:pattern id="epub_nordic_211">
-    <sch:rule context="html:*[self::html:section or self::html:article][parent::html:section[tokenize(@epub:type,' ')='part']]">
+    <sch:rule context="html:*[self::html:section or self::html:article][parent::html:section[tokenize(@epub:type,' ')=('part','volume')]]">
       <!-- types can be prologue, preface, chapter, conclusion, epilogue -->
-      <sch:assert test="tokenize(@epub:type,' ')=('prologue','preface','part','chapter','conclusion','epilogue')">[nordic208] top-level sectioning elements inside sectioning elements with the type
-        "part" must have one of the types "prologue", "preface", "chapter", "conclusion" or "epilogue"</sch:assert>
+      <sch:assert
+        test="tokenize(@epub:type,' ')=('acknowledgments','afterword','appendix','assessment','bibliography','z3998:biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue','errata','z3998:filmography','footnotes','foreword','z3998:glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works','z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','standard','subchapter','z3998:subsection','titlepage','toc','z3998:translator-note','volume','warning')"
+        >[nordic208] top-level sectioning elements inside sectioning elements with the type "part" must have one of the types:
+        'acknowledgments','afterword','appendix','assessment','bibliography','z3998:biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue','errata','z3998:filmography','footnotes','foreword','z3998:glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works','z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','standard','subchapter','z3998:subsection','titlepage','toc','z3998:translator-note','volume','warning'</sch:assert>
     </sch:rule>
   </sch:pattern>
 
@@ -632,23 +623,24 @@
   <!-- Rule 225: pagebreak -->
   <sch:pattern id="epub_nordic_225">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak' and text()]">
+      <!-- TODO: is this right? -->
       <sch:assert test="matches(@title,'.+')">[nordic225] The title attribute must be used to describe the page number.</sch:assert>
     </sch:rule>
   </sch:pattern>
 
   <!-- Rule 229: attlist.prodnote -->
-  <sch:pattern id="epub_nordic_229">
-    <sch:rule context="html:aside[tokenize(@epub:type,' ')='z3998:production']">
+  <!--<sch:pattern id="epub_nordic_229">
+    <sch:rule context="html:*[tokenize(@epub:type,' ')='z3998:production']">
       <sch:assert test="tokenize(@class,' ')=('render-required','render-optional')">[nordic229] Prodnotes must have either a 'render-required' or a 'render-optional' class.</sch:assert>
     </sch:rule>
-  </sch:pattern>
+  </sch:pattern>-->
 
   <!-- Rule 231: attlist.sidebar -->
-  <sch:pattern id="epub_nordic_231">
+  <!--<sch:pattern id="epub_nordic_231">
     <sch:rule context="html:section[tokenize(@epub:type,' ')='sidebar']">
-      <sch:assert test="tokenize(@class,' ')=('render-required','render-optional')">[nordic229] Sidebars must have either a 'render-required' or a 'render-optional' class.</sch:assert>
+      <sch:assert test="tokenize(@class,' ')=('render-required','render-optional')">[nordic231] Sidebars must have either a 'render-required' or a 'render-optional' class.</sch:assert>
     </sch:rule>
-  </sch:pattern>
+  </sch:pattern>-->
 
   <!-- Rule 246: doctitle - p -->
   <sch:pattern id="epub_nordic_246">
@@ -684,21 +676,19 @@
   <!-- Rule 253: figures and captions -->
   <sch:pattern id="epub_nordic_253">
     <sch:rule context="html:figure">
+      <sch:assert test="tokenize(@epub:type,'\s+')='sidebar' or tokenize(@class,'\s+')=('image','image-series')">[nordic253] Figures must either have an epub:type of "sidebar" or a class of "image" or
+        "image-series".</sch:assert>
+      <sch:assert test="count((.[tokenize(@epub:type,'\s+')='sidebar'], .[tokenize(@class,'\s+')='image'], .[tokenize(@class,'\s+')='image-series'])) = 1">[nordic253] Figures must either have an
+        epub:type of "sidebar" or a class of "image" or "image-series".</sch:assert>
+
       <sch:assert test="count(html:figcaption) &lt;= 1">[nordic253] There cannot be more than one figure caption in a single figure element.</sch:assert>
-      <sch:assert test="not(html:img and html:figure)">[nordic253] Figures cannot contain both a figure and a img.</sch:assert>
-      <sch:assert test="not(html:figcaption and html:figure)">[nordic253] Figures cannot contain both a figure and a figcaption.</sch:assert>
-      <sch:assert test="html:img or html:figure">[nordic253] Figures must contain either an img element or one or more figure elements (sub-figures).</sch:assert>
     </sch:rule>
-    <sch:rule context="html:figure[not(.//html:figure)]">
-      <sch:assert test="count(.//html:img) = 1">[nordic253] Figures without sub-figures must contain exactly one img.</sch:assert>
+    <sch:rule context="html:figure[tokenize(@class,'\s+')='image']">
+      <sch:assert test="count(.//html:img) = 1">[nordic253] Image figures must contain exactly one img.</sch:assert>
+      <sch:assert test="count(html:img) = 1">[nordic253] The img in image figures must be a direct child of the figure.</sch:assert>
     </sch:rule>
-    <sch:rule context="html:figure[.//html:figure]">
-      <sch:assert test="count(html:img) = 0">[nordic253] Figures with sub-figures cannot contain img childen.</sch:assert>
-    </sch:rule>
-    <sch:rule context="html:figure[ancestor::html:figure]">
-      <sch:assert test="count(ancestor::html:figure)">[nordic253] Figures cannot be nested more than two levels deep.</sch:assert>
-      <sch:assert test="count(html:img) = 1">[nordic253] Figures that are nested must contain an img.</sch:assert>
-      <sch:assert test="count(html:figure) = 0">[nordic253] Figures that are nested cannot contain a figure.</sch:assert>
+    <sch:rule context="html:figure[tokenize(@class,'\s+')='image-series']">
+      <sch:assert test="count(html:img) = 0">[nordic253] Image series figures cannot contain img childen (the img elements must be contained in children figure elements).</sch:assert>
     </sch:rule>
   </sch:pattern>
 
@@ -709,5 +699,14 @@
         z3998:production, sidebar, note, annotation, epigraph</sch:assert>
     </sch:rule>
   </sch:pattern>
-  
+
+  <!-- Rule 255: abbr types -->
+  <sch:pattern id="epub_nordic_255">
+    <sch:rule context="html:abbr">
+      <sch:assert test="tokenize(@epub:type,' ') = ('z3998:acronym','z3998:initialism','z3998:truncation')">[nordic255] "abbr" elements must use one of the following epub:types: z3998:acronym (formed
+        from the first part of a word: "Mr.", "approx.", "lbs.", "rec'd"), z3998:initialism (each letter pronounced separately: "XML", "US"), z3998:truncation (pronounced as a word:
+        "NATO").</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+
 </sch:schema>

@@ -7,9 +7,9 @@
     <head>
         <meta name="dtb:uid" content="C00000"/>
         <meta name="dc:Title" content="Valentin Haüy - the father of the education for the blind"/>
+        <meta name="dc:Identifier" content="C00000"/>
         <meta name="track:Guidelines" content="2011-2"/>
         <meta name="track:Supplier" content="MTM"/>
-        <meta name="dc:Identifier" content="C00000"/>
         <meta name="dc:Creator" content="Beatrice Christensen Sköld"/>
         <meta name="dc:Language" content="en"/>
         <meta name="dc:Source" content="urn:isbn:123456789"/>
@@ -26,7 +26,7 @@
                 <h1>Valentin Haüy - the father of the education for the blind</h1>
                 <p>
                     <span id="dtb4">Published by the Swedish Library of Talking Books and Braille (<span title="The Swedish Library of Talking Books and Braille" id="d910e49"
-                            class="acronym spell-out">MTM</span>).</span>
+                            class="initialism">MTM</span>).</span>
                 </p>
                 <imggroup id="d910e54">
                     <img id="d910e56" src="valentin.jpg" alt="image"/>
@@ -325,7 +325,7 @@
                     <h2 id="d910e619">Preface</h2>
                     <p>
                         <span id="dtb113">During my 19 years at the Swedish Library of Talking Books and Braille (<span title="The Swedish Library of Talking Books and Braille" id="d910e629"
-                                class="acronym spell-out">MTM</span>), I have frequently been asked about the history of the Braille system and these questions were really what motivated my research
+                                class="initialism">MTM</span>), I have frequently been asked about the history of the Braille system and these questions were really what motivated my research
                             into the life of Louis Braille, the inventor of the system of writing for the blind which was named after him. </span>
                         <span id="dtb114">My investigations revealed that Louis Braille himself would have had almost no schooling at all if it had not been for Valentin Haüy, the father of
                             education for the blind.</span>
@@ -365,7 +365,7 @@
                 <h1 id="d910e696">1. Research questions</h1>
                 <p>
                     <span id="dtb128">My interest in Valentin Haüy, the father of education for the blind in Europe, was aroused while working at <span
-                            title="The Swedish Library of Talking Books and Braille" id="d910e709" class="acronym spell-out">MTM</span> on a book about Louis Braille, the creator of the Braille
+                            title="The Swedish Library of Talking Books and Braille" id="d910e709" class="initialism">MTM</span> on a book about Louis Braille, the creator of the Braille
                         system. </span>
                     <span id="dtb129">I discovered that there was a dearth of literature on Haüy in Swedish, and that in the limited literature I was able to consult, information about him was
                         often contradictory. </span>
@@ -491,7 +491,7 @@
                     <span id="dtb193">To illustrate Haüy's influence on the development of education for the blind in other countries, I have chosen D.G. </span>
                     <span id="dtb194">Pritchard's Education and the Handicapped 1760-1960 (1963) as my main source since it is considered a standard work. </span>
                     <span id="dtb195">My sources on the work of pioneers in the education of the blind in Sweden are O.E. </span>
-                    <span id="dtb196">Borg's Minnen från den svenska blindundervisningens <span id="d910e1000" class="num-word">70-års</span> jubileum den 21 maj 1883, Kjell-åke Johanssons
+                    <span id="dtb196">Borg's Minnen från den svenska blindundervisningens <span id="d910e1000">70-års</span> jubileum den 21 maj 1883, Kjell-åke Johanssons
                         research report Om blindundervisningen i Sverige från 1809 (1974) and Staffan Förhammar's doctoral thesis Från tärande till närande (1991).</span>
                 </p>
                 <p>
@@ -1076,7 +1076,7 @@
                     </p>
                     <p>
                         <span id="dtb495">At the end of the revolutionary decade, the institute was bankrupt. </span>
-                        <span id="dtb496">The State owed the institute <span id="d910e2310" class="num-with-space">30 000</span> francs, apart from nine months' salary to teachers and other
+                        <span id="dtb496">The State owed the institute <span id="d910e2310">30 000</span> francs, apart from nine months' salary to teachers and other
                             staff. </span>
                         <span id="dtb497">Teachers and pupils alike starved and froze. </span>
                         <span id="dtb498">Haüy lodged a complaint with the consular government but this was rejected outright; no money was forthcoming. </span>
@@ -1203,17 +1203,17 @@
                                 mankind in general.</span>
                         </p>
                         <p>
-                            <span id="dtb562">Haüy asked his imperial highness for an annual salary of at least <span id="d910e2586" class="num-with-space">40 000</span> roubles, of which
+                            <span id="dtb562">Haüy asked his imperial highness for an annual salary of at least <span id="d910e2586">40 000</span> roubles, of which
                                 half would be paid in advance when Haüy began his work. </span>
                             <span id="dtb563">He also asked the crown to provide, at no cost to himself, a furnished house, light and fuel.</span>
                         </p>
                         <pagenum id="page_16" page="normal">16</pagenum>
                         <p>
-                            <span id="dtb564">Finally, he asked for <span id="d910e2601" class="num-with-space">2 000</span> roubles in advance, as travel allowance for himself and his blind
+                            <span id="dtb564">Finally, he asked for <span id="d910e2601">2 000</span> roubles in advance, as travel allowance for himself and his blind
                                 pupil. </span>
                             <span id="dtb565">Haüy did not ask for travel allowances for his wife and son, who accompanied him to Russia. </span>
-                            <span id="dtb566">He estimated the costs of inventories, including teaching material such as maps and a globe, at <span id="d910e2610" class="num-with-space">4
-                                    500</span> francs and the annual operating costs, including salaries, at <span id="d910e2613" class="num-with-space">54 700</span> francs. </span>
+                            <span id="dtb566">He estimated the costs of inventories, including teaching material such as maps and a globe, at <span id="d910e2610">4
+                                    500</span> francs and the annual operating costs, including salaries, at <span id="d910e2613">54 700</span> francs. </span>
                             <span id="dtb567">The institute should be staffed by three teachers, one of them a music teacher, and a manager for the printing works.</span>
                         </p>
                         <p>
@@ -1398,8 +1398,8 @@
                         <p>
                             <span id="dtb656">Once again Haüy asked to be allowed to select some blind children from the Smolny asylum as pupils. </span>
                             <span id="dtb657">Skrébitsky states that he found no answer to this letter, although he did discover a decision by the tsar, dated 10th August 1807, giving Haüy
-                                permission to teach 15 pupils at an annual cost of <span id="d910e2986" class="num-with-space">14 150</span> roubles with an extra allowance of <span
-                                    id="d910e2989" class="num-with-space">5 185</span> roubles, but this did not solve Haüy's problems. </span>
+                                permission to teach 15 pupils at an annual cost of <span id="d910e2986">14 150</span> roubles with an extra allowance of <span
+                                    id="d910e2989">5 185</span> roubles, but this did not solve Haüy's problems. </span>
                             <span id="dtb658">Now the authorities concerned began to harass him and demand that he should deduct the amount granted from what he had previously received. </span>
                             <span id="dtb659">In addition, a heated debate ensued on the carriage required by Haüy to transport his purchases to the institute. </span>
                             <span id="dtb660">The discussion ended when the tsar ordered General Hitrowo to tell Haüy to conduct himself in a proper manner.</span>
@@ -2004,7 +2004,7 @@
                     <span id="dtb958">Haüy was also a utilitarian (a term coined by Jeremy Bentham). </span>
                     <span id="dtb959">He believed wholeheartedly that the blind should taught to be self-sufficient. </span>
                     <span id="dtb960">This utilitarian view characterised teaching of the blind for a long time and is still the basis of education for the blind in the <span
-                            title="United States of America" id="d910e4274" class="acronym spell-out">USA</span>, Canada and several Asian countries where the aim of the education for the blind
+                            title="United States of America" id="d910e4274" class="initialism">USA</span>, Canada and several Asian countries where the aim of the education for the blind
                         is that they should eventually be able to fend for themselves in life. </span>
                     <span id="d910e4278">
                         <span id="dtb961">Haüy does not stand alone amongst his contemporaries in taking this utilitarian view of education for the visually impaired: it was characteristic of all
@@ -2114,7 +2114,7 @@
                     <span id="dtb1012">Underlying this policy is a belief in equality and fraternity, two of the fundamental values of the Enlightenment. </span>
                     <span id="dtb1013">The Swedish government recently presented the draft of a proposed law (pro. 1999/2000:79) to the Riksdag: Från patient till medborgare - en nationell
                         handlingsplan för handikappolitiken (From patient to citizen - a national policy for the handicapped). </span>
-                    <span id="dtb1014">This was a consequence of Sweden's adoption of the <span title="United Nations" id="d910e4503" class="acronym spell-out">UN</span> standard legislation
+                    <span id="dtb1014">This was a consequence of Sweden's adoption of the <span title="United Nations" id="d910e4503" class="initialism">UN</span> standard legislation
                         on the right of the handicapped to participation and equality and other amendments to the Declaration of Human Rights. </span>
                     <span id="dtb1015">Haüy's ideas on integration and participation in society were thus strikingly modern.</span>
                 </p>
@@ -2671,7 +2671,7 @@
                     </p>
                     <p>
                         <span id="dtb1136">Förhammar, Staffan. (1991) Från tärande till närande. </span>
-                        <span id="dtb1137">Handikapputbildningens bakgrund och socialpolitiska funktion i <span id="d910e5547" class="num-word">1800-talets</span> Sverige. </span>
+                        <span id="dtb1137">Handikapputbildningens bakgrund och socialpolitiska funktion i <span id="d910e5547">1800-talets</span> Sverige. </span>
                         <span id="dtb1138">Stockholm Studies in History 43, Doktorsavhandling. </span>
                         <span id="dtb1139">Acta Universitatis Stockholmiensis, Stockholm: A&amp;W International</span>
                     </p>

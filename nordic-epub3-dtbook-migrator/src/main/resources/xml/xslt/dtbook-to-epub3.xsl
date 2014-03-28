@@ -66,7 +66,7 @@
         <xsl:variable name="showin" select="for $s in (@showin) return concat('showin-',$s)"/>
         <xsl:variable name="old-classes" select="tokenize(@class,'\s+')"/>
 
-        <!-- assume that non-standard classes are fixed before running this XSLT (for instance, 'jacketcopy' => 'cover' and 'endnote' => 'rearnote') -->
+        <!-- non-standard classes are assumed to be already fixed before running this XSLT (for instance, 'jacketcopy' => 'cover' and 'endnote' => 'rearnote') -->
         <xsl:variable name="epub-types">
             <xsl:for-each select="$old-classes">
                 <xsl:sequence select="if (.=$vocab-default) then . else if (.=$vocab-z3998) then concat('z3998:',.) else ()"/>
@@ -127,13 +127,14 @@
                 <xsl:value-of select="string((dtbook:meta[matches(@name,'dc:title','i')])[1]/@content)"/>
             </title>
             <meta name="viewport" content="width=device-width"/>
+            <meta name="dc:identifier" content="{string((dtbook:meta[matches(@name,'dtb:uid')])[1]/@content)}"/>
             <meta name="nordic:guidelines" content="2015-1"/>
             <xsl:for-each select="dtbook:meta[starts-with(@name,'track:') and not(@name='track:Guidelines')]">
-                <meta name="nordic:{substring-after(@name,'track:')}" content="{@content}"/>
+                <meta name="nordic:{lower-case(substring-after(@name,'track:'))}" content="{@content}"/>
             </xsl:for-each>
             <xsl:call-template name="headmisc"/>
             <style type="text/css" xml:space="preserve"><![CDATA[
-                .pronounce-no{
+                .initialism{
                     -epub-speak-as:spell-out;
                 }
                 .list-preformatted{
@@ -250,10 +251,14 @@
     </xsl:template>
 
     <xsl:template match="dtbook:meta">
-        <xsl:if test="matches(@name,'dc:title','i') or starts-with(@name,'track:')"/>
-        <meta>
-            <xsl:call-template name="attlist.meta"/>
-        </meta>
+        <xsl:choose>
+            <xsl:when test="matches(@name,'dc:title','i') or matches(@name,'dc:identifier','i') or starts-with(@name,'track:')"/>
+            <xsl:otherwise>
+                <meta>
+                    <xsl:call-template name="attlist.meta"/>
+                </meta>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.meta">
@@ -474,10 +479,20 @@
     </xsl:template>
 
     <xsl:template match="dtbook:prodnote">
-        <aside>
-            <xsl:call-template name="attlist.prodnote"/>
-            <xsl:apply-templates select="node()"/>
-        </aside>
+        <xsl:choose>
+            <xsl:when test="parent::*[tokenize(@class,'\s+')='cover']">
+                <section>
+                    <xsl:call-template name="attlist.prodnote"/>
+                    <xsl:apply-templates select="node()"/>
+                </section>
+            </xsl:when>
+            <xsl:otherwise>
+                <aside>
+                    <xsl:call-template name="attlist.prodnote"/>
+                    <xsl:apply-templates select="node()"/>
+                </aside>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.prodnote">
@@ -492,16 +507,25 @@
     </xsl:template>
 
     <xsl:template match="dtbook:sidebar">
-        <aside>
-            <xsl:call-template name="attlist.sidebar"/>
-            <xsl:apply-templates select="node()"/>
-        </aside>
+        <xsl:choose>
+            <xsl:when test="@render='required'">
+                <figure>
+                    <xsl:call-template name="attlist.sidebar"/>
+                    <xsl:apply-templates select="node()"/>
+                </figure>
+            </xsl:when>
+            <xsl:otherwise>
+                <aside>
+                    <xsl:call-template name="attlist.sidebar"/>
+                    <xsl:apply-templates select="node()"/>
+                </aside>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.sidebar">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'sidebar'" tunnel="yes"/>
-            <xsl:with-param name="classes" select="if (@render) then concat('render-',@render) else ()" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -708,7 +732,7 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <xsl:template match="dtbook:abbr">
+    <xsl:template match="dtbook:abbr | dtbook:span[@class='truncation']">
         <abbr>
             <xsl:call-template name="attlist.abbr"/>
             <xsl:apply-templates select="node()"/>
@@ -728,8 +752,8 @@
 
     <xsl:template name="attlist.acronym">
         <xsl:call-template name="attrs">
-            <xsl:with-param name="types" select="'z3998:acronym'" tunnel="yes"/>
-            <xsl:with-param name="classes" select="if (@pronounce='no') then 'pronounce-no' else ()" tunnel="yes"/>
+            <xsl:with-param name="types" select="if (@pronounce='no') then 'z3998:initialism' else 'z3998:acronym'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="if (@pronounce='no') then 'initialism' else ()" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -890,9 +914,98 @@
     <xsl:template match="dtbook:imggroup">
         <figure>
             <xsl:call-template name="attlist.imggroup"/>
+            
+            <xsl:variable name="imggroup-captions" select="dtbook:img[1]/preceding-sibling::dtbook:caption[1]/(. | preceding-sibling::node()[not(self::text())])"/>
+            <xsl:variable name="imggroup-trailing-content" select="if ($imggroup-captions) then ($imggroup-captions[last()]/following-sibling::node()[not(self::text())] intersect dtbook:img[1]/preceding-sibling::node()[not(self::text())]) else dtbook:img[1]/preceding-sibling::node()[not(self::text())]"/>
+            <xsl:choose>
+                <xsl:when test="not($imggroup-captions[self::dtbook:caption])">
+                    <xsl:apply-templates select="$imggroup-captions"/>
+                </xsl:when>
+                <xsl:when test="count($imggroup-captions) = 1">
+                    <figcaption>
+                        <xsl:for-each select="$imggroup-captions[self::*][1]">
+                            <xsl:call-template name="attlist.caption"/>
+                        </xsl:for-each>
+                        <xsl:apply-templates select="$imggroup-captions"/>
+                    </figcaption>
+                </xsl:when>
+                <xsl:when test="count($imggroup-captions) &gt; 1">
+                    <figcaption>
+                        <xsl:for-each select="$imggroup-captions">
+                            <div>
+                                <xsl:call-template name="attlist.caption"/>
+                                <xsl:apply-templates select="."/>
+                            </div>
+                        </xsl:for-each>
+                    </figcaption>
+                </xsl:when>
+            </xsl:choose>
+            <xsl:apply-templates select="$imggroup-trailing-content"/>
+            
+            <xsl:for-each select="dtbook:img">
+                <xsl:variable name="captions" select="if (not(following-sibling::dtbook:caption)) then () else following-sibling::node()[not(self::text())] intersect (if (following-sibling::dtbook:img) then (following-sibling::dtbook:img[1]/preceding-sibling::dtbook:caption[1]/(. | preceding-sibling::node()[not(self::text())])) else (following-sibling::dtbook:caption[last()]/(. | preceding-sibling::node()[not(self::text())])))"/>
+                <xsl:variable name="trailing-content" select="(if ($captions) then $captions[last()] else .)/following-sibling::node()[not(self::text())] intersect (if (following-sibling::dtbook:img) then following-sibling::dtbook:img[1]/preceding-sibling::node()[not(self::text())] else following-sibling::node())"/>
+                <figure class="image">
+                    <xsl:apply-templates select="."/>
+                    <xsl:choose>
+                        <xsl:when test="count($captions[self::*]) = 1">
+                            <figcaption>
+                                <xsl:for-each select="$captions">
+                                    <xsl:call-template name="attlist.caption"/>
+                                    <xsl:apply-templates select="."/>
+                                </xsl:for-each>
+                            </figcaption>
+                        </xsl:when>
+                        <xsl:when test="count($captions[self::*]) &gt; 1">
+                            <figcaption>
+                                <xsl:for-each select="$captions">
+                                    <xsl:choose>
+                                        <xsl:when test="self::dtbook:caption">
+                                            <div>
+                                                <xsl:call-template name="attlist.caption"/>
+                                                <xsl:apply-templates select="."/>
+                                            </div>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:apply-templates select="."/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:for-each>
+                            </figcaption>
+                        </xsl:when>
+                    </xsl:choose>
+                </figure>
+                <xsl:apply-templates select="$trailing-content"/>
+            </xsl:for-each>
+            
+            <!--<oneOrMore>
+                <element name="figure">
+                    <ref name="attlist.imggroup"/>
+                    <zeroOrMore>
+                        <choice>
+                            <ref name="pagenum"/> <!-\- span -\->
+                            <ref name="prodnote"/> <!-\- aside -\->
+                        </choice>
+                    </zeroOrMore>
+                    
+                    <ref name="img"/> <!-\- img -\->
+                    <optional>
+                        <ref name="caption.figure"/> <!-\- figcaption -\->
+                    </optional>
+                </element>
+                
+                <zeroOrMore>
+                    <choice>
+                        <ref name="pagenum"/> <!-\- span -\->
+                        <ref name="prodnote"/> <!-\- aside -\->
+                    </choice>
+                </zeroOrMore>
+            </oneOrMore>
+            
+            
             <xsl:choose>
                 <xsl:when test="dtbook:img[1]/preceding-sibling::dtbook:caption">
-                    <!-- put figcaption first -->
+                    <!-\- put figcaption first -\->
                     <figcaption>
                         <xsl:for-each select="dtbook:img">
                             <div class="img-caption">
@@ -913,7 +1026,7 @@
                 </xsl:when>
 
                 <xsl:when test="dtbook:caption">
-                    <!-- put figcaption last -->
+                    <!-\- put figcaption last -\->
                     <xsl:apply-templates select="dtbook:prodnote|dtbook:img|dtbook:pagenum|comment()"/>
                     <figcaption>
                         <xsl:for-each select="dtbook:img">
@@ -933,16 +1046,18 @@
                     </figcaption>
                 </xsl:when>
 
-                <!-- no caption -->
+                <!-\- no caption -\->
                 <xsl:otherwise>
                     <xsl:apply-templates select="dtbook:prodnote|dtbook:img|dtbook:pagenum|comment()"/>
                 </xsl:otherwise>
-            </xsl:choose>
+            </xsl:choose>-->
         </figure>
     </xsl:template>
 
     <xsl:template name="attlist.imggroup">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="classes" select="'image-series'" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="dtbook:p">
@@ -1486,11 +1601,11 @@
         <xsl:variable name="id">
             <xsl:choose>
                 <xsl:when test="$element[self::dtbook:blockquote or self::dtbook:q]">
-                    <xsl:sequence select="concat('quote_',count($element/preceding::*[self::dtbook:blockquote or self::dtbook:q])+1)"/>
+                    <xsl:sequence select="concat('quote_',count($element/(ancestor::*|preceding::*)[self::dtbook:blockquote or self::dtbook:q])+1)"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:variable name="element-name" select="local-name($element)"/>
-                    <xsl:sequence select="concat($element-name,'_',count($element/preceding::*[local-name()=$element-name])+1)"/>
+                    <xsl:sequence select="concat($element-name,'_',count($element/(ancestor::*|preceding::*)[local-name()=$element-name])+1)"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
