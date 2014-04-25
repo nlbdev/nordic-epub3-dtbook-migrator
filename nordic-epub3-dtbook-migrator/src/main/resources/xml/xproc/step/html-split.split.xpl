@@ -17,7 +17,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <px:fileset-load media-types="application/xhtml+xml" method="xml">
+    <px:fileset-load media-types="application/xhtml+xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
@@ -64,12 +64,13 @@
         <p:add-attribute match="//d:file" attribute-name="omit-xml-declaration" attribute-value="false"/>
         <p:add-attribute match="//d:file" attribute-name="version" attribute-value="1.0"/>
         <p:add-attribute match="//d:file" attribute-name="encoding" attribute-value="utf-8"/>
-        <p:add-attribute match="//d:file" attribute-name="method" attribute-value="xml"/>
+        <p:add-attribute match="//d:file" attribute-name="method" attribute-value="xhtml"/>
+        <p:add-attribute match="//d:file" attribute-name="indent" attribute-value="true"/>
         <p:identity name="for-each.fileset"/>
     </p:for-each>
     <p:identity name="in-memory.html"/>
 
-    <px:fileset-load not-media-types="application/xhtml+xml" load-if-not-in-memory="false" method="xml">
+    <px:fileset-load not-media-types="application/xhtml+xml" load-if-not-in-memory="false">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>

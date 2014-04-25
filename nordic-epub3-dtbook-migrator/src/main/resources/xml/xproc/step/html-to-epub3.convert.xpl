@@ -48,13 +48,13 @@
     <px:fileset-filter media-types="application/xhtml+xml"/>
     <p:identity name="spine"/>
 
-    <px:fileset-load name="spine-html" method="xml">
+    <px:fileset-load name="spine-html">
         <p:input port="in-memory">
             <p:pipe port="in-memory.out" step="html-split.moved"/>
         </p:input>
     </px:fileset-load>
 
-    <px:fileset-load media-types="application/xhtml+xml" method="xml">
+    <px:fileset-load media-types="application/xhtml+xml">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
@@ -280,7 +280,8 @@
     </px:fileset-join>
     <p:add-attribute match="//d:file[@href='META-INF/container.xml']" attribute-name="media-type" attribute-value="application/xml"/>
     <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="omit-xml-declaration" attribute-value="false"/>
-    <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="method" attribute-value="xml"/>
+    <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="method" attribute-value="xhtml"/>
+    <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="indent" attribute-value="true"/>
     <p:identity name="result.fileset"/>
     <p:sink/>
 

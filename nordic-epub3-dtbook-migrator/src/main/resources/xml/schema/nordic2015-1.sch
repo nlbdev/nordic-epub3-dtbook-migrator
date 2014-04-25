@@ -80,7 +80,7 @@
         backmatter on any of its sectioning elements other than the top-level elements that has body as its parent</sch:assert>
     </sch:rule>
     <sch:rule context="html:body[not(html:header|html:nav)]">
-      <sch:assert test="tokenize(@epub:type,' ')=('frontmatter','bodymatter','backmatter')">[tpb13] The document must have either frontmatter, bodymatter or backmatter as epub:type on its body
+      <sch:assert test="tokenize(@epub:type,' ')=('cover','frontmatter','bodymatter','backmatter')">[tpb13] The document must have either frontmatter, bodymatter or backmatter as epub:type on its body
         element</sch:assert>
     </sch:rule>
     <sch:rule context="html:*[self::html:section or self::html:article][ancestor::html:body[not(html:header|html:nav)]]">
@@ -256,7 +256,8 @@
       <sch:report test="not(lang('sv') or lang('en')) and not(@alt)">[tpb50] an image inside a figure with class='image' must have a non-empty alt attribute</sch:report>
     </sch:rule>
     <sch:rule context="html:img[not(parent::html:figure/tokenize(@class,'\s+')='image')]">
-      <sch:report test="string(@alt)!=''">[tpb50] an image which is not inside a figure with class='image' is irrelevant or redundant with regards to the understanding of the book, so the alt attribute must be present but empty</sch:report>
+      <sch:report test="string(@alt)!=''">[tpb50] an image which is not inside a figure with class='image' is irrelevant or redundant with regards to the understanding of the book, so the alt
+        attribute must be present but empty</sch:report>
     </sch:rule>
   </sch:pattern>
 
@@ -643,12 +644,12 @@
   </sch:pattern>-->
 
   <!-- Rule 246: doctitle - p -->
-  <sch:pattern id="epub_nordic_246">
+  <!--<sch:pattern id="epub_nordic_246">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='fulltitle']">
       <sch:assert test="self::html:h1">[nordic246] The fulltitle (doctitle) must be a h1 element.</sch:assert>
       <sch:assert test="parent::html:header[parent::html:body]">[nordic246] The fulltitle (doctitle) must be inside a header element which must be inside the body element.</sch:assert>
     </sch:rule>
-  </sch:pattern>
+  </sch:pattern>-->
 
   <!-- Rule 247: doctitle.headline - h1 -->
   <sch:pattern id="epub_nordic_247">
@@ -706,6 +707,13 @@
       <sch:assert test="tokenize(@epub:type,' ') = ('z3998:acronym','z3998:initialism','z3998:truncation')">[nordic255] "abbr" elements must use one of the following epub:types: z3998:acronym (formed
         from the first part of a word: "Mr.", "approx.", "lbs.", "rec'd"), z3998:initialism (each letter pronounced separately: "XML", "US"), z3998:truncation (pronounced as a word:
         "NATO").</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+
+  <!-- Rule 256: HTML documents with only a headline -->
+  <sch:pattern id="epub_nordic_256">
+    <sch:rule context="html:body[*[last()]/self::html:h1 and *[position() &lt; last()]/self::html:div and tokenize(@epub:type,'\s+')='bodymatter']">
+      <sch:assert test="tokenize(@epub:type,'\s+')='part'">[nordic256] In bodymatter, documents only containing a headline are only allowed when epub:type="part".</sch:assert>
     </sch:rule>
   </sch:pattern>
 

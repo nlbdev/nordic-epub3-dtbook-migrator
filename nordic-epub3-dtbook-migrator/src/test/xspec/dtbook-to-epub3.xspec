@@ -1111,21 +1111,35 @@
     <!-- pagenum -->
     <x:scenario label="when processing a pagenum element">
         <x:context>
-            <dtbook:pagenum>1</dtbook:pagenum>
+            <dtbook:div>
+                <dtbook:pagenum>1</dtbook:pagenum>
+                <dtbook:p>
+                    <dtbook:pagenum>2</dtbook:pagenum>
+                </dtbook:p>
+            </dtbook:div>
         </x:context>
         <x:expect
-            label="the resulting element should be a span with an added epub:type of pagebreak, the page attribute converted into a class and the contents of the element moved into its title attribute">
-            <html:span class="page-normal" epub:type="pagebreak" title="1"/>
+            label="the resulting element should be a span for inline contexts or a div otherwise. An epub:type of pagebreak should be added, the page attribute should be converted into a class and the contents of the element moved into its title attribute">
+            <html:div>
+                <html:div class="page-normal" epub:type="pagebreak" title="1"/>
+                <html:p>
+                    <html:span class="page-normal" epub:type="pagebreak" title="2"/>
+                </html:p>
+            </html:div>
         </x:expect>
     </x:scenario>
 
     <!-- attlist.pagenum -->
     <x:scenario label="when processing the pagenum element attributes">
         <x:context>
-            <dtbook:pagenum title="old title" page="special">2</dtbook:pagenum>
+            <dtbook:span>
+                <dtbook:pagenum title="old title" page="special">2</dtbook:pagenum>
+            </dtbook:span>
         </x:context>
         <x:expect label="the title attribute should be overwritten by the text node child of pagenum, the page attribute should be converted to a class">
-            <html:span class="page-special" epub:type="pagebreak" title="2"/>
+            <html:span>
+                <html:span class="page-special" epub:type="pagebreak" title="2"/>
+            </html:span>
         </x:expect>
     </x:scenario>
 
@@ -2133,8 +2147,8 @@
                 </dtbook:dl>
             </x:context>
             <x:expect label="the resulting element should be dl">
-                <html:span epub:type="pagebreak" title="1" class="page-normal"/>
-                <html:span epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="1" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="2" class="page-normal"/>
                 <html:dl id="...">
                     <html:dt id="...">dt #1 <html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:dt>
                     <html:dd>dd #1 <html:span epub:type="pagebreak" title="5" class="page-normal"/>
@@ -2142,8 +2156,8 @@
                     <html:dt id="...">dt #2 <html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/></html:dt>
                     <html:dd>dd #2</html:dd>
                 </html:dl>
-                <html:span epub:type="pagebreak" title="9" class="page-normal"/>
-                <html:span epub:type="pagebreak" title="10" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="9" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="10" class="page-normal"/>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -2316,8 +2330,8 @@
                 </dtbook:table>
             </x:context>
             <x:expect label="the resulting element should be dl">
-                <html:span epub:type="pagebreak" title="1" class="page-normal"/>
-                <html:span epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="1" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="2" class="page-normal"/>
                 <html:table id="...">
                     <html:tbody>
                         <html:tr><html:td>td #1 <html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
@@ -2327,8 +2341,8 @@
                         <html:tr><html:td>td #4</html:td></html:tr>
                     </html:tbody>
                 </html:table>
-                <html:span epub:type="pagebreak" title="9" class="page-normal"/>
-                <html:span epub:type="pagebreak" title="10" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="9" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="10" class="page-normal"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="with pagenum and caption children">
@@ -2351,8 +2365,8 @@
                 </dtbook:table>
             </x:context>
             <x:expect label="the resulting element should be dl">
-                <html:span epub:type="pagebreak" title="1" class="page-normal"/>
-                <html:span epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="1" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="2" class="page-normal"/>
                 <html:table id="...">
                     <html:tbody>
                         <html:tr><html:td>td #1 <html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
@@ -2362,8 +2376,8 @@
                         <html:tr><html:td>td #4</html:td></html:tr>
                     </html:tbody>
                 </html:table>
-                <html:span epub:type="pagebreak" title="9" class="page-normal"/>
-                <html:span epub:type="pagebreak" title="10" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="9" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="10" class="page-normal"/>
             </x:expect>
         </x:scenario>
     </x:scenario>

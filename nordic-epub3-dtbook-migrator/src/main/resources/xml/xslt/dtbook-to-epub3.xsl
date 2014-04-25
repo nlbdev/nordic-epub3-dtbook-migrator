@@ -76,6 +76,8 @@
         <xsl:variable name="epub-types" select="($types, $epub-types)[not(.='') and not(.=$except-types)]"/>
         <xsl:variable name="epub-types"
             select="($epub-types, if ($epub-types='bodymatter' and not($epub-types=('prologue','preface','part','chapter','conclusion','epilogue'))) then 'chapter' else ())"/>
+        <xsl:variable name="epub-types"
+            select="($epub-types, if ((self::dtbook:level2 or self::dtbook:level[count(ancestor::level)=1]) and (ancestor::dtbook:level1|ancestor::dtbook:level[not(ancestor::dtbook:level)])/tokenize(@class,'\s+')='part' and not($epub-types=('prologue','preface','chapter','conclusion','epilogue'))) then 'chapter' else ())"/>
 
         <xsl:variable name="classes" select="($classes, $old-classes[not(.=($vocab-default,$vocab-z3998))], $showin)[not(.='') and not(.=$except-classes)]"/>
 
@@ -831,14 +833,16 @@
     </xsl:template>
 
     <xsl:template match="dtbook:pagenum">
-        <span>
+        <xsl:param name="pagenum.parent" tunnel="yes" select="parent::*"/>
+        <xsl:variable name="pagenum.parent" select="if (count($pagenum.parent/descendant-or-self::* intersect parent::*/ancestor-or-self::*) &gt;= 3) then parent::* else $pagenum.parent"/>
+        <xsl:element name="{if (f:is-inline($pagenum.parent)) then 'span' else 'div'}">
             <xsl:call-template name="attlist.pagenum"/>
             <xsl:attribute name="title" select="normalize-space(.)"/>
             <!--
                 NOTE: the title attribute is overwritten with the contents of the pagenum,
                 so any pre-existing @title content is lost.
             -->
-        </span>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template name="attlist.pagenum">
@@ -914,9 +918,10 @@
     <xsl:template match="dtbook:imggroup">
         <figure>
             <xsl:call-template name="attlist.imggroup"/>
-            
+
             <xsl:variable name="imggroup-captions" select="dtbook:img[1]/preceding-sibling::dtbook:caption[1]/(. | preceding-sibling::node()[not(self::text())])"/>
-            <xsl:variable name="imggroup-trailing-content" select="if ($imggroup-captions) then ($imggroup-captions[last()]/following-sibling::node()[not(self::text())] intersect dtbook:img[1]/preceding-sibling::node()[not(self::text())]) else dtbook:img[1]/preceding-sibling::node()[not(self::text())]"/>
+            <xsl:variable name="imggroup-trailing-content"
+                select="if ($imggroup-captions) then ($imggroup-captions[last()]/following-sibling::node()[not(self::text())] intersect dtbook:img[1]/preceding-sibling::node()[not(self::text())]) else dtbook:img[1]/preceding-sibling::node()[not(self::text())]"/>
             <xsl:choose>
                 <xsl:when test="not($imggroup-captions[self::dtbook:caption])">
                     <xsl:apply-templates select="$imggroup-captions"/>
@@ -941,10 +946,12 @@
                 </xsl:when>
             </xsl:choose>
             <xsl:apply-templates select="$imggroup-trailing-content"/>
-            
+
             <xsl:for-each select="dtbook:img">
-                <xsl:variable name="captions" select="if (not(following-sibling::dtbook:caption)) then () else following-sibling::node()[not(self::text())] intersect (if (following-sibling::dtbook:img) then (following-sibling::dtbook:img[1]/preceding-sibling::dtbook:caption[1]/(. | preceding-sibling::node()[not(self::text())])) else (following-sibling::dtbook:caption[last()]/(. | preceding-sibling::node()[not(self::text())])))"/>
-                <xsl:variable name="trailing-content" select="(if ($captions) then $captions[last()] else .)/following-sibling::node()[not(self::text())] intersect (if (following-sibling::dtbook:img) then following-sibling::dtbook:img[1]/preceding-sibling::node()[not(self::text())] else following-sibling::node())"/>
+                <xsl:variable name="captions"
+                    select="if (not(following-sibling::dtbook:caption)) then () else following-sibling::node()[not(self::text())] intersect (if (following-sibling::dtbook:img) then (following-sibling::dtbook:img[1]/preceding-sibling::dtbook:caption[1]/(. | preceding-sibling::node()[not(self::text())])) else (following-sibling::dtbook:caption[last()]/(. | preceding-sibling::node()[not(self::text())])))"/>
+                <xsl:variable name="trailing-content"
+                    select="(if ($captions) then $captions[last()] else .)/following-sibling::node()[not(self::text())] intersect (if (following-sibling::dtbook:img) then following-sibling::dtbook:img[1]/preceding-sibling::node()[not(self::text())] else following-sibling::node())"/>
                 <figure class="image">
                     <xsl:apply-templates select="."/>
                     <xsl:choose>
@@ -977,80 +984,6 @@
                 </figure>
                 <xsl:apply-templates select="$trailing-content"/>
             </xsl:for-each>
-            
-            <!--<oneOrMore>
-                <element name="figure">
-                    <ref name="attlist.imggroup"/>
-                    <zeroOrMore>
-                        <choice>
-                            <ref name="pagenum"/> <!-\- span -\->
-                            <ref name="prodnote"/> <!-\- aside -\->
-                        </choice>
-                    </zeroOrMore>
-                    
-                    <ref name="img"/> <!-\- img -\->
-                    <optional>
-                        <ref name="caption.figure"/> <!-\- figcaption -\->
-                    </optional>
-                </element>
-                
-                <zeroOrMore>
-                    <choice>
-                        <ref name="pagenum"/> <!-\- span -\->
-                        <ref name="prodnote"/> <!-\- aside -\->
-                    </choice>
-                </zeroOrMore>
-            </oneOrMore>
-            
-            
-            <xsl:choose>
-                <xsl:when test="dtbook:img[1]/preceding-sibling::dtbook:caption">
-                    <!-\- put figcaption first -\->
-                    <figcaption>
-                        <xsl:for-each select="dtbook:img">
-                            <div class="img-caption">
-                                <xsl:variable name="captions"
-                                    select="(if (position()=1) then ./preceding-sibling::dtbook:caption else (), ./preceding-sibling::dtbook:caption intersect ./preceding-sibling::dtbook:img[1]/following-sibling::dtbook:caption, if (position()=last()) then ./following-sibling::dtbook:caption else ())"/>
-
-                                <xsl:for-each select="$captions[1]">
-                                    <xsl:call-template name="attlist.caption">
-                                        <xsl:with-param name="classes" select="'img-caption'" tunnel="yes"/>
-                                    </xsl:call-template>
-                                </xsl:for-each>
-
-                                <xsl:apply-templates select="$captions"/>
-                            </div>
-                        </xsl:for-each>
-                    </figcaption>
-                    <xsl:apply-templates select="dtbook:prodnote|dtbook:img|dtbook:pagenum|comment()"/>
-                </xsl:when>
-
-                <xsl:when test="dtbook:caption">
-                    <!-\- put figcaption last -\->
-                    <xsl:apply-templates select="dtbook:prodnote|dtbook:img|dtbook:pagenum|comment()"/>
-                    <figcaption>
-                        <xsl:for-each select="dtbook:img">
-                            <div class="img-caption">
-                                <xsl:variable name="captions"
-                                    select="(./following-sibling::dtbook:caption intersect ./following-sibling::dtbook:img[1]/preceding-sibling::dtbook:caption, if (position()=last()) then ./following-sibling::dtbook:caption else ())"/>
-
-                                <xsl:for-each select="$captions[1]">
-                                    <xsl:call-template name="attlist.caption">
-                                        <xsl:with-param name="classes" select="'img-caption'" tunnel="yes"/>
-                                    </xsl:call-template>
-                                </xsl:for-each>
-
-                                <xsl:apply-templates select="$captions"/>
-                            </div>
-                        </xsl:for-each>
-                    </figcaption>
-                </xsl:when>
-
-                <!-\- no caption -\->
-                <xsl:otherwise>
-                    <xsl:apply-templates select="dtbook:prodnote|dtbook:img|dtbook:pagenum|comment()"/>
-                </xsl:otherwise>
-            </xsl:choose>-->
         </figure>
     </xsl:template>
 
@@ -1175,15 +1108,18 @@
     </xsl:template>
 
     <xsl:template match="dtbook:dl">
-        <xsl:apply-templates select="node()[self::dtbook:pagenum|self::text()|self::comment()][not(preceding-sibling::*[self::dtbook:dt or self::dtbook:dd])]"/>
+        <xsl:apply-templates select="node()[self::dtbook:pagenum|self::text()|self::comment()][not(preceding-sibling::*[self::dtbook:dt or self::dtbook:dd])]">
+            <xsl:with-param name="pagenum.parent" tunnel="yes" select="parent::*"/>
+        </xsl:apply-templates>
         <dl>
             <xsl:call-template name="attlist.dl"/>
             <xsl:apply-templates
                 select="dtbook:dt|dtbook:dd | (comment()|text())[preceding-sibling::*[self::dtbook:dt or self::dtbook:dd] and following-sibling::*[self::dtbook:dt or self::dtbook:dd]]"/>
         </dl>
         <xsl:apply-templates
-            select="node()[self::dtbook:pagenum|self::text()|self::comment()][preceding-sibling::*[self::dtbook:dt or self::dtbook:dd] and not(following-sibling::*[self::dtbook:dt or self::dtbook:dd])]"
-        />
+            select="node()[self::dtbook:pagenum|self::text()|self::comment()][preceding-sibling::*[self::dtbook:dt or self::dtbook:dd] and not(following-sibling::*[self::dtbook:dt or self::dtbook:dd])]">
+            <xsl:with-param name="pagenum.parent" tunnel="yes" select="parent::*"/>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template name="attlist.dl">
@@ -1200,7 +1136,9 @@
                 <xsl:if test="position()=1">
                     <xsl:text> </xsl:text>
                 </xsl:if>
-                <xsl:apply-templates select="."/>
+                <xsl:apply-templates select=".">
+                    <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
+                </xsl:apply-templates>
             </xsl:for-each>
         </dt>
     </xsl:template>
@@ -1219,7 +1157,9 @@
                 <xsl:if test="position()=1">
                     <xsl:text> </xsl:text>
                 </xsl:if>
-                <xsl:apply-templates select="."/>
+                <xsl:apply-templates select=".">
+                    <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
+                </xsl:apply-templates>
             </xsl:for-each>
         </dd>
     </xsl:template>
@@ -1243,12 +1183,16 @@
     </xsl:template>
 
     <xsl:template name="list.content">
-        <xsl:apply-templates select="dtbook:pagenum[not(preceding-sibling::dtbook:li)]"/>
+        <xsl:apply-templates select="dtbook:pagenum[not(preceding-sibling::dtbook:li)]">
+            <xsl:with-param name="pagenum.parent" tunnel="yes" select="parent::*"/>
+        </xsl:apply-templates>
         <xsl:element name="{if (@type='ul') then 'ul' else 'ol'}">
             <xsl:call-template name="attlist.list"/>
             <xsl:apply-templates select="dtbook:li|text()|comment()"/>
         </xsl:element>
-        <xsl:apply-templates select="dtbook:pagenum[preceding-sibling::dtbook:li and not(following-sibling::dtbook:li)]"/>
+        <xsl:apply-templates select="dtbook:pagenum[preceding-sibling::dtbook:li and not(following-sibling::dtbook:li)]">
+            <xsl:with-param name="pagenum.parent" tunnel="yes" select="parent::*"/>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template name="attlist.list">
@@ -1267,7 +1211,9 @@
             <xsl:call-template name="attlist.li"/>
             <xsl:apply-templates select="node()"/>
             <xsl:variable name="this" select="."/>
-            <xsl:apply-templates select="following-sibling::dtbook:pagenum[preceding-sibling::dtbook:li[1]=$this][following-sibling::dtbook:li]"/>
+            <xsl:apply-templates select="following-sibling::dtbook:pagenum[preceding-sibling::dtbook:li[1]=$this][following-sibling::dtbook:li]">
+                <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
+            </xsl:apply-templates>
         </li>
     </xsl:template>
 
@@ -1315,7 +1261,9 @@
 
     <xsl:template match="dtbook:table">
         <xsl:apply-templates
-            select="dtbook:pagenum[not(preceding-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr])] | dtbook:tbody[not(preceding-sibling::dtbook:caption or preceding-sibling::dtbook:thead)]/dtbook:pagenum[not(preceding-sibling::dtbook:tr)]"/>
+            select="dtbook:pagenum[not(preceding-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr])] | dtbook:tbody[not(preceding-sibling::dtbook:caption or preceding-sibling::dtbook:thead)]/dtbook:pagenum[not(preceding-sibling::dtbook:tr)]">
+            <xsl:with-param name="pagenum.parent" tunnel="yes" select="parent::*"/>
+        </xsl:apply-templates>
 
         <table>
             <xsl:call-template name="attlist.table"/>
@@ -1353,8 +1301,9 @@
         </table>
 
         <xsl:apply-templates
-            select="dtbook:pagenum[preceding-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr] and not(following-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr])] | dtbook:tbody/dtbook:pagenum[preceding-sibling::dtbook:tr and not(following-sibling::dtbook:tr)]"
-        />
+            select="dtbook:pagenum[preceding-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr] and not(following-sibling::*[self::dtbook:caption or self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr])] | dtbook:tbody/dtbook:pagenum[preceding-sibling::dtbook:tr and not(following-sibling::dtbook:tr)]">
+            <xsl:with-param name="pagenum.parent" tunnel="yes" select="parent::*"/>
+        </xsl:apply-templates>
     </xsl:template>
 
     <xsl:template name="attlist.table">
@@ -1399,8 +1348,12 @@
                 </p>
             </xsl:if>
             <xsl:apply-templates select="node()"/>
-            <xsl:apply-templates select="following-sibling::dtbook:pagenum[not(preceding-sibling::*[self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr])]"/>
-            <xsl:apply-templates select="if (not(following-sibling::dtbook:thead)) then following-sibling::dtbook:tbody/dtbook:pagenum[not(preceding-sibling::dtbook:tr)] else ()"/>
+            <xsl:apply-templates select="following-sibling::dtbook:pagenum[not(preceding-sibling::*[self::dtbook:thead or self::dtbook:tbody or self::dtbook:tr])]">
+                <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="if (not(following-sibling::dtbook:thead)) then following-sibling::dtbook:tbody/dtbook:pagenum[not(preceding-sibling::dtbook:tr)] else ()">
+                <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
+            </xsl:apply-templates>
         </caption>
     </xsl:template>
 
@@ -1549,18 +1502,24 @@
                         <xsl:variable name="this" select="."/>
                         <xsl:for-each select="parent::dtbook:tr/following-sibling::dtbook:pagenum[preceding-sibling::dtbook:tr[1]=$this]">
                             <xsl:text> </xsl:text>
-                            <xsl:apply-templates select="."/>
+                            <xsl:apply-templates select=".">
+                                <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
+                            </xsl:apply-templates>
                         </xsl:for-each>
                     </xsl:when>
                     <xsl:when test="parent::dtbook:tr/parent::dtbook:thead">
                         <!-- if thead => copy trailing pagenums from thead and leading pagenums from tbody -->
                         <xsl:for-each select="parent::dtbook:tr/parent::dtbook:thead/following-sibling::dtbook:pagenum[not(preceding-sibling::dtbook:tr)]">
                             <xsl:text> </xsl:text>
-                            <xsl:apply-templates select="."/>
+                            <xsl:apply-templates select=".">
+                                <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
+                            </xsl:apply-templates>
                         </xsl:for-each>
                         <xsl:for-each select="parent::dtbook:tr/parent::dtbook:thead/following-sibling::dtbook:tbody/dtbook:pagenum[not(preceding-sibling::dtbook:tr)]">
                             <xsl:text> </xsl:text>
-                            <xsl:apply-templates select="."/>
+                            <xsl:apply-templates select=".">
+                                <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
+                            </xsl:apply-templates>
                         </xsl:for-each>
                     </xsl:when>
                 </xsl:choose>
@@ -1627,6 +1586,24 @@
                 <xsl:sequence select="$pseudorandom-id"/>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="f:is-inline" as="xs:boolean">
+        <xsl:param name="parent" as="element()?"/>
+        <xsl:choose>
+            <xsl:when test="$parent">
+                <xsl:variable name="sibling-implies-inline"
+                    select="('em','strong','dfn','code','samp','kbd','cite','abbr','acronym','a','img','br','q','sub','sup','span','bdo','sent','w','annoref','noteref','lic')"/>
+                <xsl:variable name="parent-implies-inline"
+                    select="($sibling-implies-inline,'imggroup','pagenum','prodnote','line','linenum','address','title','author','byline','dateline','p','doctitle','docauthor','covertitle','h1','h2','h3','h4','h5','h6','bridgehead','dt')"/>
+                <xsl:sequence
+                    select="if ($parent[self::dtbook:* and local-name()=$parent-implies-inline] or $parent/(text()[normalize-space()],dtbook:*[local-name()=$sibling-implies-inline])) then true() else false()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="false()"/>
+            </xsl:otherwise>
+        </xsl:choose>
+
     </xsl:function>
 
 </xsl:stylesheet>

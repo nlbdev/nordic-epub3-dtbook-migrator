@@ -877,7 +877,7 @@
             <ref name="cite"/> <!-- span -->
             <ref name="samp"/> <!-- samp -->
             <ref name="kbd"/> <!-- kbd -->
-            <ref name="pagenum"/> <!-- span -->
+            <ref name="pagenum.span"/> <!-- span -->
         </choice>
     </define>
     <!-- inlines that may alternatively be in block elements. -->
@@ -1151,6 +1151,9 @@
         <ref name="i18n"/>
         <!-- the showin attribute in DTBook maps to the following classes in HTML: showin-xxx, showin-xxp, showin-xlx, showin-xlp, showin-bxx, showin-bxp, showin-blx, showin-blp -->
         <ref name="externalNamespaces"/> <!-- () -->
+        <optional>
+            <attribute name="epub:type"/>
+        </optional>
     </define>
     <!--
     %attrsrqd; includes required id and implied class,
@@ -1545,31 +1548,46 @@
         </oneOrMore>
     </define>
     <define name="frontmatter.colophon">
-        <ref name="frontmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="frontmatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='colophon'">The titlepage must have an epub:type of 'colophon'</sch:assert>
         </sch:rule>-->
     </define>
     <define name="frontmatter.toc">
-        <ref name="frontmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="frontmatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='toc'">The toc must have an epub:type of 'toc'</sch:assert>
         </sch:rule>-->
     </define>
     <define name="frontmatter.foreword">
-        <ref name="frontmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="frontmatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='foreword'">The foreword must have an epub:type of 'foreword'</sch:assert>
         </sch:rule>-->
     </define>
     <define name="frontmatter.introduction">
-        <ref name="frontmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="frontmatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='introduction'">The introduction must have an epub:type of 'introduction'</sch:assert>
         </sch:rule>-->
     </define>
     <define name="frontmatter.other">
-        <ref name="frontmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="frontmatter.generic"/>
+        </choice>
     </define>
     <define name="frontmatter.generic">
         <choice>
@@ -1612,7 +1630,10 @@
         </sch:rule>-->
     </define>
     <define name="bodymatter.part">
-        <ref name="bodymatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="bodymatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='part'">The part must have an epub:type of 'part'</sch:assert>
             <sch:assert test="(section,article)/@epub:type='chapter'">The subsections of a part must have an epub:type of 'chapter'.</sch:assert>
@@ -1667,49 +1688,73 @@
         </choice>
     </define>
     <define name="rearmatter.afterword">
-        <ref name="rearmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="rearmatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='afterword'">The afterword must have an epub:type of 'afterword'</sch:assert>
         </sch:rule>-->
     </define>
     <define name="rearmatter.toc">
-        <ref name="rearmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="rearmatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='toc'">The toc must have an epub:type of 'toc'</sch:assert>
         </sch:rule>-->
     </define>
     <define name="rearmatter.index">
-        <ref name="rearmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="rearmatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='index'">The index must have an epub:type of 'index'</sch:assert>
         </sch:rule>-->
     </define>
     <define name="rearmatter.appendix">
-        <ref name="rearmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="rearmatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='appendix'">The appendix must have an epub:type of 'appendix'</sch:assert>
         </sch:rule>-->
     </define>
     <define name="rearmatter.glossary">
-        <ref name="rearmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="rearmatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='glossary'">The glossary must have an epub:type of 'glossary'</sch:assert>
         </sch:rule>-->
     </define>
     <define name="rearmatter.footnotes">
-        <ref name="rearmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="rearmatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='footnotes'">The footnotes must have an epub:type of 'footnotes'</sch:assert>
         </sch:rule>-->
     </define>
     <define name="rearmatter.rearnotes">
-        <ref name="rearmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="rearmatter.generic"/>
+        </choice>
         <!--<sch:rule context=".">
             <sch:assert test="tokenize(@epub:type,' ')='rearnotes'">The rearnotes must have an epub:type of 'rearnotes'</sch:assert>
         </sch:rule>-->
     </define>
     <define name="rearmatter.other">
-        <ref name="rearmatter.generic"/>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="rearmatter.generic"/>
+        </choice>
     </define>
     <define name="rearmatter.generic">
         <choice>
@@ -1869,6 +1914,15 @@
     <define name="attlist.level1" combine="interleave">
         <ref name="attrs"/>
     </define>
+    
+    <define name="level1.only-headline">
+        <ref name="attlist.level1"/>
+        <zeroOrMore>
+            <ref name="pagenum.div"/> <!-- div -->
+        </zeroOrMore>
+        <ref name="h1"/> <!-- h1 -->
+    </define>
+    
     <!--
     Use: level2 contains subdivisions that nest within <level1>
     divisions. The class attribute identifies the actual name (e.g.,
@@ -2270,7 +2324,7 @@
         <choice>
             <ref name="sent"/> <!-- span -->
             <ref name="w"/> <!-- span -->
-            <ref name="pagenum"/> <!-- span -->
+            <ref name="pagenum.span"/> <!-- span -->
             <!-- STRICT NOTE: The DTBook element "prodnote" is mapped to "aside" in HTML, which is not allowed as HTML "phrasing content". This means that prodnotes must not be allowed to be placed as inline content in DTBook. -->
             <!-- STRICT NOTE: The DTBook elements "annoref" and "noteref" is mapped to "a" in HTML. In HTML, "a" cannot have "a" descendants which means dtbook:annorefs and dtbook:noterefs must be disallowed inside dtbook:a elements. -->
             <ref name="externalinline"/> <!-- () -->
@@ -2315,7 +2369,7 @@
             <text/>
             <ref name="phrase"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr -->
             <ref name="special"/> <!-- a, img, br, q, sub, sup, span, bdo -->
-            <ref name="pagenum"/> <!-- span -->
+            <ref name="pagenum.span"/> <!-- span -->
             <ref name="w"/> <!-- span -->
             <ref name="prodnote"/> <!-- aside -->
             <ref name="annoref"/> <!-- a -->
@@ -2355,7 +2409,7 @@
             <ref name="special"/> <!-- a, img, br, q, sub, sup, span, bdo -->
             <ref name="sent"/> <!-- span -->
             <ref name="w"/> <!-- span -->
-            <ref name="pagenum"/> <!-- span -->
+            <ref name="pagenum.span"/> <!-- span -->
             <ref name="annoref"/> <!-- a -->
             <ref name="noteref"/> <!-- a -->
             <ref name="externalinline"/> <!-- () -->
@@ -2832,7 +2886,7 @@
                     <ref name="byline"/> <!-- span -->
                     <ref name="linegroup"/> <!-- section -->
                     <ref name="line"/> <!-- p -->
-                    <ref name="pagenum"/> <!-- span -->
+                    <ref name="pagenum.div"/> <!-- div -->
                     <ref name="prodnote"/> <!-- aside -->
                     <ref name="noteref"/> <!-- a -->
                     <ref name="annoref"/> <!-- a -->
@@ -2876,7 +2930,7 @@
                     <ref name="byline"/> <!-- span -->
                     <ref name="linegroup"/> <!-- section -->
                     <ref name="line"/> <!-- p -->
-                    <ref name="pagenum"/> <!-- span -->
+                    <ref name="pagenum.div"/> <!-- span -->
                     <ref name="img"/> <!-- img -->
                     <ref name="imggroup"/> <!-- figure -->
                     <ref name="sidebar"/> <!-- section -->
@@ -3333,7 +3387,12 @@
     document, usually inserted at the point within the file immediately
     preceding the first item of content on a new page.
   -->
-    <define name="pagenum">
+    <define name="pagenum.div">
+        <element name="div">
+            <ref name="attlist.pagenum"/>
+        </element>
+    </define>
+    <define name="pagenum.span">
         <element name="span">
             <!--<sch:rule context=".">
                 <sch:assert test="tokenize(@epub:type,' ')='pagebreak'">The pagebreak must have an epub:type of 'pagebreak'</sch:assert>
@@ -3344,6 +3403,12 @@
                 <sch:assert test="matches(@title,'.+')">The title attribute must be used to describe the page number.</sch:assert>
             </sch:rule>-->
         </element>
+    </define>
+    <define name="pagenum">
+        <choice>
+            <ref name="pagenum.div"/>
+            <ref name="pagenum.span"/>
+        </choice>
     </define>
     <!--
     Attuse: pagenum
@@ -3590,7 +3655,7 @@
                     
                     <zeroOrMore>
                         <choice>
-                            <ref name="pagenum"/> <!-- span -->
+                            <ref name="pagenum.span"/> <!-- span -->
                             <ref name="prodnote"/> <!-- aside -->
                         </choice>
                     </zeroOrMore>
@@ -3610,7 +3675,7 @@
                     
                     <zeroOrMore>
                         <choice>
-                            <ref name="pagenum"/> <!-- span -->
+                            <ref name="pagenum.span"/> <!-- span -->
                             <ref name="prodnote"/> <!-- aside -->
                         </choice>
                     </zeroOrMore>
@@ -3621,7 +3686,7 @@
                             <ref name="attlist.imggroup"/>
                             <zeroOrMore>
                                 <choice>
-                                    <ref name="pagenum"/> <!-- span -->
+                                    <ref name="pagenum.span"/> <!-- span -->
                                     <ref name="prodnote"/> <!-- aside -->
                                 </choice>
                             </zeroOrMore>
@@ -3634,7 +3699,7 @@
                         
                         <zeroOrMore>
                             <choice>
-                                <ref name="pagenum"/> <!-- span -->
+                                <ref name="pagenum.span"/> <!-- span -->
                                 <ref name="prodnote"/> <!-- aside -->
                             </choice>
                         </zeroOrMore>
@@ -3907,7 +3972,7 @@
             <ref name="attlist.blockquote"/>
             <zeroOrMore>
                 <choice>
-                    <ref name="pagenum"/> <!-- span -->
+                    <ref name="pagenum.div"/> <!-- div -->
                     <ref name="block"/> <!-- p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section -->
                 </choice>
             </zeroOrMore>
@@ -3942,7 +4007,7 @@
             and vice versa.
         -->
         <optional>
-            <ref name="pagenum"/> <!-- span -->
+            <ref name="pagenum.span"/> <!-- span -->
         </optional>
         <element name="dl">
             <ref name="attlist.dl"/>
@@ -3974,7 +4039,7 @@
                 </choice>
             </zeroOrMore>
             <optional>
-                <ref name="pagenum"/> <!-- span -->
+                <ref name="pagenum.span"/> <!-- span -->
             </optional>
         </element>
     </define>
@@ -3996,7 +4061,7 @@
                 </choice>
             </zeroOrMore>
             <optional>
-                <ref name="pagenum"/> <!-- span -->
+                <ref name="pagenum.span"/> <!-- span -->
             </optional>
         </element>
     </define>
@@ -4133,7 +4198,7 @@
                         </choice>
                     </zeroOrMore>
                     <optional>
-                        <ref name="pagenum"/> <!-- span -->
+                        <ref name="pagenum.span"/> <!-- span -->
                     </optional>
                 </group>
                 <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
@@ -4280,7 +4345,7 @@
     <!-- jpritchett@rfbd.org 2007-12-19:  Added pagenum to content model -->
     <define name="table">
         <optional>
-            <ref name="pagenum"/> <!-- span -->
+            <ref name="pagenum.div"/> <!-- div -->
         </optional>
         <element name="table">
             <ref name="attlist.table"/>
@@ -4585,7 +4650,7 @@
                 <ref name="flownopagenum"/> <!-- em, strong, dfn, code, samp, kbd, time, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
             </zeroOrMore>
             <optional>
-                <ref name="pagenum"/> <!-- span -->
+                <ref name="pagenum.span"/> <!-- span -->
             </optional>
         </element>
     </define>

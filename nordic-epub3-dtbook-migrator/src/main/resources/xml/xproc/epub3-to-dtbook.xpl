@@ -207,7 +207,7 @@
 
             <p:choose>
                 <p:when test="$discard-intermediary-html='false' or (/*/@result='error' and $assert-valid='true')">
-                    <px:fileset-load media-types="application/xhtml+xml" method="xml">
+                    <px:fileset-load media-types="application/xhtml+xml">
                         <p:input port="fileset">
                             <p:pipe port="fileset.out" step="convert.html"/>
                         </p:input>

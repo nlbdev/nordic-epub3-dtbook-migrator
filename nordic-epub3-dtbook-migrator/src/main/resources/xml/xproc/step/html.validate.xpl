@@ -34,7 +34,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
 
-    <px:fileset-load media-types="application/xhtml+xml" method="xml">
+    <px:fileset-load media-types="application/xhtml+xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>

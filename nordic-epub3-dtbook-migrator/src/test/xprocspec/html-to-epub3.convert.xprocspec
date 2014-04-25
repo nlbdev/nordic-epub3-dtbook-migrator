@@ -32,37 +32,37 @@
         </x:context>
         <x:expect type="compare" label="all files should have their appropriate attributes set">
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-1-frontmatter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-1-frontmatter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-2-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-2-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-3-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-3-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-4-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-4-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-5-chapter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-5-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-6-conclusion.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-6-conclusion.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-7-backmatter.xhtml" method="xml" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
+                <d:file href="EPUB/C00000-7-backmatter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/nav.ncx" method="xml" omit-xml-declaration="false" media-type="application/x-dtbncx+xml"/>
+                <d:file href="EPUB/nav.ncx" method="xhtml" indent="true" omit-xml-declaration="false" media-type="application/x-dtbncx+xml"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/package.opf" method="xml" omit-xml-declaration="false" media-type="application/oebps-package+xml"/>
+                <d:file href="EPUB/package.opf" method="xhtml" indent="true" omit-xml-declaration="false" media-type="application/oebps-package+xml"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/nav.xhtml" method="xml" omit-xml-declaration="false" media-type="application/xhtml+xml"/>
+                <d:file href="EPUB/nav.xhtml" method="xhtml" indent="true" omit-xml-declaration="false" media-type="application/xhtml+xml"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="META-INF/container.xml" method="xml" omit-xml-declaration="false" media-type="application/xml"/>
+                <d:file href="META-INF/container.xml" method="xhtml" indent="true" omit-xml-declaration="false" media-type="application/xml"/>
             </x:document>
         </x:expect>
 

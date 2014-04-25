@@ -95,11 +95,13 @@
         select="('acknowledgments','afterword','appendix','assessment','bibliography','biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','discography','division','editorial-note','epigraph','epilogue','errata','filmography','footnotes','foreword','glossary','grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','promotional-copy','published-works','publisher-address','qna','rearnotes','revision-history','section','standard','subchapter','subsection','titlepage','toc','translator-note','volume','warning')"/>
     <xsl:variable name="special-classes" select="('part','cover','colophon','nonstandardpagination','jacketcopy','precedingemptyline','precedingseparator','byline','dateline')"/>
     <xsl:variable name="allowed-classes" select="distinct-values(($partition-type-classes, $division-type-classes, $special-classes))"/>
-    <xsl:template match="level1/@class">
+    <xsl:template match="level1/@class | level2[parent::level1/tokenize(@class,'\s+')='part']/@class">
         <xsl:variable name="classes" select="tokenize(.,'\s+')"/>
         <xsl:variable name="classes"
             select="for $class in ($classes) return if ($class=('briefToc','level_toc','print_toc','print-toc')) then 'toc' else if ($class=('colophom','colphon')) then 'colophon' else if ($class='jacketcopy') then 'cover' else if ($class='halftitle-page') then 'halftitlepage' else if ($class='title-page') then 'titlepage' else $class"/>
         <xsl:variable name="classes" select="$classes[.=$allowed-classes]"/>
+        <!--<xsl:variable name="classes" select="if (parent::level2) then $classes[not(.=$partition-type-classes)] else $classes"/>
+        <xsl:variable name="classes" select="if (parent::level2) then ($classes, if (not($classes[.=$division-type-classes]) and not(ancestor::level1[tokenize(@class,'\s+')=$partition-type-classes[not(.='bodymatter')]])) then 'chapter' else ()) else $classes"/>-->
         <xsl:if test="count($classes)">
             <xsl:attribute name="class" select="string-join($classes,' ')"/>
         </xsl:if>
