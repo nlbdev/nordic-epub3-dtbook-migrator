@@ -17,17 +17,17 @@ It also makes use of the "calc" program to perform some calculations (can probab
 
 1. Edit the variables at the top of run.sh
 
-Example:
-```bash
-# change these variables to fit your system
-DP2="`echo ~/daisy-pipeline/cli/dp2`" # path to dp2 command line interface
-TARGET="/media/500GB/tmp/nordic-epub3-dtbook-migrator" # use this directory to store results
-SOURCE="/media/500GB/DTBook" # read *.xml files in this directory and its subdirectories
-```
-
-In this example, I have unzipped the DAISY Pipeline 2 distributable to `~/daisy-pipeline`.
-I want the results of the batch conversion (EPUBs, logs and a summary report) to be stored in `/media/500GB/tmp/nordic-epub3-dtbook-migrator`.
-The DTBooks I want to convert are stored in `/media/500GB/DTBook`.
+   Example:
+   ```bash
+   # change these variables to fit your system
+   DP2="`echo ~/daisy-pipeline/cli/dp2`" # path to dp2 command line interface
+   TARGET="/media/500GB/tmp/nordic-epub3-dtbook-migrator" # use this directory to store results
+   SOURCE="/media/500GB/DTBook" # read *.xml files in this directory and its subdirectories
+   ```
+   
+   In this example, I have unzipped the DAISY Pipeline 2 distributable to `~/daisy-pipeline`.
+   I want the results of the batch conversion (EPUBs, logs and a summary report) to be stored in `/media/500GB/tmp/nordic-epub3-dtbook-migrator`.
+   The DTBooks I want to convert are stored in `/media/500GB/DTBook`.
 
 2. Run the batch script. Note that the process of converting 3945 DTBooks at NLB takes approximately 20 hours,
    so if you're connecting over ssh and want to perform big conversions, you'll probably want to start it through `screen` or something.
