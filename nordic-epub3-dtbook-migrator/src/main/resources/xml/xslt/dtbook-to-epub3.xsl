@@ -10,8 +10,6 @@
     <xsl:variable name="vocab-z3998"
         select="('abbreviations','acknowledgments','acronym','actor','afterword','alteration','annoref','annotation','appendix','article','aside','attribution','author','award','backmatter','bcc','bibliography','biographical-note','bodymatter','cardinal','catalogue','cc','chapter','citation','clarification','collection','colophon','commentary','commentator','compound','concluding-sentence','conclusion','continuation','continuation-of','contributors','coordinate','correction','covertitle','currency','decimal','decorative','dedication','diary','diary-entry','discography','division','drama','dramatis-personae','editor','editorial-note','email','email-message','epigraph','epilogue','errata','essay','event','example','family-name','fiction','figure','filmography','footnote','footnotes','foreword','fraction','from','frontispiece','frontmatter','ftp','fulltitle','gallery','general-editor','geographic','given-name','glossary','grant-acknowledgment','grapheme','halftitle','halftitle-page','help','homograph','http','hymn','illustration','image-placeholder','imprimatur','imprint','index','initialism','introduction','introductory-note','ip','isbn','keyword','letter','loi','lot','lyrics','marginalia','measure','mixed','morpheme','name-title','nationality','non-fiction','nonresolving-citation','nonresolving-reference','note','noteref','notice','orderedlist','ordinal','organization','other-credits','pagebreak','page-footer','page-header','part','percentage','persona','personal-name','pgroup','phone','phoneme','photograph','phrase','place','plate','poem','portmanteau','postal','postal-code','postscript','practice','preamble','preface','prefix','presentation','primary','product','production','prologue','promotional-copy','published-works','publisher-address','publisher-logo','range','ratio','rearnote','rearnotes','recipient','recto','reference','republisher','resolving-reference','result','role-description','roman','root','salutation','scene','secondary','section','sender','sentence','sidebar','signature','song','speech','stage-direction','stem','structure','subchapter','subject','subsection','subtitle','suffix','surname','taxonomy','tertiary','text','textbook','t-form','timeline','title','title-page','to','toc','topic-sentence','translator','translator-note','truncation','unorderedlist','valediction','verse','verso','v-form','volume','warning','weight','word')"/>
 
-    <xsl:variable name="all-ids" select="//@id"/>
-
     <xsl:template match="text()|comment()">
         <xsl:copy-of select="."/>
     </xsl:template>
@@ -23,6 +21,7 @@
     <xsl:template name="coreattrs">
         <xsl:param name="classes" select="()" tunnel="yes"/>
         <xsl:param name="except" select="()" tunnel="yes"/>
+        <xsl:param name="all-ids" select="()" tunnel="yes"/>
         <xsl:variable name="is-first-level" select="boolean((self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter))"/>
         <xsl:if test="$is-first-level">
             <!--
@@ -37,7 +36,7 @@
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
         <xsl:if
             test="not(@id) and not(local-name()=('book','span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd','lic','thead','tfoot','tbody','colgroup','col') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/')">
-            <xsl:attribute name="id" select="f:generate-pretty-id(.)"/>
+            <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
         <xsl:call-template name="classes-and-types">
             <xsl:with-param name="classes" select="(if ($is-first-level) then tokenize(parent::*/@class,'\s+') else (), $classes)" tunnel="yes"/>
@@ -104,11 +103,16 @@
     </xsl:template>
 
     <xsl:template match="dtbook:dtbook">
+        <xsl:variable name="all-ids" select=".//@id"/>
         <html>
             <xsl:namespace name="nordic" select="'http://www.mtm.se/epub/'"/>
             <xsl:attribute name="epub:prefix" select="'z3998: http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
-            <xsl:call-template name="attlist.dtbook"/>
-            <xsl:apply-templates select="node()"/>
+            <xsl:call-template name="attlist.dtbook">
+                <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
+            </xsl:call-template>
+            <xsl:apply-templates select="node()">
+                <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
+            </xsl:apply-templates>
         </html>
     </xsl:template>
 
@@ -498,13 +502,15 @@
     </xsl:template>
 
     <xsl:template name="attlist.prodnote">
+        <xsl:param name="all-ids" select="()" tunnel="yes"/>
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'z3998:production'" tunnel="yes"/>
             <xsl:with-param name="classes" select="if (@render) then concat('render-',@render) else ()" tunnel="yes"/>
+            <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
         <!-- @imgref is dropped, the relationship is preserved in the corresponding img/@longdesc -->
         <xsl:if test="not(@id)">
-            <xsl:attribute name="id" select="f:generate-pretty-id(.)"/>
+            <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
     </xsl:template>
 
@@ -902,14 +908,17 @@
     </xsl:template>
 
     <xsl:template name="attlist.img">
-        <xsl:call-template name="attrs"/>
+        <xsl:param name="all-ids" select="()" tunnel="yes"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
+        </xsl:call-template>
         <xsl:attribute name="src" select="concat('images/',@src)"/>
         <xsl:copy-of select="@alt|@longdesc|@height|@width"/>
         <xsl:if test="not(@longdesc) and @id">
             <xsl:variable name="id" select="@id"/>
             <xsl:variable name="longdesc" select="(//dtbook:prodnote|//dtbook:caption)[tokenize(@imgref,'\s+')=$id]"/>
             <xsl:if test="$longdesc">
-                <xsl:attribute name="longdesc" select="concat('#',$longdesc[1]/((@id,f:generate-pretty-id(.))[1]))"/>
+                <xsl:attribute name="longdesc" select="concat('#',$longdesc[1]/((@id,f:generate-pretty-id(.,$all-ids))[1]))"/>
                 <!-- NOTE: if the image has multiple prodnotes or captions, only the first one will be referenced. -->
             </xsl:if>
         </xsl:if>
@@ -1169,15 +1178,20 @@
     </xsl:template>
 
     <xsl:template match="dtbook:list">
+        <xsl:param name="all-ids" select="()" tunnel="yes"/>
         <xsl:choose>
             <xsl:when test="dtbook:hd">
                 <section>
-                    <xsl:attribute name="id" select="f:generate-pseudorandom-id(concat(f:generate-pretty-id(.),'_section'))"/>
-                    <xsl:call-template name="list.content"/>
+                    <xsl:attribute name="id" select="f:generate-pseudorandom-id(concat(f:generate-pretty-id(.,$all-ids),'_section'),$all-ids)"/>
+                    <xsl:call-template name="list.content">
+                        <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
+                    </xsl:call-template>
                 </section>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="list.content"/>
+                <xsl:call-template name="list.content">
+                    <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
+                </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -1366,10 +1380,13 @@
     </xsl:template>
 
     <xsl:template name="attlist.caption">
-        <xsl:call-template name="attrs"/>
+        <xsl:param name="all-ids" select="()" tunnel="yes"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
+        </xsl:call-template>
         <!-- @imgref is dropped, the relationship is preserved in the corresponding img/@longdesc -->
         <xsl:if test="not(@id)">
-            <xsl:attribute name="id" select="f:generate-pretty-id(.)"/>
+            <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
     </xsl:template>
 
@@ -1557,6 +1574,7 @@
 
     <xsl:function name="f:generate-pretty-id" as="xs:string">
         <xsl:param name="element" as="element()"/>
+        <xsl:param name="all-ids"/>
         <xsl:variable name="id">
             <xsl:choose>
                 <xsl:when test="$element[self::dtbook:blockquote or self::dtbook:q]">
@@ -1573,6 +1591,7 @@
 
     <xsl:function name="f:generate-pseudorandom-id" as="xs:string">
         <xsl:param name="prefix" as="xs:string"/>
+        <xsl:param name="all-ids"/>
         <xsl:variable name="pseudorandom-id" select="concat($prefix,'_',replace(replace(string(current-time()),'\d+:\d+:([\d\.]+)(\+.*)?','$1'),'[^\d]',''))"/>
         <xsl:choose>
             <xsl:when test="$pseudorandom-id=$all-ids">
@@ -1580,7 +1599,7 @@
                     Try again.
                     WARNING: this is a theoretically infinite recursion. In practice however, this shouldn't happen.
                 -->
-                <xsl:sequence select="f:generate-pseudorandom-id($prefix)"/>
+                <xsl:sequence select="f:generate-pseudorandom-id($prefix, $all-ids)"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="$pseudorandom-id"/>

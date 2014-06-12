@@ -3,7 +3,6 @@
     xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xsl:param name="output-dir" required="yes"/>
-    <xsl:param name="xspec" select="false()"/>
 
     <xsl:template match="/*">
 

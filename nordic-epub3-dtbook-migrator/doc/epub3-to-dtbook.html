@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <title>HTML to DTBook</title>
+   </head>
+   <body>
+      <div class="container">
+         <div class="page-header">
+            <h1>HTML to DTBook</h1>
+         </div>
+         <p>This document is a human-readable version of the XSLT
+         that converts HTML to DTBook inside the nordic EPUB3/DTBook migrator.</p>
+         <br/>
+         <br/>
+         <br/>
+         <table class="table table-hover">
+            <thead>
+               <tr>
+                  <th id="mapping-header-description"></th>
+                  <th id="mapping-header-source"><em>HTML</em></th>
+                  <th id="mapping-header-target"><em>DTBook</em></th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr data-template-match="html:html">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>html</h2>
+                     <p>A html element.</p>
+                  </th>
+                  <td><pre>&lt;html{i18n}&gt;&lt;/html&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;dtbook version="2005-3"[i18n]&gt;&lt;/dtbook&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:head">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>head</h2>
+                     <p>A head element.</p>
+                  </th>
+                  <td><pre>&lt;head{i18n}&gt;&lt;/head&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;head profile="{from link with rel=profile}"[i18n]&gt;
+    &lt;meta name="dtb:uid" content="{from dc:identifier}"/&gt;
+&lt;/head&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:style">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>style</h2>
+                     <p>A style element.</p>
+                  </th>
+                  <td><pre>&lt;style&gt;&lt;/style&gt;</pre></td>
+                  <td class="col-sm-4" style="text-align: center;">Element is deleted.</td>
+               </tr>
+               <tr data-template-match="html:title">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>title</h2>
+                     <p>A title element.</p>
+                  </th>
+                  <td><pre>&lt;title{i18n}&gt;&lt;/title&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;meta name="dc:Title" content="..."[18n]/&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:link">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>link</h2>
+                     <p>A link element.</p>
+                  </th>
+                  <td><pre>&lt;link/&gt;</pre></td>
+                  <td class="col-sm-4" style="text-align: center;"><code>&lt;link/&gt;</code> is not allowed in the nordic DTBook profile, so it is deleted. Disregarding the nordic DTBook profile, one could copy the element directly, including all the <code>href</code>, <code>hreflang</code>, <code>type</code>, <code>rel</code> and <code>media</code> attributes, but dropping the <code>sizes</code> attribute.</td>
+               </tr>
+               <tr data-template-match="html:meta[@name and @content and not(lower-case(@name)=('viewport','dc:title'))]">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>meta</h2>
+                     <p>A meta element with the attributes "name" and "content", and where the 'name' attribute
+                        is neither 'viewport' nor 'dc:title'.
+                     </p>
+                  </th>
+                  <td><pre>&lt;meta{i18n}/&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;meta name="..." content="..." http-equiv="..."&gt;&lt;/meta&gt;</pre>
+                     <ul>
+                        <li>Any <code>dc:*</code> metadata will be capitalized. For instance, <code>dc:language</code> becomes <code>dc:Language</code>.</li>
+                        <li>A new meta element with <code>name="dtb:uid"</code> is created with the same content as for <code>dc:identifier</code>.</li>
+                        <li><code>name="nordic:guidelines" content="2015-1"</code> becomes <code>name="track:Guidelines" content="2011-2"</code></li>
+                        <li><code>name="nordic:supplier"</code> becomes <code>name="track:Supplier"</code></li>
+                     </ul>
+                  </td>
+               </tr>
+               <tr data-template-match="html:meta">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>meta</h2>
+                     <p>A meta element with missing "name" or "content" attributes, or where the 'name' attribute
+                        is either 'viewport' or 'dc:title'.</p>
+                  </th>
+                  <td><pre>&lt;meta/&gt;</pre></td>
+                  <td class="col-sm-4" style="text-align: center;">Element is deleted.</td>
+               </tr>
+               <tr data-template-match="html:body">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>body</h2>
+                     <p>A body element.</p>
+                  </th>
+                  <td><pre>&lt;body&gt;&lt;/body&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;book&gt;
+    &lt;frontmatter&gt;&lt;/frontmatter&gt;
+    &lt;bodymatter&gt;&lt;/bodymatter&gt;
+    &lt;rearmatter&gt;&lt;/rearmatter&gt;
+&lt;/book&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:section | html:article">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>section</h2>
+                     <p>A section element.</p>
+                  </th>
+                  <td><pre>&lt;section{attrs}&gt;&lt;/section&gt;</pre></td>
+                  <td class="col-sm-4"><pre>&lt;level[1-6][attrs]&gt;&lt;/level[1-6]&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:section | html:article">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>article</h2>
+                     <p>A article element.</p>
+                  </th>
+                  <td><pre>&lt;article{attrs}&gt;&lt;/article&gt;</pre></td>
+                  <td class="col-sm-4"><pre>&lt;level[1-6][class+=article][attrs]&gt;&lt;/level[1-6]&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:br">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>br</h2>
+                     <p>A br element.</p>
+                  </th>
+                  <td><pre>&lt;br{coreattrs}/&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;br[coreattrs]/&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:p[f:classes(.)='line']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>p</h2>
+                     <p>A p element with the class "line".</p>
+                  </th>
+                  <td><pre>&lt;p class="line"{attrs}&gt;&lt;/p&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;line[attrs]&gt;&lt;/line&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:span[f:classes(.)='linenum']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>span</h2>
+                     <p>A span element with the class "linenum".</p>
+                  </th>
+                  <td><pre>&lt;span class="linenum"{attrs}&gt;&lt;/span&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;linenum[attrs]&gt;&lt;/linenum&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:address">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>address</h2>
+                     <p>A address element.</p>
+                  </th>
+                  <td><pre>&lt;address{attrs}&gt;&lt;/address&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;p class="..."[attrs]&gt;&lt;/p&gt;</pre>
+                     <p><code>&lt;address&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;p&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;address&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:div">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>div</h2>
+                     <p>A div element.</p>
+                  </th>
+                  <td><pre>&lt;div{attrs}&gt;&lt;/div&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;div[attrs]&gt;&lt;/div&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:*[f:classes(.)='title']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>*</h2>
+                     <p>Any element with the class "title".</p>
+                  </th>
+                  <td><pre>&lt;_ class="title"{attrs}&gt;&lt;/_&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;title[attrs]&gt;&lt;/title&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:*[f:types(.)='z3998:author' and not(parent::html:header[parent::html:body])]">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>*</h2>
+                     <p>Any element with the epub:type "z3998:author".</p>
+                  </th>
+                  <td><pre>&lt;_ epub:type="z3998:author"{attrs}&gt;&lt;/_&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;author[attrs]&gt;&lt;/author&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:aside[f:types(.)='z3998:production'] | html:section[parent::*/f:types(.)='cover']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>aside</h2>
+                     <p>A aside element with the epub:type "z3998:production".</p>
+                  </th>
+                  <td><pre>&lt;aside epub:type="z3998:production"{attrs}&gt;&lt;/aside&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;prodnote
+   render="{'required' if there is a 'render-required'
+           class, 'optional' otherwise}"
+   imgref="{if there is one or more img longdesc
+           referring to this aside, make the
+           prodnote refer to those imgs}"
+   [attrs]&gt;
+&lt;/prodnote&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:aside[f:types(.)='z3998:production'] | html:section[parent::*/f:types(.)='cover']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>section</h2>
+                     <p>A section element which has a parent element with the epub:type "cover".</p>
+                  </th>
+                  <td><pre><em class="parent">&lt;_ epub:type="cover"{attrs}&gt;</em><br>&nbsp;&nbsp;&nbsp;&nbsp;&lt;section&gt;&lt;/section&gt;&nbsp;&nbsp;&nbsp;&nbsp;<br><em class="parent">&lt;_&gt;</em></pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;prodnote
+   render="{'required' if there is a 'render-required'
+           class, 'optional' otherwise}"
+   imgref="{if there is one or more img longdesc
+           referring to this section, make the
+           prodnote refer to those imgs}"
+   [attrs]&gt;
+&lt;/prodnote&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:aside[f:types(.)='sidebar'] | html:figure[f:types(.)='sidebar']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>aside</h2>
+                     <p>A aside element with the epub:type "sidebar".</p>
+                  </th>
+                  <td><pre>&lt;aside epub:type="sidebar"{attrs}&gt;&lt;/aside&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;sidebar render="optional"[attrs]&gt;&lt;/sidebar&gt;</pre>
+                     <p>Note the difference between <code>&lt;aside epub:type="sidebar"&gt;</code>
+                     and <code>&lt;figure epub:type="sidebar"&gt;</code>; the <code>&lt;aside&gt;</code> ends up with
+                     a <code>render="optional"</code>, while the <code>&lt;figure&gt;</code> ends up with
+                     a <code>render="required"</code>.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:aside[f:types(.)='sidebar'] | html:figure[f:types(.)='sidebar']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>figure</h2>
+                     <p>A figure element with the epub:type "sidebar".</p>
+                  </th>
+                  <td><pre>&lt;figure epub:type="sidebar"{attrs}&gt;&lt;/figure&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;sidebar render="required"[attrs]&gt;&lt;/sidebar&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:aside[f:types(.)='note']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>aside</h2>
+                     <p>A aside element with the epub:type "note".</p>
+                  </th>
+                  <td><pre>&lt;aside epub:type="note"{attrsrqd}&gt;&lt;/aside&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;note[attrsrqd][except-all-classes]&gt;&lt;/note&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:aside[f:types(.)='annotation']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>aside</h2>
+                     <p>A aside element with the epub:type "annotation".</p>
+                  </th>
+                  <td><pre>&lt;aside epub:type="annotation"{attrsrqd}&gt;&lt;/aside&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;p class="..."[attrsrqd]&gt;&lt;/p&gt;</pre>
+                     <p><code>&lt;annotation&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;p&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;annotation&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:aside[f:types(.)='epigraph']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>aside</h2>
+                     <p>A aside element with the epub:type "epigraph".</p>
+                  </th>
+                  <td><pre>&lt;aside epub:type="epigraph"{attrs}&gt;&lt;/aside&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;p class="..."[attrs]&gt;&lt;/p&gt;</pre>
+                     <p><code>&lt;epigraph&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;p&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;epigraph&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:span[f:classes(.)='byline']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>span</h2>
+                     <p>A span element with the class "byline".</p>
+                  </th>
+                  <td><pre>&lt;span class="byline"{attrs}&gt;&lt;/span&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[attrs]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;byline&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;span&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;byline&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:span[f:classes(.)='dateline']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>span</h2>
+                     <p>A span element with the class "dateline".</p>
+                  </th>
+                  <td><pre>&lt;span class="dateline"{attrs}&gt;&lt;/span&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[attrs]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;dateline&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;span&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;dateline&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:*[f:classes(.)='linegroup']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>*</h2>
+                     <p>Any element with the class "linegroup".</p>
+                  </th>
+                  <td><pre>&lt;_ class="linegroup"{attrs}&gt;&lt;/_&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;linegroup[attrs]&gt;&lt;/linegroup&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:*[f:types(.)='z3998:poem']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>*</h2>
+                     <p>Any element with the epub:type "z3998:poem".</p>
+                  </th>
+                  <td><pre>&lt;_ epub:type="z3998:poem"{attrs}&gt;&lt;/_&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;poem[attrs]&gt;&lt;/poem&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:a">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>a</h2>
+                     <p>A a element.</p>
+                  </th>
+                  <td><pre>&lt;a type="..." href="..." hreflang="..."
+   rel="..." accesskey="..." tabindex="..."
+   {attrs}&gt;&lt;/a&gt;</pre></td>
+                  <td class="col-sm-4"><pre>&lt;a type="..." href="..." hreflang="..."
+   rel="..." accesskey="..." tabindex="..."
+   external="{if target is '_blank' or href has
+             a protocol (such as "http:" or
+             "file:"), then 'true';
+             otherwise 'false'}"
+   [attrs]&gt;&lt;/a&gt;
+
+...or...
+
+&lt;span[attrs]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;a&gt;</code> is normally not allowed in the nordic DTBook profile;
+                     by default these are replaced with <code>&lt;span&gt;</code>. However, a parameter
+                     in the converter enables links, which lets the links be carried through to the DTBook.</code></p>
+                     <p>The <code>download</code> and <code>media</code> attributes are dropped.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:em">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>em</h2>
+                     <p>A em element.</p>
+                  </th>
+                  <td><pre>&lt;em{attrs}&gt;&lt;/em&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;em[attrs]&gt;&lt;/em&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:strong">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>strong</h2>
+                     <p>A strong element.</p>
+                  </th>
+                  <td><pre>&lt;strong{attrs}&gt;&lt;/strong&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;strong[attrs]&gt;&lt;/strong&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:dfn">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>dfn</h2>
+                     <p>A dfn element.</p>
+                  </th>
+                  <td><pre>&lt;dfn{attrs}&gt;&lt;/dfn&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[class+=definition][attrs]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;dfn&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;span&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;dfn&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:kbd">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>kbd</h2>
+                     <p>A kbd element.</p>
+                  </th>
+                  <td><pre>&lt;kbd{attrs}&gt;&lt;/kbd&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;code[class+=keyboard][attrs]&gt;&lt;/code&gt;</pre>
+                     <p><code>&lt;kbd&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;code&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;kbd&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:code">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>code</h2>
+                     <p>A code element.</p>
+                  </th>
+                  <td><pre>&lt;code{i18n}{attrs}&gt;&lt;/code&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;code[i18n][attrs]&gt;&lt;/code&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:samp">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>samp</h2>
+                     <p>A samp element.</p>
+                  </th>
+                  <td><pre>&lt;samp{i18n}{attrs}&gt;&lt;/samp&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;code[class+=example][i18n][attrs]&gt;&lt;/code&gt;</pre>
+                     <p><code>&lt;samp&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;code&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;samp&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:cite">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>cite</h2>
+                     <p>A cite element.</p>
+                  </th>
+                  <td><pre>&lt;cite{attrs}&gt;&lt;/cite&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[attrs]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;cite&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;span&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;cite&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:abbr[f:types(.)='z3998:truncation']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>abbr</h2>
+                     <p>A abbr element with the epub:type "z3998:truncation".</p>
+                  </th>
+                  <td><pre>&lt;abbr epub:type="z3998:truncation"{attrs}&gt;&lt;/abbr&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[attrs]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;abbr&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;span&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;abbr&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:abbr">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>abbr</h2>
+                     <p>A abbr element.</p>
+                  </th>
+                  <td><pre>&lt;abbr{attrs}&gt;&lt;/abbr&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[attrs]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;acronym&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;span&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;acronym&gt;</code>, and
+                     the pronounce attribute would be set to "yes" if a epub:type of "z3998:initialism" were present, or false otherwise.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:sub">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>sub</h2>
+                     <p>A sub element.</p>
+                  </th>
+                  <td><pre>&lt;sub{attrs}&gt;&lt;/sub&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;sub[attrs]&gt;&lt;/sub&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:sup">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>sup</h2>
+                     <p>A sup element.</p>
+                  </th>
+                  <td><pre>&lt;sup{attrs}&gt;&lt;/sup&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;sup[attrs]&gt;&lt;/sup&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:span">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>span</h2>
+                     <p>A span element.</p>
+                  </th>
+                  <td><pre>&lt;span{attrs}&gt;&lt;/span&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[attrs]&gt;&lt;/span&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:bdo">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>bdo</h2>
+                     <p>A bdo element.</p>
+                  </th>
+                  <td><pre>&lt;bdo{coreattrs}{i18n}&gt;&lt;/bdo&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[coreattrs][i18n]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;bdo&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;span&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;bdo&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:span[f:types(.)='z3998:sentence']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>span</h2>
+                     <p>A span element with the epub:type "z3998:sentence".</p>
+                  </th>
+                  <td><pre>&lt;span epub:type="z3998:sentence"{attrs}&gt;&lt;/span&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[attrs]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;sent&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;span&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;sent&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:span[f:types(.)='z3998:word' and not(f:types(.)='z3998:sentence')]">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>span</h2>
+                     <p>A span element with the epub:type "z3998:word", which does not have the epub:type
+                        "z3998:sentence".
+                     </p>
+                  </th>
+                  <td><pre>&lt;span epub:type="z3998:word"{attrs}&gt;&lt;/span&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[attrs]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;w&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;span&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;w&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:span[f:types(.)='pagebreak'] | html:div[f:types(.)='pagebreak']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>span</h2>
+                     <p>A span element with the epub:type "pagebreak".</p>
+                  </th>
+                  <td><pre>&lt;span epub:type="pagebreak" class="page-X" title="Y"{attrsrqd}/&gt;&lt;/span&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;pagenum page="X"[attrsrqd]&gt;Y&lt;/pagenum&gt;</pre>
+                     <p>When a class starting with "page-" is present, the page attribute will be set to the
+                     corresponding value. For instance, when a "page-normal" class is present, the page
+                     attribute will be set to "normal".</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:span[f:types(.)='pagebreak'] | html:div[f:types(.)='pagebreak']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>div</h2>
+                     <p>A div element with the epub:type "pagebreak".</p>
+                  </th>
+                  <td><pre>&lt;div epub:type="pagebreak" class="page-X" title="Y"{attrsrqd}&gt;&lt;/div&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;pagenum page="..."[attrsrqd]&gt;&lt;/pagenum&gt;</pre>
+                     <p>When a class starting with "page-" is present, the page attribute will be set to the
+                     corresponding value. For instance, when a "page-normal" class is present, the page
+                     attribute will be set to "normal".</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:a[f:types(.)='noteref']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>a</h2>
+                     <p>A a element with the epub:type "noteref".</p>
+                  </th>
+                  <td><pre>&lt;a epub:type="noteref" href="#href" type="..."{attrs}&gt;&lt;/a&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;noteref idref="#href" type="..."[attrs][no-classes-allowed]&gt;&lt;/noteref&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:a[f:types(.)='annoref']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>a</h2>
+                     <p>A a element with the epub:type "annoref".</p>
+                  </th>
+                  <td><pre>&lt;a epub:type="annoref"{attrs}&gt;&lt;/a&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[attrs]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;annoref&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;span&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;annoref&gt;</code>
+                     in a similar fashion to how <code>&lt;a epub:type="noteref"&gt;</code> is converted.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:q">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>q</h2>
+                     <p>A q element.</p>
+                  </th>
+                  <td><pre>&lt;q{attrs}&gt;&lt;/q&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;span[attrs]&gt;&lt;/span&gt;</pre>
+                     <p><code>&lt;q&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;span&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;q&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:img">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>img</h2>
+                     <p>A img element.</p>
+                  </th>
+                  <td><pre>&lt;img src="..." alt="..." longdesc="..."
+     height="..." width="..." id="..."{attrs}/&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;img src="..." alt="..." longdesc="..."
+     height="..." width="..." id="..."[attrs]&gt;&lt;/img&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:figure">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>figure</h2>
+                     <p>A figure element.</p>
+                  </th>
+                  <td>
+                     <pre>&lt;figure{attrs}&gt;&lt;/figure&gt;</pre>
+                     <br/>
+                     <em>Image series example:</em>
+                     <pre>&lt;figure&gt;
+   &lt;figcaption&gt;&lt;!-- caption for the image series --&gt;&lt;/figcaption&gt;
+   &lt;figure&gt;
+      &lt;img src="..." alt="alternative text for the first image"/&gt;
+      &lt;figcaption&gt;&lt;!-- caption for the first image --&gt;&lt;/figcaption&gt;
+   &lt;/figure&gt;
+   &lt;figure&gt;
+      &lt;img src="..." alt="alternative text for the second image"/&gt;
+      &lt;figcaption&gt;&lt;!-- caption for the second image --&gt;&lt;/figcaption&gt;
+   &lt;/figure&gt;
+&lt;/figure&gt;</pre>
+                     <br/>
+                     <p>In DTBook, multiple <code>&lt;caption&gt;</code> elements are allowed which allows
+                     for assigning individual captions to individual images inside the same imggroup. In
+                     HTML, only one <code>&lt;figcaption&gt;</code> is allowed inside each <code>&lt;figure&gt;</code>.
+                     To solve this, each image in HTML (unless the image is purely decorative, signalled by
+                     an empty <code>alt</code> attribute), must be wrapped in a separate <code>&lt;figure&gt;</code>.</p>
+                  </td>
+                  <td class="col-sm-4"><pre>
+&lt;imggroup[attrs]&gt;&lt;/imggroup&gt;</pre>
+                     <br/>
+                     <em>Image series example:</em>
+                     <pre>&lt;imggroup&gt;
+   &lt;caption&gt;&lt;!-- caption for the image series --&gt;&lt;/caption&gt;
+   &lt;img src="..." alt="alternative text for the first image"/&gt;
+   &lt;caption&gt;&lt;!-- caption for the first image --&gt;&lt;/caption&gt;
+   &lt;img src="..." alt="alternative text for the second image"/&gt;
+   &lt;caption&gt;&lt;!-- caption for the second image --&gt;&lt;/caption&gt;
+&lt;/imggroup&gt;</pre>
+                     <br/>
+                  </td>
+               </tr>
+               <tr data-template-match="html:p">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>p</h2>
+                     <p>A p element.</p>
+                  </th>
+                  <td><pre>&lt;p{attrs}&gt;&lt;/p&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;p class="..."[attrs]&gt;&lt;/p&gt;</pre>
+                     <p>If the first preceding element to the <code>&lt;p&gt;</code> in the HTML is a
+                     <code>&lt;hr/&gt;</code>, then the <code>&lt;hr/&gt;</code> is removed and a
+                     <code>precedingemptyline</code> class is added to the <code>&lt;p&gt;</code>.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:hr">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>hr</h2>
+                     <p>A hr element.</p>
+                  </th>
+                  <td><pre>&lt;hr/&gt;</pre></td>
+                  <td class="col-sm-4">
+                     <p>The <code>&lt;hr/&gt;</code> element is deleted and added as a <code>precedingemptyline</code>
+                     class to the following <code>&lt;p&gt;</code> element.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:h1[f:types(.)='fulltitle' and parent::html:header[parent::html:body]]">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>h1</h2>
+                     <p>A h1 element with the epub:type "fulltitle", and where the parent element is a
+                        'header' which in turn has a 'body' element as parent.
+                     </p>
+                  </th>
+                  <td><pre>&lt;h1 epub:type="fulltitle"{attrs}&gt;&lt;/h1&gt;</pre>
+                     <br/>
+                     <em>doctitle, covertitle and docauthor example:</em>
+                     <pre>&lt;body&gt;
+   &lt;header&gt;
+      &lt;h1 epub:type="fulltitle"&gt;
+         An Invitation To Fly - Basics for the Private Pilot
+      &lt;/h1&gt;
+      &lt;!--&lt;p epub:type="z3998:covertitle"&gt;An Invitation To Fly&lt;/p&gt;--&gt;
+      &lt;p epub:type="z3998:author"&gt;Dennis Glaeser&lt;/p&gt;
+      &lt;p epub:type="z3998:author"&gt;Sanford Gum&lt;/p&gt;
+      &lt;p epub:type="z3998:author"&gt;Bruce Walters&lt;/p&gt;
+   &lt;/header&gt;
+   ...
+&lt;/body&gt;</pre>
+                     <br/>
+                     <p>Only the fulltitle is required in the nordic EPUB3 profile. Any number of
+                     z3998:author can occur inside the <code>&lt;header&gt;</code>.
+                     <code>&lt;covertitle&gt;</code> is disallowed in the nordic DTBook profile
+                     and is removed if present in the HTML, but could potentially be converted
+                     as indicated in the example.</p>
+                  </td>
+                  <td class="col-sm-4"><pre>
+&lt;doctitle[attrs]&gt;&lt;/doctitle&gt;</pre>
+                     <br/>
+                     <em>doctitle, covertitle and docauthor example:</em>
+                     <pre>&lt;book&gt;
+   &lt;frontmatter&gt;
+      &lt;doctitle&gt;
+         An Invitation To Fly - Basics for the Private Pilot
+      &lt;/doctitle&gt;
+      &lt;!--&lt;covertitle&gt;An Invitation To Fly&lt;/covertitle&gt;--&gt;
+      &lt;docauthor&gt;Dennis Glaeser&lt;/docauthor&gt;
+      &lt;docauthor&gt;Sanford Gum&lt;/docauthor&gt;
+      &lt;docauthor&gt;Bruce Walters&lt;/docauthor&gt;
+      ...
+   &lt;/frontmatter&gt;
+   ...
+&lt;/book&gt;</pre>
+                     <br/>
+                     <p>The DTBook elements <code>&lt;doctitle&gt;</code>, <code>&lt;docauthor&gt;</code> and
+                     <code>&lt;covertitle&gt;</code> is mapped to the HTML elements
+                     <code>&lt;h1 epub:type="fulltitle"&gt;</code>, <code>&lt;p epub:type="z3998:author"&gt;</code>
+                     and <code>&lt;p epub:type="z3998:covertitle"&gt;</code> respectively, contained within the
+                     first child element of the HTML element <code>&lt;body&gt;</code>, which must be a
+                     <code>&lt;header&gt;</code>. <code>&lt;covertitle&gt;</code> is not supposed to occur as
+                     it is disallowed in the nordic DTBook profile.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:*[f:types(.)='z3998:author' and parent::html:header[parent::html:body]]">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>*</h2>
+                     <p>Any element with the epub:type "z3998:author", and where the parent element is
+                        a 'header' which in turn has a 'body' element as parent.
+                     </p>
+                  </th>
+                  <td><pre>&lt;_ epub:type="z3998:author"{attrs}&gt;&lt;/_&gt;</pre>
+                     <p>See the template for <code>&lt;h1 epub:type="fulltitle"&gt;</code> for more details.</p>
+                  </td>
+                  <td class="col-sm-4"><pre>
+&lt;docauthor[attrs]&gt;&lt;/docauthor&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:*[f:types(.)='z3998:covertitle' and parent::html:header[parent::html:body]]">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>*</h2>
+                     <p>Any element with the epub:type "z3998:covertitle", and where the parent element
+                        is a 'header' which in turn has a 'body' element as parent.
+                     </p>
+                  </th>
+                  <td><pre>&lt;_ epub:type="z3998:covertitle"{attrs}&gt;&lt;/_&gt;</pre>
+                     <p>See the template for <code>&lt;h1 epub:type="fulltitle"&gt;</code> for more details.</p>
+                  </td>
+                  <td class="col-sm-4"><p><code>&lt;covertitle&gt;</code> is disallowed in the nordic DTBook profile,
+                  and so it is removed during conversion.</p></td>
+               </tr>
+               <tr data-template-match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>h1</h2>
+                     <p>A h1 element.</p>
+                  </th>
+                  <td><pre>&lt;h1{attrs}&gt;&lt;/h1&gt;</pre></td>
+                  <td class="col-sm-4"><pre>&lt;h1[attrs]&gt;&lt;/h1&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>h2</h2>
+                     <p>A h2 element.</p>
+                  </th>
+                  <td><pre>&lt;h2&gt;&lt;/h2&gt;</pre></td>
+                  <td class="col-sm-4"><pre>&lt;h2[attrs]&gt;&lt;/h2&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>h3</h2>
+                     <p>A h3 element.</p>
+                  </th>
+                  <td><pre>&lt;h3&gt;&lt;/h3&gt;</pre></td>
+                  <td class="col-sm-4"><pre>&lt;h3[attrs]&gt;&lt;/h3&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>h4</h2>
+                     <p>A h4 element.</p>
+                  </th>
+                  <td><pre>&lt;h4&gt;&lt;/h4&gt;</pre></td>
+                  <td class="col-sm-4"><pre>&lt;h4[attrs]&gt;&lt;/h4&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>h5</h2>
+                     <p>A h5 element.</p>
+                  </th>
+                  <td><pre>&lt;h5&gt;&lt;/h5&gt;</pre></td>
+                  <td class="col-sm-4"><pre>&lt;h5[attrs]&gt;&lt;/h5&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>h6</h2>
+                     <p>A h6 element.</p>
+                  </th>
+                  <td><pre>&lt;h6&gt;&lt;/h6&gt;</pre></td>
+                  <td class="col-sm-4"><pre>&lt;h6[attrs]&gt;&lt;/h6&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:p[f:types(.)='bridgehead']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>p</h2>
+                     <p>A p element with the epub:type "bridgehead".</p>
+                  </th>
+                  <td><pre>&lt;p epub:type="bridgehead"{attrs}&gt;&lt;/p&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;p class="..."[attrs]&gt;&lt;/p&gt;</pre>
+                     <p><code>&lt;bridgehead&gt;</code> is not allowed in the nordic DTBook profile; replacing with <code>&lt;p&gt;</code>.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;bridgehead&gt;</code></p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:blockquote">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>blockquote</h2>
+                     <p>A blockquote element.</p>
+                  </th>
+                  <td><pre>&lt;blockquote cite="..."{attrs}&gt;&lt;/blockquote&gt;</pre></td>
+           <td class="col-sm-4"><pre>
+&lt;blockquote cite="..."[attrs]&gt;&lt;/blockquote&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:dl">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>dl</h2>
+                     <p>A dl element.</p>
+                  </th>
+                  <td><pre>&lt;dl{attrs}&gt;&lt;/dl&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;dl[attrs]&gt;&lt;/dl&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:dt">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>dt</h2>
+                     <p>A dt element.</p>
+                  </th>
+                  <td><pre>&lt;dt{attrs}&gt;&lt;/dt&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;dt[attrs]&gt;&lt;/dt&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:dd">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>dd</h2>
+                     <p>A dd element.</p>
+                  </th>
+                  <td><pre>&lt;dd{attrs}&gt;&lt;/dd&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;dd[attrs]&gt;&lt;/dd&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:ol | html:ul">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>ol</h2>
+                     <p>A ol element.</p>
+                  </th>
+                  <td><pre>&lt;ol start="..." type="ENUM"{attrs}&gt;&lt;/ol&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;list start="..." type="pl" enum="ENUM" depth="..."[attrs]&gt;&lt;/list&gt;</pre>
+                     <p>Note that the <code>type</code> attribute in HTML and the <code>type</code>
+                     attribute in DTBook is not the same. The <code>enum</code> attribute in DTBook is the
+                     same as the <code>type</code> attribute in HTML, while the <code>type</code>
+                     attribute in DTBook signals the type of list (ordered / unordered / preformatted).</p>
+                     <p>In the nordic DTBook profile, only preformatted lists are allowed. Disregarding
+                     the nordic DTBook profile, ordered lists should map to the DTBook list type "ol".</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:ol | html:ul">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>ul</h2>
+                     <p>A ul element.</p>
+               ul   </th>
+                  <td><pre>&lt;ul{attrs}&gt;&lt;/ul&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;list type="pl" depth="..."[attrs]&gt;&lt;/list&gt;</pre>
+                     <p>In the nordic DTBook profile, only preformatted lists are allowed. Disregarding
+                     the nordic DTBook profile, unordered lists should map to the DTBook list type "ul".</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:li">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>li</h2>
+                     <p>A li element.</p>
+                  </th>
+                  <td><pre>&lt;li{attrs}&gt;...&lt;/li&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;li[attrs]&gt;• ...&lt;/li&gt;</pre>
+                     <p>In the nordic DTBook profile, only preformatted lists are allowed. As a
+                     consequence, the DTBook version is prepended with the string "• ".</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:span[f:classes(.)='lic']">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>span</h2>
+                     <p>A span element with the class "lic".</p>
+                  </th>
+                  <td><pre>&lt;span class="lic"{attrs}&gt;&lt;/span&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;lic[attrs]&gt;&lt;/lic&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:table">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>table</h2>
+                     <p>A table element.</p>
+                  </th>
+                  <td><pre>&lt;table{attrs}&gt;&lt;/table&gt;</pre>
+                     <p>The DTBook <code>summary</code> attribute does not have a HTML equivalent,
+                     so it is mapped to a HTML <code>&lt;p&gt;</code> element in the table caption like this:</p>
+                     <pre>
+&lt;table&gt;
+   &lt;caption&gt;
+      &lt;p class="table-summary"&gt;&lt;!-- summary here --&gt;&lt;/p&gt;
+   &lt;/caption&gt;
+&lt;/table&gt;</pre>
+                  </td>
+                  <td class="col-sm-4"><pre>
+&lt;table summary="..." rules="..." frame="..."[attrs]&gt;&lt;/table&gt;</pre>
+                     <p>If the HTML version has classes starting with <code>table-rules-</code> or
+                     <code>table-frame-</code>, then those classes will be mapped to the DTBook
+                     table attributes <code>rules</code> and <code>frame</code>. For instance,
+                     the HTML <code>&lt;table class="table-rules-X table-frame-Y"&gt;</code> will become
+                     <code>&lt;table rules="X" frame="Y"&gt;</code> in DTBook.</p>
+                     <p>The DTBook table attributes <code>cellspacing</code>, <code>cellpadding</code> and
+                     <code>width</code> could potentially be inferred from the CSS in the HTML,
+                     but it's probably not worth it so they are ignored for now.</p>
+                  </td>
+               </tr>
+               <tr data-template-name="caption.table">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>caption</h2>
+                     <p>A caption element where the parent element is a 'table'.</p>
+                  </th>
+                  <td><pre>&lt;caption{attrs}&gt;&lt;/caption&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;caption[attrs]&gt;&lt;/caption&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:figcaption">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>figcaption</h2>
+                     <p>A figcaption element.</p>
+                  </th>
+                  <td><pre>&lt;figcaption{attrs}&gt;&lt;/figcaption&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;caption[attrs]&gt;&lt;/caption&gt;</pre></td>
+               </tr>
+               <tr data-template-match="html:thead">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>thead</h2>
+                     <p>A thead element.</p>
+                  </th>
+                  <td><pre>&lt;thead{attrs}&gt;&lt;/thead&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;thead[attrs]&gt;&lt;/thead&gt;</pre>
+                     <p>The DTBook <code>cellhalign</code> and <code>cellvalign</code> attributes
+                     could potentially be inferred from the CSS here,
+                     but it's probably not worth it so they are ignored for now.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:tfoot">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>tfoot</h2>
+                     <p>A tfoot element.</p>
+                  </th>
+                  <td><pre>&lt;tfoot{attrs}&gt;&lt;/tfoot&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;tfoot[attrs]&gt;&lt;/tfoot&gt;</pre>
+                     <p>The DTBook <code>cellhalign</code> and <code>cellvalign</code> attributes
+                     could potentially be inferred from the CSS here,
+                     but it's probably not worth it so they are ignored for now.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:tbody">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>tbody</h2>
+                     <p>A tbody element.</p>
+                  </th>
+                  <td><pre>&lt;tbody{attrs}&gt;&lt;/tbody&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;tbody[attrs]&gt;&lt;/tbody&gt;</pre>
+                     <p>The DTBook <code>cellhalign</code> and <code>cellvalign</code> attributes
+                     could potentially be inferred from the CSS here,
+                     but it's probably not worth it so they are ignored for now.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:colgroup">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>colgroup</h2>
+                     <p>A colgroup element.</p>
+                  </th>
+                  <td><pre>&lt;colgroup{attrs}&gt;&lt;/colgroup&gt;</pre></td>
+                  <td class="col-sm-4">
+                     <p><code>&lt;colgroup&gt;</code> is not allowed in the nordic DTBook profile and is deleted.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;colgroup&gt;</code>,
+                     and the <code>span</code> attribute could be copied over directly.</p>
+                     <p>The DTBook <code>width</code>, <code>cellhalign</code> and <code>cellvalign</code> attributes
+                     could potentially be inferred from the CSS here,
+                     but it's probably not worth it so they are ignored for now.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:col">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>col</h2>
+                     <p>A col element.</p>
+                  </th>
+                  <td><pre>&lt;col{attrs}/&gt;</pre></td>
+                  <td class="col-sm-4">
+                     <p><code>&lt;col&gt;</code> is not allowed in the nordic DTBook profile and is deleted.
+                     Disregarding the nordic DTBook profile, this could be converted to a DTBook <code>&lt;col&gt;</code>,
+                     and the <code>span</code> attribute could be copied over directly.</p>
+                     <p>The DTBook <code>width</code>, <code>cellhalign</code> and <code>cellvalign</code> attributes
+                     could potentially be inferred from the CSS here,
+                     but it's probably not worth it so they are ignored for now.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:tr">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>tr</h2>
+                     <p>A tr element.</p>
+                  </th>
+                  <td><pre>&lt;tr{attrs}&gt;&lt;/tr&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;tr[attrs]&gt;&lt;/tr&gt;</pre>
+                     <p>The DTBook <code>width</code>, <code>cellhalign</code> and <code>cellvalign</code> attributes
+                     could potentially be inferred from the CSS here,
+                     but it's probably not worth it so they are ignored for now.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:th">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>th</h2>
+                     <p>A th element.</p>
+                  </th>
+                  <td><pre>&lt;th headers="..." scope="..."
+    rowspan="..." colspan="..."{attrs}&gt;&lt;/th&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;th headers="..." scope="..."
+    rowspan="..." colspan="..."[attrs]&gt;&lt;/th&gt;</pre>
+                     <p>The DTBook <code>cellhalign</code> and <code>cellvalign</code> attributes
+                     could potentially be inferred from the CSS here,
+                     but it's probably not worth it so they are ignored for now.</p>
+                  </td>
+               </tr>
+               <tr data-template-match="html:td">
+                  <th>
+                     <h2><span class="sr-only">HTML: </span>td</h2>
+                     <p>A td element.</p>
+                  </th>
+                  <td><pre>&lt;td headers="..." scope="..."
+    rowspan="..." colspan="..."{attrs}&gt;&lt;/td&gt;</pre></td>
+                  <td class="col-sm-4"><pre>
+&lt;td headers="..." scope="..."
+    rowspan="..." colspan="..."[attrs]&gt;&lt;/td&gt;</pre>
+                     <p>The DTBook <code>cellhalign</code> and <code>cellvalign</code> attributes
+                     could potentially be inferred from the CSS here,
+                     but it's probably not worth it so they are ignored for now.</p>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+      <style>
+         thead th {
+            text-align: center;
+            font-size: 2em;
+         }
+         .parent{
+            color:#888888;
+         }
+        </style>
+        <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+   </body>
+</html>
