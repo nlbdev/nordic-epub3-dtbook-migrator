@@ -258,7 +258,7 @@
 
     <xsl:template match="dtbook:meta">
         <xsl:choose>
-            <xsl:when test="matches(@name,'dc:title','i') or matches(@name,'dc:identifier','i') or starts-with(@name,'track:')"/>
+            <xsl:when test="matches(@name,'dc:title','i') or matches(@name,'dc:identifier','i') or matches(@name,'dc:format','i') or starts-with(@name,'track:')"/>
             <xsl:otherwise>
                 <meta>
                     <xsl:call-template name="attlist.meta"/>
