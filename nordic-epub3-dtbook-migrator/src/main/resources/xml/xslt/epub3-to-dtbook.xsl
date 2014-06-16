@@ -15,8 +15,6 @@
         select="('part','cover','colophon','nonstandardpagination','jacketcopy','precedingemptyline','precedingseparator','byline','dateline','address','definition','keyboard','initialism','truncation','cite','bdo','quote')"/>
     <xsl:variable name="allowed-classes" select="($special-classes, $vocab-default, $vocab-z3998)"/>
 
-    <xsl:variable name="all-ids" select="//@id"/>
-
     <xsl:template match="text()|comment()">
         <xsl:copy-of select="."/>
     </xsl:template>
@@ -102,7 +100,9 @@
     <xsl:template match="html:html">
         <dtbook version="2005-3">
             <xsl:call-template name="attlist.dtbook"/>
-            <xsl:apply-templates select="node()"/>
+            <xsl:apply-templates select="node()">
+                <xsl:with-param name="all-ids" select=".//@id" tunnel="yes"/>
+            </xsl:apply-templates>
         </dtbook>
     </xsl:template>
 
@@ -357,6 +357,7 @@
     </xsl:template>
 
     <xsl:template name="attlist.prodnote">
+        <xsl:param name="all-ids" tunnel="yes" select=".//@id"/>
         <xsl:call-template name="attrs">
             <xsl:with-param name="except-classes" select="('production','render-required','render-optional')" tunnel="yes"/>
         </xsl:call-template>
@@ -376,7 +377,7 @@
             <xsl:variable name="id" select="@id"/>
             <xsl:variable name="img" select="//html:img[replace(@longdesc,'^#','')=$id]"/>
             <xsl:if test="$img">
-                <xsl:attribute name="imgref" select="string-join($img/((@id,f:generate-pretty-id(.))[1]),' ')"/>
+                <xsl:attribute name="imgref" select="string-join($img/((@id,f:generate-pretty-id(.,$all-ids))[1]),' ')"/>
             </xsl:if>
         </xsl:if>
     </xsl:template>
@@ -443,7 +444,7 @@
         </p>
     </xsl:template>
 
-    <!-- <epigraph> is not allowed in nordic DTBook. Using div instead with a epigraph class. -->
+    <!-- <epigraph> is not allowed in nordic DTBook. Using p instead with a epigraph class. -->
     <xsl:template name="attlist.epigraph">
         <xsl:call-template name="attrs">
             <xsl:with-param name="classes" select="'epigraph'" tunnel="yes"/>
@@ -669,7 +670,7 @@
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
-
+    
     <xsl:template name="attlist.abbr">
         <xsl:call-template name="attrs"/>
     </xsl:template>
@@ -772,7 +773,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="html:*[self::html:span or self::html:div][f:types(.)='pagebreak']">
+    <xsl:template match="html:span[f:types(.)='pagebreak'] | html:div[f:types(.)='pagebreak']">
         <pagenum>
             <xsl:call-template name="attlist.pagenum"/>
             <xsl:value-of select="@title"/>
@@ -848,11 +849,12 @@
     </xsl:template>
 
     <xsl:template name="attlist.img">
+        <xsl:param name="all-ids" tunnel="yes" select=".//@id"/>
         <xsl:call-template name="attrs"/>
         <xsl:attribute name="src" select="replace(@src,'^images/','')"/>
         <xsl:copy-of select="@alt|@longdesc|@height|@width"/>
         <xsl:if test="not(@id)">
-            <xsl:attribute name="id" select="f:generate-pretty-id(.)"/>
+            <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
     </xsl:template>
 
@@ -1347,6 +1349,7 @@
 
     <xsl:function name="f:generate-pretty-id" as="xs:string">
         <xsl:param name="element" as="element()"/>
+        <xsl:param name="all-ids" as="xs:string*"/>
         <xsl:variable name="id">
             <xsl:choose>
                 <xsl:when test="$element[self::html:blockquote or self::html:q]">
