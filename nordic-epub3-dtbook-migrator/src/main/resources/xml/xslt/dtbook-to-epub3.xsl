@@ -678,7 +678,8 @@
     <xsl:template name="attlist.strong">
         <xsl:call-template name="attrs"/>
     </xsl:template>
-
+    
+    <!-- TODO: allow dtbook:span[f:classes(.)='definition'] -->
     <xsl:template match="dtbook:dfn">
         <dfn>
             <xsl:call-template name="attlist.dfn"/>
@@ -689,7 +690,8 @@
     <xsl:template name="attlist.dfn">
         <xsl:call-template name="attrs"/>
     </xsl:template>
-
+    
+    <!-- TODO: allow dtbook:span[f:classes(.)='keyboard'] -->
     <xsl:template match="dtbook:kbd">
         <kbd>
             <xsl:call-template name="attlist.kbd"/>
@@ -714,7 +716,8 @@
         <!-- ignore @smilref -->
         <!-- @showin handled by "attrs" -->
     </xsl:template>
-
+    
+    <!-- TODO: allow dtbook:span[f:classes(.)='example'] -->
     <xsl:template match="dtbook:samp">
         <samp>
             <xsl:call-template name="attlist.samp"/>
@@ -728,7 +731,8 @@
         <!-- ignore @smilref -->
         <!-- @showin handled by "attrs" -->
     </xsl:template>
-
+    
+    <!-- TODO: allow dtbook:span[f:classes(.)='cite'] -->
     <xsl:template match="dtbook:cite">
         <cite>
             <xsl:call-template name="attlist.cite"/>
@@ -887,7 +891,8 @@
         <xsl:attribute name="href" select="@idref"/>
         <xsl:copy-of select="@type"/>
     </xsl:template>
-
+    
+    <!-- TODO: allow dtbook:span[f:classes(.)='quote'] -->
     <xsl:template match="dtbook:q">
         <q>
             <xsl:call-template name="attlist.q"/>
@@ -1219,7 +1224,7 @@
         </xsl:if>
         <xsl:copy-of select="@start"/>
     </xsl:template>
-
+    
     <xsl:template match="dtbook:li">
         <li>
             <xsl:call-template name="attlist.li"/>

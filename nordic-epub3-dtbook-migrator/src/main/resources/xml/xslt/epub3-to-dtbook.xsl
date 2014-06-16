@@ -670,7 +670,7 @@
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
-
+    
     <xsl:template name="attlist.abbr">
         <xsl:call-template name="attrs"/>
     </xsl:template>
