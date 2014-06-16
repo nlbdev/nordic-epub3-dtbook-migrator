@@ -29,8 +29,9 @@
       <div id="main" role="main">
         <div class="download-bar">
         <div class="inner">
-          <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/tarball/master" class="download-button tar"><span>Download</span></a>
-          <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/zipball/master" class="download-button zip"><span>Download</span></a>
+          <!--<a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/tarball/master" class="download-button tar"><span>Download</span></a>-->
+          <!--<a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/zipball/master" class="download-button zip"><span>Download</span></a>-->
+          <a href="mapping.html" class="download-button"><span>XSLT documentation</span></a>
           <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator" class="code">View Nordic EPUB3/DTBook Migrator on GitHub</a>
         </div>
         <span class="blc"></span><span class="trc"></span>
@@ -52,33 +53,21 @@ similar to what we can expect to receive when in production (books marked up acc
 <p>While the EPUB3 will consist of multiple HTML files internally, an intermediate single-page HTML representation is useful for converting to and from DTBook. Steps for converting
 between the intermediate single-document and multi-document HTML representations will also be provided, mainly so that those not familiar with XProc or XSLT can inspect the intermediate formats and help with testing the converter.</p>
 
-<p>This project will provide the following Pipeline 2 scripts:</p>
+<p>This project provides the following Pipeline 2 scripts:</p>
 
 <ul>
-<li>EPUB3 to DTBook</li>
-<li>DTBook to EPUB3</li>
-<li>EPUB3 Validator</li>
-</ul><p>The project might also result in the following Pipeline 2 scripts:</p>
-
-<ul>
-<li>HTML to DTBook</li>
-<li>DTBook to HTML</li>
-<li>HTML splitter</li>
-<li>HTML merger</li>
-<li>DTBook Validator</li>
-</ul><p>The HTML referred to here are HTML marked up according to the Nordic markup guidelines, and will most notably make use of the
-<a href="http://www.idpf.org/accessibility/guidelines/content/semantics/epub-type.php">epub:type</a> attribute, which will be used to determine where to split the single-page HTML and how to
-map the HTML to DTBook.</p>
+<li>Nordic EPUB3 Validator</li>
+<li>Nordic DTBook Validator</li>
+<li>Nordic EPUB3 to DTBook Converter</li>
+<li>Nordic DTBook to EPUB3 Converter</li>
+</ul>
 
 <p>The grammar used in the EPUB3 and DTBook files is a strict subset of EPUB3 and DTBook, and is defined in the Nordic markup guidelines. Most DTBooks will work with these scripts, there
 are few limitations to the DTBook grammar. There are more limitations to the HTML/EPUB3 grammar however, because there must be a way to convert it to DTBook.
 Most notably, audio and video are not allowed in these EPUB3s.</p>
 
-<ul>
-<li>TODO: include or link to the Nordic markup guidelines.</li>
-<li>TODO: include or link to the mapping between DTBook and EPUB3 (possibly generate from XSLT?)</li>
-<li>TODO: include or link to a list of allowed HTML elements (or maybe they are / should be listed in the markup requirements?).</li>
-</ul>
+<p>Documentation for <a href="mapping.html">the mapping between HTML and DTBook</a> is available.</p>
+
         </article>
       </div>
     </div>
