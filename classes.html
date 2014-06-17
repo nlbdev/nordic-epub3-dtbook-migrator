@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta charset="utf-8"/>
+      <meta name="dcterms:modified" content="2014-06-16"/>
+      <meta name="dc:creator" content="Jostein Austvik Jacobsen"/>
+      <title>Classes used in the Nordic EPUB3 profile</title>
+      <link rel="stylesheet" type="text/css" href="stylesheets/epub-spec.css"/>
+      <style>
+         p.identity {
+            margin-top: -3em;
+            font-size: 75%;
+         }
+         p.noindent {
+            margin-left: -2.4em;
+         }
+         span.pubdate { 
+            color: rgb(0,0,0);
+         }
+         span.status {
+            color: rgb(190,0,0);
+            font-size: 80%;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-left: 0.3em;
+         }
+     </style>
+     <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51973045-1', 'nlbdev.github.io');
+    ga('send', 'pageview');
+
+     </script>
+   </head>
+   <body>
+      <div class="container">
+        <div class="page-header">
+            <h1>Classes used in the Nordic EPUB3 profile</h1>
+        </div>
+        
+        <div class="printhistory">
+            <p class="identity">
+              <span class="pubdate">17 June 2014</span>
+            </p>
+        </div>
+        
+        <h2 id="educational">Educational material</h2>
+        <dl>
+            <dt>exercisenumber</dt>
+            <dd>for instance <code>&lt;span class="exercisenumber"&gt;100&lt;/span&gt;</code></dd>
+            <dt>exercisepart</dt>
+            <dd>for instance <code>&lt;span class="exercisepart"&gt;a)&lt;/span&gt;</code></dd>
+            <dt>answer</dt>
+            <dd>field to write answer to a general exercise</dd>
+            <dt>answer_1</dt>
+            <dd>field to write answer to a fill-in-the-blank exercise</dd>
+            <dt>box</dt>
+            <dd>"radio" input checkbox to answer a multiple-choice exercise</dd>
+        </dl>
+        <h2 id="sectioning">Sectioning</h2>
+        <dl>
+            <dt>frontcover</dt>
+            <dd>section child of cover page</dd>
+            <dt>rearcover</dt>
+            <dd>section child of cover page</dd>
+            <dt>leftflap</dt>
+            <dd>section child of cover page</dd>
+            <dt>rightflap</dt>
+            <dd>section child of cover page</dd>
+            <dt>linegroup</dt>
+            <dd>Lines, for instance in the verse of a poem, can be grouped together in a linegroup.
+               If the linegroup has a headline, this should be a section element.
+               Otherwise it should be a div element.</dd>
+            <dt>image-series</dt>
+            <dd>Images occuring in groups should be wrapped in a figure element with the image-series class</dd>
+        </dl>
+        
+        <h2 id="inline">Inline text styling</h2>
+        <p>These classes must be applied to a <code>&lt;span&gt;</code> element containing
+           the relevant text content.</p>
+        <h3>Text values</h3>
+        <ul>
+            <li>bold</li>
+            <li>italic</li>
+            <li>handwritten</li>
+            <li>crossed-out</li>
+            <li>underlined</li>
+        </ul>
+        <h3>Colored text values</h3>
+        <ul>
+            <li>maroon</li>
+            <li>red</li>
+            <li>orange</li>
+            <li>yellow</li>
+            <li>olive</li>
+            <li>purple</li>
+            <li>fuchsia</li>
+            <li>white</li>
+            <li>lime</li>
+            <li>green</li>
+            <li>navy</li>
+            <li>blue</li>
+            <li>aqua</li>
+            <li>teal</li>
+            <li>silver</li>
+            <li>gray</li>
+        </ul>
+        <h3>Colored background values</h3>
+        <ul>
+            <li>maroon-bg</li>
+            <li>red-bg</li>
+            <li>orange-bg</li>
+            <li>yellow-bg</li>
+            <li>olive-bg</li>
+            <li>purple-bg</li>
+            <li>fuchsia-bg</li>
+            <li>lime-bg</li>
+            <li>green-bg</li>
+            <li>navy-bg</li>
+            <li>blue-bg</li>
+            <li>aqua-bg</li>
+            <li>teal-bg</li>
+            <li>black-bg</li>
+            <li>silver-bg</li>
+            <li>gray-bg</li>
+        </ul>
+        
+        <h2 id="other">Other</h2>
+        <dl>
+            <dt>line</dt>
+            <dd>p-child of linegroup</dd>
+            <dt>linenum</dt>
+            <dd>span-child of line</dd>
+            <dt>image</dt>
+            <dd>on figure when representing a image</dd>
+            <dt>lic</dt>
+            <dd>list item component; used for page numbers in table of contents</dd>
+            <dt>page-normal</dt>
+            <dd>all pagebreaks must have one of the 'page-normal', 'page-front' or 'page-special' classes.
+               page-normal is used for pagination occuring in all major divisions of the book, where the
+               numbering is positive whole numbers.</dd>
+            <dt>page-front</dt>
+            <dd>pagebreaks in frontmatter that are not logically continued in bodymatter
+               (for instance roman numerals)</dd>
+            <dt>page-special</dt>
+            <dd>pagebreaks that are repeated, unnumbered, or not numbered in a standard manner
+               must have this class</dd>
+            <dt>nonstandardpagination</dt>
+            <dd>used with page-special</dd>
+            <dt>emptyline</dt>
+            <dd>on hr, meaning: thematic breaks represented by an empty line between paragraphs</dd>
+            <dt>separator</dt>
+            <dd>on hr, meaning: thematic breaks represented by a visual marker such as an asterisk
+               or horizontal rule between paragraphs. The visual marker must not be rendered
+               in the content document</dd>
+            <dt>asciimath</dt>
+            <dd>on span with asciimath inside, for instance
+               <code>&lt;span class="asciimath"&gt;`math expression`&lt;/span&gt;</code></dd>
+            <dt>isbn</dt>
+            <dd>on paragraph in cover page</dd>
+            <dt>author</dt>
+            <dd>on paragraph in cover page</dd>
+            <dt>title</dt>
+            <dd>on paragraph in cover page</dd>
+            <dt>publisher</dt>
+            <dd>on paragraph in cover page</dd>
+        </dl>
+        
+        <h2 id="dtbook">Classes introduced by DTBook-to-EPUB3 conversion</h2>
+        <p>These classes are not in the Nordic EPUB3 Profile itself, but are used to map
+           DTBook content to HTML.</p>
+        <dl>
+            <dt>byline</dt>
+            <dd>contains information about the creator of or contributor to a work
+                (typically used on a paragraph)</dd>
+            <dt>dateline</dt>
+            <dd>dateline contains information about the time and/or place at which a work was
+                authored (typically used on a paragraph)</dd>
+            <dt>title</dt>
+            <dd>the title of a poem or citation</dd>
+            <dt>list-preformatted</dt>
+            <dd>a preformatted list contains bullets or numbers as text, so the CSS rule
+                <code>list-style-type: none;</code> should be applied</dd>
+            <dt>table-summary</dt>
+            <dd>The summary attribute on the table element has been removed from HTML5;
+                this is the equivalent and is applied to a paragraph in the table caption</dd>
+            <dt>render-required</dt>
+            <dd>Indicates that the content is essential for the user and should not be skipped.</dd>
+            <dt>render-optional</dt>
+            <dd><span>Indicates that the content is optional, and some user preference
+                may allow skipping over the content.</span><p><em>NOTE: render-required and
+                render-optional are used when mapping DTBook prodnotes to HTML aside/section.
+                We may decide to map prodnotes to the HTML figure element when render="optional"
+                instead of including it as a class (this is what we currently do for sidebars).</em></p></dd>
+        </dl>
+      </div>
+   </body>
+</html>

@@ -1073,18 +1073,28 @@
                   </th>
                   <td>
                      <pre>&lt;p&gt;&lt;/p&gt;</pre>
-                     <pre>&lt;hr/&gt;
+                     <pre>&lt;hr class="emptyline"/&gt;
+&lt;p&gt;&lt;/p&gt;</pre>
+                     <pre>&lt;hr class="separator"/&gt;
 &lt;p&gt;&lt;/p&gt;</pre>
                      <p>If the DTBook <code>&lt;p&gt;</code> element has a <code>precedingemptyline</code>
-                     class, then a <code>&lt;hr&gt;</code> is inserted before the HTML <code>&lt;p&gt;</code>.</p>
+                     or <code>precedingseparator</code>
+                     class, then a <code>&lt;hr&gt;</code> is inserted before the HTML <code>&lt;p&gt;</code>
+                     with either a <code>emptyline</code> or <code>separator</code> respectively.</p>
                   </td>
                   <td>
                      <pre>&lt;p&gt;&lt;/p&gt;</pre>
-                     <pre>&lt;!-- hr is deleted and replaced by a class on p --&gt;
+                     <pre>
+
 &lt;p class="precedingemptyline"&gt;&lt;/p&gt;</pre>
+                     <pre>
+
+&lt;p class="precedingseparator"&gt;&lt;/p&gt;</pre>
                      <p>If the first preceding element to the <code>&lt;p&gt;</code> in the HTML is a
-                     <code>&lt;hr/&gt;</code>, then the <code>&lt;hr/&gt;</code> is removed and a
-                     <code>precedingemptyline</code> class is added to the <code>&lt;p&gt;</code>.</p>
+                     <code>&lt;hr class="emptyline"/&gt;</code> or <code>&lt;hr class="separator"/&gt;</code>,
+                     then the <code>&lt;hr class="..."/&gt;</code> is removed and a
+                     <code>precedingemptyline</code> or <code>precedingseparator</code>
+                     class is added to the <code>&lt;p&gt;</code>.</p>
                   </td>
                   <th data-template-match="dtbook:p">
                      <strong class="element-th"><span class="sr-only">DTBook: </span>p</strong>
@@ -1094,9 +1104,10 @@
                   <th data-template-match="html:hr">
                      <strong class="element-th"><span class="sr-only">HTML: </span>hr</strong>
                   </th>
-                  <td><pre>&lt;hr/&gt;</pre></td>
+                  <td><pre>&lt;hr class="emptyline|separator"/&gt;</pre></td>
                   <td>
                      <p>The <code>&lt;hr/&gt;</code> element is deleted and added as a <code>precedingemptyline</code>
+                     or <code>precedingseparator</code>
                      class to the following <code>&lt;p&gt;</code> element (see description of <code>&lt;p&gt;</code>).</p>
                   </td>
                   <th></th>
