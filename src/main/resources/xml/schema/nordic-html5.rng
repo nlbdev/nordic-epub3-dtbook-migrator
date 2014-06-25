@@ -1272,18 +1272,18 @@
             </element>
             <element name="meta">
                 <attribute name="name">
-                    <value>viewport</value>
-                </attribute>
-                <attribute name="content">
-                    <value>width=device-width</value>
-                </attribute>
-            </element>
-            <element name="meta">
-                <attribute name="name">
                     <value>dc:identifier</value>
                 </attribute>
                 <attribute name="content">
                     <text/>
+                </attribute>
+            </element>
+            <element name="meta">
+                <attribute name="name">
+                    <value>viewport</value>
+                </attribute>
+                <attribute name="content">
+                    <value>width=device-width</value>
                 </attribute>
             </element>
             <zeroOrMore>
