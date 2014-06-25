@@ -428,9 +428,15 @@
   <sch:pattern id="dtbook_TPB_127">
     <sch:rule context="html:*[@class='toc']">
       <sch:assert test="self::html:nav[parent::html:body or parent::html:section/parent::html:body/html:header]">[tpb127] The "toc" class is only allowed on the main nav element.</sch:assert>
-      <sch:assert test="self::html:nav/tokenize(@epub:type,' ')='nav'">[tpb127] The main nav element must use the epub:type "nav".</sch:assert>
+      <sch:assert test="self::html:nav[tokenize(@epub:type,' ')='toc']">[tpb127] The main nav element must use the epub:type "toc".</sch:assert>
       <!--<sch:assert test="parent::html:*[(self::html:section or self::html:article) and //html:body/html:header and count(ancestor::html:section | ancestor::html:article) = 0]">[tpb127] Table of contents (&lt;list class="toc"&gt;)must be inside a level1</sch:assert>
       <sch:report test="ancestor::html:*[self::html:ul or self::html:ol][@class='toc']">[tpb127] Nested lists in table of contents must not have a 'toc' attribute</sch:report>-->
+    </sch:rule>
+  </sch:pattern>
+  
+  <sch:pattern id="epub_nordic_127">
+    <sch:rule context="html:*[tokenize(@epub:type,' ')='toc']">
+      <sch:assert test="ancestor::html:body[tokenize(@epub:type,' ')=('frontmatter','backmatter')]">[nordic127] The epub:type "toc" is only allowed in frontmatter and backmatter</sch:assert>
     </sch:rule>
   </sch:pattern>
 
