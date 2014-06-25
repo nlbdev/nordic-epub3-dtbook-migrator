@@ -590,7 +590,17 @@
       <!-- types can be titlepage, colophon, toc, foreword, introduction or blank -->
     </sch:rule>
   </sch:pattern>
-
+  
+  <!-- Rule 203: Check that both the epub:types "rearnote" and "rearnotes" are used in rearnotes -->
+  <sch:pattern id="epub_nordic_203">
+    <sch:rule context="html:*[tokenize(@epub:type,' ')='rearnote']">
+      <sch:assert test="ancestor::html:body[tokenize(@epub:type,' ')='rearnotes']">[nordic203] 'rearnote' must have a body ancestor with 'rearnotes'.</sch:assert>
+    </sch:rule>
+    <sch:rule context="html:body[tokenize(@epub:type,' ')='rearnotes']">
+      <sch:assert test="descendant::html:*[tokenize(@epub:type,' ')='rearnote']">[nordic203] 'rearnotes' must have descendants with 'rearnote'.</sch:assert>
+    </sch:rule>
+  </sch:pattern>
+  
   <!-- Rule 208: bodymatter -->
   <sch:pattern id="epub_nordic_208">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='bodymatter']">
