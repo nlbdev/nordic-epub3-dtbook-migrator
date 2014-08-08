@@ -1517,32 +1517,15 @@
         <xsl:element name="{local-name()}">
             <xsl:call-template name="attlist.th.td"/>
             <xsl:apply-templates select="node()"/>
-            <xsl:if test="not(following-sibling::dtbook:th or following-sibling::dtbook:td)">
+            <xsl:if test="not(preceding-sibling::dtbook:th or preceding-sibling::dtbook:td)">
                 <xsl:choose>
-                    <xsl:when test="parent::dtbook:tr/following-sibling::dtbook:tr">
+                    <xsl:when test="parent::dtbook:tr/preceding-sibling::*[1][self::dtbook:pagenum]">
                         <!-- copy pagenums from between the tr elements -->
                         <xsl:variable name="this" select="."/>
-                        <xsl:for-each select="parent::dtbook:tr/following-sibling::dtbook:pagenum[preceding-sibling::dtbook:tr[1]=$this]">
                             <xsl:text> </xsl:text>
-                            <xsl:apply-templates select=".">
+                            <xsl:apply-templates select="parent::dtbook:tr/preceding-sibling::dtbook:pagenum[1][following-sibling::dtbook:tr[1]/child::*=$this]">
                                 <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
                             </xsl:apply-templates>
-                        </xsl:for-each>
-                    </xsl:when>
-                    <xsl:when test="parent::dtbook:tr/parent::dtbook:thead">
-                        <!-- if thead => copy trailing pagenums from thead and leading pagenums from tbody -->
-                        <xsl:for-each select="parent::dtbook:tr/parent::dtbook:thead/following-sibling::dtbook:pagenum[not(preceding-sibling::dtbook:tr)]">
-                            <xsl:text> </xsl:text>
-                            <xsl:apply-templates select=".">
-                                <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
-                            </xsl:apply-templates>
-                        </xsl:for-each>
-                        <xsl:for-each select="parent::dtbook:tr/parent::dtbook:thead/following-sibling::dtbook:tbody/dtbook:pagenum[not(preceding-sibling::dtbook:tr)]">
-                            <xsl:text> </xsl:text>
-                            <xsl:apply-templates select=".">
-                                <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
-                            </xsl:apply-templates>
-                        </xsl:for-each>
                     </xsl:when>
                 </xsl:choose>
             </xsl:if>
