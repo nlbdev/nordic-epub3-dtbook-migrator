@@ -1522,7 +1522,6 @@
                     <xsl:when test="parent::dtbook:tr/preceding-sibling::*[1][self::dtbook:pagenum]">
                         <!-- copy pagenums from between the tr elements -->
                         <xsl:variable name="this" select="."/>
-                            <xsl:text> </xsl:text>
                             <xsl:apply-templates select="parent::dtbook:tr/preceding-sibling::dtbook:pagenum[1][following-sibling::dtbook:tr[1]/child::*=$this]">
                                 <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
                             </xsl:apply-templates>
