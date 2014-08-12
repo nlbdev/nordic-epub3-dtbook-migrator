@@ -774,10 +774,17 @@
     </xsl:template>
 
     <xsl:template match="html:span[f:types(.)='pagebreak'] | html:div[f:types(.)='pagebreak']">
-        <pagenum>
-            <xsl:call-template name="attlist.pagenum"/>
-            <xsl:value-of select="@title"/>
-        </pagenum>
+    <xsl:choose>
+		<xsl:when test="ancestor::html:td">
+			<xsl:message select="'Moving pagenum in table cell before current row for DTBook conformance.'"/>
+		</xsl:when>
+		<xsl:otherwise>
+            <pagenum>
+                <xsl:call-template name="attlist.pagenum"/>
+                <xsl:value-of select="@title"/>
+            </pagenum>
+        </xsl:otherwise>
+	</xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.pagenum">
@@ -1252,10 +1259,27 @@
     </xsl:template>
 
     <xsl:template match="html:tr">
+    <xsl:choose>
+		<xsl:when test="not(html:td//*[self::html:span[f:types(.)='pagebreak']])">
         <tr>
             <xsl:call-template name="attlist.tr"/>
             <xsl:apply-templates select="node()"/>
         </tr>
+        </xsl:when>
+		<xsl:otherwise>
+		<xsl:variable name="content" select="html:td//*[self::html:span[f:types(.)='pagebreak']]"/>
+		<xsl:for-each select="$content">
+					<pagenum>
+						<xsl:call-template name="attlist.pagenum"/>
+						<xsl:value-of select="@title"/>
+					</pagenum>
+			</xsl:for-each>
+				<tr>
+					<xsl:call-template name="attlist.tr"/>
+					<xsl:apply-templates select="node()"/>
+				</tr>
+		</xsl:otherwise>
+	</xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.tr">
