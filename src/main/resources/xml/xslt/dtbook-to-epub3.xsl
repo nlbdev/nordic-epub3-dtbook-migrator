@@ -132,8 +132,8 @@
             <title>
                 <xsl:value-of select="string((dtbook:meta[matches(@name,'dc:title','i')])[1]/@content)"/>
             </title>
-            <meta name="viewport" content="width=device-width"/>
             <meta name="dc:identifier" content="{string((dtbook:meta[matches(@name,'dtb:uid')])[1]/@content)}"/>
+            <meta name="viewport" content="width=device-width"/>
             <meta name="nordic:guidelines" content="2015-1"/>
             <xsl:for-each select="dtbook:meta[starts-with(@name,'track:') and not(@name='track:Guidelines')]">
                 <meta name="nordic:{lower-case(substring-after(@name,'track:'))}" content="{@content}"/>

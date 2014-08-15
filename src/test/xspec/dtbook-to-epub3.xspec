@@ -127,8 +127,8 @@
             <html:head>
                 <html:meta charset="UTF-8"/>
                 <html:title>...</html:title>
-                <html:meta name="viewport" content="..."/>
                 <html:meta name="dc:identifier" content=""/>
+                <html:meta name="viewport" content="..."/>
                 <html:meta name="nordic:guidelines" content="2015-1"/>
                 <html:style type="text/css" xml:space="preserve">...</html:style>
                 <html:link rel="profile" href="http://www.nlb.no/metadata-profile"/>
@@ -147,8 +147,8 @@
             <html:head>
                 <html:meta charset="UTF-8"/>
                 <html:title>...</html:title>
-                <html:meta name="viewport" content="..."/>
                 <html:meta name="dc:identifier" content=""/>
+                <html:meta name="viewport" content="..."/>
                 <html:meta name="nordic:guidelines" content="2015-1"/>
                 <html:link/>
                 <html:style type="text/css" xml:space="preserve">...</html:style>

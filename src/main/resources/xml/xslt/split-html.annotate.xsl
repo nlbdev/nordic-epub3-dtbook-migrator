@@ -33,7 +33,7 @@
 
                             <xsl:choose>
                                 <xsl:when test="$division='part'">
-                                    <xsl:copy-of select="node() except (section | article)"/>
+                                    <xsl:copy-of select="node()[not(self::section) and not(self::article)]"/>
 
                                 </xsl:when>
                                 <xsl:otherwise>
