@@ -79,8 +79,6 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="step/fileset-move.xpl"/>
-    <p:import href="step/fileset-store.xpl"/>
 
     <p:variable name="epub-href" select="resolve-uri($epub,base-uri(/*))">
         <p:inline>
@@ -161,14 +159,14 @@
             </p:for-each>
             <p:identity name="load.in-memory"/>
 
-            <pxi:fileset-store name="load.stored">
+            <px:fileset-store name="load.stored">
                 <p:input port="fileset.in">
                     <p:pipe port="result" step="load.in-memory.fileset-fix"/>
                 </p:input>
                 <p:input port="in-memory.in">
                     <p:pipe port="result" step="load.in-memory"/>
                 </p:input>
-            </pxi:fileset-store>
+            </px:fileset-store>
 
             <px:nordic-epub3-to-html-convert name="convert.html">
                 <p:input port="fileset.in">
@@ -267,14 +265,14 @@
                         </p:input>
                     </px:fileset-move>
 
-                    <pxi:fileset-store name="fileset-store">
+                    <px:fileset-store name="fileset-store">
                         <p:input port="fileset.in">
                             <p:pipe port="fileset.out" step="move"/>
                         </p:input>
                         <p:input port="in-memory.in">
                             <p:pipe port="in-memory.out" step="move"/>
                         </p:input>
-                    </pxi:fileset-store>
+                    </px:fileset-store>
 
                     <px:nordic-dtbook-validate.step name="validate.dtbook">
                         <p:with-option name="dtbook" select="(/*/d:file[@media-type='application/x-dtbook+xml'])[1]/resolve-uri(@href,base-uri(.))">

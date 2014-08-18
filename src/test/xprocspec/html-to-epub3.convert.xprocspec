@@ -9,8 +9,8 @@
             <x:input port="fileset.in">
                 <x:document type="inline" xml:base="single-html/">
                     <d:fileset>
-                        <d:file href="images/valentin.jpg" media-type="image/jpeg"/>
-                        <d:file href="C00000.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="images/valentin.jpg" media-type="image/jpeg" original-href="images/valentin.jpg"/>
+                        <d:file href="C00000.xhtml" media-type="application/xhtml+xml" original-href="C00000.xhtml"/>
                     </d:fileset>
                 </x:document>
             </x:input>

@@ -15,7 +15,6 @@
 
     <p:option name="temp-dir" required="true"/>
 
-    <p:import href="fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>

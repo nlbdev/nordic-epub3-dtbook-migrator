@@ -31,8 +31,8 @@
             <title>
                 <xsl:value-of select="$title"/>
             </title>
-            <meta name="viewport" content="width=device-width"/>
             <meta name="dc:identifier" content="{$identifier}"/>
+            <meta name="viewport" content="width=device-width"/>
             <meta name="nordic:guidelines" content="2015-1"/>
             <xsl:if test="$supplier!=''">
                 <meta name="nordic:supplier" content="{$supplier}"/>

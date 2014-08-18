@@ -209,9 +209,6 @@
         <p:input port="source">
             <p:pipe port="result" step="in-memory"/>
         </p:input>
-        <p:input port="fileset.in">
-            <p:pipe port="fileset.in" step="main"/>
-        </p:input>
     </px:html-to-fileset>
     <p:delete match="//d:file[preceding-sibling::d:file/resolve-uri(@href,base-uri(.))=resolve-uri(@href,base-uri(.))]"/>
     <p:viewport match="//d:file[starts-with(@media-type,'image/')]">

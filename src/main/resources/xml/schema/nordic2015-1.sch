@@ -436,7 +436,7 @@
   
   <sch:pattern id="epub_nordic_127">
     <sch:rule context="html:*[tokenize(@epub:type,' ')='toc']">
-      <sch:assert test="ancestor::html:body[tokenize(@epub:type,' ')=('frontmatter','backmatter')]">[nordic127] The epub:type "toc" is only allowed in frontmatter and backmatter</sch:assert>
+      <sch:assert test="ancestor::html:body[tokenize(@epub:type,' ')=('frontmatter','backmatter') or tokenize(base-uri(),'/')[last()]='nav.xhtml']">[nordic127] The epub:type "toc" is only allowed in frontmatter, backmatter, and in the EPUB3 Navigation Document (nav.xhtml).</sch:assert>
     </sch:rule>
   </sch:pattern>
 

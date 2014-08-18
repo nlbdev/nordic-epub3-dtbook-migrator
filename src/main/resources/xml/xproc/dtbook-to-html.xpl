@@ -23,7 +23,6 @@
     </p:option>
 
     <p:import href="library.xpl"/>
-    <p:import href="step/fileset-store.xpl"/>
 
     <p:variable name="base" select="replace(base-uri(/),'[^/]*$','')"/>
     <p:variable name="href" select="replace(base-uri(/),'^.*/([^/]*)$','$1')"/>

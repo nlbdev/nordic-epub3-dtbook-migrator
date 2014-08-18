@@ -19,7 +19,6 @@
     <p:option name="compatibility-mode" select="'true'"/>
 
     <p:import href="html-split.split.xpl"/>
-    <p:import href="fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="epub3-nav-utils/xproc/epub3-nav-library.xpl"/>
     <!--<p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>-->
@@ -31,7 +30,7 @@
 
     <p:variable name="epub-dir" select="concat($temp-dir,'epub/')"/>
     <p:variable name="publication-dir" select="concat($epub-dir,'EPUB/')"/>
-
+    
     <px:nordic-html-split-perform name="html-split">
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.in" step="main"/>
@@ -154,11 +153,26 @@
             <p:pipe port="html" step="nav"/>
             <p:pipe port="result" step="spine-html"/>
         </p:iteration-source>
-        <px:html-to-fileset>
-            <p:input port="fileset.in">
-                <p:pipe port="fileset.out" step="html-split.moved"/>
-            </p:input>
-        </px:html-to-fileset>
+        <px:html-to-fileset/>
+        <!-- reset d:file/@original-href to the ones in the input fileset (TODO: fix this by adding a fileset.in port to px:html-to-fileset etc.?) -->
+        <p:viewport match="/*/*">
+            <p:variable name="href" select="/*/@href"/>
+            <p:choose>
+                <p:xpath-context>
+                    <p:pipe port="fileset.in" step="main"/>
+                </p:xpath-context>
+                <p:when test="$href = /*/*[@original-href]/@href">
+                    <p:add-attribute match="/*" attribute-name="original-href">
+                        <p:with-option name="attribute-value" select="/*/*[@href=$href]/@original-href">
+                            <p:pipe port="fileset.in" step="main"/>
+                        </p:with-option>
+                    </p:add-attribute>
+                </p:when>
+                <p:otherwise>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+        </p:viewport>
     </p:for-each>
     <p:identity name="html-filesets"/>
     <px:fileset-create>

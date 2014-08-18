@@ -29,7 +29,6 @@
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
-    <!--    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>-->
     <!--    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
@@ -59,6 +58,7 @@
             </px:fileset-create>
             <px:fileset-add-entry media-type="application/x-dtbook+xml">
                 <p:with-option name="href" select="$dtbook"/>
+                <p:with-option name="original-href" select="$dtbook"/>
             </px:fileset-add-entry>
             <p:identity name="invalid-fileset"/>
         </p:when>
@@ -149,6 +149,15 @@
                     <p:pipe port="result" step="input-dtbook"/>
                 </p:input>
             </px:dtbook-load>
+            <p:viewport match="/*/*">
+                <px:message message="setting original-href for $1 to $2">
+                    <p:with-option name="param1" select="/*/@href"/>
+                    <p:with-option name="param2" select="if (/*/@original-href) then /*/@original-href else resolve-uri(/*/@href, base-uri(/*))"/>
+                </px:message>
+                <p:add-attribute match="/*" attribute-name="original-href">
+                    <p:with-option name="attribute-value" select="if (/*/@original-href) then /*/@original-href else resolve-uri(/*/@href, base-uri(/*))"/>
+                </p:add-attribute>
+            </p:viewport>
             <px:mediatype-detect name="input-dtbook.fileset"/>
 
         </p:otherwise>
