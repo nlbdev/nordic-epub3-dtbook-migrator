@@ -11,7 +11,7 @@
                 <x:document type="inline">
                     <d:fileset>
                         <d:file media-type="image/jpeg" href="single-html/images/valentin.jpg"/>
-                        <d:file media-type="application/xhtml+xml" href="single-html/C00000.xhtml"/>
+                        <d:file media-type="application/xhtml+xml" href="single-html/C00000.xhtml" doctype="&lt;!DOCTYPE html&gt;"/>
                     </d:fileset>
                 </x:document>
             </x:input>

@@ -10,7 +10,7 @@
                 <x:document type="inline" xml:base="single-html/">
                     <d:fileset>
                         <d:file href="images/valentin.jpg" media-type="image/jpeg"/>
-                        <d:file href="C00000.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="C00000.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                     </d:fileset>
                 </x:document>
             </x:input>

@@ -13,14 +13,14 @@
                         <d:file href="mimetype" media-type="text/plain"/>
                         <d:file href="META-INF/container.xml"/>
                         <d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
-                        <d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-1-frontmatter.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-2-chapter.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-6-conclusion.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-7-backmatter.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-1-frontmatter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-2-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-6-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-7-backmatter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
                         <d:file href="EPUB/images/valentin.jpg" media-type="image/jpeg"/>
                         <d:file href="EPUB/css/accessibility.css" media-type="text/css"/>

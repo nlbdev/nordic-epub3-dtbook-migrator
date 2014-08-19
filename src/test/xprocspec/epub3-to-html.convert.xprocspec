@@ -12,14 +12,14 @@
                         <d:file href="mimetype" media-type="text/plain"/>
                         <d:file href="META-INF/container.xml"/>
                         <d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
-                        <d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-1-frontmatter.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-2-chapter.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-6-conclusion.xhtml" media-type="application/xhtml+xml"/>
-                        <d:file href="EPUB/C00000-7-backmatter.xhtml" media-type="application/xhtml+xml"/>
+                        <d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-1-frontmatter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-2-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-6-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-7-backmatter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/toc.ncx" media-type="application/x-dtbncx+xml"/>
                         <d:file href="EPUB/images/valentin.jpg" media-type="image/jpeg"/>
                         <d:file href="EPUB/css/accessibility.css" media-type="text/css"/>
@@ -55,16 +55,6 @@
         <x:expect label="The body of the resulting HTML-file should be as expected" type="compare">
             <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:body"/>
         </x:expect>
-
-        <!--<x:context label="result HTML document" pending="validation not implemented in xprocspec yet?">
-            <x:document type="port" port="in-memory.out"/>
-        </x:context>
-        <x:expect label="The result should be valid according to the Nordic EPUB3 HTML content model" type="validate" grammar="relax-ng">
-            <x:document type="file" href="../../main/resources/xml/schema/nordic-html5.rng"/>
-        </x:expect>
-        <x:expect label="The result should be valid according to the Nordic EPUB3 HTML markup rules" type="validate" grammar="schematron">
-            <x:document type="file" href="../../main/resources/xml/schema/nordic2015-1.sch"/>
-        </x:expect>-->
 
     </x:scenario>
 

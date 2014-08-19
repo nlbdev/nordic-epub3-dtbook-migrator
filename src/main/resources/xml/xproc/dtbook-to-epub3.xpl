@@ -81,6 +81,7 @@
     <p:import href="step/dtbook-to-html.convert.xpl"/>
     <p:import href="step/html-to-epub3.convert.xpl"/>
     <p:import href="step/format-html-report.step.xpl"/>
+    <p:import href="step/set-doctype.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -227,17 +228,60 @@
                         <p:with-option name="compatibility-mode" select="'true'"/>
                     </px:nordic-html-to-epub3-convert>
                     
-                    <px:epub3-store name="store.epub3">
-                        <p:input port="fileset.in">
-                            <p:pipe port="fileset.out" step="convert.epub3"/>
-                        </p:input>
+                    
+                    <p:group name="store.epub3">
+                        <!-- TODO: replace this p:group with px:epub3-store when px:set-doctype is fixed in the next pipeline 2 version -->
+                        
+                        <p:output port="result" primary="false">
+                            <p:pipe port="result" step="zip"/>
+                        </p:output>
+                        
+                        <p:delete match="/*/d:file/@doctype"/>
+                        <px:fileset-store name="fileset-store">
+                            <p:input port="in-memory.in">
+                                <p:pipe port="in-memory.out" step="convert.epub3"/>
+                            </p:input>
+                        </px:fileset-store>
+                        
+                        <p:viewport match="/*/d:file" name="store.epub3.doctype">
+                            <p:viewport-source>
+                                <p:pipe port="fileset.out" step="fileset-store"/>
+                            </p:viewport-source>
+                            
+                            <p:choose>
+                                <p:when test="/*/@media-type='application/xhtml+xml'">
+                                    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+                                        <p:with-option name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
+                                    </pxi:set-doctype>
+                                    <p:add-attribute match="/*" attribute-value="&lt;!DOCTYPE html&gt;">
+                                        <p:with-option name="attribute-name" select="'doctype'">
+                                            <!-- p:with-option uses default connection as context, thus making sure pxi:set-doctype is run before p:add-attribute -->
+                                        </p:with-option>
+                                        <p:input port="source">
+                                            <p:pipe port="current" step="store.epub3.doctype"/>
+                                        </p:input>
+                                    </p:add-attribute>
+                                </p:when>
+                                <p:otherwise>
+                                    <p:identity/>
+                                </p:otherwise>
+                            </p:choose>
+                        </p:viewport>
+                        
+                        <px:epub3-ocf-zip name="zip" cx:depends-on="fileset-store">
+                            <p:with-option name="target" select="concat($output-dir,/*/@content,'.epub')">
+                                <p:pipe port="identifier" step="metadata"/>
+                            </p:with-option>
+                        </px:epub3-ocf-zip>
+                    </p:group>
+                    <!--<px:epub3-store name="store.epub3">
                         <p:input port="in-memory.in">
                             <p:pipe port="in-memory.out" step="convert.epub3"/>
                         </p:input>
                         <p:with-option name="href" select="concat($output-dir,/*/@content,'.epub')">
                             <p:pipe port="identifier" step="metadata"/>
                         </p:with-option>
-                    </px:epub3-store>
+                    </px:epub3-store>-->
 
                     <px:fileset-create>
                         <p:with-option name="base" select="$output-dir">

@@ -110,5 +110,11 @@
                 "C00000-03-chapter.xhtml"</assert>
         </rule>
     </pattern>
+    
+    <pattern id="opf_nordic_10">
+        <rule context="opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-cover.xhtml')]">
+            <assert test="@linear = 'no'">Cover must be marked as secondary in the spine</assert>
+        </rule>
+    </pattern>
 
 </schema>

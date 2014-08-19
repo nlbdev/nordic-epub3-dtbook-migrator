@@ -294,8 +294,10 @@
     </px:fileset-join>
     <p:add-attribute match="//d:file[@href='META-INF/container.xml']" attribute-name="media-type" attribute-value="application/xml"/>
     <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="omit-xml-declaration" attribute-value="false"/>
-    <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="method" attribute-value="xhtml"/>
     <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="indent" attribute-value="true"/>
+    <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$') and not(@media-type='application/xhtml+xml')]" attribute-name="method" attribute-value="xml"/>
+    <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="method" attribute-value="xhtml"/>
+    <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="doctype" attribute-value="&lt;!DOCTYPE html&gt;"/>
     <p:identity name="result.fileset"/>
     <p:sink/>
 

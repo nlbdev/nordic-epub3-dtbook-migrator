@@ -36,9 +36,9 @@
     <p:group>
         <p:variable name="content" select="/*/text()"/>
         <p:choose>
-            <p:when test="matches($content,'^&lt;!DOCTYPE')">
-                <p:variable name="doctype-declaration" select="replace(/*/text(),'^.*?(&lt;!DOCTYPE.*?&gt;).*$','$1','s')"/>
-                <p:variable name="parsed-doctype-declaration" select="replace(replace($doctype-declaration,'SYSTEM','PUBLIC &quot;&quot;','s'),'^&lt;!DOCTYPE\s+([^\s&gt;]+)(\s+PUBLIC\s+([&quot;''][^&quot;'']*[&quot;''])\s+([&quot;''][^&quot;'']*[&quot;'']))?.*?&gt;.*$','$1&#10;$3&#10;$4','s')"/>
+            <p:when test="matches($content,'^(&lt;\?[^&lt;]*\?&gt;|\s)*&lt;!DOCTYPE','si')">
+                <p:variable name="doctype-declaration" select="replace(/*/text(),'^(&lt;\?[^&lt;]*\?&gt;|\s)*(&lt;!DOCTYPE[^&gt;]*&gt;).*$','$2','si')"/>
+                <p:variable name="parsed-doctype-declaration" select="replace(replace($doctype-declaration,'SYSTEM','PUBLIC &quot;&quot;','s'),'^&lt;!DOCTYPE\s+([^\s&gt;]+)(\s+PUBLIC\s+([&quot;''][^&quot;'']*[&quot;''])\s+([&quot;''][^&quot;'']*[&quot;'']))?.*?&gt;.*$','$1&#10;$3&#10;$4','si')"/>
                 <p:add-attribute match="/*" attribute-name="doctype-declaration">
                     <p:with-option name="attribute-value" select="$doctype-declaration"/>
                     <p:input port="source">

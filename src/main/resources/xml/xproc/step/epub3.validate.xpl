@@ -289,14 +289,6 @@
 
         <!-- DOCTYPE declaration -->
         <p:choose>
-            <p:when test="/*/@media-type='application/xhtml+xml'">
-                <px:message message="skipping doctype check for HTML document until &lt;!DOCTYPE html&gt; is supported in `p:store`. See: https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/83"/>
-                <p:identity>
-                    <p:input port="source">
-                        <p:empty/>
-                    </p:input>
-                </p:identity>
-            </p:when>
             <p:when test="not(/*/@media-type='application/xhtml+xml')">
                 <px:message message="skipping doctype check for non-HTML document: $1">
                     <p:with-option name="param1" select="$href"/>

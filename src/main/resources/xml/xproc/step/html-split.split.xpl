@@ -66,6 +66,7 @@
         <p:add-attribute match="//d:file" attribute-name="encoding" attribute-value="utf-8"/>
         <p:add-attribute match="//d:file" attribute-name="method" attribute-value="xhtml"/>
         <p:add-attribute match="//d:file" attribute-name="indent" attribute-value="true"/>
+        <p:add-attribute match="//d:file" attribute-name="doctype" attribute-value="&lt;!DOCTYPE html&gt;"/>
         <p:identity name="for-each.fileset"/>
     </p:for-each>
     <p:identity name="in-memory.html"/>
