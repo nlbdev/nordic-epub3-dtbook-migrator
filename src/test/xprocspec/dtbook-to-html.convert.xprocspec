@@ -42,15 +42,16 @@
         <x:expect type="xpath" label="There should be a file with href='css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf'" test="//d:file[@href='css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf']"/>
         <x:expect type="xpath" label="There should be a file with href='css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf'"
             test="//d:file[@href='css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf']"/>
+        <x:expect type="xpath" label="There should be a file with href='css/fonts/opendyslexic/LICENSE.txt'" test="//d:file[@href='css/fonts/opendyslexic/LICENSE.txt']"/>
         <x:expect type="xpath" label="There should be a file with href='C00000.xhtml'" test="//d:file[@href='C00000.xhtml']"/>
-        <x:expect type="xpath" label="There should be exactly 8 files in the fileset" test="count(//d:file)" equals="8"/>
+        <x:expect type="xpath" label="There should be exactly 8 files in the fileset" test="count(//d:file)" equals="9"/>
 
         <x:context label="temp-dir directory">
             <x:document type="directory" base-uri="temp-dir" href="temp-dir/" recursive="true"/>
         </x:context>
         <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
         <x:expect type="xpath" label="The intermediary HTML should not be stored to disk" test="count(//c:file[matches(@name,'\.x?html','i')])" equals="0"/>
-        <x:expect type="compare" label="The default CSS and fonts should be provided">
+        <x:expect type="compare" label="The default CSS, fonts, and fonts license should be provided">
             <x:document type="inline">
                 <c:directory name="temp-dir">
                     <c:directory name="css">

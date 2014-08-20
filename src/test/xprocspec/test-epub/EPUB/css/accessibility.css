@@ -50,12 +50,12 @@ code, kbd, pre, samp {
    The text is colored dark blue to assist with "glare"
    issues, but also to make the black symbols subtly stand
    out.                                                  */
- body {
-    font-size: 14px;
+body {
+    font-size: 0.875em;
     line-height: 200%;
     background: snow;
     margin: auto 0;
-    padding: 0 100;
+    padding: 0 100px;
     color: #1A0033;
 }
 

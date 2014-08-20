@@ -100,7 +100,7 @@
             <xsl:if test="./d:file">
                 <pre><xsl:value-of select="./d:file"/></pre>
             </xsl:if>
-            <xsl:if test="string-length(./d:location/@href) > 0">
+            <xsl:if test="./d:location[@href or @line or @column]">
                 <div>
                     <h3>Location:</h3>
                     <pre class="box">
@@ -109,7 +109,19 @@
                             <xsl:value-of select="./d:location/@href"/>
                         </xsl:when>
                         <xsl:otherwise>
-                            <em>Line <xsl:value-of select="./d:location/@line"/>, Column <xsl:value-of select="./d:location/@column"/></em>
+                            <em>
+                                <xsl:if test="./d:location/@line">
+                                    <xsl:text>Line </xsl:text>
+                                    <xsl:value-of select="./d:location/@line"/>
+                                </xsl:if>
+                                <xsl:if test="./d:location[@line and @column]">
+                                    <xsl:text>, </xsl:text>
+                                </xsl:if>
+                                <xsl:if test="./d:location/@column">
+                                    <xsl:text>Column </xsl:text>
+                                    <xsl:value-of select="./d:location/@column"/>
+                                </xsl:if>
+                            </em>
                         </xsl:otherwise>
                     </xsl:choose>
                     </pre>

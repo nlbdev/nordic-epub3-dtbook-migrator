@@ -128,6 +128,7 @@
     <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Bold.otf"/>
     <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf"/>
     <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"/>
+    <px:fileset-add-entry media-type="text/plain" href="css/fonts/opendyslexic/LICENSE.txt"/>
     <p:viewport match="/*/*">
         <p:add-attribute match="/*" attribute-name="original-href">
             <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri(/*))"/>

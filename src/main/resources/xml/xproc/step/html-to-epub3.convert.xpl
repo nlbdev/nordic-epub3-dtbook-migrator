@@ -146,35 +146,7 @@
         </p:add-attribute>
         <p:identity name="nav.ncx"/>
     </p:group>
-
-    <!-- List auxiliary resources (i.e. all non-content files: images, CSS, NCX, etc.) -->
-    <p:for-each>
-        <p:iteration-source>
-            <p:pipe port="html" step="nav"/>
-            <p:pipe port="result" step="spine-html"/>
-        </p:iteration-source>
-        <px:html-to-fileset/>
-        <!-- reset d:file/@original-href to the ones in the input fileset (TODO: fix this by adding a fileset.in port to px:html-to-fileset etc.?) -->
-        <p:viewport match="/*/*">
-            <p:variable name="href" select="/*/@href"/>
-            <p:choose>
-                <p:xpath-context>
-                    <p:pipe port="fileset.in" step="main"/>
-                </p:xpath-context>
-                <p:when test="$href = /*/*[@original-href]/@href">
-                    <p:add-attribute match="/*" attribute-name="original-href">
-                        <p:with-option name="attribute-value" select="/*/*[@href=$href]/@original-href">
-                            <p:pipe port="fileset.in" step="main"/>
-                        </p:with-option>
-                    </p:add-attribute>
-                </p:when>
-                <p:otherwise>
-                    <p:identity/>
-                </p:otherwise>
-            </p:choose>
-        </p:viewport>
-    </p:for-each>
-    <p:identity name="html-filesets"/>
+    
     <px:fileset-create>
         <p:with-option name="base" select="replace(base-uri(/*),'[^/]+$','')">
             <p:pipe port="ncx" step="nav"/>
@@ -192,7 +164,7 @@
     <px:fileset-join>
         <p:input port="source">
             <p:pipe port="result" step="ncx-fileset"/>
-            <p:pipe port="result" step="html-filesets"/>
+            <p:pipe port="result" step="non-linear-content"/>
         </p:input>
     </px:fileset-join>
     <px:mediatype-detect name="resource-fileset"/>
@@ -308,7 +280,14 @@
         </p:input>
     </p:identity>
     <p:sink/>
-
-    <!--</p:group>-->
+    
+    <!-- List auxiliary resources (i.e. all non-content files: images, CSS, NCX, etc. as well as content files that are non-primary) -->
+    <px:fileset-filter>
+        <p:input port="source">
+            <p:pipe port="fileset.out" step="html-split.moved"/>
+        </p:input>
+    </px:fileset-filter>
+    <p:delete match="//d:file[@media-type='application/xhtml+xml' and not(ends-with(@href,'-cover.xhtml'))]"/>
+    <p:identity name="non-linear-content"/>
 
 </p:declare-step>

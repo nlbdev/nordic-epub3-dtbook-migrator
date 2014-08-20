@@ -111,7 +111,7 @@
                         <xsl:variable name="file" select="if ($severity='exception') then '' else replace($message,$message-regex,'$1')"/>
                         <xsl:variable name="location" select="if ($severity='exception') then '' else replace($message,$message-regex,'$4')"/>
                         <xsl:variable name="message-text" select="if ($severity='exception') then $message else replace($message,$message-regex,'$5')"/>
-                        <xsl:variable name="element-name" select="if ($severity='warn' and $report-warning-as-error='true' or $severity='exception') then 'd:error' else concat('d:',$severity)"/>
+                        <xsl:variable name="element-name" select="if ($severity='warn' and $report-warning-as-error='true' or $severity='exception') then 'd:error' else concat('d:',lower-case($severity))"/>
                         <xsl:element name="{$element-name}">
                             <d:desc>
                                 <xsl:value-of select="$message-text"/>

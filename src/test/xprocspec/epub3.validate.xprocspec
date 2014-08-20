@@ -29,6 +29,7 @@
                         <d:file href="EPUB/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf"/>
                         <d:file href="EPUB/css/fonts/opendyslexic/OpenDyslexic-Regular.otf"/>
                         <d:file href="EPUB/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"/>
+                        <d:file href="EPUB/css/fonts/opendyslexic/LICENSE.txt"/>
                     </d:fileset>
                 </x:document>
             </x:input>
