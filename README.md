@@ -1,6 +1,8 @@
 Nordic EPUB3/DTBook Migrator
 ============================
 
+[![Build Status](https://travis-ci.org/nlbdev/nordic-epub3-dtbook-migrator.svg)](https://travis-ci.org/nlbdev/nordic-epub3-dtbook-migrator)
+
 The main goal of this project is to provide a EPUB3 to DTBook conversion tool for the libraries in the Nordic countries providing accessible litterature to visually impaired readers
 ([NLB](http://www.nlb.no/), [MTM](http://mtm.se/), [Celia](http://www.celia.fi/), [Nota](http://www.nota.nu/) and [SBS](http://sbs.ch/)).
 The conversion will be implemented in XProc and XSLT. As a tool, [DAISY Pipeline 2](http://www.daisy.org/pipeline2) is recommended,
