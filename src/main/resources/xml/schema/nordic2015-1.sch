@@ -251,9 +251,7 @@
   <!-- Rule 50: image alt attribute -->
   <sch:pattern id="dtbook_TPB_50">
     <sch:rule context="html:img[parent::html:figure/tokenize(@class,'\s+')='image']">
-      <sch:report test="lang('sv') and @alt!='illustration'">[tpb50] an image inside a figure with class='image' in swedish language context must have attribute alt="illustration"</sch:report>
-      <sch:report test="lang('en') and @alt!='image'">[tpb50] an image inside a figure with class='image' in english language context must have attribute alt="image"</sch:report>
-      <sch:report test="not(lang('sv') or lang('en')) and not(@alt)">[tpb50] an image inside a figure with class='image' must have a non-empty alt attribute</sch:report>
+      <sch:report test="string(@alt)!='image'">[tpb50] an image inside a figure with class='image' must have attribute alt="image"</sch:report>
     </sch:rule>
     <sch:rule context="html:img[not(parent::html:figure/tokenize(@class,'\s+')='image')]">
       <sch:report test="string(@alt)!=''">[tpb50] an image which is not inside a figure with class='image' is irrelevant or redundant with regards to the understanding of the book, so the alt

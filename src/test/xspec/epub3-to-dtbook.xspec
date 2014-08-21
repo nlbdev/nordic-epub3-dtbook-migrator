@@ -2021,7 +2021,24 @@
 
     <!-- ########## Nordic tests ########## -->
 
-    <!-- None at the moment. -->
+    <x:scenario label="github issue #30; make images in swedish books have alt='illustration'">
+        <x:context>
+            <html:img src="images/img.jpg" lang="en" alt="image"/>
+            <html:img src="images/img.jpg" lang="sv" alt="image"/>
+            <html:img src="images/img.jpg" lang="no" alt="image"/>
+            <html:img src="images/img.jpg" xml:lang="en" alt="image"/>
+            <html:img src="images/img.jpg" xml:lang="sv" alt="image"/>
+            <html:img src="images/img.jpg" xml:lang="no" alt="image"/>
+        </x:context>
+        <x:expect label="the resulting element should be a img">
+            <dtbook:img src="..." id="..." xml:lang="en" alt="image"/>
+            <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
+            <dtbook:img src="..." id="..." xml:lang="no" alt="image"/>
+            <dtbook:img src="..." id="..." xml:lang="en" alt="image"/>
+            <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
+            <dtbook:img src="..." id="..." xml:lang="no" alt="image"/>
+        </x:expect>
+    </x:scenario>
 
 
 </x:description>

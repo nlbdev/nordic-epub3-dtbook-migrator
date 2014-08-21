@@ -859,7 +859,15 @@
         <xsl:param name="all-ids" tunnel="yes" select=".//@id"/>
         <xsl:call-template name="attrs"/>
         <xsl:attribute name="src" select="replace(@src,'^images/','')"/>
-        <xsl:copy-of select="@alt|@longdesc|@height|@width"/>
+        <xsl:choose>
+            <xsl:when test="(ancestor-or-self::*/(@xml:lang|@lang))[1]='sv'">
+                <xsl:attribute name="alt" select="'illustration'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="@alt"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:copy-of select="@longdesc|@height|@width"/>
         <xsl:if test="not(@id)">
             <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
