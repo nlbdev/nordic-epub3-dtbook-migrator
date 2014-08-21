@@ -2315,16 +2315,24 @@
                 <dtbook:table>
                     <dtbook:pagenum>1</dtbook:pagenum>
                     <dtbook:pagenum>2</dtbook:pagenum>
-                    <dtbook:tr><dtbook:td>td #1</dtbook:td></dtbook:tr>
+                    <dtbook:tr>
+                        <dtbook:td>td #1</dtbook:td>
+                    </dtbook:tr>
                     <dtbook:pagenum>3</dtbook:pagenum>
                     <dtbook:pagenum>4</dtbook:pagenum>
-                    <dtbook:tr><dtbook:td>td #2</dtbook:td></dtbook:tr>
+                    <dtbook:tr>
+                        <dtbook:td>td #2</dtbook:td>
+                    </dtbook:tr>
                     <dtbook:pagenum>5</dtbook:pagenum>
                     <dtbook:pagenum>6</dtbook:pagenum>
-                    <dtbook:tr><dtbook:td>td #3</dtbook:td></dtbook:tr>
+                    <dtbook:tr>
+                        <dtbook:td>td #3</dtbook:td>
+                    </dtbook:tr>
                     <dtbook:pagenum>7</dtbook:pagenum>
                     <dtbook:pagenum>8</dtbook:pagenum>
-                    <dtbook:tr><dtbook:td>td #4</dtbook:td></dtbook:tr>
+                    <dtbook:tr>
+                        <dtbook:td>td #4</dtbook:td>
+                    </dtbook:tr>
                     <dtbook:pagenum>9</dtbook:pagenum>
                     <dtbook:pagenum>10</dtbook:pagenum>
                 </dtbook:table>
@@ -2334,15 +2342,182 @@
                 <html:div epub:type="pagebreak" title="2" class="page-normal"/>
                 <html:table id="...">
                     <html:tbody>
-                        <html:tr><html:td>td #1 <html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
-                        <html:tr><html:td>td #2 <html:span epub:type="pagebreak" title="5" class="page-normal"/>
-                                <html:span epub:type="pagebreak" title="6" class="page-normal"/></html:td></html:tr>
-                        <html:tr><html:td>td #3 <html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/></html:td></html:tr>
-                        <html:tr><html:td>td #4</html:td></html:tr>
+                        <html:tr>
+                            <html:td>td #1</html:td>
+                        </html:tr>
+                        <html:tr>
+                            <html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td>
+                        </html:tr>
+                        <html:tr>
+                            <html:td><html:span epub:type="pagebreak" title="5" class="page-normal"/><html:span epub:type="pagebreak" title="6" class="page-normal"/>td #3</html:td>
+                        </html:tr>
+                        <html:tr>
+                            <html:td><html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/>td #4</html:td>
+                        </html:tr>
                     </html:tbody>
                 </html:table>
                 <html:div epub:type="pagebreak" title="9" class="page-normal"/>
                 <html:div epub:type="pagebreak" title="10" class="page-normal"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with pagenum, thead and tr children">
+            <x:context>
+                <dtbook:table>
+                    <dtbook:thead>
+                        <dtbook:tr>
+                            <dtbook:th>thead th #1</dtbook:th>
+                            <dtbook:th>thead th #2</dtbook:th>
+                        </dtbook:tr>
+                        <dtbook:tr>
+                            <dtbook:th>thead th #3</dtbook:th>
+                            <dtbook:th>thead th #4</dtbook:th>
+                        </dtbook:tr>
+                    </dtbook:thead>
+                    <dtbook:pagenum>1</dtbook:pagenum>
+                    <dtbook:pagenum>2</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #1</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>3</dtbook:pagenum>
+                    <dtbook:pagenum>4</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #2</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>5</dtbook:pagenum>
+                    <dtbook:pagenum>6</dtbook:pagenum>
+                </dtbook:table>
+            </x:context>
+            <x:expect label="the resulting element should be table, with pagebreaks moved before or after the table element, or inside the table cells">
+                <html:div epub:type="pagebreak" title="1" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:table id="...">
+                    <html:thead>
+                        <html:tr>
+                            <html:th>thead th #1</html:th>
+                            <html:th>thead th #2</html:th>
+                        </html:tr>
+                        <html:tr>
+                            <html:th>thead th #3</html:th>
+                            <html:th>thead th #4</html:th>
+                        </html:tr>
+                    </html:thead>
+                    <html:tbody>
+                        <html:tr><html:td>td #1</html:td></html:tr>
+                        <html:tr><html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td></html:tr>
+                    </html:tbody>
+                </html:table>
+                <html:div epub:type="pagebreak" title="5" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="6" class="page-normal"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with pagenum, tfoot and tr children">
+            <x:context>
+                <dtbook:table>
+                    <dtbook:tfoot>
+                        <dtbook:tr>
+                            <dtbook:td>tfoot td #1</dtbook:td>
+                            <dtbook:td>tfoot td #2</dtbook:td>
+                        </dtbook:tr>
+                        <dtbook:tr>
+                            <dtbook:td>tfoot td #3</dtbook:td>
+                            <dtbook:td>tfoot td #4</dtbook:td>
+                        </dtbook:tr>
+                    </dtbook:tfoot>
+                    <dtbook:pagenum>1</dtbook:pagenum>
+                    <dtbook:pagenum>2</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #1</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>3</dtbook:pagenum>
+                    <dtbook:pagenum>4</dtbook:pagenum>
+                    <dtbook:tr><dtbook:td>td #2</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum>5</dtbook:pagenum>
+                    <dtbook:pagenum>6</dtbook:pagenum>
+                </dtbook:table>
+            </x:context>
+            <x:expect label="the resulting element should be table, with pagebreaks moved before or after the table element, or inside the table cells">
+                <html:div epub:type="pagebreak" title="1" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:table id="...">
+                    <html:tfoot>
+                        <html:tr>
+                            <html:td>tfoot td #1</html:td>
+                            <html:td>tfoot td #2</html:td>
+                        </html:tr>
+                        <html:tr>
+                            <html:td>tfoot td #3</html:td>
+                            <html:td>tfoot td #4</html:td>
+                        </html:tr>
+                    </html:tfoot>
+                    <html:tbody>
+                        <html:tr><html:td>td #1</html:td></html:tr>
+                        <html:tr><html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td></html:tr>
+                    </html:tbody>
+                </html:table>
+                <html:div epub:type="pagebreak" title="5" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="6" class="page-normal"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with thead, tfoot and tbody children, and pagenum children inside the tbody">
+            <x:context>
+                <dtbook:table>
+                    <dtbook:thead>
+                        <dtbook:tr>
+                            <dtbook:th>thead th #1</dtbook:th>
+                            <dtbook:th>thead th #2</dtbook:th>
+                        </dtbook:tr>
+                        <dtbook:tr>
+                            <dtbook:th>thead th #3</dtbook:th>
+                            <dtbook:th>thead th #4</dtbook:th>
+                        </dtbook:tr>
+                    </dtbook:thead>
+                    <dtbook:tfoot>
+                        <dtbook:tr>
+                            <dtbook:td>tfoot td #1</dtbook:td>
+                            <dtbook:td>tfoot td #2</dtbook:td>
+                        </dtbook:tr>
+                        <dtbook:tr>
+                            <dtbook:td>tfoot td #3</dtbook:td>
+                            <dtbook:td>tfoot td #4</dtbook:td>
+                        </dtbook:tr>
+                    </dtbook:tfoot>
+                    <dtbook:tbody>
+                        <dtbook:pagenum>1</dtbook:pagenum>
+                        <dtbook:pagenum>2</dtbook:pagenum>
+                        <dtbook:tr><dtbook:td>td #1</dtbook:td></dtbook:tr>
+                        <dtbook:pagenum>3</dtbook:pagenum>
+                        <dtbook:pagenum>4</dtbook:pagenum>
+                        <dtbook:tr><dtbook:td>td #2</dtbook:td></dtbook:tr>
+                        <dtbook:pagenum>5</dtbook:pagenum>
+                        <dtbook:pagenum>6</dtbook:pagenum>
+                    </dtbook:tbody>
+                </dtbook:table>
+            </x:context>
+            <x:expect label="the resulting element should be table, with pagebreaks moved before or after the table element, or inside the table cells">
+                <html:div epub:type="pagebreak" title="1" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="2" class="page-normal"/>
+                <html:table id="...">
+                    <html:thead>
+                        <html:tr>
+                            <html:th>thead th #1</html:th>
+                            <html:th>thead th #2</html:th>
+                        </html:tr>
+                        <html:tr>
+                            <html:th>thead th #3</html:th>
+                            <html:th>thead th #4</html:th>
+                        </html:tr>
+                    </html:thead>
+                    <html:tfoot>
+                        <html:tr>
+                            <html:td>tfoot td #1</html:td>
+                            <html:td>tfoot td #2</html:td>
+                        </html:tr>
+                        <html:tr>
+                            <html:td>tfoot td #3</html:td>
+                            <html:td>tfoot td #4</html:td>
+                        </html:tr>
+                    </html:tfoot>
+                    <html:tbody>
+                        <html:tr><html:td>td #1</html:td></html:tr>
+                        <html:tr><html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td></html:tr>
+                    </html:tbody>
+                </html:table>
+                <html:div epub:type="pagebreak" title="5" class="page-normal"/>
+                <html:div epub:type="pagebreak" title="6" class="page-normal"/>
             </x:expect>
         </x:scenario>
         <!-- TODO: table captions
