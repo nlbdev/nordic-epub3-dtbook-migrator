@@ -4368,7 +4368,7 @@
                 </oneOrMore>
                 <!--<oneOrMore>
                     <ref name="tr"/> <!-\- tr -\->
-                    <!-\- STRICT NOTE: spans (HTML equivalent for pagenums) are not allowed as direct children of the table element in HTML. They must be moved to the preceding cell (th,td) or to before the table starts. -\->
+                    <!-\- STRICT NOTE: spans (HTML equivalent for pagenums) are not allowed as direct children of the table element in HTML. They must be moved to the following cell (th,td), or to outside of the table element. -\->
                 </oneOrMore>
             </choice>-->
         </element>
