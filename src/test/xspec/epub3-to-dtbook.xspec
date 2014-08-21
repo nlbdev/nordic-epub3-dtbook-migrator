@@ -1978,6 +1978,46 @@
         </x:expect>
     </x:scenario>
 
+    <x:scenario label="github issue #101; pagenums in DTBook must be placed between table rows">
+        <x:context>
+            <html:table>
+                <html:tbody>
+                    <html:tr><html:td>CONTENT</html:td></html:tr>
+                    <html:tr>
+                        <html:td>CONTENT 1<html:span epub:type="pagebreak" title="26" id="page-26"/>CONTENT 2</html:td>
+                        <html:td><html:span epub:type="pagebreak" title="27" id="page-27"/>CONTENT 3</html:td>
+                    </html:tr>
+                </html:tbody>
+            </html:table>
+            <html:table>
+                <html:tr><html:td>CONTENT</html:td></html:tr>
+                <html:tr>
+                    <html:td>CONTENT 1<html:span epub:type="pagebreak" title="26" id="page-26"/>CONTENT 2</html:td>
+                    <html:td><html:span epub:type="pagebreak" title="27" id="page-27"/>CONTENT 3</html:td>
+                </html:tr>
+            </html:table>
+        </x:context>
+        <x:expect label="all the pagebreaks should become pagenums and be placed in front of the table row">
+            <dtbook:table>
+                <dtbook:tr><dtbook:td>CONTENT</dtbook:td></dtbook:tr>
+                <dtbook:pagenum page="normal" id="page-26">26</dtbook:pagenum>
+                <dtbook:pagenum page="normal" id="page-27">27</dtbook:pagenum>
+                <dtbook:tr>
+                    <dtbook:td>CONTENT 1CONTENT 2</dtbook:td>
+                    <dtbook:td>CONTENT 3</dtbook:td>
+                </dtbook:tr>
+            </dtbook:table>
+            <dtbook:table>
+                <dtbook:tr><dtbook:td>CONTENT</dtbook:td></dtbook:tr>
+                <dtbook:pagenum page="normal" id="page-26">26</dtbook:pagenum>
+                <dtbook:pagenum page="normal" id="page-27">27</dtbook:pagenum>
+                <dtbook:tr>
+                    <dtbook:td>CONTENT 1CONTENT 2</dtbook:td>
+                    <dtbook:td>CONTENT 3</dtbook:td>
+                </dtbook:tr>
+            </dtbook:table>
+        </x:expect>
+    </x:scenario>
 
     <!-- ########## Nordic tests ########## -->
 
