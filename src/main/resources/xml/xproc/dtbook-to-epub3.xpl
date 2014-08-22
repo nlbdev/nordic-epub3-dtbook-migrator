@@ -147,9 +147,6 @@
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.out" step="single-html"/>
                 </p:input>
-                <p:with-option name="title" select="/*/@content">
-                    <p:pipe port="title" step="metadata"/>
-                </p:with-option>
                 <p:with-option name="strict" select="$strict"/>
             </px:nordic-html-validate.step>
             <p:sink/>

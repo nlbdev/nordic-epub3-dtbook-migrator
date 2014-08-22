@@ -25,7 +25,6 @@
     </p:output>
 
     <p:option name="document-type" required="false" select="'Nordic HTML'"/>
-    <p:option name="title" required="true"/>
     <p:option name="strict" select="'true'"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
@@ -105,59 +104,6 @@
             <p:pipe step="validate.sch.strict" port="result"/>
         </p:input>
     </p:identity>
-
-    <p:identity>
-        <p:input port="source">
-            <p:pipe step="html" port="result"/>
-        </p:input>
-    </p:identity>
-    <p:choose>
-        <p:when test="/*/html:head/html:title/text() = $title">
-            <p:identity>
-                <p:input port="source">
-                    <p:empty/>
-                </p:input>
-            </p:identity>
-        </p:when>
-        <p:otherwise>
-            <p:for-each>
-                <p:iteration-source select="/*/html:head/html:title"/>
-                <p:identity/>
-            </p:for-each>
-            <p:wrap-sequence wrapper="d:was"/>
-            <p:wrap-sequence wrapper="d:error"/>
-            <p:insert match="/*" position="first-child">
-                <p:input port="insertion">
-                    <p:inline>
-                        <d:desc>PLACEHOLDER</d:desc>
-                    </p:inline>
-                    <p:inline>
-                        <d:file>PLACEHOLDER</d:file>
-                    </p:inline>
-                    <p:inline>
-                        <d:expected>
-                            <html:title>PLACEHOLDER</html:title>
-                        </d:expected>
-                    </p:inline>
-                </p:input>
-            </p:insert>
-            <p:string-replace match="/*/d:desc/text()">
-                <p:with-option name="replace" select="concat('&quot;Wrong document title in: ',replace(base-uri(/*),'^.*/([^/]*)$','$1'),'&quot;')">
-                    <p:pipe port="result" step="html"/>
-                </p:with-option>
-            </p:string-replace>
-            <p:string-replace match="/*/d:file/text()">
-                <p:with-option name="replace" select="concat('&quot;',base-uri(/*),'&quot;')">
-                    <p:pipe port="result" step="html"/>
-                </p:with-option>
-            </p:string-replace>
-            <p:string-replace match="/*/d:expected/html:title/text()">
-                <p:with-option name="replace" select="concat('&quot;',replace($title,'&quot;','&amp;quot;'),'&quot;')"/>
-            </p:string-replace>
-        </p:otherwise>
-    </p:choose>
-    <p:wrap-sequence wrapper="d:errors"/>
-    <p:identity name="validate.title"/>
     <p:sink/>
 
     <px:combine-validation-reports>
@@ -165,12 +111,6 @@
         <p:input port="source">
             <p:pipe port="report" step="validate.rng"/>
             <p:pipe port="result" step="validate.sch"/>
-            <p:pipe port="result" step="validate.title"/>
-            <p:inline>
-                <c:errors>
-                    <!-- Temporary fix for v1.7. Will probably be fixed in v1.8. See: https://github.com/daisy-consortium/pipeline-modules-common/pull/48 -->
-                </c:errors>
-            </p:inline>
         </p:input>
         <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
             <p:pipe port="result" step="html"/>

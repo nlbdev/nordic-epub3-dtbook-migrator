@@ -22,7 +22,6 @@
 
             <x:input port="report.in"/>
             
-            <x:option name="title" select="'Valentin Haüy - the father of the education for the blind'"/>
             <x:option name="strict" select="'true'"/>
 
         </x:call>

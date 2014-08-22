@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
 
-    <title>DTBook 2005 Schematron tests for TPB 2010-1 rules - adapted for HTML5</title>
+    <title>Schematron tests for Nordic EPUB 2015-1 OPF rules</title>
 
     <ns prefix="opf" uri="http://www.idpf.org/2007/opf"/>
     <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
