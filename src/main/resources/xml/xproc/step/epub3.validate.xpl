@@ -26,7 +26,7 @@
         <p:pipe port="result" step="epubcheck.validate"/>
         <p:pipe port="result" step="opf.validate"/>
         <p:pipe port="result" step="html.validate"/>
-        <p:pipe port="result" step="id.validate"/>
+        <p:pipe port="result" step="opf-and-html.validate"/>
     </p:output>
 
     <p:option name="temp-dir" required="true"/>
@@ -144,6 +144,19 @@
     </px:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
     <p:identity name="opf"/>
+    <p:sink/>
+
+    <px:fileset-load media-types="application/xhtml+xml">
+        <p:input port="fileset">
+            <p:pipe port="fileset" step="unzip"/>
+        </p:input>
+        <p:input port="in-memory">
+            <p:pipe port="in-memory" step="unzip"/>
+        </p:input>
+    </px:fileset-load>
+    <px:assert test-count-min="1" message="There must be a HTML file in the fileset." error-code="NORDICDTBOOKEPUB005"/>
+    <p:identity name="html"/>
+    <p:sink/>
 
     <p:validate-with-schematron name="opf.validate.schematron" assert-valid="false">
         <p:input port="parameters">
@@ -160,11 +173,6 @@
     <px:combine-validation-reports document-type="Nordic EPUB3 Package Document">
         <p:input port="source">
             <p:pipe port="report" step="opf.validate.schematron"/>
-            <p:inline>
-                <c:errors>
-                    <!-- Temporary fix for v1.7. Will probably be fixed in v1.8. See: https://github.com/daisy-consortium/pipeline-modules-common/pull/48 -->
-                </c:errors>
-            </p:inline>
         </p:input>
         <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
             <p:pipe port="result" step="opf"/>
@@ -174,7 +182,6 @@
         </p:with-option>
     </px:combine-validation-reports>
     <p:identity name="opf.validate"/>
-    <!-- TODO: the package document must have the xml declaration `<?xml version="1.0" encoding="UTF-8"?>` -->
     <p:sink/>
 
     <p:for-each>
@@ -191,9 +198,6 @@
             <p:input port="in-memory.in">
                 <p:pipe port="in-memory" step="unzip"/>
             </p:input>
-            <p:with-option name="title" select="/opf:package/opf:metadata[1]/dc:title[1]/text()">
-                <p:pipe port="result" step="opf"/>
-            </p:with-option>
             <p:with-option name="strict" select="$strict"/>
         </px:nordic-html-validate.step>
         <p:identity>
@@ -205,216 +209,201 @@
     <p:identity name="html.validate" cx:depends-on="xml-declaration.validate"/>
     <p:sink/>
 
-    <p:identity>
-        <p:input port="source">
-            <p:pipe port="fileset" step="unzip"/>
-        </p:input>
-    </p:identity>
-    <px:fileset-filter media-types="application/xml application/*+xml"/>
-    <p:for-each name="xml-declaration.iterate-files">
-        <p:iteration-source select="/*/d:file"/>
-        <p:output port="result" sequence="true">
-            <p:pipe port="result" step="xml-declaration.iterate-files.xml"/>
-            <p:pipe port="result" step="xml-declaration.iterate-files.doctype"/>
-        </p:output>
-        <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
-
-        <!-- XML declaration -->
-        <p:try>
-            <p:group>
-                <px:message message="trying to read xml declaration from $1">
-                    <p:with-option name="param1" select="$href"/>
-                </px:message>
-                <px:read-xml-declaration>
-                    <p:with-option name="href" select="$href"/>
-                </px:read-xml-declaration>
-                <px:message message="xml declaration from $1 is $2">
-                    <p:with-option name="param1" select="$href"/>
-                    <p:with-option name="param2" select="/*/@xml-declaration"/>
-                </px:message>
-            </p:group>
-            <p:catch>
-                <px:message message="inferring xml declaration from d:file instead: $1">
-                    <p:with-option name="param1" select="$href"/>
-                </px:message>
-                <p:rename match="/*" new-name="c:result"/>
-                <p:delete match="/*/@*[not(local-name()=('version','encoding','standalone'))]"/>
-                <px:message message="xml declaration: |$1|$2|$3|">
-                    <p:with-option name="param1" select="/*/@version"/>
-                    <p:with-option name="param2" select="/*/@encoding"/>
-                    <p:with-option name="param3" select="/*/@standalone"/>
-                </px:message>
-            </p:catch>
-        </p:try>
-        <p:choose>
-            <p:when test="/*/@version='1.0' and /*/@encoding=('utf-8','UTF-8') and not(/*/@standalone)">
-                <p:identity>
-                    <p:input port="source">
-                        <p:empty/>
-                    </p:input>
-                </p:identity>
-            </p:when>
-            <p:otherwise>
-                <p:wrap-sequence wrapper="d:was"/>
-                <p:string-replace match="/*/c:result" replace="/*/c:result/@xml-declaration"/>
-                <p:wrap-sequence wrapper="d:error"/>
-                <p:insert match="/*" position="first-child">
-                    <p:input port="insertion">
-                        <p:inline>
-                            <d:desc>PLACEHOLDER</d:desc>
-                        </p:inline>
-                        <p:inline>
-                            <d:file>PLACEHOLDER</d:file>
-                        </p:inline>
-                        <p:inline>
-                            <d:expected>&lt;?xml version="1.0" encoding="utf-8"?&gt;</d:expected>
-                        </p:inline>
-                    </p:input>
-                </p:insert>
-                <p:string-replace match="/*/d:desc/text()">
-                    <p:with-option name="replace" select="concat('&quot;Bad or missing XML declaration in: ',replace($href,'^.*/([^/]*)$','$1'),'&quot;')"/>
-                </p:string-replace>
-                <p:string-replace match="/*/d:file/text()">
-                    <p:with-option name="replace" select="concat('&quot;',$href,'&quot;')"/>
-                </p:string-replace>
-            </p:otherwise>
-        </p:choose>
-        <p:identity name="xml-declaration.iterate-files.xml"/>
-
+    <p:group>
         <p:identity>
             <p:input port="source">
-                <p:pipe port="current" step="xml-declaration.iterate-files"/>
+                <p:pipe port="fileset" step="unzip"/>
             </p:input>
         </p:identity>
+        <px:fileset-filter media-types="application/xml application/*+xml"/>
+        <p:for-each name="xml-declaration.iterate-files">
+            <p:iteration-source select="/*/d:file"/>
+            <p:output port="result" sequence="true">
+                <p:pipe port="result" step="xml-declaration.iterate-files.xml"/>
+                <p:pipe port="result" step="xml-declaration.iterate-files.doctype"/>
+            </p:output>
+            <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
 
-        <!-- DOCTYPE declaration -->
-        <p:choose>
-            <p:when test="not(/*/@media-type='application/xhtml+xml')">
-                <px:message message="skipping doctype check for non-HTML document: $1">
-                    <p:with-option name="param1" select="$href"/>
-                </px:message>
-                <p:identity>
-                    <p:input port="source">
-                        <p:empty/>
-                    </p:input>
-                </p:identity>
-            </p:when>
-            <p:otherwise>
-                <p:try>
-                    <p:group>
-                        <px:message message="trying to read doctype declaration from $1">
-                            <p:with-option name="param1" select="$href"/>
-                        </px:message>
-                        <px:read-doctype-declaration>
-                            <p:with-option name="href" select="$href"/>
-                        </px:read-doctype-declaration>
-                        <px:message message="doctype declaration from $1 is: $2 $3 $4">
-                            <p:with-option name="param1" select="$href"/>
-                            <p:with-option name="param2" select="/*/@name"/>
-                            <p:with-option name="param3" select="/*/@doctype-public"/>
-                            <p:with-option name="param4" select="/*/@doctype-system"/>
-                        </px:message>
-                    </p:group>
-                    <p:catch>
-                        <px:message message="inferring doctype declaration from d:file instead: $1">
-                            <p:with-option name="param1" select="$href"/>
-                        </px:message>
-                        <p:rename match="/*" new-name="c:result"/>
-                        <p:delete match="/*/@*[not(local-name()=('doctype-public','doctype-system'))]"/>
-                        <px:message message="doctype declaration: $1 $2">
-                            <p:with-option name="param1" select="/*/@doctype-public"/>
-                            <p:with-option name="param2" select="/*/@doctype-system"/>
-                        </px:message>
-                    </p:catch>
-                </p:try>
-                <p:choose>
-                    <p:when test="/*/@has-doctype-declaration='true' and /*/@name='html' and not(/*/@doctype-public) and not(/*/@doctype-system)">
-                        <p:identity>
-                            <p:input port="source">
-                                <p:empty/>
-                            </p:input>
-                        </p:identity>
-                    </p:when>
-                    <p:otherwise>
-                        <p:wrap-sequence wrapper="d:was"/>
-                        <p:string-replace match="/*/c:result" replace="/*/c:result/@doctype-declaration"/>
-                        <p:wrap-sequence wrapper="d:error"/>
-                        <p:insert match="/*" position="first-child">
-                            <p:input port="insertion">
-                                <p:inline>
-                                    <d:desc>PLACEHOLDER</d:desc>
-                                </p:inline>
-                                <p:inline>
-                                    <d:file>PLACEHOLDER</d:file>
-                                </p:inline>
-                                <p:inline>
-                                    <d:expected>&lt;!DOCTYPE html&gt;</d:expected>
-                                </p:inline>
-                            </p:input>
-                        </p:insert>
-                        <p:string-replace match="/*/d:desc/text()">
-                            <p:with-option name="replace" select="concat('&quot;Bad or missing DOCTYPE declaration in: ',replace($href,'^.*/([^/]*)$','$1'),'&quot;')"/>
-                        </p:string-replace>
-                        <p:string-replace match="/*/d:file/text()">
-                            <p:with-option name="replace" select="concat('&quot;',$href,'&quot;')"/>
-                        </p:string-replace>
-                    </p:otherwise>
-                </p:choose>
-            </p:otherwise>
-        </p:choose>
+            <!-- XML declaration -->
+            <p:try>
+                <p:group>
+                    <px:message message="trying to read xml declaration from $1">
+                        <p:with-option name="param1" select="$href"/>
+                    </px:message>
+                    <px:read-xml-declaration>
+                        <p:with-option name="href" select="$href"/>
+                    </px:read-xml-declaration>
+                    <px:message message="xml declaration from $1 is $2">
+                        <p:with-option name="param1" select="$href"/>
+                        <p:with-option name="param2" select="/*/@xml-declaration"/>
+                    </px:message>
+                </p:group>
+                <p:catch>
+                    <px:message message="inferring xml declaration from d:file instead: $1">
+                        <p:with-option name="param1" select="$href"/>
+                    </px:message>
+                    <p:rename match="/*" new-name="c:result"/>
+                    <p:delete match="/*/@*[not(local-name()=('version','encoding','standalone'))]"/>
+                    <px:message message="xml declaration: |$1|$2|$3|">
+                        <p:with-option name="param1" select="/*/@version"/>
+                        <p:with-option name="param2" select="/*/@encoding"/>
+                        <p:with-option name="param3" select="/*/@standalone"/>
+                    </px:message>
+                </p:catch>
+            </p:try>
+            <p:choose>
+                <p:when test="/*/@version='1.0' and /*/@encoding=('utf-8','UTF-8') and not(/*/@standalone)">
+                    <p:identity>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:identity>
+                </p:when>
+                <p:otherwise>
+                    <p:wrap-sequence wrapper="d:was"/>
+                    <p:string-replace match="/*/c:result" replace="/*/c:result/@xml-declaration"/>
+                    <p:wrap-sequence wrapper="d:error"/>
+                    <p:insert match="/*" position="first-child">
+                        <p:input port="insertion">
+                            <p:inline>
+                                <d:desc>PLACEHOLDER</d:desc>
+                            </p:inline>
+                            <p:inline>
+                                <d:file>PLACEHOLDER</d:file>
+                            </p:inline>
+                            <p:inline>
+                                <d:expected>&lt;?xml version="1.0" encoding="utf-8"?&gt;</d:expected>
+                            </p:inline>
+                        </p:input>
+                    </p:insert>
+                    <p:string-replace match="/*/d:desc/text()">
+                        <p:with-option name="replace" select="concat('&quot;Bad or missing XML declaration in: ',replace($href,'^.*/([^/]*)$','$1'),'&quot;')"/>
+                    </p:string-replace>
+                    <p:string-replace match="/*/d:file/text()">
+                        <p:with-option name="replace" select="concat('&quot;',$href,'&quot;')"/>
+                    </p:string-replace>
+                </p:otherwise>
+            </p:choose>
+            <p:identity name="xml-declaration.iterate-files.xml"/>
 
-        <p:identity name="xml-declaration.iterate-files.doctype"/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe port="current" step="xml-declaration.iterate-files"/>
+                </p:input>
+            </p:identity>
 
-    </p:for-each>
-    <p:wrap-sequence wrapper="d:errors"/>
+            <!-- DOCTYPE declaration -->
+            <p:choose>
+                <p:when test="not(/*/@media-type='application/xhtml+xml')">
+                    <px:message message="skipping doctype check for non-HTML document: $1">
+                        <p:with-option name="param1" select="$href"/>
+                    </px:message>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:identity>
+                </p:when>
+                <p:otherwise>
+                    <p:try>
+                        <p:group>
+                            <px:message message="trying to read doctype declaration from $1">
+                                <p:with-option name="param1" select="$href"/>
+                            </px:message>
+                            <px:read-doctype-declaration>
+                                <p:with-option name="href" select="$href"/>
+                            </px:read-doctype-declaration>
+                            <px:message message="doctype declaration from $1 is: $2 $3 $4">
+                                <p:with-option name="param1" select="$href"/>
+                                <p:with-option name="param2" select="/*/@name"/>
+                                <p:with-option name="param3" select="/*/@doctype-public"/>
+                                <p:with-option name="param4" select="/*/@doctype-system"/>
+                            </px:message>
+                        </p:group>
+                        <p:catch>
+                            <px:message message="inferring doctype declaration from d:file instead: $1">
+                                <p:with-option name="param1" select="$href"/>
+                            </px:message>
+                            <p:rename match="/*" new-name="c:result"/>
+                            <p:delete match="/*/@*[not(local-name()=('doctype-public','doctype-system'))]"/>
+                            <px:message message="doctype declaration: $1 $2">
+                                <p:with-option name="param1" select="/*/@doctype-public"/>
+                                <p:with-option name="param2" select="/*/@doctype-system"/>
+                            </px:message>
+                        </p:catch>
+                    </p:try>
+                    <p:choose>
+                        <p:when test="/*/@has-doctype-declaration='true' and /*/@name='html' and not(/*/@doctype-public) and not(/*/@doctype-system)">
+                            <p:identity>
+                                <p:input port="source">
+                                    <p:empty/>
+                                </p:input>
+                            </p:identity>
+                        </p:when>
+                        <p:otherwise>
+                            <p:wrap-sequence wrapper="d:was"/>
+                            <p:string-replace match="/*/c:result" replace="/*/c:result/@doctype-declaration"/>
+                            <p:wrap-sequence wrapper="d:error"/>
+                            <p:insert match="/*" position="first-child">
+                                <p:input port="insertion">
+                                    <p:inline>
+                                        <d:desc>PLACEHOLDER</d:desc>
+                                    </p:inline>
+                                    <p:inline>
+                                        <d:file>PLACEHOLDER</d:file>
+                                    </p:inline>
+                                    <p:inline>
+                                        <d:expected>&lt;!DOCTYPE html&gt;</d:expected>
+                                    </p:inline>
+                                </p:input>
+                            </p:insert>
+                            <p:string-replace match="/*/d:desc/text()">
+                                <p:with-option name="replace" select="concat('&quot;Bad or missing DOCTYPE declaration in: ',replace($href,'^.*/([^/]*)$','$1'),'&quot;')"/>
+                            </p:string-replace>
+                            <p:string-replace match="/*/d:file/text()">
+                                <p:with-option name="replace" select="concat('&quot;',$href,'&quot;')"/>
+                            </p:string-replace>
+                        </p:otherwise>
+                    </p:choose>
+                </p:otherwise>
+            </p:choose>
+
+            <p:identity name="xml-declaration.iterate-files.doctype"/>
+
+        </p:for-each>
+        <p:wrap-sequence wrapper="d:errors"/>
+    </p:group>
     <p:identity name="xml-declaration.validate"/>
     <p:sink/>
 
-    <px:fileset-load media-types="application/oebps-package+xml application/xhtml+xml">
-        <p:input port="fileset">
-            <p:pipe port="fileset" step="unzip"/>
-        </p:input>
-        <p:input port="in-memory">
-            <p:pipe port="in-memory" step="unzip"/>
-        </p:input>
-    </px:fileset-load>
-    <p:for-each>
-        <p:add-attribute match="/*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="base-uri(/*)"/>
-        </p:add-attribute>
-    </p:for-each>
-    <p:wrap-sequence wrapper="c:result"/>
-    <p:add-attribute match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="base-uri(/*)">
-            <p:pipe port="fileset" step="unzip"/>
-        </p:with-option>
-    </p:add-attribute>
-    <p:add-xml-base relative="true"/>
-    <p:viewport match="/*/*">
-        <p:add-attribute match="//*" attribute-name="xml:base">
-            <p:with-option name="attribute-value" select="/*/@xml:base"/>
-        </p:add-attribute>
-    </p:viewport>
-    <p:for-each>
-        <p:iteration-source select="//*[@id]"/>
-        <p:delete match="/*//node()"/>
-    </p:for-each>
-    <p:wrap-sequence wrapper="c:result"/>
-    <p:add-attribute match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="base-uri(/*)">
-            <p:pipe port="fileset" step="unzip"/>
-        </p:with-option>
-    </p:add-attribute>
-    <p:xslt>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:document href="../../xslt/compare-ids.xsl"/>
-        </p:input>
-    </p:xslt>
-    <p:rename match="/*" new-name="d:errors"/>
-    <p:identity name="id.validate"/>
+    <p:group>
+        <p:for-each>
+            <p:iteration-source>
+                <p:pipe step="opf" port="result"/>
+                <p:pipe step="html" port="result"/>
+            </p:iteration-source>
+            <p:add-attribute match="/*" attribute-name="xml:base">
+                <p:with-option name="attribute-value" select="base-uri(/*)"/>
+            </p:add-attribute>
+        </p:for-each>
+        <p:wrap-sequence wrapper="c:result"/>
+        <p:validate-with-schematron name="opf-and-html.validate.schematron" assert-valid="false">
+            <p:input port="parameters">
+                <p:empty/>
+            </p:input>
+            <p:input port="schema">
+                <p:document href="../../schema/nordic2015-1.opf-and-html.sch"/>
+            </p:input>
+        </p:validate-with-schematron>
+        <p:sink/>
+        <px:combine-validation-reports document-type="Nordic EPUB3 OPF+HTML" document-path="/">
+            <p:input port="source">
+                <p:pipe port="report" step="opf-and-html.validate.schematron"/>
+            </p:input>
+            <p:with-option name="document-name" select="'All content documents (HTML) and the package document (OPF)'"/>
+        </px:combine-validation-reports>
+    </p:group>
+    <p:identity name="opf-and-html.validate"/>
     <p:sink/>
 
 </p:declare-step>

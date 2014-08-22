@@ -180,9 +180,6 @@
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.out" step="convert.html"/>
                 </p:input>
-                <p:with-option name="title" select="(/*/html:body/html:header//html:h1[tokenize(@epub:type,'\s+')='fulltitle']/text())[1]">
-                    <p:pipe port="in-memory.out" step="convert.html"/>
-                </p:with-option>
                 <p:with-option name="strict" select="$strict"/>
             </px:nordic-html-validate.step>
             <p:sink/>
