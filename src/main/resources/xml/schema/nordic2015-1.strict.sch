@@ -15,10 +15,10 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 124 (106): All documents must have at least one pagebreak -->
+    <!-- Rule 124 (106): All documents must have at least one pagebreak, except navigation document and cover document -->
     <sch:pattern id="dtbook_TPB_124_strict">
-        <sch:rule context="html:body[not(html:nav)]">
-            <sch:assert test="count(//html:*[tokenize(@epub:type,' ')='pagebreak'])>=1">[tpb124] All documents in the spine must contain page numbers</sch:assert>
+        <sch:rule context="html:body[not(html:nav or tokenize(@epub.type,'\s')='cover')]">
+            <sch:assert test="count(//html:*[tokenize(@epub:type,' ')='pagebreak'])>=1">[tpb124] All documents in the spine (except cover page) must contain page numbers</sch:assert>
         </sch:rule>
     </sch:pattern>
 
