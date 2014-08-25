@@ -734,5 +734,12 @@
             <sch:assert test="@xml:lang = @lang">[nordic257] The `xml:lang` and the `lang` attributes must have the same value.</sch:assert>
         </sch:rule>
     </sch:pattern>
+    
+    <!-- Rule 258: allow at most one pagebreak before any content in each content file -->
+    <sch:pattern id="epub_nordic_258">
+        <sch:rule context="html:div[../html:body and tokenize(@epub:type,'\s')='pagebreak']">
+            <sch:report test="preceding-sibling::html:div[tokenize(@epub:type,'\s')='pagebreak']">[nordic258] Only one pagebreak is allowed before any content in each content file.</sch:report>
+        </sch:rule>
+    </sch:pattern>
 
 </sch:schema>
