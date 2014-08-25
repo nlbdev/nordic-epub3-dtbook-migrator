@@ -728,4 +728,11 @@
         </sch:rule>
     </sch:pattern>
 
+    <!-- Rule 257: always require both xml:lang and lang -->
+    <sch:pattern id="epub_nordic_257">
+        <sch:rule context="*[@xml:lang or @lang]">
+            <sch:assert test="@xml:lang = @lang">[nordic257] The `xml:lang` and the `lang` attributes must have the same value.</sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
 </sch:schema>

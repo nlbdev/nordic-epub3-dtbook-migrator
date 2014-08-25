@@ -51,9 +51,17 @@
                 the frontmatter/bodymatter/rearmatter does not have corresponding elements in HTML and is removed;
                 try preserving the attributes on the closest sectioning element(s) when possible
             -->
-            <xsl:copy-of select="parent::*/(@xml:lang|@dir)[not(name()=$except)]"/>
+            <xsl:if test="../@xml:lang and not($except=('lang','xml:lang'))">
+                <xsl:attribute name="lang" select="../@xml:lang"/>
+                <xsl:attribute name="xml:lang" select="../@xml:lang"/>
+            </xsl:if>
+            <xsl:copy-of select="../@dir[not(name()=$except)]"/>
         </xsl:if>
-        <xsl:copy-of select="(@xml:lang|@dir)[not(name()=$except)]"/>
+        <xsl:if test="@xml:lang and not($except=('lang','xml:lang'))">
+            <xsl:attribute name="lang" select="@xml:lang"/>
+            <xsl:attribute name="xml:lang" select="@xml:lang"/>
+        </xsl:if>
+        <xsl:copy-of select="@dir[not(name()=$except)]"/>
     </xsl:template>
 
     <xsl:template name="classes-and-types">

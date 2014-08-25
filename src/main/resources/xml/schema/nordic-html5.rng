@@ -1034,6 +1034,9 @@
             <attribute name="xml:lang">
                 <ref name="LanguageCode"/>
             </attribute>
+            <attribute name="lang">
+                <ref name="LanguageCode"/>
+            </attribute>
         </optional>
         <optional>
             <attribute name="dir">
