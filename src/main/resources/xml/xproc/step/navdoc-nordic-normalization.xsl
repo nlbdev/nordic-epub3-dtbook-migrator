@@ -20,6 +20,7 @@
             <xsl:namespace name="nordic" select="'http://www.mtm.se/epub/'"/>
             <xsl:apply-templates select="@*[not(name()=('lang','xml:lang'))]"/>
             <xsl:attribute name="xml:lang" select="$lang"/>
+            <xsl:attribute name="lang" select="$lang"/>
             <xsl:attribute name="epub:prefix" select="'z3998: http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>

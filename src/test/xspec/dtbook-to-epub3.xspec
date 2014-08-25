@@ -3054,17 +3054,17 @@
         </x:context>
         <x:expect label="the p should be converted into a div and any text before and after the imggroup should be wrapped in new p elements (img without imggroup is allowed in p)">
             <html:div>
-                <html:div xml:lang="no" id="id1" class="class1">
+                <html:div xml:lang="no" lang="no" id="id1" class="class1">
                     <html:figure id="..." class="image-series">
                         <html:figure class="image">
                             <html:img id="rId101" src="images/900340%20(Reparert)-Picture%201.png" alt=""/>
                         </html:figure>
                     </html:figure>
                 </html:div>
-                <html:p xml:lang="no" id="id2" class="class2">
+                <html:p xml:lang="no" lang="no" id="id2" class="class2">
                     <html:img id="rId101" src="images/900340%20(Reparert)-Picture%201.png" alt=""/>
                 </html:p>
-                <html:div xml:lang="no" id="id3" class="class3">
+                <html:div xml:lang="no" lang="no" id="id3" class="class3">
                     <html:p>TEXT</html:p>
                     <html:figure id="..." class="image-series">
                         <html:figure class="image">

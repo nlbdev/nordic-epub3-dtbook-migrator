@@ -203,6 +203,11 @@
             select="replace(base-uri(/*),'[^/]+$',concat((/*/html:head/html:meta[lower-case(@name)=('dc:identifier','dct:identifier','dtb:uid','dc:title')]/string(@content), /*/html:head/html:title/normalize-space(.))[1],'.xhtml'))"
         />
     </p:add-attribute>
+    <p:viewport match="//*[@xml:lang]">
+        <p:add-attribute match="/*" attribute-name="lang">
+            <p:with-option name="attribute-value" select="/*/@xml:lang"/>
+        </p:add-attribute>
+    </p:viewport>
     <p:identity name="in-memory"/>
 
     <px:html-to-fileset>
