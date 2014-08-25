@@ -1224,21 +1224,38 @@
 
     <x:scenario label="when processing a hr">
         <!-- see also discussion: https://github.com/josteinaj/nordic-epub3-dtbook-migrator/issues/2 -->
-        <x:context>
-            <html:section epub:type="bodymatter">
-                <html:p>Some text</html:p>
-                <!-- thematic break occurs here -->
-                <html:hr/>
-                <html:p>More text</html:p>
-            </html:section>
-        </x:context>
-        <x:expect label="the following element should have a precedingemptyline class">
-            <dtbook:level1>
-                <dtbook:p>Some text</dtbook:p>
-                <!-- thematic break occurs here -->
-                <dtbook:p class="precedingemptyline">More text</dtbook:p>
-            </dtbook:level1>
-        </x:expect>
+        <x:scenario label="without a class attribute">
+            <x:context>
+                <html:section epub:type="bodymatter">
+                    <html:p>Some text</html:p>
+                    <!-- thematic break occurs here -->
+                    <html:hr/>
+                    <html:p>More text</html:p>
+                </html:section>
+            </x:context>
+            <x:expect label="the following element should have a precedingemptyline class">
+                <dtbook:level1>
+                    <dtbook:p>Some text</dtbook:p>
+                    <!-- thematic break occurs here -->
+                    <dtbook:p class="precedingemptyline">More text</dtbook:p>
+                </dtbook:level1>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a class attribute with values 'emptyline', 'separator' and a invalid class">
+            <x:context>
+                <html:hr class="emptyline"/>
+                <html:p>Paragraph 1</html:p>
+                <html:hr class="separator"/>
+                <html:p>Paragraph 2</html:p>
+                <html:hr class="invalidclass"/>
+                <html:p>Paragraph 3</html:p>
+            </x:context>
+            <x:expect label="the resulting p elements should have 'precedingemptyline', 'precedingseparator', and 'precedingemptyline' respectively">
+                <dtbook:p class="precedingemptyline">Paragraph 1</dtbook:p>
+                <dtbook:p class="precedingseparator">Paragraph 2</dtbook:p>
+                <dtbook:p class="precedingemptyline">Paragraph 3</dtbook:p>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- doctitle -->

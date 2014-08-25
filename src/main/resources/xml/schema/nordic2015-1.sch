@@ -31,7 +31,7 @@
     <sch:pattern id="dtbook_TPB_9">
         <sch:rule context="html:*">
             <sch:report
-                test="normalize-space(.)='' and not(*) and not(self::html:img or self::html:br or self::html:meta or self::html:link or self::html:col or self::html:th or self::html:td or self::html:dd or self::html:*[tokenize(@epub:type,'\s+')='pagebreak'])"
+                test="normalize-space(.)='' and not(*) and not(self::html:img or self::html:br or self::html:meta or self::html:link or self::html:col or self::html:th or self::html:td or self::html:dd or self::html:*[tokenize(@epub:type,'\s+')='pagebreak'] or self::html:hr)"
                 >[tpb09] Element may not be empty</sch:report>
         </sch:rule>
     </sch:pattern>

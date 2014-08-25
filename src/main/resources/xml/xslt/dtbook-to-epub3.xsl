@@ -1018,13 +1018,13 @@
     <xsl:template match="dtbook:p">
         <xsl:variable name="element" select="."/>
         <xsl:variable name="has-block-elements" select="if (dtbook:list or dtbook:dl or dtbook:imggroup) then true() else false()"/>
-        <xsl:if test="f:classes($element)=('precedingemptyline')">
-            <hr/>
+        <xsl:if test="f:classes($element)=('precedingemptyline','precedingseparator')">
+            <hr class="{if (f:classes($element)='precedingseparator') then 'separator' else 'emptyline'}"/>
         </xsl:if>
         <xsl:element name="{if ($has-block-elements) then 'div' else 'p'}" namespace="http://www.w3.org/1999/xhtml">
             <!-- div allows the same attributes as p -->
             <xsl:call-template name="attlist.p">
-                <xsl:with-param name="except-classes" select="'precedingemptyline'" tunnel="yes"/>
+                <xsl:with-param name="except-classes" select="('precedingemptyline','precedingseparator')" tunnel="yes"/>
             </xsl:call-template>
             <xsl:for-each-group select="node()" group-adjacent="not(self::dtbook:list or self::dtbook:dl or self::dtbook:imggroup)">
                 <xsl:choose>
