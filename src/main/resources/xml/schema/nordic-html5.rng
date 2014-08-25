@@ -3717,9 +3717,25 @@
         <ref name="attrs"/>
     </define>
     <!-- HB: 2004-03-25 30: hr: element dropped horizontal rule as purely visual. -->
+    <define name="hr">
+        <element name="hr">
+            <ref name="attlist.hr"/>
+        </element>
+    </define>
+    <define name="attlist.hr" combine="interleave">
+        <attribute name="class">
+            <choice>
+            <value>emptyline</value>
+            <value>separator</value>
+            </choice>
+        </attribute>
+    </define>
     <!-- ============================= Paragraphs ============================== -->
     <!-- Use: p contains a paragraph, which may contain subsidiary <list> or <dl>. -->
     <define name="p">
+        <optional>
+            <ref name="hr"/>
+        </optional>
         <element name="p">
             <ref name="attlist.p"/>
             <zeroOrMore>

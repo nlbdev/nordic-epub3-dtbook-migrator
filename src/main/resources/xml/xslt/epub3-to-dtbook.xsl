@@ -75,7 +75,7 @@
                 </xsl:variable>
 
                 <xsl:variable name="class-string"
-                    select="string-join(distinct-values(($classes[.=$allowed-classes], if (preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]) then 'precedingemptyline' else (), $old-classes[.=$allowed-classes], $epub-type-classes)[not(.='') and not(.=$except-classes)]),' ')"/>
+                    select="string-join(distinct-values(($classes[.=$allowed-classes], if (preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]) then (if (preceding-sibling::html:hr[1]/tokenize(@class,'\s')='separator') then 'precedingseparator' else 'precedingemptyline') else (), $old-classes[.=$allowed-classes], $epub-type-classes)[not(.='') and not(.=$except-classes)]),' ')"/>
                 <xsl:if test="not($class-string='')">
                     <xsl:attribute name="class" select="$class-string"/>
                 </xsl:if>
@@ -670,7 +670,7 @@
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
-    
+
     <xsl:template name="attlist.abbr">
         <xsl:call-template name="attrs"/>
     </xsl:template>
@@ -774,17 +774,17 @@
     </xsl:template>
 
     <xsl:template match="html:span[f:types(.)='pagebreak'] | html:div[f:types(.)='pagebreak']">
-    <xsl:choose>
-		<xsl:when test="ancestor::html:td">
-			<xsl:message select="'Moving pagenum in table cell before current row for DTBook conformance.'"/>
-		</xsl:when>
-		<xsl:otherwise>
-            <pagenum>
-                <xsl:call-template name="attlist.pagenum"/>
-                <xsl:value-of select="@title"/>
-            </pagenum>
-        </xsl:otherwise>
-	</xsl:choose>
+        <xsl:choose>
+            <xsl:when test="ancestor::html:td">
+                <xsl:message select="'Moving pagenum in table cell before current row for DTBook conformance.'"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <pagenum>
+                    <xsl:call-template name="attlist.pagenum"/>
+                    <xsl:value-of select="@title"/>
+                </pagenum>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.pagenum">
@@ -928,10 +928,11 @@
     </xsl:template>
 
     <xsl:template match="html:p">
-        <xsl:variable name="precedingemptyline" select="preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]"/>
+        <xsl:variable name="precedinghr" select="preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]"/>
         <p>
             <xsl:call-template name="attlist.p">
-                <xsl:with-param name="classes" select="if ($precedingemptyline) then 'precedingemptyline' else ()" tunnel="yes"/>
+                <xsl:with-param name="classes" select="if ($precedinghr) then (if ($precedinghr/tokenize(@class,'\s')='separator') then 'precedingseparator' else 'precedingemptyline') else ()"
+                    tunnel="yes"/>
             </xsl:call-template>
             <xsl:apply-templates select="node()"/>
         </p>
@@ -947,7 +948,7 @@
     <xsl:template name="attlist.p.class">
         <xsl:param name="classes" select="()" tunnel="yes"/>
         <xsl:variable name="classes"
-            select="(for $class in ((tokenize(@class,'\s'),$classes)) return if ($class = ('part','jacketcopy','colophon','nonstandardpagination')) then $class else (), if (preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]) then 'precedingemptyline' else ())"/>
+            select="(for $class in ((tokenize(@class,'\s'),$classes)) return if ($class = ('part','jacketcopy','colophon','nonstandardpagination')) then $class else (), if (preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]) then (if (preceding-sibling::html:hr[1]/tokenize(@class,'\s')='separator') then 'precedingseparator' else 'precedingemptyline') else ())"/>
         <xsl:if test="$classes">
             <xsl:attribute name="class" select="string-join($classes,' ')"/>
         </xsl:if>
@@ -1267,27 +1268,27 @@
     </xsl:template>
 
     <xsl:template match="html:tr">
-    <xsl:choose>
-		<xsl:when test="not(html:td//*[self::html:span[f:types(.)='pagebreak']])">
-        <tr>
-            <xsl:call-template name="attlist.tr"/>
-            <xsl:apply-templates select="node()"/>
-        </tr>
-        </xsl:when>
-		<xsl:otherwise>
-		<xsl:variable name="content" select="html:td//*[self::html:span[f:types(.)='pagebreak']]"/>
-		<xsl:for-each select="$content">
-					<pagenum>
-						<xsl:call-template name="attlist.pagenum"/>
-						<xsl:value-of select="@title"/>
-					</pagenum>
-			</xsl:for-each>
-				<tr>
-					<xsl:call-template name="attlist.tr"/>
-					<xsl:apply-templates select="node()"/>
-				</tr>
-		</xsl:otherwise>
-	</xsl:choose>
+        <xsl:choose>
+            <xsl:when test="not(html:td//*[self::html:span[f:types(.)='pagebreak']])">
+                <tr>
+                    <xsl:call-template name="attlist.tr"/>
+                    <xsl:apply-templates select="node()"/>
+                </tr>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="content" select="html:td//*[self::html:span[f:types(.)='pagebreak']]"/>
+                <xsl:for-each select="$content">
+                    <pagenum>
+                        <xsl:call-template name="attlist.pagenum"/>
+                        <xsl:value-of select="@title"/>
+                    </pagenum>
+                </xsl:for-each>
+                <tr>
+                    <xsl:call-template name="attlist.tr"/>
+                    <xsl:apply-templates select="node()"/>
+                </tr>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.tr">
