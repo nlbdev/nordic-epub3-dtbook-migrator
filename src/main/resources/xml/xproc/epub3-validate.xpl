@@ -69,10 +69,25 @@
         <p:with-option name="temp-dir" select="concat($temp-dir,'validate/')"/>
         <p:with-option name="strict" select="$strict"/>
     </px:nordic-epub3-validate.step>
+    <px:fileset-load media-types="application/xhtml+xml">
+        <p:input port="in-memory">
+            <p:pipe port="in-memory.out" step="validate.nordic"/>
+        </p:input>
+    </px:fileset-load>
+    <p:xslt>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:document href="../xslt/info-report.xsl"/>
+        </p:input>
+    </p:xslt>
+    <p:identity name="report.nordic"/>
     <p:sink/>
 
     <px:nordic-format-html-report.step name="html">
         <p:input port="source">
+            <p:pipe port="result" step="report.nordic"/>
             <p:pipe port="report.out" step="validate.nordic"/>
         </p:input>
     </px:nordic-format-html-report.step>
