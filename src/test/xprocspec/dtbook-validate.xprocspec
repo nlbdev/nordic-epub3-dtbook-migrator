@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/dtbook-validate.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf">
+
+    <x:scenario label="px:nordic-dtbook-validate">
+        <x:call step="px:nordic-dtbook-validate">
+            <x:option name="dtbook" select="resolve-uri('DTBook/C00000.xml',base-uri())"/>
+        </x:call>
+
+        <x:context label="validation-status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect type="compare" label="DTBook/C00000.xml should be valid">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+
+        <x:context label="html-report - publication statistics">
+            <x:document type="port" port="html-report" select="//html:tbody[html:tr/html:td[starts-with(text(),'element: ')]]"/>
+        </x:context>
+        <x:expect label="there should be exactly one table containing statistics of elements and classes" type="count" min="1" max="1"/>
+        <x:expect label="The publication statistics should be as expected" type="compare">
+            <x:document type="inline">
+                <tbody xmlns="http://www.w3.org/1999/xhtml">
+                    <tr>
+                        <td>class: 'initialism'</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>class: 'chapter'</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>class: 'conclusion'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'dtbook'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'head'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'meta'</td>
+                        <td>12</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'book'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'frontmatter'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'doctitle'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'docauthor'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'level1'</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'h1'</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'p'</td>
+                        <td>309</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'span'</td>
+                        <td>1128</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'imggroup'</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'img'</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'caption'</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'prodnote'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'level2'</td>
+                        <td>17</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'h2'</td>
+                        <td>17</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'table'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'tr'</td>
+                        <td>23</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'td'</td>
+                        <td>69</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'pagenum'</td>
+                        <td>28</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'bodymatter'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'list'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'li'</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'noteref'</td>
+                        <td>103</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'blockquote'</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'line'</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'level3'</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'h3'</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'rearmatter'</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'note'</td>
+                        <td>103</td>
+                    </tr>
+                </tbody>
+            </x:document>
+        </x:expect>
+
+    </x:scenario>
+
+</x:description>

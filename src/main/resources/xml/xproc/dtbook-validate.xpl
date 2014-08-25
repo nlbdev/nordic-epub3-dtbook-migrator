@@ -59,6 +59,7 @@
     <p:import href="step/format-html-report.step.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
 
     <px:message message="$1" name="nordic-version-message">
         <p:with-option name="param1" select="/*">
@@ -71,10 +72,25 @@
         <p:with-option name="check-images" select="if ($ignore-missing-images='false') then 'true' else 'false'"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
+    <px:fileset-load media-types="application/x-dtbook+xml">
+        <p:input port="in-memory">
+            <p:pipe port="in-memory.out" step="validate"/>
+        </p:input>
+    </px:fileset-load>
+    <p:xslt>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:document href="../xslt/info-report.xsl"/>
+        </p:input>
+    </p:xslt>
+    <p:identity name="report.nordic"/>
     <p:sink/>
 
     <px:nordic-format-html-report.step name="html">
         <p:input port="source">
+            <p:pipe port="result" step="report.nordic"/>
             <p:pipe port="report.out" step="validate"/>
         </p:input>
     </px:nordic-format-html-report.step>
