@@ -172,7 +172,7 @@
   	                          self::html:aside[tokenize(@epub:type,' ')='epigraph']   or self::html:p[tokenize(@class,' ')='line']     or
   	                          self::html:*[tokenize(@class,' ')='linegroup']  or
   	                          self::html:*[self::html:ul or self::html:ol][not(ancestor::html:nav)]       or self::html:a[tokenize(@epub:type,' ')='note']       or self::html:p        or
-  	                          self::html:*[tokenize(@epub:type,' ')='z3998:poem']       or self::html:sidebar    or self::html:table    or
+  	                          self::html:*[tokenize(@epub:type,' ')='z3998:poem']       or self::html:*[(self::figure or self::aside) and tokenize(@epub:type,'s')='sidebar']    or self::html:table    or
   	                          self::html:*[matches(local-name(),'^h\d$') and tokenize(@class,' ')='title']]">
             <sch:report
                 test="ancestor::html:a      or ancestor::html:abbr or ancestor::html:acronym or ancestor::html:a[tokenize(@epub:type,' ')='annoref'] or
@@ -192,7 +192,7 @@
   	                          self::html:*[tokenize(@class,' ')='dateline']   or self::html:div        or self::html:dl       or
   	                          self::html:aside[tokenize(@epub:type,' ')='epigraph']   or self::html:p[tokenize(@class,' ')='linegroup'] or
   	                          self::html:*[self::html:ul or self::html:ol][not(ancestor::html:nav)]       or self::html:a[tokenize(@epub:type,' ')='note']       or self::html:p        or
-  	                          self::html:*[tokenize(@epub:type,' ')='z3998:poem']       or self::html:sidebar    or self::html:table    or
+  	                          self::html:*[tokenize(@epub:type,' ')='z3998:poem']       or self::html:*[(self::figure or self::aside) and tokenize(@epub:type,'s')='sidebar']    or self::html:table    or
   	                          self::html:*[matches(local-name(),'^h\d$') and tokenize(@class,' ')='title']      or self::html:section or self::html:article]">
             <sch:report
                 test="following-sibling::html:a      or following-sibling::html:abbr or following-sibling::html:acronym or following-sibling::html:a[tokenize(@epub:type,' ')='annoref'] or
@@ -234,7 +234,7 @@
                                            self::html:aside[tokenize(@epub:type,' ')='epigraph']   or self::html:p[tokenize(@class,' ')='line']     or
   	                                       self::html:*[tokenize(@class,' ')='linegroup']  or
                                            self::html:*[self::html:ul or self::html:ol]       or self::html:a[tokenize(@epub:type,' ')='note']       or self::html:p        or
-                                           self::html:*[tokenize(@epub:type,' ')='z3998:poem']       or self::html:sidebar    or self::html:table    or
+                                           self::html:*[tokenize(@epub:type,' ')='z3998:poem']       or self::html:*[(self::figure or self::aside) and tokenize(@epub:type,'s')='sidebar']    or self::html:table    or
                                            self::html:*[matches(local-name(),'^h\d$') and tokenize(@class,' ')='title']]"
                 >[tpb29] Prodnote in inline context used as block element</sch:report>
         </sch:rule>
