@@ -59,7 +59,7 @@
                 output is not guaranteed to be valid if this option is set to false.</p>
         </p:documentation>
     </p:option>
-    
+
     <p:option name="strict" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Extra strict markup</h2>
