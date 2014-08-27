@@ -46,6 +46,9 @@
                 <c:result version="1.0" encoding="UTF-8"/>
             </x:document>
         </x:expect>
+        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xml',$temp-dir))/*/count(namespace::*)" equals="2" label="There should be exactly two namespaces declared on the root element (the default namespace and the implicit xml namespace)"/>
+        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xml',$temp-dir))/*/namespace::*[name()='']" equals="'http://www.daisy.org/z3986/2005/dtbook/'" label="The DTBook namespace should be the default namespace on the root element"/>
+        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xml',$temp-dir))/*//*/count(namespace::*[not(.=../../namespace::*)])" equals="0" label="No namespaces should be declared other than on the root element"/>
     </x:scenario>
 
 </x:description>
