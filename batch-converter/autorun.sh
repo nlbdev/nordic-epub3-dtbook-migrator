@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # TIP: set up a cron job to run this script once each minute
 
 # change these variables to fit your system
@@ -10,7 +11,19 @@ export SOURCE="/media/500GB/DTBook" # read *.xml files in this directory and its
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SCRIPT_FILENAME="`basename $0`"
 
+for pid in $(pidof -x $SCRIPT_FILENAME); do
+    if [ $pid != $$ ]; then
+        echo "[$(date)] : $SCRIPT_FILENAME : Process is already running with PID $pid"
+        exit 1
+    fi
+done
+
 mkdir -p "$DIR/results/commits/"
+
+# set up logging
+exec > >(tee "$DIR/results/logfile.txt")
+exec 2>&1
+
 if [ ! -d "$DIR/results/nordic-epub3-dtbook-migrator" ]; then
     git clone https://github.com/nlbdev/nordic-epub3-dtbook-migrator.git results/nordic-epub3-dtbook-migrator
 fi
@@ -35,11 +48,12 @@ function build(){
     mvn clean package
 }
 
-
-if [ "`ps aux | grep -v grep | grep \"$SCRIPT_FILENAME\" | wc -l`" -gt "2" ]; then
-    echo "already running; exiting..."
-    exit
-fi
+function email(){
+    # email(subject, path)
+    SUBJECT_ALLOWED_CHARACTERS="`echo \"$1\" | sed 's/[^a-zA-Z0-9\(\)]/ /g' | sed 's/^\s*//g' | sed 's/\s*$//g'`"
+    echo "cat \"$2\" | mailx -v -A nlb -s \"$SUBJECT_ALLOWED_CHARACTERS\" jostein@nlb.no"
+    cat "$2" | mailx -v -A nlb -s "$SUBJECT_ALLOWED_CHARACTERS" jostein@nlb.no
+}
 
 cd "$MIGRATOR_DIR" && git add -A && git pull
 cd "$DIR"
@@ -65,12 +79,14 @@ do
     
     if [ $IS_MASTER ]; then
         echo "is on master branch"
+        email "Nordic EPUB3/DTBook Migrator autobuild (master): $COMMENT" "$DIR/results/logfile.txt"
         # execute run.sh
         # send summary and link to report as e-mail
         # make list of books that fail
         
     else
         echo "is not on master branch"
+        email "Nordic EPUB3/DTBook Migrator autobuild (feature branch): $COMMENT" "$DIR/results/logfile.txt"
         # pick last failed book (or first available if none is found)
         # perform a conversion on it including a report similar to run.sh
         # send summary and link to report as e-mail
