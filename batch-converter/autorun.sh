@@ -7,6 +7,7 @@
 export DP2="`echo ~/daisy-pipeline`" # path to DAISY Pipeline 2 directory
 export TARGET="/media/500GB/tmp/nordic-epub3-dtbook-migrator" # results can be big; use this directory to store results
 export SOURCE="/media/500GB/DTBook" # read *.xml files in this directory and its subdirectories
+IP="128.39.251.143"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 SCRIPT_FILENAME="`basename $0`"
@@ -28,7 +29,6 @@ LOGFILE="$TARGET/$DATEUID.log"
 exec > >(tee "$LOGFILE")
 exec 2>&1
 
-IP="`ifconfig eth0 | grep "inet addr" | sed 's/^[^0-9]*//' | sed 's/\s.*//'`"
 echo "See full log file at http://$IP/nordic-epub3-dtbook-migrator/$DATEUID.log" > "$DIR/results/email.txt"
 
 if [ ! -d "$DIR/results/nordic-epub3-dtbook-migrator" ]; then
