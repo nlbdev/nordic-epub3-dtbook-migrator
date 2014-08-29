@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # change these variables to fit your system
 if [ "$DP2" = "" ]; then
@@ -159,7 +159,9 @@ function nordic_test {
     STATUS_4=""
     
     if [ -f "$2" ]; then
+        echo $DP2_CLI $SCRIPT_1 --x-no-legacy="false" --x-dtbook="$2" --output="$TARGET/zip/$1.$SCRIPT_1.zip" -p
         $DP2_CLI $SCRIPT_1 --x-no-legacy="false" --x-dtbook="$2" --output="$TARGET/zip/$1.$SCRIPT_1.zip" -p
+        echo $DP2_CLI log --lastid --file="$TARGET/log/$1.$SCRIPT_1.log"
         $DP2_CLI log --lastid --file="$TARGET/log/$1.$SCRIPT_1.log"
         mkdir -p "$TARGET/zip/$1.$SCRIPT_1"
         unzip -o "$TARGET/zip/$1.$SCRIPT_1.zip" -d "$TARGET/zip/$1.$SCRIPT_1/"
@@ -173,6 +175,7 @@ function nordic_test {
         html_li "detailed log" "$LOG_1"
         html_li "`basename $2`" "$2"
         html_td_end
+        echo $DP2_CLI delete --lastid
         $DP2_CLI delete --lastid
 
         echo "\"$STATUS_1\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
@@ -287,12 +290,15 @@ $DP2_CLI help
 
 # iterate over all DTBooks
 if [ "$BOOK_ID" = "" ]; then
+    rm -r --interactive=never "$TARGET/zip"/*
+    rm -r --interactive=never "$TARGET/log"/*
+    rm -r --interactive=never "$TARGET/epub"/*
     for dtbook in "${SOURCE_DTBOOKS[@]}"
     do
         dtbook_path="${dtbook}"
+        dtbook_organization=`echo $dtbook_path | sed -r 's/^.*DTBook\/([^\/]*).*/\1/' | sed 's/\///g'`
         dtbook_id=`echo $dtbook_path | sed -r 's/^.*\/(.*)\.xml/\1/'`
-        nordic_test "$dtbook_id" "$dtbook_path"
-        break # temp
+        nordic_test "$dtbook_organization.$dtbook_id" "$dtbook_path"
     done
 else
     nordic_test "$BOOK_ID" "$BOOK_PATH"

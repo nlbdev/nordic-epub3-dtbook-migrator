@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 
 # TIP: set up a cron job to run this script once each minute
@@ -79,13 +79,13 @@ do
     
     mkdir -p "$DIR/results/commits/$COMMIT/"
     build "$MIGRATOR_DIR" "$COMMIT"
-    find "$DIR/results/nordic-epub3-dtbook-migrator" | grep nordic-epub3-dtbook-migrator-$VERSION-SNAPSHOT.jar | xargs cp -t "$DIR/results/commits/$COMMIT/"
     rm -r "$DP2/modules/nordic-epub3-dtbook-migrator*"
-    cp "$DIR/commits/$COMMIT/*.jar" "$DP2/modules/"
+    find "$DIR/results/nordic-epub3-dtbook-migrator" | grep jar$ | xargs cp -t "$DIR/results/commits/$COMMIT/"
+    find "$DIR/results/nordic-epub3-dtbook-migrator" | grep jar$ | xargs cp -t "$DP2/modules/"
     IS_MASTER="`cd $MIGRATOR_DIR && git log --oneline --first-parent master | grep \"$COMMIT\" | wc -l`"
     
     cd $DIR
-    if [ $IS_MASTER ]; then
+    if [ "$IS_MASTER" = "1" ]; then
         echo "is on master branch"
         export HTML_REPORT="$TARGET/report-$COMMIT.html"
         bash run.sh
@@ -100,8 +100,8 @@ do
         
     else
         echo "is not on master branch; will only convert the first book that previously failed"
-        export BOOK_ID="`cat $STATUS_SUMMARY | grep FAIL | head -n 1 | sed 's/.*\",\"\(.*\)\",\".*/\1/'`"
-        export BOOK_PATH="`cat $STATUS_SUMMARY | grep FAIL | head -n 1 | sed 's/.*\",\".*\",\"\(.*\)/\1/'`"
+        export BOOK_ID="`cat $STATUS_SUMMARY | grep FAIL | head -n 1 | sed 's/\".*\",\"\(.*\)\",\".*\"/\1/'`"
+        export BOOK_PATH="`cat $STATUS_SUMMARY | grep FAIL | head -n 1 | sed 's/\".*\",\".*\",\"\(.*\)\"/\1/'`"
         echo "BOOK_ID: $BOOK_ID"
         echo "BOOK_PATH: $BOOK_PATH"
         export HTML_REPORT="$TARGET/report-$COMMIT.html"
