@@ -23,14 +23,17 @@ SCRIPT_1="nordic-dtbook-validate"
 SCRIPT_2="nordic-dtbook-to-epub3"
 SCRIPT_3="nordic-epub3-validate"
 SCRIPT_4="nordic-epub3-to-dtbook"
-LOGFILE="$TARGET/report-`date -I`.html"
-FAILED_BOOKS="$TARGET/failed-books.csv"
+if [ "$HTML_REPORT" = "" ]; then
+    LOGFILE="$TARGET/report-`date -I`.html"
+else
+    LOGFILE=$HTML_REPORT
+fi
+STATUS_SUMMARY="$TARGET/status-summary.csv"
 SOURCE_DTBOOKS=(`find "$SOURCE" -type f | grep \.xml$`)
 SOURCE_DTBOOK_COUNT="${#SOURCE_DTBOOKS[@]}"
 PROGRESSBAR_INCREMENTS=`calc "100/($SOURCE_DTBOOK_COUNT*4)" | sed 's/\~//'`
 
-rm "$LOGFILE"
-rm "$FAILED_BOOKS"
+rm "$STATUS_SUMMARY"
 echo "Writing output to $LOGFILE"
 function log {
     echo "$1" >> "$LOGFILE"
@@ -171,10 +174,8 @@ function nordic_test {
         html_li "`basename $2`" "$2"
         html_td_end
         $DP2_CLI delete --lastid
-        
-        if [ "$STATUS_1" != "DONE" ]; then
-            echo "\"$1\",\"$2\"" >> $FAILED_BOOKS
-        fi
+
+        echo "\"$STATUS_1\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
         
         if [ "$STATUS_1" == "DONE" ]; then
             $DP2_CLI $SCRIPT_2 --x-no-legacy="false" --x-strict="false" --x-dtbook="$2" --output="$TARGET/zip/$1.$SCRIPT_2.zip" -p
@@ -192,16 +193,16 @@ function nordic_test {
             html_li "`basename $2`" "$2"
             html_td_end
             $DP2_CLI delete --lastid
-            
-            if [ "$STATUS_2" != "DONE" ]; then
-                echo "\"$1\",\"$2\"" >> $FAILED_BOOKS
-            fi
+
+            echo "\"$STATUS_2\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
             
         else
             html_td
             html_li "Status: SKIPPED"
             update_progress "SKIPPED"
             html_td_end
+
+            echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
         fi
         
         if [ "$STATUS_2" == "DONE" ]; then
@@ -221,16 +222,16 @@ function nordic_test {
             html_li "`basename $EPUB`" "$EPUB"
             html_td_end
             $DP2_CLI delete --lastid
-            
-            if [ "$STATUS_3" != "DONE" ]; then
-                echo "\"$1\",\"$2\"" >> $FAILED_BOOKS
-            fi
+
+            echo "\"$STATUS_3\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
             
         else
             html_td
             html_li "Status: SKIPPED"
             update_progress "SKIPPED"
             html_td_end
+
+            echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
         fi
         
         if [ "$STATUS_3" == "DONE" ]; then
@@ -250,16 +251,16 @@ function nordic_test {
             html_li "`basename $EPUB`" "$EPUB"
             html_td_end
             $DP2_CLI delete --lastid
-            
-            if [ "$STATUS_4" != "DONE" ]; then
-                echo "\"$1\",\"$2\"" >> $FAILED_BOOKS
-            fi
+
+            echo "\"$STATUS_4\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
             
         else
             html_td
             html_li "Status: SKIPPED"
             update_progress "SKIPPED"
             html_td_end
+
+            echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
         fi
         
     else
@@ -271,6 +272,11 @@ function nordic_test {
         update_progress "SKIPPED"
         update_progress "SKIPPED"
         html_td_end
+
+        echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
+        echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
+        echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
+        echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
     fi
     
     html_tr_end
@@ -280,12 +286,17 @@ function nordic_test {
 $DP2_CLI help
 
 # iterate over all DTBooks
-for dtbook in "${SOURCE_DTBOOKS[@]}"
-do
-    dtbook_path="${dtbook}"
-    dtbook_id=`echo $dtbook_path | sed -r 's/^.*\/(.*)\.xml/\1/'`
-    nordic_test "$dtbook_id" "$dtbook_path"
-done
+if [ "$BOOK_ID" = "" ]; then
+    for dtbook in "${SOURCE_DTBOOKS[@]}"
+    do
+        dtbook_path="${dtbook}"
+        dtbook_id=`echo $dtbook_path | sed -r 's/^.*\/(.*)\.xml/\1/'`
+        nordic_test "$dtbook_id" "$dtbook_path"
+        break # temp
+    done
+else
+    nordic_test "$BOOK_ID" "$BOOK_PATH"
+fi
 
 # finishing the log file
 log "</tbody></table>"
