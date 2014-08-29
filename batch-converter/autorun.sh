@@ -100,8 +100,8 @@ do
         
     else
         echo "is not on master branch; will only convert the first book that previously failed"
-        export BOOK_ID="`cat $STATUS_SUMMARY | grep DONE | head -n 1 | sed 's/.*\",\"\(.*\)\",\".*/\1/'`"
-        export BOOK_PATH="`cat $STATUS_SUMMARY | grep DONE | head -n 1 | sed 's/.*\",\".*\",\"\(.*\)/\1/'`"
+        export BOOK_ID="`cat $STATUS_SUMMARY | grep FAIL | head -n 1 | sed 's/.*\",\"\(.*\)\",\".*/\1/'`"
+        export BOOK_PATH="`cat $STATUS_SUMMARY | grep FAIL | head -n 1 | sed 's/.*\",\".*\",\"\(.*\)/\1/'`"
         echo "BOOK_ID: $BOOK_ID"
         echo "BOOK_PATH: $BOOK_PATH"
         export HTML_REPORT="$TARGET/report-$COMMIT.html"
