@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public">
+  <nextCatalog catalog="../../../../pipeline-modules/scripts/catalog.xml"/>
+  <nextCatalog catalog="../../../../pipeline-modules/scripts-utils/catalog.xml"/>
+  <nextCatalog catalog="../../../../pipeline-modules/common-utils/catalog.xml"/>
+  <nextCatalog catalog="../../../catalog.xml"/>
+</catalog>
