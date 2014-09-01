@@ -684,10 +684,10 @@
             <html:figure id="..." class="image-series">
                 <html:aside id="prodnote" epub:type="z3998:production" class="render-optional"/>
                 <html:figure class="image">
-                    <html:img id="img1" src="images/img.jpg" longdesc="#prodnote"/>
+                    <html:img id="img1" src="images/img.jpg" longdesc="#prodnote" alt="image"/>
                 </html:figure>
                 <html:figure class="image">
-                    <html:img id="img2" src="images/img.jpg" longdesc="#prodnote"/>
+                    <html:img id="img2" src="images/img.jpg" longdesc="#prodnote" alt="image"/>
                 </html:figure>
             </html:figure>
         </x:expect>
@@ -1218,7 +1218,7 @@
             <dtbook:img src="img.jpg"/>
         </x:context>
         <x:expect label="the resulting element should be a img">
-            <html:img src="images/img.jpg" id="..."/>
+            <html:img src="images/img.jpg" id="..." alt="image"/>
         </x:expect>
     </x:scenario>
 
@@ -1228,7 +1228,7 @@
             <dtbook:img src="img.jpg#target" alt="alt text" longdesc="#image-description" height="100" width="100" id="id"/>
         </x:context>
         <x:expect label="the resulting element should be a img">
-            <html:img src="images/img.jpg#target" alt="alt text" longdesc="#image-description" height="100" width="100" id="id"/>
+            <html:img src="images/img.jpg#target" alt="image" longdesc="#image-description" height="100" width="100" id="id"/>
         </x:expect>
     </x:scenario>
 
@@ -1255,7 +1255,7 @@
                 <html:figure id="..." class="image-series">
                     <html:aside id="prodnote1" epub:type="z3998:production"/>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1"/>
+                        <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
                         <html:figcaption>
                             <html:span epub:type="pagebreak" class="page-normal" title="1"/>
                             <html:div id="caption1"/>
@@ -1290,7 +1290,7 @@
             <x:expect label="the resulting element should be a figure">
                 <html:figure id="..." class="image-series">
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1"/>
+                        <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
                         <html:figcaption>
                             <html:aside id="prodnote1" epub:type="z3998:production"/>
                             <html:div id="caption1">
@@ -1299,7 +1299,7 @@
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img2"/>
+                        <html:img src="images/img.jpg" id="img2" alt="image"/>
                         <html:figcaption>
                             <html:div id="caption2">
                                 <html:p/>
@@ -1310,16 +1310,16 @@
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img3"/>
+                        <html:img src="images/img.jpg" id="img3" alt="image"/>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img4"/>
+                        <html:img src="images/img.jpg" id="img4" alt="image"/>
                         <html:figcaption id="caption4">
                             <html:p/>
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img5"/>
+                        <html:img src="images/img.jpg" id="img5" alt="image"/>
                     </html:figure>
                 </html:figure>
             </x:expect>
@@ -1351,7 +1351,7 @@
                         <html:p/>
                     </html:figcaption>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img1"/>
+                        <html:img src="images/img.jpg" id="img1" alt="image"/>
                         <html:figcaption>
                             <html:div id="caption2">
                                 <html:p/>
@@ -1362,16 +1362,16 @@
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img2"/>
+                        <html:img src="images/img.jpg" id="img2" alt="image"/>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img3"/>
+                        <html:img src="images/img.jpg" id="img3" alt="image"/>
                         <html:figcaption id="caption4">
                             <html:p/>
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img4"/>
+                        <html:img src="images/img.jpg" id="img4" alt="image"/>
                     </html:figure>
                 </html:figure>
             </x:expect>
@@ -2618,7 +2618,7 @@
                 <html:tbody>
                     <html:tr>
                         <html:td>
-                            <html:img id="img" src="images/img.jpg" longdesc="#caption"/>
+                            <html:img id="img" src="images/img.jpg" longdesc="#caption" alt="image"/>
                         </html:td>
                     </html:tr>
                 </html:tbody>
