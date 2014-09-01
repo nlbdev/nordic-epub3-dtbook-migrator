@@ -1511,6 +1511,19 @@
     <xsl:template match="dtbook:th | dtbook:td">
         <xsl:element name="{local-name()}">
             <xsl:call-template name="attlist.th.td"/>
+<<<<<<< HEAD:nordic-epub3-dtbook-migrator/src/main/resources/xml/xslt/dtbook-to-epub3.xsl
+            <xsl:apply-templates select="node()"/>
+            <xsl:if test="not(preceding-sibling::dtbook:th or preceding-sibling::dtbook:td)">
+                <xsl:choose>
+                    <xsl:when test="parent::dtbook:tr/preceding-sibling::*[1][self::dtbook:pagenum]">
+                        <!-- copy pagenums from between the tr elements -->
+                        <xsl:variable name="this" select="."/>
+                            <xsl:apply-templates select="parent::dtbook:tr/preceding-sibling::dtbook:pagenum[1][following-sibling::dtbook:tr[1]/child::*=$this]">
+                                <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
+                            </xsl:apply-templates>
+                    </xsl:when>
+                </xsl:choose>
+=======
 
             <xsl:if test="not(following-sibling::dtbook:th or following-sibling::dtbook:tr)">
                 <!-- If this is the last cell in the row -->
@@ -1523,6 +1536,7 @@
                         <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
                     </xsl:apply-templates>
                 </xsl:if>
+>>>>>>> upstream/master:src/main/resources/xml/xslt/dtbook-to-epub3.xsl
             </xsl:if>
 
             <xsl:apply-templates select="node()"/>
