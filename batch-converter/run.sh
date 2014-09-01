@@ -1,9 +1,17 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # change these variables to fit your system
-DP2="`echo ~/daisy-pipeline/cli/dp2`" # path to dp2 command line interface
-TARGET="/media/500GB/tmp/nordic-epub3-dtbook-migrator" # use this directory to store results
-SOURCE="/media/500GB/DTBook" # read *.xml files in this directory and its subdirectories
+if [ "$DP2" = "" ]; then
+    DP2="`echo ~/daisy-pipeline/cli/dp2`" # path to dp2 command line interface
+fi
+if [ "$TARGET" = "" ]; then
+    TARGET="/media/500GB/tmp/nordic-epub3-dtbook-migrator" # use this directory to store results
+fi
+if [ "$SOURCE" = "" ]; then
+    SOURCE="/media/500GB/DTBook" # read *.xml files in this directory and its subdirectories
+fi
+
+DP2_CLI="$DP2/cli/dp2"
 
 mkdir -p "$TARGET/zip"
 mkdir -p "$TARGET/log"
@@ -15,12 +23,17 @@ SCRIPT_1="nordic-dtbook-validate"
 SCRIPT_2="nordic-dtbook-to-epub3"
 SCRIPT_3="nordic-epub3-validate"
 SCRIPT_4="nordic-epub3-to-dtbook"
-LOGFILE="$TARGET/report-`date -I`.html"
+if [ "$HTML_REPORT" = "" ]; then
+    LOGFILE="$TARGET/report-`date -I`.html"
+else
+    LOGFILE=$HTML_REPORT
+fi
+STATUS_SUMMARY="$TARGET/status-summary.csv"
 SOURCE_DTBOOKS=(`find "$SOURCE" -type f | grep \.xml$`)
 SOURCE_DTBOOK_COUNT="${#SOURCE_DTBOOKS[@]}"
 PROGRESSBAR_INCREMENTS=`calc "100/($SOURCE_DTBOOK_COUNT*4)" | sed 's/\~//'`
 
-rm "$LOGFILE"
+rm "$STATUS_SUMMARY"
 echo "Writing output to $LOGFILE"
 function log {
     echo "$1" >> "$LOGFILE"
@@ -146,11 +159,13 @@ function nordic_test {
     STATUS_4=""
     
     if [ -f "$2" ]; then
-        $DP2 $SCRIPT_1 --x-no-legacy="false" --x-dtbook="$2" --output="$TARGET/zip/$1.$SCRIPT_1.zip" -p
-        $DP2 log --lastid --file="$TARGET/log/$1.$SCRIPT_1.log"
+        echo $DP2_CLI $SCRIPT_1 --x-no-legacy="false" --x-dtbook="$2" --output="$TARGET/zip/$1.$SCRIPT_1.zip" -p
+        $DP2_CLI $SCRIPT_1 --x-no-legacy="false" --x-dtbook="$2" --output="$TARGET/zip/$1.$SCRIPT_1.zip" -p
+        echo $DP2_CLI log --lastid --file="$TARGET/log/$1.$SCRIPT_1.log"
+        $DP2_CLI log --lastid --file="$TARGET/log/$1.$SCRIPT_1.log"
         mkdir -p "$TARGET/zip/$1.$SCRIPT_1"
         unzip -o "$TARGET/zip/$1.$SCRIPT_1.zip" -d "$TARGET/zip/$1.$SCRIPT_1/"
-        STATUS_1="`$DP2 status --lastid | grep Status | sed 's/.*Status: //'`"
+        STATUS_1="`$DP2_CLI status --lastid | grep Status | sed 's/.*Status: //'`"
         update_progress $STATUS_1
         HTML_1="`find "$TARGET/zip/$1.$SCRIPT_1/html-report/" -type f | head -n 1 |  sed -r "s/^.{$SUBSTR_LENGTH}//"`"
         LOG_1="`echo "$TARGET/log/$1.$SCRIPT_1.log" | sed -r "s/^.{$SUBSTR_LENGTH}//"`"
@@ -160,14 +175,17 @@ function nordic_test {
         html_li "detailed log" "$LOG_1"
         html_li "`basename $2`" "$2"
         html_td_end
-        $DP2 delete --lastid
+        echo $DP2_CLI delete --lastid
+        $DP2_CLI delete --lastid
+
+        echo "\"$STATUS_1\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
         
         if [ "$STATUS_1" == "DONE" ]; then
-            $DP2 $SCRIPT_2 --x-no-legacy="false" --x-strict="false" --x-dtbook="$2" --output="$TARGET/zip/$1.$SCRIPT_2.zip" -p
-            $DP2 log --lastid --file="$TARGET/log/$1.$SCRIPT_2.log"
+            $DP2_CLI $SCRIPT_2 --x-no-legacy="false" --x-strict="false" --x-dtbook="$2" --output="$TARGET/zip/$1.$SCRIPT_2.zip" -p
+            $DP2_CLI log --lastid --file="$TARGET/log/$1.$SCRIPT_2.log"
             mkdir -p "$TARGET/zip/$1.$SCRIPT_2"
             unzip -o "$TARGET/zip/$1.$SCRIPT_2.zip" -d "$TARGET/zip/$1.$SCRIPT_2/"
-            STATUS_2="`$DP2 status --lastid | grep Status | sed 's/.*Status: //'`"
+            STATUS_2="`$DP2_CLI status --lastid | grep Status | sed 's/.*Status: //'`"
             update_progress $STATUS_2
             LOG_2="`echo "$TARGET/log/$1.$SCRIPT_2.log" | sed -r "s/^.{$SUBSTR_LENGTH}//"`"
             HTML_2="`find "$TARGET/zip/$1.$SCRIPT_2/html-report/" -type f | head -n 1 |  sed -r "s/^.{$SUBSTR_LENGTH}//"`"
@@ -177,21 +195,26 @@ function nordic_test {
             html_li "detailed log" "$LOG_2"
             html_li "`basename $2`" "$2"
             html_td_end
-            $DP2 delete --lastid
+            $DP2_CLI delete --lastid
+
+            echo "\"$STATUS_2\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
+            
         else
             html_td
             html_li "Status: SKIPPED"
             update_progress "SKIPPED"
             html_td_end
+
+            echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
         fi
         
         if [ "$STATUS_2" == "DONE" ]; then
             EPUB="`find $TARGET/zip/$1.$SCRIPT_2/ -type f | grep epub\$`"
-            $DP2 $SCRIPT_3 --x-strict="false" --x-epub="$EPUB" --output="$TARGET/zip/$1.$SCRIPT_3.zip" -p
-            $DP2 log --lastid --file="$TARGET/log/$1.$SCRIPT_3.log"
+            $DP2_CLI $SCRIPT_3 --x-strict="false" --x-epub="$EPUB" --output="$TARGET/zip/$1.$SCRIPT_3.zip" -p
+            $DP2_CLI log --lastid --file="$TARGET/log/$1.$SCRIPT_3.log"
             mkdir -p "$TARGET/zip/$1.$SCRIPT_3"a
             unzip -o "$TARGET/zip/$1.$SCRIPT_3.zip" -d "$TARGET/zip/$1.$SCRIPT_3/"
-            STATUS_3="`$DP2 status --lastid | grep Status | sed 's/.*Status: //'`"
+            STATUS_3="`$DP2_CLI status --lastid | grep Status | sed 's/.*Status: //'`"
             update_progress $STATUS_3
             LOG_3="`echo $TARGET/log/$1.$SCRIPT_3.log | sed -r "s/^.{$SUBSTR_LENGTH}//"`"
             HTML_3="`find "$TARGET/zip/$1.$SCRIPT_3/html-report/" -type f | head -n 1 |  sed -r "s/^.{$SUBSTR_LENGTH}//"`"
@@ -201,21 +224,26 @@ function nordic_test {
             html_li "detailed log" "$LOG_3"
             html_li "`basename $EPUB`" "$EPUB"
             html_td_end
-            $DP2 delete --lastid
+            $DP2_CLI delete --lastid
+
+            echo "\"$STATUS_3\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
+            
         else
             html_td
             html_li "Status: SKIPPED"
             update_progress "SKIPPED"
             html_td_end
+
+            echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
         fi
         
         if [ "$STATUS_3" == "DONE" ]; then
             EPUB="`find $TARGET/zip/$1.$SCRIPT_2/ -type f | grep epub\$`"
-            $DP2 $SCRIPT_4 --x-strict="false" --x-epub="$EPUB" --output="$TARGET/zip/$1.$SCRIPT_4.zip" -p
-            $DP2 log --lastid --file="$TARGET/log/$1.$SCRIPT_4.log"
+            $DP2_CLI $SCRIPT_4 --x-strict="false" --x-epub="$EPUB" --output="$TARGET/zip/$1.$SCRIPT_4.zip" -p
+            $DP2_CLI log --lastid --file="$TARGET/log/$1.$SCRIPT_4.log"
             mkdir -p "$TARGET/zip/$1.$SCRIPT_4"
             unzip -o "$TARGET/zip/$1.$SCRIPT_4.zip" -d "$TARGET/zip/$1.$SCRIPT_4/"
-            STATUS_4="`$DP2 status --lastid | grep Status | sed 's/.*Status: //'`"
+            STATUS_4="`$DP2_CLI status --lastid | grep Status | sed 's/.*Status: //'`"
             update_progress $STATUS_4
             LOG_4="`echo $TARGET/log/$1.$SCRIPT_4.log | sed -r "s/^.{$SUBSTR_LENGTH}//"`"
             HTML_4="`find "$TARGET/zip/$1.$SCRIPT_4/html-report/" -type f | head -n 1 |  sed -r "s/^.{$SUBSTR_LENGTH}//"`"
@@ -225,12 +253,17 @@ function nordic_test {
             html_li "detailed log" "$LOG_4"
             html_li "`basename $EPUB`" "$EPUB"
             html_td_end
-            $DP2 delete --lastid
+            $DP2_CLI delete --lastid
+
+            echo "\"$STATUS_4\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
+            
         else
             html_td
             html_li "Status: SKIPPED"
             update_progress "SKIPPED"
             html_td_end
+
+            echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
         fi
         
     else
@@ -242,18 +275,38 @@ function nordic_test {
         update_progress "SKIPPED"
         update_progress "SKIPPED"
         html_td_end
+
+        echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
+        echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
+        echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
+        echo "\"SKIPPED\",\"$1\",\"$2\"" >> $STATUS_SUMMARY
     fi
     
     html_tr_end
 }
 
+# start DP2
+$DP2_CLI help
+
 # iterate over all DTBooks
-for dtbook in "${SOURCE_DTBOOKS[@]}"
-do
-    dtbook_path="${dtbook}"
-    dtbook_id=`echo $dtbook_path | sed -r 's/^.*\/(.*)\.xml/\1/'`
-    nordic_test "$dtbook_id" "$dtbook_path"
-done
+if [ "$BOOK_ID" = "" ]; then
+    rm -r --interactive=never "$TARGET/zip"/*
+    rm -r --interactive=never "$TARGET/log"/*
+    rm -r --interactive=never "$TARGET/epub"/*
+    for dtbook in "${SOURCE_DTBOOKS[@]}"
+    do
+        if [ $(( RANDOM % ($SOURCE_DTBOOK_COUNT / 1000) )) -gt 0 ]; then
+            echo "doing all books takes too long; skipping $BOOK_ID ..."
+            continue
+        fi
+        dtbook_path="${dtbook}"
+        dtbook_organization=`echo $dtbook_path | sed -r 's/^.*DTBook\/([^\/]*).*/\1/' | sed 's/\///g'`
+        dtbook_id=`echo $dtbook_path | sed -r 's/^.*\/(.*)\.xml/\1/'`
+        nordic_test "$dtbook_organization.$dtbook_id" "$dtbook_path"
+    done
+else
+    nordic_test "$BOOK_ID" "$BOOK_PATH"
+fi
 
 # finishing the log file
 log "</tbody></table>"
@@ -264,3 +317,6 @@ log "</body></html>"
 cp "$LOGFILE" "$TARGET/report.html"
 
 echo "Report file: $LOGFILE"
+
+# stop DP2
+$DP2_CLI halt

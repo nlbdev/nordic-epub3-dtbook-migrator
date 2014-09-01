@@ -542,8 +542,13 @@
     <!-- Rule 141: Prodnotes in jacket copy must contain text and have a @class=['frontcover', 'rearcover', 'leftflap' or 'rightflap'] -->
     <sch:pattern id="dtbook_TPB_141">
         <sch:rule context="html:section[tokenize(parent::*/@epub:type,' ')='cover']">
+<<<<<<< HEAD
  <sch:assert test="tokenize(@class,' ')='frontcover' or tokenize(@class,' ')='rearcover' or tokenize(@class,' ')='leftflap' or tokenize(@class,' ')='rightflap'">[tpb141] prodnote in jacket copy must have a class attribute with one of
                 'frontcover', 'rearcover', 'leftflap' or 'rightflap'</sch:assert>
+=======
+            <sch:assert test="tokenize(@class,' ')='frontcover' or tokenize(@class,' ')='rearcover' or tokenize(@class,' ')='leftflap' or tokenize(@class,' ')='rightflap'">[tpb141] prodnote in jacket
+                copy must have a class attribute with one of 'frontcover', 'rearcover', 'leftflap' or 'rightflap'</sch:assert>
+>>>>>>> upstream/master
         </sch:rule>
     </sch:pattern>
 
@@ -734,11 +739,19 @@
             <sch:assert test="@xml:lang = @lang">[nordic257] The `xml:lang` and the `lang` attributes must have the same value.</sch:assert>
         </sch:rule>
     </sch:pattern>
-    
+
     <!-- Rule 258: allow at most one pagebreak before any content in each content file -->
     <sch:pattern id="epub_nordic_258">
         <sch:rule context="html:div[../html:body and tokenize(@epub:type,'\s')='pagebreak']">
             <sch:report test="preceding-sibling::html:div[tokenize(@epub:type,'\s')='pagebreak']">[nordic258] Only one pagebreak is allowed before any content in each content file.</sch:report>
+        </sch:rule>
+    </sch:pattern>
+
+    <!-- Rule 259: don't allow pagenum in thead -->
+    <sch:pattern id="epub_nordic_259">
+        <sch:rule context=".[tokenize(@epub:type,'\s')='pagebreak']">
+            <sch:report test="ancestor::html:thead">[nordic259] Pagebreaks can not occur within table headers (thead).</sch:report>
+            <sch:report test="ancestor::html:tfoot">[nordic259] Pagebreaks can not occur within table footers (tfoot).</sch:report>
         </sch:rule>
     </sch:pattern>
 
