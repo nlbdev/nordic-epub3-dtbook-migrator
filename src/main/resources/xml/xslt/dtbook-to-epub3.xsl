@@ -922,21 +922,11 @@
 
     <xsl:template name="attlist.img">
         <xsl:param name="all-ids" select="()" tunnel="yes"/>
-		<xsl:variable name="change-img-alt" select="'image'"/>
         <xsl:call-template name="attrs">
             <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
         <xsl:attribute name="src" select="concat('images/',@src)"/>
-        <xsl:choose>
-			<xsl:when test="@alt = 'illustration'">
-				<xsl:attribute name="alt">
-					<xsl:value-of select="$change-img-alt"/>
-				</xsl:attribute>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:copy-of select="@alt"/>
-			</xsl:otherwise>
-		</xsl:choose>
+        <xsl:attribute name="alt" select="if (@alt and @alt='') then '' else 'image'"/>
         <xsl:copy-of select="@longdesc|@height|@width"/>
         <xsl:if test="not(@longdesc) and @id">
             <xsl:variable name="id" select="@id"/>
