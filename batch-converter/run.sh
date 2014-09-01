@@ -295,6 +295,10 @@ if [ "$BOOK_ID" = "" ]; then
     rm -r --interactive=never "$TARGET/epub"/*
     for dtbook in "${SOURCE_DTBOOKS[@]}"
     do
+        if [ $(( RANDOM % ($SOURCE_DTBOOK_COUNT / 1000) )) -gt 0 ]; then
+            echo "doing all books takes too long; skipping $BOOK_ID ..."
+            continue
+        fi
         dtbook_path="${dtbook}"
         dtbook_organization=`echo $dtbook_path | sed -r 's/^.*DTBook\/([^\/]*).*/\1/' | sed 's/\///g'`
         dtbook_id=`echo $dtbook_path | sed -r 's/^.*\/(.*)\.xml/\1/'`
