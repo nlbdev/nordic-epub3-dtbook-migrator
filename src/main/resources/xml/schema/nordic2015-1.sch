@@ -542,8 +542,8 @@
     <!-- Rule 141: Prodnotes in jacket copy must contain text and have a @class=['frontcover', 'rearcover', 'leftflap' or 'rightflap'] -->
     <sch:pattern id="dtbook_TPB_141">
         <sch:rule context="html:section[tokenize(parent::*/@epub:type,' ')='cover']">
-            <sch:assert test="@class='frontcover' or @class='rearcover' or @class='leftflap' or @class='rightflap'">[tpb141] prodnote in jacket copy must have a class attribute with one of
-                'frontcover', 'rearcover', 'leftflap' or 'rightflap'</sch:assert>
+            <sch:assert test="tokenize(@class,' ')='frontcover' or tokenize(@class,' ')='rearcover' or tokenize(@class,' ')='leftflap' or tokenize(@class,' ')='rightflap'">[tpb141] prodnote in jacket
+                copy must have a class attribute with one of 'frontcover', 'rearcover', 'leftflap' or 'rightflap'</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -734,7 +734,7 @@
             <sch:assert test="@xml:lang = @lang">[nordic257] The `xml:lang` and the `lang` attributes must have the same value.</sch:assert>
         </sch:rule>
     </sch:pattern>
-    
+
     <!-- Rule 258: allow at most one pagebreak before any content in each content file -->
     <sch:pattern id="epub_nordic_258">
         <sch:rule context="html:div[../html:body and tokenize(@epub:type,'\s')='pagebreak']">
