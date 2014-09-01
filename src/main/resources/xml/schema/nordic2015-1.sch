@@ -542,8 +542,13 @@
     <!-- Rule 141: Prodnotes in jacket copy must contain text and have a @class=['frontcover', 'rearcover', 'leftflap' or 'rightflap'] -->
     <sch:pattern id="dtbook_TPB_141">
         <sch:rule context="html:section[tokenize(parent::*/@epub:type,' ')='cover']">
+<<<<<<< HEAD
+ <sch:assert test="tokenize(@class,' ')='frontcover' or tokenize(@class,' ')='rearcover' or tokenize(@class,' ')='leftflap' or tokenize(@class,' ')='rightflap'">[tpb141] prodnote in jacket copy must have a class attribute with one of
+                'frontcover', 'rearcover', 'leftflap' or 'rightflap'</sch:assert>
+=======
             <sch:assert test="tokenize(@class,' ')='frontcover' or tokenize(@class,' ')='rearcover' or tokenize(@class,' ')='leftflap' or tokenize(@class,' ')='rightflap'">[tpb141] prodnote in jacket
                 copy must have a class attribute with one of 'frontcover', 'rearcover', 'leftflap' or 'rightflap'</sch:assert>
+>>>>>>> upstream/master
         </sch:rule>
     </sch:pattern>
 

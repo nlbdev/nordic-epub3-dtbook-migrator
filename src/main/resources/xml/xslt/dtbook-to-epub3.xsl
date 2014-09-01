@@ -922,11 +922,22 @@
 
     <xsl:template name="attlist.img">
         <xsl:param name="all-ids" select="()" tunnel="yes"/>
+		<xsl:variable name="change-img-alt" select="'image'"/>
         <xsl:call-template name="attrs">
             <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
         <xsl:attribute name="src" select="concat('images/',@src)"/>
-        <xsl:copy-of select="@alt|@longdesc|@height|@width"/>
+        <xsl:choose>
+			<xsl:when test="@alt = 'illustration'">
+				<xsl:attribute name="alt">
+					<xsl:value-of select="$change-img-alt"/>
+				</xsl:attribute>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:copy-of select="@alt"/>
+			</xsl:otherwise>
+		</xsl:choose>
+        <xsl:copy-of select="@longdesc|@height|@width"/>
         <xsl:if test="not(@longdesc) and @id">
             <xsl:variable name="id" select="@id"/>
             <xsl:variable name="longdesc" select="(//dtbook:prodnote|//dtbook:caption)[tokenize(@imgref,'\s+')=$id]"/>
@@ -1511,6 +1522,19 @@
     <xsl:template match="dtbook:th | dtbook:td">
         <xsl:element name="{local-name()}">
             <xsl:call-template name="attlist.th.td"/>
+<<<<<<< HEAD:nordic-epub3-dtbook-migrator/src/main/resources/xml/xslt/dtbook-to-epub3.xsl
+            <xsl:apply-templates select="node()"/>
+            <xsl:if test="not(preceding-sibling::dtbook:th or preceding-sibling::dtbook:td)">
+                <xsl:choose>
+                    <xsl:when test="parent::dtbook:tr/preceding-sibling::*[1][self::dtbook:pagenum]">
+                        <!-- copy pagenums from between the tr elements -->
+                        <xsl:variable name="this" select="."/>
+                            <xsl:apply-templates select="parent::dtbook:tr/preceding-sibling::dtbook:pagenum[1][following-sibling::dtbook:tr[1]/child::*=$this]">
+                                <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
+                            </xsl:apply-templates>
+                    </xsl:when>
+                </xsl:choose>
+=======
 
             <xsl:if test="not(following-sibling::dtbook:th or following-sibling::dtbook:tr)">
                 <!-- If this is the last cell in the row -->
@@ -1523,6 +1547,7 @@
                         <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
                     </xsl:apply-templates>
                 </xsl:if>
+>>>>>>> upstream/master:src/main/resources/xml/xslt/dtbook-to-epub3.xsl
             </xsl:if>
 
             <xsl:apply-templates select="node()"/>
