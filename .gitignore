@@ -4,3 +4,4 @@ src/test/xspec/xspec/*
 src/test/xprocspec/*.html
 src/test/xprocspec/report/
 *.xpr
+batch-converter/results/
