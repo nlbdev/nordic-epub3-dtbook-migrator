@@ -742,4 +742,12 @@
         </sch:rule>
     </sch:pattern>
 
+    <!-- Rule 259: don't allow pagenum in thead -->
+    <sch:pattern id="epub_nordic_259">
+        <sch:rule context=".[tokenize(@epub:type,'\s')='pagebreak']">
+            <sch:report test="ancestor::html:thead">[nordic259] Pagebreaks can not occur within table headers (thead).</sch:report>
+            <sch:report test="ancestor::html:tfoot">[nordic259] Pagebreaks can not occur within table footers (tfoot).</sch:report>
+        </sch:rule>
+    </sch:pattern>
+
 </sch:schema>
