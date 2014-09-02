@@ -485,8 +485,8 @@
         <sch:rule
             context="html:*[self::html:aside[tokenize(@epub:type,' ')='epigraph'] or self::html:*[tokenize(@class,' ')='byline'] or
   	                          self::html:*[tokenize(@class,' ')='dateline'] or self::html:cite or self::html:span[tokenize(@epub:type,' ')='z3998:sentence'] or self::html:span[tokenize(@epub:type,' ')='z3998:word'] or
-  	                          self::html:*[tokenize(@epub:type,' ')='z3998:covertitle'] or self::html:p[tokenize(@epub:type,' ')='bridgehead'] or self::html:thead or
-  	                          self::html:tfoot or self::html:colgroup or self::html:col or
+  	                          self::html:*[tokenize(@epub:type,' ')='z3998:covertitle'] or self::html:p[tokenize(@epub:type,' ')='bridgehead'] or
+  	                          self::html:colgroup or self::html:col or
   	                          self::html:address or self::html:aside[tokenize(@epub:type,' ')='annotation'] or self::html:dfn or
   	                          self::html:kbd or self::html:samp or
   	                          self::html:q or self::html:bdo or self::html:bdo or self::html:a[tokenize(@epub:type,' ')='annoref']]">
