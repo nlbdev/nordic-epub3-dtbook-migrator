@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns="http://www.daisy.org/z3986/2005/dtbook/"
-    xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/" exclude-result-prefixes="#all" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+    xmlns="http://www.daisy.org/z3986/2005/dtbook/" xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/" exclude-result-prefixes="#all" xmlns:epub="http://www.idpf.org/2007/ops"
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
+    <!--    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
 
     <xsl:param name="allow-links" select="false()"/>
 
@@ -1082,19 +1085,73 @@
     <xsl:template name="attlist.list">
         <xsl:attribute name="type" select="'pl'"/>
         <xsl:call-template name="attrs"/>
+        <!--
+        list is always preformatted so enum and start is not included in the result
         <xsl:copy-of select="@start"/>
         <xsl:if test="@type">
             <xsl:attribute name="enum" select="@type"/>
         </xsl:if>
+        -->
         <xsl:attribute name="depth" select="count(ancestor::html:li)+1"/>
     </xsl:template>
 
-    <!-- Only 'pl' is allowed in nordic DTBook; prepend "• " to all list items. -->
+    <!-- Only 'pl' is allowed in nordic DTBook; prepend markers ("• " for ul, "1. " for numbered, etc) to all list items. -->
     <xsl:template match="html:li">
         <li>
             <xsl:call-template name="attlist.li"/>
-            <xsl:text>• </xsl:text>
-            <xsl:apply-templates select="node()"/>
+            <xsl:variable name="marker">
+                <xsl:choose>
+                    <xsl:when test="parent::html:ul">
+                        <xsl:value-of select="'• '"/>
+                    </xsl:when>
+                    <xsl:when test="parent::html:ol[not(@type) or @type='1']">
+                        <xsl:variable name="value" select="f:li-value(.)"/>
+                        <xsl:value-of select="concat($value,'. ')"/>
+                    </xsl:when>
+                    <xsl:when test="parent::html:ol[@type=('a','A')]">
+                        <xsl:variable name="value" select="f:li-value(.)"/>
+                        <xsl:variable name="alpha" select="f:numeric-decimal-to-alpha($value)"/>
+                        <xsl:value-of select="concat(if (parent::html:ol/@type='a') then lower-case($alpha) else upper-case($alpha),'. ')"/>
+                    </xsl:when>
+                    <xsl:when test="parent::html:ol[@type=('i','I')]">
+                        <xsl:variable name="value" select="f:li-value(.)"/>
+                        <xsl:variable name="roman" select="pf:numeric-decimal-to-roman($value)"/>
+                        <xsl:value-of select="concat(if (parent::html:ol/@type='i') then lower-case($roman) else upper-case($roman),'. ')"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- shouldn't happen, but let's have a fallback anyway -->
+                        <xsl:value-of select="'• '"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="is-block"
+                select="if ((html:figure | html:p | html:ol | html:ul | html:dl | html:div | html:blockquote | html:table | html:address | html:section | html:aside)) then true() else false()"/>
+            <xsl:choose>
+                <xsl:when test="$is-block">
+                    <xsl:choose>
+                        <xsl:when test="*[1] intersect html:p">
+                            <xsl:for-each select="*[1]">
+                                <p>
+                                    <xsl:call-template name="attlist.p"/>
+                                    <xsl:value-of select="$marker"/>
+                                    <xsl:apply-templates select="node()"/>
+                                </p>
+                            </xsl:for-each>
+                            <xsl:apply-templates select="node() except *[1]"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <p>
+                                <xsl:value-of select="$marker"/>
+                            </p>
+                            <xsl:apply-templates select="node()"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$marker"/>
+                    <xsl:apply-templates select="node()"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </li>
     </xsl:template>
 
@@ -1395,6 +1452,46 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:sequence select="if ($all-ids=$id) then generate-id($element) else $id"/>
+    </xsl:function>
+
+    <xsl:function name="f:li-value" as="xs:integer">
+        <xsl:param name="li" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="not($li)">
+                <xsl:value-of select="1"/>
+            </xsl:when>
+            <xsl:when test="$li/@value">
+                <xsl:value-of select="$li/@value"/>
+            </xsl:when>
+            <xsl:when test="not($li/preceding-sibling::*)">
+                <xsl:value-of select="if ($li/parent::*/@start) then $li/parent::*/@start else if ($li/parent::*/@reversed) then count($li/parent::*/*) else 1"/>
+            </xsl:when>
+            <xsl:when test="$li/parent::*/@reversed">
+                <xsl:value-of select="f:li-value($li/preceding-sibling::*[1]) - 1"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="f:li-value($li/preceding-sibling::*[1]) + 1"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="f:numeric-decimal-to-alpha">
+        <!-- TODO: move this to numeral-conversion.xsl in DP2 common-utils -->
+        <xsl:param name="decimal" as="xs:integer"/>
+        <xsl:value-of select="string-join(f:numeric-decimal-to-alpha-part($decimal,()),'')"/>
+    </xsl:function>
+
+    <xsl:function name="f:numeric-decimal-to-alpha-part">
+        <xsl:param name="remainder" as="xs:integer"/>
+        <xsl:param name="result" as="xs:string*"/>
+        <xsl:choose>
+            <xsl:when test="$remainder &lt;= 0">
+                <xsl:sequence select="$result"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="f:numeric-decimal-to-alpha-part(xs:integer(floor($remainder div 26)), (codepoints-to-string(($remainder mod 26) + 96), $result))"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:function>
 
 </xsl:stylesheet>

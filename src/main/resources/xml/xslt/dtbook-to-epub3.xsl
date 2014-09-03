@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
     xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
+
+    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
+    <!--    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
 
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
 
@@ -1214,9 +1217,18 @@
         <xsl:apply-templates select="dtbook:pagenum[not(preceding-sibling::dtbook:li)]">
             <xsl:with-param name="pagenum.parent" tunnel="yes" select="parent::*"/>
         </xsl:apply-templates>
-        <xsl:element name="{if (@type='ul') then 'ul' else 'ol'}">
-            <xsl:call-template name="attlist.list"/>
-            <xsl:apply-templates select="dtbook:li|text()|comment()"/>
+        <xsl:variable name="first-marker-text" select="dtbook:li[1]/(text()[1] | dtbook:p/text()[1])[normalize-space()][1]"/>
+        <xsl:variable name="first-marker"
+            select="if (starts-with($first-marker-text,'•')) then '•' else if (matches($first-marker-text,'^[0-9a-zA-Z]+\.')) then replace($first-marker-text,'^([0-9a-zA-Z]+)\..*','$1') else ''"/>
+        <xsl:variable name="first-marker-type"
+            select="if (not($first-marker)) then '' else if ($first-marker='•') then '•' else if (string(number($first-marker)) != 'NaN') then '1' else if ($first-marker='i') then 'i' else if ($first-marker='I') then 'I' else if ($first-marker=lower-case($first-marker)) then 'a' else 'A'"/>
+        <xsl:element name="{if ($first-marker-type='•') then 'ul' else 'ol'}">
+            <xsl:call-template name="attlist.list">
+                <xsl:with-param name="marker-type" select="$first-marker-type"/>
+            </xsl:call-template>
+            <xsl:apply-templates select="dtbook:li">
+                <xsl:with-param name="marker-type" select="$first-marker-type"/>
+            </xsl:apply-templates>
         </xsl:element>
         <xsl:apply-templates select="dtbook:pagenum[preceding-sibling::dtbook:li and not(following-sibling::dtbook:li)]">
             <xsl:with-param name="pagenum.parent" tunnel="yes" select="parent::*"/>
@@ -1224,20 +1236,62 @@
     </xsl:template>
 
     <xsl:template name="attlist.list">
+        <xsl:param name="marker-type" select="''"/>
         <xsl:call-template name="attrs">
-            <xsl:with-param name="classes" select="if (@type='pl') then 'list-preformatted' else ()" tunnel="yes"/>
+            <xsl:with-param name="classes" select="if (@type='pl' and $marker-type='') then 'list-preformatted' else ()" tunnel="yes"/>
         </xsl:call-template>
         <!-- @depth is implicit; ignore it -->
-        <xsl:if test="@enum">
+        <!--<xsl:if test="@enum">
             <xsl:attribute name="type" select="@enum"/>
+        </xsl:if>-->
+        <xsl:if test="$marker-type=('a','A','i','I')">
+            <xsl:attribute name="type" select="$marker-type"/>
         </xsl:if>
         <xsl:copy-of select="@start"/>
     </xsl:template>
 
     <xsl:template match="dtbook:li">
+        <xsl:param name="marker-type" select="''"/>
+        <xsl:apply-templates select="preceding-sibling::comment() intersect preceding-sibling::*[1]/following-sibling::comment()"/>
         <li>
-            <xsl:call-template name="attlist.li"/>
-            <xsl:apply-templates select="node()"/>
+            <xsl:variable name="marker-text" select="(text() | dtbook:p/text())[normalize-space()][1]"/>
+            <xsl:variable name="marker"
+                select="if (starts-with($marker-text,'•')) then '•' else if (matches($marker-text,'^[0-9a-zA-Z]+\.')) then replace($marker-text,'^([0-9a-zA-Z]+)\..*','$1') else ()"/>
+            <xsl:variable name="marker-type"
+                select="if (not($marker)) then '' else if ($marker='•') then '•' else if (string(number($marker)) != 'NaN') then '1' else parent::*/dtbook:li[1]/(text()[normalize-space()]|dtbook:p/text()[normalize-space()])[1]/(if (starts-with(.,'i.')) then 'i' else if (starts-with(.,'I.')) then 'I' else if (substring(.,1,1)=lower-case(substring(.,1,1))) then 'a' else 'A')"/>
+            <!-- NOTE: list is assumed to be preformatted; a generic script would calculate implicit value based on start attribute etc. -->
+            <xsl:variable name="marker-value"
+                select="if ($marker-type=('a','A')) then pf:numeric-alpha-to-decimal(lower-case($marker)) else if ($marker-type=('i','I')) then pf:numeric-roman-to-decimal(lower-case($marker)) else $marker"/>
+
+            <xsl:call-template name="attlist.li">
+                <xsl:with-param name="li-value" select="$marker-value"/>
+            </xsl:call-template>
+
+            <xsl:choose>
+                <xsl:when test="dtbook:p[1][starts-with(.,'•') or matches(.,'^\w+\.')]">
+                    <xsl:for-each select="dtbook:p[1]">
+                        <xsl:if test="string-length(replace(.,'^\w+\. ','')) != 0">
+                            <p>
+                                <xsl:call-template name="attlist.p">
+                                    <xsl:with-param name="except-classes" select="('precedingemptyline','precedingseparator')" tunnel="yes"/>
+                                </xsl:call-template>
+                                <xsl:for-each select="text()[1]">
+                                    <xsl:value-of select="replace(.,'^(\w+\.|•) ','')"/>
+                                </xsl:for-each>
+                                <xsl:apply-templates select="node() except text()[1]"/>
+                            </p>
+                        </xsl:if>
+                    </xsl:for-each>
+                    <xsl:apply-templates select="node() except dtbook:p[1]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:for-each select="text()[1]">
+                        <xsl:value-of select="replace(.,'^(\w+\.|•) ','')"/>
+                    </xsl:for-each>
+                    <xsl:apply-templates select="node() except text()[1]"/>
+                </xsl:otherwise>
+            </xsl:choose>
+
             <xsl:variable name="this" select="."/>
             <xsl:apply-templates select="following-sibling::dtbook:pagenum[preceding-sibling::dtbook:li[1]=$this][following-sibling::dtbook:li]">
                 <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
@@ -1246,7 +1300,11 @@
     </xsl:template>
 
     <xsl:template name="attlist.li">
+        <xsl:param name="li-value" select="''"/>
         <xsl:call-template name="attrs"/>
+        <xsl:if test="string(number($li-value)) != 'NaN'">
+            <xsl:attribute name="value" select="$li-value"/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="dtbook:lic">
