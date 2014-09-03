@@ -1601,10 +1601,14 @@
                 </html:li>
             </html:ol>
         </x:context>
-        <x:expect label="the start attribute should be copied as-is, the type attribute should be renamed to enum, a depth attribute should be added and the type attribute should be set to 'pl'">
-            <dtbook:list start="3" enum="1" depth="1" type="pl">
-                <dtbook:li>• <dtbook:list depth="2" type="pl">
-                        <dtbook:li>• <dtbook:list start="7" enum="i" depth="3" type="pl"/>
+        <x:expect label="the start and type attributes should be dropped, a depth attribute should be added and the type attribute should be set to 'pl'">
+            <dtbook:list depth="1" type="pl">
+                <dtbook:li>
+                    <dtbook:p>3. </dtbook:p>
+                    <dtbook:list depth="2" type="pl">
+                        <dtbook:li>
+                            <dtbook:p>• </dtbook:p>
+                            <dtbook:list depth="3" type="pl"/>
                         </dtbook:li>
                     </dtbook:list>
                 </dtbook:li>
@@ -1614,12 +1618,124 @@
 
     <!-- li -->
     <x:scenario label="when processing the li element">
-        <x:context>
-            <html:li/>
-        </x:context>
-        <x:expect label="the resulting element should be a li and its contents should be prepended with '• ' since it is part of a preformatted list (all nordic lists are required to be so)">
-            <dtbook:li>• </dtbook:li>
-        </x:expect>
+        <x:scenario label="a simple one">
+            <x:context>
+                <html:li/>
+            </x:context>
+            <x:expect label="the resulting element should be a li and its contents should be prepended with '• ' since it is part of a preformatted list (all nordic lists are required to be so)">
+                <dtbook:li>• </dtbook:li>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with ul and both block and non-block text content">
+            <x:context>
+                <html:ul>
+                    <html:li id="li_814"><html:p>TEXT1 <html:em>TEXT2</html:em> TEXT3</html:p>
+                        <html:ul id="list_213">
+                            <html:li id="li_815">TEXT4 <html:em>TEXT5 </html:em> TEXT6</html:li>
+                        </html:ul>
+                    </html:li>
+                </html:ul>
+            </x:context>
+            <x:expect label="the ul should become list, bullets should be added to text or block content as necessary">
+                <dtbook:list type="pl" depth="1">
+                    <dtbook:li id="li_814"><dtbook:p>• TEXT1 <dtbook:em>TEXT2</dtbook:em> TEXT3</dtbook:p>
+                        <dtbook:list type="pl" id="list_213" depth="2">
+                            <dtbook:li id="li_815">• TEXT4 <dtbook:em>TEXT5 </dtbook:em> TEXT6</dtbook:li>
+                        </dtbook:list>
+                    </dtbook:li>
+                </dtbook:list>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with ol and both block and non-block text content">
+            <x:context>
+                <html:ol>
+                    <html:li id="li_814"><html:p>TEXT1 <html:em>TEXT2</html:em> TEXT3</html:p>
+                        <html:ol id="list_213">
+                            <html:li id="li_815">TEXT4 <html:em>TEXT5 </html:em> TEXT6</html:li>
+                        </html:ol>
+                    </html:li>
+                    <html:li>TEXT7</html:li>
+                    <html:li value="9">TEXT8</html:li>
+                    <html:li>TEXT9</html:li>
+                </html:ol>
+            </x:context>
+            <x:expect label="the ul should become list, bullets should be added to text or block content as necessary">
+                <dtbook:list type="pl" depth="1">
+                    <dtbook:li id="li_814"><dtbook:p>1. TEXT1 <dtbook:em>TEXT2</dtbook:em> TEXT3</dtbook:p>
+                        <dtbook:list type="pl" id="list_213" depth="2">
+                            <dtbook:li id="li_815">1. TEXT4 <dtbook:em>TEXT5 </dtbook:em> TEXT6</dtbook:li>
+                        </dtbook:list>
+                    </dtbook:li>
+                    <dtbook:li>2. TEXT7</dtbook:li>
+                    <dtbook:li>9. TEXT8</dtbook:li>
+                    <dtbook:li>10. TEXT9</dtbook:li>
+                </dtbook:list>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with ol and different marker types (roman numerals, letters, numbers)">
+            <x:context>
+                <html:ol type="1">
+                    <html:li>ONE</html:li>
+                    <html:li>TWO</html:li>
+                </html:ol>
+                <html:ol type="a">
+                    <html:li>ONE</html:li>
+                    <html:li>TWO</html:li>
+                </html:ol>
+                <html:ol type="A">
+                    <html:li>ONE</html:li>
+                    <html:li>TWO</html:li>
+                </html:ol>
+                <html:ol type="i">
+                    <html:li>ONE</html:li>
+                    <html:li>TWO</html:li>
+                </html:ol>
+                <html:ol type="I">
+                    <html:li>ONE</html:li>
+                    <html:li>TWO</html:li>
+                </html:ol>
+            </x:context>
+            <x:expect label="the list items should be prefixed with the right type of marker">
+                <dtbook:list type="pl" depth="1">
+                    <dtbook:li>1. ONE</dtbook:li>
+                    <dtbook:li>2. TWO</dtbook:li>
+                </dtbook:list>
+                <dtbook:list type="pl" depth="1">
+                    <dtbook:li>a. ONE</dtbook:li>
+                    <dtbook:li>b. TWO</dtbook:li>
+                </dtbook:list>
+                <dtbook:list type="pl" depth="1">
+                    <dtbook:li>A. ONE</dtbook:li>
+                    <dtbook:li>B. TWO</dtbook:li>
+                </dtbook:list>
+                <dtbook:list type="pl" depth="1">
+                    <dtbook:li>i. ONE</dtbook:li>
+                    <dtbook:li>ii. TWO</dtbook:li>
+                </dtbook:list>
+                <dtbook:list type="pl" depth="1">
+                    <dtbook:li>I. ONE</dtbook:li>
+                    <dtbook:li>II. TWO</dtbook:li>
+                </dtbook:list>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with ol and reversed order">
+            <x:context>
+                <html:ol start="10" reversed="">
+                    <html:li>ONE</html:li>
+                    <html:li>TWO</html:li>
+                    <html:li value="5">THREE</html:li>
+                    <html:li>FOUR</html:li>
+                </html:ol>
+            </x:context>
+            <x:expect label="the result should be 10, 9, 5, 4">
+                <dtbook:list type="pl" depth="1">
+                    <dtbook:li>10. ONE</dtbook:li>
+                    <dtbook:li>9. TWO</dtbook:li>
+                    <dtbook:li>5. THREE</dtbook:li>
+                    <dtbook:li>4. FOUR</dtbook:li>
+                </dtbook:list>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.li -->
