@@ -435,7 +435,7 @@
 
     <sch:pattern id="epub_nordic_127">
         <sch:rule context="html:*[tokenize(@epub:type,' ')='toc']">
-            <sch:assert test="ancestor::html:body[tokenize(@epub:type,' ')=('frontmatter','backmatter') or tokenize(base-uri(),'/')[last()]='nav.xhtml']">[nordic127] The epub:type "toc" is only
+            <sch:assert test="ancestor::*[tokenize(@epub:type,' ')=('frontmatter','backmatter') or tokenize(base-uri(),'/')[last()]='nav.xhtml']">[nordic127] The epub:type "toc" is only
                 allowed in frontmatter, backmatter, and in the EPUB3 Navigation Document (nav.xhtml).</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -560,8 +560,8 @@
             <sch:report test="../html:li">[tpb143] pagebreak is not allowed as sibling to list items</sch:report>
         </sch:rule>
         <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:li]">
-            <sch:report test="../preceding-sibling::html:li or preceding-sibling::* or preceding-sibling::text()[normalize-space()]">[tpb143] pagebreak is not allowed at the beginning of the first
-                list item; it should be placed before the list</sch:report>
+            <sch:assert test="../preceding-sibling::html:li or preceding-sibling::* or preceding-sibling::text()[normalize-space()]">[tpb143] pagebreak is not allowed at the beginning of the first
+                list item; it should be placed before the list</sch:assert>
         </sch:rule>
     </sch:pattern>
 

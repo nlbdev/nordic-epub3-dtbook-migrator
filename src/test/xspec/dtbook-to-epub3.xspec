@@ -3210,5 +3210,20 @@
             </html:div>
         </x:expect>
     </x:scenario>
+    
+    <x:scenario label="when processing a li element enumerated with letters of with a string length &gt; 1">
+        <x:context>
+            <dtbook:list type="pl" depth="1">
+                <dtbook:li>aa. ONE</dtbook:li>
+                <dtbook:li>bbb. TWO</dtbook:li>
+            </dtbook:list>
+        </x:context>
+        <x:expect label="the letters should be correctly parsed">
+            <html:ol id="..." type="a">
+                <html:li id="..." value="27">ONE</html:li>
+                <html:li id="..." value="1406">TWO</html:li>
+            </html:ol>
+        </x:expect>
+    </x:scenario>
 
 </x:description>

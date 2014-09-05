@@ -4227,6 +4227,11 @@
     </define>
     <define name="attlist.li" combine="interleave">
         <ref name="attrs"/>
+        <optional>
+            <attribute name="value">
+                <data type="integer"/>
+            </attribute>
+        </optional>
     </define>
     <!--
     Use: lic ("list item component") allows ordered substructure
