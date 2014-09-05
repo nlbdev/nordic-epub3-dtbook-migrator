@@ -4,7 +4,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
-    <!--    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
+    <!--        <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
 
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
 
@@ -1261,7 +1261,7 @@
                 select="if (not($marker)) then '' else if ($marker='•') then '•' else if (string(number($marker)) != 'NaN') then '1' else parent::*/dtbook:li[1]/(text()[normalize-space()]|dtbook:p/text()[normalize-space()])[1]/(if (starts-with(.,'i.')) then 'i' else if (starts-with(.,'I.')) then 'I' else if (substring(.,1,1)=lower-case(substring(.,1,1))) then 'a' else 'A')"/>
             <!-- NOTE: list is assumed to be preformatted; a generic script would calculate implicit value based on start attribute etc. -->
             <xsl:variable name="marker-value"
-                select="if ($marker-type=('a','A')) then pf:numeric-alpha-to-decimal(lower-case($marker)) else if ($marker-type=('i','I')) then pf:numeric-roman-to-decimal(lower-case($marker)) else $marker"/>
+                select="if ($marker-type=('a','A')) then f:numeric-alpha-to-decimal(lower-case($marker)) else if ($marker-type=('i','I')) then pf:numeric-roman-to-decimal(lower-case($marker)) else $marker"/>
 
             <xsl:call-template name="attlist.li">
                 <xsl:with-param name="li-value" select="$marker-value"/>
@@ -1668,6 +1668,24 @@
             </xsl:otherwise>
         </xsl:choose>
 
+    </xsl:function>
+
+    <xsl:function name="f:numeric-alpha-to-decimal" as="xs:integer">
+        <!-- TODO: update pf:numeric-alpha-to-decimal in numeral-conversion.xsl in DP2 common-utils -->
+        <xsl:param name="alpha" as="xs:string"/>
+        <xsl:value-of select="xs:integer(sum(for $pos in (1 to string-length($alpha)) return ((string-to-codepoints(substring( $alpha, $pos, 1 )) - 96 ) * f:power( 26, $pos - 1 ))))"/>
+    </xsl:function>
+
+    <xsl:function name="f:power" as="xs:double">
+        <!-- TODO: move to DP2 common-utils? or a math module? -->
+        <!-- From http://users.atw.hu/xsltcookbook2/xsltckbk2-chp-3-sect-5.html -->
+        <xsl:param name="base" as="xs:double"/>
+        <xsl:param name="exp" as="xs:integer"/>
+        <xsl:sequence select="if ($exp lt 0) then f:power(1.0 div $base, -$exp)
+            else
+            if ($exp eq 0)
+            then 1e0
+            else $base * f:power($base, $exp - 1)"/>
     </xsl:function>
 
 </xsl:stylesheet>

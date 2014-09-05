@@ -27,22 +27,22 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="meta[not(starts-with(@name,'track')) and matches(@name,'.*:Supplier$')]">
+    <xsl:template match="meta[not(starts-with(@name,'track')) and matches(@name,'.*:Supplier$','i')]">
         <meta name="track:Supplier" content="{@content}"/>
     </xsl:template>
 
-    <xsl:template match="meta[not(starts-with(@name,'track')) and matches(@name,'.*:SupplierDate$')]">
+    <xsl:template match="meta[not(starts-with(@name,'track')) and matches(@name,'.*:SupplierDate$','i')]">
         <meta name="track:SuppliedDate" content="{@content}"/>
     </xsl:template>
+
+    <xsl:template match="meta[matches(@name,'.*:Guidelines$','i')]"/>
 
     <xsl:template match="meta/@scheme"/>
 
     <xsl:template match="head">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
-            <xsl:if test="not(meta/@name='track:Guidelines')">
-                <meta name="track:Guidelines" content="2011-2"/>
-            </xsl:if>
+            <meta name="track:Guidelines" content="2011-2"/>
             <xsl:if test="not(meta/@name='dc:Source')">
                 <xsl:variable name="isbn"
                     select="(//level1[contains(@class,'colophon')]//text()[matches(.,'^\s*ISBN[:\s]*([\d\- ]+)([^\d\- ]|$)')]/replace(replace(.,'^\s*ISBN[:\s]*([\d\- ]+)([^\d\- ].*?$|$)','$1'),'[^\d]',''))[1]"/>
