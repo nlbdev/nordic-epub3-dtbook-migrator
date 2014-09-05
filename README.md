@@ -38,6 +38,5 @@ The grammar used in the EPUB3 and DTBook files is a strict subset of EPUB3 and D
 are few limitations to the DTBook grammar. There are more limitations to the HTML/EPUB3 grammar however, because there must be a way to convert it to DTBook.
 Most notably, audio and video are not allowed in these EPUB3s.
 
-* TODO: include or link to the Nordic markup guidelines.
-* TODO: include or link to the mapping between DTBook and EPUB3 (possibly generate from XSLT?)
-* TODO: include or link to a list of allowed HTML elements (or maybe they are / should be listed in the markup requirements?).
+See [the project homepage](http://nlbdev.github.io/nordic-epub3-dtbook-migrator/) for more information.
+
