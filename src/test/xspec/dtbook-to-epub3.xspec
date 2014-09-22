@@ -1252,15 +1252,13 @@
                 </dtbook:imggroup>
             </x:context>
             <x:expect label="the resulting element should be a figure">
-                <html:figure id="..." class="image-series">
+                <html:figure id="..." class="image">
                     <html:aside id="prodnote1" epub:type="z3998:production"/>
-                    <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
-                        <html:figcaption>
-                            <html:span epub:type="pagebreak" class="page-normal" title="1"/>
-                            <html:div id="caption1"/>
-                        </html:figcaption>
-                    </html:figure>
+                    <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
+                    <html:figcaption>
+                        <html:span epub:type="pagebreak" class="page-normal" title="1"/>
+                        <html:div id="caption1"/>
+                    </html:figcaption>
                 </html:figure>
             </x:expect>
         </x:scenario>
@@ -3189,10 +3187,8 @@
         <x:expect label="the p should be converted into a div and any text before and after the imggroup should be wrapped in new p elements (img without imggroup is allowed in p)">
             <html:div>
                 <html:div xml:lang="no" lang="no" id="id1" class="class1">
-                    <html:figure id="..." class="image-series">
-                        <html:figure class="image">
-                            <html:img id="rId101" src="images/900340%20(Reparert)-Picture%201.png" alt=""/>
-                        </html:figure>
+                    <html:figure id="..." class="image">
+                        <html:img id="rId101" src="images/900340%20(Reparert)-Picture%201.png" alt=""/>
                     </html:figure>
                 </html:div>
                 <html:p xml:lang="no" lang="no" id="id2" class="class2">
@@ -3200,17 +3196,15 @@
                 </html:p>
                 <html:div xml:lang="no" lang="no" id="id3" class="class3">
                     <html:p>TEXT</html:p>
-                    <html:figure id="..." class="image-series">
-                        <html:figure class="image">
-                            <html:img id="rId101" src="images/900340%20(Reparert)-Picture%201.png" alt=""/>
-                        </html:figure>
+                    <html:figure id="..." class="image">
+                        <html:img id="rId101" src="images/900340%20(Reparert)-Picture%201.png" alt=""/>
                     </html:figure>
                     <html:p>TEXT</html:p>
                 </html:div>
             </html:div>
         </x:expect>
     </x:scenario>
-    
+
     <x:scenario label="when processing a li element enumerated with letters of with a string length &gt; 1">
         <x:context>
             <dtbook:list type="pl" depth="1">

@@ -3683,6 +3683,30 @@
                         </choice>
                     </zeroOrMore>
                     
+                    <!-- group + oneOrMore = two or more -->
+                    <group>
+                        <element name="figure">
+                            <ref name="attlist.imggroup"/>
+                            <zeroOrMore>
+                                <choice>
+                                    <ref name="pagenum.span"/> <!-- span -->
+                                    <ref name="prodnote"/> <!-- aside -->
+                                </choice>
+                            </zeroOrMore>
+                            
+                            <ref name="img"/> <!-- img -->
+                            <optional>
+                                <ref name="caption.figure"/> <!-- figcaption -->
+                            </optional>
+                        </element>
+                        
+                        <zeroOrMore>
+                            <choice>
+                                <ref name="pagenum.span"/> <!-- span -->
+                                <ref name="prodnote"/> <!-- aside -->
+                            </choice>
+                        </zeroOrMore>
+                    </group>
                     <oneOrMore>
                         
                         <element name="figure">
