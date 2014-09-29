@@ -858,18 +858,20 @@
         <xsl:variable name="pagenum.parent" select="if (count($pagenum.parent/descendant-or-self::* intersect parent::*/ancestor-or-self::*) &gt;= 3) then parent::* else $pagenum.parent"/>
         <xsl:element name="{if (f:is-inline($pagenum.parent)) then 'span' else 'div'}">
             <xsl:call-template name="attlist.pagenum"/>
-            <xsl:attribute name="title" select="normalize-space(.)"/>
-            <!--
-                NOTE: the title attribute is overwritten with the contents of the pagenum,
-                so any pre-existing @title content is lost.
-            -->
+            <xsl:if test="normalize-space(.)">
+                <xsl:attribute name="title" select="normalize-space(.)"/>
+                <!--
+                    NOTE: the title attribute is overwritten with the contents of the pagenum,
+                    so any pre-existing @title content is lost.
+                -->
+            </xsl:if>
         </xsl:element>
     </xsl:template>
 
     <xsl:template name="attlist.pagenum">
         <xsl:call-template name="attrsrqd">
             <xsl:with-param name="types" select="'pagebreak'" tunnel="yes"/>
-            <xsl:with-param name="classes" select="concat('page-',(@page,'normal')[1])" tunnel="yes"/>
+            <xsl:with-param name="classes" select="concat('page-',(@page,if (normalize-space(.)='') then 'special' else 'normal')[1])" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -945,85 +947,83 @@
         <figure>
             <xsl:call-template name="attlist.imggroup"/>
 
-            <xsl:variable name="imggroup-captions" select="dtbook:img[1]/preceding-sibling::dtbook:caption[1]/(. | preceding-sibling::node()[not(self::text())])"/>
-            <xsl:variable name="imggroup-trailing-content"
-                select="if ($imggroup-captions) then ($imggroup-captions[last()]/following-sibling::node()[not(self::text())] intersect dtbook:img[1]/preceding-sibling::node()[not(self::text())]) else dtbook:img[1]/preceding-sibling::node()[not(self::text())]"/>
             <xsl:choose>
-                <xsl:when test="not($imggroup-captions[self::dtbook:caption])">
-                    <xsl:apply-templates select="$imggroup-captions"/>
-                </xsl:when>
-                <xsl:when test="count($imggroup-captions) = 1">
-                    <figcaption>
-                        <xsl:for-each select="$imggroup-captions[self::*][1]">
-                            <xsl:call-template name="attlist.caption"/>
-                        </xsl:for-each>
-                        <xsl:apply-templates select="$imggroup-captions"/>
-                    </figcaption>
-                </xsl:when>
-                <xsl:when test="count($imggroup-captions) &gt; 1">
-                    <figcaption>
-                        <xsl:for-each select="$imggroup-captions">
-                            <div>
-                                <xsl:call-template name="attlist.caption"/>
-                                <xsl:apply-templates select="."/>
-                            </div>
-                        </xsl:for-each>
-                    </figcaption>
-                </xsl:when>
-            </xsl:choose>
-            <xsl:apply-templates select="$imggroup-trailing-content"/>
+                <xsl:when test="count(dtbook:img) = 1">
+                    <!-- Single image -->
 
-            <xsl:choose>
-                <xsl:when test="count(dtbook:img) &gt; 1">
-                    <xsl:for-each select="dtbook:img">
-                        <figure class="image">
-                            <xsl:call-template name="imggroup.image"/>
-                        </figure>
-                    </xsl:for-each>
+                    <xsl:call-template name="imggroup.image">
+                        <xsl:with-param name="content" select="node()"/>
+                    </xsl:call-template>
+
                 </xsl:when>
                 <xsl:otherwise>
+                    <!-- Image series -->
+
+                    <xsl:variable name="image-series-captions" select="dtbook:img[1]/preceding-sibling::dtbook:caption"/>
+                    <xsl:choose>
+                        <xsl:when test="count($image-series-captions) = 1">
+                            <figcaption>
+                                <xsl:for-each select="$image-series-captions">
+                                    <xsl:call-template name="attlist.caption"/>
+                                    <xsl:apply-templates select="node()"/>
+                                </xsl:for-each>
+                            </figcaption>
+                        </xsl:when>
+                        <xsl:when test="count($image-series-captions) &gt; 1">
+                            <figcaption>
+                                <xsl:for-each select="$image-series-captions">
+                                    <div>
+                                        <xsl:call-template name="attlist.caption"/>
+                                        <xsl:apply-templates select="node()"/>
+                                    </div>
+                                </xsl:for-each>
+                            </figcaption>
+                        </xsl:when>
+                    </xsl:choose>
+                    <xsl:apply-templates select="dtbook:img[1]/preceding-sibling::node()[not(self::dtbook:caption)]"/>
+
                     <xsl:for-each select="dtbook:img">
-                        <xsl:call-template name="imggroup.image"/>
+                        <xsl:variable name="trailing-content"
+                            select="if (following-sibling::dtbook:img) then following-sibling::node() intersect following-sibling::dtbook:img[1]/preceding-sibling::node() else following-sibling::node()"/>
+                        <figure class="image">
+                            <xsl:call-template name="imggroup.image">
+                                <xsl:with-param name="content" select=". | $trailing-content"/>
+                            </xsl:call-template>
+                        </figure>
                     </xsl:for-each>
+
                 </xsl:otherwise>
             </xsl:choose>
         </figure>
     </xsl:template>
 
     <xsl:template name="imggroup.image">
-        <xsl:variable name="captions"
-            select="if (not(following-sibling::dtbook:caption)) then () else following-sibling::node()[not(self::text())] intersect (if (following-sibling::dtbook:img) then (following-sibling::dtbook:img[1]/preceding-sibling::dtbook:caption[1]/(. | preceding-sibling::node()[not(self::text())])) else (following-sibling::dtbook:caption[last()]/(. | preceding-sibling::node()[not(self::text())])))"/>
-        <xsl:variable name="trailing-content"
-            select="(if ($captions) then $captions[last()] else .)/following-sibling::node()[not(self::text())] intersect (if (following-sibling::dtbook:img) then following-sibling::dtbook:img[1]/preceding-sibling::node()[not(self::text())] else following-sibling::node())"/>
-        <xsl:apply-templates select="."/>
+        <xsl:param name="content" required="yes"/>
+
+        <xsl:apply-templates select="$content[self::dtbook:img]"/>
+        <xsl:apply-templates select="$content[self::node() and not(self::dtbook:img or self::dtbook:caption)]"/>
+
+        <xsl:variable name="image-captions" select="$content[self::dtbook:caption]"/>
         <xsl:choose>
-            <xsl:when test="count($captions[self::*]) = 1">
+            <xsl:when test="count($image-captions) = 1">
                 <figcaption>
-                    <xsl:for-each select="$captions">
+                    <xsl:for-each select="$image-captions">
                         <xsl:call-template name="attlist.caption"/>
-                        <xsl:apply-templates select="."/>
+                        <xsl:apply-templates select="node()"/>
                     </xsl:for-each>
                 </figcaption>
             </xsl:when>
-            <xsl:when test="count($captions[self::*]) &gt; 1">
+            <xsl:when test="count($image-captions) &gt; 1">
                 <figcaption>
-                    <xsl:for-each select="$captions">
-                        <xsl:choose>
-                            <xsl:when test="self::dtbook:caption">
-                                <div>
-                                    <xsl:call-template name="attlist.caption"/>
-                                    <xsl:apply-templates select="."/>
-                                </div>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:apply-templates select="."/>
-                            </xsl:otherwise>
-                        </xsl:choose>
+                    <xsl:for-each select="$image-captions">
+                        <div>
+                            <xsl:call-template name="attlist.caption"/>
+                            <xsl:apply-templates select="node()"/>
+                        </div>
                     </xsl:for-each>
                 </figcaption>
             </xsl:when>
         </xsl:choose>
-        <xsl:apply-templates select="$trailing-content"/>
     </xsl:template>
 
     <xsl:template name="attlist.imggroup">

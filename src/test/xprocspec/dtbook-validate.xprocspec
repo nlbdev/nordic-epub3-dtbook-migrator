@@ -83,11 +83,11 @@
                     </tr>
                     <tr>
                         <td>element: 'imggroup'</td>
-                        <td>2</td>
+                        <td>3</td>
                     </tr>
                     <tr>
                         <td>element: 'img'</td>
-                        <td>2</td>
+                        <td>5</td>
                     </tr>
                     <tr>
                         <td>element: 'caption'</td>
@@ -119,7 +119,7 @@
                     </tr>
                     <tr>
                         <td>element: 'pagenum'</td>
-                        <td>28</td>
+                        <td>31</td>
                     </tr>
                     <tr>
                         <td>element: 'bodymatter'</td>

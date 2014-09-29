@@ -20,8 +20,7 @@
 
     <p:import href="html-split.split.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
-    <p:import href="epub3-nav-utils/xproc/epub3-nav-library.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -84,25 +83,25 @@
             <p:pipe port="result" step="nav.ncx"/>
         </p:output>
 
-        <pxi:epub3-nav-create-toc name="nav.toc">
+        <px:epub3-nav-create-toc name="nav.toc">
             <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
                 <p:pipe port="result" step="single-html"/>
             </p:with-option>
             <p:input port="source">
                 <p:pipe port="in-memory.out" step="html-split"/>
             </p:input>
-        </pxi:epub3-nav-create-toc>
+        </px:epub3-nav-create-toc>
 
-        <pxi:epub3-nav-create-page-list name="nav.page-list">
+        <px:epub3-nav-create-page-list name="nav.page-list">
             <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
                 <p:pipe port="result" step="single-html"/>
             </p:with-option>
             <p:input port="source">
                 <p:pipe port="in-memory.out" step="html-split"/>
             </p:input>
-        </pxi:epub3-nav-create-page-list>
+        </px:epub3-nav-create-page-list>
 
-        <pxi:epub3-nav-aggregate>
+        <px:epub3-nav-aggregate>
             <p:input port="source">
                 <p:pipe step="nav.toc" port="result"/>
                 <p:pipe step="nav.page-list" port="result"/>
@@ -110,7 +109,7 @@
             <p:with-option name="language" select="/*/(@xml:lang,@lang)[1]">
                 <p:pipe port="result" step="single-html"/>
             </p:with-option>
-        </pxi:epub3-nav-aggregate>
+        </px:epub3-nav-aggregate>
         <p:add-attribute match="/*" attribute-name="xml:base">
             <p:with-option name="attribute-value" select="concat($publication-dir,'nav.xhtml')"/>
         </p:add-attribute>

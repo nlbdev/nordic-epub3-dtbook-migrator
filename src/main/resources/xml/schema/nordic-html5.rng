@@ -3397,14 +3397,7 @@
     </define>
     <define name="pagenum.span">
         <element name="span">
-            <!--<sch:rule context=".">
-                <sch:assert test="tokenize(@epub:type,' ')='pagebreak'">The pagebreak must have an epub:type of 'pagebreak'</sch:assert>
-            </sch:rule>-->
             <ref name="attlist.pagenum"/>
-            <!--<sch:rule context=".">
-                <sch:assert test="matches(@class,'(^|.* )(page-front|page-normal|page-special)( .*|$)')">Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special' class.</sch:assert>
-                <sch:assert test="matches(@title,'.+')">The title attribute must be used to describe the page number.</sch:assert>
-            </sch:rule>-->
         </element>
     </define>
     <define name="pagenum">
@@ -3427,6 +3420,13 @@
   -->
     <define name="attlist.pagenum" combine="interleave">
         <ref name="attrsrqd"/>
+        <!--<sch:rule context=".">
+            <sch:assert test="tokenize(@epub:type,' ')='pagebreak'">The pagebreak must have an epub:type of 'pagebreak'</sch:assert>
+        </sch:rule>-->
+        <!--<sch:rule context=".">
+            <sch:assert test="matches(@class,'(^|.* )(page-front|page-normal|page-special)( .*|$)')">Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special' class.</sch:assert>
+            <sch:assert test="matches(@title,'.+')">The title attribute must be used to describe the page number.</sch:assert>
+        </sch:rule>-->
     </define>
     <!--
     Use: noteref marks one or more characters that reference a footnote
@@ -3656,14 +3656,15 @@
                 <group>
                     <!-- A single image -->
                     
+                    <ref name="img"/> <!-- img -->
+                    
                     <zeroOrMore>
                         <choice>
-                            <ref name="pagenum.span"/> <!-- span -->
+                            <ref name="pagenum"/> <!-- span, div -->
                             <ref name="prodnote"/> <!-- aside -->
                         </choice>
                     </zeroOrMore>
                     
-                    <ref name="img"/> <!-- img -->
                     <optional>
                         <ref name="caption.figure"/> <!-- figcaption -->
                     </optional>
@@ -3678,58 +3679,30 @@
                     
                     <zeroOrMore>
                         <choice>
-                            <ref name="pagenum.span"/> <!-- span -->
+                            <ref name="pagenum"/> <!-- span, div -->
                             <ref name="prodnote"/> <!-- aside -->
                         </choice>
                     </zeroOrMore>
                     
-                    <!-- group + oneOrMore = two or more -->
-                    <group>
-                        <element name="figure">
-                            <ref name="attlist.imggroup"/>
-                            <zeroOrMore>
-                                <choice>
-                                    <ref name="pagenum.span"/> <!-- span -->
-                                    <ref name="prodnote"/> <!-- aside -->
-                                </choice>
-                            </zeroOrMore>
-                            
-                            <ref name="img"/> <!-- img -->
-                            <optional>
-                                <ref name="caption.figure"/> <!-- figcaption -->
-                            </optional>
-                        </element>
-                        
-                        <zeroOrMore>
-                            <choice>
-                                <ref name="pagenum.span"/> <!-- span -->
-                                <ref name="prodnote"/> <!-- aside -->
-                            </choice>
-                        </zeroOrMore>
-                    </group>
                     <oneOrMore>
                         
                         <element name="figure">
                             <ref name="attlist.imggroup"/>
+                            
+                            <ref name="img"/> <!-- img -->
+                            
                             <zeroOrMore>
                                 <choice>
-                                    <ref name="pagenum.span"/> <!-- span -->
+                                    <ref name="pagenum"/> <!-- span, div -->
                                     <ref name="prodnote"/> <!-- aside -->
                                 </choice>
                             </zeroOrMore>
                             
-                            <ref name="img"/> <!-- img -->
                             <optional>
                                 <ref name="caption.figure"/> <!-- figcaption -->
                             </optional>
                         </element>
                         
-                        <zeroOrMore>
-                            <choice>
-                                <ref name="pagenum.span"/> <!-- span -->
-                                <ref name="prodnote"/> <!-- aside -->
-                            </choice>
-                        </zeroOrMore>
                     </oneOrMore>
                     
                 </group>

@@ -319,31 +319,49 @@
             </navLabel>
             <content src="C00000-5-chapter.xhtml#page_25"/>
         </pageTarget>
-        <pageTarget id="pageTarget-51" playOrder="51" type="normal">
+        <pageTarget id="pageTarget-51" playOrder="51" type="special">
+            <navLabel>
+                <text>-</text>
+            </navLabel>
+            <content src="C00000-5-chapter.xhtml#page_unnumbered_1"/>
+        </pageTarget>
+        <pageTarget id="pageTarget-52" playOrder="52" type="special">
+            <navLabel>
+                <text>-</text>
+            </navLabel>
+            <content src="C00000-5-chapter.xhtml#page_unnumbered_2"/>
+        </pageTarget>
+        <pageTarget id="pageTarget-53" playOrder="53" type="special">
+            <navLabel>
+                <text>-</text>
+            </navLabel>
+            <content src="C00000-5-chapter.xhtml#page_unnumbered_3"/>
+        </pageTarget>
+        <pageTarget id="pageTarget-54" playOrder="54" type="normal">
             <navLabel>
                 <text>26</text>
             </navLabel>
             <content src="C00000-5-chapter.xhtml#page_26"/>
         </pageTarget>
-        <pageTarget id="pageTarget-52" playOrder="52" type="normal">
+        <pageTarget id="pageTarget-55" playOrder="55" type="normal">
             <navLabel>
                 <text>27</text>
             </navLabel>
             <content src="C00000-6-conclusion.xhtml#page_27"/>
         </pageTarget>
-        <pageTarget id="pageTarget-53" playOrder="53" type="normal">
+        <pageTarget id="pageTarget-56" playOrder="56" type="normal">
             <navLabel>
                 <text>28</text>
             </navLabel>
             <content src="C00000-6-conclusion.xhtml#page_28"/>
         </pageTarget>
-        <pageTarget id="pageTarget-54" playOrder="54" type="normal">
+        <pageTarget id="pageTarget-57" playOrder="57" type="normal">
             <navLabel>
                 <text>29</text>
             </navLabel>
             <content src="C00000-7-backmatter.xhtml#page_29"/>
         </pageTarget>
-        <pageTarget id="pageTarget-55" playOrder="55" type="normal">
+        <pageTarget id="pageTarget-58" playOrder="58" type="normal">
             <navLabel>
                 <text>30</text>
             </navLabel>
