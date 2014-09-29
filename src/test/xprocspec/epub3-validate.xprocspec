@@ -27,6 +27,22 @@
             <x:document type="inline">
                 <tbody xmlns="http://www.w3.org/1999/xhtml">
                     <tr>
+                        <td>epub:type: 'bodymatter'</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>epub:type: 'chapter'</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>epub:type: 'noteref'</td>
+                        <td>103</td>
+                    </tr>
+                    <tr>
+                        <td>epub:type: 'pagebreak'</td>
+                        <td>31</td>
+                    </tr>
+                    <tr>
                         <td>epub:type: 'frontmatter'</td>
                         <td>1</td>
                     </tr>
@@ -39,20 +55,12 @@
                         <td>1</td>
                     </tr>
                     <tr>
-                        <td>epub:type: 'pagebreak'</td>
-                        <td>28</td>
+                        <td>epub:type: 'toc'</td>
+                        <td>1</td>
                     </tr>
                     <tr>
-                        <td>epub:type: 'bodymatter'</td>
-                        <td>5</td>
-                    </tr>
-                    <tr>
-                        <td>epub:type: 'chapter'</td>
-                        <td>4</td>
-                    </tr>
-                    <tr>
-                        <td>epub:type: 'noteref'</td>
-                        <td>103</td>
+                        <td>epub:type: 'page-list'</td>
+                        <td>1</td>
                     </tr>
                     <tr>
                         <td>epub:type: 'conclusion'</td>
@@ -67,24 +75,24 @@
                         <td>103</td>
                     </tr>
                     <tr>
-                        <td>epub:type: 'toc'</td>
+                        <td>class: 'page-normal'</td>
+                        <td>26</td>
+                    </tr>
+                    <tr>
+                        <td>class: 'image-series'</td>
                         <td>1</td>
                     </tr>
                     <tr>
-                        <td>epub:type: 'page-list'</td>
-                        <td>1</td>
+                        <td>class: 'page-special'</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>class: 'image'</td>
+                        <td>5</td>
                     </tr>
                     <tr>
                         <td>class: 'initialism'</td>
                         <td>5</td>
-                    </tr>
-                    <tr>
-                        <td>class: 'image'</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>class: 'img-caption'</td>
-                        <td>1</td>
                     </tr>
                     <tr>
                         <td>class: 'render-required'</td>
@@ -93,10 +101,6 @@
                     <tr>
                         <td>class: 'page-front'</td>
                         <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>class: 'page-normal'</td>
-                        <td>26</td>
                     </tr>
                     <tr>
                         <td>class: 'num-word'</td>
@@ -152,26 +156,30 @@
                     </tr>
                     <tr>
                         <td>element: 'span'</td>
-                        <td>1183</td>
+                        <td>1185</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'a'</td>
+                        <td>162</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'figure'</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'div'</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'img'</td>
+                        <td>5</td>
                     </tr>
                     <tr>
                         <td>element: 'abbr'</td>
                         <td>5</td>
                     </tr>
                     <tr>
-                        <td>element: 'figure'</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>element: 'img'</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
                         <td>element: 'figcaption'</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>element: 'div'</td>
                         <td>2</td>
                     </tr>
                     <tr>
@@ -203,16 +211,20 @@
                         <td>69</td>
                     </tr>
                     <tr>
-                        <td>element: 'ul'</td>
-                        <td>1</td>
+                        <td>element: 'nav'</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>element: 'ol'</td>
+                        <td>5</td>
                     </tr>
                     <tr>
                         <td>element: 'li'</td>
-                        <td>62</td>
+                        <td>65</td>
                     </tr>
                     <tr>
-                        <td>element: 'a'</td>
-                        <td>159</td>
+                        <td>element: 'ul'</td>
+                        <td>1</td>
                     </tr>
                     <tr>
                         <td>element: 'blockquote'</td>
@@ -220,14 +232,6 @@
                     </tr>
                     <tr>
                         <td>element: 'h3'</td>
-                        <td>5</td>
-                    </tr>
-                    <tr>
-                        <td>element: 'nav'</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>element: 'ol'</td>
                         <td>5</td>
                     </tr>
                 </tbody>

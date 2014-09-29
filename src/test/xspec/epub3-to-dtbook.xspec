@@ -1122,61 +1122,93 @@
 
     <!-- imggroup -->
     <x:scenario label="when processing a figure element">
-        <x:scenario label="without any children">
+        <x:scenario label="with class='image-series'">
             <x:context>
-                <html:figure/>
+                <html:figure class="image-series"/>
             </x:context>
             <x:expect label="the resulting element should be a imggroup">
                 <dtbook:imggroup/>
             </x:expect>
         </x:scenario>
+        <x:scenario label="with class='image' and no image-series parent">
+            <x:context>
+                <html:figure class="image">
+                    <html:img src="images/image.jpg"/>
+                </html:figure>
+            </x:context>
+            <x:expect label="the resulting element should be a imggroup">
+                <dtbook:imggroup>
+                    <dtbook:img src="image.jpg" id="..."/>
+                </dtbook:imggroup>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with class='image' and a image-series parent">
+            <x:context>
+                <html:figure class="image-series">
+                    <html:figure class="image">
+                        <html:img src="images/image.jpg"/>
+                    </html:figure>
+                </html:figure>
+            </x:context>
+            <x:expect label="the image figure should be unwrapped">
+                <dtbook:imggroup>
+                    <dtbook:img src="image.jpg" id="..."/>
+                </dtbook:imggroup>
+            </x:expect>
+        </x:scenario>
         <x:scenario label="with the children [ aside(prodnote), img, span(pagebreak), figcaption[div(caption)] ]">
             <x:context>
-                <html:figure>
+                <html:figure class="image-series">
                     <html:aside id="prodnote1" epub:type="z3998:production"/>
-                    <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1"/>
-                    <html:span epub:type="pagebreak" class="page-normal" title="1"/>
-                    <html:figcaption>
-                        <html:div id="caption1" class="img-caption">
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1"/>
+                        <html:span epub:type="pagebreak" class="page-normal" title="1"/>
+                        <html:figcaption>
                             <html:p/>
-                        </html:div>
-                    </html:figcaption>
+                        </html:figcaption>
+                    </html:figure>
                 </html:figure>
             </x:context>
             <x:expect label="the resulting element should be a figure">
                 <dtbook:imggroup>
                     <dtbook:prodnote render="optional" id="prodnote1" imgref="img1"/>
                     <dtbook:img src="img.jpg" id="img1" longdesc="#prodnote1"/>
-                    <dtbook:caption id="caption1">
+                    <dtbook:caption>
                         <dtbook:p/>
                     </dtbook:caption>
                     <dtbook:pagenum page="normal">1</dtbook:pagenum>
                 </dtbook:imggroup>
             </x:expect>
         </x:scenario>
-        <x:scenario label="with the children [ img, aside(prodnote), img, img, img, img, figcaption[div(caption), div(caption), div(caption), div(caption)] ]">
+        <x:scenario label="with the image captions">
             <x:context>
-                <html:figure>
-                    <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1"/>
-                    <html:aside id="prodnote1" epub:type="z3998:production"/>
-                    <html:img src="images/img.jpg" id="img2"/>
-                    <html:img src="images/img.jpg" id="img3"/>
-                    <html:img src="images/img.jpg" id="img4"/>
-                    <html:img src="images/img.jpg" id="img5"/>
-                    <html:figcaption>
-                        <html:div id="caption1" class="img-caption">
+                <html:figure class="image-series">
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1"/>
+                        <html:aside id="prodnote1" epub:type="z3998:production"/>
+                        <html:figcaption id="caption1">
                             <html:p/>
-                        </html:div>
-                        <html:div id="caption2" class="img-caption">
+                        </html:figcaption>
+                    </html:figure>
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img2"/>
+                        <html:figcaption id="caption2">
                             <html:p/>
                             <html:p/>
-                        </html:div>
-                        <html:div id="caption3" class="img-caption"/>
-                        <html:div id="caption4" class="img-caption">
+                        </html:figcaption>
+                    </html:figure>
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img3"/>
+                    </html:figure>
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img4"/>
+                        <html:figcaption id="caption4">
                             <html:p/>
-                        </html:div>
-                        <html:div id="caption5" class="img-caption"/>
-                    </html:figcaption>
+                        </html:figcaption>
+                    </html:figure>
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img5"/>
+                    </html:figure>
                 </html:figure>
             </x:context>
             <x:expect label="the resulting element should be a figure">
@@ -1192,13 +1224,75 @@
                         <dtbook:p/>
                     </dtbook:caption>
                     <dtbook:img src="img.jpg" id="img3"/>
-                    <dtbook:caption id="caption3"/>
                     <dtbook:img src="img.jpg" id="img4"/>
                     <dtbook:caption id="caption4">
                         <dtbook:p/>
                     </dtbook:caption>
                     <dtbook:img src="img.jpg" id="img5"/>
-                    <dtbook:caption id="caption5"/>
+                </dtbook:imggroup>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="representing a image series">
+            <x:context>
+                <html:figure class="image-series">
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
+                        <html:figcaption>
+                            <html:aside id="prodnote1" epub:type="z3998:production"/>
+                            <html:div id="caption1">
+                                <html:p/>
+                            </html:div>
+                        </html:figcaption>
+                    </html:figure>
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img2" alt="image"/>
+                        <html:figcaption>
+                            <html:div id="caption2">
+                                <html:p/>
+                            </html:div>
+                            <html:div id="caption3">
+                                <html:p/>
+                            </html:div>
+                        </html:figcaption>
+                    </html:figure>
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img3" alt="image"/>
+                    </html:figure>
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img4" alt="image"/>
+                        <html:figcaption id="caption4">
+                            <html:p/>
+                        </html:figcaption>
+                    </html:figure>
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img5" alt="image"/>
+                    </html:figure>
+                </html:figure>
+            </x:context>
+            <x:expect label="the nested figures should be unwrapped properly">
+                <dtbook:imggroup>
+                    <dtbook:img src="img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
+                    <dtbook:caption>
+                        <dtbook:prodnote id="prodnote1" imgref="img1" render="optional"/>
+                        <dtbook:div id="caption1">
+                            <dtbook:p/>
+                        </dtbook:div>
+                    </dtbook:caption>
+                    <dtbook:img src="img.jpg" id="img2" alt="image"/>
+                    <dtbook:caption>
+                        <dtbook:div id="caption2">
+                            <dtbook:p/>
+                        </dtbook:div>
+                        <dtbook:div id="caption3">
+                            <dtbook:p/>
+                        </dtbook:div>
+                    </dtbook:caption>
+                    <dtbook:img src="img.jpg" id="img3" alt="image"/>
+                    <dtbook:img src="img.jpg" id="img4" alt="image"/>
+                    <dtbook:caption id="caption4">
+                        <dtbook:p/>
+                    </dtbook:caption>
+                    <dtbook:img src="img.jpg" id="img5" alt="image"/>
                 </dtbook:imggroup>
             </x:expect>
         </x:scenario>

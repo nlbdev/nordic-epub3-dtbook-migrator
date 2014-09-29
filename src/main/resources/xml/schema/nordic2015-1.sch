@@ -688,19 +688,20 @@
     <!-- Rule 253: figures and captions -->
     <sch:pattern id="epub_nordic_253">
         <sch:rule context="html:figure">
-            <sch:assert test="tokenize(@epub:type,'\s+')='sidebar' or tokenize(@class,'\s+')=('image','image-series')">[nordic253] Figures must either have an epub:type of "sidebar" or a class of
+            <sch:assert test="tokenize(@epub:type,'\s+')='sidebar' or tokenize(@class,'\s+')=('image','image-series')">[nordic253a] Figures must either have an epub:type of "sidebar" or a class of
                 "image" or "image-series".</sch:assert>
-            <sch:assert test="count((.[tokenize(@epub:type,'\s+')='sidebar'], .[tokenize(@class,'\s+')='image'], .[tokenize(@class,'\s+')='image-series'])) = 1">[nordic253] Figures must either have an
+            <sch:assert test="count((.[tokenize(@epub:type,'\s+')='sidebar'], .[tokenize(@class,'\s+')='image'], .[tokenize(@class,'\s+')='image-series'])) = 1">[nordic253a] Figures must either have an
                 epub:type of "sidebar" or a class of "image" or "image-series".</sch:assert>
 
-            <sch:assert test="count(html:figcaption) &lt;= 1">[nordic253] There cannot be more than one figure caption in a single figure element.</sch:assert>
+            <sch:assert test="count(html:figcaption) &lt;= 1">[nordic253b] There cannot be more than one figure caption in a single figure element.</sch:assert>
         </sch:rule>
         <sch:rule context="html:figure[tokenize(@class,'\s+')='image']">
-            <sch:assert test="count(.//html:img) = 1">[nordic253] Image figures must contain exactly one img.</sch:assert>
-            <sch:assert test="count(html:img) = 1">[nordic253] The img in image figures must be a direct child of the figure.</sch:assert>
+            <sch:assert test="count(.//html:img) = 1">[nordic253c] Image figures must contain exactly one img.</sch:assert>
+            <sch:assert test="count(html:img) = 1">[nordic253c] The img in image figures must be a direct child of the figure.</sch:assert>
         </sch:rule>
         <sch:rule context="html:figure[tokenize(@class,'\s+')='image-series']">
-            <sch:assert test="count(html:img) = 0">[nordic253] Image series figures cannot contain img childen (the img elements must be contained in children figure elements).</sch:assert>
+            <sch:assert test="count(html:img) = 0">[nordic253d] Image series figures cannot contain img childen (the img elements must be contained in children figure elements).</sch:assert>
+            <sch:assert test="count(html:figure[tokenize(@class,'\s+')='image']) &gt;= 2">[nordic253e] Image series must contain at least 2 image figures ("figure" elements with class "image").</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -744,9 +745,18 @@
 
     <!-- Rule 259: don't allow pagenum in thead -->
     <sch:pattern id="epub_nordic_259">
-        <sch:rule context=".[tokenize(@epub:type,'\s')='pagebreak']">
+        <sch:rule context=".[tokenize(@epub:type,'\s+')='pagebreak']">
             <sch:report test="ancestor::html:thead">[nordic259] Pagebreaks can not occur within table headers (thead).</sch:report>
             <sch:report test="ancestor::html:tfoot">[nordic259] Pagebreaks can not occur within table footers (tfoot).</sch:report>
+        </sch:rule>
+    </sch:pattern>
+    
+    <sch:pattern id="epub_nordic_260">
+        <sch:rule context="html:figure[tokenize(@class,'\s+')='image']">
+            <sch:assert test="html:img intersect *[1]">[nordic260a] The first element in a figure with class="image" must be a "img" element.</sch:assert>
+        </sch:rule>
+        <sch:rule context="html:figure[tokenize(@class,'\s+')='image-series']/html:*[not(self::html:figure[tokenize(@class,'\s+')='image'])]">
+            <sch:report test="preceding-sibling::html:figure">[nordic260b] Content not allowed between or after image figure elements.</sch:report>
         </sch:rule>
     </sch:pattern>
 

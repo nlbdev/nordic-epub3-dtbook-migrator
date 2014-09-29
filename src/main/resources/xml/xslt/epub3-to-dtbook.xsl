@@ -876,53 +876,28 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="html:figure">
+    <xsl:template match="html:figure[f:classes(.)='image']">
+        <xsl:choose>
+            <xsl:when test="parent::html:figure[f:classes(.)='image-series']">
+                <xsl:apply-templates select="html:img"/>
+                <xsl:apply-templates select="html:figcaption"/>
+                <xsl:apply-templates select="node()[not(self::html:img or self::html:figcaption)]"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <imggroup>
+                    <xsl:call-template name="attlist.imggroup"/>
+                    <xsl:apply-templates select="html:img"/>
+                    <xsl:apply-templates select="html:figcaption"/>
+                    <xsl:apply-templates select="node()[not(self::html:img or self::html:figcaption)]"/>
+                </imggroup>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="html:figure[f:classes(.)='image-series']">
         <imggroup>
             <xsl:call-template name="attlist.imggroup"/>
-            <xsl:choose>
-                <xsl:when test="not(html:figcaption) or html:figcaption/*[not(self::html:div[f:classes(.)='img-caption'])]">
-                    <!-- no figcaption present or figcaption does not follow the convention that lets it be matched against individual images -->
-                    <xsl:apply-templates select="node()"/>
-                </xsl:when>
-
-                <xsl:otherwise>
-                    <xsl:variable name="precede" select="if (html:img[1]/preceding-sibling::html:figcaption) then true() else false()"/>
-                    <xsl:for-each select="node()[not(self::html:figcaption)]">
-                        <xsl:choose>
-                            <xsl:when test="self::html:img">
-                                <xsl:variable name="position" select="count(preceding-sibling::html:img)+1"/>
-                                <xsl:variable name="caption" select="parent::html:figure/html:figcaption/html:div[$position]"/>
-                                <xsl:choose>
-                                    <xsl:when test="not($caption)">
-                                        <xsl:apply-templates select="."/>
-                                    </xsl:when>
-                                    <xsl:when test="$precede">
-                                        <xsl:for-each select="parent::html:figure/html:figcaption/html:div[$position]">
-                                            <caption>
-                                                <xsl:call-template name="attlist.caption"/>
-                                                <xsl:apply-templates select="node()"/>
-                                            </caption>
-                                        </xsl:for-each>
-                                        <xsl:apply-templates select="."/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:apply-templates select="."/>
-                                        <xsl:for-each select="parent::html:figure/html:figcaption/html:div[$position]">
-                                            <caption>
-                                                <xsl:call-template name="attlist.caption"/>
-                                                <xsl:apply-templates select="node()"/>
-                                            </caption>
-                                        </xsl:for-each>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:apply-templates select="."/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:for-each>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="node()"/>
         </imggroup>
     </xsl:template>
 
@@ -1228,26 +1203,14 @@
     </xsl:template>
 
     <xsl:template match="html:figcaption">
-        <xsl:variable name="content" select="node()[not(self::div[f:classes(.)='img-caption'])]"/>
-        <xsl:if test="$content">
-            <caption>
-                <xsl:call-template name="attlist.caption"/>
-                <xsl:apply-templates select="$content"/>
-            </caption>
-        </xsl:if>
-    </xsl:template>
-
-    <!--<xsl:template match="html:div[f:classes(.)='img-caption']">
         <caption>
             <xsl:call-template name="attlist.caption"/>
             <xsl:apply-templates select="node()"/>
         </caption>
-    </xsl:template>-->
+    </xsl:template>
 
     <xsl:template name="attlist.caption">
-        <xsl:call-template name="attrs">
-            <xsl:with-param name="except-classes" select="'img-caption'" tunnel="yes"/>
-        </xsl:call-template>
+        <xsl:call-template name="attrs"/>
     </xsl:template>
 
     <xsl:template match="html:thead">

@@ -1110,23 +1110,37 @@
 
     <!-- pagenum -->
     <x:scenario label="when processing a pagenum element">
-        <x:context>
-            <dtbook:div>
-                <dtbook:pagenum>1</dtbook:pagenum>
-                <dtbook:p>
-                    <dtbook:pagenum>2</dtbook:pagenum>
-                </dtbook:p>
-            </dtbook:div>
-        </x:context>
-        <x:expect
-            label="the resulting element should be a span for inline contexts or a div otherwise. An epub:type of pagebreak should be added, the page attribute should be converted into a class and the contents of the element moved into its title attribute">
-            <html:div>
-                <html:div class="page-normal" epub:type="pagebreak" title="1"/>
-                <html:p>
-                    <html:span class="page-normal" epub:type="pagebreak" title="2"/>
-                </html:p>
-            </html:div>
-        </x:expect>
+        <x:scenario label="with numeric values">
+            <x:context>
+                <dtbook:div>
+                    <dtbook:pagenum>1</dtbook:pagenum>
+                    <dtbook:p>
+                        <dtbook:pagenum>2</dtbook:pagenum>
+                    </dtbook:p>
+                </dtbook:div>
+            </x:context>
+            <x:expect
+                label="the resulting element should be a span for inline contexts or a div otherwise. An epub:type of pagebreak should be added, the page attribute should be converted into a class and the contents of the element moved into its title attribute">
+                <html:div>
+                    <html:div class="page-normal" epub:type="pagebreak" title="1"/>
+                    <html:p>
+                        <html:span class="page-normal" epub:type="pagebreak" title="2"/>
+                    </html:p>
+                </html:div>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with missing page numbers">
+            <x:context>
+                <dtbook:div>
+                    <dtbook:pagenum id="unnumbered"/>
+                </dtbook:div>
+            </x:context>
+            <x:expect label="unnumbered pages should not have a title attribute, and should use the page-special class">
+                <html:div>
+                    <html:div id="unnumbered" class="page-special" epub:type="pagebreak"/>
+                </html:div>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.pagenum -->
@@ -1242,7 +1256,7 @@
                 <html:figure id="..." class="..."/>
             </x:expect>
         </x:scenario>
-        <x:scenario label="with the children [prodnote, img, pagenum, caption]">
+        <x:scenario label="with a single img child [prodnote, img, pagenum, caption]">
             <x:context>
                 <dtbook:imggroup>
                     <dtbook:prodnote id="prodnote1" imgref="img1"/>
@@ -1251,18 +1265,16 @@
                     <dtbook:caption id="caption1"/>
                 </dtbook:imggroup>
             </x:context>
-            <x:expect label="the resulting element should be a figure">
+            <x:expect label="the resulting element should be a figure with class='image'">
                 <html:figure id="..." class="image">
-                    <html:aside id="prodnote1" epub:type="z3998:production"/>
                     <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
-                    <html:figcaption>
-                        <html:span epub:type="pagebreak" class="page-normal" title="1"/>
-                        <html:div id="caption1"/>
-                    </html:figcaption>
+                    <html:aside id="prodnote1" epub:type="z3998:production"/>
+                    <html:span epub:type="pagebreak" class="page-normal" title="1"/>
+                    <html:figcaption id="caption1"/>
                 </html:figure>
             </x:expect>
         </x:scenario>
-        <x:scenario label="with the children [img, prodnote, caption, img, caption, caption, img, img, caption, img]">
+        <x:scenario label="with multiple img children [img, prodnote, caption, img, caption, prodnote, caption, img, img, caption, img]">
             <x:context>
                 <dtbook:imggroup>
                     <dtbook:img src="img.jpg" id="img1"/>
@@ -1274,6 +1286,7 @@
                     <dtbook:caption id="caption2">
                         <dtbook:p/>
                     </dtbook:caption>
+                    <dtbook:prodnote id="prodnote2" imgref="img2"/>
                     <dtbook:caption id="caption3">
                         <dtbook:p/>
                     </dtbook:caption>
@@ -1285,19 +1298,18 @@
                     <dtbook:img src="img.jpg" id="img5"/>
                 </dtbook:imggroup>
             </x:context>
-            <x:expect label="the resulting element should be a figure">
+            <x:expect label="the resulting element should be a figure with class='image-series'">
                 <html:figure id="..." class="image-series">
                     <html:figure class="image">
                         <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
-                        <html:figcaption>
-                            <html:aside id="prodnote1" epub:type="z3998:production"/>
-                            <html:div id="caption1">
-                                <html:p/>
-                            </html:div>
+                        <html:aside id="prodnote1" epub:type="z3998:production"/>
+                        <html:figcaption id="caption1">
+                            <html:p/>
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img2" alt="image"/>
+                        <html:img src="images/img.jpg" id="img2" longdesc="#prodnote2" alt="image"/>
+                        <html:aside id="prodnote2" epub:type="z3998:production"/>
                         <html:figcaption>
                             <html:div id="caption2">
                                 <html:p/>
