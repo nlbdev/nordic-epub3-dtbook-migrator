@@ -234,6 +234,9 @@
                         </p:output>
                         
                         <p:delete match="/*/d:file/@doctype"/>
+                        <p:add-attribute match="/*/d:file[@indent='true']" attribute-name="indent" attribute-value="false">
+                            <!-- temporary workaround until https://github.com/daisy/pipeline-modules-common/issues/69 is fixed -->
+                        </p:add-attribute>
                         <px:fileset-store name="fileset-store">
                             <p:input port="in-memory.in">
                                 <p:pipe port="in-memory.out" step="convert.epub3"/>
