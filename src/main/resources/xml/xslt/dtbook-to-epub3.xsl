@@ -1584,8 +1584,8 @@
         <xsl:element name="{local-name()}">
             <xsl:call-template name="attlist.th.td"/>
 
-            <xsl:if test="not(following-sibling::dtbook:th or following-sibling::dtbook:tr)">
-                <!-- If this is the last cell in the row -->
+            <xsl:if test="not(preceding-sibling::dtbook:th or preceding-sibling::dtbook:td)">
+                <!-- If this is the first cell in the row -->
 
                 <xsl:if test="../preceding-sibling::dtbook:tr">
                     <!-- If there is a row before this row -->

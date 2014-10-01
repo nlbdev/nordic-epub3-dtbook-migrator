@@ -3232,4 +3232,67 @@
         </x:expect>
     </x:scenario>
 
+    <x:scenario label="Move table pagebreak to first cell in following row. #113">
+        <x:context>
+            <dtbook:table>
+                <dtbook:pagenum page="normal">1</dtbook:pagenum>
+                <dtbook:pagenum page="normal">2</dtbook:pagenum>
+                <dtbook:tr>
+                    <dtbook:td><dtbook:span>cell 11</dtbook:span></dtbook:td>
+                    <dtbook:td><dtbook:span>cell 12</dtbook:span></dtbook:td>
+                    <dtbook:td><dtbook:span>cell 13</dtbook:span></dtbook:td>
+                </dtbook:tr>
+                <dtbook:pagenum page="normal">3</dtbook:pagenum>
+                <dtbook:pagenum page="normal">4</dtbook:pagenum>
+                <dtbook:tr>
+                    <dtbook:td><dtbook:span>cell 21</dtbook:span></dtbook:td>
+                    <dtbook:td><dtbook:span>cell 22</dtbook:span></dtbook:td>
+                    <dtbook:td><dtbook:span>cell 23</dtbook:span></dtbook:td>
+                </dtbook:tr>
+                <dtbook:pagenum page="normal">5</dtbook:pagenum>
+                <dtbook:pagenum page="normal">6</dtbook:pagenum>
+                <dtbook:tr>
+                    <dtbook:td><dtbook:span>cell 31</dtbook:span></dtbook:td>
+                    <dtbook:td><dtbook:span>cell 32</dtbook:span></dtbook:td>
+                    <dtbook:td><dtbook:span>cell 33</dtbook:span></dtbook:td>
+                </dtbook:tr>
+                <dtbook:pagenum page="normal">7</dtbook:pagenum>
+                <dtbook:pagenum page="normal">8</dtbook:pagenum>
+            </dtbook:table>
+        </x:context>
+        <x:expect label="table pagebreak should be moved to first cell in following row or before the table if in the beginning of the table">
+            <html:div epub:type="pagebreak" title="1" class="page-normal"/>
+            <html:div epub:type="pagebreak" title="2" class="page-normal"/>
+            <html:table id="...">
+                <html:tbody>
+                    <html:tr>
+                        <html:td><html:span>cell 11</html:span></html:td>
+                        <html:td><html:span>cell 12</html:span></html:td>
+                        <html:td><html:span>cell 13</html:span></html:td>
+                    </html:tr>
+                    <html:tr>
+                        <html:td>
+                            <html:span epub:type="pagebreak" title="3" class="page-normal"/>
+                            <html:span epub:type="pagebreak" title="4" class="page-normal"/>
+                            <html:span>cell 21</html:span>
+                        </html:td>
+                        <html:td><html:span>cell 22</html:span></html:td>
+                        <html:td><html:span>cell 23</html:span></html:td>
+                    </html:tr>
+                    <html:tr>
+                        <html:td>
+                            <html:span epub:type="pagebreak" title="5" class="page-normal"/>
+                            <html:span epub:type="pagebreak" title="6" class="page-normal"/>
+                            <html:span>cell 31</html:span>
+                        </html:td>
+                        <html:td><html:span>cell 32</html:span></html:td>
+                        <html:td><html:span>cell 33</html:span></html:td>
+                    </html:tr>
+                </html:tbody>
+            </html:table>
+            <html:div epub:type="pagebreak" title="7" class="page-normal"/>
+            <html:div epub:type="pagebreak" title="8" class="page-normal"/>
+        </x:expect>
+    </x:scenario>
+
 </x:description>
