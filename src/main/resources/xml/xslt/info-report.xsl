@@ -9,14 +9,17 @@
                 <d:error-count>0</d:error-count>
                 <d:properties>
                     <xsl:for-each select="distinct-values(collection()//tokenize(@epub:type,'\s+'))">
+                        <xsl:sort select="."/>
                         <xsl:variable name="name" select="."/>
                         <d:property name="epub:type: '{$name}'" content="{count(collection()//*[tokenize(@epub:type,'\s+')=$name])}"/>
                     </xsl:for-each>
                     <xsl:for-each select="distinct-values(collection()//tokenize(@class,'\s+'))">
+                        <xsl:sort select="."/>
                         <xsl:variable name="name" select="."/>
                         <d:property name="class: '{$name}'" content="{count(collection()//*[tokenize(@class,'\s+')=$name])}"/>
                     </xsl:for-each>
                     <xsl:for-each select="distinct-values(collection()//*/name())">
+                        <xsl:sort select="."/>
                         <xsl:variable name="name" select="."/>
                         <d:property name="element: '{$name}'" content="{count(collection()//*[name()=$name])}"/>
                     </xsl:for-each>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0" xmlns="http://hul.harvard.edu/ois/xml/ns/jhove"
-    xpath-default-namespace="http://hul.harvard.edu/ois/xml/ns/jhove" xmlns:d="http://www.daisy.org/ns/pipeline/data">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all" version="2.0"
+    xmlns="http://hul.harvard.edu/ois/xml/ns/jhove" xpath-default-namespace="http://hul.harvard.edu/ois/xml/ns/jhove" xmlns:d="http://www.daisy.org/ns/pipeline/data">
 
     <xsl:output indent="yes"/>
 
@@ -44,7 +44,6 @@
             </xsl:if>
 
             <d:document-info>
-                <!-- TODO -->
                 <d:document-name>
                     <xsl:value-of select="repInfo/@uri"/>
                 </d:document-name>
@@ -56,10 +55,10 @@
                         <xsl:value-of select="$document-path"/>
                     </d:document-path>
                 </xsl:if>
-                <!--<d:report-path/>-->
-                <xsl:variable name="error-count-regex" select="if ($report-warning-as-error='true') then '^(WARN|ERROR|EXCEPTION): ' else '^(ERROR|EXCEPTION): '"/>
+                <xsl:variable name="error-count-regex" select="if ($report-warning-as-error='true') then ', (WARN|ERROR|FATAL), ' else ', (ERROR|FATAL), '"/>
+                <xsl:variable name="error-count" select="count(repInfo/messages/message[matches(.,$error-count-regex)])"/>
                 <d:error-count>
-                    <xsl:value-of select="count(repInfo/messages/message[matches(.,$error-count-regex)])"/>
+                    <xsl:value-of select="$error-count"/>
                 </d:error-count>
                 <d:properties>
                     <xsl:if test="@name">
@@ -93,9 +92,15 @@
                         </xsl:call-template>
                     </xsl:if>
                     <xsl:if test="repInfo/status">
+                        <!--
+                            epubcheck status logic:
+                            
+                            if (fatalErrors.isEmpty() && errors.isEmpty()) { generateElement(ident, "status", "Well-formed"); }
+                            else { generateElement(ident, "status", "Not well-formed"); }
+                        -->
                         <xsl:call-template name="property">
                             <xsl:with-param name="name" select="'Status'"/>
-                            <xsl:with-param name="content" select="repInfo/status/text()"/>
+                            <xsl:with-param name="content" select="if ($error-count = 0) then 'Well-formed' else 'Not well-formed'"/>
                         </xsl:call-template>
                     </xsl:if>
                     <xsl:apply-templates select="repInfo/properties/property"/>
@@ -104,30 +109,37 @@
 
             <d:reports>
                 <d:report>
-                    <xsl:for-each select="repInfo/messages/message">
-                        <xsl:variable name="severity" select="if (contains(.,':')) then tokenize(.,':')[1] else 'error'"/>
-                        <xsl:variable name="message" select="replace(.,'^[^:]*:\s*(.*?)$','$1')"/>
-                        <xsl:variable name="message-regex" select="'^(|/[^:]*?)(()|\(([^\)]*)\)): (.*)$'"/>
-                        <xsl:variable name="file" select="if ($severity='exception') then '' else replace($message,$message-regex,'$1')"/>
-                        <xsl:variable name="location" select="if ($severity='exception') then '' else replace($message,$message-regex,'$4')"/>
-                        <xsl:variable name="message-text" select="if ($severity='exception') then $message else replace($message,$message-regex,'$5')"/>
-                        <xsl:variable name="element-name" select="if ($severity='warn' and $report-warning-as-error='true' or $severity='exception') then 'd:error' else concat('d:',lower-case($severity))"/>
-                        <xsl:element name="{$element-name}">
-                            <d:desc>
-                                <xsl:value-of select="$message-text"/>
-                            </d:desc>
-                            <xsl:if test="$file">
-                                <d:file>
-                                    <xsl:value-of select="$file"/>
-                                </d:file>
-                            </xsl:if>
-                            <xsl:if test="$location">
-                                <d:location line="{tokenize($location,',')[1]}">
-                                    <xsl:if test="contains($location,',')">
-                                        <xsl:attribute name="column" select="tokenize($location,',')[last()]"/>
-                                    </xsl:if>
-                                </d:location>
-                            </xsl:if>
+                    <xsl:variable name="messages">
+                        <xsl:for-each select="repInfo/messages/message">
+                            <xsl:variable name="id" select="substring-before(.,',')"/>
+                            <xsl:variable name="severity" select="substring-after(substring-before(.,', ['),', ')">
+                                <!-- FATAL, ERROR, WARN, HINT -->
+                            </xsl:variable>
+                            <xsl:variable name="message" select="substring-after(substring-before(.,']'),'[')"/>
+                            <xsl:variable name="file" select="replace(substring-after(tokenize(.,'\]')[last()],', '),' \(.*?\)$','')"/>
+                            <xsl:variable name="line" select="if (ends-with(.,')')) then replace(.,'.*\((\d+)-\d+\)$','$1') else ()"/>
+                            <xsl:variable name="column" select="if (ends-with(.,')')) then replace(.,'.*\(\d+-(\d+)\)$','$1') else ()"/>
+
+                            <xsl:element
+                                name="{if ($severity='FATAL' or $severity='WARN' and $report-warning-as-error='true') then 'd:error' else if ($severity='FATAL') then 'd:exception' else if ($severity=('ERROR','WARN','HINT')) then concat('d:',lower-case($severity)) else 'd:warn'}">
+                                <d:desc>
+                                    <xsl:value-of select="concat($id,': ',$message)"/>
+                                </d:desc>
+                                <xsl:if test="$file">
+                                    <d:file>
+                                        <xsl:value-of select="$file"/>
+                                    </d:file>
+                                </xsl:if>
+                                <xsl:if test="$line or $column">
+                                    <d:location line="{$line}" column="{$column}"/>
+                                </xsl:if>
+                            </xsl:element>
+                        </xsl:for-each>
+                    </xsl:variable>
+                    <xsl:for-each select="distinct-values($messages/*/local-name())">
+                        <xsl:variable name="name" select="."/>
+                        <xsl:element name="d:{if ($name='exception') then 'exceptions' else if ($name='error') then 'errors' else if ($name='warn') then 'warnings' else 'hints'}">
+                            <xsl:copy-of select="$messages/*[local-name()=$name]"/>
                         </xsl:element>
                     </xsl:for-each>
                 </d:report>
