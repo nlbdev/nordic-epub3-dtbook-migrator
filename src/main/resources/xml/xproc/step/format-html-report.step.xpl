@@ -87,7 +87,7 @@
         </p:input>
     </p:insert>
 
-    <p:viewport match="//*[tokenize(lower-case(@class),'\s+')=('error','fatal')]">
+    <p:viewport match="//*[tokenize(lower-case(@class),'\s+')=('error','fatal','exception')]">
         <p:add-attribute match="/*" attribute-name="style">
             <p:with-option name="attribute-value" select="concat('background-color: #f2dede; ',/*/@style)"/>
         </p:add-attribute>
