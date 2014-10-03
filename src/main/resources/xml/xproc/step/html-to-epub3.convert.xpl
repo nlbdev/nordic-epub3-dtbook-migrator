@@ -82,14 +82,24 @@
         <p:output port="ncx">
             <p:pipe port="result" step="nav.ncx"/>
         </p:output>
-
+        
+        <p:for-each>
+            <p:iteration-source>
+                <p:pipe port="in-memory.out" step="html-split"/>
+            </p:iteration-source>
+            <p:xslt>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/generate-missing-headlines.xsl"/>
+                </p:input>
+            </p:xslt>
+        </p:for-each>
         <px:epub3-nav-create-toc name="nav.toc">
             <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
                 <p:pipe port="result" step="single-html"/>
             </p:with-option>
-            <p:input port="source">
-                <p:pipe port="in-memory.out" step="html-split"/>
-            </p:input>
         </px:epub3-nav-create-toc>
 
         <px:epub3-nav-create-page-list name="nav.page-list">

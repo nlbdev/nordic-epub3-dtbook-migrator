@@ -10,6 +10,7 @@
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
             <x:option name="discard-intermediary-html" select="'false'"/>
+            <x:option name="no-legacy" select="'false'"/>
         </x:call>
 
         <x:context label="validation status">

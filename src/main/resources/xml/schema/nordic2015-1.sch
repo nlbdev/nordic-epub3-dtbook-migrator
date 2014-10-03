@@ -91,17 +91,10 @@
 
     <!-- Rule 14:  Don't allow <h x+1> in <level x+1> unless <h x> in <level x> is present -->
     <sch:pattern id="dtbook_TPB_14">
-        <sch:rule context="html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][html:section|html:article]">
-            <sch:assert test="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">[tpb14] section with no headline (h1-h6) when sub-section is present</sch:assert>
+        <sch:rule context="html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section|html:article]">
+            <sch:assert test="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">[tpb14] sectioning element with no headline (h1-h6) when sub-section is present (is only allowed for sectioning element with epub:type="cover")</sch:assert>
         </sch:rule>
     </sch:pattern>
-
-    <!-- Rule 18: Disallow level -->
-    <!--<sch:pattern id="dtbook_TPB_18">
-    <sch:rule context="html:level">
-      <sch:report test="true()">[tpb18] Element level is not allowed</sch:report>
-    </sch:rule>
-  </sch:pattern>-->
 
     <!-- Rule 20: No imggroup in inline context -->
     <sch:pattern id="dtbook_TPB_20">

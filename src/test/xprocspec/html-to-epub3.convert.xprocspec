@@ -32,10 +32,10 @@
         </x:context>
         <x:expect type="compare" label="all files should have their appropriate attributes set">
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-1-frontmatter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
+                <d:file href="EPUB/C00000-1-cover.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-2-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
+                <d:file href="EPUB/C00000-2-frontmatter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
                 <d:file href="EPUB/C00000-3-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
@@ -47,10 +47,13 @@
                 <d:file href="EPUB/C00000-5-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-6-conclusion.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
+                <d:file href="EPUB/C00000-6-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-7-backmatter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
+                <d:file href="EPUB/C00000-7-conclusion.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
+            </x:document>
+            <x:document type="inline" base-uri="temp-dir">
+                <d:file href="EPUB/C00000-8-backmatter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
                 <d:file href="EPUB/nav.ncx" method="xml" indent="true" omit-xml-declaration="false" media-type="application/x-dtbncx+xml"/>

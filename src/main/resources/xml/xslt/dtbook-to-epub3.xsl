@@ -335,7 +335,7 @@
             <xsl:choose>
 
                 <!-- cover -->
-                <xsl:when test="f:classes(.)=('cover','jacketcopy')">
+                <xsl:when test="f:classes(.)=('cover')">
                     <xsl:apply-templates
                         select="if (not(preceding-sibling::*)) then preceding-sibling::comment() else (preceding-sibling::comment() intersect preceding-sibling::*[1]/following-sibling::comment())"/>
 
@@ -497,7 +497,7 @@
 
     <xsl:template match="dtbook:prodnote">
         <xsl:choose>
-            <xsl:when test="parent::*[tokenize(@class,'\s+')='cover']">
+            <xsl:when test="parent::*[tokenize(@class,'\s+')=('cover')]">
                 <section>
                     <xsl:call-template name="attlist.prodnote"/>
                     <xsl:apply-templates select="node()"/>

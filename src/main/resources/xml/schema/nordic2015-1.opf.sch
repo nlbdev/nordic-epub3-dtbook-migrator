@@ -112,7 +112,7 @@
     </pattern>
     
     <pattern id="opf_nordic_10">
-        <rule context="opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-cover.xhtml')]">
+        <rule context="opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-cover.xhtml')]/@id = @idref]">
             <assert test="@linear = 'no'">Cover must be marked as secondary in the spine</assert>
         </rule>
     </pattern>
