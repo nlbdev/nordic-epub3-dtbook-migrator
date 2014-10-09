@@ -2292,6 +2292,14 @@
             <dtbook:img src="..." id="..." xml:lang="no" alt="image"/>
         </x:expect>
     </x:scenario>
-
+    
+    <x:scenario label="Make sure the p class 'indented' is preserved during conversion to DTBook #73">
+        <x:context>
+            <html:p class="indented"/>
+        </x:context>
+        <x:expect label="the p class 'indented' should be preserved">
+            <dtbook:p class="indented"/>
+        </x:expect>
+    </x:scenario>
 
 </x:description>

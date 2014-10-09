@@ -3026,21 +3026,21 @@
             <x:context>
                 <dtbook:p class="precedingemptyline">Paragraph 1</dtbook:p>
                 <dtbook:p class="precedingseparator">Paragraph 2</dtbook:p>
-                <dtbook:p class="precedingemptyline indent">Paragraph 3</dtbook:p>
-                <dtbook:p class="precedingseparator indent">Paragraph 4</dtbook:p>
-                <dtbook:p class="indent">Paragraph 5</dtbook:p>
+                <dtbook:p class="precedingemptyline indented">Paragraph 3</dtbook:p>
+                <dtbook:p class="precedingseparator indented">Paragraph 4</dtbook:p>
+                <dtbook:p class="indented">Paragraph 5</dtbook:p>
                 <dtbook:p>Paragraph 6</dtbook:p>
             </x:context>
-            <x:expect label="the resulting p elements should have 'precedingemptyline', 'precedingseparator', and 'precedingemptyline' respectively">
+            <x:expect label="the resulting p elements should be preceded with hr elements with classes 'emptyline', 'separator', and 'emptyline' respectively">
                 <html:hr class="emptyline"/>
                 <html:p>Paragraph 1</html:p>
                 <html:hr class="separator"/>
                 <html:p>Paragraph 2</html:p>
                 <html:hr class="emptyline"/>
-                <html:p class="indent">Paragraph 3</html:p>
+                <html:p class="indented">Paragraph 3</html:p>
                 <html:hr class="separator"/>
-                <html:p class="indent">Paragraph 4</html:p>
-                <html:p class="indent">Paragraph 5</html:p>
+                <html:p class="indented">Paragraph 4</html:p>
+                <html:p class="indented">Paragraph 5</html:p>
                 <html:p>Paragraph 6</html:p>
             </x:expect>
         </x:scenario>
@@ -3353,6 +3353,15 @@
             </html:table>
             <html:div epub:type="pagebreak" title="7" class="page-normal"/>
             <html:div epub:type="pagebreak" title="8" class="page-normal"/>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="Make sure the p class 'indented' is preserved during conversion to DTBook #73">
+        <x:context>
+            <dtbook:p class="indented"/>
+        </x:context>
+        <x:expect label="the p class 'indented' should be preserved">
+            <html:p class="indented"/>
         </x:expect>
     </x:scenario>
 
