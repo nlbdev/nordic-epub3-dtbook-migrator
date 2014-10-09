@@ -2,6 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all" version="2.0"
     xmlns="http://www.daisy.org/z3986/2005/dtbook/" xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
 
+    <!-- TODO: fix capitalization for language codes in xml:lang -->
+
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
     <!-- TODO: move these functions to numeral-conversion.xsl -->
     <xsl:function name="pf:numeric-decimal-to-alpha" as="xs:string">
@@ -18,7 +20,7 @@
     <xsl:function name="pf:numeric-integer-power" as="xs:integer">
         <xsl:param name="integer" as="xs:integer"/>
         <xsl:param name="power" as="xs:integer"/>
-        <xsl:sequence select="if ($power=0) then $integer else $integer * pf:numeric-integer-power($integer, $power)"/>
+        <xsl:sequence select="if ($power=0) then $integer else $integer * pf:numeric-integer-power($integer, $power - 1)"/>
     </xsl:function>
 
     <xsl:template match="@*|node()">
@@ -93,7 +95,8 @@
     <xsl:variable name="partition-type-classes" select="('cover','frontmatter','bodymatter','backmatter')"/>
     <xsl:variable name="division-type-classes"
         select="('acknowledgments','afterword','appendix','assessment','bibliography','biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','discography','division','editorial-note','epigraph','epilogue','errata','filmography','footnotes','foreword','glossary','grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','promotional-copy','published-works','publisher-address','qna','rearnotes','revision-history','section','standard','subchapter','subsection','titlepage','toc','translator-note','volume','warning')"/>
-    <xsl:variable name="special-classes" select="('part','cover','colophon','nonstandardpagination','jacketcopy','precedingemptyline','precedingseparator','byline','dateline')"/>
+    <xsl:variable name="special-classes" select="('part','cover','colophon','nonstandardpagination')"/>
+    <!-- 'part','cover','colophon','nonstandardpagination','jacketcopy','precedingemptyline','precedingseparator','byline','dateline' -->
     <xsl:variable name="allowed-classes" select="distinct-values(($partition-type-classes, $division-type-classes, $special-classes))"/>
     <xsl:template match="level1/@class | level2[parent::level1/tokenize(@class,'\s+')='part']/@class">
         <xsl:variable name="classes" select="tokenize(.,'\s+')"/>

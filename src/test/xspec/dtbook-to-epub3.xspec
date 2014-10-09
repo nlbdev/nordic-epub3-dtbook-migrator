@@ -3170,8 +3170,51 @@
         </x:expect>
     </x:scenario>
 
-    <!-- TODO: test that class="jacketcopy" are treated the same as class="cover" -->
-
+    <!-- cover -->
+    <x:scenario label="when processing a level1 with class 'cover' in frontmatter">
+        <x:scenario label="with only a paragraph">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:level1 class="cover">
+                            <dtbook:p/>
+                        </dtbook:level1>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the resulting element should be a section with epub:type cover">
+                <html:body>
+                    <html:section id="..." epub:type="cover">
+                        <html:p/>
+                    </html:section>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with no headline but with asides with epub:type 'z3998:production' for the covers and flaps">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:level1 class="cover">
+                            <dtbook:prodnote class="frontcover" render="optional"/>
+                            <dtbook:prodnote class="rearcover" render="optional"/>
+                            <dtbook:prodnote class="leftflap" render="optional"/>
+                            <dtbook:prodnote class="rightflap" render="optional"/>
+                        </dtbook:level1>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the resulting element should be a level1 inside the frontmatter">
+                <html:body>
+                    <html:section id="..." epub:type="cover">
+                        <html:section id="..." class="render-optional frontcover" epub:type="z3998:production"/>
+                        <html:section id="..." class="render-optional rearcover" epub:type="z3998:production"/>
+                        <html:section id="..." class="render-optional leftflap" epub:type="z3998:production"/>
+                        <html:section id="..." class="render-optional rightflap" epub:type="z3998:production"/>
+                    </html:section>
+                </html:body>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
 
     <!-- #### From MTMs DTBook schema #### -->
 

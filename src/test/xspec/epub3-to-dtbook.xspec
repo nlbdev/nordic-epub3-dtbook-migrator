@@ -231,22 +231,48 @@
 
     <!-- cover -->
     <x:scenario label="when processing a cover in a body">
-        <x:context>
-            <html:body>
-                <html:section epub:type="cover" class="classA classB">
-                    <html:p/>
-                </html:section>
-            </html:body>
-        </x:context>
-        <x:expect label="the resulting element should be a level1 inside the frontmatter">
-            <dtbook:book>
-                <dtbook:frontmatter>
-                    <dtbook:level1 class="jacketcopy">
-                        <dtbook:p/>
-                    </dtbook:level1>
-                </dtbook:frontmatter>
-            </dtbook:book>
-        </x:expect>
+        <x:scenario label="with only a paragraph">
+            <x:context>
+                <html:body>
+                    <html:section epub:type="cover" class="classA classB">
+                        <html:p/>
+                    </html:section>
+                </html:body>
+            </x:context>
+            <x:expect label="the resulting element should be a level1 inside the frontmatter">
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:level1 class="jacketcopy">
+                            <dtbook:p/>
+                        </dtbook:level1>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with no headline but with prodnotes for the covers and flaps">
+            <x:context>
+                <html:body>
+                    <html:section epub:type="cover">
+                        <html:section class="render-optional frontcover" epub:type="z3998:production"/>
+                        <html:section class="render-optional rearcover" epub:type="z3998:production"/>
+                        <html:section class="render-optional leftflap" epub:type="z3998:production"/>
+                        <html:section class="render-optional rightflap" epub:type="z3998:production"/>
+                    </html:section>
+                </html:body>
+            </x:context>
+            <x:expect label="the resulting element should be a level1 inside the frontmatter">
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:level1 class="jacketcopy">
+                            <dtbook:prodnote class="frontcover" render="optional"/>
+                            <dtbook:prodnote class="rearcover" render="optional"/>
+                            <dtbook:prodnote class="leftflap" render="optional"/>
+                            <dtbook:prodnote class="rightflap" render="optional"/>
+                        </dtbook:level1>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- frontmatter -->
