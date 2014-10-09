@@ -695,12 +695,30 @@
 
     <!-- sidebar -->
     <x:scenario label="when processing a sidebar element">
-        <x:context>
-            <dtbook:sidebar/>
-        </x:context>
-        <x:expect label="the resulting element should be a aside with an added epub:type of sidebar">
-            <html:aside id="..." epub:type="sidebar"/>
-        </x:expect>
+        <x:scenario label="with no attributes">
+            <x:context>
+                <dtbook:sidebar/>
+            </x:context>
+            <x:expect label="the resulting element should be a aside with an added epub:type of sidebar">
+                <html:aside id="..." epub:type="sidebar"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with render=optional">
+            <x:context>
+                <dtbook:sidebar render="optional"/>
+            </x:context>
+            <x:expect label="the resulting element should be a aside with an added epub:type of sidebar">
+                <html:aside id="..." epub:type="sidebar"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with render=required">
+            <x:context>
+                <dtbook:sidebar render="required"/>
+            </x:context>
+            <x:expect label="the resulting element should be a aside with an added epub:type of sidebar">
+                <html:figure id="..." epub:type="sidebar"/>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.sidebar -->
