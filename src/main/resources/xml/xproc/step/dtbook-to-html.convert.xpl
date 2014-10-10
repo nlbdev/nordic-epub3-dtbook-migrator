@@ -47,11 +47,12 @@
 
     <p:insert match="/html:html/html:head" position="last-child">
         <p:input port="insertion">
-            <p:inline>
+            <p:inline exclude-inline-prefixes="#all">
                 <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="css/accessibility.css"/>
             </p:inline>
         </p:input>
     </p:insert>
+    <!-- TODO: add ASCIIMathML.js if there are asciimath elements -->
 
     <p:add-attribute match="/*" attribute-name="xml:base">
         <p:with-option name="attribute-value" select="concat($temp-dir,(//dtbook:meta[@name='dtb:uid']/@content,'missing-uid')[1],'.xhtml')">
@@ -91,6 +92,7 @@
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/LICENSE.txt',$doc-base)"/>
         <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
     </px:copy-resource>
+    <!-- TODO: add ASCIIMathML.js if there are asciimath elements -->
     <p:identity name="store-dependency">
         <p:input port="source">
             <p:pipe port="result" step="store1"/>

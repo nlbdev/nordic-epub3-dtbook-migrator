@@ -2301,5 +2301,14 @@
             <dtbook:p class="indented"/>
         </x:expect>
     </x:scenario>
+    
+    <x:scenario label="Make sure the span class 'asciimath' is preserved during conversion to DTBook #54">
+        <x:context>
+            <html:span class="asciimath"/>
+        </x:context>
+        <x:expect label="the span class 'asciimath' should be preserved">
+            <dtbook:span class="asciimath"/>
+        </x:expect>
+    </x:scenario>
 
 </x:description>
