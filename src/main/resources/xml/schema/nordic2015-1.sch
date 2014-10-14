@@ -70,21 +70,23 @@
     <!-- Rule 13: All documents must have frontmatter and bodymatter -->
     <sch:pattern id="dtbook_TPB_13">
         <sch:rule context="html:body[html:header]">
-            <sch:assert test="((html:section|html:article)/tokenize(@epub:type,' ')='frontmatter') = true()">[tpb13] A Single-HTML document must have at least one frontmatter section</sch:assert>
-            <sch:assert test="((html:section|html:article)/tokenize(@epub:type,' ')='bodymatter') = true()">[tpb13] A Single-HTML document must have at least one bodymatter section</sch:assert>
-            <sch:assert test="not(tokenize(@epub:type,' ')=('cover','frontmatter','bodymatter','backmatter'))">[tpb13] The Single-HTML document must not have cover, frontmatter, bodymatter or
+            <sch:assert test="((html:section|html:article)/tokenize(@epub:type,'\s+')=('cover','frontmatter')) = true()">[tpb13] A Single-HTML document must have at least one frontmatter or cover
+                section</sch:assert>
+            <sch:assert test="((html:section|html:article)/tokenize(@epub:type,'\s+')='bodymatter') = true()">[tpb13] A Single-HTML document must have at least one bodymatter section</sch:assert>
+            <sch:assert test="not(tokenize(@epub:type,'\s+')=('cover','frontmatter','bodymatter','backmatter'))">[tpb13] The Single-HTML document must not have cover, frontmatter, bodymatter or
                 backmatter as epub:type on its body element</sch:assert>
         </sch:rule>
-        <sch:rule context="html:*[self::html:section or self::html:article][ancestor::html:body[html:header] and not(parent::html:body) and not(parent::html:section[tokenize(@epub:type,' ')='part'])]">
-            <sch:assert test="not((tokenize(@epub:type,' ')=('cover','frontmatter','bodymatter','backmatter')) = true())">[tpb13] The Single-HTML document must not have cover, frontmatter, bodymatter
-                or backmatter on any of its sectioning elements other than the top-level elements that has body as its parent</sch:assert>
+        <sch:rule
+            context="html:*[self::html:section or self::html:article][ancestor::html:body[html:header] and not(parent::html:body) and not(parent::html:section[tokenize(@epub:type,'\s+')='part'])]">
+            <sch:assert test="not((tokenize(@epub:type,'\s+')=('cover','frontmatter','bodymatter','backmatter')) = true())">[tpb13] The Single-HTML document must not have cover, frontmatter,
+                bodymatter or backmatter on any of its sectioning elements other than the top-level elements that has body as its parent</sch:assert>
         </sch:rule>
         <sch:rule context="html:body[not(html:header|html:nav)]">
-            <sch:assert test="tokenize(@epub:type,' ')=('cover','frontmatter','bodymatter','backmatter')">[tpb13] The document must have either frontmatter, bodymatter or backmatter as epub:type on
-                its body element</sch:assert>
+            <sch:assert test="tokenize(@epub:type,'\s+')=('cover','frontmatter','bodymatter','backmatter')">[tpb13] The document must have either cover, frontmatter, bodymatter or backmatter as
+                epub:type on its body element</sch:assert>
         </sch:rule>
         <sch:rule context="html:*[self::html:section or self::html:article][ancestor::html:body[not(html:header|html:nav)]]">
-            <sch:assert test="not((tokenize(@epub:type,' ')=('cover','frontmatter','bodymatter','backmatter')) = true())">[tpb13] The document must not have cover, frontmatter, bodymatter or
+            <sch:assert test="not((tokenize(@epub:type,'\s+')=('cover','frontmatter','bodymatter','backmatter')) = true())">[tpb13] The document must not have cover, frontmatter, bodymatter or
                 backmatter on any of its sectioning elements</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -92,7 +94,8 @@
     <!-- Rule 14:  Don't allow <h x+1> in <level x+1> unless <h x> in <level x> is present -->
     <sch:pattern id="dtbook_TPB_14">
         <sch:rule context="html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section|html:article]">
-            <sch:assert test="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">[tpb14] sectioning element with no headline (h1-h6) when sub-section is present (is only allowed for sectioning element with epub:type="cover")</sch:assert>
+            <sch:assert test="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">[tpb14] sectioning element with no headline (h1-h6) when sub-section is present (is only allowed for sectioning
+                element with epub:type="cover")</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -428,8 +431,8 @@
 
     <sch:pattern id="epub_nordic_127">
         <sch:rule context="html:*[tokenize(@epub:type,' ')='toc']">
-            <sch:assert test="ancestor::*[tokenize(@epub:type,' ')=('frontmatter','backmatter') or tokenize(base-uri(),'/')[last()]='nav.xhtml']">[nordic127] The epub:type "toc" is only
-                allowed in frontmatter, backmatter, and in the EPUB3 Navigation Document (nav.xhtml).</sch:assert>
+            <sch:assert test="ancestor::*[tokenize(@epub:type,' ')=('frontmatter','backmatter') or tokenize(base-uri(),'/')[last()]='nav.xhtml']">[nordic127] The epub:type "toc" is only allowed in
+                frontmatter, backmatter, and in the EPUB3 Navigation Document (nav.xhtml).</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -683,8 +686,8 @@
         <sch:rule context="html:figure">
             <sch:assert test="tokenize(@epub:type,'\s+')='sidebar' or tokenize(@class,'\s+')=('image','image-series')">[nordic253a] Figures must either have an epub:type of "sidebar" or a class of
                 "image" or "image-series".</sch:assert>
-            <sch:assert test="count((.[tokenize(@epub:type,'\s+')='sidebar'], .[tokenize(@class,'\s+')='image'], .[tokenize(@class,'\s+')='image-series'])) = 1">[nordic253a] Figures must either have an
-                epub:type of "sidebar" or a class of "image" or "image-series".</sch:assert>
+            <sch:assert test="count((.[tokenize(@epub:type,'\s+')='sidebar'], .[tokenize(@class,'\s+')='image'], .[tokenize(@class,'\s+')='image-series'])) = 1">[nordic253a] Figures must either have
+                an epub:type of "sidebar" or a class of "image" or "image-series".</sch:assert>
 
             <sch:assert test="count(html:figcaption) &lt;= 1">[nordic253b] There cannot be more than one figure caption in a single figure element.</sch:assert>
         </sch:rule>
@@ -694,7 +697,8 @@
         </sch:rule>
         <sch:rule context="html:figure[tokenize(@class,'\s+')='image-series']">
             <sch:assert test="count(html:img) = 0">[nordic253d] Image series figures cannot contain img childen (the img elements must be contained in children figure elements).</sch:assert>
-            <sch:assert test="count(html:figure[tokenize(@class,'\s+')='image']) &gt;= 2">[nordic253e] Image series must contain at least 2 image figures ("figure" elements with class "image").</sch:assert>
+            <sch:assert test="count(html:figure[tokenize(@class,'\s+')='image']) &gt;= 2">[nordic253e] Image series must contain at least 2 image figures ("figure" elements with class
+                "image").</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -743,7 +747,7 @@
             <sch:report test="ancestor::html:tfoot">[nordic259] Pagebreaks can not occur within table footers (tfoot).</sch:report>
         </sch:rule>
     </sch:pattern>
-    
+
     <sch:pattern id="epub_nordic_260">
         <sch:rule context="html:figure[tokenize(@class,'\s+')='image']">
             <sch:assert test="html:img intersect *[1]">[nordic260a] The first element in a figure with class="image" must be a "img" element.</sch:assert>

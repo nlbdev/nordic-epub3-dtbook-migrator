@@ -142,30 +142,8 @@
                 </p:input>
                 <p:with-option name="temp-dir" select="concat($temp-dir,'html/')"/>
             </px:nordic-dtbook-to-html-convert>
-
-            <px:nordic-html-validate.step name="validate.html" document-type="Nordic HTML (intermediary single-document)">
-                <p:input port="in-memory.in">
-                    <p:pipe port="in-memory.out" step="single-html"/>
-                </p:input>
-                <p:with-option name="strict" select="$strict"/>
-            </px:nordic-html-validate.step>
             <p:sink/>
-
-            <p:group name="status.html">
-                <p:output port="result"/>
-                <p:for-each>
-                    <p:iteration-source select="/d:document-validation-report/d:document-info/d:error-count">
-                        <p:pipe port="report.out" step="validate.html"/>
-                    </p:iteration-source>
-                    <p:identity/>
-                </p:for-each>
-                <p:wrap-sequence wrapper="d:validation-status"/>
-                <p:add-attribute attribute-name="result" match="/*">
-                    <p:with-option name="attribute-value" select="if (sum(/*/*/number(.))&gt;0) then 'error' else 'ok'"/>
-                </p:add-attribute>
-                <p:delete match="/*/node()"/>
-            </p:group>
-
+            
             <p:choose>
                 <p:when test="$discard-intermediary-html='false' or (/*/@result='error' and $assert-valid='true')">
                     <px:fileset-load media-types="application/xhtml+xml">
@@ -189,9 +167,41 @@
                     </p:identity>
                 </p:when>
                 <p:otherwise>
-                    <p:identity/>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:identity>
                 </p:otherwise>
             </p:choose>
+            <p:identity name="store-intermediary"/>
+            <p:sink/>
+
+            <px:nordic-html-validate.step name="validate.html" document-type="Nordic HTML (intermediary single-document)" cx:depends-on="store-intermediary">
+                <p:input port="fileset.in">
+                    <p:pipe port="fileset.out" step="single-html"/>
+                </p:input>
+                <p:input port="in-memory.in">
+                    <p:pipe port="in-memory.out" step="single-html"/>
+                </p:input>
+                <p:with-option name="strict" select="$strict"/>
+            </px:nordic-html-validate.step>
+            <p:sink/>
+
+            <p:group name="status.html">
+                <p:output port="result"/>
+                <p:for-each>
+                    <p:iteration-source select="/d:document-validation-report/d:document-info/d:error-count">
+                        <p:pipe port="report.out" step="validate.html"/>
+                    </p:iteration-source>
+                    <p:identity/>
+                </p:for-each>
+                <p:wrap-sequence wrapper="d:validation-status"/>
+                <p:add-attribute attribute-name="result" match="/*">
+                    <p:with-option name="attribute-value" select="if (sum(/*/*/number(.))&gt;0) then 'error' else 'ok'"/>
+                </p:add-attribute>
+                <p:delete match="/*/node()"/>
+            </p:group>
             <p:sink/>
 
             <p:identity>
@@ -224,15 +234,15 @@
                         <p:with-option name="temp-dir" select="concat($temp-dir,'epub/')"/>
                         <p:with-option name="compatibility-mode" select="'true'"/>
                     </px:nordic-html-to-epub3-convert>
-                    
-                    
+
+
                     <p:group name="store.epub3">
                         <!-- TODO: replace this p:group with px:epub3-store when px:set-doctype is fixed in the next pipeline 2 version -->
-                        
+
                         <p:output port="result" primary="false">
                             <p:pipe port="result" step="zip"/>
                         </p:output>
-                        
+
                         <p:delete match="/*/d:file/@doctype"/>
                         <p:add-attribute match="/*/d:file[@indent='true']" attribute-name="indent" attribute-value="false">
                             <!-- temporary workaround until https://github.com/daisy/pipeline-modules-common/issues/69 is fixed -->
@@ -242,12 +252,12 @@
                                 <p:pipe port="in-memory.out" step="convert.epub3"/>
                             </p:input>
                         </px:fileset-store>
-                        
+
                         <p:viewport match="/*/d:file" name="store.epub3.doctype">
                             <p:viewport-source>
                                 <p:pipe port="fileset.out" step="fileset-store"/>
                             </p:viewport-source>
-                            
+
                             <p:choose>
                                 <p:when test="/*/@media-type='application/xhtml+xml'">
                                     <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
@@ -267,7 +277,7 @@
                                 </p:otherwise>
                             </p:choose>
                         </p:viewport>
-                        
+
                         <px:epub3-ocf-zip name="zip" cx:depends-on="fileset-store">
                             <p:with-option name="target" select="concat($output-dir,/*/@content,'.epub')">
                                 <p:pipe port="identifier" step="metadata"/>
