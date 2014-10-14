@@ -863,7 +863,7 @@
         <xsl:call-template name="attrs"/>
         <xsl:attribute name="src" select="replace(@src,'^images/','')"/>
         <xsl:choose>
-            <xsl:when test="(ancestor-or-self::*/(@xml:lang|@lang))[1]='sv'">
+            <xsl:when test="(ancestor-or-self::*/(@xml:lang|@lang))[last()]='sv'">
                 <xsl:attribute name="alt" select="'illustration'"/>
             </xsl:when>
             <xsl:otherwise>

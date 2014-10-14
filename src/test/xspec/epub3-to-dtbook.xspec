@@ -2275,24 +2275,64 @@
     <!-- ########## Nordic tests ########## -->
 
     <x:scenario label="github issue #30; make images in swedish books have alt='illustration'">
-        <x:context>
-            <html:img src="images/img.jpg" lang="en" alt="image"/>
-            <html:img src="images/img.jpg" lang="sv" alt="image"/>
-            <html:img src="images/img.jpg" lang="no" alt="image"/>
-            <html:img src="images/img.jpg" xml:lang="en" alt="image"/>
-            <html:img src="images/img.jpg" xml:lang="sv" alt="image"/>
-            <html:img src="images/img.jpg" xml:lang="no" alt="image"/>
-        </x:context>
-        <x:expect label="the resulting element should be a img">
-            <dtbook:img src="..." id="..." xml:lang="en" alt="image"/>
-            <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
-            <dtbook:img src="..." id="..." xml:lang="no" alt="image"/>
-            <dtbook:img src="..." id="..." xml:lang="en" alt="image"/>
-            <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
-            <dtbook:img src="..." id="..." xml:lang="no" alt="image"/>
-        </x:expect>
+        <x:scenario label="when there's no conflicting ancestor language">
+            <x:context>
+                <html:img src="images/img.jpg" lang="en" alt="image"/>
+                <html:img src="images/img.jpg" lang="sv" alt="image"/>
+                <html:img src="images/img.jpg" lang="no" alt="image"/>
+                <html:img src="images/img.jpg" xml:lang="en" alt="image"/>
+                <html:img src="images/img.jpg" xml:lang="sv" alt="image"/>
+                <html:img src="images/img.jpg" xml:lang="no" alt="image"/>
+            </x:context>
+            <x:expect label="the resulting element should be a img">
+                <dtbook:img src="..." id="..." xml:lang="en" alt="image"/>
+                <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
+                <dtbook:img src="..." id="..." xml:lang="no" alt="image"/>
+                <dtbook:img src="..." id="..." xml:lang="en" alt="image"/>
+                <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
+                <dtbook:img src="..." id="..." xml:lang="no" alt="image"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="when there's a conflicting ancestor language">
+            <x:context>
+                <html:div xml:lang="en">
+                    <html:img src="images/img.jpg" xml:lang="sv" alt="image"/>
+                    <html:img src="images/img.jpg" lang="sv" alt="image"/>
+                </html:div>
+                <html:div lang="en">
+                    <html:img src="images/img.jpg" xml:lang="sv" alt="image"/>
+                    <html:img src="images/img.jpg" lang="sv" alt="image"/>
+                </html:div>
+                <html:div xml:lang="sv">
+                    <html:img src="images/img.jpg" xml:lang="en" alt="image"/>
+                    <html:img src="images/img.jpg" lang="en" alt="image"/>
+                </html:div>
+                <html:div lang="sv">
+                    <html:img src="images/img.jpg" xml:lang="en" alt="image"/>
+                    <html:img src="images/img.jpg" lang="en" alt="image"/>
+                </html:div>
+            </x:context>
+            <x:expect label="the resulting element should be a img">
+                <dtbook:div xml:lang="en">
+                    <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
+                    <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
+                </dtbook:div>
+                <dtbook:div xml:lang="en">
+                    <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
+                    <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
+                </dtbook:div>
+                <dtbook:div xml:lang="sv">
+                    <dtbook:img src="..." id="..." xml:lang="en" alt="image"/>
+                    <dtbook:img src="..." id="..." xml:lang="en" alt="image"/>
+                </dtbook:div>
+                <dtbook:div xml:lang="sv">
+                    <dtbook:img src="..." id="..." xml:lang="en" alt="image"/>
+                    <dtbook:img src="..." id="..." xml:lang="en" alt="image"/>
+                </dtbook:div>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
-    
+
     <x:scenario label="Make sure the p class 'indented' is preserved during conversion to DTBook #73">
         <x:context>
             <html:p class="indented"/>
@@ -2301,7 +2341,7 @@
             <dtbook:p class="indented"/>
         </x:expect>
     </x:scenario>
-    
+
     <x:scenario label="Make sure the span class 'asciimath' is preserved during conversion to DTBook #54">
         <x:context>
             <html:span class="asciimath"/>
