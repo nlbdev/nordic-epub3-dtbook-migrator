@@ -48,9 +48,24 @@
             <xsl:if test="not(meta/@name='dc:Source')">
                 <xsl:variable name="isbn"
                     select="(//level1[contains(@class,'colophon')]//text()[matches(.,'^\s*ISBN[:\s]*([\d\- ]+)([^\d\- ]|$)')]/replace(replace(.,'^\s*ISBN[:\s]*([\d\- ]+)([^\d\- ].*?$|$)','$1'),'[^\d]',''))[1]"/>
-                <xsl:if test="$isbn">
-                    <meta name="dc:Source" content="urn:isbn:{$isbn}"/>
-                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$isbn">
+                        <meta name="dc:Source" content="urn:isbn:{$isbn}"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <!-- ISBN is in a non-standard position => do a broader search in frontmatter -->
+                        <xsl:variable name="isbn"
+                            select="(//level1//text()[matches(.,'^.*?ISBN[:\s]*([\d\- ]+)([^\d\- ]|$).*?$')]/replace(replace(.,'^(|.*?\s*)ISBN[:\s]*([\d\- ]+)([^\d\- ].*?$|$)','$2'),'[^\d]',''))[1]"/>
+                        <xsl:choose>
+                            <xsl:when test="$isbn">
+                                <meta name="dc:Source" content="urn:isbn:{$isbn}"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:message select="'No ISBN found, can''t create dc:Source !'"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:if>
         </xsl:copy>
     </xsl:template>
