@@ -55,7 +55,7 @@
                     <xsl:otherwise>
                         <!-- ISBN is in a non-standard position => do a broader search in frontmatter -->
                         <xsl:variable name="isbn"
-                            select="(//level1//text()[matches(.,'^.*?ISBN[:\s]*([\d\- ]+)([^\d\- ]|$).*?$')]/replace(replace(.,'^.*?^\s*ISBN[:\s]*([\d\- ]+)([^\d\- ].*?$|$).*?$','$1'),'[^\d]',''))[1]"/>
+                            select="(//level1//text()[matches(.,'^.*?ISBN[:\s]*([\d\- ]+)([^\d\- ]|$).*?$')]/replace(replace(.,'^(|.*?\s*)ISBN[:\s]*([\d\- ]+)([^\d\- ].*?$|$)','$2'),'[^\d]',''))[1]"/>
                         <xsl:choose>
                             <xsl:when test="$isbn">
                                 <meta name="dc:Source" content="urn:isbn:{$isbn}"/>
