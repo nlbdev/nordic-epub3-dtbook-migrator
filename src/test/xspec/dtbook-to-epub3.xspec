@@ -2705,8 +2705,8 @@
                 </dtbook:tr>
             </dtbook:table>
         </x:context>
-        <x:expect label="all the attributes except border (which remains) and summary (which becoms a caption paragraph) should be translated to CSS using either the style attribute or classes">
-            <html:table id="..." class="table-rules-all table-frame-box" border="1" style="width: 50%; border-collapse: separate; border-spacing: 20px;">
+        <x:expect label="all the attributes except summary (which becoms a caption paragraph) should be translated to CSS using either the style attribute or classes">
+            <html:table id="..." class="table-rules-all table-frame-box" style="border: 1px solid black; width: 50%; border-collapse: separate; border-spacing: 20px;">
                 <html:caption>
                     <html:p class="table-summary">SUMMARY</html:p>
                 </html:caption>

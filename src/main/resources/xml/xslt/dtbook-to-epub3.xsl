@@ -1408,8 +1408,10 @@
             />
         </xsl:call-template>
         <!-- @summary handled the dtbook:table and dtbook:caption templates -->
-        <xsl:copy-of select="@border"/>
         <xsl:variable name="style">
+            <xsl:if test="@border">
+                <xsl:sequence select="concat('border: ',@border,(if (not(ends-with(@border,'%'))) then 'px' else ''),' solid black;')"/>
+            </xsl:if>
             <xsl:if test="@cellspacing">
                 <xsl:if test="@width">
                     <xsl:sequence select="concat('width: ',@width,if (not(ends-with(@width,'%'))) then 'px;' else ';')"/>
