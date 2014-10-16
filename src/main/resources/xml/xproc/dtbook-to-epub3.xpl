@@ -145,6 +145,9 @@
             <p:sink/>
             
             <p:choose>
+                <p:xpath-context>
+                    <p:pipe port="result" step="status.dtbook"/>
+                </p:xpath-context>
                 <p:when test="$discard-intermediary-html='false' or (/*/@result='error' and $assert-valid='true')">
                     <px:fileset-load media-types="application/xhtml+xml">
                         <p:input port="fileset">
