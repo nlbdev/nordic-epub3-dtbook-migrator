@@ -1404,6 +1404,42 @@
                 </html:figure>
             </x:expect>
         </x:scenario>
+        <x:scenario label="with a caption containing text node(s)">
+            <x:context>
+                <dtbook:imggroup>
+                    <dtbook:img src="img.jpg" id="img1"/>
+                    <dtbook:caption id="caption1">TEXT</dtbook:caption>
+                </dtbook:imggroup>
+                <dtbook:imggroup>
+                    <dtbook:caption id="caption2">TEXT</dtbook:caption>
+                    <dtbook:img src="img.jpg" id="img2"/>
+                    <dtbook:caption id="caption3">TEXT</dtbook:caption>
+                    <dtbook:img src="img.jpg" id="img3"/>
+                </dtbook:imggroup>
+            </x:context>
+            <x:expect label="the text nodes should be wrapped in p elements">
+                <html:figure id="..." class="image">
+                    <html:img src="images/img.jpg" id="img1" alt="image"/>
+                    <html:figcaption id="caption1">
+                        <html:p>TEXT</html:p>
+                    </html:figcaption>
+                </html:figure>
+                <html:figure id="..." class="image-series">
+                    <html:figcaption id="caption2">
+                        <html:p>TEXT</html:p>
+                    </html:figcaption>
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img2" alt="image"/>
+                        <html:figcaption id="caption3">
+                            <html:p>TEXT</html:p>
+                        </html:figcaption>
+                    </html:figure>
+                    <html:figure class="image">
+                        <html:img src="images/img.jpg" id="img3" alt="image"/>
+                    </html:figure>
+                </html:figure>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.imggroup -->
@@ -3355,7 +3391,7 @@
             <html:div epub:type="pagebreak" title="8" class="page-normal"/>
         </x:expect>
     </x:scenario>
-    
+
     <x:scenario label="Make sure the p class 'indented' is preserved during conversion to DTBook #73">
         <x:context>
             <dtbook:p class="indented"/>
@@ -3364,7 +3400,7 @@
             <html:p class="indented"/>
         </x:expect>
     </x:scenario>
-    
+
     <x:scenario label="Make sure the span class 'asciimath' is preserved during conversion to DTBook #54">
         <x:context>
             <dtbook:span class="asciimath"/>

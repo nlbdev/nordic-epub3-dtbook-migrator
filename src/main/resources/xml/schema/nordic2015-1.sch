@@ -747,13 +747,21 @@
             <sch:report test="ancestor::html:tfoot">[nordic259] Pagebreaks can not occur within table footers (tfoot).</sch:report>
         </sch:rule>
     </sch:pattern>
-
+    
+    <!-- Rule 260: img must be first in image figure, and non-image content must be placed first in image-series -->
     <sch:pattern id="epub_nordic_260">
         <sch:rule context="html:figure[tokenize(@class,'\s+')='image']">
             <sch:assert test="html:img intersect *[1]">[nordic260a] The first element in a figure with class="image" must be a "img" element.</sch:assert>
         </sch:rule>
         <sch:rule context="html:figure[tokenize(@class,'\s+')='image-series']/html:*[not(self::html:figure[tokenize(@class,'\s+')='image'])]">
             <sch:report test="preceding-sibling::html:figure">[nordic260b] Content not allowed between or after image figure elements.</sch:report>
+        </sch:rule>
+    </sch:pattern>
+    
+    <!-- Rule 261: Text can't be direct child of div -->
+    <sch:pattern id="epub_nordic_261">
+        <sch:rule context="html:div">
+            <sch:report test="text()[normalize-space(.)]">[nordic 261] Text can't be placed directly inside div elements. Please wrap it in a p element.</sch:report>
         </sch:rule>
     </sch:pattern>
 
