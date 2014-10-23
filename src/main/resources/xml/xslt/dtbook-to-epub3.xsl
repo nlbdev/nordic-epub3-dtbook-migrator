@@ -170,9 +170,6 @@
                 .initialism{
                     -epub-speak-as:spell-out;
                 }
-                .list-preformatted{
-                    list-style-type:none;
-                }
                 table[class ^= "table-rules-"],
                 table[class *= " table-rules-"]{
                     border-width:thin;
@@ -1266,9 +1263,7 @@
 
     <xsl:template name="attlist.list">
         <xsl:param name="marker-type" select="''"/>
-        <xsl:call-template name="attrs">
-            <xsl:with-param name="classes" select="if (@type='pl' and $marker-type='') then 'list-preformatted' else ()" tunnel="yes"/>
-        </xsl:call-template>
+        <xsl:call-template name="attrs"/>
         <!-- @depth is implicit; ignore it -->
         <!--<xsl:if test="@enum">
             <xsl:attribute name="type" select="@enum"/>

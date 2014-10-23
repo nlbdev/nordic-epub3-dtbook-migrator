@@ -2297,8 +2297,8 @@
                     <dtbook:li>TEXT</dtbook:li>
                 </dtbook:list>
             </x:context>
-            <x:expect label="the resulting element should be a ol and a 'list-preformatted' class should be added (since the list is preformatted but no markers were found)">
-                <html:ol id="..." class="list-preformatted">
+            <x:expect label="the resulting element should be a ol">
+                <html:ol id="...">
                     <html:li id="...">TEXT</html:li>
                 </html:ol>
             </x:expect>
@@ -2313,7 +2313,7 @@
             </dtbook:list>
         </x:context>
         <x:expect label="the resulting list should be wrapped in a section element">
-            <html:ol id="..." start="1" class="list-preformatted">
+            <html:ol id="..." start="1">
                 <html:li id="...">TEXT</html:li>
             </html:ol>
         </x:expect>
@@ -3154,13 +3154,13 @@
             </dtbook:list>
         </x:context>
         <x:expect label="the resulting toc should be as given">
-            <html:ol id="..." class="list-preformatted" epub:type="toc">
+            <html:ol id="..." epub:type="toc">
                 <html:li id="...">
                     <html:span class="lic">
                         <html:strong>Kapittel 1 Vitenskap: grunnleggende antakelser</html:strong>
                     </html:span>
                     <html:span class="lic">13</html:span>
-                    <html:ol id="..." class="list-preformatted">
+                    <html:ol id="...">
                         <html:li id="...">
                             <html:span class="lic">Hva er vitenskap?</html:span>
                             <html:span class="lic">14</html:span>
@@ -3176,13 +3176,13 @@
                         <html:strong>Del 1 Grunnleggende begreper og prinsipper</html:strong>
                     </html:span>
                     <html:span class="lic">39</html:span>
-                    <html:ol id="..." class="list-preformatted">
+                    <html:ol id="...">
                         <html:li id="...">
                             <html:span class="lic">
                                 <html:strong><![CDATA[Kapittel 2 Vitenskapelig tenkning: validitet, begreper og teori]]></html:strong>
                             </html:span>
                             <html:span class="lic">41</html:span>
-                            <html:ol id="..." class="list-preformatted">
+                            <html:ol id="...">
                                 <html:li id="...">
                                     <html:span class="lic">Validitet</html:span>
                                     <html:span class="lic">41</html:span>
@@ -3198,7 +3198,7 @@
                                 <html:strong><![CDATA[Kapittel 3 Forskningsprosessen: fra spørsmål til svar]]></html:strong>
                             </html:span>
                             <html:span class="lic">70</html:span>
-                            <html:ol id="..." class="list-preformatted">
+                            <html:ol id="...">
                                 <html:li id="...">
                                     <html:span class="lic"><![CDATA[Hvor kommer ideer til forskning fra?]]></html:span>
                                     <html:span class="lic">71</html:span>
