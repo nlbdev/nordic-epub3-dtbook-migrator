@@ -148,9 +148,11 @@
     </xsl:template>
 
     <xsl:template match="html:meta">
-        <xsl:message
-            select="concat('removed meta element because it did not contain a name attribute, a content attribute, or for some other reason (',string-join(for $a in (@*) return concat($a/name(),'=&quot;',$a,'&quot;'),' '),')')"
-        />
+        <xsl:if test="not(@http-equiv='Content-Type') and not(@charset) and not(@name='viewport')">
+            <xsl:message
+                select="concat('removed meta element because it did not contain a name attribute, a content attribute, or for some other reason (',string-join(for $a in (@*) return concat($a/name(),'=&quot;',$a,'&quot;'),' '),')')"
+            />
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="html:meta[@name and @content and not(lower-case(@name)=('viewport','dc:title'))]">
@@ -806,7 +808,7 @@
     </xsl:template>
 
     <xsl:template name="attlist.noteref">
-        <xsl:if test="@class or @epub:type">
+        <xsl:if test="@class or f:types(.)[not(.='noteref')]">
             <xsl:message select="'the class attribute on a noteref was dropped since it is not allowed in Nordic DTBook.'"/>
         </xsl:if>
         <xsl:call-template name="attrs">
@@ -1055,9 +1057,8 @@
         </list>
     </xsl:template>
 
-    <!-- Only 'pl' is allowed in nordic DTBook. -->
-    <!--    <xsl:attribute name="type" select="if (self::html:ul) then 'ul' else if (f:classes(.)='list-preformatted') then 'pl' else 'ol'"/>-->
     <xsl:template name="attlist.list">
+        <!-- Only 'pl' is allowed in nordic DTBook, markers will be inlined. A generic script would set type to ul or ol (i.e. select="local-name()"). -->
         <xsl:attribute name="type" select="'pl'"/>
         <xsl:call-template name="attrs"/>
         <!--
@@ -1430,10 +1431,14 @@
                 <xsl:value-of select="if ($li/parent::*/@start) then $li/parent::*/@start else if ($li/parent::*/@reversed) then count($li/parent::*/*) else 1"/>
             </xsl:when>
             <xsl:when test="$li/parent::*/@reversed">
-                <xsl:value-of select="f:li-value($li/preceding-sibling::*[1]) - 1"/>
+                <xsl:value-of
+                    select="if ($li/preceding-sibling::*[@value]) then f:li-value(($li/preceding-sibling::*[@value])[last()]) - 1 - count($li/preceding-sibling::* intersect ($li/preceding-sibling::*[@value])[last()]/following-sibling::*) else ($li/parent::*/@start/number(.), count($li/parent::*/*))[1] - count($li/preceding-sibling::*)"
+                />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="f:li-value($li/preceding-sibling::*[1]) + 1"/>
+                <xsl:value-of
+                    select="if ($li/preceding-sibling::*[@value]) then f:li-value(($li/preceding-sibling::*[@value])[last()]) + 1 + count($li/preceding-sibling::* intersect ($li/preceding-sibling::*[@value])[last()]/following-sibling::*) else ($li/parent::*/@start/number(.), 1)[1] + count($li/preceding-sibling::*)"
+                />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
