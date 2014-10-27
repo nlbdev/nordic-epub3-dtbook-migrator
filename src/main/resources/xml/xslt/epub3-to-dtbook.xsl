@@ -1077,6 +1077,7 @@
             <xsl:call-template name="attlist.li"/>
             <xsl:variable name="marker">
                 <xsl:choose>
+                    <xsl:when test="parent::html:*/f:classes(.)='list-style-type-none'"/>
                     <xsl:when test="parent::html:ul">
                         <xsl:value-of select="'• '"/>
                     </xsl:when>
@@ -1094,14 +1095,10 @@
                         <xsl:variable name="roman" select="pf:numeric-decimal-to-roman($value)"/>
                         <xsl:value-of select="concat(if (parent::html:ol/@type='i') then lower-case($roman) else upper-case($roman),'. ')"/>
                     </xsl:when>
-                    <xsl:otherwise>
-                        <!-- shouldn't happen, but let's have a fallback anyway -->
-                        <xsl:value-of select="'• '"/>
-                    </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
             <xsl:variable name="is-block"
-                select="if ((html:figure | html:p | html:ol | html:ul | html:dl | html:div | html:blockquote | html:table | html:address | html:section | html:aside)) then true() else false()"/>
+                select="if ((html:p | html:ol | html:ul | html:dl | html:div | html:blockquote | html:table | html:address | html:section | html:aside)) then true() else false()"/>
             <xsl:choose>
                 <xsl:when test="$is-block">
                     <xsl:choose>

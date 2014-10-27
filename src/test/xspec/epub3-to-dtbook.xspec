@@ -1742,8 +1742,8 @@
             <x:context>
                 <html:li/>
             </x:context>
-            <x:expect label="the resulting element should be a li and its contents should be prepended with '• ' since it is part of a preformatted list (all nordic lists are required to be so)">
-                <dtbook:li>• </dtbook:li>
+            <x:expect label="the resulting element should be a li">
+                <dtbook:li/>
             </x:expect>
         </x:scenario>
         <x:scenario label="with ul and both block and non-block text content">
@@ -2348,6 +2348,66 @@
         </x:context>
         <x:expect label="the span class 'asciimath' should be preserved">
             <dtbook:span class="asciimath"/>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="List items with both inline and image (figure) content, and no bullets or numbering">
+        <x:context>
+            <html:ol class="list-style-type-none">
+                <html:li><html:strong>Totalt antal häckande par</html:strong> 49 024 037–101 782 306</html:li>
+                <html:li><html:strong>Antal ökande arter</html:strong> 64</html:li>
+                <html:li><html:strong>Procentandel ökande arter</html:strong> 26%</html:li>
+                <html:li><html:strong>Antal minskande arter</html:strong> 114</html:li>
+                <html:li><html:strong>Procentandel minskande arter</html:strong> 46%</html:li>
+                <html:li>
+                    <html:strong>Sommarhalvåret</html:strong>
+                    <html:figure class="image">
+                        <html:img src="images/img01.jpg" alt="image"/>
+                    </html:figure> (vissa arter kan sällsynt övervintra)</html:li>
+                <html:li>
+                    <html:strong>Hela året</html:strong>
+                    <html:figure class="image">
+                        <html:img src="images/img02.jpg" alt="image"/>
+                    </html:figure>
+                </html:li>
+                <html:li>
+                    <html:strong>Vinterhalvåret</html:strong>
+                    <html:figure class="image">
+                        <html:img src="images/img03.jpg" alt="image"/>
+                    </html:figure>
+                </html:li>
+                <html:li><html:strong>ökande bestånd</html:strong> ↗</html:li>
+                <html:li><html:strong>minskande bestånd</html:strong> ↘</html:li>
+                <html:li><html:strong>stabilt bestånd</html:strong> →</html:li>
+                <html:li><html:strong>fluktuerande bestånd</html:strong> ~</html:li>
+                <html:li><html:strong>beståndsutveckling osäker</html:strong>‽</html:li>
+            </html:ol>
+        </x:context>
+        <x:expect label="the result should be as expected">
+            <dtbook:list type="pl" depth="1">
+                <dtbook:li><dtbook:strong>Totalt antal häckande par</dtbook:strong> 49 024 037–101 782 306</dtbook:li>
+                <dtbook:li><dtbook:strong>Antal ökande arter</dtbook:strong> 64</dtbook:li>
+                <dtbook:li><dtbook:strong>Procentandel ökande arter</dtbook:strong> 26%</dtbook:li>
+                <dtbook:li><dtbook:strong>Antal minskande arter</dtbook:strong> 114</dtbook:li>
+                <dtbook:li><dtbook:strong>Procentandel minskande arter</dtbook:strong> 46%</dtbook:li>
+                <dtbook:li><dtbook:strong>Sommarhalvåret</dtbook:strong>
+                    <dtbook:imggroup>
+                        <dtbook:img src="img01.jpg" alt="image" id="..."/>
+                    </dtbook:imggroup> (vissa arter kan sällsynt övervintra)</dtbook:li>
+                <dtbook:li><dtbook:strong>Hela året</dtbook:strong>
+                    <dtbook:imggroup>
+                        <dtbook:img src="img02.jpg" alt="image" id="..."/>
+                    </dtbook:imggroup></dtbook:li>
+                <dtbook:li><dtbook:strong>Vinterhalvåret</dtbook:strong>
+                    <dtbook:imggroup>
+                        <dtbook:img src="img03.jpg" alt="image" id="..."/>
+                    </dtbook:imggroup></dtbook:li>
+                <dtbook:li><dtbook:strong>ökande bestånd</dtbook:strong> ↗</dtbook:li>
+                <dtbook:li><dtbook:strong>minskande bestånd</dtbook:strong> ↘</dtbook:li>
+                <dtbook:li><dtbook:strong>stabilt bestånd</dtbook:strong> →</dtbook:li>
+                <dtbook:li><dtbook:strong>fluktuerande bestånd</dtbook:strong> ~</dtbook:li>
+                <dtbook:li><dtbook:strong>beståndsutveckling osäker</dtbook:strong>‽</dtbook:li>
+            </dtbook:list>
         </x:expect>
     </x:scenario>
 

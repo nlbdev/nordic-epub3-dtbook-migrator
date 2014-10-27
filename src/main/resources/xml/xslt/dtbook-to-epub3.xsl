@@ -256,6 +256,9 @@
                 }
                 table.table-frame-border{
                     border-style:outset;
+                }
+                list-style-type-none{
+                    list-style-type:none;
                 }]]></style>
             <xsl:if test="@profile">
                 <link rel="profile" href="{@profile}"/>
@@ -1263,7 +1266,9 @@
 
     <xsl:template name="attlist.list">
         <xsl:param name="marker-type" select="''"/>
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="classes" select="if ($marker-type='') then 'list-style-type-none' else ()" tunnel="yes"/>
+        </xsl:call-template>
         <!-- @depth is implicit; ignore it -->
         <!--<xsl:if test="@enum">
             <xsl:attribute name="type" select="@enum"/>
@@ -1291,30 +1296,31 @@
                 <xsl:with-param name="li-value" select="$marker-value"/>
             </xsl:call-template>
 
-            <xsl:choose>
-                <xsl:when test="dtbook:p[1][starts-with(.,'•') or matches(.,'^\w+\.')]">
-                    <xsl:for-each select="dtbook:p[1]">
-                        <xsl:if test="string-length(replace(.,'^\w+\. ','')) != 0">
-                            <p>
-                                <xsl:call-template name="attlist.p">
-                                    <xsl:with-param name="except-classes" select="('precedingemptyline','precedingseparator')" tunnel="yes"/>
-                                </xsl:call-template>
-                                <xsl:for-each select="text()[1]">
-                                    <xsl:value-of select="replace(.,'^(\w+\.|•) ','')"/>
-                                </xsl:for-each>
-                                <xsl:apply-templates select="node() except text()[1]"/>
-                            </p>
+            <xsl:for-each select="node()">
+                <xsl:choose>
+                    <xsl:when
+                        test="self::dtbook:* and not(preceding-sibling::node()[self::* or self::text()[normalize-space()]]) and not(text()[1]/preceding-sibling::*) and matches(text()[1],'^(\w+\.|•)')">
+                        <xsl:if test="* or normalize-space(replace(text()[1],'^(\w+\.|•) ','')) != ''">
+                            <xsl:variable name="element">
+                                <xsl:apply-templates select="."/>
+                            </xsl:variable>
+                            <xsl:for-each select="$element/*">
+                                <xsl:copy>
+                                    <xsl:copy-of select="@*"/>
+                                    <xsl:value-of select="replace(text()[1],'^(\w+\.|•) ','')"/>
+                                    <xsl:copy-of select="node() except text()[1]"/>
+                                </xsl:copy>
+                            </xsl:for-each>
                         </xsl:if>
-                    </xsl:for-each>
-                    <xsl:apply-templates select="node() except dtbook:p[1]"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:for-each select="text()[1]">
+                    </xsl:when>
+                    <xsl:when test="self::text() and not(preceding-sibling::node()[self::* or self::text()[normalize-space()]]) and matches(.,'^(\w+\.|•)')">
                         <xsl:value-of select="replace(.,'^(\w+\.|•) ','')"/>
-                    </xsl:for-each>
-                    <xsl:apply-templates select="node() except text()[1]"/>
-                </xsl:otherwise>
-            </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:apply-templates select="."/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
 
             <xsl:variable name="this" select="."/>
             <xsl:apply-templates select="following-sibling::dtbook:pagenum[preceding-sibling::dtbook:li[1]=$this][following-sibling::dtbook:li]">
@@ -1693,7 +1699,6 @@
                 <xsl:sequence select="false()"/>
             </xsl:otherwise>
         </xsl:choose>
-
     </xsl:function>
 
     <xsl:function name="f:numeric-alpha-to-decimal" as="xs:integer">
