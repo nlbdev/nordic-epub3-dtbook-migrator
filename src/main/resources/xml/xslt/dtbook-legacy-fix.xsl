@@ -47,15 +47,17 @@
             <meta name="track:Guidelines" content="2011-2"/>
             <xsl:if test="not(meta/@name='dc:Source')">
                 <xsl:variable name="isbn"
-                    select="(//level1[contains(@class,'colophon')]//text()[matches(.,'^\s*ISBN[:\s]*([\d\- ]+)([^\d\- ]|$)')]/replace(replace(.,'^\s*ISBN[:\s]*([\d\- ]+)([^\d\- ].*?$|$)','$1'),'[^\d]',''))[1]"/>
+                    select="(/dtbook/book/frontmatter/level1[tokenize(@class,'\s+')='colophon']//text()[matches(.,'^\s*ISBN[:\s]*([\d\-– ]+)([^\d\-– ]|$)')]/replace(replace(.,'^\s*ISBN[:\s]*([\d\- ]+)([^\d\-– ].*?$|$)','$1'),'[^\d]',''))[1]"/>
                 <xsl:choose>
                     <xsl:when test="$isbn">
                         <meta name="dc:Source" content="urn:isbn:{$isbn}"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <!-- ISBN is in a non-standard position => do a broader search in frontmatter -->
-                        <xsl:variable name="isbn"
-                            select="(//level1//text()[matches(.,'^.*?ISBN[:\s]*([\d\- ]+)([^\d\- ]|$).*?$')]/replace(replace(.,'^(|.*?\s*)ISBN[:\s]*([\d\- ]+)([^\d\- ].*?$|$)','$2'),'[^\d]',''))[1]"/>
+                        <xsl:variable name="isbn" select="string-join(/dtbook/book/frontmatter/level1//text(),' ')"/>
+                        <xsl:variable name="isbn" select="if (not(contains($isbn,'ISBN'))) then '' else substring-after($isbn,'ISBN')"/>
+                        <xsl:variable name="isbn" select="if ($isbn='') then '' else replace($isbn,'^[:\s]*([\d\-– ]+).*?$','$1','s')"/>
+                        <xsl:variable name="isbn" select="if ($isbn='') then '' else replace($isbn,'[^\d]','','s')"/>
                         <xsl:choose>
                             <xsl:when test="$isbn">
                                 <meta name="dc:Source" content="urn:isbn:{$isbn}"/>
