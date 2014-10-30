@@ -61,7 +61,7 @@
             <p:empty/>
         </p:input>
         <p:input port="stylesheet">
-            <p:document href="../xslt/pretty-print.xsl"/>
+            <p:document href="../../xslt/pretty-print.xsl"/>
         </p:input>
     </p:xslt>
     <p:identity name="result.in-memory"/>
@@ -90,7 +90,7 @@
     <p:xslt>
         <p:with-param name="preserve-empty-whitespace" select="'false'"/>
         <p:input port="stylesheet">
-            <p:document href="../xslt/pretty-print.xsl"/>
+            <p:document href="../../xslt/pretty-print.xsl"/>
         </p:input>
     </p:xslt>
     <p:identity name="result.fileset"/>

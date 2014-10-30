@@ -46,7 +46,7 @@
             <p:inline>
                 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0" exclude-result-prefixes="#all"
                     xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
-                    <xsl:import href="../xslt/i18n.xsl"/>
+                    <xsl:import href="../../xslt/i18n.xsl"/>
                     <xsl:param name="id" as="xs:string"/>
                     <xsl:param name="language" as="xs:string"/>
                     <xsl:template match="/*">
