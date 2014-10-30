@@ -125,7 +125,7 @@
             <p:empty/>
         </p:input>
         <p:input port="stylesheet">
-            <p:document href="../xslt/pretty-print.xsl"/>
+            <p:document href="../../xslt/pretty-print.xsl"/>
         </p:input>
     </p:xslt>
     <p:identity name="report"/>

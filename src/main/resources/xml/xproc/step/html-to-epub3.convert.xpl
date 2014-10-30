@@ -29,7 +29,7 @@
 
     <p:variable name="epub-dir" select="concat($temp-dir,'epub/')"/>
     <p:variable name="publication-dir" select="concat($epub-dir,'EPUB/')"/>
-    
+
     <px:nordic-html-split-perform name="html-split">
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.in" step="main"/>
@@ -82,11 +82,14 @@
         <p:output port="ncx">
             <p:pipe port="result" step="nav.ncx"/>
         </p:output>
-        
-        <p:for-each>
-            <p:iteration-source>
-                <p:pipe port="in-memory.out" step="html-split"/>
-            </p:iteration-source>
+
+        <p:group name="nav.toc">
+            <p:output port="result"/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe port="result" step="single-html"/>
+                </p:input>
+            </p:identity>
             <p:xslt>
                 <p:input port="parameters">
                     <p:empty/>
@@ -95,12 +98,35 @@
                     <p:document href="../../xslt/generate-missing-headlines.xsl"/>
                 </p:input>
             </p:xslt>
-        </p:for-each>
-        <px:epub3-nav-create-toc name="nav.toc">
-            <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
-                <p:pipe port="result" step="single-html"/>
-            </p:with-option>
-        </px:epub3-nav-create-toc>
+            <px:epub3-nav-create-toc>
+                <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
+                    <p:pipe port="result" step="single-html"/>
+                </p:with-option>
+            </px:epub3-nav-create-toc>
+            <p:add-attribute match="/*" attribute-name="xml:base">
+                <p:with-option name="attribute-value" select="base-uri(/*)">
+                    <p:pipe port="result" step="single-html"/>
+                </p:with-option>
+            </p:add-attribute>
+            <p:delete match="/*/@xml:base"/>
+            <p:delete match="/html:nav/html:ol/html:li/html:a"/>
+            <p:unwrap match="/html:nav/html:ol/html:li"/>
+            <p:unwrap match="/html:nav/html:ol"/>
+            <p:identity name="nav.toc.single-html-hrefs"/>
+            <p:xslt>
+                <p:input port="source">
+                    <p:pipe port="result" step="nav.toc.single-html-hrefs"/>
+                    <p:pipe port="in-memory.out" step="html-split"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/replace-single-html-hrefs-with-multi-html-hrefs.xsl"/>
+                </p:input>
+            </p:xslt>
+        </p:group>
+        <p:sink/>
 
         <px:epub3-nav-create-page-list name="nav.page-list">
             <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
@@ -110,6 +136,7 @@
                 <p:pipe port="in-memory.out" step="html-split"/>
             </p:input>
         </px:epub3-nav-create-page-list>
+        <p:sink/>
 
         <px:epub3-nav-aggregate>
             <p:input port="source">
@@ -137,7 +164,7 @@
                 <p:pipe port="result" step="single-html"/>
             </p:with-param>
             <p:input port="stylesheet">
-                <p:document href="navdoc-nordic-normalization.xsl"/>
+                <p:document href="../../xslt/navdoc-nordic-normalization.xsl"/>
             </p:input>
         </p:xslt>
         <p:identity name="nav.html"/>
@@ -155,7 +182,7 @@
         </p:add-attribute>
         <p:identity name="nav.ncx"/>
     </p:group>
-    
+
     <px:fileset-create>
         <p:with-option name="base" select="replace(base-uri(/*),'[^/]+$','')">
             <p:pipe port="ncx" step="nav"/>
@@ -289,7 +316,7 @@
         </p:input>
     </p:identity>
     <p:sink/>
-    
+
     <!-- List auxiliary resources (i.e. all non-content files: images, CSS, NCX, etc. as well as content files that are non-primary) -->
     <px:fileset-filter>
         <p:input port="source">
