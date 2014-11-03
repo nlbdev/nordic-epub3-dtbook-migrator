@@ -61,10 +61,6 @@
         <sch:rule context="html:body/html:header">
             <sch:assert test="html:*[1][self::html:h1[tokenize(@epub:type,' ')='fulltitle']]">[tpb12] Single-HTML document must begin with a fulltitle headline</sch:assert>
         </sch:rule>
-        <sch:rule context="html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='author']">
-            <sch:assert test="preceding-sibling::*[self::html:h1[tokenize(@epub:type,' ')='fulltitle'] or self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='author']]"
-                >[tpb12] Docauthor may only be preceded by fulltitle headline</sch:assert>
-        </sch:rule>
     </sch:pattern>
 
     <!-- Rule 13: All documents must have frontmatter and bodymatter -->
@@ -109,7 +105,7 @@
                           ancestor::html:q        or ancestor::html:samp       or ancestor::html:span[tokenize(@epub:type,' ')='z3998:sentence']       or ancestor::html:span      or
                           ancestor::html:strong   or ancestor::html:sub        or ancestor::html:sup        or ancestor::html:span[tokenize(@epub:type,' ')='z3998:word']         or
                           ancestor::html:address  or ancestor::html:*[tokenize(@epub:type,' ')='z3998:author' and not(parent::html:header[parent::html:body])]     or ancestor::html:p[tokenize(@epub:type,' ')='bridgehead'] or ancestor::html:*[tokenize(@class,' ')='byline']    or
-                          ancestor::html:cite     or ancestor::html:*[tokenize(@epub:type,' ')='z3998:covertitle'] or ancestor::html:*[tokenize(@class,' ')='dateline']   or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='author'] or
+                          ancestor::html:cite     or ancestor::html:*[tokenize(@epub:type,' ')='z3998:covertitle'] or ancestor::html:*[tokenize(@class,' ')='dateline']   or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author'] or
                           ancestor::html:h1[tokenize(@epub:type,' ')='fulltitle'] or ancestor::html:dt         or ancestor::html:h1         or ancestor::html:h2        or
                           ancestor::html:h3       or ancestor::html:h4         or ancestor::html:h5         or ancestor::html:h6        or
                           ancestor::html:p[tokenize(@class,' ')='line']       or ancestor::html:p"
@@ -164,7 +160,7 @@
             context="html:*[self::html:address    or self::html:aside[tokenize(@epub:type,' ')='annotation'] or self::html:*[tokenize(@epub:type,' ')='z3998:author' and not(parent::html:header[parent::html:body])]   or
   	                          self::html:blockquote or self::html:p[tokenize(@epub:type,' ')='bridgehead'] or self::html:caption  or
   	                          self::html:*[tokenize(@class,' ')='dateline']   or self::html:div        or self::html:dl       or
-  	                          self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='author']  or self::html:h1[tokenize(@epub:type,' ')='fulltitle']   or
+  	                          self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author']  or self::html:h1[tokenize(@epub:type,' ')='fulltitle']   or
   	                          self::html:aside[tokenize(@epub:type,' ')='epigraph']   or self::html:p[tokenize(@class,' ')='line']     or
   	                          self::html:*[tokenize(@class,' ')='linegroup']  or
   	                          self::html:*[self::html:ul or self::html:ol][not(ancestor::html:nav)]       or self::html:a[tokenize(@epub:type,' ')='note']       or self::html:p        or
@@ -218,7 +214,7 @@
                                      ancestor::html:q        or ancestor::html:samp       or ancestor::html:span[tokenize(@epub:type,' ')='z3998:sentence']       or ancestor::html:span      or
                                      ancestor::html:strong   or ancestor::html:sub        or ancestor::html:sup        or ancestor::html:span[tokenize(@epub:type,' ')='z3998:word']         or
                                      ancestor::html:address  or ancestor::html:*[tokenize(@epub:type,' ')='z3998:author' and not(parent::html:header[parent::html:body])]     or ancestor::html:p[tokenize(@epub:type,' ')='bridgehead'] or ancestor::html:*[tokenize(@class,' ')='byline']    or
-                                     ancestor::html:cite     or ancestor::html:*[tokenize(@epub:type,' ')='z3998:covertitle'] or ancestor::html:*[tokenize(@class,' ')='dateline']   or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='author'] or
+                                     ancestor::html:cite     or ancestor::html:*[tokenize(@epub:type,' ')='z3998:covertitle'] or ancestor::html:*[tokenize(@class,' ')='dateline']   or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author'] or
                                      ancestor::html:h1[tokenize(@epub:type,' ')='fulltitle'] or ancestor::html:dt         or ancestor::html:h1         or ancestor::html:h2        or
                                      ancestor::html:h3       or ancestor::html:h4         or ancestor::html:h5         or ancestor::html:h6        or
                                      ancestor::html:p[tokenize(@class,' ')='line']       or ancestor::html:p]">
@@ -226,7 +222,7 @@
                 test="descendant::html:*[self::html:address    or self::html:aside[tokenize(@epub:type,' ')='annotation'] or self::html:*[tokenize(@epub:type,' ')='z3998:author' and not(parent::html:header[parent::html:body])]   or
   	                                       self::html:blockquote or self::html:p[tokenize(@epub:type,' ')='bridgehead'] or self::html:caption  or
                                            self::html:*[tokenize(@class,' ')='dateline']   or self::html:div        or self::html:dl       or
-                                           self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='author']  or self::html:h1[tokenize(@epub:type,' ')='fulltitle']   or
+                                           self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author']  or self::html:h1[tokenize(@epub:type,' ')='fulltitle']   or
                                            self::html:aside[tokenize(@epub:type,' ')='epigraph']   or self::html:p[tokenize(@class,' ')='line']     or
   	                                       self::html:*[tokenize(@class,' ')='linegroup']  or
                                            self::html:*[self::html:ul or self::html:ol]       or self::html:a[tokenize(@epub:type,' ')='note']       or self::html:p        or
@@ -288,14 +284,11 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 67: doctitle and docauthor only allowed in frontmatter -->
+    <!-- Rule 67: fulltitle only allowed in frontmatter -->
     <sch:pattern id="dtbook_TPB_67">
         <sch:rule context="html:h1[tokenize(@epub:type,' ')='fulltitle'][not(ancestor::html:header[parent::html:body])]">
-            <sch:assert test="ancestor::html:*[tokenize(@epub:type,' ')='frontmatter']">[tpb67] doctitle is only allowed in frontmatter</sch:assert>
+            <sch:assert test="ancestor::html:*[tokenize(@epub:type,' ')='frontmatter']">[tpb67] fulltitle is only allowed in frontmatter</sch:assert>
         </sch:rule>
-        <!--<sch:rule context="html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='author']">
-      <sch:assert test="ancestor::html:*[tokenize(@epub:type,' ')='frontmatter']">[tpb67] docauthor is only allowed in frontmatter</sch:assert>
-    </sch:rule>-->
     </sch:pattern>
 
     <!-- Rule 68: No smilref attributes -->
@@ -391,7 +384,7 @@
 
             <sch:report test="@class='cover' and (not(parent::html:frontmatter))">[tpb123] Jacket copy must be in frontmatter</sch:report>
             <sch:report
-                test="@class='cover' and (not(preceding-sibling::*[1][self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='author'] or self::html:h1[tokenize(@epub:type,' ')='fulltitle']]))"
+                test="@class='cover' and (not(preceding-sibling::*[1][self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author'] or self::html:h1[tokenize(@epub:type,' ')='fulltitle']]))"
                 >[tpb123] Jacket copy must follow immediately after docauthor or doctitle</sch:report>
 
             <sch:report test="@class='colophon' and parent::html:bodymatter">[tpb123] Colophon is not allowed in bodymatter</sch:report>
@@ -506,14 +499,18 @@
 
     <!-- Rule 135: Poem contents -->
     <sch:pattern id="dtbook_TPB_135">
-        <sch:rule
+        <!--<sch:rule
             context="html:*[self::html:*[matches(local-name(),'^h\d$') and tokenize(@class,' ')='title'] or self::html:*[tokenize(@epub:type,' ')='z3998:author' and not(parent::html:header[parent::html:body])]]">
             <sch:assert test="parent::html:*[tokenize(@epub:type,' ')='z3998:poem']">[tpb135] Element <sch:name/> is only allowed in poem context</sch:assert>
-        </sch:rule>
+        </sch:rule>-->
         <sch:rule context="html:*[tokenize(@epub:type,' ')='z3998:poem']">
             <sch:assert test="html:*[tokenize(@class,' ')='linegroup']">[tpb135] Every poem must contain a linegroup</sch:assert>
             <sch:report test="html:p[tokenize(@class,' ')='line']">[tpb135] Poem lines must be wrapped in a linegroup</sch:report>
         </sch:rule>
+        <sch:rule context="html:*[tokenize(@epub:type,'\s+')='z3998:author']">
+            <sch:assert test="parent::html:*/tokenize(@epub:type,'\s+')='z3998:poem' or parent::html:header/parent::html:body">[tpb135] z3998:author is only allowed inside a poem</sch:assert>
+        </sch:rule>
+        <!-- TODO: in guidelines revision 2015-2, make sure that verses are contained in poems -->
     </sch:pattern>
 
     <!-- Rule 136: List types -->
@@ -593,6 +590,27 @@
         </sch:rule>
         <sch:rule context="html:body[tokenize(@epub:type,'\s+')='rearnotes'] | html:section[tokenize(@epub:type,'\s+')='rearnotes']">
             <sch:assert test="descendant::html:*[tokenize(@epub:type,'\s+')='rearnote']">[nordic203] 'rearnotes' must have descendants with 'rearnote'.</sch:assert>
+        </sch:rule>
+        <sch:rule context="html:*[tokenize(@epub:type,'\s+')='rearnote']">
+            <sch:assert test="self::html:li">[nordic203] 'rearnote' can only be applied to &lt;li&gt; elements.</sch:assert>
+            <sch:assert test="tokenize(@class,'\s+')='notebody'">[nordic203] The 'notebody' class must be applied to all rearnotes.</sch:assert>
+        </sch:rule>
+    </sch:pattern>
+    
+    <!-- Rule 204: Check that both the epub:types "rearnote" and "rearnotes" are used in rearnotes -->
+    <sch:pattern id="epub_nordic_204">
+        <sch:rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='footnote']">
+            <sch:assert test="ancestor::html:section[tokenize(@epub:type,'\s+')='footnotes']">[nordic204] 'footnote' must have a section ancestor with 'footnotes'.</sch:assert>
+        </sch:rule>
+        <sch:rule context="html:*[not(ancestor::html:body[html:header]) and tokenize(@epub:type,'\s+')='footnote']">
+            <sch:assert test="ancestor::html:body[tokenize(@epub:type,'\s+')='footnotes']">[nordic204] 'footnote' must have a body ancestor with 'footnotes'.</sch:assert>
+        </sch:rule>
+        <sch:rule context="html:body[tokenize(@epub:type,'\s+')='footnotes'] | html:section[tokenize(@epub:type,'\s+')='footnotes']">
+            <sch:assert test="descendant::html:*[tokenize(@epub:type,'\s+')='footnote']">[nordic204] 'footnotes' must have descendants with 'footnote'.</sch:assert>
+        </sch:rule>
+        <sch:rule context="html:*[tokenize(@epub:type,'\s+')='footnote']">
+            <sch:assert test="self::html:li">[nordic204] 'footnote' can only be applied to &lt;li&gt; elements.</sch:assert>
+            <sch:assert test="tokenize(@class,'\s+')='notebody'">[nordic204] The 'notebody' class must be applied to all footnotes.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
