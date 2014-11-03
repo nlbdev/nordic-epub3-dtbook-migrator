@@ -2272,8 +2272,6 @@
         </x:expect>
     </x:scenario>
 
-    <!-- ########## Nordic tests ########## -->
-
     <x:scenario label="github issue #30; make images in swedish books have alt='illustration'">
         <x:scenario label="when there's no conflicting ancestor language">
             <x:context>
@@ -2408,6 +2406,16 @@
                 <dtbook:li><dtbook:strong>fluktuerande bestånd</dtbook:strong> ~</dtbook:li>
                 <dtbook:li><dtbook:strong>beståndsutveckling osäker</dtbook:strong>‽</dtbook:li>
             </dtbook:list>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="err:FORG0006 when declaring multiple classes">
+        <x:context>
+            <html:hr class="emptyline"/>
+            <html:p class="indented">TEXT</html:p>
+        </x:context>
+        <x:expect label="the resulting class attribute should not throw an error">
+            <dtbook:p class="indented precedingemptyline">TEXT</dtbook:p>
         </x:expect>
     </x:scenario>
 

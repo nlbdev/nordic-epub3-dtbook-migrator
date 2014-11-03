@@ -929,7 +929,7 @@
         <xsl:param name="classes" select="()" tunnel="yes"/>
         <xsl:variable name="classes"
             select="(for $class in ((tokenize(@class,'\s'),$classes)) return if ($class = ('part','jacketcopy','colophon','nonstandardpagination','indented')) then $class else (), if (preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]) then (if (preceding-sibling::html:hr[1]/tokenize(@class,'\s')='separator') then 'precedingseparator' else 'precedingemptyline') else ())"/>
-        <xsl:if test="$classes">
+        <xsl:if test="count($classes)">
             <xsl:attribute name="class" select="string-join($classes,' ')"/>
         </xsl:if>
     </xsl:template>
