@@ -471,8 +471,7 @@
   <!-- Rule 129: Class attribute of p -->
   <sch:pattern  id="dtbook_TPB_129">
   	<sch:rule context="dtbk:p[@class]">
-  		<sch:assert test="@class='precedingemptyline' or @class='precedingseparator' or @class='indented' or @class='precedingseparator indented'
-  		        or @class='precedingemptyline indented' or @class='asciimath'">[tpb129] Class attribute of &lt;p&gt; must be one (or more) of 'precedingemptyline', 'precedingseparator', 'indented' or 'asciimath'</sch:assert>
+  		<sch:assert test="not(tokenize(@class,'\s+')[not(. = ('precedingemptyline','precedingseparator','indented','asciimath'))])">[tpb129] Class attribute of &lt;p&gt; must be one (or more) of 'precedingemptyline', 'precedingseparator', 'indented' or 'asciimath'</sch:assert>
   	</sch:rule>
   </sch:pattern>
 
