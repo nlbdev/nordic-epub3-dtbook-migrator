@@ -44,7 +44,7 @@
             test="//d:file[@href='css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf']"/>
         <x:expect type="xpath" label="There should be a file with href='css/fonts/opendyslexic/LICENSE.txt'" test="//d:file[@href='css/fonts/opendyslexic/LICENSE.txt']"/>
         <x:expect type="xpath" label="There should be a file with href='C00000.xhtml'" test="//d:file[@href='C00000.xhtml']"/>
-        <x:expect type="xpath" label="There should be exactly 8 files in the fileset" test="count(//d:file)" equals="9"/>
+        <x:expect type="xpath" label="There should be exactly 9 files in the fileset" test="count(//d:file)" equals="9"/>
 
         <x:context label="temp-dir directory">
             <x:document type="directory" base-uri="temp-dir" href="temp-dir/" recursive="true"/>

@@ -585,11 +585,14 @@
 
     <!-- Rule 203: Check that both the epub:types "rearnote" and "rearnotes" are used in rearnotes -->
     <sch:pattern id="epub_nordic_203">
-        <sch:rule context="html:*[tokenize(@epub:type,' ')='rearnote']">
-            <sch:assert test="ancestor::html:body[tokenize(@epub:type,' ')='rearnotes']">[nordic203] 'rearnote' must have a body ancestor with 'rearnotes'.</sch:assert>
+        <sch:rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='rearnote']">
+            <sch:assert test="ancestor::html:section[tokenize(@epub:type,'\s+')='rearnotes']">[nordic203] 'rearnote' must have a section ancestor with 'rearnotes'.</sch:assert>
         </sch:rule>
-        <sch:rule context="html:body[tokenize(@epub:type,' ')='rearnotes']">
-            <sch:assert test="descendant::html:*[tokenize(@epub:type,' ')='rearnote']">[nordic203] 'rearnotes' must have descendants with 'rearnote'.</sch:assert>
+        <sch:rule context="html:*[not(ancestor::html:body[html:header]) and tokenize(@epub:type,'\s+')='rearnote']">
+            <sch:assert test="ancestor::html:body[tokenize(@epub:type,'\s+')='rearnotes']">[nordic203] 'rearnote' must have a body ancestor with 'rearnotes'.</sch:assert>
+        </sch:rule>
+        <sch:rule context="html:body[tokenize(@epub:type,'\s+')='rearnotes'] | html:section[tokenize(@epub:type,'\s+')='rearnotes']">
+            <sch:assert test="descendant::html:*[tokenize(@epub:type,'\s+')='rearnote']">[nordic203] 'rearnotes' must have descendants with 'rearnote'.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -747,7 +750,7 @@
             <sch:report test="ancestor::html:tfoot">[nordic259] Pagebreaks can not occur within table footers (tfoot).</sch:report>
         </sch:rule>
     </sch:pattern>
-    
+
     <!-- Rule 260: img must be first in image figure, and non-image content must be placed first in image-series -->
     <sch:pattern id="epub_nordic_260">
         <sch:rule context="html:figure[tokenize(@class,'\s+')='image']">
@@ -757,7 +760,7 @@
             <sch:report test="preceding-sibling::html:figure">[nordic260b] Content not allowed between or after image figure elements.</sch:report>
         </sch:rule>
     </sch:pattern>
-    
+
     <!-- Rule 261: Text can't be direct child of div -->
     <sch:pattern id="epub_nordic_261">
         <sch:rule context="html:div">
