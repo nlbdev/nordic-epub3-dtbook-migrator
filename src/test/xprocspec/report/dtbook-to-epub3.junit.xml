@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="1"
+            failures="0"
+            time="20.141"
+            errors="1"
+            name="dtbooktoepub3">
+   <testsuite timestamp="2014-11-03T11:05:26.399Z"
+              hostname="localhost"
+              tests="1"
+              errors="1"
+              failures="0"
+              skipped="0"
+              id="d12144e1"
+              name="compilationError"
+              package="org.daisy.xprocspec">
+      <properties>
+         <property name="xml:base"
+                   value="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec"/>
+         <property name="test-base-uri"
+                   value="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec"/>
+         <property name="error-location" value="evaluate.xpl - evaluation of assertions"/>
+      </properties>
+      <error message="evaluate.xpl - evaluation of assertions" type="static"/>
+      <system-out>dtbook-to-epub3.xprocspec: ERROR</system-out>
+      <system-err>line: 57
+column: 30
+
+                       * port not found: validation-status
+            </system-err>
+      <system-err>&lt;x:was xmlns:x="http://www.daisy.org/ns/xprocspec" xml:base="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec"&gt;&lt;x:description xmlns:cx="http://xmlcalabash.com/ns/extensions" test-base-uri="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec" script="file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/dtbook-to-epub3.xpl" test-grammar="xprocspec" temp-dir="file:/tmp/xprocspec-20141103120508522/"&gt;&lt;x:step-declaration&gt;&lt;p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" type="px:nordic-dtbook-to-epub3" name="main" version="1.0" x:type="{http://www.daisy.org/ns/pipeline/xproc}nordic-dtbook-to-epub3"&gt;&lt;p:output px:media-type="application/vnd.pipeline.report+xml" port="html-report" kind="document" sequence="false" primary="false"&gt;&lt;p:documentation xmlns="http://www.w3.org/1999/xhtml"&gt;
+            &lt;h1 px:role="name"&gt;HTML Report&lt;/h1&gt;
+            &lt;p px:role="desc"&gt;An HTML-formatted version of the validation report.&lt;/p&gt;
+        &lt;/p:documentation&gt;&lt;p:pipe port="result" step="html"/&gt;&lt;/p:output&gt;&lt;p:output px:media-type="application/vnd.pipeline.status+xml" port="validation-status" kind="document" sequence="false" primary="false"&gt;&lt;p:documentation xmlns="http://www.w3.org/1999/xhtml"&gt;
+            &lt;h1 px:role="name"&gt;Validation status&lt;/h1&gt;
+            &lt;p px:role="desc"&gt;Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).&lt;/p&gt;
+        &lt;/p:documentation&gt;&lt;p:pipe port="result" step="status"/&gt;&lt;/p:output&gt;&lt;p:option name="dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml"&gt;
+        &lt;p:documentation xmlns="http://www.w3.org/1999/xhtml"&gt;
+            &lt;h2 px:role="name"&gt;DTBook&lt;/h2&gt;
+            &lt;p px:role="desc"&gt;Input DTBook to be converted.&lt;/p&gt;
+        &lt;/p:documentation&gt;
+    &lt;/p:option&gt;&lt;p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI"&gt;
+        &lt;p:documentation xmlns="http://www.w3.org/1999/xhtml"&gt;
+            &lt;h2 px:role="name"&gt;Temporary directory&lt;/h2&gt;
+            &lt;p px:role="desc"&gt;Temporary directory for use by the script.&lt;/p&gt;
+        &lt;/p:documentation&gt;
+    &lt;/p:option&gt;&lt;p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI"&gt;
+        &lt;p:documentation xmlns="http://www.w3.org/1999/xhtml"&gt;
+            &lt;h2 px:role="name"&gt;Output directory&lt;/h2&gt;
+            &lt;p px:role="desc"&gt;Output directory for the EPUB publication.&lt;/p&gt;
+        &lt;/p:documentation&gt;
+    &lt;/p:option&gt;&lt;p:option name="discard-intermediary-html" required="false" select="'true'" px:type="boolean"&gt;
+        &lt;p:documentation xmlns="http://www.w3.org/1999/xhtml"&gt;
+            &lt;h2 px:role="name"&gt;Discard intermediary HTML&lt;/h2&gt;
+            &lt;p px:role="desc"&gt;Whether or not to include the intermediary HTML in the output (does not include external resources such as images). Set to false to include the HTML.&lt;/p&gt;
+        &lt;/p:documentation&gt;
+    &lt;/p:option&gt;&lt;p:option name="assert-valid" required="false" select="'true'" px:type="boolean"&gt;
+        &lt;p:documentation xmlns="http://www.w3.org/1999/xhtml"&gt;
+            &lt;h2 px:role="name"&gt;Stop processing on validation error&lt;/h2&gt;
+            &lt;p px:role="desc"&gt;Whether or not to stop the conversion when a validation error occurs. Setting this to false may be useful for debugging or if the validation error is a minor one. The
+                output is not guaranteed to be valid if this option is set to false.&lt;/p&gt;
+        &lt;/p:documentation&gt;
+    &lt;/p:option&gt;&lt;p:option name="no-legacy" required="false" px:type="boolean" select="'true'"&gt;
+        &lt;p:documentation xmlns="http://www.w3.org/1999/xhtml"&gt;
+            &lt;h2 px:role="name"&gt;Disallow legacy markup&lt;/h2&gt;
+            &lt;p px:role="desc"&gt;If set to false, will upgrade DTBook versions earlier than 2005-3 to 2005-3, and fix some non-standard practices that appear in older DTBooks.&lt;/p&gt;
+        &lt;/p:documentation&gt;
+    &lt;/p:option&gt;&lt;p:option name="strict" select="'true'" px:type="boolean"&gt;
+        &lt;p:documentation xmlns="http://www.w3.org/1999/xhtml"&gt;
+            &lt;h2 px:role="name"&gt;Extra strict markup&lt;/h2&gt;
+            &lt;p px:role="desc"&gt;Some validation rules are considered extra strict and can be disabled using this option. Examples of extra strict rules are pagebreaks being required in all documents and
+                only a predefined list of languages, suppliers and publishers being allowed.&lt;/p&gt;
+        &lt;/p:documentation&gt;
+    &lt;/p:option&gt;&lt;/p:declare-step&gt;&lt;/x:step-declaration&gt;&lt;x:scenario xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema" end-time="2014-11-03T11:05:26.216Z" label="px:nordic-dtbook-to-epub3" start-time="2014-11-03T11:05:17.167Z"&gt;&lt;x:call x:type="{http://www.daisy.org/ns/pipeline/xproc}nordic-dtbook-to-epub3" step="px:nordic-dtbook-to-epub3"&gt;&lt;x:option select="resolve-uri('DTBook/C00000.xml',base-uri())" name="dtbook" value="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/DTBook/C00000.xml"/&gt;&lt;x:option select="concat($temp-dir,'output-dir/')" name="output-dir" value="file:/tmp/xprocspec-20141103120508522/output-dir/"/&gt;&lt;x:option select="concat($temp-dir,'temp-dir/')" name="temp-dir" value="file:/tmp/xprocspec-20141103120508522/temp-dir/"/&gt;&lt;x:option select="'false'" name="discard-intermediary-html" value="false"/&gt;&lt;x:option select="'false'" name="no-legacy" value="false"/&gt;&lt;/x:call&gt;
+                                                &lt;x:context label="errors" id="errors"&gt;
+                                                    &lt;x:document type="errors"/&gt;
+                                                &lt;/x:context&gt;
+                                            
+                                                &lt;x:expect type="count" label="the step should execute successfully without throwing any errors" max="0" contextref="errors"/&gt;
+                                            &lt;x:context label="validation status" id="context0"&gt;
+            &lt;x:document type="port" port="validation-status" xml:space="preserve"/&gt;
+        &lt;/x:context&gt;&lt;x:expect type="count" label="There should be exactly one document on the validation-status port" min="1" max="1" contextref="context0"/&gt;&lt;x:expect type="xpath" label="There should be no validation errors" test="/*/@result" equals="'ok'" contextref="context0"/&gt;&lt;x:context label="validation report" id="context1"&gt;
+            &lt;x:document type="port" port="html-report" xml:space="preserve"/&gt;
+        &lt;/x:context&gt;&lt;x:expect type="count" label="There should be exactly one document on the html-report port" min="1" max="1" contextref="context1"/&gt;&lt;x:expect type="xpath" label="There should be no validation errors in the HTML report" test="sum(//*[matches(@class,'(^|\s)document-validation-report(\s|$)')]//html:p[matches(normalize-space(string-join(text(),' ')),'^\d+ issue.*')]/xs:integer(replace(normalize-space(string-join(text(),' ')),'(\d+) .*','$1')))" equals="0" contextref="context1"/&gt;&lt;x:context label="result fileset" id="context2"&gt;
+            &lt;x:document type="directory" base-uri="temp-dir" href="output-dir/" recursive="true" xml:space="preserve"/&gt;
+        &lt;/x:context&gt;&lt;x:expect type="count" label="The output directory should exist" min="1" max="1" contextref="context2"/&gt;&lt;x:expect type="xpath" label="There should be no directories in the resulting fileset" test="count(/*//c:directory)" equals="0" contextref="context2"/&gt;&lt;x:expect type="xpath" label="The intermediary HTML should be named C00000.xhtml (in the same directory as the EPUB)" test="/*/c:file[ends-with(@name,'.xhtml')]/@name" equals="'C00000.xhtml'" contextref="context2"/&gt;&lt;x:expect type="xpath" label="The resulting EPUB should be named C00000.epub" test="/*/c:file[ends-with(@name,'.epub')]/@name" equals="'C00000.epub'" contextref="context2"/&gt;&lt;x:expect type="xpath" label="There should be exactly two files in the resulting fileset" test="count(//c:file)" equals="2" contextref="context2"/&gt;&lt;x:expect type="xpath" test="document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/count(namespace::*)" equals="4" label="There should be exactly four namespaces declared on the root element (the default namespace, nordic, epub and the implicit xml namespace)" contextref="context2"/&gt;&lt;x:expect type="xpath" test="document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/namespace::*[name()='']" equals="'http://www.w3.org/1999/xhtml'" label="The HTML namespace should be the default namespace on the root element" contextref="context2"/&gt;&lt;x:expect type="xpath" test="document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/namespace::*[name()='nordic']" equals="'http://www.mtm.se/epub/'" label="The Nordic EPUB namespace should be declared with prefix nordic on the root element" contextref="context2"/&gt;&lt;x:expect type="xpath" test="document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/namespace::*[name()='epub']" equals="'http://www.idpf.org/2007/ops'" label="The EPUB namespace should be declared with the prefix epub on the root element" contextref="context2"/&gt;&lt;x:expect type="xpath" test="document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*//*/count(namespace::*[not(.=../../namespace::*)])" equals="0" label="No namespaces should be declared other than on the root element" contextref="context2"/&gt;&lt;/x:scenario&gt;&lt;c:errors test-base-uri="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec" error-location="running the script"&gt;&lt;c:error code="PEZE01" href="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec" line="9" column="18"&gt;
+                Found document in fileset that was declared as being on disk but were neither stored on disk nor in memory: file:/tmp/xprocspec-20141103120508522/temp-dir/html/css/accessibility.css
+            &lt;/c:error&gt;&lt;/c:errors&gt;&lt;/x:description&gt;
+        &lt;/x:was&gt;</system-err>
+   </testsuite>
+</testsuites>

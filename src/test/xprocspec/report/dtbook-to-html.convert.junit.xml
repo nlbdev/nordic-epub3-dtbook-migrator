@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="19"
+            failures="1"
+            time="6.831"
+            errors="0"
+            name="dtbooktohtmlConvert">
+   <testsuite timestamp="2014-11-03T11:05:41.626Z"
+              hostname="localhost"
+              tests="19"
+              errors="0"
+              failures="1"
+              skipped="0"
+              id="d4927e1"
+              name="pxnordicdtbooktohtmlconvert"
+              package="http://www.daisy.org/ns/pipeline/xproc"
+              time="1.76">
+      <properties>
+         <property name="input: fileset.in"
+                   value="&lt;fileset xmlns=&#34;http://www.daisy.org/ns/pipeline/data&#34; ...&gt;...&lt;/fileset&gt; (Base URI: DTBook/)"/>
+         <property name="input: in-memory.in"
+                   value="&lt;dtbook xmlns=&#34;http://www.daisy.org/z3986/2005/dtbook/&#34; ...&gt;...&lt;/dtbook&gt; (Base URI: file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-html.convert.xprocspec)"/>
+
+         <property name="option: temp-dir"
+                   value="file:/tmp/xprocspec-20141103120536081/temp-dir/"/>
+
+      </properties>
+      <testcase name="theStepShouldExecuteSuccessfullyWithoutThrowingAnyErrors"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>the step should execute successfully without throwing any errors: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeExactlyOneOutputDocument"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be exactly one output document: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="TheOutputDocumentTheIntermediaryHTMLShouldHaveAnXmlbaseAttributeWithFilenameC00000Xhtml"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>The output document (the intermediary HTML) should have an xml:base attribute with filename C00000.xhtml: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="TheOutputDocumentTheIntermediaryHTMLShouldHaveAnXmlbaseAttributePointingToTheTempdirDirectory"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>The output document (the intermediary HTML) should have an xml:base attribute pointing to the temp-dir directory: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeExactlyOneFilesetDocument"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be exactly one fileset document: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="TheFilesetShouldHaveAXmlbaseAttributePointingToTheTempdir"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>The fileset should have a xml:base attribute pointing to the temp-dir: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeAFileWithHref=imagesvalentinJpg"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be a file with href='images/valentin.jpg': SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeAFileWithHref=cssaccessibilityCss"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be a file with href='css/accessibility.css': SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeAFileWithHref=cssfontsopendyslexicOpenDyslexicRegularOtf"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be a file with href='css/fonts/opendyslexic/OpenDyslexic-Regular.otf': SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeAFileWithHref=cssfontsopendyslexicOpenDyslexicItalicOtf"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be a file with href='css/fonts/opendyslexic/OpenDyslexic-Italic.otf': SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeAFileWithHref=cssfontsopendyslexicOpenDyslexicBoldOtf"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be a file with href='css/fonts/opendyslexic/OpenDyslexic-Bold.otf': SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeAFileWithHref=cssfontsopendyslexicOpenDyslexicBoldItalicOtf"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be a file with href='css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf': SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeAFileWithHref=cssfontsopendyslexicOpenDyslexicMonoRegularOtf"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be a file with href='css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf': SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeAFileWithHref=cssfontsopendyslexicLICENSETxt"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be a file with href='css/fonts/opendyslexic/LICENSE.txt': SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeAFileWithHref=C00000Xhtml"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be a file with href='C00000.xhtml': SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeExactly8FilesInTheFileset"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be exactly 8 files in the fileset: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="TheOutputDirectoryShouldExist"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>The output directory should exist: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="TheIntermediaryHTMLShouldNotBeStoredToDisk"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>The intermediary HTML should not be stored to disk: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="TheDefaultCSSFontsAndFontsLicenseShouldBeProvided"
+                classname="nordic-dtbook-to-html-convert"
+                assertions="1"
+                time="0"
+                status="FAILED">
+         <failure message="The default CSS, fonts, and fonts license should be provided"
+                  type="compare"/>
+         <system-out>The default CSS, fonts, and fonts license should be provided: FAILED</system-out>
+         <system-err>Expected:
+&lt;c:directory name="temp-dir"&gt;
+                    &lt;c:directory name="css"&gt;
+                        &lt;c:file name="accessibility.css"/&gt;
+                        &lt;c:directory name="fonts"&gt;
+                            &lt;c:directory name="opendyslexic"&gt;
+                                &lt;c:file name="LICENSE.txt"/&gt;
+                                &lt;c:file name="OpenDyslexic-Bold.otf"/&gt;
+                                &lt;c:file name="OpenDyslexic-BoldItalic.otf"/&gt;
+                                &lt;c:file name="OpenDyslexic-Italic.otf"/&gt;
+                                &lt;c:file name="OpenDyslexic-Regular.otf"/&gt;
+                                &lt;c:file name="OpenDyslexicMono-Regular.otf"/&gt;
+                            &lt;/c:directory&gt;
+                        &lt;/c:directory&gt;
+                    &lt;/c:directory&gt;
+                &lt;/c:directory&gt;
+
+Was:
+
+    
+        
+        
+            
+                
+                
+                
+                
+                
+                
+            
+        
+    
+</system-err>
+      </testcase>
+   </testsuite>
+        </testsuites>

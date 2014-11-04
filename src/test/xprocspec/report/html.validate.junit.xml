@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="6"
+            failures="0"
+            time="9.452"
+            errors="0"
+            name="htmlValidate">
+   <testsuite timestamp="2014-11-03T11:09:05.854Z"
+              hostname="localhost"
+              tests="6"
+              errors="0"
+              failures="0"
+              skipped="0"
+              id="d2519e1"
+              name="pxnordichtmlvalidateStep"
+              package="http://www.daisy.org/ns/pipeline/xproc"
+              time="3.039">
+      <properties>
+         <property name="input: fileset.in"
+                   value="&lt;fileset xmlns=&#34;http://www.daisy.org/ns/pipeline/data&#34; ...&gt;...&lt;/fileset&gt; (Base URI: file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/html.validate.xprocspec)"/>
+         <property name="input: in-memory.in"
+                   value="&lt;html xmlns=&#34;http://www.w3.org/1999/xhtml&#34; ...&gt;...&lt;/html&gt; (Base URI: file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/html.validate.xprocspec)"/>
+         <property name="input: report.in" value=""/>
+
+         <property name="option: strict" value="true"/>
+
+      </properties>
+      <testcase name="theStepShouldExecuteSuccessfullyWithoutThrowingAnyErrors"
+                classname="nordic-html-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>the step should execute successfully without throwing any errors: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="theFilesetOutPortShouldContainTheSameDocumentAsWasReceivedOnTheFilesetInPort"
+                classname="nordic-html-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>the fileset.out port should contain the same document as was received on the fileset.in port: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="theInmemoryOutPortShouldContainTheSameDocumentsAsWasReceivedOnTheInmemoryInPort"
+                classname="nordic-html-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>the in-memory.out port should contain the same documents as was received on the in-memory.in port: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="thereShouldBeAtLeastOneReportDocument"
+                classname="nordic-html-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>there should be at least one report document: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="thereShouldBeNoErrorsUnderDreports"
+                classname="nordic-html-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>there should be no errors under d:reports: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="theErrorCoundShouldBe0"
+                classname="nordic-html-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>the error cound should be 0: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+   </testsuite>
+        </testsuites>

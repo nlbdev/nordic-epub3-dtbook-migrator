@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="4"
+            failures="0"
+            time="9.589"
+            errors="0"
+            name="dtbookvalidate">
+   <testsuite timestamp="2014-11-03T11:05:55.058Z"
+              hostname="localhost"
+              tests="4"
+              errors="0"
+              failures="0"
+              skipped="0"
+              id="d3266e1"
+              name="pxnordicdtbookvalidate"
+              package="http://www.daisy.org/ns/pipeline/xproc"
+              time="4.467">
+      <properties>
+
+         <property name="option: dtbook"
+                   value="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/DTBook/C00000.xml"/>
+
+      </properties>
+      <testcase name="theStepShouldExecuteSuccessfullyWithoutThrowingAnyErrors"
+                classname="nordic-dtbook-validate"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>the step should execute successfully without throwing any errors: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="DTBookC00000XmlShouldBeValid"
+                classname="nordic-dtbook-validate"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>DTBook/C00000.xml should be valid: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="thereShouldBeExactlyOneTableContainingStatisticsOfElementsAndClasses"
+                classname="nordic-dtbook-validate"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>there should be exactly one table containing statistics of elements and classes: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThePublicationStatisticsShouldContainStuff"
+                classname="nordic-dtbook-validate"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>The publication statistics should contain stuff: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+   </testsuite>
+        </testsuites>

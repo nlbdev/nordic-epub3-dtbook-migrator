@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:test-report xmlns:x="http://www.daisy.org/ns/xprocspec">
+   <x:description xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                  xmlns:c="http://www.w3.org/ns/xproc-step"
+                  xml:base="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-validate.xprocspec"
+                  test-base-uri="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-validate.xprocspec"
+                  script="file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/dtbook-validate.xpl"
+                  test-grammar="xprocspec"
+                  temp-dir="file:/tmp/xprocspec-20141103120547083/">
+      <x:step-declaration>
+         <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+                         xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                         xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                         xmlns:epub="http://www.idpf.org/2007/ops"
+                         xmlns:pxp="http://exproc.org/proposed/steps"
+                         type="px:nordic-dtbook-validate"
+                         name="main"
+                         version="1.0"
+                         x:type="{http://www.daisy.org/ns/pipeline/xproc}nordic-dtbook-validate">
+            <p:output px:media-type="application/vnd.pipeline.report+xml"
+                      port="html-report"
+                      kind="document"
+                      sequence="false"
+                      primary="false">
+               <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+                  <h1 px:role="name">HTML Report</h1>
+                  <p px:role="desc">An HTML-formatted version of the validation report.</p>
+               </p:documentation>
+               <p:pipe port="result" step="html"/>
+            </p:output>
+            <p:output px:media-type="application/vnd.pipeline.status+xml"
+                      port="validation-status"
+                      kind="document"
+                      sequence="false"
+                      primary="false">
+               <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+                  <h1 px:role="name">Validation status</h1>
+                  <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
+               </p:documentation>
+               <p:pipe port="result" step="status"/>
+            </p:output>
+            <p:option name="dtbook"
+                      required="true"
+                      px:type="anyFileURI"
+                      px:media-type="application/x-dtbook+xml">
+               <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+                  <h2 px:role="name">DTBook</h2>
+                  <p px:role="desc">DTBook marked up according to the nordic markup guidelines.</p>
+               </p:documentation>
+            </p:option>
+            <p:option name="ignore-missing-images"
+                      required="false"
+                      px:type="boolean"
+                      select="'true'">
+               <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+                  <h2 px:role="name">Ignore non-existing images</h2>
+                  <p px:role="desc">Whether or not to see that referenced images exist on disk.</p>
+               </p:documentation>
+            </p:option>
+            <p:option name="no-legacy"
+                      required="false"
+                      px:type="boolean"
+                      select="'true'">
+               <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+                  <h2 px:role="name">Disallow legacy markup</h2>
+                  <p px:role="desc">If set to false, will upgrade DTBook versions earlier than 2005-3 to 2005-3, and fix some non-standard practices that appear in older DTBooks.</p>
+               </p:documentation>
+            </p:option>
+         </p:declare-step>
+      </x:step-declaration>
+      <x:scenario xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                  xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                  xmlns:epub="http://www.idpf.org/2007/ops"
+                  xmlns:html="http://www.w3.org/1999/xhtml"
+                  xmlns:opf="http://www.idpf.org/2007/opf"
+                  end-time="2014-11-03T11:05:54.588Z"
+                  label="px:nordic-dtbook-validate"
+                  start-time="2014-11-03T11:05:50.121Z">
+         <x:call x:type="{http://www.daisy.org/ns/pipeline/xproc}nordic-dtbook-validate"
+                 step="px:nordic-dtbook-validate">
+            <x:option select="resolve-uri('DTBook/C00000.xml',base-uri())"
+                      name="dtbook"
+                      value="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/DTBook/C00000.xml"/>
+         </x:call>
+                                                <x:context label="errors" id="errors">
+                                                    
+                                                </x:context>
+                                            
+                                                <x:expect type="count"
+                   label="the step should execute successfully without throwing any errors"
+                   max="0"
+                   contextref="errors"/>
+                                            <x:context label="validation-status" id="context0">
+            <x:document xml:base="file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/dtbook-validate.xpl" xml:space="preserve" type="inline"><d:validation-status result="ok"/></x:document>
+        </x:context>
+         <x:expect type="compare"
+                   label="DTBook/C00000.xml should be valid"
+                   normalize-space="true"
+                   contextref="context0">
+            <x:document xml:base="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-validate.xprocspec" xml:space="preserve" type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+         <x:context label="html-report - publication statistics" id="context1">
+            <x:document xml:base="file:/home/jostein/pipeline-modules/common-utils/validation-utils/src/main/resources/xml/xproc/validation-report-to-html.xpl" xml:space="preserve" type="inline"><tbody xmlns="http://www.w3.org/1999/xhtml"><tr><td>class: 'asciimath'</td><td>13</td></tr><tr><td>class: 'chapter'</td><td>4</td></tr><tr><td>class: 'conclusion'</td><td>1</td></tr><tr><td>class: 'initialism'</td><td>5</td></tr><tr><td>class: 'jacketcopy'</td><td>1</td></tr><tr><td>class: 'rearcover'</td><td>1</td></tr><tr><td>element: 'blockquote'</td><td>10</td></tr><tr><td>element: 'bodymatter'</td><td>1</td></tr><tr><td>element: 'book'</td><td>1</td></tr><tr><td>element: 'caption'</td><td>2</td></tr><tr><td>element: 'div'</td><td>1</td></tr><tr><td>element: 'docauthor'</td><td>1</td></tr><tr><td>element: 'doctitle'</td><td>1</td></tr><tr><td>element: 'dtbook'</td><td>1</td></tr><tr><td>element: 'frontmatter'</td><td>1</td></tr><tr><td>element: 'h1'</td><td>7</td></tr><tr><td>element: 'h2'</td><td>17</td></tr><tr><td>element: 'h3'</td><td>5</td></tr><tr><td>element: 'head'</td><td>1</td></tr><tr><td>element: 'img'</td><td>5</td></tr><tr><td>element: 'imggroup'</td><td>3</td></tr><tr><td>element: 'level1'</td><td>8</td></tr><tr><td>element: 'level2'</td><td>17</td></tr><tr><td>element: 'level3'</td><td>5</td></tr><tr><td>element: 'li'</td><td>6</td></tr><tr><td>element: 'line'</td><td>8</td></tr><tr><td>element: 'list'</td><td>1</td></tr><tr><td>element: 'meta'</td><td>12</td></tr><tr><td>element: 'note'</td><td>103</td></tr><tr><td>element: 'noteref'</td><td>103</td></tr><tr><td>element: 'p'</td><td>328</td></tr><tr><td>element: 'pagenum'</td><td>31</td></tr><tr><td>element: 'prodnote'</td><td>2</td></tr><tr><td>element: 'rearmatter'</td><td>1</td></tr><tr><td>element: 'span'</td><td>1141</td></tr><tr><td>element: 'table'</td><td>1</td></tr><tr><td>element: 'td'</td><td>69</td></tr><tr><td>element: 'tr'</td><td>23</td></tr></tbody></x:document>
+        </x:context>
+         <x:expect label="there should be exactly one table containing statistics of elements and classes"
+                   type="count"
+                   min="1"
+                   max="1"
+                   contextref="context1"/>
+         <x:expect label="The publication statistics should contain stuff"
+                   type="xpath"
+                   test="count(//html:tr) &gt; 0"
+                   contextref="context1"/>
+      </x:scenario>
+      <x:output port="html-report">
+         <x:document xml:base="file:/home/jostein/pipeline-modules/common-utils/validation-utils/src/main/resources/xml/xproc/validation-report-to-html.xpl" xml:space="preserve" type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                    <head>
+                        <title>Validation Results</title>
+                        <style type="text/css"> 
+                            body { 
+                            font-family: helvetica; 
+                            } 
+                            pre.box { 
+                            white-space: pre-wrap; /* css-3 */ 
+                            white-space: -moz-pre-wrap; /*Mozilla, since 1999 */ 
+                            white-space: -pre-wrap; /* Opera 4-6 */
+                            white-space: -o-pre-wrap; /* Opera 7 */ 
+                            word-wrap: break-word; /*Internet Explorer 5.5+ */ 
+                            } 
+                            li.error div { 
+                            display: table; 
+                            border: gray thin solid; 
+                            padding: 5px; 
+                            } 
+                            li.error div h3 { 
+                            display: table-cell; 
+                            padding-right: 10px; 
+                            font-size: smaller; 
+                            } 
+                            li.error div pre.box { 
+                            display: table-cell; 
+                            } 
+                            li { 
+                            padding-bottom: 15px; 
+                            } 
+                            #toc {
+                            border-spacing: 0px;
+                            }
+                            #toc th, #toc td {
+                            padding: 5px 30px 5px 10px;
+                            border-spacing: 0px;
+                            font-size: 90%;
+                            margin: 0px;
+                            }
+                            #toc th, #toc td {
+                            text-align: left;
+                            border-top: 1px solid #f1f8fe;
+                            border-bottom: 1px solid #cbd2d8;
+                            border-right: 1px solid #cbd2d8;
+                            }
+                            
+                            #toc tr:nth-child(odd) {
+                            background-color: #e0e9f0;
+                            }
+                            #toc tr:nth-child(even), #toc thead th {
+                            background-color: #e8eff5; !important;
+                            }
+                            
+                        </style>
+                    </head>
+                    <body>
+                        <div id="header">
+                            <h1>Validation Results</h1>
+                            <p id="datetime">Generated on 2014-11-03+01:00 at 12:05:54.566+01:00</p>
+                            
+                        </div>
+                    <div class="document-validation-report" id="d2619e1"><div class="document-info"><p>Validated as <code>Fileset statistics</code></p><p>0 issues found.</p><table class="table table-condensed"><thead><tr><th>Property</th><th>Value</th></tr></thead><tbody><tr><td>class: 'asciimath'</td><td>13</td></tr><tr><td>class: 'chapter'</td><td>4</td></tr><tr><td>class: 'conclusion'</td><td>1</td></tr><tr><td>class: 'initialism'</td><td>5</td></tr><tr><td>class: 'jacketcopy'</td><td>1</td></tr><tr><td>class: 'rearcover'</td><td>1</td></tr><tr><td>element: 'blockquote'</td><td>10</td></tr><tr><td>element: 'bodymatter'</td><td>1</td></tr><tr><td>element: 'book'</td><td>1</td></tr><tr><td>element: 'caption'</td><td>2</td></tr><tr><td>element: 'div'</td><td>1</td></tr><tr><td>element: 'docauthor'</td><td>1</td></tr><tr><td>element: 'doctitle'</td><td>1</td></tr><tr><td>element: 'dtbook'</td><td>1</td></tr><tr><td>element: 'frontmatter'</td><td>1</td></tr><tr><td>element: 'h1'</td><td>7</td></tr><tr><td>element: 'h2'</td><td>17</td></tr><tr><td>element: 'h3'</td><td>5</td></tr><tr><td>element: 'head'</td><td>1</td></tr><tr><td>element: 'img'</td><td>5</td></tr><tr><td>element: 'imggroup'</td><td>3</td></tr><tr><td>element: 'level1'</td><td>8</td></tr><tr><td>element: 'level2'</td><td>17</td></tr><tr><td>element: 'level3'</td><td>5</td></tr><tr><td>element: 'li'</td><td>6</td></tr><tr><td>element: 'line'</td><td>8</td></tr><tr><td>element: 'list'</td><td>1</td></tr><tr><td>element: 'meta'</td><td>12</td></tr><tr><td>element: 'note'</td><td>103</td></tr><tr><td>element: 'noteref'</td><td>103</td></tr><tr><td>element: 'p'</td><td>328</td></tr><tr><td>element: 'pagenum'</td><td>31</td></tr><tr><td>element: 'prodnote'</td><td>2</td></tr><tr><td>element: 'rearmatter'</td><td>1</td></tr><tr><td>element: 'span'</td><td>1141</td></tr><tr><td>element: 'table'</td><td>1</td></tr><tr><td>element: 'td'</td><td>69</td></tr><tr><td>element: 'tr'</td><td>23</td></tr></tbody></table></div></div><div class="document-validation-report" id="d2623e2"><div class="document-info"><h2><code>C00000.xml</code></h2><p>Validated as <code>DTBook 2005-3</code></p><p>Path: <code>file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/DTBook/C00000.xml</code></p><p>0 issues found.</p></div><div class="document-report"><ul/><ul/><ul/></div></div><div class="document-validation-report" id="d2626e2"><div class="document-info"><h2><code>C00000.xml</code></h2><p>Validated as <code>Nordic DTBook</code></p><p>Path: <code>file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/DTBook/C00000.xml</code></p><p>0 issues found.</p></div><div class="document-report"><ul/><ul/></div></div>
+                <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"> </script>
+            </body>
+                </html>
+            </x:document>
+      </x:output>
+      <x:output port="validation-status">
+         <x:document xml:base="file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/dtbook-validate.xpl" xml:space="preserve" type="inline"><d:validation-status xmlns:d="http://www.daisy.org/ns/pipeline/data" result="ok"/></x:document>
+      </x:output>
+      <x:test-result xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                     xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                     xmlns:epub="http://www.idpf.org/2007/ops"
+                     xmlns:html="http://www.w3.org/1999/xhtml"
+                     xmlns:opf="http://www.idpf.org/2007/opf"
+                     type="count"
+                     label="the step should execute successfully without throwing any errors"
+                     max="0"
+                     contextref="errors"
+                     result="passed">
+                                                        <x:expected>At most 0 documents.</x:expected>
+                                                    <x:was>0</x:was>
+      </x:test-result>
+      <x:test-result xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                     xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                     xmlns:epub="http://www.idpf.org/2007/ops"
+                     xmlns:html="http://www.w3.org/1999/xhtml"
+                     xmlns:opf="http://www.idpf.org/2007/opf"
+                     type="compare"
+                     label="DTBook/C00000.xml should be valid"
+                     normalize-space="true"
+                     contextref="context0"
+                     result="passed"/>
+      <x:test-result xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                     xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                     xmlns:epub="http://www.idpf.org/2007/ops"
+                     xmlns:html="http://www.w3.org/1999/xhtml"
+                     xmlns:opf="http://www.idpf.org/2007/opf"
+                     label="there should be exactly one table containing statistics of elements and classes"
+                     type="count"
+                     min="1"
+                     max="1"
+                     contextref="context1"
+                     result="passed">
+                                                        <x:expected>At least 1 and at most 1 documents.</x:expected>
+                                                    <x:was>1</x:was>
+      </x:test-result>
+      <x:test-result xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                     xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                     xmlns:epub="http://www.idpf.org/2007/ops"
+                     xmlns:html="http://www.w3.org/1999/xhtml"
+                     xmlns:opf="http://www.idpf.org/2007/opf"
+                     label="The publication statistics should contain stuff"
+                     type="xpath"
+                     test="count(//html:tr) &gt; 0"
+                     contextref="context1"
+                     result="passed">
+         <x:expected xml:space="preserve">XPath: true()
+Value: true</x:expected>
+         <x:was xml:space="preserve">XPath: count(//html:tr) &gt; 0
+Value: true</x:was>
+      </x:test-result>
+   </x:description>
+        </x:test-report>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="8"
+            failures="0"
+            time="11.056"
+            errors="0"
+            name="dtbookValidate">
+   <testsuite timestamp="2014-11-03T11:06:09.552Z"
+              hostname="localhost"
+              tests="8"
+              errors="0"
+              failures="0"
+              skipped="0"
+              id="d2626e1"
+              name="pxnordicdtbookvalidateStep"
+              package="http://www.daisy.org/ns/pipeline/xproc"
+              time="4.313">
+      <properties>
+         <property name="input: report.in" value=""/>
+
+         <property name="option: dtbook"
+                   value="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/DTBook/C00000.xml"/>
+
+      </properties>
+      <testcase name="theStepShouldExecuteSuccessfullyWithoutThrowingAnyErrors"
+                classname="nordic-dtbook-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>the step should execute successfully without throwing any errors: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="TheFilesetShouldContain2Files"
+                classname="nordic-dtbook-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>The fileset should contain 2 files: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="TheFilesetShouldOneImageFile"
+                classname="nordic-dtbook-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>The fileset should one image file: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="TheFilesetShouldOneDTBookFile"
+                classname="nordic-dtbook-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>The fileset should one DTBook file: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="theInmemoryOutPortShouldContainTheDTBook"
+                classname="nordic-dtbook-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>the in-memory.out port should contain the DTBook: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="thereShouldBeAtLeastOneReportDocument"
+                classname="nordic-dtbook-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>there should be at least one report document: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="thereShouldBeNoErrorsUnderDreports"
+                classname="nordic-dtbook-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>there should be no errors under d:reports: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="theErrorCoundShouldBe0"
+                classname="nordic-dtbook-validate.step"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>the error cound should be 0: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+   </testsuite>
+        </testsuites>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="6"
+            failures="0"
+            time="13.256"
+            errors="0"
+            name="htmltoepub3Convert">
+   <testsuite timestamp="2014-11-03T11:08:47.084Z"
+              hostname="localhost"
+              tests="6"
+              errors="0"
+              failures="0"
+              skipped="0"
+              id="d5865e1"
+              name="pxnordichtmltoepub3convert"
+              package="http://www.daisy.org/ns/pipeline/xproc"
+              time="4.859">
+      <properties>
+         <property name="input: fileset.in"
+                   value="&lt;fileset xmlns=&#34;http://www.daisy.org/ns/pipeline/data&#34; ...&gt;...&lt;/fileset&gt; (Base URI: single-html/)"/>
+         <property name="input: in-memory.in"
+                   value="&lt;html xmlns=&#34;http://www.w3.org/1999/xhtml&#34; ...&gt;...&lt;/html&gt; (Base URI: file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/html-to-epub3.convert.xprocspec)"/>
+
+         <property name="option: temp-dir" value="file:/tmp/xprocspec-2014110312083604/"/>
+
+      </properties>
+      <testcase name="theStepShouldExecuteSuccessfullyWithoutThrowingAnyErrors"
+                classname="nordic-html-to-epub3-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>the step should execute successfully without throwing any errors: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldBeExactlyOneFileset"
+                classname="nordic-html-to-epub3-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should be exactly one fileset: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="TheFilesetShouldHaveAXmlbaseAttributePointingToTheEpubSubdirectoryOfTheTemporaryDirectory"
+                classname="nordic-html-to-epub3-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>The fileset should have a xml:base attribute pointing to the 'epub' subdirectory of the temporary directory: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="allFilesShouldHaveTheirAppropriateAttributesSet"
+                classname="nordic-html-to-epub3-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>all files should have their appropriate attributes set: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="ThereShouldOnlyBeOneFileOnDisk"
+                classname="nordic-html-to-epub3-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>There should only be one file on disk: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+      <testcase name="TheOnlyFileOnDiskShouldBeValentinJpg"
+                classname="nordic-html-to-epub3-convert"
+                assertions="1"
+                time="0"
+                status="SUCCESS">
+         <system-out>The only file on disk should be valentin.jpg: SUCCESS</system-out>
+         <system-err/>
+      </testcase>
+   </testsuite>
+        </testsuites>

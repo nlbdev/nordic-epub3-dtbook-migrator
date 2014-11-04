@@ -1,0 +1,2455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <title>Test Report for file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec (passed:0 / pending:0 / failed:0 / errors:1 / total:1)</title>
+        <meta charset="utf-8"/>
+        <style type="text/css" xml:space="preserve">/**/
+/****************************************************************************/
+/*  File:       test-report.css                                             */
+/*  Author:     Jeni Tennsion                                               */
+/*  URI:        http://xspec.googlecode.com/                                */
+/*  Tags:                                                                   */
+/*    Copyright (c) 2008, 2010 Jeni Tennsion (see end of file.)             */
+/* ------------------------------------------------------------------------ */
+
+
+/* test */
+
+/* box model */
+
+body {
+	margin-right: 1em;
+	/*margin-left: 10%;*/
+	}
+
+h1 {
+	padding: 0.3em 0.5em 0.3em 0.5em;
+	position: relative;
+	}
+
+h2 {
+	padding: 0.1em 0.5em 0.2em 0.5em;
+	}
+
+h3 {
+	padding-left: 0.6em;
+	}
+
+h4 {
+	padding-left: 0.8em;
+	}
+
+p, table {
+	/*margin-left: 5%;*/
+	}
+
+dd ul, dd ol {
+	margin-left: 0%;
+	}
+
+li ul, li ol {
+	/*margin-left: 5%;*/
+	}
+
+dl, ul, ol, blockquote {
+	/*margin-left: 10%;*/
+	}
+
+dt {
+  padding-top: 3px;
+  padding-bottom: 3px;
+	clear: both;
+	}
+
+dd p {
+	/*margin-left: -5px;*/
+	margin-top: 5px;
+	clear: both;
+	}
+
+p.link {
+	margin-top: 4px;
+	margin-bottom: 0px;
+	clear: both;
+	}
+
+tr td, td p, li, li p {
+	margin-left: 0%;
+	}
+
+td:nth-child(2) {
+	padding-left: 5%;
+	}
+
+.link img, dt img {
+	vertical-align: middle;
+	position: relative;
+	top: -5px;
+	}
+
+img {
+	position: relative;
+	}
+
+#xml-link {
+	position: absolute;
+	left: 5px;
+	top: 5px;
+	width: 10%;
+	margin-left: 0%;
+	}
+
+#link-up {
+	position: absolute;
+	left: 93%;
+	right: 2em;
+	top: 0.3em;
+	}
+
+#link-top {
+	position: absolute;
+	left: 89%;
+	right: 4em;
+	top: 0.3em;
+	}
+	
+.popup {
+	display: block;
+	visibility: hidden;
+	float: right;
+	position: absolute;
+	top: 5px;
+	left: -200px;
+	z-index: 1;
+	padding: 0.3em;
+	width: 220px;
+	}
+
+.note {
+	position: relative;
+	}
+
+.post {
+	/*margin-left: 5%;*/
+	padding-top: 1em;
+	}
+	
+.example, .sidebar {
+  /*margin-left: 5%;*/
+  margin-top: 1em;
+  margin-bottom: 1em;
+  }
+
+/*pre {
+	padding-left: 5%;
+	margin-left: 5%;
+	}*/
+
+/*dd pre, li pre {
+	padding-left: 5%;
+	}*/
+
+/* fonts */
+/* Oxygen  */
+body, table {
+    font-family:arial, helvetica, sans-serif;
+    font-size:12px;
+}
+/* Oxygen  */
+
+/*body {
+	font-family: Verdana, arial, sans-serif;
+	font-size: small;
+	}*/	
+
+/*h1, h2, h3, h4, h5, h6 {
+	font-family: 'trebuchet MS', arial, sans-serif;
+	}*/
+
+h1 {
+	font-size: 173%;
+	font-weight: bold;
+	}
+
+h2 {
+	font-size: 144%;
+	font-weight: normal;
+	}
+
+h3 {
+	font-size: 120%;
+	font-weight: normal;
+	}
+
+h4 {
+  font-size: 100%;
+  font-weight: bold;
+}
+
+dt {
+	font-weight: bold;
+	}
+
+a:link, a:visited, a:active, a:hover {
+	font-weight: bold;
+	}
+
+a.offsite:link, a.offsite:visited, a.offsite:active, a.offsite:hover {
+	font-weight: normal;
+	}
+
+/* suppress the normal italics */
+address {
+	font-style: normal;
+	}
+
+div.example, .sidebar {
+  font-family: Verdana, arial, sans-serif;
+  font-size: 100%;
+  }
+
+
+.note, .link {
+	font-family: Verdana, arial, sans-serif;
+	/*font-size: 83%;*/
+	}
+
+/*.example, .string, .rtf, .code, pre, code {
+	font-family: "Lucida Console", "Courier New", monospace;*/
+  /*font-size: 83%;*/
+/*	}*/
+
+.boolean {
+	font-style: italic;
+	}
+
+#colophon, #xml-link {
+	font-size: 69%;
+	}
+
+.question, .title {
+	font-weight: bold;
+	}
+
+/* colours */
+body {
+	background-color: white;
+	color: black;
+	border: 0px none black;
+	}
+
+/* this is to make Navigator fill the entire line */
+h1, h2 {
+	border: 1px solid white;
+	width: auto;
+	}
+
+h1 {
+	/*background: #606;*/
+	/*color: #6F6;*/
+	}
+
+h2 {
+	color: #606;
+	/*background: #CFC;*/
+	}
+
+hr {
+	color: #606;
+	background: white;
+	}
+
+img, a:link img, a:visited img, a:hover img, a:active img, #link-up img, #link-top img {
+	border: 0px none white;
+	background: transparent;
+	}
+
+/* OXYGEN */
+a, a:visited {
+    color:rgb(0, 0, 150);
+    background-color:inherit;
+    font-weight: bold;
+}
+a:link, a:visited {
+    text-decoration:none; 
+}
+a:hover {
+    text-decoration:underline;
+}
+
+/* OXYGEN */
+
+a.img:hover, a.img:active {
+	background: transparent;
+	}
+
+#colophon, #xml-link, .note {
+	color: #666;
+	}
+
+#colophon a:link, #colophon a:visited, #colophon a:hover,
+#xml-link a:link, #xml-link a:visited, #xml-link a:hover,
+.note a:link, .note a:visited, .note a:hover {
+	color: #969;
+	background: transparent;
+	}
+
+#colophon a:hover, #xml-link a:hover, .note a:hover {
+	background: #CFC;
+	color: #969;
+	}
+
+.popup {
+	background: white;
+	border: 1px solid #606;
+	}
+
+.post {
+	border-top: 2px solid #606;
+	}
+	
+.example {
+  border-top: 2px solid #606;
+  border-bottom: 2px solid #606;
+  }
+  
+.sidebar {
+  border-top: 2px solid #090;
+  border-bottom: 2px solid #090;
+  }
+  
+.rng {
+  border-left: 2px solid #666;
+  }
+
+.same {
+  background-color: rgb(206, 239, 174);
+}
+
+.diff {
+  background-color: #FCC;
+}
+
+.whitespace {
+	font-style: italic;
+	color: #999;
+	background: white;
+}
+
+.ignored {
+  font-style: italic;
+  color: #999;
+  background: white;
+}
+
+.hit {
+}
+
+.missed {
+  background-color: #A33;
+  color: white;
+}
+
+/* text */
+ol ol li {
+	list-style: lower-alpha;
+	}
+
+th {
+	text-align: left;
+	}
+
+td {
+	vertical-align: top;
+	}
+
+h1 {
+	text-transform: uppercase;
+	}
+
+h2, h3 {
+	/*text-transform: capitalize;*/
+	}
+
+.question {
+	text-indent: -33px;
+	}
+
+.byline {
+	text-align: right;
+	}
+
+#link-top, #link-up {
+	text-align: right;
+	}
+
+a {
+	text-decoration: none;
+	}
+
+table { width: 85%;
+        /* border: collapse; */ }
+
+th { text-align: left; }
+
+.xspec tbody th { font-weight: normal; /*font-size: 0.8em;*/ border-top: 1px #666 solid; }
+.xspec tbody td { /*font-size: 0.8em;*/ color: #666; }
+
+.successful.label th, .successful.label td { background-color: #CFC; }
+.pending.label th, .pending.label td { background-color: #DDD; color: #666; }
+.failed.label th, .failed.label td { background-color: #FCC; }
+.error.label th, .error.label td { background-color: #FAA; }
+/*body &gt; table tbody .failed.label th:first-child:before {content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpCQjU0NjU4QjIyQTNFMTExQkI5Rjk5QkQ4RkQ5RUJFQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpEQTUyOTdBQUEzRDUxMUUxQTQwN0YzMUI0Nzg3NDU1RSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpEQTUyOTdBOUEzRDUxMUUxQTQwN0YzMUI0Nzg3NDU1RSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjQ4MTZDRTNCRDVBM0UxMTFBQTI2QTBCMjZENzg1Qzg5IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkJCNTQ2NThCMjJBM0UxMTFCQjlGOTlCRDhGRDlFQkVCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+aHNJrgAAAZ1JREFUeNpsUssrRGEU/907985YMDPNYlh4hbKZPMdgR3aysrGSSFIeKyUKpewoRTYkmcgCf4MsMI2FPDYGKeUZSoru4/uc82VC+W7fOeee+zvn/M45V1uuyCmVwDogq0hDklD6jy1dspNkdxokVrIzPFUh0/MD5OdXoJDwPFtu3d2ns6TTp9oggTlFZlmN0o4AHMmXfJGo0lmGzoE1OgmNHf5YA8rmN5HfM6wADmUuHphA9cIW/JX1yiek9DIlyijxkNjBzXYche19gNcHzfShoLUdVxtLuD/cYzCoMAzCwqYrhMDx9Chs20JRWzf4nMcXcDI3pYAqQHIAtWUJbpKursMMhpA+RiAEGzpc4X5XkDB4GjaHmiZik/PIa2rBEWVlSuW9Q+T3YndskBi46QpQFcLltchtbEZyZhxna4uKhmV9Ito/gtPNOG4P99WItdlIWARNXWOAv6AEr9cplel7/ggUleDlMqUSvNnCobHKxDsNnqs8XaWUZopp/XhxTkOR+HDVOveYUge9rNLyY9SU9v+vwXuUB2R0fQkwABfn/VKSjTLBAAAAAElFTkSuQmCC) " "}*/
+/*body &gt; table tbody .error.label th:first-child:before {content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QcKER4AdkxvvQAAAdVJREFUKM89kM9KG0EAh7/JTHazZInEQwJ68KIWLx6Etj6EjxAobYSsD+BjCJ682EOp0FMueYmS0FMICF4i6tFNzJ/dyRh2Znoo6Xf+Pn7wEzc3Nx/W6/UvY8xJnudkWYa1Fu893nviOCaKIhuG4R/v/Ve1Xq9/bG1tnezs7JDnOVpr3t/fcc4hpaRSqVCpVORqtTp9e3v7rrTWn5vNJpPJhHK5zHg8JssyvPeEYcjR0RFpmlKr1ZjP5x9Li8VCbOR2u83BwQEvLy88PT1xfHzMxcUFQgjSNCXLskDlec5sNuPx8REpJZ1Oh+fnZ4QQnJ+fc319Tb/fZ29vD601SmvNdDplsVhwe3vLaDTi6uoKgCRJGAwGNBoNXl9fMcZQcs5hjGG1WpHnObVajQ3VahWtNcYYjDE451Cb+7z3JElCkiScnZ0hpaTX67G7u0u328V7/y+oVqsIITg8PKTT6dBqtRgOhzjnaLVa3N3dcX9/z3K5JI5jxOXlpSuKQqRpirWWh4eH//Plcpn9/X2cc2xvb1MqlQqllBpYa0/jOGYymdBsNsmyDOccURRRFAX1eh2lFGEY/lZBEHyx1v703n8KgkBEUYSUEu/9RkIIUQRB0A/D8NtflUT+nn4OS+0AAAAASUVORK5CYII=) " "}*/
+.failed.label th:first-child:before, .failed.label td:first-child:before {content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpCQjU0NjU4QjIyQTNFMTExQkI5Rjk5QkQ4RkQ5RUJFQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpEQTUyOTdBQUEzRDUxMUUxQTQwN0YzMUI0Nzg3NDU1RSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpEQTUyOTdBOUEzRDUxMUUxQTQwN0YzMUI0Nzg3NDU1RSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjQ4MTZDRTNCRDVBM0UxMTFBQTI2QTBCMjZENzg1Qzg5IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkJCNTQ2NThCMjJBM0UxMTFCQjlGOTlCRDhGRDlFQkVCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+aHNJrgAAAZ1JREFUeNpsUssrRGEU/907985YMDPNYlh4hbKZPMdgR3aysrGSSFIeKyUKpewoRTYkmcgCf4MsMI2FPDYGKeUZSoru4/uc82VC+W7fOeee+zvn/M45V1uuyCmVwDogq0hDklD6jy1dspNkdxokVrIzPFUh0/MD5OdXoJDwPFtu3d2ns6TTp9oggTlFZlmN0o4AHMmXfJGo0lmGzoE1OgmNHf5YA8rmN5HfM6wADmUuHphA9cIW/JX1yiek9DIlyijxkNjBzXYche19gNcHzfShoLUdVxtLuD/cYzCoMAzCwqYrhMDx9Chs20JRWzf4nMcXcDI3pYAqQHIAtWUJbpKursMMhpA+RiAEGzpc4X5XkDB4GjaHmiZik/PIa2rBEWVlSuW9Q+T3YndskBi46QpQFcLltchtbEZyZhxna4uKhmV9Ito/gtPNOG4P99WItdlIWARNXWOAv6AEr9cplel7/ggUleDlMqUSvNnCobHKxDsNnqs8XaWUZopp/XhxTkOR+HDVOveYUge9rNLyY9SU9v+vwXuUB2R0fQkwABfn/VKSjTLBAAAAAElFTkSuQmCC) " "}
+.error.label th:first-child:before, .error.label td:first-child:before {content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QcKER4AdkxvvQAAAdVJREFUKM89kM9KG0EAh7/JTHazZInEQwJ68KIWLx6Etj6EjxAobYSsD+BjCJ682EOp0FMueYmS0FMICF4i6tFNzJ/dyRh2Znoo6Xf+Pn7wEzc3Nx/W6/UvY8xJnudkWYa1Fu893nviOCaKIhuG4R/v/Ve1Xq9/bG1tnezs7JDnOVpr3t/fcc4hpaRSqVCpVORqtTp9e3v7rrTWn5vNJpPJhHK5zHg8JssyvPeEYcjR0RFpmlKr1ZjP5x9Li8VCbOR2u83BwQEvLy88PT1xfHzMxcUFQgjSNCXLskDlec5sNuPx8REpJZ1Oh+fnZ4QQnJ+fc319Tb/fZ29vD601SmvNdDplsVhwe3vLaDTi6uoKgCRJGAwGNBoNXl9fMcZQcs5hjGG1WpHnObVajQ3VahWtNcYYjDE451Cb+7z3JElCkiScnZ0hpaTX67G7u0u328V7/y+oVqsIITg8PKTT6dBqtRgOhzjnaLVa3N3dcX9/z3K5JI5jxOXlpSuKQqRpirWWh4eH//Plcpn9/X2cc2xvb1MqlQqllBpYa0/jOGYymdBsNsmyDOccURRRFAX1eh2lFGEY/lZBEHyx1v703n8KgkBEUYSUEu/9RkIIUQRB0A/D8NtflUT+nn4OS+0AAAAASUVORK5CYII=) " "}
+.pending.label th:first-child:before, .pending.label td:first-child:before {content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpCQjU0NjU4QjIyQTNFMTExQkI5Rjk5QkQ4RkQ5RUJFQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpDODdDM0Y0QUEzRDUxMUUxQjk5N0MzQjVFRDMyQUE1MiIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpDODdDM0Y0OUEzRDUxMUUxQjk5N0MzQjVFRDMyQUE1MiIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjQ4MTZDRTNCRDVBM0UxMTFBQTI2QTBCMjZENzg1Qzg5IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkJCNTQ2NThCMjJBM0UxMTFCQjlGOTlCRDhGRDlFQkVCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+yj6RYgAAAPZJREFUeNp0kM8KgkAQxmc1E0Wfo3vQn5eRSDx4EUHwbTpEhx4lil7DiydBQUFXp5nAMNsGhpnd/X77za4Iw3CFiFcAWFMFDkXtKZ/UHhfUnB3HWdu2/REpAL2u631ZlicGdpZlwTAMSmBM0zS5bhgQLB5FU3AOUS4XvNn3vVKgAACCIMA0TbFpGsyyDJMkefdFUWAcx1hVFeZ5jlEUoed5qPEI7KDrOhiG8e6llNC27Zcz77FW+L6Pruv+WKtGIzfgR39umv/UHOJgAMlO/BPOXCQDD5p3r2ma8lvHNU9BcWPg0HXdhRZbOhRT8aSXVO9U/ZcAAwAsmjsSQcM0lwAAAABJRU5ErkJggg==) " ";}
+.successful.label th:first-child:before, .successful.label td:first-child:before {content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpCQjU0NjU4QjIyQTNFMTExQkI5Rjk5QkQ4RkQ5RUJFQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpEMDVBNThBQUEzRDUxMUUxQjdCQkM2QUNBMTNBMDExNiIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpEMDVBNThBOUEzRDUxMUUxQjdCQkM2QUNBMTNBMDExNiIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjQ4MTZDRTNCRDVBM0UxMTFBQTI2QTBCMjZENzg1Qzg5IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkJCNTQ2NThCMjJBM0UxMTFCQjlGOTlCRDhGRDlFQkVCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+xJ3YrgAAAYBJREFUeNpsUrtKA1EQPZtdY4gEQiD4QCsLEVGX4CP4AykEq1hYiGghCDZ+gBZWVtrZ+EAjaGOhfoAkNiaKhYWICilMEQNqoYjZ5O4d5+6ucQuLM3funDNzD7OrLe229YBwSKAEnyAP/pyIbL5fcz5rcNiLtuqJSEz3ickn5ruE/vFmJ9/LYjvAldGWqA7bJkgPtoAHQrS5G6NdiwhFWCoxHOCgKUL+iurkCBVawyamE8d4qmSZ51clBZUlh+RG14JzEsJNcaTNLVwWd1B6vXXqkmGoYNeVUPnW3JNr4+YarPoncvebEAKNekAlokaY6N/A1NA+SBgY6Eijtz2Fs5sVWNWawysorWNJsO+q9QWzaxLTYwfojA3isZzDfSnrWvTsNiyp7pOrZURC7ejrTDEpcVpY9ab+NSioLZEiapZA5nwBxZcC8g9HeK7ccYM7TDnwmoU2vx6/NIJaUjc0b0u8YvJNle5HdJvlhbI0Y31ThqsjTGr0/+8hOOQ5nfsRYACtHiy+FDd82wAAAABJRU5ErkJggg==) " "}
+/*.successful.label a:before {content:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpCQjU0NjU4QjIyQTNFMTExQkI5Rjk5QkQ4RkQ5RUJFQiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpEMDVBNThBQUEzRDUxMUUxQjdCQkM2QUNBMTNBMDExNiIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpEMDVBNThBOUEzRDUxMUUxQjdCQkM2QUNBMTNBMDExNiIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjQ4MTZDRTNCRDVBM0UxMTFBQTI2QTBCMjZENzg1Qzg5IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkJCNTQ2NThCMjJBM0UxMTFCQjlGOTlCRDhGRDlFQkVCIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+xJ3YrgAAAYBJREFUeNpsUrtKA1EQPZtdY4gEQiD4QCsLEVGX4CP4AykEq1hYiGghCDZ+gBZWVtrZ+EAjaGOhfoAkNiaKhYWICilMEQNqoYjZ5O4d5+6ucQuLM3funDNzD7OrLe229YBwSKAEnyAP/pyIbL5fcz5rcNiLtuqJSEz3ickn5ruE/vFmJ9/LYjvAldGWqA7bJkgPtoAHQrS5G6NdiwhFWCoxHOCgKUL+iurkCBVawyamE8d4qmSZ51clBZUlh+RG14JzEsJNcaTNLVwWd1B6vXXqkmGoYNeVUPnW3JNr4+YarPoncvebEAKNekAlokaY6N/A1NA+SBgY6Eijtz2Fs5sVWNWawysorWNJsO+q9QWzaxLTYwfojA3isZzDfSnrWvTsNiyp7pOrZURC7ejrTDEpcVpY9ab+NSioLZEiapZA5nwBxZcC8g9HeK7ccYM7TDnwmoU2vx6/NIJaUjc0b0u8YvJNle5HdJvlhbI0Y31ThqsjTGr0/+8hOOQ5nfsRYACtHiy+FDd82wAAAABJRU5ErkJggg==) " "}*/
+
+.xspecResult { width: 90%; table-layout: fixed; }
+
+.xspecResult td,
+.xspecResult th { width: 50%; }
+
+/*.xspecResult pre { 
+  margin-left: 0; 
+  padding: 0.5em; 
+  overflow: auto; 
+  border: 1px #999 dotted;
+}*/
+
+span.scenario-totals {float: right; width: 14.5%; text-align: left}
+
+/* OXYGEN */
+span.scenario-totals {float: right; width: 34.5%; text-align: right}
+
+h2.failed {
+    background-color: #FCC;
+}
+
+h1, h2 {
+    width: 86%;
+    /*margin-left: 3%;*/
+    
+    font-size:1.4em;
+    font-weight:bold;
+    text-align:left;
+    margin-top:1.4em;
+    margin-bottom:0.7em;
+    color:#333333;
+    background-color:inherit;
+}
+
+h1 {
+    font-size:1.7em;
+}
+
+body &gt; h1:first-child:before {
+    content:"XSLT UNIT ";
+}
+
+body &gt; h2:first-of-type {
+    font-size:1.7em;
+}
+
+div &gt; table &gt; tbody &gt; tr &gt; th:first-child {
+    font-weight:bold;
+}
+
+div &gt; h3 {
+    font-weight:bold;
+    /*margin-left: 3%;*/
+}
+
+div &gt; h4 {
+    font-weight:normal;
+    /*margin-left: 4%;*/
+}
+
+th.result { text-align: center; }
+/* OXYGEN */
+
+
+/* ------------------------------------------------------------------------ */
+/*  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS COMMENT.               */
+/*                                                                          */
+/*  Copyright (c) 2008, 2010 Jeni Tennsion                                  */
+/*                                                                          */
+/*  The contents of this file are subject to the MIT License (see the URI   */
+/*  http://www.opensource.org/licenses/mit-license.php for details).        */
+/*                                                                          */
+/*  Permission is hereby granted, free of charge, to any person obtaining   */
+/*  a copy of this software and associated documentation files (the         */
+/*  "Software"), to deal in the Software without restriction, including     */
+/*  without limitation the rights to use, copy, modify, merge, publish,     */
+/*  distribute, sublicense, and/or sell copies of the Software, and to      */
+/*  permit persons to whom the Software is furnished to do so, subject to   */
+/*  the following conditions:                                               */
+/*                                                                          */
+/*  The above copyright notice and this permission notice shall be          */
+/*  included in all copies or substantial portions of the Software.         */
+/*                                                                          */
+/*  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,         */
+/*  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF      */
+/*  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  */
+/*  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY    */
+/*  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,    */
+/*  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE       */
+/*  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                  */
+/* ------------------------------------------------------------------------ */
+
+.nobr { white-space: nowrap; }
+.scenario-label { text-indent: 0px; }
+.context-label { text-indent: 10px; }
+.test-label { text-indent: 20px; }
+.pending-label { text-indent: 30px; }
+
+
+        /**/</style>
+      <style>
+                        .pp-tag-name{
+                            color:blue;
+                        }
+                        .pp-attr-name{
+                            color:#8A8A00;
+                        }
+                        .pp-attr-value{
+                            color:#FF4F4F;
+                        }
+                        .pp-document-element{
+                            background-color:#F5F5F5;
+                        }
+                        .diff{
+                            background-color:pink;
+                        }</style>
+   </head>
+   <body>
+      <h1>Test Report</h1>
+      <p>Script: <a href="file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec">file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec</a>
+      </p>
+      <p>Tested: 2014-11-03T12:05:26.442+01:00</p>
+      <h2>Contents</h2>
+      <table>
+         <col width="75%"/>
+         <col width="5%"/>
+         <col width="5%"/>
+         <col width="5%"/>
+         <col width="5%"/>
+         <col width="5%"/>
+         <thead>
+            <tr>
+               <th/>
+               <th class="result">passed:0</th>
+               <th class="result">pending:0</th>
+               <th class="result">failed:0</th>
+               <th class="result">errors:1</th>
+               <th class="result">total:1</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr class="error label">
+               <th>
+                  <a href="#errors">Errors</a>
+               </th>
+               <th class="result">0</th>
+               <th class="result">0</th>
+               <th class="result">0</th>
+               <th class="result">1</th>
+               <th class="result">1</th>
+            </tr>
+         </tbody>
+      </table>
+      <div id="errors">
+         <h2 class="error">Errors<span class="scenario-totals">passed:0 / pending:0 / failed:0 / errors:1 / total:1</span>
+         </h2>
+         <div style="border:2px solid;border-radius:5px;">
+            <dl>
+               <dt>code</dt>
+               <dd>XPS03</dd>
+               <dt>href</dt>
+               <dd>file:/home/jostein/xprocspec/src/main/resources/content/xml/xproc/evaluate/evaluate.xpl</dd>
+               <dt>line</dt>
+               <dd>57</dd>
+               <dt>column</dt>
+               <dd>30</dd>
+            </dl>
+            <pre>
+               <code>* port not found: validation-status
+    </code>
+            </pre>
+         </div>
+         <div style="border:2px solid;border-radius:5px;">
+            <dl>
+               <dt>type</dt>
+               <dd>was</dd>
+            </dl>
+            <pre>
+               <code>
+        </code>
+            </pre>
+            <div class="pp-xml">
+               <div class="pp-element pp-document-element">
+                  <div class="pp-element pp-document-element">
+                     <pre>
+                        <code>
+            </code>
+                     </pre>
+                  </div>
+                  <br/>
+                  <div class="pp-element pp-document-element">
+                     <br/>
+                     <span class="pp-tag-open">&lt;</span>
+                     <span>
+                        <span class="pp-tag-name">x:description</span> 
+                        <span class="pp-attr-name">xmlns</span>
+                        <span>=</span>
+                        <span class="pp-attr-value">"http://www.daisy.org/ns/xprocspec"</span>
+                     </span> 
+                     <span>
+                        <span class="pp-attr-name">test-base-uri=</span>
+                        <span class="pp-attr-value">"file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec"</span>
+                     </span> 
+                     <span>
+                        <span class="pp-attr-name">script=</span>
+                        <span class="pp-attr-value">"file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/dtbook-to-epub3.xpl"</span>
+                     </span> 
+                     <span>
+                        <span class="pp-attr-name">test-grammar=</span>
+                        <span class="pp-attr-value">"xprocspec"</span>
+                     </span> 
+                     <span>
+                        <span class="pp-attr-name">temp-dir=</span>
+                        <span class="pp-attr-value">"file:/tmp/xprocspec-20141103120508522/"</span>
+                     </span>
+                     <span class="pp-tag-close">&gt;</span>
+                     <span class="pp-element">
+                        <br/>    <span class="pp-tag-open">&lt;</span>
+                        <span>
+                           <span class="pp-tag-name">x:step-declaration</span>
+                        </span>
+                        <span class="pp-tag-close">&gt;</span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">p:declare-step</span> 
+                              <span class="pp-attr-name">xmlns</span>
+                              <span class="pp-attr-name-prefix">:p</span>
+                              <span>=</span>
+                              <span class="pp-attr-value">"http://www.w3.org/ns/xproc"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"px:nordic-dtbook-to-epub3"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">name=</span>
+                              <span class="pp-attr-value">"main"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">version=</span>
+                              <span class="pp-attr-value">"1.0"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">x:type=</span>
+                              <span class="pp-attr-value">"{http://www.daisy.org/ns/pipeline/xproc}nordic-dtbook-to-epub3"</span>
+                           </span>
+                           <span class="pp-tag-close">&gt;</span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">p:output</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:media-type=</span>
+                                 <span class="pp-attr-value">"application/vnd.pipeline.report+xml"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">port=</span>
+                                 <span class="pp-attr-value">"html-report"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">kind=</span>
+                                 <span class="pp-attr-value">"document"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">sequence=</span>
+                                 <span class="pp-attr-value">"false"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">primary=</span>
+                                 <span class="pp-attr-value">"false"</span>
+                              </span>
+                              <span class="pp-tag-close">&gt;</span>
+                              <span class="pp-element">
+                                 <br/>                <span class="pp-tag-open">&lt;</span>
+                                 <span>
+                                    <span class="pp-tag-name">p:documentation</span>
+                                 </span>
+                                 <span class="pp-tag-close">&gt;</span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">h1</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"name"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>HTML Report
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">h1</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">p</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"desc"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>An HTML-formatted version of the validation report.
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">p</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                 <br/>                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">documentation</span>
+                                 <span class="pp-tag-close">&gt;</span>
+                              </span>
+                              <span class="pp-element">
+                                 <br/>                <span class="pp-tag-open">&lt;</span>
+                                 <span>
+                                    <span class="pp-tag-name">p:pipe</span>
+                                 </span> 
+                                 <span>
+                                    <span class="pp-attr-name">port=</span>
+                                    <span class="pp-attr-value">"result"</span>
+                                 </span> 
+                                 <span>
+                                    <span class="pp-attr-name">step=</span>
+                                    <span class="pp-attr-value">"html"</span>
+                                 </span>
+                                 <span class="pp-tag-close">/&gt;</span>
+                              </span>
+                              <br/>            <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">output</span>
+                              <span class="pp-tag-close">&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">p:output</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:media-type=</span>
+                                 <span class="pp-attr-value">"application/vnd.pipeline.status+xml"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">port=</span>
+                                 <span class="pp-attr-value">"validation-status"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">kind=</span>
+                                 <span class="pp-attr-value">"document"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">sequence=</span>
+                                 <span class="pp-attr-value">"false"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">primary=</span>
+                                 <span class="pp-attr-value">"false"</span>
+                              </span>
+                              <span class="pp-tag-close">&gt;</span>
+                              <span class="pp-element">
+                                 <br/>                <span class="pp-tag-open">&lt;</span>
+                                 <span>
+                                    <span class="pp-tag-name">p:documentation</span>
+                                 </span>
+                                 <span class="pp-tag-close">&gt;</span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">h1</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"name"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Validation status
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">h1</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">p</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"desc"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">p</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                 <br/>                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">documentation</span>
+                                 <span class="pp-tag-close">&gt;</span>
+                              </span>
+                              <span class="pp-element">
+                                 <br/>                <span class="pp-tag-open">&lt;</span>
+                                 <span>
+                                    <span class="pp-tag-name">p:pipe</span>
+                                 </span> 
+                                 <span>
+                                    <span class="pp-attr-name">port=</span>
+                                    <span class="pp-attr-value">"result"</span>
+                                 </span> 
+                                 <span>
+                                    <span class="pp-attr-name">step=</span>
+                                    <span class="pp-attr-value">"status"</span>
+                                 </span>
+                                 <span class="pp-tag-close">/&gt;</span>
+                              </span>
+                              <br/>            <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">output</span>
+                              <span class="pp-tag-close">&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">p:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"dtbook"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">required=</span>
+                                 <span class="pp-attr-value">"true"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:type=</span>
+                                 <span class="pp-attr-value">"anyFileURI"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:media-type=</span>
+                                 <span class="pp-attr-value">"application/x-dtbook+xml"</span>
+                              </span>
+                              <span class="pp-tag-close">&gt;</span>
+                              <span class="pp-element">
+                                 <br/>                <span class="pp-tag-open">&lt;</span>
+                                 <span>
+                                    <span class="pp-tag-name">p:documentation</span>
+                                 </span>
+                                 <span class="pp-tag-close">&gt;</span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">h2</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"name"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>DTBook
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">h2</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">p</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"desc"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Input DTBook to be converted.
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">p</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                 <br/>                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">documentation</span>
+                                 <span class="pp-tag-close">&gt;</span>
+                              </span>
+                              <br/>            <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">option</span>
+                              <span class="pp-tag-close">&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">p:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"temp-dir"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">required=</span>
+                                 <span class="pp-attr-value">"true"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:output=</span>
+                                 <span class="pp-attr-value">"temp"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:type=</span>
+                                 <span class="pp-attr-value">"anyDirURI"</span>
+                              </span>
+                              <span class="pp-tag-close">&gt;</span>
+                              <span class="pp-element">
+                                 <br/>                <span class="pp-tag-open">&lt;</span>
+                                 <span>
+                                    <span class="pp-tag-name">p:documentation</span>
+                                 </span>
+                                 <span class="pp-tag-close">&gt;</span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">h2</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"name"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Temporary directory
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">h2</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">p</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"desc"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Temporary directory for use by the script.
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">p</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                 <br/>                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">documentation</span>
+                                 <span class="pp-tag-close">&gt;</span>
+                              </span>
+                              <br/>            <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">option</span>
+                              <span class="pp-tag-close">&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">p:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"output-dir"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">required=</span>
+                                 <span class="pp-attr-value">"true"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:output=</span>
+                                 <span class="pp-attr-value">"result"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:type=</span>
+                                 <span class="pp-attr-value">"anyDirURI"</span>
+                              </span>
+                              <span class="pp-tag-close">&gt;</span>
+                              <span class="pp-element">
+                                 <br/>                <span class="pp-tag-open">&lt;</span>
+                                 <span>
+                                    <span class="pp-tag-name">p:documentation</span>
+                                 </span>
+                                 <span class="pp-tag-close">&gt;</span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">h2</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"name"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Output directory
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">h2</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">p</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"desc"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Output directory for the EPUB publication.
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">p</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                 <br/>                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">documentation</span>
+                                 <span class="pp-tag-close">&gt;</span>
+                              </span>
+                              <br/>            <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">option</span>
+                              <span class="pp-tag-close">&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">p:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"discard-intermediary-html"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">required=</span>
+                                 <span class="pp-attr-value">"false"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">select=</span>
+                                 <span class="pp-attr-value">"'true'"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:type=</span>
+                                 <span class="pp-attr-value">"boolean"</span>
+                              </span>
+                              <span class="pp-tag-close">&gt;</span>
+                              <span class="pp-element">
+                                 <br/>                <span class="pp-tag-open">&lt;</span>
+                                 <span>
+                                    <span class="pp-tag-name">p:documentation</span>
+                                 </span>
+                                 <span class="pp-tag-close">&gt;</span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">h2</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"name"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Discard intermediary HTML
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">h2</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">p</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"desc"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Whether or not to include the intermediary HTML in the output (does not include external resources such as images). Set to false to include the HTML.
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">p</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                 <br/>                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">documentation</span>
+                                 <span class="pp-tag-close">&gt;</span>
+                              </span>
+                              <br/>            <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">option</span>
+                              <span class="pp-tag-close">&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">p:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"assert-valid"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">required=</span>
+                                 <span class="pp-attr-value">"false"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">select=</span>
+                                 <span class="pp-attr-value">"'true'"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:type=</span>
+                                 <span class="pp-attr-value">"boolean"</span>
+                              </span>
+                              <span class="pp-tag-close">&gt;</span>
+                              <span class="pp-element">
+                                 <br/>                <span class="pp-tag-open">&lt;</span>
+                                 <span>
+                                    <span class="pp-tag-name">p:documentation</span>
+                                 </span>
+                                 <span class="pp-tag-close">&gt;</span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">h2</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"name"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Stop processing on validation error
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">h2</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">p</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"desc"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Whether or not to stop the conversion when a validation error occurs. Setting this to false may be useful for debugging or if the validation error is a minor one. The output is not guaranteed to be valid if this option is set to false.
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">p</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                 <br/>                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">documentation</span>
+                                 <span class="pp-tag-close">&gt;</span>
+                              </span>
+                              <br/>            <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">option</span>
+                              <span class="pp-tag-close">&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">p:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"no-legacy"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">required=</span>
+                                 <span class="pp-attr-value">"false"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:type=</span>
+                                 <span class="pp-attr-value">"boolean"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">select=</span>
+                                 <span class="pp-attr-value">"'true'"</span>
+                              </span>
+                              <span class="pp-tag-close">&gt;</span>
+                              <span class="pp-element">
+                                 <br/>                <span class="pp-tag-open">&lt;</span>
+                                 <span>
+                                    <span class="pp-tag-name">p:documentation</span>
+                                 </span>
+                                 <span class="pp-tag-close">&gt;</span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">h2</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"name"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Disallow legacy markup
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">h2</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">p</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"desc"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>If set to false, will upgrade DTBook versions earlier than 2005-3 to 2005-3, and fix some non-standard practices that appear in older DTBooks.
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">p</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                 <br/>                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">documentation</span>
+                                 <span class="pp-tag-close">&gt;</span>
+                              </span>
+                              <br/>            <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">option</span>
+                              <span class="pp-tag-close">&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">p:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"strict"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">select=</span>
+                                 <span class="pp-attr-value">"'true'"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">px:type=</span>
+                                 <span class="pp-attr-value">"boolean"</span>
+                              </span>
+                              <span class="pp-tag-close">&gt;</span>
+                              <span class="pp-element">
+                                 <br/>                <span class="pp-tag-open">&lt;</span>
+                                 <span>
+                                    <span class="pp-tag-name">p:documentation</span>
+                                 </span>
+                                 <span class="pp-tag-close">&gt;</span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">h2</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"name"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Extra strict markup
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">h2</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                <span class="pp-element">
+                                    <br/>                    <span class="pp-tag-open">&lt;</span>
+                                    <span>
+                                       <span class="pp-tag-name">p</span> 
+                                       <span class="pp-attr-name">xmlns</span>
+                                       <span class="pp-attr-name-prefix"/>
+                                       <span>=</span>
+                                       <span class="pp-attr-value">"http://www.w3.org/1999/xhtml"</span>
+                                    </span> 
+                                    <span>
+                                       <span class="pp-attr-name">px:role=</span>
+                                       <span class="pp-attr-value">"desc"</span>
+                                    </span>
+                                    <span class="pp-tag-close">&gt;</span>Some validation rules are considered extra strict and can be disabled using this option. Examples of extra strict rules are pagebreaks being required in all documents and only a predefined list of languages, suppliers and publishers being allowed.
+                                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">p</span>
+                                    <span class="pp-tag-close">&gt;</span>
+                                 </span>
+                                 <br/>                <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">documentation</span>
+                                 <span class="pp-tag-close">&gt;</span>
+                              </span>
+                              <br/>            <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">option</span>
+                              <span class="pp-tag-close">&gt;</span>
+                           </span>
+                           <br/>        <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">declare-step</span>
+                           <span class="pp-tag-close">&gt;</span>
+                        </span>
+                        <br/>    <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">step-declaration</span>
+                        <span class="pp-tag-close">&gt;</span>
+                     </span>
+                     <span class="pp-element">
+                        <br/>    <span class="pp-tag-open">&lt;</span>
+                        <span>
+                           <span class="pp-tag-name">x:scenario</span>
+                        </span> 
+                        <span>
+                           <span class="pp-attr-name">end-time=</span>
+                           <span class="pp-attr-value">"2014-11-03T11:05:26.216Z"</span>
+                        </span> 
+                        <span>
+                           <span class="pp-attr-name">label=</span>
+                           <span class="pp-attr-value">"px:nordic-dtbook-to-epub3"</span>
+                        </span> 
+                        <span>
+                           <span class="pp-attr-name">start-time=</span>
+                           <span class="pp-attr-value">"2014-11-03T11:05:17.167Z"</span>
+                        </span>
+                        <span class="pp-tag-close">&gt;</span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:call</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">x:type=</span>
+                              <span class="pp-attr-value">"{http://www.daisy.org/ns/pipeline/xproc}nordic-dtbook-to-epub3"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">step=</span>
+                              <span class="pp-attr-value">"px:nordic-dtbook-to-epub3"</span>
+                           </span>
+                           <span class="pp-tag-close">&gt;</span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">x:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">select=</span>
+                                 <span class="pp-attr-value">"resolve-uri('DTBook/C00000.xml',base-uri())"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"dtbook"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">value=</span>
+                                 <span class="pp-attr-value">"file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/DTBook/C00000.xml"</span>
+                              </span>
+                              <span class="pp-tag-close">/&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">x:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">select=</span>
+                                 <span class="pp-attr-value">"concat($temp-dir,'output-dir/')"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"output-dir"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">value=</span>
+                                 <span class="pp-attr-value">"file:/tmp/xprocspec-20141103120508522/output-dir/"</span>
+                              </span>
+                              <span class="pp-tag-close">/&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">x:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">select=</span>
+                                 <span class="pp-attr-value">"concat($temp-dir,'temp-dir/')"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"temp-dir"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">value=</span>
+                                 <span class="pp-attr-value">"file:/tmp/xprocspec-20141103120508522/temp-dir/"</span>
+                              </span>
+                              <span class="pp-tag-close">/&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">x:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">select=</span>
+                                 <span class="pp-attr-value">"'false'"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"discard-intermediary-html"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">value=</span>
+                                 <span class="pp-attr-value">"false"</span>
+                              </span>
+                              <span class="pp-tag-close">/&gt;</span>
+                           </span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">x:option</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">select=</span>
+                                 <span class="pp-attr-value">"'false'"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">name=</span>
+                                 <span class="pp-attr-value">"no-legacy"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">value=</span>
+                                 <span class="pp-attr-value">"false"</span>
+                              </span>
+                              <span class="pp-tag-close">/&gt;</span>
+                           </span>
+                           <br/>        <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">call</span>
+                           <span class="pp-tag-close">&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:context</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"errors"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">id=</span>
+                              <span class="pp-attr-value">"errors"</span>
+                           </span>
+                           <span class="pp-tag-close">&gt;</span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">x:document</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">type=</span>
+                                 <span class="pp-attr-value">"errors"</span>
+                              </span>
+                              <span class="pp-tag-close">/&gt;</span>
+                           </span>
+                           <br/>        <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">context</span>
+                           <span class="pp-tag-close">&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"count"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"the step should execute successfully without throwing any errors"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">max=</span>
+                              <span class="pp-attr-value">"0"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"errors"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:context</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"validation status"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">id=</span>
+                              <span class="pp-attr-value">"context0"</span>
+                           </span>
+                           <span class="pp-tag-close">&gt;</span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">x:document</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">type=</span>
+                                 <span class="pp-attr-value">"port"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">port=</span>
+                                 <span class="pp-attr-value">"validation-status"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">xml:space=</span>
+                                 <span class="pp-attr-value">"preserve"</span>
+                              </span>
+                              <span class="pp-tag-close">/&gt;</span>
+                           </span>
+                           <br/>        <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">context</span>
+                           <span class="pp-tag-close">&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"count"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"There should be exactly one document on the validation-status port"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">min=</span>
+                              <span class="pp-attr-value">"1"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">max=</span>
+                              <span class="pp-attr-value">"1"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context0"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"xpath"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"There should be no validation errors"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">test=</span>
+                              <span class="pp-attr-value">"/*/@result"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">equals=</span>
+                              <span class="pp-attr-value">"'ok'"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context0"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:context</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"validation report"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">id=</span>
+                              <span class="pp-attr-value">"context1"</span>
+                           </span>
+                           <span class="pp-tag-close">&gt;</span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">x:document</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">type=</span>
+                                 <span class="pp-attr-value">"port"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">port=</span>
+                                 <span class="pp-attr-value">"html-report"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">xml:space=</span>
+                                 <span class="pp-attr-value">"preserve"</span>
+                              </span>
+                              <span class="pp-tag-close">/&gt;</span>
+                           </span>
+                           <br/>        <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">context</span>
+                           <span class="pp-tag-close">&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"count"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"There should be exactly one document on the html-report port"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">min=</span>
+                              <span class="pp-attr-value">"1"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">max=</span>
+                              <span class="pp-attr-value">"1"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context1"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"xpath"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"There should be no validation errors in the HTML report"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">test=</span>
+                              <span class="pp-attr-value">"sum(//*[matches(@class,'(^|\s)document-validation-report(\s|$)')]//html:p[matches(normalize-space(string-join(text(),' ')),'^\d+ issue.*')]/xs:integer(replace(normalize-space(string-join(text(),' ')),'(\d+) .*','$1')))"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">equals=</span>
+                              <span class="pp-attr-value">"0"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context1"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:context</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"result fileset"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">id=</span>
+                              <span class="pp-attr-value">"context2"</span>
+                           </span>
+                           <span class="pp-tag-close">&gt;</span>
+                           <span class="pp-element">
+                              <br/>            <span class="pp-tag-open">&lt;</span>
+                              <span>
+                                 <span class="pp-tag-name">x:document</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">type=</span>
+                                 <span class="pp-attr-value">"directory"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">base-uri=</span>
+                                 <span class="pp-attr-value">"temp-dir"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">href=</span>
+                                 <span class="pp-attr-value">"output-dir/"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">recursive=</span>
+                                 <span class="pp-attr-value">"true"</span>
+                              </span> 
+                              <span>
+                                 <span class="pp-attr-name">xml:space=</span>
+                                 <span class="pp-attr-value">"preserve"</span>
+                              </span>
+                              <span class="pp-tag-close">/&gt;</span>
+                           </span>
+                           <br/>        <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">context</span>
+                           <span class="pp-tag-close">&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"count"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"The output directory should exist"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">min=</span>
+                              <span class="pp-attr-value">"1"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">max=</span>
+                              <span class="pp-attr-value">"1"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context2"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"xpath"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"There should be no directories in the resulting fileset"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">test=</span>
+                              <span class="pp-attr-value">"count(/*//c:directory)"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">equals=</span>
+                              <span class="pp-attr-value">"0"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context2"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"xpath"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"The intermediary HTML should be named C00000.xhtml (in the same directory as the EPUB)"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">test=</span>
+                              <span class="pp-attr-value">"/*/c:file[ends-with(@name,'.xhtml')]/@name"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">equals=</span>
+                              <span class="pp-attr-value">"'C00000.xhtml'"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context2"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"xpath"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"The resulting EPUB should be named C00000.epub"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">test=</span>
+                              <span class="pp-attr-value">"/*/c:file[ends-with(@name,'.epub')]/@name"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">equals=</span>
+                              <span class="pp-attr-value">"'C00000.epub'"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context2"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"xpath"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"There should be exactly two files in the resulting fileset"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">test=</span>
+                              <span class="pp-attr-value">"count(//c:file)"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">equals=</span>
+                              <span class="pp-attr-value">"2"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context2"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"xpath"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">test=</span>
+                              <span class="pp-attr-value">"document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/count(namespace::*)"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">equals=</span>
+                              <span class="pp-attr-value">"4"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"There should be exactly four namespaces declared on the root element (the default namespace, nordic, epub and the implicit xml namespace)"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context2"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"xpath"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">test=</span>
+                              <span class="pp-attr-value">"document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/namespace::*[name()='']"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">equals=</span>
+                              <span class="pp-attr-value">"'http://www.w3.org/1999/xhtml'"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"The HTML namespace should be the default namespace on the root element"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context2"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"xpath"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">test=</span>
+                              <span class="pp-attr-value">"document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/namespace::*[name()='nordic']"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">equals=</span>
+                              <span class="pp-attr-value">"'http://www.mtm.se/epub/'"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"The Nordic EPUB namespace should be declared with prefix nordic on the root element"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context2"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"xpath"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">test=</span>
+                              <span class="pp-attr-value">"document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/namespace::*[name()='epub']"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">equals=</span>
+                              <span class="pp-attr-value">"'http://www.idpf.org/2007/ops'"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"The EPUB namespace should be declared with the prefix epub on the root element"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context2"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">x:expect</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">type=</span>
+                              <span class="pp-attr-value">"xpath"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">test=</span>
+                              <span class="pp-attr-value">"document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*//*/count(namespace::*[not(.=../../namespace::*)])"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">equals=</span>
+                              <span class="pp-attr-value">"0"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">label=</span>
+                              <span class="pp-attr-value">"No namespaces should be declared other than on the root element"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">contextref=</span>
+                              <span class="pp-attr-value">"context2"</span>
+                           </span>
+                           <span class="pp-tag-close">/&gt;</span>
+                        </span>
+                        <br/>    <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">scenario</span>
+                        <span class="pp-tag-close">&gt;</span>
+                     </span>
+                     <span class="pp-element">
+                        <br/>    <span class="pp-tag-open">&lt;</span>
+                        <span>
+                           <span class="pp-tag-name">c:errors</span> 
+                           <span class="pp-attr-name">xmlns</span>
+                           <span class="pp-attr-name-prefix">:c</span>
+                           <span>=</span>
+                           <span class="pp-attr-value">"http://www.w3.org/ns/xproc-step"</span>
+                        </span> 
+                        <span>
+                           <span class="pp-attr-name">test-base-uri=</span>
+                           <span class="pp-attr-value">"file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec"</span>
+                        </span> 
+                        <span>
+                           <span class="pp-attr-name">error-location=</span>
+                           <span class="pp-attr-value">"running the script"</span>
+                        </span>
+                        <span class="pp-tag-close">&gt;</span>
+                        <span class="pp-element">
+                           <br/>        <span class="pp-tag-open">&lt;</span>
+                           <span>
+                              <span class="pp-tag-name">c:error</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">code=</span>
+                              <span class="pp-attr-value">"PEZE01"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">href=</span>
+                              <span class="pp-attr-value">"file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">line=</span>
+                              <span class="pp-attr-value">"9"</span>
+                           </span> 
+                           <span>
+                              <span class="pp-attr-name">column=</span>
+                              <span class="pp-attr-value">"18"</span>
+                           </span>
+                           <span class="pp-tag-close">&gt;</span>Found document in fileset that was declared as being on disk but were neither stored on disk nor in memory: file:/tmp/xprocspec-20141103120508522/temp-dir/html/css/accessibility.css
+                    <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">error</span>
+                           <span class="pp-tag-close">&gt;</span>
+                        </span>
+                        <br/>    <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">errors</span>
+                        <span class="pp-tag-close">&gt;</span>
+                     </span>
+                     <br/>
+                     <span class="pp-tag-open">&lt;</span>/<span class="pp-tag-name">description</span>
+                     <span class="pp-tag-close">&gt;</span>
+                  </div>
+                  <br/>
+                  <div class="pp-element pp-document-element">
+                     <pre>
+                        <code>
+        </code>
+                     </pre>
+                  </div>
+                  <br/>
+               </div>
+               <br/>
+            </div>
+            <pre>
+               <code>
+    </code>
+            </pre>
+         </div>
+      </div>
+      <h2>Execution log</h2>
+      <table>
+         <thead>
+            <tr>
+               <th>Time</th>
+               <th>Severity</th>
+               <th>Message</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr style="">
+               <td>0.000</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>#### file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec ####</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.145</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * temporary directory: file:/tmp/</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.190</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>preprocessing...</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.389</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * checking for imports</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.426</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * checking file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec for imports</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.462</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * extracting step declarations from file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/dtbook-to-epub3.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.502</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * tests reference 1 step</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.529</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>   * step: px:nordic-dtbook-to-epub3</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.557</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * trying to load: file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/dtbook-to-epub3.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.604</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * checking file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/dtbook-to-epub3.xpl for imports</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.661</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/step/dtbook.validate.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.722</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/step/html.validate.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.782</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/step/epub3.validate.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.854</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/step/dtbook-to-html.convert.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.920</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/step/html-to-epub3.convert.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>0.991</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/step/format-html-report.step.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>1.089</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/step/set-doctype.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>1.155</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>1.236</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>1.316</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>1.411</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: http://www.daisy.org/pipeline/modules/common-utils/library.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>1.497</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>1.574</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>1.666</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * importing: http://www.daisy.org/pipeline/modules/validation-utils/library.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>1.784</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>   * success!</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>1.978</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * trying to extract the step declaration for {http://www.daisy.org/ns/pipeline/xproc}nordic-dtbook-to-epub3 from file:/home/jostein/nordic-epub3-dtbook-migrator/src/main/resources/xml/xproc/dtbook-to-epub3.xpl</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.036</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * creating a new x:description document for each x:scenario element with inferred inputs, options and parameters</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.100</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * validating output grammar</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.137</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>compiling...</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.169</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * created directory using Calabash's cxf:mkdir</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.189</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * converting test 'test1' to XProc</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.254</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>   * done</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.286</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * validating output grammar for file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.310</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>   * done!</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.325</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * using as temporary directory: file:/tmp/xprocspec-20141103120508522/</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.340</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>storing...</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.364</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>running...</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>2.392</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>   * loading 'file:/tmp/test1.xpl'</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>19.882</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>evaluating...</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>19.924</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre> * evaluating scenario 'px:nordic-dtbook-to-epub3' (file:/home/jostein/nordic-epub3-dtbook-migrator/src/test/xprocspec/dtbook-to-epub3.xprocspec)</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>19.938</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>   * resolving x:document elements...</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="background-color:#FF6347;">
+               <td>19.978</td>
+               <td style="padding-left:0%;">ERROR</td>
+               <td>
+                  <code>
+                     <pre>XPS03:        * port not found: validation-status</pre>
+                  </code>
+               </td>
+            </tr>
+            <tr style="">
+               <td>19.999</td>
+               <td style="padding-left:0%;">INFO</td>
+               <td>
+                  <code>
+                     <pre>reporting...</pre>
+                  </code>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>
