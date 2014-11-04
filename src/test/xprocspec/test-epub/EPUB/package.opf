@@ -36,7 +36,8 @@
         <item id="item_15" media-type="application/xhtml+xml" href="C00000-6-chapter.xhtml"/>
         <item id="item_16" media-type="application/xhtml+xml" href="C00000-7-conclusion.xhtml"/>
         <item id="item_17" media-type="application/xhtml+xml" href="C00000-8-backmatter.xhtml"/>
-        <item id="item_18" media-type="application/xhtml+xml" href="nav.xhtml" properties="nav"/>
+        <item id="item_18" media-type="application/xhtml+xml" href="C00000-9-rearnotes.xhtml"/>
+        <item id="item_19" media-type="application/xhtml+xml" href="nav.xhtml" properties="nav"/>
     </manifest>
     <spine toc="item_9">
         <itemref id="itemref_1" idref="item_10" linear="no"/>
@@ -47,5 +48,6 @@
         <itemref id="itemref_6" idref="item_15"/>
         <itemref id="itemref_7" idref="item_16"/>
         <itemref id="itemref_8" idref="item_17"/>
+        <itemref id="itemref_9" idref="item_18"/>
     </spine>
 </package>

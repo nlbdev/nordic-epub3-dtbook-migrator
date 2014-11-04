@@ -22,6 +22,7 @@
                         <d:file href="EPUB/C00000-6-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/C00000-7-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/C00000-8-backmatter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-9-rearnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
                         <d:file href="EPUB/images/valentin.jpg" media-type="image/jpeg"/>
                         <d:file href="EPUB/css/accessibility.css" media-type="text/css"/>
@@ -46,6 +47,7 @@
                 <x:document href="test-epub/EPUB/C00000-6-chapter.xhtml" type="file" method="xml"/>
                 <x:document href="test-epub/EPUB/C00000-7-conclusion.xhtml" type="file" method="xml"/>
                 <x:document href="test-epub/EPUB/C00000-8-backmatter.xhtml" type="file" method="xml"/>
+                <x:document href="test-epub/EPUB/C00000-9-rearnotes.xhtml" type="file" method="xml"/>
                 <x:document href="test-epub/EPUB/nav.ncx" type="file" method="xml"/>
             </x:input>
 
@@ -76,6 +78,7 @@
             <x:document href="test-epub/EPUB/C00000-6-chapter.xhtml" type="file" method="xml"/>
             <x:document href="test-epub/EPUB/C00000-7-conclusion.xhtml" type="file" method="xml"/>
             <x:document href="test-epub/EPUB/C00000-8-backmatter.xhtml" type="file" method="xml"/>
+            <x:document href="test-epub/EPUB/C00000-9-rearnotes.xhtml" type="file" method="xml"/>
             <x:document href="test-epub/EPUB/nav.ncx" type="file" method="xml"/>
         </x:expect>
 

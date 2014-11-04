@@ -2805,6 +2805,13 @@
                     </p>
                 </level2>
             </level1>
+            <level1 id="rearnotes_body" class="rearnotes">
+                <pagenum id="page_31" page="normal">31</pagenum>
+                <h1 id="rearnotes_h1">Rearnotes</h1>
+                <list type="pl" depth="1">
+                    <li id="f01001" class="rearnote">1. REARNOTE</li>
+                </list> 
+            </level1> 
         </rearmatter>
     </book>
 </dtbook>
