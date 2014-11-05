@@ -3470,4 +3470,99 @@
         </x:expect>
     </x:scenario>
 
+    <x:scenario label="allow lic to be wrapped in a (issue #129)">
+        <x:context>
+            <dtbook:list type="pl" depth="1">
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:a href="mtm06350-1.xhtml#d130172e14" id="id1">Chapter 1</dtbook:a>
+                    </dtbook:lic>
+                    <dtbook:lic>
+                        <dtbook:a href="mtm06350-1.xhtml#d130172e14" id="id1_1">1</dtbook:a>
+                    </dtbook:lic>
+                </dtbook:li>
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:a href="mtm06350-1.xhtml#d130172e14" id="id2">Chapter 2</dtbook:a>
+                    </dtbook:lic>
+                    <dtbook:lic>
+                        <dtbook:a href="mtm06350-1.xhtml#d130172e14">2</dtbook:a>
+                    </dtbook:lic>
+                    <dtbook:list type="pl" depth="2">
+                        <dtbook:li>
+                            <dtbook:lic>Chapter 2.1</dtbook:lic>
+                            <dtbook:lic>3</dtbook:lic>
+                        </dtbook:li>
+                    </dtbook:list>
+                </dtbook:li>
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:a href="mtm06350-1.xhtml#d130172e14" id="id3">Chapter 3</dtbook:a>
+                    </dtbook:lic>
+                    <dtbook:span>non-lic</dtbook:span>
+                    <dtbook:span>span</dtbook:span>
+                </dtbook:li>
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:a href="mtm06350-1.xhtml#d130172e14" id="id4">Chapter 4</dtbook:a>
+                    </dtbook:lic>
+                    <dtbook:span>non-lic</dtbook:span>
+                    <dtbook:span>span</dtbook:span>
+                    <dtbook:list type="pl" depth="2">
+                        <dtbook:li>
+                            <dtbook:lic>Chapter 4.1</dtbook:lic>
+                            <dtbook:lic>4</dtbook:lic>
+                        </dtbook:li>
+                    </dtbook:list>
+                </dtbook:li>
+            </dtbook:list>
+        </x:context>
+        <x:expect label="the lic elements should be direct children of li and the a should become spans inside the lics">
+            <html:ol class="list-style-type-none" id="...">
+                <html:li id="...">
+                    <html:span class="lic">
+                        <html:a id="id1" href="mtm06350-1.xhtml#d130172e14">Chapter 1</html:a>
+                    </html:span>
+                    <html:span class="lic">
+                        <html:a id="id1_1" href="mtm06350-1.xhtml#d130172e14">1</html:a>
+                    </html:span>
+                </html:li>
+                <html:li id="...">
+                    <html:span class="lic">
+                        <html:a id="id2" href="mtm06350-1.xhtml#d130172e14">Chapter 2</html:a>
+                    </html:span>
+                    <html:span class="lic">
+                        <html:a href="mtm06350-1.xhtml#d130172e14" id="...">2</html:a>
+                    </html:span>
+                    <html:ol class="list-style-type-none" id="...">
+                        <html:li id="...">
+                            <html:span class="lic">Chapter 2.1</html:span>
+                            <html:span class="lic">3</html:span>
+                        </html:li>
+                    </html:ol>
+                </html:li>
+                <html:li id="...">
+                    <html:span class="lic">
+                        <html:a href="mtm06350-1.xhtml#d130172e14" id="id3">Chapter 3</html:a>
+                    </html:span>
+                    <html:span>non-lic</html:span>
+                    <html:span>span</html:span>
+                </html:li>
+                <html:li id="...">
+                    <html:span class="lic">
+                        <html:a id="id4" href="mtm06350-1.xhtml#d130172e14">Chapter 4</html:a>
+                    </html:span>
+                    <html:span>non-lic</html:span>
+                    <html:span>span</html:span>
+                    <html:ol class="list-style-type-none" id="...">
+                        <html:li id="...">
+                            <html:span class="lic">Chapter 4.1</html:span>
+                            <html:span class="lic">4</html:span>
+                        </html:li>
+                    </html:ol>
+                </html:li>
+            </html:ol>
+        </x:expect>
+    </x:scenario>
+
 </x:description>
