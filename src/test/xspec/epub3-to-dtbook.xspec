@@ -2419,4 +2419,95 @@
         </x:expect>
     </x:scenario>
 
+    <x:scenario label="allow lic to be wrapped in a (issue #129)">
+        <x:context>
+            <html:ol class="list-style-type-none">
+                <html:li>
+                    <html:a id="id1" href="mtm06350-1.xhtml#d130172e14">
+                        <html:span class="lic">Chapter 1</html:span>
+                        <html:span class="lic">1</html:span>
+                    </html:a>
+                </html:li>
+                <html:li>
+                    <html:a id="id2" href="mtm06350-1.xhtml#d130172e14">
+                        <html:span class="lic">Chapter 2</html:span>
+                        <html:span class="lic">2</html:span>
+                    </html:a>
+                    <html:ol class="list-style-type-none">
+                        <html:li>
+                            <html:span class="lic">Chapter 2.1</html:span>
+                            <html:span class="lic">3</html:span>
+                        </html:li>
+                    </html:ol>
+                </html:li>
+                <html:li>
+                    <html:a id="id3" href="mtm06350-1.xhtml#d130172e14">
+                        <html:span class="lic">Chapter 3</html:span>
+                        <html:span>non-lic</html:span>
+                    </html:a>
+                    <html:span>span</html:span>
+                </html:li>
+                <html:li>
+                    <html:a id="id4" href="mtm06350-1.xhtml#d130172e14">
+                        <html:span class="lic">Chapter 4</html:span>
+                        <html:span>non-lic</html:span>
+                    </html:a>
+                    <html:span>span</html:span>
+                    <html:ol class="list-style-type-none">
+                        <html:li>
+                            <html:span class="lic">Chapter 4.1</html:span>
+                            <html:span class="lic">4</html:span>
+                        </html:li>
+                    </html:ol>
+                </html:li>
+            </html:ol>
+        </x:context>
+        <x:expect label="the lic elements should be direct children of li and the a should become spans inside the lics">
+            <dtbook:list type="pl" depth="1">
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:span id="id1">Chapter 1</dtbook:span>
+                    </dtbook:lic>
+                    <dtbook:lic>
+                        <dtbook:span>1</dtbook:span>
+                    </dtbook:lic>
+                </dtbook:li>
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:span id="id2">Chapter 2</dtbook:span>
+                    </dtbook:lic>
+                    <dtbook:lic>
+                        <dtbook:span>2</dtbook:span>
+                    </dtbook:lic>
+                    <dtbook:list type="pl" depth="2">
+                        <dtbook:li>
+                            <dtbook:lic>Chapter 2.1</dtbook:lic>
+                            <dtbook:lic>3</dtbook:lic>
+                        </dtbook:li>
+                    </dtbook:list>
+                </dtbook:li>
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:span id="id3">Chapter 3</dtbook:span>
+                    </dtbook:lic>
+                    <dtbook:span>non-lic</dtbook:span>
+                    <dtbook:span>span</dtbook:span>
+                </dtbook:li>
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:span id="id4">Chapter 4</dtbook:span>
+                    </dtbook:lic>
+                    <dtbook:span>non-lic</dtbook:span>
+                    <dtbook:span>span</dtbook:span>
+                    <dtbook:list type="pl" depth="2">
+                        <dtbook:li>
+                            <dtbook:lic>Chapter 4.1</dtbook:lic>
+                            <dtbook:lic>4</dtbook:lic>
+                        </dtbook:li>
+                    </dtbook:list>
+                </dtbook:li>
+            </dtbook:list>
+        </x:expect>
+    </x:scenario>
+
 </x:description>

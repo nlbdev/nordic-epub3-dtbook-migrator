@@ -520,17 +520,28 @@
     <!-- <a> is not allowed in nordic DTBook. Replacing with span. -->
     <xsl:template match="html:a">
         <xsl:choose>
+            <xsl:when test="parent::html:li">
+                <xsl:apply-templates select="node()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="a"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    <xsl:template name="a">
+        <xsl:param name="children" select="node()"/>
+        <xsl:choose>
             <xsl:when test="$allow-links">
                 <a>
                     <xsl:call-template name="attlist.a"/>
-                    <xsl:apply-templates select="node()"/>
+                    <xsl:apply-templates select="$children"/>
                 </a>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message select="'&lt;a&gt; is not allowed in nordic DTBook. Replacing with span and a &quot;a&quot; class.'"/>
                 <span>
                     <xsl:call-template name="attlist.a"/>
-                    <xsl:apply-templates select="node()"/>
+                    <xsl:apply-templates select="$children"/>
                 </span>
             </xsl:otherwise>
         </xsl:choose>
@@ -1100,7 +1111,7 @@
             <xsl:variable name="is-block"
                 select="if ((html:p | html:ol | html:ul | html:dl | html:div | html:blockquote | html:table | html:address | html:section | html:aside)) then true() else false()"/>
             <xsl:choose>
-                <xsl:when test="$is-block">
+                <xsl:when test="$is-block and string-length($marker)">
                     <xsl:choose>
                         <xsl:when test="*[1] intersect html:p">
                             <xsl:for-each select="*[1]">
@@ -1133,9 +1144,33 @@
     </xsl:template>
 
     <xsl:template match="html:span[f:classes(.)='lic']">
+        <xsl:variable name="position" select="count(preceding-sibling::*) + 1"/>
+        <xsl:variable name="children" select="node()"/>
         <lic>
             <xsl:call-template name="attlist.lic"/>
-            <xsl:apply-templates select="node()"/>
+            <xsl:choose>
+                <xsl:when test="parent::html:a">
+                    <xsl:variable name="a">
+                        <xsl:for-each select="parent::*">
+                            <xsl:call-template name="a">
+                                <xsl:with-param name="children" select="$children"/>
+                            </xsl:call-template>
+                        </xsl:for-each>
+                    </xsl:variable>
+                    <xsl:for-each select="$a/*">
+                        <xsl:copy>
+                            <xsl:copy-of select="@* except @id"/>
+                            <xsl:if test="$position = 1">
+                                <xsl:copy-of select="@id"/>
+                            </xsl:if>
+                            <xsl:copy-of select="node()"/>
+                        </xsl:copy>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="node()"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </lic>
     </xsl:template>
 
