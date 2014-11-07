@@ -33,10 +33,10 @@
         <item id="item_12" media-type="application/xhtml+xml" href="C00000-3-chapter.xhtml"/>
         <item id="item_13" media-type="application/xhtml+xml" href="C00000-4-chapter.xhtml"/>
         <item id="item_14" media-type="application/xhtml+xml" href="C00000-5-chapter.xhtml"/>
-        <item id="item_15" media-type="application/xhtml+xml" href="C00000-6-chapter.xhtml"/>
-        <item id="item_16" media-type="application/xhtml+xml" href="C00000-7-conclusion.xhtml"/>
-        <item id="item_17" media-type="application/xhtml+xml" href="C00000-8-backmatter.xhtml"/>
-        <item id="item_18" media-type="application/xhtml+xml" href="C00000-9-rearnotes.xhtml"/>
+        <item id="item_15" media-type="application/xhtml+xml" href="C00000-6-rearnotes.xhtml"/>
+        <item id="item_16" media-type="application/xhtml+xml" href="C00000-7-chapter.xhtml"/>
+        <item id="item_17" media-type="application/xhtml+xml" href="C00000-8-conclusion.xhtml"/>
+        <item id="item_18" media-type="application/xhtml+xml" href="C00000-9-footnotes.xhtml"/>
         <item id="item_19" media-type="application/xhtml+xml" href="nav.xhtml" properties="nav"/>
     </manifest>
     <spine toc="item_9">
@@ -46,6 +46,7 @@
         <itemref id="itemref_4" idref="item_13"/>
         <itemref id="itemref_5" idref="item_14"/>
         <itemref id="itemref_6" idref="item_15"/>
+        <!-- TODO: item_15 should have linear="no". See https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/148 -->
         <itemref id="itemref_7" idref="item_16"/>
         <itemref id="itemref_8" idref="item_17"/>
         <itemref id="itemref_9" idref="item_18"/>

@@ -645,9 +645,9 @@
                 </attribute>
                 <attribute name="class">
                     <list>
-                        <ref name="types"/>
+                        <ref name="classes"/>
                         <value>frontcover</value>
-                        <ref name="types"/>
+                        <ref name="classes"/>
                     </list>
                 </attribute>
                 <ref name="attrsrqd.base"/>
@@ -665,9 +665,9 @@
                 </attribute>
                 <attribute name="class">
                     <list>
-                        <ref name="types"/>
+                        <ref name="classes"/>
                         <value>rearcover</value>
-                        <ref name="types"/>
+                        <ref name="classes"/>
                     </list>
                 </attribute>
                 <ref name="attrsrqd.base"/>
@@ -685,9 +685,9 @@
                 </attribute>
                 <attribute name="class">
                     <list>
-                        <ref name="types"/>
+                        <ref name="classes"/>
                         <value>leftflap</value>
-                        <ref name="types"/>
+                        <ref name="classes"/>
                     </list>
                 </attribute>
                 <ref name="attrsrqd.base"/>
@@ -705,9 +705,9 @@
                 </attribute>
                 <attribute name="class">
                     <list>
-                        <ref name="types"/>
+                        <ref name="classes"/>
                         <value>rightflap</value>
-                        <ref name="types"/>
+                        <ref name="classes"/>
                     </list>
                 </attribute>
                 <ref name="attrsrqd.base"/>
@@ -884,6 +884,7 @@
             <ref name="bodymatter.preface"/>
             <ref name="bodymatter.part"/>
             <ref name="bodymatter.chapter"/>
+            <ref name="backmatter.rearnotes"/>
             <ref name="bodymatter.conclusion"/>
             <ref name="bodymatter.epilogue"/>
         </choice>
@@ -976,6 +977,29 @@
         </attribute>
         <ref name="level1.content"/>
     </define>
+    <define name="backmatter.rearnotes">
+        <attribute name="epub:type">
+            <choice>
+                <list>
+                    <ref name="types"/>
+                    <value>bodymatter</value>
+                    <ref name="types"/>
+                    <value>rearnotes</value>
+                    <ref name="types"/>
+                </list>
+                <list>
+                    <ref name="types"/>
+                    <value>rearnotes</value>
+                    <ref name="types"/>
+                    <value>bodymatter</value>
+                    <ref name="types"/>
+                </list>
+            </choice>
+        </attribute>
+        <choice>
+            <ref name="level1.content"/>
+        </choice>
+    </define>
     <define name="bodymatter.conclusion">
         <attribute name="epub:type">
             <choice>
@@ -1032,7 +1056,6 @@
             <ref name="backmatter.appendix"/>
             <ref name="backmatter.glossary"/>
             <ref name="backmatter.footnotes"/>
-            <ref name="backmatter.rearnotes"/>
             <ref name="backmatter.other"/>
         </choice>
     </define>
@@ -1169,30 +1192,6 @@
                 <list>
                     <ref name="types"/>
                     <value>footnotes</value>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
-    </define>
-    <define name="backmatter.rearnotes">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                    <value>rearnotes</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>rearnotes</value>
                     <ref name="types"/>
                     <value>backmatter</value>
                     <ref name="types"/>
@@ -1682,9 +1681,6 @@
                 <zeroOrMore>
                     <ref name="inlinenoprodnote"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
                 </zeroOrMore>
-                <optional>
-                    <ref name="pagebreak.inline"/> <!-- span -->
-                </optional>
             </group>
             <group>
                 <zeroOrMore>
@@ -1727,11 +1723,13 @@
                 <choice>
                     <ref name="inlinenoprodnote"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
                     <ref name="lic"/> <!-- span -->
+                    <ref name="list"/> <!-- ol, ul -->
                 </choice>
             </zeroOrMore>
             <zeroOrMore>
                 <choice>
                     <ref name="blocknoimggroup"/> <!-- p, ol, ul, dl, div, blockquote, table, address, span, section -->
+                    <ref name="pagebreak.block"/> <!-- div -->
                     
                     <!-- STRICT NOTE: "figure" is not allowed in HTML as inline content so it is not included in "inlinenoprodnote". We explicitly include it here instead. -->
                     <ref name="figure.imggroup"/>
@@ -3456,17 +3454,8 @@
   -->
     <define name="li">
         <element name="li">
-            <choice>
-                <group>
-                    <ref name="attlist.li"/>
-                    <ref name="flowlic"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
-                    <optional>
-                        <ref name="pagebreak.inline"/> <!-- span -->
-                    </optional>
-                </group>
-                <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
-                <ref name="prodnote"/> <!-- aside -->
-            </choice>
+            <ref name="attlist.li"/>
+            <ref name="flowlic"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
         </element>
     </define>
     <define name="attlist.li" combine="interleave">
@@ -4212,6 +4201,8 @@
                 <value>sidebar</value>
                 <value>title</value>
                 <value>truncation</value>
+                <value>render-required</value>
+                <value>render-optional</value>
                 
                 <!-- Text values -->
                 <value>bold</value>
