@@ -49,7 +49,7 @@
             -->
             <xsl:copy-of select="parent::*/(@title|@xml:space)[not(name()=$except)]"/>
             <xsl:if test="not(preceding-sibling::dtbook:level or preceding-sibling::dtbook:level1)">
-                <xsl:copy-of select="parent::*[not(name()=$except)]/@id"/>
+                <xsl:copy-of select="parent::*/@id[not(name()=$except)]"/>
             </xsl:if>
         </xsl:if>
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
@@ -101,9 +101,9 @@
         </xsl:variable>
         <xsl:variable name="epub-types" select="($types, $epub-types)[not(.='') and not(.=$except-types)]"/>
         <xsl:variable name="epub-types"
-            select="($epub-types, if ($epub-types='bodymatter' and not($epub-types=('prologue','preface','part','chapter','conclusion','epilogue'))) then 'chapter' else ())"/>
+            select="($epub-types, if ($epub-types='bodymatter' and not($epub-types=('prologue','preface','part','chapter','conclusion','epilogue','rearnotes'))) then 'chapter' else ())"/>
         <xsl:variable name="epub-types"
-            select="($epub-types, if ((self::dtbook:level2 or self::dtbook:level[count(ancestor::level)=1]) and (ancestor::dtbook:level1|ancestor::dtbook:level[not(ancestor::dtbook:level)])/tokenize(@class,'\s+')='part' and not($epub-types=('prologue','preface','chapter','conclusion','epilogue'))) then 'chapter' else ())"/>
+            select="($epub-types, if ((self::dtbook:level2 or self::dtbook:level[count(ancestor::level)=1]) and (ancestor::dtbook:level1|ancestor::dtbook:level[not(ancestor::dtbook:level)])/tokenize(@class,'\s+')='part' and not($epub-types=('prologue','preface','chapter','conclusion','epilogue','rearnotes'))) then 'chapter' else ())"/>
 
         <xsl:variable name="classes" select="($classes, $old-classes[not(.=($vocab-default,$vocab-z3998))], $showin)[not(.='') and not(.=$except-classes)]"/>
 
@@ -419,10 +419,11 @@
     </xsl:template>
 
     <xsl:template name="attlist.level">
+        <xsl:variable name="types"
+            select="if (ancestor::*[self::dtbook:level or self::dtbook:level1 or self::dtbook:level2 or self::dtbook:level3 or self::dtbook:level4 or self::dtbook:level5 or self::dtbook:level6]) then () else if (ancestor::dtbook:frontmatter) then 'frontmatter' else if (ancestor::dtbook:bodymatter) then 'bodymatter' else 'backmatter'"/>
+        <xsl:variable name="types" select="($types, if (dtbook:note) then if (ancestor::dtbook:bodymatter) then 'rearnotes' else if (ancestor::dtbook:rearmatter) then 'footnotes' else () else ())"/>
         <xsl:call-template name="attrs">
-            <xsl:with-param name="types"
-                select="if (ancestor::*[self::dtbook:level or self::dtbook:level1 or self::dtbook:level2 or self::dtbook:level3 or self::dtbook:level4 or self::dtbook:level5 or self::dtbook:level6]) then () else if (ancestor::dtbook:frontmatter) then 'frontmatter' else if (ancestor::dtbook:bodymatter) then 'bodymatter' else 'backmatter'"
-                tunnel="yes"/>
+            <xsl:with-param name="types" select="$types" tunnel="yes"/>
         </xsl:call-template>
         <!-- @depth is removed, it is implicit anyway -->
     </xsl:template>
@@ -532,7 +533,8 @@
         <xsl:param name="all-ids" select="()" tunnel="yes"/>
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'z3998:production'" tunnel="yes"/>
-            <xsl:with-param name="classes" select="if (@render) then concat('render-',@render) else ()" tunnel="yes"/>
+            <xsl:with-param name="classes" select="(if (not(parent::dtbook:level1/tokenize(@class,'\s+')='cover')) then 'prodnote' else (), if (@render) then concat('render-',@render) else ())"
+                tunnel="yes"/>
             <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
         <!-- @imgref is dropped, the relationship is preserved in the corresponding img/@longdesc -->
@@ -565,15 +567,43 @@
     </xsl:template>
 
     <xsl:template match="dtbook:note">
-        <aside>
-            <xsl:call-template name="attlist.note"/>
-            <xsl:apply-templates select="node()"/>
-        </aside>
+        <xsl:variable name="type"
+            select="if (count(parent::*[matches(local-name(),'^level\d?$')])) then if (count(ancestor::dtbook:bodymatter)) then 'rearnote' else if (count(ancestor::dtbook:rearmatter)) then 'footnote' else 'note' else 'note'"/>
+        <xsl:choose>
+            <xsl:when test="$type='note'">
+                <aside>
+                    <xsl:call-template name="attlist.note">
+                        <xsl:with-param name="types" select="$type" tunnel="yes"/>
+                    </xsl:call-template>
+                    <xsl:apply-templates select="node()"/>
+                </aside>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:if test="not(preceding-sibling::*[not(self::dtbook:pagenum)][1] intersect preceding-sibling::dtbook:note)">
+                    <!-- first note in sequence of notes; handle all the notes in the sequence here -->
+                    <ol epub:type="{$type}s">
+                        <xsl:for-each
+                            select="(., if (not(count(following-sibling::*[not(self::dtbook:note) and not(self::dtbook:pagenum)]))) then following-sibling::dtbook:note else (following-sibling::*[not(self::dtbook:note) and not(self::dtbook:pagenum)][1]/preceding-sibling::dtbook:note intersect following-sibling::dtbook:note))">
+                            <li>
+                                <xsl:call-template name="attlist.note">
+                                    <xsl:with-param name="types" select="$type" tunnel="yes"/>
+                                </xsl:call-template>
+                                <xsl:apply-templates select="node()"/>
+                                <xsl:apply-templates
+                                    select="if (count(following-sibling::*[not(self::dtbook:pagenum)][1] intersect following-sibling::dtbook:note)) then (following-sibling::dtbook:pagenum intersect following-sibling::dtbook:note[1]/preceding-sibling::dtbook:pagenum) else ()">
+                                    <xsl:with-param name="pagenum.parent" select="." tunnel="yes"/>
+                                </xsl:apply-templates>
+                            </li>
+                        </xsl:for-each>
+                    </ol>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.note">
         <xsl:call-template name="attrsrqd">
-            <xsl:with-param name="types" select="'note'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'notebody'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -872,16 +902,22 @@
     <xsl:template match="dtbook:pagenum">
         <xsl:param name="pagenum.parent" tunnel="yes" select="parent::*"/>
         <xsl:variable name="pagenum.parent" select="if (count($pagenum.parent/descendant-or-self::* intersect parent::*/ancestor-or-self::*) &gt;= 3) then parent::* else $pagenum.parent"/>
-        <xsl:element name="{if (f:is-inline($pagenum.parent)) then 'span' else 'div'}">
-            <xsl:call-template name="attlist.pagenum"/>
-            <xsl:if test="normalize-space(.)">
-                <xsl:attribute name="title" select="normalize-space(.)"/>
-                <!--
+
+        <xsl:if
+            test="not(count($pagenum.parent[matches(local-name(),'^level\d?$')]) = 1 and not(ancestor::dtbook:frontmatter) and count(following-sibling::*[not(self::dtbook:pagenum)][1][self::dtbook:note]) = 1 and count(preceding-sibling::*[not(self::dtbook:pagenum)][1][self::dtbook:note]) = 1)">
+            <!-- xsl:if avoids inserting pagenum betwen li elements when rearnotes or footnotes are made into lists. -->
+
+            <xsl:element name="{if (f:is-inline($pagenum.parent) and not(parent::dtbook:imggroup)) then 'span' else 'div'}">
+                <xsl:call-template name="attlist.pagenum"/>
+                <xsl:if test="normalize-space(.)">
+                    <xsl:attribute name="title" select="normalize-space(.)"/>
+                    <!--
                     NOTE: the title attribute is overwritten with the contents of the pagenum,
                     so any pre-existing @title content is lost.
                 -->
-            </xsl:if>
-        </xsl:element>
+                </xsl:if>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="attlist.pagenum">
@@ -1096,6 +1132,7 @@
     <xsl:template name="attlist.doctitle">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'fulltitle'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'title'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -1122,7 +1159,7 @@
 
     <xsl:template name="attlist.covertitle">
         <xsl:call-template name="attrs">
-            <xsl:with-param name="types" select="'z3998:covertitle'" tunnel="yes"/>
+            <xsl:with-param name="types" select="'covertitle'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 

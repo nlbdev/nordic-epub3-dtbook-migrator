@@ -156,49 +156,49 @@
             <navLabel>
                 <text>4. The importance of Haüy in the education of the blind in Sweden and elsewhere</text>
             </navLabel>
-            <content src="C00000-6-chapter.xhtml#d910e3694"/>
+            <content src="C00000-7-chapter.xhtml#d910e3694"/>
         </navPoint>
         <navPoint id="navPoint-25" playOrder="25">
             <navLabel>
                 <text>5. Discussion and conclusions</text>
             </navLabel>
-            <content src="C00000-7-conclusion.xhtml#d910e4160"/>
+            <content src="C00000-8-conclusion.xhtml#d910e4160"/>
         </navPoint>
         <navPoint id="navPoint-26" playOrder="26">
             <navLabel>
                 <text>References</text>
             </navLabel>
-            <content src="C00000-8-backmatter.xhtml#d910e4513"/>
+            <content src="C00000-9-footnotes.xhtml#d910e4513"/>
             <navPoint id="navPoint-27" playOrder="27">
                 <navLabel>
                     <text>Footnotes</text>
                 </navLabel>
-                <content src="C00000-8-backmatter.xhtml#d910e4524"/>
+                <content src="C00000-9-footnotes.xhtml#d910e4524"/>
             </navPoint>
             <navPoint id="navPoint-28" playOrder="28">
                 <navLabel>
                     <text>Literature</text>
                 </navLabel>
-                <content src="C00000-8-backmatter.xhtml#d910e5483"/>
+                <content src="C00000-9-footnotes.xhtml#d910e5483"/>
             </navPoint>
             <navPoint id="navPoint-29" playOrder="29">
                 <navLabel>
                     <text>Articles</text>
                 </navLabel>
-                <content src="C00000-8-backmatter.xhtml#d910e5721"/>
+                <content src="C00000-9-footnotes.xhtml#d910e5721"/>
             </navPoint>
             <navPoint id="navPoint-30" playOrder="30">
                 <navLabel>
                     <text>Electronic media</text>
                 </navLabel>
-                <content src="C00000-8-backmatter.xhtml#d910e5764"/>
+                <content src="C00000-9-footnotes.xhtml#d910e5764"/>
             </navPoint>
         </navPoint>
         <navPoint id="navPoint-31" playOrder="31">
             <navLabel>
                 <text>Rearmatter</text>
             </navLabel>
-            <content src="C00000-9-rearmatter.xhtml#rearmatter_body"/>
+            <content src="C00000-6-rearnotes.xhtml#rearnotes_body"/>
         </navPoint>
     </navMap>
     <pageList>
@@ -327,69 +327,69 @@
         </pageTarget>
         <pageTarget id="pageTarget-49" playOrder="52" type="normal">
             <navLabel>
-                <text>24</text>
+                <text>31</text>
             </navLabel>
-            <content src="C00000-6-chapter.xhtml#page_24"/>
+            <content src="C00000-6-rearnotes.xhtml#page_31_special"/>
         </pageTarget>
         <pageTarget id="pageTarget-50" playOrder="53" type="normal">
             <navLabel>
+                <text>24</text>
+            </navLabel>
+            <content src="C00000-7-chapter.xhtml#page_24"/>
+        </pageTarget>
+        <pageTarget id="pageTarget-51" playOrder="54" type="normal">
+            <navLabel>
                 <text>25</text>
             </navLabel>
-            <content src="C00000-6-chapter.xhtml#page_25"/>
-        </pageTarget>
-        <pageTarget id="pageTarget-51" playOrder="54" type="special">
-            <navLabel>
-                <text>-</text>
-            </navLabel>
-            <content src="C00000-6-chapter.xhtml#page_unnumbered_1"/>
+            <content src="C00000-7-chapter.xhtml#page_25"/>
         </pageTarget>
         <pageTarget id="pageTarget-52" playOrder="55" type="special">
             <navLabel>
                 <text>-</text>
             </navLabel>
-            <content src="C00000-6-chapter.xhtml#page_unnumbered_2"/>
+            <content src="C00000-7-chapter.xhtml#page_unnumbered_1"/>
         </pageTarget>
         <pageTarget id="pageTarget-53" playOrder="56" type="special">
             <navLabel>
                 <text>-</text>
             </navLabel>
-            <content src="C00000-6-chapter.xhtml#page_unnumbered_3"/>
+            <content src="C00000-7-chapter.xhtml#page_unnumbered_2"/>
         </pageTarget>
-        <pageTarget id="pageTarget-54" playOrder="57" type="normal">
+        <pageTarget id="pageTarget-54" playOrder="57" type="special">
             <navLabel>
-                <text>26</text>
+                <text>-</text>
             </navLabel>
-            <content src="C00000-6-chapter.xhtml#page_26"/>
+            <content src="C00000-7-chapter.xhtml#page_unnumbered_3"/>
         </pageTarget>
         <pageTarget id="pageTarget-55" playOrder="58" type="normal">
             <navLabel>
-                <text>27</text>
+                <text>26</text>
             </navLabel>
-            <content src="C00000-7-conclusion.xhtml#page_27"/>
+            <content src="C00000-7-chapter.xhtml#page_26"/>
         </pageTarget>
         <pageTarget id="pageTarget-56" playOrder="59" type="normal">
             <navLabel>
-                <text>28</text>
+                <text>27</text>
             </navLabel>
-            <content src="C00000-7-conclusion.xhtml#page_28"/>
+            <content src="C00000-8-conclusion.xhtml#page_27"/>
         </pageTarget>
         <pageTarget id="pageTarget-57" playOrder="60" type="normal">
             <navLabel>
-                <text>29</text>
+                <text>28</text>
             </navLabel>
-            <content src="C00000-8-backmatter.xhtml#page_29"/>
+            <content src="C00000-8-conclusion.xhtml#page_28"/>
         </pageTarget>
         <pageTarget id="pageTarget-58" playOrder="61" type="normal">
             <navLabel>
-                <text>30</text>
+                <text>29</text>
             </navLabel>
-            <content src="C00000-8-backmatter.xhtml#page_31"/>
+            <content src="C00000-9-footnotes.xhtml#page_29"/>
         </pageTarget>
         <pageTarget id="pageTarget-59" playOrder="62" type="normal">
             <navLabel>
-                <text>31</text>
+                <text>30</text>
             </navLabel>
-            <content src="C00000-9-rearmatter.xhtml#page_31"/>
+            <content src="C00000-9-footnotes.xhtml#page_30"/>
         </pageTarget>
     </pageList>
 </ncx>

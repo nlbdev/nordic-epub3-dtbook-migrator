@@ -50,19 +50,19 @@
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" xml:base="single-html/">
-                <d:file href="C00000-6-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
+                <d:file href="C00000-6-rearnotes.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" xml:base="single-html/">
-                <d:file href="C00000-7-conclusion.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
+                <d:file href="C00000-7-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" xml:base="single-html/">
-                <d:file href="C00000-8-backmatter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
+                <d:file href="C00000-8-conclusion.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" xml:base="single-html/">
-                <d:file href="C00000-9-rearnotes.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
+                <d:file href="C00000-9-footnotes.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
         </x:expect>
@@ -102,26 +102,26 @@
             <x:document type="port" port="in-memory.out" position="5"/>
         </x:context>
         <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-5-chapter.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-5-chapter.xhtml')"/>
-
+        
         <x:context label="the 6th document on the in-memory.out port">
             <x:document type="port" port="in-memory.out" position="6"/>
         </x:context>
-        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-6-chapter.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-6-chapter.xhtml')"/>
+        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-6-rearnotes.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-6-rearnotes.xhtml')"/>
 
         <x:context label="the 7th document on the in-memory.out port">
             <x:document type="port" port="in-memory.out" position="7"/>
         </x:context>
-        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-7-conclusion.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-7-conclusion.xhtml')"/>
+        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-7-chapter.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-7-chapter.xhtml')"/>
 
         <x:context label="the 8th document on the in-memory.out port">
             <x:document type="port" port="in-memory.out" position="8"/>
         </x:context>
-        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-8-backmatter.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-8-backmatter.xhtml')"/>
+        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-8-conclusion.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-8-conclusion.xhtml')"/>
 
         <x:context label="the 9th document on the in-memory.out port">
             <x:document type="port" port="in-memory.out" position="9"/>
         </x:context>
-        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-9-rearnotes.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-9-rearnotes.xhtml')"/>
+        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-9-footnotes.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-9-footnotes.xhtml')"/>
     </x:scenario>
 
 </x:description>

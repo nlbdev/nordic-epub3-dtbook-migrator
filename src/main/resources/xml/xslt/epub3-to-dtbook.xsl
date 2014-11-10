@@ -408,7 +408,7 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="html:aside[f:types(.)='note']">
+    <xsl:template match="html:aside[f:types(.)='note'] | html:li[f:types(.)=('rearnote','footnote')]">
         <note>
             <xsl:call-template name="attlist.note"/>
             <xsl:apply-templates select="node()"/>
@@ -520,7 +520,7 @@
     <!-- <a> is not allowed in nordic DTBook. Replacing with span. -->
     <xsl:template match="html:a">
         <xsl:choose>
-            <xsl:when test="parent::html:li">
+            <xsl:when test="html:span[f:classes(.) = 'lic']">
                 <xsl:apply-templates select="node()"/>
             </xsl:when>
             <xsl:otherwise>
@@ -956,7 +956,7 @@
 
     <xsl:template name="attlist.doctitle">
         <xsl:call-template name="attrs">
-            <xsl:with-param name="except-classes" select="'fulltitle'" tunnel="yes"/>
+            <xsl:with-param name="except-classes" select="('fulltitle','title')" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -974,7 +974,7 @@
     </xsl:template>
 
     <!-- <covertitle> is not allowed in nordic DTBook. Using p instead. -->
-    <xsl:template match="html:*[f:types(.)='z3998:covertitle' and parent::html:header[parent::html:body]]">
+    <xsl:template match="html:*[f:types(.)='covertitle' and parent::html:header[parent::html:body]]">
         <xsl:message select="'&lt;covertitle&gt; is not allowed in nordic DTBook, dropping it...'"/>
     </xsl:template>
 
@@ -1062,10 +1062,17 @@
     </xsl:template>
 
     <xsl:template match="html:ol | html:ul">
-        <list>
-            <xsl:call-template name="attlist.list"/>
-            <xsl:apply-templates select="node()"/>
-        </list>
+        <xsl:choose>
+            <xsl:when test="f:types(.)=('rearnotes','footnotes')">
+                <xsl:apply-templates select="node()"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <list>
+                    <xsl:call-template name="attlist.list"/>
+                    <xsl:apply-templates select="node()"/>
+                </list>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.list">
@@ -1108,10 +1115,10 @@
                     </xsl:when>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:variable name="is-block"
-                select="if ((html:p | html:ol | html:ul | html:dl | html:div | html:blockquote | html:table | html:address | html:section | html:aside)) then true() else false()"/>
+
+            <xsl:variable name="is-block-except-list" select="if ((html:p | html:dl | html:div | html:blockquote | html:table | html:address | html:section | html:aside)) then true() else false()"/>
             <xsl:choose>
-                <xsl:when test="$is-block and string-length($marker)">
+                <xsl:when test="$is-block-except-list and string-length($marker)">
                     <xsl:choose>
                         <xsl:when test="*[1] intersect html:p">
                             <xsl:for-each select="*[1]">
@@ -1130,6 +1137,13 @@
                             <xsl:apply-templates select="node()"/>
                         </xsl:otherwise>
                     </xsl:choose>
+                </xsl:when>
+                <xsl:when test="(html:ol or html:ul) and string-length($marker)">
+                    <lic>
+                        <xsl:value-of select="$marker"/>
+                        <xsl:apply-templates select="*[not(self::html:ol or self::html:ul)] | text()[normalize-space()]"/>
+                    </lic>
+                    <xsl:apply-templates select="html:ol | html:ul"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="$marker"/>
@@ -1492,6 +1506,11 @@
                 <xsl:sequence select="f:numeric-decimal-to-alpha-part(xs:integer(floor($remainder div 26)), (codepoints-to-string(($remainder mod 26) + 96), $result))"/>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:function>
+
+    <xsl:function name="f:is-inline" as="xs:boolean">
+        <xsl:param name="element" as="node()"/>
+        <xsl:sequence select="$element[self::text()] or $element[self::* and local-name() = ('a','abbr','bdo','br','code','dfn','em','img','kbd','q','samp','span','strong','sub','sup')]"/>
     </xsl:function>
 
 </xsl:stylesheet>

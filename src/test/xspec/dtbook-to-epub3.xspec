@@ -667,7 +667,7 @@
             <dtbook:prodnote/>
         </x:context>
         <x:expect label="the resulting element should be a aside element with an added epub:type of z3998:production">
-            <html:aside id="..." epub:type="z3998:production"/>
+            <html:aside id="..." epub:type="z3998:production" class="prodnote"/>
         </x:expect>
     </x:scenario>
 
@@ -682,7 +682,7 @@
         </x:context>
         <x:expect label="the render should become a class and imgref is replaced by the longdesc attribute on the corresponding img element.">
             <html:figure id="..." class="image-series">
-                <html:aside id="prodnote" epub:type="z3998:production" class="render-optional"/>
+                <html:aside id="prodnote" epub:type="z3998:production" class="prodnote render-optional"/>
                 <html:figure class="image">
                     <html:img id="img1" src="images/img.jpg" longdesc="#prodnote" alt="image"/>
                 </html:figure>
@@ -729,8 +729,8 @@
         <x:context>
             <dtbook:note/>
         </x:context>
-        <x:expect label="the resulting element should be a aside with an added epub:type of note">
-            <html:aside id="..." epub:type="note"/>
+        <x:expect label="the resulting element should by default be an aside with an added epub:type of note">
+            <html:aside id="..." epub:type="note" class="notebody"/>
         </x:expect>
     </x:scenario>
 
@@ -1286,8 +1286,8 @@
             <x:expect label="the resulting element should be a figure with class='image'">
                 <html:figure id="..." class="image">
                     <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
-                    <html:aside id="prodnote1" epub:type="z3998:production"/>
-                    <html:span epub:type="pagebreak" class="page-normal" title="1"/>
+                    <html:aside id="prodnote1" epub:type="z3998:production" class="prodnote"/>
+                    <html:div epub:type="pagebreak" class="page-normal" title="1"/>
                     <html:figcaption id="caption1"/>
                 </html:figure>
             </x:expect>
@@ -1320,14 +1320,14 @@
                 <html:figure id="..." class="image-series">
                     <html:figure class="image">
                         <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
-                        <html:aside id="prodnote1" epub:type="z3998:production"/>
+                        <html:aside id="prodnote1" epub:type="z3998:production" class="prodnote"/>
                         <html:figcaption id="caption1">
                             <html:p/>
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
                         <html:img src="images/img.jpg" id="img2" longdesc="#prodnote2" alt="image"/>
-                        <html:aside id="prodnote2" epub:type="z3998:production"/>
+                        <html:aside id="prodnote2" epub:type="z3998:production" class="prodnote"/>
                         <html:figcaption>
                             <html:div id="caption2">
                                 <html:p/>
@@ -1500,7 +1500,7 @@
             <x:expect label="the top-level doctitle should not be used as the headline for that level">
                 <html:body>
                     <html:header>
-                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                        <html:h1 id="..." epub:type="fulltitle" class="title">TITLE</html:h1>
                     </html:header>
                     <html:section id="..." epub:type="frontmatter titlepage"/>
                 </html:body>
@@ -1518,7 +1518,7 @@
             <x:expect label="the doctitle should not be used as the headline for that level">
                 <html:body>
                     <html:header>
-                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                        <html:h1 id="..." epub:type="fulltitle" class="title">TITLE</html:h1>
                     </html:header>
                     <html:section id="..." epub:type="frontmatter titlepage"/>
                 </html:body>
@@ -1538,7 +1538,7 @@
             <x:expect label="the doctitle should be used as the main h1; the level1/h1 should be used for the titlepage h1">
                 <html:body>
                     <html:header>
-                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                        <html:h1 id="..." epub:type="fulltitle" class="title">TITLE</html:h1>
                     </html:header>
                     <html:section id="..." epub:type="frontmatter titlepage">
                         <html:h1 id="...">OTHER TITLE</html:h1>
@@ -1558,7 +1558,7 @@
             <x:expect label="the doctitle should not be used to create a titlepage">
                 <html:body>
                     <html:header>
-                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                        <html:h1 id="..." epub:type="fulltitle" class="title">TITLE</html:h1>
                     </html:header>
                     <html:section id="..." epub:type="frontmatter"/>
                 </html:body>
@@ -1583,11 +1583,11 @@
             <x:expect label="the doctitle should become a p">
                 <html:body>
                     <html:section id="..." epub:type="frontmatter">
-                        <html:p id="..." epub:type="fulltitle">book/frontmatter/level1/doctitle</html:p>
+                        <html:p id="..." epub:type="fulltitle" class="title">book/frontmatter/level1/doctitle</html:p>
                     </html:section>
                     <html:section id="..." epub:type="bodymatter chapter">
                         <html:h1 id="...">headline</html:h1>
-                        <html:p id="..." epub:type="fulltitle">book/bodymatter/level1/doctitle</html:p>
+                        <html:p id="..." epub:type="fulltitle" class="title">book/bodymatter/level1/doctitle</html:p>
                     </html:section>
                 </html:body>
             </x:expect>
@@ -1612,7 +1612,7 @@
             <x:expect label="the docauthor should be added as a paragraph after the headline for that level with an epub:type of 'z3998:author' and a class of 'docauthor'">
                 <html:body>
                     <html:header>
-                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                        <html:h1 id="..." epub:type="fulltitle" class="title">TITLE</html:h1>
                         <html:p epub:type="z3998:author" class="docauthor">DOCAUTHOR</html:p>
                     </html:header>
                     <html:section id="..." epub:type="frontmatter titlepage"/>
@@ -1634,7 +1634,7 @@
             <x:expect label="the docauthor should not be added as a paragraph after the headline for that level">
                 <html:body>
                     <html:header>
-                        <html:h1 id="..." epub:type="fulltitle">TITLE</html:h1>
+                        <html:h1 id="..." epub:type="fulltitle" class="title">TITLE</html:h1>
                         <html:p epub:type="z3998:author" class="docauthor">DOCAUTHOR</html:p>
                     </html:header>
                     <html:section id="..." epub:type="frontmatter titlepage">
@@ -1712,7 +1712,7 @@
             <x:expect label="the covertitle should not be used as the headline for that level">
                 <html:body>
                     <html:header>
-                        <html:p id="..." epub:type="z3998:covertitle">TITLE</html:p>
+                        <html:p id="..." epub:type="covertitle">TITLE</html:p>
                     </html:header>
                     <html:section id="..." epub:type="cover"/>
                 </html:body>
@@ -1730,7 +1730,7 @@
             <x:expect label="the covertitle should not be used as the headline for that level">
                 <html:body>
                     <html:header>
-                        <html:p id="..." epub:type="z3998:covertitle">TITLE</html:p>
+                        <html:p id="..." epub:type="covertitle">TITLE</html:p>
                     </html:header>
                     <html:section id="..." epub:type="cover"/>
                 </html:body>
@@ -1750,7 +1750,7 @@
             <x:expect label="the covertitle should not be used as the headline for that level, the existing one should be used instead">
                 <html:body>
                     <html:header>
-                        <html:p id="..." epub:type="z3998:covertitle">TITLE</html:p>
+                        <html:p id="..." epub:type="covertitle">TITLE</html:p>
                     </html:header>
                     <html:section id="..." epub:type="cover">
                         <html:h1 id="...">OTHER TITLE</html:h1>
@@ -1769,7 +1769,7 @@
             <x:expect label="the covertitle should not be used to create a cover">
                 <html:body>
                     <html:header>
-                        <html:p id="..." epub:type="z3998:covertitle">TITLE</html:p>
+                        <html:p id="..." epub:type="covertitle">TITLE</html:p>
                     </html:header>
                 </html:body>
             </x:expect>
@@ -1797,15 +1797,15 @@
             <x:expect label="the covertitle should become a p">
                 <html:body>
                     <html:section id="..." epub:type="frontmatter">
-                        <html:p id="..." epub:type="z3998:covertitle">book/frontmatter/level1/covertitle</html:p>
+                        <html:p id="..." epub:type="covertitle">book/frontmatter/level1/covertitle</html:p>
                     </html:section>
                     <html:section id="..." epub:type="bodymatter chapter">
                         <html:h1 id="...">headline 1</html:h1>
-                        <html:p id="..." epub:type="z3998:covertitle">book/bodymatter/level1[1]/covertitle</html:p>
+                        <html:p id="..." epub:type="covertitle">book/bodymatter/level1[1]/covertitle</html:p>
                     </html:section>
                     <html:section id="..." epub:type="bodymatter chapter">
-                        <html:p id="..." epub:type="fulltitle">headline 2</html:p>
-                        <html:p id="..." epub:type="z3998:covertitle">book/bodymatter/level1[2]/covertitle</html:p>
+                        <html:p id="..." epub:type="fulltitle" class="title">headline 2</html:p>
+                        <html:p id="..." epub:type="covertitle">book/bodymatter/level1[2]/covertitle</html:p>
                     </html:section>
                 </html:body>
             </x:expect>
@@ -1853,7 +1853,7 @@
         <x:expect label="the resulting element should be h1-h6 elements">
             <html:body>
                 <html:header>
-                    <html:h1 id="..." epub:type="fulltitle">doctitle</html:h1>
+                    <html:h1 id="..." epub:type="fulltitle" class="title">doctitle</html:h1>
                 </html:header>
                 <html:section id="..." epub:type="frontmatter">
                     <html:h1 id="...">h1</html:h1>
@@ -2300,6 +2300,86 @@
             <x:expect label="the resulting element should be a ol">
                 <html:ol id="..." class="list-style-type-none">
                     <html:li id="...">TEXT</html:li>
+                </html:ol>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which has a li with one span and one nested list">
+            <x:context>
+                <dtbook:list type="pl">
+                    <dtbook:li>
+                        <dtbook:span>TEXT</dtbook:span>
+                        <dtbook:list type="pl">
+                            <dtbook:li>TEXT</dtbook:li>
+                        </dtbook:list>
+                    </dtbook:li>
+                </dtbook:list>
+            </x:context>
+            <x:expect label="the result should be one span and one nested list">
+                <html:ol id="..." class="list-style-type-none">
+                    <html:li id="...">
+                        <html:span>TEXT</html:span>
+                        <html:ol id="..." class="list-style-type-none">
+                            <html:li id="...">TEXT</html:li>
+                        </html:ol>
+                    </html:li>
+                </html:ol>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which has a li with one lic and one nested list">
+            <x:context>
+                <dtbook:list type="pl">
+                    <dtbook:li>
+                        <dtbook:lic>
+                            <dtbook:span>TEXT</dtbook:span>
+                        </dtbook:lic>
+                        <dtbook:list type="pl">
+                            <dtbook:li>TEXT</dtbook:li>
+                        </dtbook:list>
+                    </dtbook:li>
+                </dtbook:list>
+            </x:context>
+            <x:expect label="the result should be the contents of the lic and one nested list">
+                <html:ol id="..." class="list-style-type-none">
+                    <html:li id="...">
+                        <html:span class="lic">
+                            <html:span>TEXT</html:span>
+                        </html:span>
+                        <html:ol id="..." class="list-style-type-none">
+                            <html:li id="...">TEXT</html:li>
+                        </html:ol>
+                    </html:li>
+                </html:ol>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which has a li with two lics and one nested list">
+            <x:context>
+                <dtbook:list type="pl">
+                    <dtbook:li>
+                        <dtbook:lic>
+                            <dtbook:span>TEXT</dtbook:span>
+                        </dtbook:lic>
+                        <dtbook:lic>
+                            <dtbook:span>TEXT</dtbook:span>
+                        </dtbook:lic>
+                        <dtbook:list type="pl">
+                            <dtbook:li>TEXT</dtbook:li>
+                        </dtbook:list>
+                    </dtbook:li>
+                </dtbook:list>
+            </x:context>
+            <x:expect label="the result should be two lics and one nested list">
+                <html:ol id="..." class="list-style-type-none">
+                    <html:li id="...">
+                        <html:span class="lic">
+                            <html:span>TEXT</html:span>
+                        </html:span>
+                        <html:span class="lic">
+                            <html:span>TEXT</html:span>
+                        </html:span>
+                        <html:ol id="..." class="list-style-type-none">
+                            <html:li id="...">TEXT</html:li>
+                        </html:ol>
+                    </html:li>
                 </html:ol>
             </x:expect>
         </x:scenario>
@@ -3562,6 +3642,246 @@
                     </html:ol>
                 </html:li>
             </html:ol>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="pagebreaks in imggroups should become divs">
+        <x:context>
+            <dtbook:imggroup>
+                <dtbook:img id="img1" src="img.jpg"/>
+                <dtbook:pagenum>1</dtbook:pagenum>
+            </dtbook:imggroup>
+        </x:context>
+        <x:expect label="the pagebreaks should have become a div">
+            <html:figure class="image" id="...">
+                <html:img id="img1" src="images/img.jpg" alt="image"/>
+                <html:div epub:type="pagebreak" class="page-normal" title="1"/>
+            </html:figure>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="rearnotes and footnotes">
+        <x:context>
+            <dtbook:book>
+                <dtbook:frontmatter>
+                    <dtbook:level1 id="frontmatter-notes">
+                        <dtbook:h1>notes</dtbook:h1>
+                        <dtbook:note id="fn_ch1_1">
+                            <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
+                        </dtbook:note>
+                        <dtbook:note id="fn_ch1_2">
+                            <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
+                        </dtbook:note>
+                        <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
+                        <dtbook:note id="fn_ch1_3">
+                            <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
+                        </dtbook:note>
+                    </dtbook:level1>
+                </dtbook:frontmatter>
+                <dtbook:bodymatter>
+                    <dtbook:level1 id="rearnotes">
+                        <dtbook:h1>notes</dtbook:h1>
+                        <dtbook:pagenum page="normal" id="page-39">39</dtbook:pagenum>
+                        <dtbook:note id="fn_ch1_1">
+                            <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
+                        </dtbook:note>
+                        <dtbook:note id="fn_ch1_2">
+                            <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
+                        </dtbook:note>
+                        <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
+                        <dtbook:note id="fn_ch1_3">
+                            <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
+                        </dtbook:note>
+                        <dtbook:pagenum page="normal" id="page-41">41</dtbook:pagenum>
+                        <dtbook:p>Paragraph</dtbook:p>
+                        <dtbook:note id="fn_ch1_3_2">
+                            <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
+                        </dtbook:note>
+                        <dtbook:pagenum page="normal" id="page-42">42</dtbook:pagenum>
+                    </dtbook:level1>
+                    <dtbook:level1 id="bodymatter-notes">
+                        <dtbook:h1>notes</dtbook:h1>
+                        <dtbook:div>
+                            <dtbook:note id="fn_ch1_1">
+                                <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
+                            </dtbook:note>
+                            <dtbook:note id="fn_ch1_2">
+                                <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
+                            </dtbook:note>
+                            <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
+                            <dtbook:note id="fn_ch1_3">
+                                <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
+                            </dtbook:note>
+                        </dtbook:div>
+                    </dtbook:level1>
+                    <dtbook:level1 id="chapter-with-rearnotes">
+                        <dtbook:h1>Chapter with rearnotes</dtbook:h1>
+                        <dtbook:p>Paragraph</dtbook:p>
+                        <dtbook:level2 id="rearnotes">
+                            <dtbook:h2>notes</dtbook:h2>
+                            <dtbook:note id="fn_ch1_1">
+                                <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
+                            </dtbook:note>
+                            <dtbook:note id="fn_ch1_2">
+                                <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
+                            </dtbook:note>
+                            <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
+                            <dtbook:note id="fn_ch1_3">
+                                <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
+                            </dtbook:note>
+                        </dtbook:level2>
+                    </dtbook:level1>
+                </dtbook:bodymatter>
+                <dtbook:rearmatter>
+                    <dtbook:level1 id="footnotes">
+                        <dtbook:h1>notes</dtbook:h1>
+                        <dtbook:note id="fn_ch1_1">
+                            <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
+                        </dtbook:note>
+                        <dtbook:note id="fn_ch1_2">
+                            <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
+                        </dtbook:note>
+                        <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
+                        <dtbook:note id="fn_ch1_3">
+                            <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
+                        </dtbook:note>
+                    </dtbook:level1>
+                    <dtbook:level1 id="rearmatter-notes">
+                        <dtbook:h1>notes</dtbook:h1>
+                        <dtbook:level2>
+                            <dtbook:h2>notes</dtbook:h2>
+                            <dtbook:note id="fn_ch1_1">
+                                <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
+                            </dtbook:note>
+                            <dtbook:note id="fn_ch1_2">
+                                <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
+                            </dtbook:note>
+                            <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
+                            <dtbook:note id="fn_ch1_3">
+                                <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
+                            </dtbook:note>
+                            <dtbook:div>
+                                <dtbook:note id="fn_ch1_1">
+                                    <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
+                                </dtbook:note>
+                            </dtbook:div>
+                        </dtbook:level2>
+                    </dtbook:level1>
+                </dtbook:rearmatter>
+            </dtbook:book>
+        </x:context>
+        <x:expect label="rearnotes and footnotes should become lists">
+            <html:body>
+                <html:section epub:type="frontmatter" id="frontmatter-notes">
+                    <html:h1 id="...">notes</html:h1>
+                    <html:aside epub:type="note" class="notebody" id="fn_ch1_1">
+                        <html:p>1. G.D.H. Cole in Horowitz, <html:em>The Anarchists</html:em> (New York: Dell Publishing, 1964).</html:p>
+                    </html:aside>
+                    <html:aside epub:type="note" class="notebody" id="fn_ch1_2">
+                        <html:p>2. G. Woodcock, <html:em>Anarchism</html:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</html:p>
+                    </html:aside>
+                    <html:div epub:type="pagebreak" class="page-normal" id="page-40" title="40"/>
+                    <html:aside epub:type="note" class="notebody" id="fn_ch1_3">
+                        <html:p>3. <html:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</html:em> at http://colet.uhicago.edu/cgi-bin</html:p>
+                    </html:aside>
+                </html:section>
+                <html:section epub:type="bodymatter rearnotes" id="rearnotes">
+                    <html:h1 id="...">notes</html:h1>
+                    <html:div id="page-39" class="page-normal" epub:type="pagebreak" title="39"/>
+                    <html:ol epub:type="rearnotes">
+                        <html:li epub:type="rearnote" class="notebody" id="fn_ch1_1">
+                            <html:p>1. G.D.H. Cole in Horowitz, <html:em>The Anarchists</html:em> (New York: Dell Publishing, 1964).</html:p>
+                        </html:li>
+                        <html:li epub:type="rearnote" class="notebody" id="fn_ch1_2">
+                            <html:p>2. G. Woodcock, <html:em>Anarchism</html:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</html:p>
+                            <html:div epub:type="pagebreak" class="page-normal" id="page-40" title="40"/>
+                        </html:li>
+                        <html:li epub:type="rearnote" class="notebody" id="fn_ch1_3">
+                            <html:p>3. <html:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</html:em> at http://colet.uhicago.edu/cgi-bin</html:p>
+                        </html:li>
+                    </html:ol>
+                    <html:div id="page-41" class="page-normal" epub:type="pagebreak" title="41"/>
+                    <html:p>Paragraph</html:p>
+                    <html:ol epub:type="rearnotes">
+                        <html:li epub:type="rearnote" class="notebody" id="fn_ch1_3_2">
+                            <html:p>3. <html:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</html:em> at http://colet.uhicago.edu/cgi-bin</html:p>
+                        </html:li>
+                    </html:ol>
+                    <html:div id="page-42" class="page-normal" epub:type="pagebreak" title="42"/>
+                </html:section>
+                <html:section epub:type="bodymatter chapter" id="bodymatter-notes">
+                    <html:h1 id="...">notes</html:h1>
+                    <html:div>
+                        <html:aside epub:type="note" class="notebody" id="fn_ch1_1">
+                            <html:p>1. G.D.H. Cole in Horowitz, <html:em>The Anarchists</html:em> (New York: Dell Publishing, 1964).</html:p>
+                        </html:aside>
+                        <html:aside epub:type="note" class="notebody" id="fn_ch1_2">
+                            <html:p>2. G. Woodcock, <html:em>Anarchism</html:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</html:p>
+                        </html:aside>
+                        <html:div epub:type="pagebreak" class="page-normal" id="page-40" title="40"/>
+                        <html:aside epub:type="note" class="notebody" id="fn_ch1_3">
+                            <html:p>3. <html:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</html:em> at http://colet.uhicago.edu/cgi-bin</html:p>
+                        </html:aside>
+                    </html:div>
+                </html:section>
+                <html:section epub:type="bodymatter chapter" id="chapter-with-rearnotes">
+                    <html:h1 id="...">Chapter with rearnotes</html:h1>
+                    <html:p>Paragraph</html:p>
+                    <html:section epub:type="rearnotes" id="rearnotes">
+                        <html:h2 id="...">notes</html:h2>
+                        <html:ol epub:type="rearnotes">
+                            <html:li epub:type="rearnote" class="notebody" id="fn_ch1_1">
+                                <html:p>1. G.D.H. Cole in Horowitz, <html:em>The Anarchists</html:em> (New York: Dell Publishing, 1964).</html:p>
+                            </html:li>
+                            <html:li epub:type="rearnote" class="notebody" id="fn_ch1_2">
+                                <html:p>2. G. Woodcock, <html:em>Anarchism</html:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</html:p>
+                                <html:div epub:type="pagebreak" class="page-normal" id="page-40" title="40"/>
+                            </html:li>
+                            <html:li epub:type="rearnote" class="notebody" id="fn_ch1_3">
+                                <html:p>3. <html:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</html:em> at http://colet.uhicago.edu/cgi-bin</html:p>
+                            </html:li>
+                        </html:ol>
+                    </html:section>
+                </html:section>
+                <html:section epub:type="backmatter footnotes" id="footnotes">
+                    <html:h1 id="...">notes</html:h1>
+                    <html:ol epub:type="footnotes">
+                        <html:li epub:type="footnote" class="notebody" id="fn_ch1_1">
+                            <html:p>1. G.D.H. Cole in Horowitz, <html:em>The Anarchists</html:em> (New York: Dell Publishing, 1964).</html:p>
+                        </html:li>
+                        <html:li epub:type="footnote" class="notebody" id="fn_ch1_2">
+                            <html:p>2. G. Woodcock, <html:em>Anarchism</html:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</html:p>
+                            <html:div epub:type="pagebreak" class="page-normal" id="page-40" title="40"/>
+                        </html:li>
+                        <html:li epub:type="footnote" class="notebody" id="fn_ch1_3">
+                            <html:p>3. <html:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</html:em> at http://colet.uhicago.edu/cgi-bin</html:p>
+                        </html:li>
+                    </html:ol>
+                </html:section>
+                <html:section epub:type="backmatter" id="rearmatter-notes">
+                    <html:h1 id="...">notes</html:h1>
+                    <html:section epub:type="footnotes" id="...">
+                        <html:h2 id="...">notes</html:h2>
+                        <html:ol epub:type="footnotes">
+                            <html:li epub:type="footnote" class="notebody" id="fn_ch1_1">
+                                <html:p>1. G.D.H. Cole in Horowitz, <html:em>The Anarchists</html:em> (New York: Dell Publishing, 1964).</html:p>
+                            </html:li>
+                            <html:li epub:type="footnote" class="notebody" id="fn_ch1_2">
+                                <html:p>2. G. Woodcock, <html:em>Anarchism</html:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</html:p>
+                                <html:div epub:type="pagebreak" class="page-normal" id="page-40" title="40"/>
+                            </html:li>
+                            <html:li epub:type="footnote" class="notebody" id="fn_ch1_3">
+                                <html:p>3. <html:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</html:em> at http://colet.uhicago.edu/cgi-bin</html:p>
+                            </html:li>
+                        </html:ol>
+                        <html:div>
+                            <html:aside epub:type="note" class="notebody" id="fn_ch1_1">
+                                <html:p>1. G.D.H. Cole in Horowitz, <html:em>The Anarchists</html:em> (New York: Dell Publishing, 1964).</html:p>
+                            </html:aside>
+                        </html:div>
+                    </html:section>
+                </html:section>
+            </html:body>
         </x:expect>
     </x:scenario>
 

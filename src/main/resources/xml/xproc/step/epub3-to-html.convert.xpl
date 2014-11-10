@@ -147,7 +147,7 @@
         <p:input port="source">
             <p:inline exclude-inline-prefixes="#all">
                 <header xmlns="http://www.w3.org/1999/xhtml">
-                    <h1 epub:type="fulltitle">FULLTITLE</h1>
+                    <h1 epub:type="fulltitle" class="title">FULLTITLE</h1>
                 </header>
             </p:inline>
         </p:input>
@@ -161,7 +161,7 @@
         </p:input>
     </p:insert>
     <p:insert match="/*" position="last-child">
-        <p:input port="insertion" select="//html:meta[@name='z3998:covertitle']">
+        <p:input port="insertion" select="//html:meta[@name='covertitle']">
             <p:pipe port="result" step="single-html.metadata"/>
         </p:input>
     </p:insert>
@@ -178,8 +178,9 @@
         <p:string-replace match="/*/text()" replace="/*/@content"/>
     </p:viewport>
     <p:add-attribute match="//html:p[@name='dc:creator']" attribute-name="epub:type" attribute-value="z3998:author"/>
-    <p:add-attribute match="//html:p[@name='z3998:covertitle']" attribute-name="epub:type" attribute-value="z3998:covertitle"/>
-    <p:delete match="//html:p/@*[not(name()='epub:type')]"/>
+    <p:add-attribute match="//html:p[@name='dc:creator']" attribute-name="class" attribute-value="docauthor"/>
+    <p:add-attribute match="//html:p[@name='covertitle']" attribute-name="epub:type" attribute-value="z3998:covertitle"/>
+    <p:delete match="//html:p/@*[not(name()=('epub:type','class'))]"/>
     <p:identity name="single-html.body.header"/>
 
     <p:replace match="//html:head">

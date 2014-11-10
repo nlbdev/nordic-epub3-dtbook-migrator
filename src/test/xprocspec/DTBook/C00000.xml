@@ -50,7 +50,7 @@
                         <span id="dtb5-test">Valentin Haüy</span>
                     </caption>
                 </imggroup>
-                <prodnote id="dtb6" render="required">
+                <prodnote id="dtb6" render="optional">
                     <p>
                         <span id="dtb7">This version is a for-test-use-only modification of the published original.</span>
                     </p>
@@ -396,8 +396,7 @@
                     </li>
                     <li id="d910e755">• <span id="dtb138">What were his teaching methods?</span>
                     </li>
-                    <li id="d910e762">• <span id="dtb139">What happened during his stay in Russia - did he in fact found an institute for the blind in St Petersburg?</span>
-                    </li>
+                    <li id="d910e762">• <span id="dtb139">What happened during his stay in Russia - did he in fact found an institute for the blind in St Petersburg?</span></li>
                 </list>
             </level1>
             <level1 id="d910e770" class="chapter">
@@ -1756,6 +1755,14 @@
                     </p>
                 </level2>
             </level1>
+            <level1 id="rearnotes_body" class="rearnotes">
+                <pagenum id="page_31_special" page="special">31</pagenum>
+                <h1 id="rearnotes_h1">Rearnotes</h1>
+                <p>See <noteref idref="#f01001">[1]</noteref>.</p>
+                <note id="f01001">
+                    <p>REARNOTE</p>
+                </note>
+            </level1>
             <level1 id="d910e3694" class="chapter">
                 <h1 id="d910e3696">4. The importance of Haüy in the education of the blind in Sweden and elsewhere extra long title extra long title extra long title extra long title</h1>
                 <p>
@@ -2155,7 +2162,7 @@
             </level1>
         </bodymatter>
         <rearmatter>
-            <level1 id="d910e4513">
+            <level1 id="d910e4513" class="footnotes">
                 <pagenum id="page_29" page="normal">29</pagenum>
                 <h1 id="d910e4515">References</h1>
                 <level2 id="d910e4524">
@@ -2805,13 +2812,6 @@
                     </p>
                 </level2>
             </level1>
-            <level1 id="rearnotes_body" class="rearnotes">
-                <pagenum id="page_31" page="normal">31</pagenum>
-                <h1 id="rearnotes_h1">Rearnotes</h1>
-                <list type="pl" depth="1">
-                    <li id="f01001" class="rearnote">1. REARNOTE</li>
-                </list> 
-            </level1> 
         </rearmatter>
     </book>
 </dtbook>
