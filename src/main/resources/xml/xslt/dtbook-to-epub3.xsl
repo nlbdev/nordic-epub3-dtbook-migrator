@@ -170,6 +170,9 @@
                 .initialism{
                     -epub-speak-as:spell-out;
                 }
+                .list-style-type-none{
+                    list-style-type:none;
+                }
                 table[class ^= "table-rules-"],
                 table[class *= " table-rules-"]{
                     border-width:thin;
@@ -257,9 +260,7 @@
                 table.table-frame-border{
                     border-style:outset;
                 }
-                list-style-type-none{
-                    list-style-type:none;
-                }]]></style>
+            ]]></style>
             <xsl:if test="@profile">
                 <link rel="profile" href="{@profile}"/>
             </xsl:if>
