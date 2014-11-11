@@ -513,12 +513,17 @@
     <!-- Rule 140: Jacket copy must contain at least one prodnote, at most one of each @class value and no other elements -->
     <sch:pattern id="dtbook_TPB_140">
         <sch:rule context="html:body[tokenize(@epub:type,'\s+')='cover'] | html:section[tokenize(@epub:type,'\s+')='cover']">
-            <sch:assert test="count(*)=count(html:section)">[tpb140] Only prodnote allowed in jacket copy</sch:assert>
-            <sch:assert test="count(html:section)>=1">[tpb140] There must be at least one prodnote in jacket copy</sch:assert>
-            <sch:report test="count(html:section[@class='frontcover'])>1">[tpb140] Too many prodnotes with @class='frontcover' in jacket copy</sch:report>
-            <sch:report test="count(html:section[@class='rearcover'])>1">[tpb140] Too many prodnotes with @class='rearcover' in jacket copy</sch:report>
-            <sch:report test="count(html:section[@class='leftflap'])>1">[tpb140] Too many prodnotes with @class='leftflap' in jacket copy</sch:report>
-            <sch:report test="count(html:section[@class='rightflap'])>1">[tpb140] Too many prodnotes with @class='rightflap' in jacket copy</sch:report>
+            <sch:assert test="count(*[not(matches(local-name(),'h\d'))])=count(html:section[tokenize(@epub:type,'\s+')='z3998:production'])">[tpb140] Only section with epub:type="z3998:production" is
+                allowed in cover</sch:assert>
+            <sch:assert test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production'])>=1">[tpb140] There must be at least one section with epub:type="z3998:production" in cover</sch:assert>
+            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='frontcover'])>1">[tpb140] Too many sections with epub:type="z3998:production"
+                and class="frontcover" in cover</sch:report>
+            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='rearcover'])>1">[tpb140] Too many sections with epub:type="z3998:production"
+                and class="rearcover" in cover</sch:report>
+            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='leftflap'])>1">[tpb140] Too many sections with epub:type="z3998:production"
+                and class="leftflap" in cover</sch:report>
+            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='rightflap'])>1">[tpb140] Too many sections with epub:type="z3998:production"
+                and class="rightflap" in cover</sch:report>
         </sch:rule>
     </sch:pattern>
 
