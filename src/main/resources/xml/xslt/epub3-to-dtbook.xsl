@@ -27,6 +27,9 @@
     </xsl:template>
 
     <xsl:template match="html:style"/>
+    
+    <xsl:template match="html:script"/>
+    
     <xsl:template name="coreattrs">
         <xsl:param name="except" tunnel="yes"/>
 

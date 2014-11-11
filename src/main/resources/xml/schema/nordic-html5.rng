@@ -387,6 +387,7 @@
             <ref name="meta"/> <!-- meta -->
             <ref name="link"/> <!-- link -->
             <ref name="style"/>
+            <ref name="script"/>
         </choice>
     </define>
     <!-- optional head elements -->
@@ -537,7 +538,7 @@
     <define name="style">
         <element name="style">
             <ref name="attlist.style"/>
-            <empty/>
+            <text/>
         </element>
     </define>
     
@@ -550,7 +551,32 @@
         <optional>
             <attribute name="scoped"/>
         </optional>
-        <text/>
+    </define>
+    
+    <define name="script">
+        <element name="script">
+            <ref name="attlist.script"/>
+            <text/>
+        </element>
+    </define>
+    
+    <define name="attlist.script" combine="interleave">
+        <ref name="attrs"/>
+        <optional>
+            <attribute name="type"/>
+        </optional>
+        <optional>
+            <attribute name="src"/>
+        </optional>
+        <optional>
+            <attribute name="async"/>
+        </optional>
+        <optional>
+            <attribute name="defer"/>
+        </optional>
+        <optional>
+            <attribute name="crossorigin"/>
+        </optional>
     </define>
     
     <!-- ============================ Body Content ============================= -->
@@ -620,6 +646,10 @@
                 </group>
             </choice>
             <!-- (attributes and content is defined by cover/frontmatter/bodymatter/backmatter definitions) -->
+            
+            <zeroOrMore>
+                <ref name="script"/>
+            </zeroOrMore>
         </element>
     </define>
     
