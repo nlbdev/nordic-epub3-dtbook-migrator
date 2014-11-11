@@ -42,10 +42,10 @@
             <meta name="dc:language" content="{$lang}"/>
             <xsl:apply-templates select="*[not(self::meta | self::title)] | meta[not(@charset) and not(@name=('nordic:guidelines','nordic:supplier','dc:publisher','dc:language'))]"/>
             <style type="text/css" xml:space="preserve"><![CDATA[
-                .pronounce-no{
+                .initialism{
                     -epub-speak-as:spell-out;
                 }
-                .list-preformatted{
+                .list-style-type-none{
                     list-style-type:none;
                 }
                 table[class ^= "table-rules-"],
@@ -134,7 +134,8 @@
                 }
                 table.table-frame-border{
                     border-style:outset;
-                }]]></style>
+                }
+            ]]></style>
         </head>
     </xsl:template>
 
