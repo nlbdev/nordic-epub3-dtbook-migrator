@@ -42,7 +42,7 @@
         </p:input>
     </p:xslt>
     <p:xslt>
-        <p:with-param name="body-is-section" select="'true1'"/>
+        <p:with-param name="body-is-section" select="'true'"/>
         <p:input port="stylesheet">
             <p:document href="../../xslt/fix-section-hierarchy.xsl"/>
         </p:input>
