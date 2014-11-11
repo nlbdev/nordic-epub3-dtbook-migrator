@@ -703,7 +703,7 @@
     <!-- Rule 251: lic - span -->
     <sch:pattern id="epub_nordic_251">
         <sch:rule context="html:span[tokenize(@class,' ')='lic']">
-            <sch:assert test="parent::html:li">[nordic251] The parent of a list item component (span class="lic") must be a "li".</sch:assert>
+            <sch:assert test="parent::html:li or parent::html:a/parent::html:li">[nordic251] The parent of a list item component (span class="lic") must be either a "li" or a "a" (where the "a" has "li" as parent).</sch:assert>
         </sch:rule>
     </sch:pattern>
 
