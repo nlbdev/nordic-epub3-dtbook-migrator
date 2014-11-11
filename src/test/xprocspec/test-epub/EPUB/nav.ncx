@@ -151,54 +151,54 @@
                 </navLabel>
                 <content src="C00000-5-chapter.xhtml#d910e3633"/>
             </navPoint>
+            <navPoint id="navPoint-24" playOrder="24">
+                <navLabel>
+                    <text>Rearmatter</text>
+                </navLabel>
+                <content src="C00000-6-rearnotes.xhtml#rearnotes_body"/>
+            </navPoint>
         </navPoint>
-        <navPoint id="navPoint-24" playOrder="24">
+        <navPoint id="navPoint-25" playOrder="25">
             <navLabel>
                 <text>4. The importance of Haüy in the education of the blind in Sweden and elsewhere</text>
             </navLabel>
             <content src="C00000-7-chapter.xhtml#d910e3694"/>
         </navPoint>
-        <navPoint id="navPoint-25" playOrder="25">
+        <navPoint id="navPoint-26" playOrder="26">
             <navLabel>
                 <text>5. Discussion and conclusions</text>
             </navLabel>
             <content src="C00000-8-conclusion.xhtml#d910e4160"/>
         </navPoint>
-        <navPoint id="navPoint-26" playOrder="26">
+        <navPoint id="navPoint-27" playOrder="27">
             <navLabel>
                 <text>References</text>
             </navLabel>
             <content src="C00000-9-footnotes.xhtml#d910e4513"/>
-            <navPoint id="navPoint-27" playOrder="27">
+            <navPoint id="navPoint-28" playOrder="28">
                 <navLabel>
                     <text>Footnotes</text>
                 </navLabel>
                 <content src="C00000-9-footnotes.xhtml#d910e4524"/>
             </navPoint>
-            <navPoint id="navPoint-28" playOrder="28">
+            <navPoint id="navPoint-29" playOrder="29">
                 <navLabel>
                     <text>Literature</text>
                 </navLabel>
                 <content src="C00000-9-footnotes.xhtml#d910e5483"/>
             </navPoint>
-            <navPoint id="navPoint-29" playOrder="29">
+            <navPoint id="navPoint-30" playOrder="30">
                 <navLabel>
                     <text>Articles</text>
                 </navLabel>
                 <content src="C00000-9-footnotes.xhtml#d910e5721"/>
             </navPoint>
-            <navPoint id="navPoint-30" playOrder="30">
+            <navPoint id="navPoint-31" playOrder="31">
                 <navLabel>
                     <text>Electronic media</text>
                 </navLabel>
                 <content src="C00000-9-footnotes.xhtml#d910e5764"/>
             </navPoint>
-        </navPoint>
-        <navPoint id="navPoint-31" playOrder="31">
-            <navLabel>
-                <text>Rearmatter</text>
-            </navLabel>
-            <content src="C00000-6-rearnotes.xhtml#rearnotes_body"/>
         </navPoint>
     </navMap>
     <pageList>
