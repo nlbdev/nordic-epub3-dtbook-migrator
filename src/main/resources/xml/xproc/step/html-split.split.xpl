@@ -33,7 +33,7 @@
             <p:document href="../../xslt/split-html.annotate.xsl"/>
         </p:input>
     </p:xslt>
-    <p:xslt name="split">
+    <p:xslt>
         <p:with-param name="output-dir" select="replace(base-uri(/*),'[^/]+$','')">
             <p:pipe port="result" step="html"/>
         </p:with-param>
@@ -41,6 +41,13 @@
             <p:document href="../../xslt/split-html.xsl"/>
         </p:input>
     </p:xslt>
+    <p:xslt>
+        <p:with-param name="body-is-section" select="'true1'"/>
+        <p:input port="stylesheet">
+            <p:document href="../../xslt/fix-section-hierarchy.xsl"/>
+        </p:input>
+    </p:xslt>
+    <p:identity name="split"/>
 
     <p:for-each name="for-each">
         <p:iteration-source select="/*/*"/>

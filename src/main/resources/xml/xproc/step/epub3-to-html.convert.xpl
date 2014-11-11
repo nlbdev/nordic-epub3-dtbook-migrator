@@ -120,6 +120,25 @@
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
     </pxi:replace-sections-with-documents>
+    <p:viewport match="/*/html:body/*/*[@epub:type]">
+        <p:variable name="types" select="string-join(tokenize(/*/@epub:type,'\s+')[not(.=('cover','frontmatter','bodymatter','backmatter'))],' ')"/>
+        <p:choose>
+            <p:when test="string-length($types)">
+                <p:add-attribute match="/*" attribute-name="epub:type">
+                    <p:with-option name="attribute-value" select="$types"/>
+                </p:add-attribute>
+            </p:when>
+            <p:otherwise>
+                <p:delete match="/*/@epub:type"/>
+            </p:otherwise>
+        </p:choose>
+    </p:viewport>
+    <p:xslt>
+        <p:with-param name="body-is-section" select="'false'"/>
+        <p:input port="stylesheet">
+            <p:document href="../../xslt/fix-section-hierarchy.xsl"/>
+        </p:input>
+    </p:xslt>
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>

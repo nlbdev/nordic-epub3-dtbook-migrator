@@ -10,7 +10,8 @@
         <xsl:variable name="division-types"
             select="('acknowledgments','afterword','appendix','assessment','bibliography','z3998:biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue','errata','z3998:filmography','footnotes','foreword','glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works','z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','standard','subchapter','z3998:subsection','titlepage','toc','z3998:translator-note','volume','warning')"/>
         <xsl:variable name="identifier" select="(//html/head/meta[@name='dc:identifier']/string(@content))[1]"/>
-        <xsl:variable name="padding-size" select="string-length(string(count(/*/body/(section|article|section[tokenize(@epub:type,'\s+')='part']/(section|article)))))"/>
+        <xsl:variable name="padding-size"
+            select="string-length(string(count(/*/body/( section | article | section[f:types(.)='part']/(section|article) | (section|article)[f:types(.)='bodymatter']/section[f:types(.)='rearnotes'] ))))"/>
 
         <xsl:copy>
             <xsl:copy-of select="@*"/>
@@ -19,7 +20,7 @@
             <xsl:for-each select="body">
                 <xsl:copy>
                     <xsl:copy-of select="@*"/>
-                    <xsl:for-each select="section | article | section[tokenize(@epub:type,'\s+')='part']/(section|article)">
+                    <xsl:for-each select="section | article | section[f:types(.)='part']/(section|article) | (section|article)[f:types(.)='bodymatter']/section[f:types(.)='rearnotes']">
                         <xsl:copy>
                             <xsl:variable name="types" select="f:types(.)"/>
                             <xsl:variable name="partition" select="(f:types(.)[.=$partition-types], 'bodymatter')[1]"/>
@@ -36,8 +37,12 @@
                                     <xsl:copy-of select="node()[not(self::section) and not(self::article)]"/>
 
                                 </xsl:when>
-                                <xsl:otherwise>
+                                <xsl:when test="$partition='rearnotes'">
                                     <xsl:copy-of select="node()"/>
+
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:copy-of select="node()[not(self::section and $partition='bodymatter' and f:types(.)='rearnotes')]"/>
 
                                 </xsl:otherwise>
                             </xsl:choose>
