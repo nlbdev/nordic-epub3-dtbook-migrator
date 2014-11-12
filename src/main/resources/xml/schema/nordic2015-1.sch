@@ -338,11 +338,12 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 105: Page attribute must appear on all pagebreak elements -->
+    <!-- Rule 105: Pagebreaks must have a page-* class and must not contain anything -->
     <sch:pattern id="dtbook_TPB_105">
         <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak']">
             <sch:assert test="tokenize(@class,' ')=('page-front','page-normal','page-special')">[tpb105] Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special'
                 class.</sch:assert>
+            <sch:assert test="count(*|comment())=0 and string-length(string-join(text(),''))=0">[tpb105] Pagebreaks must not contain anything</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -498,7 +499,8 @@
             <sch:report test="html:p[tokenize(@class,' ')='line']">[tpb135] Poem lines must be wrapped in a linegroup</sch:report>
         </sch:rule>
         <sch:rule context="html:*[tokenize(@epub:type,'\s+')='z3998:author']">
-            <sch:assert test="parent::html:*/tokenize(@epub:type,'\s+')='z3998:poem' or parent::html:header/parent::html:body">[tpb135] z3998:author is only allowed inside a poem</sch:assert>
+            <sch:assert test="parent::html:*/tokenize(@epub:type,'\s+')='z3998:poem' or parent::html:header/parent::html:body or parent::html:body/tokenize(@epub:type,'\s+')='titlepage'">[tpb135]
+                z3998:author is only allowed either in the titlepage or inside a poem</sch:assert>
         </sch:rule>
         <!-- TODO: in guidelines revision 2015-2, make sure that verses are contained in poems -->
     </sch:pattern>
@@ -703,7 +705,8 @@
     <!-- Rule 251: lic - span -->
     <sch:pattern id="epub_nordic_251">
         <sch:rule context="html:span[tokenize(@class,' ')='lic']">
-            <sch:assert test="parent::html:li or parent::html:a/parent::html:li">[nordic251] The parent of a list item component (span class="lic") must be either a "li" or a "a" (where the "a" has "li" as parent).</sch:assert>
+            <sch:assert test="parent::html:li or parent::html:a/parent::html:li">[nordic251] The parent of a list item component (span class="lic") must be either a "li" or a "a" (where the "a" has
+                "li" as parent).</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -787,7 +790,16 @@
     <!-- Rule 261: Text can't be direct child of div -->
     <sch:pattern id="epub_nordic_261">
         <sch:rule context="html:div">
-            <sch:report test="text()[normalize-space(.)]">[nordic 261] Text can't be placed directly inside div elements. Please wrap it in a p element.</sch:report>
+            <sch:report test="text()[normalize-space(.)]">[nordic261] Text can't be placed directly inside div elements. Please wrap it in a p element.</sch:report>
+        </sch:rule>
+    </sch:pattern>
+
+    <!-- Rule 262: Only fulltitle and docauthor are allowed on the titlepage -->
+    <sch:pattern id="epub_nordic_262">
+        <sch:rule context="*[(parent::html:body|parent::html:section|parent::html:header)/tokenize(@epub:type,'\s+')='titlepage']">
+            <sch:report test="tokenize(@epub:type,'\s+')='pagebreak'">[nordic262] Pagebreaks are not allowed on the titlepage.</sch:report>
+            <sch:assert test="self::html:h1 and tokenize(@epub:type,'\s+')='fulltitle' or self::html:p and tokenize(@epub:type,'\s+')='z3998:author'">[nordic262] Only &lt;h1 epub:type="fulltitle"
+                class="title"&gt; and &lt;p epub:type="z3998:author" class="docauthor"&gt; are allowed on the titlepage.</sch:assert>
         </sch:rule>
     </sch:pattern>
 

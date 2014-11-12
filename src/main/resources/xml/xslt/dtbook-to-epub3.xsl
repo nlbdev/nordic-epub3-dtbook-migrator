@@ -259,8 +259,7 @@
                 }
                 table.table-frame-border{
                     border-style:outset;
-                }
-            ]]></style>
+                }]]></style>
             <xsl:if test="@profile">
                 <link rel="profile" href="{@profile}"/>
             </xsl:if>
@@ -564,6 +563,7 @@
     <xsl:template name="attlist.sidebar">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'sidebar'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'sidebar'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -618,6 +618,7 @@
     <xsl:template name="attlist.annotation">
         <xsl:call-template name="attrsrqd">
             <xsl:with-param name="types" select="'annotation'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'annotation'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -631,6 +632,7 @@
     <xsl:template name="attlist.epigraph">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'epigraph'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'epigraph'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -684,6 +686,7 @@
     <xsl:template name="attlist.poem">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'z3998:poem'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'poem'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -884,6 +887,7 @@
     <xsl:template name="attlist.sent">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'z3998:sentence'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'sentence'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -897,6 +901,7 @@
     <xsl:template name="attlist.w">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'z3998:word'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'word'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -938,6 +943,7 @@
     <xsl:template name="attlist.noteref">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'noteref'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'noteref'" tunnel="yes"/>
         </xsl:call-template>
         <xsl:attribute name="href" select="@idref"/>
         <xsl:copy-of select="@type"/>
@@ -953,6 +959,7 @@
     <xsl:template name="attlist.annoref">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'annoref'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'annoref'" tunnel="yes"/>
         </xsl:call-template>
         <xsl:attribute name="href" select="@idref"/>
         <xsl:copy-of select="@type"/>
@@ -1161,6 +1168,7 @@
     <xsl:template name="attlist.covertitle">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'covertitle'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'covertitle'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -1185,6 +1193,7 @@
     <xsl:template name="attlist.bridgehead">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'bridgehead'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="'bridgehead'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 

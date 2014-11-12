@@ -700,7 +700,7 @@
                 <dtbook:sidebar/>
             </x:context>
             <x:expect label="the resulting element should be a aside with an added epub:type of sidebar">
-                <html:aside id="..." epub:type="sidebar"/>
+                <html:aside id="..." epub:type="sidebar" class="sidebar"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="with render=optional">
@@ -708,7 +708,7 @@
                 <dtbook:sidebar render="optional"/>
             </x:context>
             <x:expect label="the resulting element should be a aside with an added epub:type of sidebar">
-                <html:aside id="..." epub:type="sidebar"/>
+                <html:aside id="..." epub:type="sidebar" class="sidebar"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="with render=required">
@@ -716,7 +716,7 @@
                 <dtbook:sidebar render="required"/>
             </x:context>
             <x:expect label="the resulting element should be a aside with an added epub:type of sidebar">
-                <html:figure id="..." epub:type="sidebar"/>
+                <html:figure id="..." epub:type="sidebar" class="sidebar"/>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -743,7 +743,7 @@
             <dtbook:annotation/>
         </x:context>
         <x:expect label="the resulting element should be a aside with an added epub:type of annotation">
-            <html:aside id="..." epub:type="annotation"/>
+            <html:aside id="..." epub:type="annotation" class="annotation"/>
         </x:expect>
     </x:scenario>
 
@@ -756,7 +756,7 @@
             <dtbook:epigraph/>
         </x:context>
         <x:expect label="the resulting element should be a p with an added epub:type of epigraph">
-            <html:p id="..." epub:type="epigraph"/>
+            <html:p id="..." epub:type="epigraph" class="epigraph"/>
         </x:expect>
     </x:scenario>
 
@@ -826,7 +826,7 @@
                 </dtbook:poem>
             </x:context>
             <x:expect label="the resulting element should be given an added epub:type of z3998:verse">
-                <html:div id="..." epub:type="z3998:poem">
+                <html:div id="..." epub:type="z3998:poem" class="poem">
                     <html:div id="..." class="linegroup" epub:type="z3998:verse"/>
                 </html:div>
             </x:expect>
@@ -852,7 +852,7 @@
             <x:expect label="the resulting element should be a section with an added epub:type of z3998:poem">
                 <html:section id="..." epub:type="bodymatter chapter">
                     <html:h1 id="...">Headline 1</html:h1>
-                    <html:section id="..." epub:type="z3998:poem">
+                    <html:section id="..." epub:type="z3998:poem" class="poem">
                         <html:h2 id="...">Headline 2</html:h2>
                     </html:section>
                 </html:section>
@@ -863,7 +863,7 @@
                 <dtbook:poem/>
             </x:context>
             <x:expect label="the resulting element should be a div with an added epub:type of z3998:poem">
-                <html:div id="..." epub:type="z3998:poem"/>
+                <html:div id="..." epub:type="z3998:poem" class="poem"/>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -1106,7 +1106,7 @@
             <dtbook:sent>TEXT</dtbook:sent>
         </x:context>
         <x:expect label="the resulting element should be a span with an added epub:type of z3998:sentence">
-            <html:span epub:type="z3998:sentence">TEXT</html:span>
+            <html:span epub:type="z3998:sentence" class="sentence">TEXT</html:span>
         </x:expect>
     </x:scenario>
 
@@ -1119,7 +1119,7 @@
             <dtbook:w>TEXT</dtbook:w>
         </x:context>
         <x:expect label="the resulting element should be a span with an added epub:type of z3998:word">
-            <html:span epub:type="z3998:word">TEXT</html:span>
+            <html:span epub:type="z3998:word" class="word">TEXT</html:span>
         </x:expect>
     </x:scenario>
 
@@ -1181,7 +1181,7 @@
             <dtbook:noteref idref="#target">TEXT</dtbook:noteref>
         </x:context>
         <x:expect label="the resulting element should be a a">
-            <html:a id="..." epub:type="noteref" href="#target">TEXT</html:a>
+            <html:a id="..." epub:type="noteref" class="noteref" href="#target">TEXT</html:a>
         </x:expect>
     </x:scenario>
 
@@ -1191,7 +1191,7 @@
             <dtbook:noteref idref="#target" type="image/png">TEXT</dtbook:noteref>
         </x:context>
         <x:expect label="the type attribute should be copied when present">
-            <html:a id="..." epub:type="noteref" href="#target" type="image/png">TEXT</html:a>
+            <html:a id="..." epub:type="noteref" class="noteref" href="#target" type="image/png">TEXT</html:a>
         </x:expect>
     </x:scenario>
 
@@ -1201,7 +1201,7 @@
             <dtbook:annoref idref="#target">TEXT</dtbook:annoref>
         </x:context>
         <x:expect label="the resulting element should be a a">
-            <html:a id="..." epub:type="annoref" href="#target">TEXT</html:a>
+            <html:a id="..." epub:type="annoref" class="annoref" href="#target">TEXT</html:a>
         </x:expect>
     </x:scenario>
 
@@ -1211,7 +1211,7 @@
             <dtbook:annoref idref="#target" type="image/png">TEXT</dtbook:annoref>
         </x:context>
         <x:expect label="the type attribute should be copied when present">
-            <html:a id="..." epub:type="annoref" href="#target" type="image/png">TEXT</html:a>
+            <html:a id="..." epub:type="annoref" class="annoref" href="#target" type="image/png">TEXT</html:a>
         </x:expect>
     </x:scenario>
 
@@ -1712,7 +1712,7 @@
             <x:expect label="the covertitle should not be used as the headline for that level">
                 <html:body>
                     <html:header>
-                        <html:p id="..." epub:type="covertitle">TITLE</html:p>
+                        <html:p id="..." epub:type="covertitle" class="covertitle">TITLE</html:p>
                     </html:header>
                     <html:section id="..." epub:type="cover"/>
                 </html:body>
@@ -1730,7 +1730,7 @@
             <x:expect label="the covertitle should not be used as the headline for that level">
                 <html:body>
                     <html:header>
-                        <html:p id="..." epub:type="covertitle">TITLE</html:p>
+                        <html:p id="..." epub:type="covertitle" class="covertitle">TITLE</html:p>
                     </html:header>
                     <html:section id="..." epub:type="cover"/>
                 </html:body>
@@ -1750,7 +1750,7 @@
             <x:expect label="the covertitle should not be used as the headline for that level, the existing one should be used instead">
                 <html:body>
                     <html:header>
-                        <html:p id="..." epub:type="covertitle">TITLE</html:p>
+                        <html:p id="..." epub:type="covertitle" class="covertitle">TITLE</html:p>
                     </html:header>
                     <html:section id="..." epub:type="cover">
                         <html:h1 id="...">OTHER TITLE</html:h1>
@@ -1769,7 +1769,7 @@
             <x:expect label="the covertitle should not be used to create a cover">
                 <html:body>
                     <html:header>
-                        <html:p id="..." epub:type="covertitle">TITLE</html:p>
+                        <html:p id="..." epub:type="covertitle" class="covertitle">TITLE</html:p>
                     </html:header>
                 </html:body>
             </x:expect>
@@ -1797,15 +1797,15 @@
             <x:expect label="the covertitle should become a p">
                 <html:body>
                     <html:section id="..." epub:type="frontmatter">
-                        <html:p id="..." epub:type="covertitle">book/frontmatter/level1/covertitle</html:p>
+                        <html:p id="..." epub:type="covertitle" class="covertitle">book/frontmatter/level1/covertitle</html:p>
                     </html:section>
                     <html:section id="..." epub:type="bodymatter chapter">
                         <html:h1 id="...">headline 1</html:h1>
-                        <html:p id="..." epub:type="covertitle">book/bodymatter/level1[1]/covertitle</html:p>
+                        <html:p id="..." epub:type="covertitle" class="covertitle">book/bodymatter/level1[1]/covertitle</html:p>
                     </html:section>
                     <html:section id="..." epub:type="bodymatter chapter">
                         <html:p id="..." epub:type="fulltitle" class="title">headline 2</html:p>
-                        <html:p id="..." epub:type="covertitle">book/bodymatter/level1[2]/covertitle</html:p>
+                        <html:p id="..." epub:type="covertitle" class="covertitle">book/bodymatter/level1[2]/covertitle</html:p>
                     </html:section>
                 </html:body>
             </x:expect>
@@ -2093,7 +2093,7 @@
             <dtbook:bridgehead>TEXT</dtbook:bridgehead>
         </x:context>
         <x:expect label="the result should be a p with a epub:type of bridgehead">
-            <html:p epub:type="bridgehead">TEXT</html:p>
+            <html:p epub:type="bridgehead" class="bridgehead">TEXT</html:p>
         </x:expect>
     </x:scenario>
 
