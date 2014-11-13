@@ -45,8 +45,7 @@
         <itemref id="itemref_3" idref="item_12"/>
         <itemref id="itemref_4" idref="item_13"/>
         <itemref id="itemref_5" idref="item_14"/>
-        <itemref id="itemref_6" idref="item_15"/>
-        <!-- TODO: item_15 should have linear="no". See https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/148 -->
+        <itemref id="itemref_6" idref="item_15" linear="no"/>
         <itemref id="itemref_7" idref="item_16"/>
         <itemref id="itemref_8" idref="item_17"/>
         <itemref id="itemref_9" idref="item_18"/>

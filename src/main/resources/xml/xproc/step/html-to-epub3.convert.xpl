@@ -323,7 +323,7 @@
             <p:pipe port="fileset.out" step="html-split.moved"/>
         </p:input>
     </px:fileset-filter>
-    <p:delete match="//d:file[@media-type='application/xhtml+xml' and not(ends-with(@href,'-cover.xhtml'))]"/>
+    <p:delete match="//d:file[@media-type='application/xhtml+xml' and not(ends-with(@href,'-cover.xhtml') or ends-with(@href,'-rearnotes.xhtml'))]"/>
     <p:identity name="non-linear-content"/>
 
 </p:declare-step>
