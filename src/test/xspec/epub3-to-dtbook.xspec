@@ -2760,4 +2760,65 @@
         </x:expect>
     </x:scenario>
 
+    <x:scenario label="issue #174: Exercise markup not converted properly to DTBook">
+        <x:context xml:space="preserve">
+            <html:p>
+                <html:span class="answer">---</html:span>
+                <html:span class="box">---</html:span>
+                <html:span class="exercisenumber"/>
+                <html:span class="exercisepart"/>
+            </html:p>
+            <html:p>
+                <html:span class="exercisenumber">100</html:span>
+                <html:span class="exercisepart">a)</html:span>
+                What is the name of the capital city of Madagascar?
+            </html:p>
+            <html:p>
+                2 Hon säger att hon ska läsa frågorna för barnen.
+                <html:span class="answer">---</html:span>
+                3 Alla barnen tycker att det verkar kul.
+                <html:span class="answer">---</html:span>
+            </html:p>
+            <html:p>
+                <html:span class="exercisenumber">10</html:span>
+                <html:span class="exercisepart">b)</html:span>
+                Fill in the missing letter: DTBo<html:span class="answer_1">-</html:span>k
+            </html:p>
+            <html:p>
+                Would you like some candy?
+                Yes <html:span class="box">---</html:span>
+                No <html:span class="box">---</html:span>
+            </html:p>
+        </x:context>
+        <x:expect xml:space="preserve" label="the classes should be preserved">
+            <dtbook:p>
+                <dtbook:span class="answer">---</dtbook:span>
+                <dtbook:span class="box">---</dtbook:span>
+                <dtbook:span class="exercisenumber"/>
+                <dtbook:span class="exercisepart"/>
+            </dtbook:p>
+            <dtbook:p>
+                <dtbook:span class="exercisenumber">100</dtbook:span>
+                <dtbook:span class="exercisepart">a)</dtbook:span>
+                What is the name of the capital city of Madagascar?
+            </dtbook:p>
+            <dtbook:p>
+                2 Hon säger att hon ska läsa frågorna för barnen.
+                <dtbook:span class="answer">---</dtbook:span>
+                3 Alla barnen tycker att det verkar kul.
+                <dtbook:span class="answer">---</dtbook:span>
+            </dtbook:p>
+            <dtbook:p>
+                <dtbook:span class="exercisenumber">10</dtbook:span>
+                <dtbook:span class="exercisepart">b)</dtbook:span>
+                Fill in the missing letter: DTBo<dtbook:span class="answer_1">-</dtbook:span>k
+            </dtbook:p>
+            <dtbook:p>
+                Would you like some candy?
+                Yes <dtbook:span class="box">---</dtbook:span>
+                No <dtbook:span class="box">---</dtbook:span>
+            </dtbook:p>
+        </x:expect>
+    </x:scenario>
+
 </x:description>
