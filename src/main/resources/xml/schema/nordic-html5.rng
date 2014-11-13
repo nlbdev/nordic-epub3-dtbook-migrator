@@ -914,7 +914,7 @@
             <ref name="bodymatter.preface"/>
             <ref name="bodymatter.part"/>
             <ref name="bodymatter.chapter"/>
-            <ref name="backmatter.rearnotes"/>
+            <ref name="bodymatter.rearnotes"/>
             <ref name="bodymatter.conclusion"/>
             <ref name="bodymatter.epilogue"/>
         </choice>
@@ -1007,7 +1007,7 @@
         </attribute>
         <ref name="level1.content"/>
     </define>
-    <define name="backmatter.rearnotes">
+    <define name="bodymatter.rearnotes">
         <attribute name="epub:type">
             <choice>
                 <list>
@@ -1349,7 +1349,25 @@
         </choice>
     </define>
     <define name="attlist.level2" combine="interleave">
-        <ref name="attrsrqd"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
+        <optional>
+            <attribute name="epub:type">
+                <list>
+                    <ref name="types"/>
+                    <optional>
+                        <choice>
+                            <value>prologue</value>
+                            <value>preface</value>
+                            <value>chapter</value>
+                            <value>rearnotes</value>
+                            <value>conclusion</value>
+                            <value>epilogue</value>
+                        </choice>
+                    </optional>
+                    <ref name="types"/>
+                </list>
+            </attribute>
+        </optional>
+        <ref name="attrsrqd.notype"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
     
     <define name="level3">
@@ -3448,7 +3466,7 @@
     of a different element type, such as <pageno>.
   -->
     <define name="attlist.list.ordered" combine="interleave">
-        <ref name="attrs"/>
+        <ref name="attlist.list.common"/>
         <!-- ordered list -->
         <optional>
             <attribute name="type">
@@ -3468,7 +3486,7 @@
     </define>
     
     <define name="attlist.list.preformatted" combine="interleave">
-        <ref name="attrs"/>
+        <ref name="attlist.list.common"/>
         <attribute name="style">
             <value>list-style-type: none;</value>
         </attribute>
@@ -3476,8 +3494,26 @@
     </define>
     
     <define name="attlist.list.unordered" combine="interleave">
-        <ref name="attrs"/>
+        <ref name="attlist.list.common"/>
         <!-- depth is implicit (count number of ancestor list elements + 1) -->
+    </define>
+    
+    <define name="attlist.list.common">
+        <optional>
+            <attribute name="epub:type">
+                <list>
+                    <ref name="types"/>
+                    <optional>
+                        <choice>
+                            <value>rearnotes</value>
+                            <value>footnotes</value>
+                        </choice>
+                    </optional>
+                    <ref name="types"/>
+                </list>
+            </attribute>
+        </optional>
+        <ref name="attrs.notype"/>
     </define>
     
     <!--
@@ -3909,34 +3945,34 @@
         <zeroOrMore>
             <choice>
                 <value>acknowledgments</value>
-                <value>afterword</value>
-                <value>annoref</value>
-                <value>annotation</value>
-                <value>appendix</value>
-                <value>backmatter</value>
+                <!--<value>afterword</value>-->
+                <!--<value>annoref</value>-->
+                <!--<value>annotation</value>-->
+                <!--<value>appendix</value>-->
+                <!--<value>backmatter</value>-->
                 <value>biblioentry</value>
                 <value>bibliography</value>
-                <value>bodymatter</value>
-                <value>bridgehead</value>
-                <value>chapter</value>
-                <value>colophon</value>
+                <!--<value>bodymatter</value>-->
+                <!--<value>bridgehead</value>-->
+                <!--<value>chapter</value>-->
+                <!--<value>colophon</value>-->
                 <value>concluding-sentence</value>
-                <value>conclusion</value>
+                <!--<value>conclusion</value>-->
                 <value>contributors</value>
                 <value>copyright-page</value>
-                <value>cover</value>
-                <value>covertitle</value>
+                <!--<value>cover</value>-->
+                <!--<value>covertitle</value>-->
                 <value>dedication</value>
                 <value>division</value>
-                <value>epigraph</value>
-                <value>epilogue</value>
+                <!--<value>epigraph</value>-->
+                <!--<value>epilogue</value>-->
                 <value>errata</value>
                 <value>footnote</value>
-                <value>footnotes</value>
-                <value>foreword</value>
-                <value>frontmatter</value>
-                <value>fulltitle</value>
-                <value>glossary</value>
+                <!--<value>footnotes</value>-->
+                <!--<value>foreword</value>-->
+                <!--<value>frontmatter</value>-->
+                <!--<value>fulltitle</value>-->
+                <!--<value>glossary</value>-->
                 <value>glossdef</value>
                 <value>glossterm</value>
                 <value>halftitle</value>
@@ -3944,8 +3980,8 @@
                 <value>help</value>
                 <value>imprimatur</value>
                 <value>imprint</value>
-                <value>index</value>
-                <value>introduction</value>
+                <!--<value>index</value>-->
+                <!--<value>introduction</value>-->
                 <value>keyword</value>
                 <value>landmarks</value>
                 <value>list</value>
@@ -3953,28 +3989,28 @@
                 <value>loi</value>
                 <value>lot</value>
                 <value>marginalia</value>
-                <value>note</value>
-                <value>noteref</value>
+                <!--<value>note</value>-->
+                <!--<value>noteref</value>-->
                 <value>notice</value>
                 <value>other-credits</value>
-                <value>pagebreak</value>
+                <!--<value>pagebreak</value>-->
                 <value>page-list</value>
-                <value>part</value>
+                <!--<value>part</value>-->
                 <value>practice</value>
                 <value>preamble</value>
-                <value>preface</value>
-                <value>prologue</value>
+                <!--<value>preface</value>-->
+                <!--<value>prologue</value>-->
                 <value>rearnote</value>
-                <value>rearnotes</value>
-                <value>sidebar</value>
+                <!--<value>rearnotes</value>-->
+                <!--<value>sidebar</value>-->
                 <value>subchapter</value>
                 <value>subtitle</value>
                 <value>table</value>
                 <value>table-cell</value>
                 <value>table-row</value>
                 <value>title</value>
-                <value>titlepage</value>
-                <value>toc</value>
+                <!--<value>titlepage</value>-->
+                <!--<value>toc</value>-->
                 <value>topic-sentence</value>
                 <value>volume</value>
                 <value>warning</value>
@@ -3982,40 +4018,40 @@
                 <value>z3998:acknowledgments</value>
                 <value>z3998:acronym</value>
                 <value>z3998:actor</value>
-                <value>z3998:afterword</value>
+                <!--<value>z3998:afterword</value>-->
                 <value>z3998:alteration</value>
-                <value>z3998:annoref</value>
-                <value>z3998:annotation</value>
-                <value>z3998:appendix</value>
+                <!--<value>z3998:annoref</value>-->
+                <!--<value>z3998:annotation</value>-->
+                <!--<value>z3998:appendix</value>-->
                 <value>z3998:article</value>
                 <value>z3998:aside</value>
                 <value>z3998:attribution</value>
-                <value>z3998:author</value>
+                <!--<value>z3998:author</value>-->
                 <value>z3998:award</value>
-                <value>z3998:backmatter</value>
+                <!--<value>z3998:backmatter</value>-->
                 <value>z3998:bcc</value>
                 <value>z3998:bibliography</value>
                 <value>z3998:biographical-note</value>
-                <value>z3998:bodymatter</value>
+                <!--<value>z3998:bodymatter</value>-->
                 <value>z3998:cardinal</value>
                 <value>z3998:catalogue</value>
                 <value>z3998:cc</value>
-                <value>z3998:chapter</value>
+                <!--<value>z3998:chapter</value>-->
                 <value>z3998:citation</value>
                 <value>z3998:clarification</value>
                 <value>z3998:collection</value>
-                <value>z3998:colophon</value>
+                <!--<value>z3998:colophon</value>-->
                 <value>z3998:commentary</value>
                 <value>z3998:commentator</value>
                 <value>z3998:compound</value>
                 <value>z3998:concluding-sentence</value>
-                <value>z3998:conclusion</value>
+                <!--<value>z3998:conclusion</value>-->
                 <value>z3998:continuation</value>
                 <value>z3998:continuation-of</value>
                 <value>z3998:contributors</value>
                 <value>z3998:coordinate</value>
                 <value>z3998:correction</value>
-                <value>z3998:covertitle</value>
+                <!--<value>z3998:covertitle</value>-->
                 <value>z3998:currency</value>
                 <value>z3998:decimal</value>
                 <value>z3998:decorative</value>
@@ -4030,8 +4066,8 @@
                 <value>z3998:editorial-note</value>
                 <value>z3998:email</value>
                 <value>z3998:email-message</value>
-                <value>z3998:epigraph</value>
-                <value>z3998:epilogue</value>
+                <!--<value>z3998:epigraph</value>-->
+                <!--<value>z3998:epilogue</value>-->
                 <value>z3998:errata</value>
                 <value>z3998:essay</value>
                 <value>z3998:event</value>
@@ -4041,19 +4077,19 @@
                 <value>z3998:figure</value>
                 <value>z3998:filmography</value>
                 <value>z3998:footnote</value>
-                <value>z3998:footnotes</value>
-                <value>z3998:foreword</value>
+                <!--<value>z3998:footnotes</value>-->
+                <!--<value>z3998:foreword</value>-->
                 <value>z3998:fraction</value>
                 <value>z3998:from</value>
                 <value>z3998:frontispiece</value>
-                <value>z3998:frontmatter</value>
+                <!--<value>z3998:frontmatter</value>-->
                 <value>z3998:ftp</value>
-                <value>z3998:fulltitle</value>
+                <!--<value>z3998:fulltitle</value>-->
                 <value>z3998:gallery</value>
                 <value>z3998:general-editor</value>
                 <value>z3998:geographic</value>
                 <value>z3998:given-name</value>
-                <value>z3998:glossary</value>
+                <!--<value>z3998:glossary</value>-->
                 <value>z3998:grant-acknowledgment</value>
                 <value>z3998:grapheme</value>
                 <value>z3998:halftitle</value>
@@ -4066,9 +4102,9 @@
                 <value>z3998:image-placeholder</value>
                 <value>z3998:imprimatur</value>
                 <value>z3998:imprint</value>
-                <value>z3998:index</value>
+                <!--<value>z3998:index</value>-->
                 <value>z3998:initialism</value>
-                <value>z3998:introduction</value>
+                <!--<value>z3998:introduction</value>-->
                 <value>z3998:introductory-note</value>
                 <value>z3998:ip</value>
                 <value>z3998:isbn</value>
@@ -4084,19 +4120,19 @@
                 <value>z3998:name-title</value>
                 <value>z3998:nationality</value>
                 <value>z3998:non-fiction</value>
-                <value>z3998:nonresolving-citation</value>
+                <!--<value>z3998:nonresolving-citation</value>-->
                 <value>z3998:nonresolving-reference</value>
-                <value>z3998:note</value>
-                <value>z3998:noteref</value>
+                <!--<value>z3998:note</value>-->
+                <!--<value>z3998:noteref</value>-->
                 <value>z3998:notice</value>
                 <value>z3998:orderedlist</value>
                 <value>z3998:ordinal</value>
                 <value>z3998:organization</value>
                 <value>z3998:other-credits</value>
-                <value>z3998:pagebreak</value>
+                <!--<value>z3998:pagebreak</value>-->
                 <value>z3998:page-footer</value>
                 <value>z3998:page-header</value>
-                <value>z3998:part</value>
+                <!--<value>z3998:part</value>-->
                 <value>z3998:percentage</value>
                 <value>z3998:persona</value>
                 <value>z3998:personal-name</value>
@@ -4107,20 +4143,20 @@
                 <value>z3998:phrase</value>
                 <value>z3998:place</value>
                 <value>z3998:plate</value>
-                <value>z3998:poem</value>
+                <!--<value>z3998:poem</value>-->
                 <value>z3998:portmanteau</value>
                 <value>z3998:postal</value>
                 <value>z3998:postal-code</value>
                 <value>z3998:postscript</value>
                 <value>z3998:practice</value>
                 <value>z3998:preamble</value>
-                <value>z3998:preface</value>
+                <!--<value>z3998:preface</value>-->
                 <value>z3998:prefix</value>
                 <value>z3998:presentation</value>
                 <value>z3998:primary</value>
                 <value>z3998:product</value>
-                <value>z3998:production</value>
-                <value>z3998:prologue</value>
+                <!--<value>z3998:production</value>-->
+                <!--<value>z3998:prologue</value>-->
                 <value>z3998:promotional-copy</value>
                 <value>z3998:published-works</value>
                 <value>z3998:publisher-address</value>
@@ -4128,7 +4164,7 @@
                 <value>z3998:range</value>
                 <value>z3998:ratio</value>
                 <value>z3998:rearnote</value>
-                <value>z3998:rearnotes</value>
+                <!--<value>z3998:rearnotes</value>-->
                 <value>z3998:recipient</value>
                 <value>z3998:recto</value>
                 <value>z3998:reference</value>
@@ -4143,8 +4179,8 @@
                 <value>z3998:secondary</value>
                 <value>z3998:section</value>
                 <value>z3998:sender</value>
-                <value>z3998:sentence</value>
-                <value>z3998:sidebar</value>
+                <!--<value>z3998:sentence</value>-->
+                <!--<value>z3998:sidebar</value>-->
                 <value>z3998:signature</value>
                 <value>z3998:song</value>
                 <value>z3998:speech</value>
@@ -4166,20 +4202,20 @@
                 <value>z3998:title</value>
                 <value>z3998:title-page</value>
                 <value>z3998:to</value>
-                <value>z3998:toc</value>
+                <!--<value>z3998:toc</value>-->
                 <value>z3998:topic-sentence</value>
                 <value>z3998:translator</value>
                 <value>z3998:translator-note</value>
                 <value>z3998:truncation</value>
                 <value>z3998:unorderedlist</value>
                 <value>z3998:valediction</value>
-                <value>z3998:verse</value>
+                <!--<value>z3998:verse</value>-->
                 <value>z3998:verso</value>
                 <value>z3998:v-form</value>
                 <value>z3998:volume</value>
                 <value>z3998:warning</value>
                 <value>z3998:weight</value>
-                <value>z3998:word</value>
+                <!--<value>z3998:word</value>-->
             </choice>
         </zeroOrMore>
     </define>
