@@ -196,20 +196,14 @@
   	                          self::html:*[tokenize(@epub:type,' ')='z3998:poem']       or self::html:*[(self::figure or self::aside) and tokenize(@epub:type,'s')='sidebar']    or self::html:table    or
   	                          self::html:*[matches(local-name(),'^h\d$') and tokenize(@class,' ')='title']      or self::html:section or self::html:article]">
             <sch:report
-                test="following-sibling::html:a      or following-sibling::html:abbr or following-sibling::html:acronym or following-sibling::html:a[tokenize(@epub:type,' ')='annoref'] or
-  	                    following-sibling::html:bdo    or following-sibling::html:code or following-sibling::html:dfn     or following-sibling::html:em      or
-  	                    following-sibling::html:kbd or following-sibling::html:p[tokenize(@class,' ')='linenum'] or following-sibling::html:a[tokenize(@epub:type,' ')='noteref'] or
-  	                    following-sibling::html:q      or following-sibling::html:samp or following-sibling::html:span[tokenize(@epub:type,' ')='z3998:sentence']    or following-sibling::html:span[not(tokenize(@epub:type,'\s+')='pagebreak') and not(tokenize(@class,'\s+')='lic')]    or
-  	                    following-sibling::html:strong or following-sibling::html:sub  or following-sibling::html:sup     or following-sibling::html:span[tokenize(@epub:type,' ')='z3998:word']       or
-  	                    (following-sibling::text()/normalize-space()!='' and not(parent::html:li))"
-                >Block element as sibling to inline element</sch:report>
-            <sch:report
-                test="preceding-sibling::html:a      or preceding-sibling::html:abbr or preceding-sibling::html:acronym or preceding-sibling::html:a[tokenize(@epub:type,' ')='annoref'] or
-  	                    preceding-sibling::html:bdo    or preceding-sibling::html:code or preceding-sibling::html:dfn     or preceding-sibling::html:em      or
-  	                    preceding-sibling::html:kbd or preceding-sibling::html:p[tokenize(@class,' ')='linenum'] or preceding-sibling::html:a[tokenize(@epub:type,' ')='noteref'] or
-  	                    preceding-sibling::html:q      or preceding-sibling::html:samp or preceding-sibling::html:span[tokenize(@epub:type,' ')='z3998:sentence']    or preceding-sibling::html:span[not(tokenize(@epub:type,'\s+')='pagebreak') and not(tokenize(@class,'\s+')='lic')]    or
-  	                    preceding-sibling::html:strong or preceding-sibling::html:sub  or preceding-sibling::html:sup     or preceding-sibling::html:span[tokenize(@epub:type,' ')='z3998:word']       or
-  	                    (preceding-sibling::text()/normalize-space(.)!='' and not(parent::html:li))"
+                test="(
+                        ../html:a      or ../html:abbr or ../html:acronym or ../html:a[tokenize(@epub:type,' ')='annoref'] or
+                        ../html:bdo    or ../html:code or ../html:dfn     or ../html:em      or
+                        ../html:kbd or ../html:p[tokenize(@class,' ')='linenum'] or ../html:a[tokenize(@epub:type,' ')='noteref'] or
+                        ../html:q      or ../html:samp or ../html:span[tokenize(@epub:type,' ')='z3998:sentence']    or ../html:span[not(tokenize(@epub:type,'\s+')='pagebreak') and not(tokenize(@class,'\s+')='lic')]    or
+                        ../html:strong or ../html:sub  or ../html:sup     or ../html:span[tokenize(@epub:type,' ')='z3998:word']       or
+                        ../text()/normalize-space()!=''
+                      ) and not(parent::html:li)"
                 >[tpb29] Block element <sch:name/> as sibling to inline element</sch:report>
         </sch:rule>
     </sch:pattern>
