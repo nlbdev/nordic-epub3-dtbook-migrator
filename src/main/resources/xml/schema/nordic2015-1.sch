@@ -132,18 +132,18 @@
     <!-- Rule 23: Increasing pagebreak values for page-normal -->
     <sch:pattern id="dtbook_TPB_23">
         <sch:rule
-            context="html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-normal' and preceding::html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-normal']]">
-            <sch:assert test="number(current()/@title) > number(preceding::html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-normal'][1]/@title)">[tpb23] pagebreak values must
-                increase for page-normal</sch:assert>
+            context="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][tokenize(@class,'\s+')='page-normal']]">
+            <sch:let name="preceding" value="preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'][1]"/>
+            <sch:assert test="number(current()/@title) > number($preceding/@title)">[tpb23] pagebreak values must increase for pagebreaks with class="page-normal" (see pagebreak with
+                    title="<sch:value-of select="@title"/>" and compare with pagebreak with title="<sch:value-of select="$preceding/@title"/>")</sch:assert>
         </sch:rule>
     </sch:pattern>
 
     <!-- Rule 24: Values of pagebreak must be unique for page-front -->
     <sch:pattern id="dtbook_TPB_24">
         <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front']">
-            <!--  		<sch:assert test="count(key('pageFrontValues', .))=1">[tpb24] pagebreak values must be unique for page-front</sch:assert>-->
-            <sch:assert test="count(//html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front' and @title=current()/@title])=1">[tpb24] pagebreak values must be unique for
-                page-front</sch:assert>
+            <sch:assert test="count(//html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front' and @title=current()/@title])=1">[tpb24] pagebreak values must be unique for
+                pagebreaks with class="page-front" (see pagebreak with title="<sch:value-of select="@title"/>")</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -237,10 +237,11 @@
 
     <!-- Rule 40: No page numbering gaps for pagebreak w/page-normal -->
     <sch:pattern id="dtbook_TPB_40">
-        <sch:rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-normal']">
-            <sch:report
-                test="preceding::html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-normal'] and number(preceding::html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-normal'][1]/@title) != number(@title)-1"
-                >[tpb40] No gaps may occur in page numbering</sch:report>
+        <sch:rule
+            context="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and count(preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'])]">
+            <sch:let name="preceding-pagebreak" value="preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'][1]"/>
+            <sch:report test="number($preceding-pagebreak/@title) != number(@title)-1">[tpb40a] No gaps may occur in page numbering (see pagebreak with title="<sch:value-of select="@title"/>" and
+                compare with pagebreak with title="<sch:value-of select="$preceding-pagebreak/@title"/>")</sch:report>
         </sch:rule>
     </sch:pattern>
 

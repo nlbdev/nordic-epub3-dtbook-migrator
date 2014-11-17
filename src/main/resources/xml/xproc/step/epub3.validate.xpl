@@ -152,15 +152,24 @@
     <p:identity name="opf"/>
     <p:sink/>
 
-    <px:fileset-load media-types="application/xhtml+xml">
-        <p:input port="fileset">
-            <p:pipe port="fileset" step="unzip"/>
+    <p:xslt>
+        <!-- get fileset of HTML documents in spine order -->
+        <p:input port="parameters">
+            <p:empty/>
         </p:input>
+        <p:input port="source">
+            <p:pipe port="result" step="opf"/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:document href="../../xslt/opf-to-spine-fileset.xsl"/>
+        </p:input>
+    </p:xslt>
+    <px:fileset-load media-types="application/xhtml+xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory" step="unzip"/>
         </p:input>
     </px:fileset-load>
-    <px:assert test-count-min="1" message="There must be a HTML file in the fileset." error-code="NORDICDTBOOKEPUB005"/>
+    <px:assert test-count-min="1" message="There must be a HTML file in the spine." error-code="NORDICDTBOOKEPUB005"/>
     <p:identity name="html"/>
     <p:sink/>
 
