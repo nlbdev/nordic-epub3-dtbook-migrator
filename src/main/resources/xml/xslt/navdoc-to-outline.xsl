@@ -2,7 +2,7 @@
     xpath-default-namespace="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" exclude-result-prefixes="#all">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-<!--    <xsl:import href="../../../../test/xspec/mock/uri-functions.xsl"/>-->
+    <!--    <xsl:import href="../../../../test/xspec/mock/uri-functions.xsl"/>-->
 
     <xsl:template match="node()">
         <xsl:apply-templates select="node()"/>
@@ -12,6 +12,8 @@
         <xsl:copy>
             <xsl:attribute name="xml:base" select="base-uri(/*)"/>
             <xsl:attribute name="epub:prefix" select="'z3998: http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
+            <xsl:namespace name="nordic" select="'http://www.mtm.se/epub/'"/>
+            <xsl:namespace name="epub" select="'http://www.idpf.org/2007/ops'"/>
             <head/>
             <body>
                 <xsl:apply-templates select="//nav[matches(@epub:type,'(^|\s)toc(\s|$)')]/ol"/>
