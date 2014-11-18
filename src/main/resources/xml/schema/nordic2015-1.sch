@@ -509,18 +509,10 @@
 
     <!-- Rule 135: Poem contents -->
     <sch:pattern id="dtbook_TPB_135_a">
-        <sch:rule context="html:*[tokenize(@epub:type,' ')='z3998:poem']">
-            <sch:assert test="html:*[tokenize(@class,' ')='linegroup']">[tpb135a] Every poem must contain a linegroup</sch:assert>
-            <sch:report test="html:p[tokenize(@class,' ')='line']">[tpb135a] Poem lines must be wrapped in a linegroup</sch:report>
+        <sch:rule context="html:*[tokenize(@epub:type,'\s+')='z3998:poem'] | html:*[tokenize(@epub:type,'\s+')='z3998:verse' and not(ancestor::html:*/tokenize(@epub:type,'\s+')='z3998:poem')]">
+            <sch:assert test="html:*[tokenize(@class,'\s+')='linegroup']">[nordic135] Every poem must contain a linegroup</sch:assert>
+            <sch:report test="html:p[tokenize(@class,'\s+')='line']">[nordic135] Poem lines must be wrapped in a linegroup</sch:report>
         </sch:rule>
-    </sch:pattern>
-
-    <sch:pattern id="dtbook_TPB_135_b">
-        <sch:rule context="html:*[tokenize(@epub:type,'\s+')='z3998:author']">
-            <sch:assert test="parent::html:*/tokenize(@epub:type,'\s+')='z3998:poem' or parent::html:header/parent::html:body or parent::html:body/tokenize(@epub:type,'\s+')='titlepage'">[tpb135b]
-                z3998:author is only allowed either in the titlepage or inside a poem</sch:assert>
-        </sch:rule>
-        <!-- TODO: in guidelines revision 2015-2, make sure that verses are contained in poems -->
     </sch:pattern>
 
     <!-- Rule 136: List types -->
@@ -836,12 +828,20 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 262: Only fulltitle and docauthor are allowed on the titlepage -->
-    <sch:pattern id="epub_nordic_262">
-        <sch:rule context="*[(parent::html:body|parent::html:section|parent::html:header)/tokenize(@epub:type,'\s+')='titlepage']">
-            <sch:report test="tokenize(@epub:type,'\s+')='pagebreak'">[nordic262] Pagebreaks are not allowed on the titlepage.</sch:report>
-            <sch:assert test="self::html:h1 and tokenize(@epub:type,'\s+')='fulltitle' or self::html:p and tokenize(@epub:type,'\s+')='z3998:author'">[nordic262] Only &lt;h1 epub:type="fulltitle"
-                class="title"&gt; and &lt;p epub:type="z3998:author" class="docauthor"&gt; are allowed on the titlepage.</sch:assert>
+    <!-- Rule 263: there must be a headline on the titlepage -->
+    <sch:pattern>
+        <sch:rule context="html:body[tokenize(@epub:type,'\s+')='titlepage'] | html:section[tokenize(@epub:type,'\s+')='titlepage']">
+            <sch:assert test="count(html:*[matches(local-name(),'h\d')])">[nordic263] the titlepage must have a headline (and the headline must have epub:type="fulltitle" and
+                class="title")</sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+    <!-- Rule 264: h1 on titlepage must be epub:type=fulltitle with class=title -->
+    <sch:pattern>
+        <sch:rule
+            context="html:body[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')] | html:section[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')]">
+            <sch:assert test="tokenize(@epub:type,'\s+') = 'fulltitle'">[nordic264] the headline on the titlepage must have a epub:type with the value "fulltitle"</sch:assert>
+            <sch:assert test="tokenize(@class,'\s+') = 'title'">[nordic264] the headline on the titlepage must have a class with the value "title"</sch:assert>
         </sch:rule>
     </sch:pattern>
 

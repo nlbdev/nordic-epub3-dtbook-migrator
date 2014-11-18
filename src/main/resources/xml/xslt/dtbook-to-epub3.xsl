@@ -92,20 +92,31 @@
         <xsl:variable name="showin" select="for $s in (@showin) return concat('showin-',$s)"/>
         <xsl:variable name="old-classes" select="tokenize(@class,'\s+')"/>
 
-        <!-- non-standard classes are assumed to be already fixed before running this XSLT (for instance, 'jacketcopy' => 'cover' and 'endnote' => 'rearnote') -->
         <xsl:variable name="epub-types">
             <xsl:for-each select="$old-classes">
-                <xsl:sequence select="if (.=$vocab-default) then . else if (.=$vocab-z3998) then concat('z3998:',.) else ()"/>
+                <xsl:choose>
+                    <xsl:when test=".='jacketcopy'">
+                        <xsl:sequence select="'cover'"/>
+                    </xsl:when>
+                    <xsl:when test=".='endnote'">
+                        <xsl:sequence select="'rearnote'"/>
+                    </xsl:when>
+                    <xsl:when test=".=$vocab-default">
+                        <xsl:sequence select="."/>
+                    </xsl:when>
+                    <xsl:when test=".=$vocab-z3998">
+                        <xsl:sequence select="concat('z3998:',.)"/>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:for-each>
             <xsl:value-of select="''"/>
         </xsl:variable>
         <xsl:variable name="epub-types" select="($types, $epub-types)[not(.='') and not(.=$except-types)]"/>
+        <xsl:variable name="epub-types" select="($epub-types, if ($epub-types='bodymatter' and count($epub-types)=1) then 'chapter' else ())"/>
         <xsl:variable name="epub-types"
-            select="($epub-types, if ($epub-types='bodymatter' and not($epub-types=('prologue','preface','part','chapter','conclusion','epilogue','rearnotes'))) then 'chapter' else ())"/>
-        <xsl:variable name="epub-types"
-            select="($epub-types, if ((self::dtbook:level2 or self::dtbook:level[count(ancestor::level)=1]) and (ancestor::dtbook:level1|ancestor::dtbook:level[not(ancestor::dtbook:level)])/tokenize(@class,'\s+')='part' and not($epub-types=('prologue','preface','chapter','conclusion','epilogue','rearnotes'))) then 'chapter' else ())"/>
+            select="($epub-types, if ((self::dtbook:level2 or self::dtbook:level[count(ancestor::level)=1]) and (ancestor::dtbook:level1|ancestor::dtbook:level[not(ancestor::dtbook:level)])/tokenize(@class,'\s+')='part' and count($epub-types)=1) then 'chapter' else ())"/>
 
-        <xsl:variable name="classes" select="($classes, $old-classes[not(.=($vocab-default,$vocab-z3998))], $showin)[not(.='') and not(.=$except-classes)]"/>
+        <xsl:variable name="classes" select="($classes, $old-classes[not(.=($vocab-default,$vocab-z3998,'jacketcopy','endnote'))], $showin)[not(.='') and not(.=$except-classes)]"/>
 
         <xsl:if test="count($classes) and not('_class'=$except)">
             <xsl:attribute name="class" select="string-join(distinct-values($classes),' ')"/>
@@ -351,7 +362,7 @@
             <xsl:choose>
 
                 <!-- cover -->
-                <xsl:when test="f:classes(.)=('cover')">
+                <xsl:when test="f:classes(.)=('cover','jacketcopy')">
                     <xsl:apply-templates
                         select="if (not(preceding-sibling::*)) then preceding-sibling::comment() else (preceding-sibling::comment() intersect preceding-sibling::*[1]/following-sibling::comment())"/>
 
@@ -500,21 +511,32 @@
     </xsl:template>
 
     <xsl:template match="dtbook:author">
-        <span>
-            <xsl:call-template name="attlist.author"/>
-            <xsl:apply-templates select="node()"/>
-        </span>
+        <xsl:choose>
+            <xsl:when test="parent::dtbook:level1[tokenize(@class,'\s+')='titlepage']">
+                <p>
+                    <xsl:call-template name="attlist.author"/>
+                    <xsl:apply-templates select="node()"/>
+                </p>
+            </xsl:when>
+            <xsl:otherwise>
+                <span>
+                    <xsl:call-template name="attlist.author"/>
+                    <xsl:apply-templates select="node()"/>
+                </span>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.author">
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'z3998:author'" tunnel="yes"/>
+            <xsl:with-param name="classes" select="if (parent::dtbook:level1[tokenize(@class,'\s+')='titlepage']) then 'docauthor' else ()" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="dtbook:prodnote">
         <xsl:choose>
-            <xsl:when test="parent::*[tokenize(@class,'\s+')=('cover')]">
+            <xsl:when test="parent::*[tokenize(@class,'\s+')=('cover','jacketcopy')]">
                 <section>
                     <xsl:call-template name="attlist.prodnote"/>
                     <xsl:apply-templates select="node()"/>
@@ -533,8 +555,8 @@
         <xsl:param name="all-ids" select="()" tunnel="yes"/>
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="'z3998:production'" tunnel="yes"/>
-            <xsl:with-param name="classes" select="(if (not(parent::dtbook:level1/tokenize(@class,'\s+')='cover')) then 'prodnote' else (), if (@render) then concat('render-',@render) else ())"
-                tunnel="yes"/>
+            <xsl:with-param name="classes"
+                select="(if (not(parent::dtbook:level1/tokenize(@class,'\s+')=('cover','jacketcopy'))) then 'prodnote' else (), if (@render) then concat('render-',@render) else ())" tunnel="yes"/>
             <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
         <!-- @imgref is dropped, the relationship is preserved in the corresponding img/@longdesc -->
@@ -1180,7 +1202,10 @@
     </xsl:template>
 
     <xsl:template name="attlist.h">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="types" select="if (parent::dtbook:level1[tokenize(@class,'\s+')='titlepage']) then 'fulltitle' else ()" tunnel="yes"/>
+            <xsl:with-param name="classes" select="if (parent::dtbook:level1[tokenize(@class,'\s+')='titlepage']) then 'title' else ()" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="dtbook:bridgehead">
