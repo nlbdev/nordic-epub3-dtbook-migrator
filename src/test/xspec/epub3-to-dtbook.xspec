@@ -592,12 +592,28 @@
     <!-- title -->
     <x:scenario label="when processing an element with a title class">
         <x:context>
-            <html:strong class="title"/>
-            <html:h3 class="title"/>
+            <html:section>
+                <html:strong class="title"/>
+                <html:h1 class="title"/>
+                <html:section epub:type="z3998:poem">
+                    <html:p class="title"/>
+                </html:section>
+                <html:section epub:type="z3998:verse">
+                    <html:p class="title"/>
+                </html:section>
+            </html:section>
         </x:context>
-        <x:expect label="the resulting element should be a title with the title class removed">
-            <dtbook:title/>
-            <dtbook:title/>
+        <x:expect label="the resulting element should be a title with the title class removed if it's in a poem; otherwise treat as if the title class was not there">
+            <dtbook:level1>
+                <dtbook:strong class="title"/>
+                <dtbook:h1 class="title"/>
+                <dtbook:poem>
+                    <dtbook:title/>
+                </dtbook:poem>
+                <dtbook:poem>
+                    <dtbook:title/>
+                </dtbook:poem>
+            </dtbook:level1>
         </x:expect>
     </x:scenario>
 
@@ -609,12 +625,21 @@
         <x:context>
             <html:body>
                 <html:header>
-                    <html:h1 epub:type="fulltitle">Document Title</html:h1>
-                    <html:p epub:type="z3998:author">Document Author</html:p>
+                    <html:h1 epub:type="fulltitle" class="title">Document Title</html:h1>
+                    <html:p epub:type="z3998:author" class="docauthor">Document Author</html:p>
                 </html:header>
                 <html:section>
                     <html:h1>Chapter Title</html:h1>
-                    <html:p epub:type="z3998:author">Author</html:p>
+                    <html:section epub:type="z3998:verse">
+                        <html:p epub:type="z3998:author">Author in poem context (2015-1)</html:p>
+                        <html:div class="linegroup"/>
+                    </html:section>
+                    <html:section epub:type="z3998:poem">
+                        <html:p epub:type="z3998:author">Author in poem context (2015-2)</html:p>
+                        <html:div epub:type="z3998:verse" class="linegroup"/>
+                    </html:section>
+                    <html:p epub:type="z3998:author">Author on p element</html:p>
+                    <html:p><html:span epub:type="z3998:author">Author on span element</html:span></html:p>
                 </html:section>
             </html:body>
         </x:context>
@@ -627,7 +652,16 @@
                 <dtbook:bodymatter>
                     <dtbook:level1>
                         <dtbook:h1>Chapter Title</dtbook:h1>
-                        <dtbook:author>Author</dtbook:author>
+                        <dtbook:poem>
+                            <dtbook:author>Author in poem context (2015-1)</dtbook:author>
+                            <dtbook:linegroup/>
+                        </dtbook:poem>
+                        <dtbook:poem>
+                            <dtbook:author>Author in poem context (2015-2)</dtbook:author>
+                            <dtbook:linegroup class="verse"/>
+                        </dtbook:poem>
+                        <dtbook:p>Author on p element</dtbook:p>
+                        <dtbook:p><dtbook:span class="author">Author on span element</dtbook:span></dtbook:p>
                     </dtbook:level1>
                 </dtbook:bodymatter>
             </dtbook:book>
@@ -1433,7 +1467,7 @@
                 <dtbook:book>
                     <dtbook:frontmatter>
                         <dtbook:level1 class="titlepage">
-                            <dtbook:author>AUTHOR</dtbook:author>
+                            <dtbook:p>AUTHOR</dtbook:p>
                         </dtbook:level1>
                     </dtbook:frontmatter>
                 </dtbook:book>
@@ -1443,7 +1477,7 @@
             <x:context>
                 <html:body>
                     <html:header>
-                        <html:p epub:type="z3998:author">DOCAUTHOR</html:p>
+                        <html:p epub:type="z3998:author" class="docauthor">DOCAUTHOR</html:p>
                     </html:header>
                 </html:body>
             </x:context>

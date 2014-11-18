@@ -331,7 +331,7 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <xsl:template match="html:*[f:classes(.)='title']">
+    <xsl:template match="html:*[f:classes(.)='title' and not(parent::html:header[parent::html:body]) and ancestor::html:*/f:types(.)=('z3998:poem','z3998:verse')]">
         <title>
             <xsl:call-template name="attlist.title"/>
             <xsl:apply-templates select="node()"/>
@@ -344,7 +344,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="html:*[f:types(.)='z3998:author' and not(parent::html:header[parent::html:body])]">
+    <xsl:template match="html:*[f:types(.)='z3998:author' and not(parent::html:header[parent::html:body]) and ancestor::html:*/f:types(.)=('z3998:poem','z3998:verse')]">
         <author>
             <xsl:call-template name="attlist.author"/>
             <xsl:apply-templates select="node()"/>
@@ -507,7 +507,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="html:*[f:types(.)='z3998:poem']">
+    <xsl:template match="html:*[f:types(.)='z3998:poem'] | html:*[f:types(.)='z3998:verse' and not(ancestor::html:*/f:types(.)='z3998:poem')]">
         <poem>
             <xsl:call-template name="attlist.poem"/>
             <xsl:apply-templates select="node()"/>
@@ -516,7 +516,7 @@
 
     <xsl:template name="attlist.poem">
         <xsl:call-template name="attrs">
-            <xsl:with-param name="except-classes" select="'poem'" tunnel="yes"/>
+            <xsl:with-param name="except-classes" select="('poem','verse')" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 

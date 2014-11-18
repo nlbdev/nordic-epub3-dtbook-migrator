@@ -593,7 +593,6 @@
                 <choice>
                     <!-- multi-page HTML -->
                     <ref name="cover"/>
-                    <ref name="frontmatter.titlepage"/>
                     <ref name="frontmatter"/>
                     <ref name="bodymatter"/>
                     <ref name="backmatter"/>
@@ -622,10 +621,7 @@
                            <element name="article">
                                <!-- "article" should be used for magazine or newspaper articles. Otherwise, "section" should be used. -->
                                <choice>
-                                   <ref name="cover"/>
-                                   <ref name="frontmatter"/>
                                    <ref name="bodymatter"/>
-                                   <ref name="backmatter"/>
                                </choice>
                            </element>
                        </choice>
@@ -755,6 +751,7 @@
   -->
     <define name="frontmatter">
         <choice>
+            <ref name="frontmatter.titlepage"/>
             <ref name="frontmatter.colophon"/>
             <ref name="frontmatter.toc"/>
             <ref name="frontmatter.foreword"/>
@@ -781,14 +778,10 @@
                 </list>
             </choice>
         </attribute>
-        <ref name="attrsrqd.notype"/>
-        <ref name="doctitle.headline"/> <!-- h1 -->
-        <optional>
-            <ref name="covertitle"/> <!-- p -->
-        </optional>
-        <zeroOrMore>
-            <ref name="docauthor"/> <!-- p -->
-        </zeroOrMore>
+        <choice>
+            <ref name="level1.only-headline"/>
+            <ref name="level1.content"/>
+        </choice>
     </define>
     <define name="frontmatter.colophon">
         <attribute name="epub:type">
@@ -3971,7 +3964,7 @@
                 <!--<value>footnotes</value>-->
                 <!--<value>foreword</value>-->
                 <!--<value>frontmatter</value>-->
-                <!--<value>fulltitle</value>-->
+                <value>fulltitle</value>
                 <!--<value>glossary</value>-->
                 <value>glossdef</value>
                 <value>glossterm</value>

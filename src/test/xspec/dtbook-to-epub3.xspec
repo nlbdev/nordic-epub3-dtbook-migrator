@@ -214,9 +214,9 @@
                 <dtbook:book>
                     <dtbook:frontmatter>
                         <!-- COMMENT #1 -->
-                        <dtbook:level1 class="titlepage"/>
-                        <!-- COMMENT #2 -->
                         <dtbook:level1 class="cover"/>
+                        <!-- COMMENT #2 -->
+                        <dtbook:level1 class="titlepage"/>
                         <!-- COMMENT #3 -->
                         <dtbook:level1/>
                         <!-- COMMENT #4 -->
@@ -228,9 +228,9 @@
             <x:expect label="the top-level frontmatter levels should become sections and given the appropriate epub:types">
                 <html:body>
                     <!-- COMMENT #1 -->
-                    <html:section id="..." epub:type="frontmatter titlepage"/>
-                    <!-- COMMENT #2 -->
                     <html:section id="..." epub:type="cover"/>
+                    <!-- COMMENT #2 -->
+                    <html:section id="..." epub:type="frontmatter titlepage"/>
                     <!-- COMMENT #3 -->
                     <html:section id="..." epub:type="frontmatter"/>
                     <!-- COMMENT #4 -->
@@ -288,6 +288,20 @@
                     <!-- COMMENT #4 -->
                     <html:section id="..." epub:type="frontmatter"/>
                     <!-- COMMENT #5 -->
+                </html:body>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a jacketcopy class instead of a cover class">
+            <x:context>
+                <dtbook:book>
+                    <dtbook:frontmatter>
+                        <dtbook:level1 class="jacketcopy"/>
+                    </dtbook:frontmatter>
+                </dtbook:book>
+            </x:context>
+            <x:expect label="the result should be a cover">
+                <html:body>
+                    <html:section id="..." epub:type="cover"/>
                 </html:body>
             </x:expect>
         </x:scenario>
@@ -1531,6 +1545,8 @@
                         <dtbook:doctitle>TITLE</dtbook:doctitle>
                         <dtbook:level1 class="titlepage">
                             <dtbook:h1>OTHER TITLE</dtbook:h1>
+                            <dtbook:author>Author as direct child to titlepage (#1)</dtbook:author>
+                            <dtbook:author>Author as direct child to titlepage (#2)</dtbook:author>
                         </dtbook:level1>
                     </dtbook:frontmatter>
                 </dtbook:book>
@@ -1541,7 +1557,9 @@
                         <html:h1 id="..." epub:type="fulltitle" class="title">TITLE</html:h1>
                     </html:header>
                     <html:section id="..." epub:type="frontmatter titlepage">
-                        <html:h1 id="...">OTHER TITLE</html:h1>
+                        <html:h1 id="..." epub:type="fulltitle" class="title">OTHER TITLE</html:h1>
+                        <html:p epub:type="z3998:author" class="docauthor">Author as direct child to titlepage (#1)</html:p>
+                        <html:p epub:type="z3998:author" class="docauthor">Author as direct child to titlepage (#2)</html:p>
                     </html:section>
                 </html:body>
             </x:expect>
@@ -1564,7 +1582,7 @@
                 </html:body>
             </x:expect>
         </x:scenario>
-        <x:scenario label="where the doctitle is not a direct child of frontmatter">
+        <x:scenario label="where the doctitle for some reason is not a direct child of frontmatter">
             <x:context>
                 <dtbook:book>
                     <dtbook:frontmatter>
