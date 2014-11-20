@@ -619,16 +619,15 @@
     <!-- Rule 204: Check that both the epub:types "rearnote" and "rearnotes" are used in rearnotes -->
     <sch:pattern id="epub_nordic_204_a">
         <sch:rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='footnote']">
-            <sch:assert test="count(ancestor::html:section | ancestor::html:article) = 1">[nordic204a] footnotes must be placed in a top-level section. Remember that footnotes should be placed in a
-                separate file from the rest of the content.</sch:assert>
+            <sch:assert test="count(ancestor::html:section | ancestor::html:article) = 1">[nordic204a] footnotes must be placed in a top-level section.</sch:assert>
             <sch:assert test="ancestor::html:section[tokenize(@epub:type,'\s+')='footnotes']">[nordic204a] 'footnote' must have a section ancestor with 'footnotes'.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
     <sch:pattern id="epub_nordic_204_b">
         <sch:rule context="html:*[not(ancestor::html:body[html:header]) and tokenize(@epub:type,'\s+')='footnote']">
-            <sch:assert test="count(ancestor::html:section | ancestor::html:article) = 0">[nordic204b] footnotes must be placed in a top-level sectioning element (i.e. not in section element, only in
-                the body element). Remember that footnotes should be placed in a separate file from the rest of the content.</sch:assert>
+            <sch:assert test="count(ancestor::html:section | ancestor::html:article) = 0">[nordic204b] footnotes must be placed in the body element, not in a nested section. Remember that footnotes
+                should be placed in a separate file from the rest of the content.</sch:assert>
             <sch:assert test="ancestor::html:body[tokenize(@epub:type,'\s+')='footnotes']">[nordic204b] 'footnote' must have a body ancestor with 'footnotes'.</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -851,6 +850,32 @@
                 elements.</sch:report>
             <sch:report test="count(html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6)   =  0 and not(self::html:div)">[nordic265] linegroups without headlines must be div
                 elements.</sch:report>
+        </sch:rule>
+    </sch:pattern>
+
+    <sch:pattern id="epub_nordic_266_a">
+        <sch:rule context="html:*[*[tokenize(@epub:type,'\s+')='footnote']]">
+            <sch:assert test="self::html:ol">[nordic266a] Footnotes must be wrapped in a "ol" element.</sch:assert>
+            <sch:assert test="tokenize(@epub:type,'\s+')='footnotes'">[nordic266a] The footnotes "ol" element must use the epub:type "footnotes".</sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+    <sch:pattern id="epub_nordic_266_b">
+        <sch:rule context="html:*[parent::ol[tokenize(@epub:type,'\s+')='footnotes']]">
+            <sch:assert test="tokenize(@epub:type,'\s+')='footnote'">[nordic266b] List items inside a footnotes list must use epub:type="footnote"</sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+    <sch:pattern id="epub_nordic_267_a">
+        <sch:rule context="html:*[*[tokenize(@epub:type,'\s+')='rearnote']]">
+            <sch:assert test="self::html:ol">[nordic267a] Rearnotes must be wrapped in a "ol" element.</sch:assert>
+            <sch:assert test="tokenize(@epub:type,'\s+')='rearnotes'">[nordic266a] The rearnotes "ol" element must use the epub:type "rearnotes".</sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+    <sch:pattern id="epub_nordic_267_b">
+        <sch:rule context="html:*[parent::ol[tokenize(@epub:type,'\s+')='footnotes']]">
+            <sch:assert test="tokenize(@epub:type,'\s+')='rearnote'">[nordic267b] List items inside a rearnotes list must use epub:type="rearnote"</sch:assert>
         </sch:rule>
     </sch:pattern>
 

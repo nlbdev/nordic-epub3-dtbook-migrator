@@ -3747,7 +3747,7 @@
                 <value>z3998:fiction</value>
                 <value>z3998:figure</value>
                 <value>z3998:filmography</value>
-                <value>z3998:footnote</value>
+                <!--<value>z3998:footnote</value>-->
                 <!--<value>z3998:footnotes</value>-->
                 <!--<value>z3998:foreword</value>-->
                 <value>z3998:fraction</value>
