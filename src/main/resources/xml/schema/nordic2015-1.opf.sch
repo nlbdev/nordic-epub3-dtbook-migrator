@@ -158,4 +158,18 @@
         </rule>
     </pattern>
 
+    <pattern id="opf_nordic_13">
+        <rule context="opf:item[@media-type='application/xhtml+xml' and @href='nav.xhtml']">
+            <assert test="tokenize(@properties,'\s+')='nav'">[opf13] the Navigation Document must be identified with the attribute properties="nav" in the OPF manifest</assert>
+        </rule>
+    </pattern>
+
+    <pattern id="opf_nordic_14">
+        <rule context="opf:itemref">
+            <let name="itemref" value="."/>
+            <report test="count(//opf:item[@id=$itemref/@idref and (tokenize(@properties,'\s+')='nav' or @href='nav.xhtml')])">[opf14] the Navigation Document must not be present in the OPF
+                spine.</report>
+        </rule>
+    </pattern>
+
 </schema>

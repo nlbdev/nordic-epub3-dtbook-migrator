@@ -677,12 +677,34 @@
 
     <!-- prodnote -->
     <x:scenario label="when processing a prodnote element">
-        <x:context>
-            <dtbook:prodnote/>
-        </x:context>
-        <x:expect label="the resulting element should be a aside element with an added epub:type of z3998:production">
-            <html:aside id="..." epub:type="z3998:production" class="prodnote"/>
-        </x:expect>
+        <x:scenario label="which is not a top-level element on the cover page">
+            <x:context>
+                <dtbook:prodnote/>
+            </x:context>
+            <x:expect label="the resulting element should be a aside element with an added epub:type of z3998:production">
+                <html:aside id="..." epub:type="z3998:production" class="prodnote"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="which is a top-level element on the cover page">
+            <x:context>
+                <dtbook:frontmatter>
+                    <dtbook:level1 class="cover">
+                        <dtbook:prodnote/>
+                    </dtbook:level1>
+                    <dtbook:level1 class="jacketcopy">
+                        <dtbook:prodnote/>
+                    </dtbook:level1>
+                </dtbook:frontmatter>
+            </x:context>
+            <x:expect label="the resulting element should be a section element with an added epub:type of z3998:production">
+                <html:section epub:type="cover" id="...">
+                    <html:section id="..." epub:type="z3998:production"/>
+                </html:section>
+                <html:section epub:type="cover" id="...">
+                    <html:section id="..." epub:type="z3998:production"/>
+                </html:section>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.prodnote -->

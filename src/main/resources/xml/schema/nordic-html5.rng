@@ -750,28 +750,18 @@
     guide to the content and nature of a <book>.
   -->
     <define name="frontmatter">
-        <choice>
-            <ref name="frontmatter.titlepage"/>
-            <ref name="frontmatter.colophon"/>
-            <ref name="frontmatter.toc"/>
-            <ref name="frontmatter.foreword"/>
-            <ref name="frontmatter.introduction"/>
-            <ref name="frontmatter.other"/>
-        </choice>
-    </define>
-    <define name="frontmatter.titlepage">
         <attribute name="epub:type">
             <choice>
                 <list>
                     <ref name="types"/>
                     <value>frontmatter</value>
                     <ref name="types"/>
-                    <value>titlepage</value>
+                    <ref name="frontmatter.types"/>
                     <ref name="types"/>
                 </list>
                 <list>
                     <ref name="types"/>
-                    <value>titlepage</value>
+                    <ref name="frontmatter.types"/>
                     <ref name="types"/>
                     <value>frontmatter</value>
                     <ref name="types"/>
@@ -783,115 +773,19 @@
             <ref name="level1.content"/>
         </choice>
     </define>
-    <define name="frontmatter.colophon">
-        <attribute name="epub:type">
+    <define name="frontmatter.types">
+        <optional>
             <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>frontmatter</value>
-                    <ref name="types"/>
-                    <value>colophon</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>colophon</value>
-                    <ref name="types"/>
-                    <value>frontmatter</value>
-                    <ref name="types"/>
-                </list>
+                <value>titlepage</value>
+                <value>colophon</value>
+                <value>toc</value>
+                <value>foreword</value>
+                <value>preface</value>
+                <value>introduction</value>
             </choice>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
+        </optional>
     </define>
-    <define name="frontmatter.toc">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>frontmatter</value>
-                    <ref name="types"/>
-                    <value>toc</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>toc</value>
-                    <ref name="types"/>
-                    <value>frontmatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
-    </define>
-    <define name="frontmatter.foreword">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>frontmatter</value>
-                    <ref name="types"/>
-                    <value>foreword</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>foreword</value>
-                    <ref name="types"/>
-                    <value>frontmatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
-    </define>
-    <define name="frontmatter.introduction">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>frontmatter</value>
-                    <ref name="types"/>
-                    <value>introduction</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>introduction</value>
-                    <ref name="types"/>
-                    <value>frontmatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
-    </define>
-    <define name="frontmatter.other">
-        <attribute name="epub:type">
-            <list>
-                <ref name="types"/>
-                <value>frontmatter</value>
-                <ref name="types"/>
-            </list>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
-    </define>
+    
     <!--
     Use: bodymatter consists of the text proper of a book, as contrasted
     with preliminary material <frontmatter> or supplementary information
@@ -903,167 +797,64 @@
   -->
     <define name="bodymatter">
         <choice>
-            <ref name="bodymatter.prologue"/>
-            <ref name="bodymatter.preface"/>
-            <ref name="bodymatter.part"/>
-            <ref name="bodymatter.chapter"/>
-            <ref name="bodymatter.rearnotes"/>
-            <ref name="bodymatter.conclusion"/>
-            <ref name="bodymatter.epilogue"/>
+            <group>
+                <attribute name="epub:type">
+                    <choice>
+                        <list>
+                            <ref name="types"/>
+                            <value>bodymatter</value>
+                            <ref name="types"/>
+                            <ref name="bodymatter.types"/>
+                            <ref name="types"/>
+                        </list>
+                        <list>
+                            <ref name="types"/>
+                            <ref name="bodymatter.types"/>
+                            <ref name="types"/>
+                            <value>bodymatter</value>
+                            <ref name="types"/>
+                        </list>
+                    </choice>
+                </attribute>
+                <ref name="level1.content"/>
+            </group>
+            <group>
+                <attribute name="epub:type">
+                    <choice>
+                        <list>
+                            <ref name="types"/>
+                            <value>bodymatter</value>
+                            <ref name="types"/>
+                            <value>part</value>
+                            <ref name="types"/>
+                        </list>
+                        <list>
+                            <ref name="types"/>
+                            <value>part</value>
+                            <ref name="types"/>
+                            <value>bodymatter</value>
+                            <ref name="types"/>
+                        </list>
+                    </choice>
+                </attribute>
+                <choice>
+                    <ref name="level1.only-headline"/>
+                    <ref name="level1.content"/>
+                </choice>
+                <!-- Note: The subsections of a part must have an epub:type of 'chapter'. -->
+            </group>
         </choice>
     </define>
-    <define name="bodymatter.prologue">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                    <value>prologue</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>prologue</value>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <ref name="level1.content"/>
-    </define>
-    <define name="bodymatter.preface">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                    <value>preface</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>preface</value>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <ref name="level1.content"/>
-    </define>
-    <define name="bodymatter.part">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                    <value>part</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>part</value>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
+    <define name="bodymatter.types">
         <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
+            <value>prologue</value>
+            <value>preface</value>
+            <value>introduction</value>
+            <value>chapter</value>
+            <value>rearnotes</value>
+            <value>conclusion</value>
+            <value>epilogue</value>
         </choice>
-        <!-- Note: The subsections of a part must have an epub:type of 'chapter'. -->
-    </define>
-    <define name="bodymatter.chapter">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                    <value>chapter</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>chapter</value>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <ref name="level1.content"/>
-    </define>
-    <define name="bodymatter.rearnotes">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                    <value>rearnotes</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>rearnotes</value>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <choice>
-            <ref name="level1.content"/>
-        </choice>
-    </define>
-    <define name="bodymatter.conclusion">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                    <value>conclusion</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>conclusion</value>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <ref name="level1.content"/>
-    </define>
-    <define name="bodymatter.epilogue">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                    <value>epilogue</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>epilogue</value>
-                    <ref name="types"/>
-                    <value>bodymatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <ref name="level1.content"/>
     </define>
     
     <!--
@@ -1072,29 +863,18 @@
     the bodymatter of the book.
   -->
     <define name="backmatter">
-        <choice>
-            <ref name="backmatter.afterword"/>
-            <ref name="backmatter.toc"/>
-            <ref name="backmatter.index"/>
-            <ref name="backmatter.appendix"/>
-            <ref name="backmatter.glossary"/>
-            <ref name="backmatter.footnotes"/>
-            <ref name="backmatter.other"/>
-        </choice>
-    </define>
-    <define name="backmatter.afterword">
         <attribute name="epub:type">
             <choice>
                 <list>
                     <ref name="types"/>
                     <value>backmatter</value>
                     <ref name="types"/>
-                    <value>afterword</value>
+                    <ref name="backmatter.types"/>
                     <ref name="types"/>
                 </list>
                 <list>
                     <ref name="types"/>
-                    <value>afterword</value>
+                    <ref name="backmatter.types"/>
                     <ref name="types"/>
                     <value>backmatter</value>
                     <ref name="types"/>
@@ -1106,138 +886,17 @@
             <ref name="level1.content"/>
         </choice>
     </define>
-    <define name="backmatter.toc">
-        <attribute name="epub:type">
+    <define name="backmatter.types">
+        <optional>
             <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                    <value>toc</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>toc</value>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                </list>
+                <value>afterword</value>
+                <value>toc</value>
+                <value>index</value>
+                <value>appendix</value>
+                <value>glossary</value>
+                <value>footnotes</value>
             </choice>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
-    </define>
-    <define name="backmatter.index">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                    <value>index</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>index</value>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
-    </define>
-    <define name="backmatter.appendix">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                    <value>appendix</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>appendix</value>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
-    </define>
-    <define name="backmatter.glossary">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                    <value>glossary</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>glossary</value>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
-    </define>
-    <define name="backmatter.footnotes">
-        <attribute name="epub:type">
-            <choice>
-                <list>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                    <value>footnotes</value>
-                    <ref name="types"/>
-                </list>
-                <list>
-                    <ref name="types"/>
-                    <value>footnotes</value>
-                    <ref name="types"/>
-                    <value>backmatter</value>
-                    <ref name="types"/>
-                </list>
-            </choice>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
-    </define>
-    <define name="backmatter.other">
-        <attribute name="epub:type">
-            <list>
-                <ref name="types"/>
-                <value>backmatter</value>
-                <ref name="types"/>
-            </list>
-        </attribute>
-        <choice>
-            <ref name="level1.only-headline"/>
-            <ref name="level1.content"/>
-        </choice>
+        </optional>
     </define>
     
     <!-- ============ Hierarchic Structure (6 levels deep) ============ -->
@@ -2223,31 +1882,44 @@
     
     <!-- Use: linegroup provides means to group a set of lines of a poem. -->
     <define name="linegroup">
-        <element name="section">
-            <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
-            <!-- Strict content model: (h1 | span | p | section | aside | a | ul | ol | dl | blockquote | img | figure)* -->
-            <ref name="attlist.linegroup"/>
-            <zeroOrMore>
-                <choice>
-                    <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
-                    <ref name="dateline"/> <!-- span -->
-                    <ref name="epigraph"/> <!-- p -->
-                    <ref name="byline"/> <!-- span -->
-                    <ref name="linegroup"/> <!-- section -->
-                    <ref name="line"/> <!-- p -->
-                    <ref name="pagebreak.block"/> <!-- div -->
-                    <ref name="prodnote"/> <!-- aside -->
-                    <ref name="noteref"/> <!-- a -->
-                    <ref name="annoref"/> <!-- a -->
-                    <ref name="note"/> <!-- aside -->
-                    <ref name="annotation"/> <!-- aside -->
-                    <ref name="p"/> <!-- p, ul, ol, dl, span -->
-                    <ref name="blockquote"/> <!-- blockquote -->
-                    <ref name="img"/> <!-- img -->
-                    <ref name="figure.imggroup"/> <!-- figure -->
-                </choice>
-            </zeroOrMore>
-        </element>
+        <!-- linegroups with headlines must be section elements; otherwise they must be div elements -->
+        <choice>
+            <element name="div">
+                <ref name="attrs.noclass"/>
+                <ref name="attlist.linegroup"/>
+                <ref name="linegroup.common"/>
+            </element>
+            <element name="section">
+                <ref name="attrsrqd.noclass"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
+                <ref name="attlist.linegroup"/>
+                <ref name="linegroup.common"/>
+                <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
+                <ref name="linegroup.common"/>
+            </element>
+        </choice>
+    </define>
+    <define name="linegroup.common">
+        <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
+        <!-- Strict content model: (h1 | span | p | section | aside | a | ul | ol | dl | blockquote | img | figure)* -->
+        <zeroOrMore>
+            <choice>
+                <ref name="dateline"/> <!-- span -->
+                <ref name="epigraph"/> <!-- p -->
+                <ref name="byline"/> <!-- span -->
+                <ref name="linegroup"/> <!-- section -->
+                <ref name="line"/> <!-- p -->
+                <ref name="pagebreak.block"/> <!-- div -->
+                <ref name="prodnote"/> <!-- aside -->
+                <ref name="noteref"/> <!-- a -->
+                <ref name="annoref"/> <!-- a -->
+                <ref name="note"/> <!-- aside -->
+                <ref name="annotation"/> <!-- aside -->
+                <ref name="p"/> <!-- p, ul, ol, dl, span -->
+                <ref name="blockquote"/> <!-- blockquote -->
+                <ref name="img"/> <!-- img -->
+                <ref name="figure.imggroup"/> <!-- figure -->
+            </choice>
+        </zeroOrMore>
     </define>
     <define name="attlist.linegroup" combine="interleave">
         <attribute name="class">
@@ -2257,7 +1929,6 @@
                 <ref name="classes"/>
             </list>
         </attribute>
-        <ref name="attrsrqd.noclass"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
     
     <!-- Use: poem is a complete poem or fragment thereof. -->
@@ -2296,7 +1967,14 @@
                 <ref name="types"/>
             </list>
         </attribute>
-        <ref name="attrsrqd.notype"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
+        <attribute name="class">
+            <list>
+                <ref name="classes"/>
+                <value>poem</value>
+                <ref name="classes"/>
+            </list>
+        </attribute>
+        <ref name="attrsrqd.base"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
     
     <!-- ========================= The Anchor Element ========================== -->
@@ -2720,8 +2398,7 @@
                 <ref name="classes"/>
             </list>
         </attribute>
-        <ref name="coreattrs.base"/>
-        <ref name="i18n"/>
+        <ref name="attrsrqd.base"/>
         <!-- The title attribute must be used to describe the page number. -->
     </define>
     
@@ -4069,7 +3746,7 @@
                 <value>z3998:fiction</value>
                 <value>z3998:figure</value>
                 <value>z3998:filmography</value>
-                <value>z3998:footnote</value>
+                <!--<value>z3998:footnote</value>-->
                 <!--<value>z3998:footnotes</value>-->
                 <!--<value>z3998:foreword</value>-->
                 <value>z3998:fraction</value>
