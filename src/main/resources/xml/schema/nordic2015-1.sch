@@ -829,7 +829,7 @@
     </sch:pattern>
 
     <!-- Rule 263: there must be a headline on the titlepage -->
-    <sch:pattern>
+    <sch:pattern id="epub_nordic_263">
         <sch:rule context="html:body[tokenize(@epub:type,'\s+')='titlepage'] | html:section[tokenize(@epub:type,'\s+')='titlepage']">
             <sch:assert test="count(html:*[matches(local-name(),'h\d')])">[nordic263] the titlepage must have a headline (and the headline must have epub:type="fulltitle" and
                 class="title")</sch:assert>
@@ -837,11 +837,20 @@
     </sch:pattern>
 
     <!-- Rule 264: h1 on titlepage must be epub:type=fulltitle with class=title -->
-    <sch:pattern>
+    <sch:pattern id="epub_nordic_264">
         <sch:rule
             context="html:body[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')] | html:section[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')]">
             <sch:assert test="tokenize(@epub:type,'\s+') = 'fulltitle'">[nordic264] the headline on the titlepage must have a epub:type with the value "fulltitle"</sch:assert>
             <sch:assert test="tokenize(@class,'\s+') = 'title'">[nordic264] the headline on the titlepage must have a class with the value "title"</sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
+    <sch:pattern id="epub_nordic_265">
+        <sch:rule context="html:*[tokenize(@class,'\s+')='linegroup']">
+            <sch:report test="count(html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6) &gt; 0 and not(self::html:section)">[nordic265] linegroups with headlines must be section
+                elements.</sch:report>
+            <sch:report test="count(html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6)   =  0 and not(self::html:div)">[nordic265] linegroups without headlines must be div
+                elements.</sch:report>
         </sch:rule>
     </sch:pattern>
 

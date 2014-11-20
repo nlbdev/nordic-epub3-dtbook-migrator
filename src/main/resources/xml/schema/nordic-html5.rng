@@ -1882,31 +1882,44 @@
     
     <!-- Use: linegroup provides means to group a set of lines of a poem. -->
     <define name="linegroup">
-        <element name="section">
-            <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
-            <!-- Strict content model: (h1 | span | p | section | aside | a | ul | ol | dl | blockquote | img | figure)* -->
-            <ref name="attlist.linegroup"/>
-            <zeroOrMore>
-                <choice>
-                    <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
-                    <ref name="dateline"/> <!-- span -->
-                    <ref name="epigraph"/> <!-- p -->
-                    <ref name="byline"/> <!-- span -->
-                    <ref name="linegroup"/> <!-- section -->
-                    <ref name="line"/> <!-- p -->
-                    <ref name="pagebreak.block"/> <!-- div -->
-                    <ref name="prodnote"/> <!-- aside -->
-                    <ref name="noteref"/> <!-- a -->
-                    <ref name="annoref"/> <!-- a -->
-                    <ref name="note"/> <!-- aside -->
-                    <ref name="annotation"/> <!-- aside -->
-                    <ref name="p"/> <!-- p, ul, ol, dl, span -->
-                    <ref name="blockquote"/> <!-- blockquote -->
-                    <ref name="img"/> <!-- img -->
-                    <ref name="figure.imggroup"/> <!-- figure -->
-                </choice>
-            </zeroOrMore>
-        </element>
+        <!-- linegroups with headlines must be section elements; otherwise they must be div elements -->
+        <choice>
+            <element name="div">
+                <ref name="attrs.noclass"/>
+                <ref name="attlist.linegroup"/>
+                <ref name="linegroup.common"/>
+            </element>
+            <element name="section">
+                <ref name="attrsrqd.noclass"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
+                <ref name="attlist.linegroup"/>
+                <ref name="linegroup.common"/>
+                <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
+                <ref name="linegroup.common"/>
+            </element>
+        </choice>
+    </define>
+    <define name="linegroup.common">
+        <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
+        <!-- Strict content model: (h1 | span | p | section | aside | a | ul | ol | dl | blockquote | img | figure)* -->
+        <zeroOrMore>
+            <choice>
+                <ref name="dateline"/> <!-- span -->
+                <ref name="epigraph"/> <!-- p -->
+                <ref name="byline"/> <!-- span -->
+                <ref name="linegroup"/> <!-- section -->
+                <ref name="line"/> <!-- p -->
+                <ref name="pagebreak.block"/> <!-- div -->
+                <ref name="prodnote"/> <!-- aside -->
+                <ref name="noteref"/> <!-- a -->
+                <ref name="annoref"/> <!-- a -->
+                <ref name="note"/> <!-- aside -->
+                <ref name="annotation"/> <!-- aside -->
+                <ref name="p"/> <!-- p, ul, ol, dl, span -->
+                <ref name="blockquote"/> <!-- blockquote -->
+                <ref name="img"/> <!-- img -->
+                <ref name="figure.imggroup"/> <!-- figure -->
+            </choice>
+        </zeroOrMore>
     </define>
     <define name="attlist.linegroup" combine="interleave">
         <attribute name="class">
@@ -1916,7 +1929,6 @@
                 <ref name="classes"/>
             </list>
         </attribute>
-        <ref name="attrsrqd.noclass"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
     
     <!-- Use: poem is a complete poem or fragment thereof. -->
@@ -1955,7 +1967,14 @@
                 <ref name="types"/>
             </list>
         </attribute>
-        <ref name="attrsrqd.notype"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
+        <attribute name="class">
+            <list>
+                <ref name="classes"/>
+                <value>poem</value>
+                <ref name="classes"/>
+            </list>
+        </attribute>
+        <ref name="attrsrqd.base"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
     
     <!-- ========================= The Anchor Element ========================== -->
