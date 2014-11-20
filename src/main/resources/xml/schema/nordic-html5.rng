@@ -2398,8 +2398,7 @@
                 <ref name="classes"/>
             </list>
         </attribute>
-        <ref name="coreattrs.base"/>
-        <ref name="i18n"/>
+        <ref name="attrsrqd.base"/>
         <!-- The title attribute must be used to describe the page number. -->
     </define>
     
