@@ -3205,142 +3205,148 @@
     <!-- a typical toc -->
     <x:scenario label="when processing a typical toc">
         <x:context>
-            <dtbook:list type="pl" class="toc">
-                <dtbook:li>
-                    <dtbook:lic>
-                        <dtbook:strong><![CDATA[Kapittel 1 Vitenskap: grunnleggende antakelser]]></dtbook:strong>
-                    </dtbook:lic>
-                    <dtbook:lic>13</dtbook:lic>
-                    <dtbook:list type="pl">
-                        <dtbook:li>
-                            <dtbook:lic>Hva er vitenskap?</dtbook:lic>
-                            <dtbook:lic>14</dtbook:lic>
-                        </dtbook:li>
-                        <dtbook:li>
-                            <dtbook:lic>Psykologi som vitenskap: tre tradisjoner</dtbook:lic>
-                            <dtbook:lic>17</dtbook:lic>
-                        </dtbook:li>
-                    </dtbook:list>
-                </dtbook:li>
-                <dtbook:li>
-                    <dtbook:lic>
-                        <dtbook:strong>Del 1 Grunnleggende begreper og prinsipper</dtbook:strong>
-                    </dtbook:lic>
-                    <dtbook:lic>39</dtbook:lic>
-                    <dtbook:list type="pl">
+            <dtbook:frontmatter>
+                <dtbook:level1>
+                    <dtbook:list type="pl" class="toc">
                         <dtbook:li>
                             <dtbook:lic>
-                                <dtbook:strong><![CDATA[Kapittel 2 Vitenskapelig tenkning: validitet, begreper og teori]]></dtbook:strong>
+                                <dtbook:strong><![CDATA[Kapittel 1 Vitenskap: grunnleggende antakelser]]></dtbook:strong>
                             </dtbook:lic>
-                            <dtbook:lic>41</dtbook:lic>
+                            <dtbook:lic>13</dtbook:lic>
                             <dtbook:list type="pl">
                                 <dtbook:li>
-                                    <dtbook:lic>Validitet</dtbook:lic>
+                                    <dtbook:lic>Hva er vitenskap?</dtbook:lic>
+                                    <dtbook:lic>14</dtbook:lic>
+                                </dtbook:li>
+                                <dtbook:li>
+                                    <dtbook:lic>Psykologi som vitenskap: tre tradisjoner</dtbook:lic>
+                                    <dtbook:lic>17</dtbook:lic>
+                                </dtbook:li>
+                            </dtbook:list>
+                        </dtbook:li>
+                        <dtbook:li>
+                            <dtbook:lic>
+                                <dtbook:strong>Del 1 Grunnleggende begreper og prinsipper</dtbook:strong>
+                            </dtbook:lic>
+                            <dtbook:lic>39</dtbook:lic>
+                            <dtbook:list type="pl">
+                                <dtbook:li>
+                                    <dtbook:lic>
+                                        <dtbook:strong><![CDATA[Kapittel 2 Vitenskapelig tenkning: validitet, begreper og teori]]></dtbook:strong>
+                                    </dtbook:lic>
                                     <dtbook:lic>41</dtbook:lic>
+                                    <dtbook:list type="pl">
+                                        <dtbook:li>
+                                            <dtbook:lic>Validitet</dtbook:lic>
+                                            <dtbook:lic>41</dtbook:lic>
+                                        </dtbook:li>
+                                        <dtbook:li>
+                                            <dtbook:lic>Vitenskapelige begreper</dtbook:lic>
+                                            <dtbook:lic>46</dtbook:lic>
+                                        </dtbook:li>
+                                    </dtbook:list>
                                 </dtbook:li>
                                 <dtbook:li>
-                                    <dtbook:lic>Vitenskapelige begreper</dtbook:lic>
-                                    <dtbook:lic>46</dtbook:lic>
-                                </dtbook:li>
-                            </dtbook:list>
-                        </dtbook:li>
-                        <dtbook:li>
-                            <dtbook:lic>
-                                <dtbook:strong><![CDATA[Kapittel 3 Forskningsprosessen: fra spørsmål til svar]]></dtbook:strong>
-                            </dtbook:lic>
-                            <dtbook:lic>70</dtbook:lic>
-                            <dtbook:list type="pl">
-                                <dtbook:li>
-                                    <dtbook:lic>Hvor kommer ideer til forskning fra?</dtbook:lic>
-                                    <dtbook:lic>71</dtbook:lic>
-                                </dtbook:li>
-                                <dtbook:li>
-                                    <dtbook:lic>Psykologien som empirisk disiplin</dtbook:lic>
-                                    <dtbook:lic>75</dtbook:lic>
-                                </dtbook:li>
-                                <dtbook:li>
-                                    <dtbook:lic>Logikk i forskning</dtbook:lic>
-                                    <dtbook:lic>80</dtbook:lic>
-                                </dtbook:li>
-                                <dtbook:pagenum id="page-8" page="normal">8</dtbook:pagenum>
-                                <dtbook:li>
-                                    <dtbook:lic><![CDATA[Ideer til forskning: hypoteser og prediksjoner]]></dtbook:lic>
-                                    <dtbook:lic>83</dtbook:lic>
+                                    <dtbook:lic>
+                                        <dtbook:strong><![CDATA[Kapittel 3 Forskningsprosessen: fra spørsmål til svar]]></dtbook:strong>
+                                    </dtbook:lic>
+                                    <dtbook:lic>70</dtbook:lic>
+                                    <dtbook:list type="pl">
+                                        <dtbook:li>
+                                            <dtbook:lic>Hvor kommer ideer til forskning fra?</dtbook:lic>
+                                            <dtbook:lic>71</dtbook:lic>
+                                        </dtbook:li>
+                                        <dtbook:li>
+                                            <dtbook:lic>Psykologien som empirisk disiplin</dtbook:lic>
+                                            <dtbook:lic>75</dtbook:lic>
+                                        </dtbook:li>
+                                        <dtbook:li>
+                                            <dtbook:lic>Logikk i forskning</dtbook:lic>
+                                            <dtbook:lic>80</dtbook:lic>
+                                        </dtbook:li>
+                                        <dtbook:pagenum id="page-8" page="normal">8</dtbook:pagenum>
+                                        <dtbook:li>
+                                            <dtbook:lic><![CDATA[Ideer til forskning: hypoteser og prediksjoner]]></dtbook:lic>
+                                            <dtbook:lic>83</dtbook:lic>
+                                        </dtbook:li>
+                                    </dtbook:list>
                                 </dtbook:li>
                             </dtbook:list>
                         </dtbook:li>
                     </dtbook:list>
-                </dtbook:li>
-            </dtbook:list>
+                </dtbook:level1>
+            </dtbook:frontmatter>
         </x:context>
         <x:expect label="the resulting toc should be as given">
-            <html:ol id="..." epub:type="toc" class="list-style-type-none">
-                <html:li id="...">
-                    <html:span class="lic">
-                        <html:strong>Kapittel 1 Vitenskap: grunnleggende antakelser</html:strong>
-                    </html:span>
-                    <html:span class="lic">13</html:span>
-                    <html:ol id="..." class="list-style-type-none">
-                        <html:li id="...">
-                            <html:span class="lic">Hva er vitenskap?</html:span>
-                            <html:span class="lic">14</html:span>
-                        </html:li>
-                        <html:li id="...">
-                            <html:span class="lic"><![CDATA[Psykologi som vitenskap: tre tradisjoner]]></html:span>
-                            <html:span class="lic">17</html:span>
-                        </html:li>
-                    </html:ol>
-                </html:li>
-                <html:li id="...">
-                    <html:span class="lic">
-                        <html:strong>Del 1 Grunnleggende begreper og prinsipper</html:strong>
-                    </html:span>
-                    <html:span class="lic">39</html:span>
-                    <html:ol id="..." class="list-style-type-none">
-                        <html:li id="...">
-                            <html:span class="lic">
-                                <html:strong><![CDATA[Kapittel 2 Vitenskapelig tenkning: validitet, begreper og teori]]></html:strong>
-                            </html:span>
-                            <html:span class="lic">41</html:span>
-                            <html:ol id="..." class="list-style-type-none">
-                                <html:li id="...">
-                                    <html:span class="lic">Validitet</html:span>
-                                    <html:span class="lic">41</html:span>
-                                </html:li>
-                                <html:li id="...">
-                                    <html:span class="lic">Vitenskapelige begreper</html:span>
-                                    <html:span class="lic">46</html:span>
-                                </html:li>
-                            </html:ol>
-                        </html:li>
-                        <html:li id="...">
-                            <html:span class="lic">
-                                <html:strong><![CDATA[Kapittel 3 Forskningsprosessen: fra spørsmål til svar]]></html:strong>
-                            </html:span>
-                            <html:span class="lic">70</html:span>
-                            <html:ol id="..." class="list-style-type-none">
-                                <html:li id="...">
-                                    <html:span class="lic"><![CDATA[Hvor kommer ideer til forskning fra?]]></html:span>
-                                    <html:span class="lic">71</html:span>
-                                </html:li>
-                                <html:li id="...">
-                                    <html:span class="lic"><![CDATA[Psykologien som empirisk disiplin]]></html:span>
-                                    <html:span class="lic">75</html:span>
-                                </html:li>
-                                <html:li id="...">
-                                    <html:span class="lic">Logikk i forskning</html:span>
-                                    <html:span class="lic">80</html:span>
-                                    <html:span epub:type="pagebreak" id="page-8" class="page-normal" title="8"/>
-                                </html:li>
-                                <html:li id="...">
-                                    <html:span class="lic"><![CDATA[Ideer til forskning: hypoteser og prediksjoner]]></html:span>
-                                    <html:span class="lic">83</html:span>
-                                </html:li>
-                            </html:ol>
-                        </html:li>
-                    </html:ol>
-                </html:li>
-            </html:ol>
+            <html:section epub:type="frontmatter toc" id="...">
+                <html:ol id="...">
+                    <html:li id="...">
+                        <html:span class="lic">
+                            <html:strong>Kapittel 1 Vitenskap: grunnleggende antakelser</html:strong>
+                        </html:span>
+                        <html:span class="lic">13</html:span>
+                        <html:ol id="...">
+                            <html:li id="...">
+                                <html:span class="lic">Hva er vitenskap?</html:span>
+                                <html:span class="lic">14</html:span>
+                            </html:li>
+                            <html:li id="...">
+                                <html:span class="lic"><![CDATA[Psykologi som vitenskap: tre tradisjoner]]></html:span>
+                                <html:span class="lic">17</html:span>
+                            </html:li>
+                        </html:ol>
+                    </html:li>
+                    <html:li id="...">
+                        <html:span class="lic">
+                            <html:strong>Del 1 Grunnleggende begreper og prinsipper</html:strong>
+                        </html:span>
+                        <html:span class="lic">39</html:span>
+                        <html:ol id="...">
+                            <html:li id="...">
+                                <html:span class="lic">
+                                    <html:strong><![CDATA[Kapittel 2 Vitenskapelig tenkning: validitet, begreper og teori]]></html:strong>
+                                </html:span>
+                                <html:span class="lic">41</html:span>
+                                <html:ol id="...">
+                                    <html:li id="...">
+                                        <html:span class="lic">Validitet</html:span>
+                                        <html:span class="lic">41</html:span>
+                                    </html:li>
+                                    <html:li id="...">
+                                        <html:span class="lic">Vitenskapelige begreper</html:span>
+                                        <html:span class="lic">46</html:span>
+                                    </html:li>
+                                </html:ol>
+                            </html:li>
+                            <html:li id="...">
+                                <html:span class="lic">
+                                    <html:strong><![CDATA[Kapittel 3 Forskningsprosessen: fra spørsmål til svar]]></html:strong>
+                                </html:span>
+                                <html:span class="lic">70</html:span>
+                                <html:ol id="...">
+                                    <html:li id="...">
+                                        <html:span class="lic"><![CDATA[Hvor kommer ideer til forskning fra?]]></html:span>
+                                        <html:span class="lic">71</html:span>
+                                    </html:li>
+                                    <html:li id="...">
+                                        <html:span class="lic"><![CDATA[Psykologien som empirisk disiplin]]></html:span>
+                                        <html:span class="lic">75</html:span>
+                                    </html:li>
+                                    <html:li id="...">
+                                        <html:span class="lic">Logikk i forskning</html:span>
+                                        <html:span class="lic">80</html:span>
+                                        <html:span epub:type="pagebreak" id="page-8" class="page-normal" title="8"/>
+                                    </html:li>
+                                    <html:li id="...">
+                                        <html:span class="lic"><![CDATA[Ideer til forskning: hypoteser og prediksjoner]]></html:span>
+                                        <html:span class="lic">83</html:span>
+                                    </html:li>
+                                </html:ol>
+                            </html:li>
+                        </html:ol>
+                    </html:li>
+                </html:ol>
+            </html:section>
         </x:expect>
     </x:scenario>
 
@@ -3922,6 +3928,55 @@
                     </html:section>
                 </html:section>
             </html:body>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="issue when converting toc #204">
+        <x:context>
+            <dtbook:frontmatter>
+                <dtbook:level1 class="toc">
+                    <dtbook:list type="pl"/>
+                </dtbook:level1>
+                <dtbook:level1>
+                    <dtbook:list type="pl" class="toc"/>
+                </dtbook:level1>
+            </dtbook:frontmatter>
+            <dtbook:bodymatter>
+                <dtbook:level1 class="toc">
+                    <dtbook:list type="pl"/>
+                </dtbook:level1>
+                <dtbook:level1>
+                    <dtbook:list type="pl" class="toc"/>
+                </dtbook:level1>
+            </dtbook:bodymatter>
+            <dtbook:rearmatter>
+                <dtbook:level1 class="toc">
+                    <dtbook:list type="pl"/>
+                </dtbook:level1>
+                <dtbook:level1>
+                    <dtbook:list type="pl" class="toc"/>
+                </dtbook:level1>
+            </dtbook:rearmatter>
+        </x:context>
+        <x:expect label="all the tocs should be converted and placed in the matter they occured in the DTBook">
+            <html:section epub:type="frontmatter toc" id="...">
+                <html:ol class="list-style-type-none" id="..."/>
+            </html:section>
+            <html:section epub:type="frontmatter toc" id="...">
+                <html:ol id="..."/>
+            </html:section>
+            <html:section epub:type="bodymatter toc" id="...">
+                <html:ol class="list-style-type-none" id="..."/>
+            </html:section>
+            <html:section epub:type="bodymatter toc" id="...">
+                <html:ol id="..."/>
+            </html:section>
+            <html:section epub:type="backmatter toc" id="...">
+                <html:ol class="list-style-type-none" id="..."/>
+            </html:section>
+            <html:section epub:type="backmatter toc" id="...">
+                <html:ol id="..."/>
+            </html:section>
         </x:expect>
     </x:scenario>
 

@@ -413,20 +413,12 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 127: Table of contents must be inside a level1 -->
-    <sch:pattern id="dtbook_TPB_127">
-        <sch:rule context="html:*[@class='toc']">
-            <sch:assert test="self::html:nav[parent::html:body or parent::html:section/parent::html:body/html:header]">[tpb127] The "toc" class is only allowed on the main nav element.</sch:assert>
-            <sch:assert test="self::html:nav[tokenize(@epub:type,' ')='toc']">[tpb127] The main nav element must use the epub:type "toc".</sch:assert>
-            <!--<sch:assert test="parent::html:*[(self::html:section or self::html:article) and //html:body/html:header and count(ancestor::html:section | ancestor::html:article) = 0]">[tpb127] Table of contents (&lt;list class="toc"&gt;)must be inside a level1</sch:assert>
-      <sch:report test="ancestor::html:*[self::html:ul or self::html:ol][@class='toc']">[tpb127] Nested lists in table of contents must not have a 'toc' attribute</sch:report>-->
-        </sch:rule>
-    </sch:pattern>
-
+    <!-- Rule 127: Table of contents list must be child of the toc sectioning element -->
     <sch:pattern id="epub_nordic_127">
-        <sch:rule context="html:*[tokenize(@epub:type,' ')='toc']">
-            <sch:assert test="ancestor::*[tokenize(@epub:type,' ')=('frontmatter','backmatter') or tokenize(base-uri(),'/')[last()]='nav.xhtml']">[nordic127] The epub:type "toc" is only allowed in
-                frontmatter, backmatter, and in the EPUB3 Navigation Document (nav.xhtml).</sch:assert>
+        <sch:rule context="html:section[tokenize(@epub:type,'\s+')='toc'] | html:body[tokenize(@epub:type,'\s+')='toc']">
+            <sch:assert test="html:ol">[nordic127a] The table of contents must contain a "ol" element as a direct child of the parent <sch:value-of
+                    select="if (self::html:body) then 'body' else 'section'"/> element.</sch:assert>
+            <sch:report test="tokenize(@epub:type,'\s+')='bodymatter'">[nordic127b] The table of contents must be in either frontmatter or backmatter; it is not allowed in bodymatter.</sch:report>
         </sch:rule>
     </sch:pattern>
 

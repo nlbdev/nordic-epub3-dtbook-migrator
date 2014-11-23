@@ -1066,6 +1066,14 @@
 
     <xsl:template match="html:ol | html:ul">
         <xsl:choose>
+            <xsl:when test="parent::html:section[f:types(.)='toc' and not(ancestor::html:section | ancestor::html:article)]">
+                <list>
+                    <xsl:call-template name="attlist.list">
+                        <xsl:with-param name="classes" select="'toc'" tunnel="yes"/>
+                    </xsl:call-template>
+                    <xsl:apply-templates select="node()"/>
+                </list>
+            </xsl:when>
             <xsl:when test="f:types(.)=('rearnotes','footnotes')">
                 <xsl:apply-templates select="node()"/>
             </xsl:when>
@@ -1099,6 +1107,7 @@
             <xsl:variable name="marker">
                 <xsl:choose>
                     <xsl:when test="parent::html:*/f:classes(.)='list-style-type-none'"/>
+                    <xsl:when test="ancestor::html:section[1][f:types(.)='toc' and not(ancestor::html:section | ancestor::html:article)]"/>
                     <xsl:when test="parent::html:ul">
                         <xsl:value-of select="'• '"/>
                     </xsl:when>

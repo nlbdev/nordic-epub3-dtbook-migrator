@@ -3680,7 +3680,7 @@
                 <value>table-row</value>
                 <value>title</value>
                 <!--<value>titlepage</value>-->
-                <!--<value>toc</value>-->
+                <value>toc</value>
                 <value>topic-sentence</value>
                 <value>volume</value>
                 <value>warning</value>
