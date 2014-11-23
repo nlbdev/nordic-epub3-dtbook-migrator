@@ -895,6 +895,7 @@
                 <value>appendix</value>
                 <value>glossary</value>
                 <value>footnotes</value>
+                <value>rearnotes</value>
             </choice>
         </optional>
     </define>
