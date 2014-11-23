@@ -514,28 +514,17 @@
     </sch:rule>
   </sch:pattern>-->
 
-    <!-- Rule 140: Jacket copy must contain at least one prodnote, at most one of each @class value and no other elements -->
+    <!-- Rule 140: Jacket copy must contain at least one part of the cover, at most one of each @class value and no other elements -->
     <sch:pattern id="dtbook_TPB_140">
         <sch:rule context="html:body[tokenize(@epub:type,'\s+')='cover'] | html:section[tokenize(@epub:type,'\s+')='cover']">
-            <sch:assert test="count(*[not(matches(local-name(),'h\d'))])=count(html:section[tokenize(@epub:type,'\s+')='z3998:production'])">[tpb140] Only section with epub:type="z3998:production" is
-                allowed in cover</sch:assert>
-            <sch:assert test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production'])>=1">[tpb140] There must be at least one section with epub:type="z3998:production" in cover</sch:assert>
-            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='frontcover'])>1">[tpb140] Too many sections with epub:type="z3998:production"
-                and class="frontcover" in cover</sch:report>
-            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='rearcover'])>1">[tpb140] Too many sections with epub:type="z3998:production"
-                and class="rearcover" in cover</sch:report>
-            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='leftflap'])>1">[tpb140] Too many sections with epub:type="z3998:production"
-                and class="leftflap" in cover</sch:report>
-            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='rightflap'])>1">[tpb140] Too many sections with epub:type="z3998:production"
-                and class="rightflap" in cover</sch:report>
-        </sch:rule>
-    </sch:pattern>
-
-    <!-- Rule 141: Prodnotes in jacket copy must contain text and have a @class=['frontcover', 'rearcover', 'leftflap' or 'rightflap'] -->
-    <sch:pattern id="dtbook_TPB_141">
-        <sch:rule context="html:section[tokenize(parent::*/@epub:type,' ')='cover']">
-            <sch:assert test="tokenize(@class,' ')='frontcover' or tokenize(@class,' ')='rearcover' or tokenize(@class,' ')='leftflap' or tokenize(@class,' ')='rightflap'">[tpb141] prodnote in jacket
-                copy must have a class attribute with one of 'frontcover', 'rearcover', 'leftflap' or 'rightflap'</sch:assert>
+            <sch:assert test="count(*[not(matches(local-name(),'h\d'))])=count(html:section[tokenize(@class,'\s+')=('frontcover','rearcover','leftflap','rightflap')])">[tpb140] Only sections with one
+                of the classes 'frontcover', 'rearcover', 'leftflap' or 'rightflap' is allowed in cover</sch:assert>
+            <sch:assert test="count(html:section[tokenize(@class,'\s+')=('frontcover','rearcover','leftflap','rightflap')])>=1">[tpb140] There must be at least one section with one of the classes
+                'frontcover', 'rearcover', 'leftflap' or 'rightflap' in cover.</sch:assert>
+            <sch:report test="count(html:section[tokenize(@class,'\s+')='frontcover'])>1">[tpb140] Too many sections with class="frontcover" in cover</sch:report>
+            <sch:report test="count(html:section[tokenize(@class,'\s+')='rearcover'])>1">[tpb140] Too many sections with class="rearcover" in cover</sch:report>
+            <sch:report test="count(html:section[tokenize(@class,'\s+')='leftflap'])>1">[tpb140] Too many sections with class="leftflap" in cover</sch:report>
+            <sch:report test="count(html:section[tokenize(@class,'\s+')='rightflap'])>1">[tpb140] Too many sections with class="rightflap" in cover</sch:report>
         </sch:rule>
     </sch:pattern>
 

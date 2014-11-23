@@ -662,13 +662,6 @@
         <ref name="attrsrqd.notype"/>
         <optional>
             <element name="section">
-                <attribute name="epub:type">
-                    <list>
-                        <ref name="types"/>
-                        <value>z3998:production</value>
-                        <ref name="types"/>
-                    </list>
-                </attribute>
                 <attribute name="class">
                     <list>
                         <ref name="classes"/>
@@ -676,19 +669,12 @@
                         <ref name="classes"/>
                     </list>
                 </attribute>
-                <ref name="attrsrqd.base"/>
+                <ref name="attrsrqd.noclass"/>
                 <ref name="level2.content.noattrs"/>
             </element>
         </optional>
         <optional>
             <element name="section">
-                <attribute name="epub:type">
-                    <list>
-                        <ref name="types"/>
-                        <value>z3998:production</value>
-                        <ref name="types"/>
-                    </list>
-                </attribute>
                 <attribute name="class">
                     <list>
                         <ref name="classes"/>
@@ -696,19 +682,12 @@
                         <ref name="classes"/>
                     </list>
                 </attribute>
-                <ref name="attrsrqd.base"/>
+                <ref name="attrsrqd.noclass"/>
                 <ref name="level2.content.noattrs"/>
             </element>
         </optional>
         <optional>
             <element name="section">
-                <attribute name="epub:type">
-                    <list>
-                        <ref name="types"/>
-                        <value>z3998:production</value>
-                        <ref name="types"/>
-                    </list>
-                </attribute>
                 <attribute name="class">
                     <list>
                         <ref name="classes"/>
@@ -716,19 +695,12 @@
                         <ref name="classes"/>
                     </list>
                 </attribute>
-                <ref name="attrsrqd.base"/>
+                <ref name="attrsrqd.noclass"/>
                 <ref name="level2.content.noattrs"/>
             </element>
         </optional>
         <optional>
             <element name="section">
-                <attribute name="epub:type">
-                    <list>
-                        <ref name="types"/>
-                        <value>z3998:production</value>
-                        <ref name="types"/>
-                    </list>
-                </attribute>
                 <attribute name="class">
                     <list>
                         <ref name="classes"/>
@@ -736,7 +708,7 @@
                         <ref name="classes"/>
                     </list>
                 </attribute>
-                <ref name="attrsrqd.base"/>
+                <ref name="attrsrqd.noclass"/>
                 <ref name="level2.content.noattrs"/>
             </element>
         </optional>
