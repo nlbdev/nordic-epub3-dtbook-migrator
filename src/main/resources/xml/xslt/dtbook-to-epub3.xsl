@@ -433,6 +433,7 @@
         <xsl:variable name="types"
             select="if (ancestor::*[self::dtbook:level or self::dtbook:level1 or self::dtbook:level2 or self::dtbook:level3 or self::dtbook:level4 or self::dtbook:level5 or self::dtbook:level6]) then () else if (ancestor::dtbook:frontmatter) then 'frontmatter' else if (ancestor::dtbook:bodymatter) then 'bodymatter' else 'backmatter'"/>
         <xsl:variable name="types" select="($types, if (dtbook:note) then if (ancestor::dtbook:bodymatter) then 'rearnotes' else if (ancestor::dtbook:rearmatter) then 'footnotes' else () else ())"/>
+        <xsl:variable name="types" select="($types, if (dtbook:list[f:classes(.)='toc']) then 'toc' else ())"/>
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="$types" tunnel="yes"/>
         </xsl:call-template>
@@ -1339,7 +1340,8 @@
     <xsl:template name="attlist.list">
         <xsl:param name="marker-type" select="''"/>
         <xsl:call-template name="attrs">
-            <xsl:with-param name="classes" select="if ($marker-type='') then 'list-style-type-none' else ()" tunnel="yes"/>
+            <xsl:with-param name="classes" select="if ($marker-type='' and not(ancestor-or-self::dtbook:list[f:classes(.)='toc'])) then 'list-style-type-none' else ()" tunnel="yes"/>
+            <xsl:with-param name="except-types" select="if (ancestor-or-self::dtbook:list[f:classes(.)='toc']) then 'toc' else ()" tunnel="yes"/>
         </xsl:call-template>
         <!-- @depth is implicit; ignore it -->
         <!--<xsl:if test="@enum">

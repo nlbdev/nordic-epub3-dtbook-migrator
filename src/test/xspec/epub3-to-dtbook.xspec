@@ -2855,4 +2855,52 @@
         </x:expect>
     </x:scenario>
 
+    <x:scenario label="a typical table of contents">
+        <!-- NOTE: we'll let list-style-type: none be implied for the special case of tocs (i.e. no numbers or bullets will be added even though the list-style-type-none class is not present) -->
+        <x:context>
+            <html:section epub:type="frontmatter toc">
+                <html:div epub:type="pagebreak" class="page-normal" title="3"/>
+                <html:h1>Table of Contents</html:h1>
+                <html:ol>
+                    <html:li>
+                        <html:a href="#">
+                            <html:span class="lic">Chapter 1</html:span>
+                            <html:span class="lic">5</html:span>
+                        </html:a>
+                    </html:li>
+                    <html:li>
+                        <html:a href="#">
+                            <html:span class="lic">Chapter 2</html:span>
+                            <html:span class="lic">42</html:span>
+                        </html:a>
+                    </html:li>
+                </html:ol>
+            </html:section>
+        </x:context>
+        <x:expect label="should convert as expected">
+            <dtbook:level1 class="toc">
+                <dtbook:pagenum page="normal">3</dtbook:pagenum>
+                <dtbook:h1>Table of Contents</dtbook:h1>
+                <dtbook:list type="pl" depth="1" class="toc">
+                    <dtbook:li>
+                        <dtbook:lic>
+                            <dtbook:span>Chapter 1</dtbook:span>
+                        </dtbook:lic>
+                        <dtbook:lic>
+                            <dtbook:span>5</dtbook:span>
+                        </dtbook:lic>
+                    </dtbook:li>
+                    <dtbook:li>
+                        <dtbook:lic>
+                            <dtbook:span>Chapter 2</dtbook:span>
+                        </dtbook:lic>
+                        <dtbook:lic>
+                            <dtbook:span>42</dtbook:span>
+                        </dtbook:lic>
+                    </dtbook:li>
+                </dtbook:list>
+            </dtbook:level1>
+        </x:expect>
+    </x:scenario>
+
 </x:description>
