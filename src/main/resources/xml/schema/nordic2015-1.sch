@@ -514,28 +514,17 @@
     </sch:rule>
   </sch:pattern>-->
 
-    <!-- Rule 140: Jacket copy must contain at least one prodnote, at most one of each @class value and no other elements -->
+    <!-- Rule 140: Jacket copy must contain at least one part of the cover, at most one of each @class value and no other elements -->
     <sch:pattern id="dtbook_TPB_140">
         <sch:rule context="html:body[tokenize(@epub:type,'\s+')='cover'] | html:section[tokenize(@epub:type,'\s+')='cover']">
-            <sch:assert test="count(*[not(matches(local-name(),'h\d'))])=count(html:section[tokenize(@epub:type,'\s+')='z3998:production'])">[tpb140] Only section with epub:type="z3998:production" is
-                allowed in cover</sch:assert>
-            <sch:assert test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production'])>=1">[tpb140] There must be at least one section with epub:type="z3998:production" in cover</sch:assert>
-            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='frontcover'])>1">[tpb140] Too many sections with epub:type="z3998:production"
-                and class="frontcover" in cover</sch:report>
-            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='rearcover'])>1">[tpb140] Too many sections with epub:type="z3998:production"
-                and class="rearcover" in cover</sch:report>
-            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='leftflap'])>1">[tpb140] Too many sections with epub:type="z3998:production"
-                and class="leftflap" in cover</sch:report>
-            <sch:report test="count(html:section[tokenize(@epub:type,'\s+')='z3998:production' and tokenize(@class,'\s+')='rightflap'])>1">[tpb140] Too many sections with epub:type="z3998:production"
-                and class="rightflap" in cover</sch:report>
-        </sch:rule>
-    </sch:pattern>
-
-    <!-- Rule 141: Prodnotes in jacket copy must contain text and have a @class=['frontcover', 'rearcover', 'leftflap' or 'rightflap'] -->
-    <sch:pattern id="dtbook_TPB_141">
-        <sch:rule context="html:section[tokenize(parent::*/@epub:type,' ')='cover']">
-            <sch:assert test="tokenize(@class,' ')='frontcover' or tokenize(@class,' ')='rearcover' or tokenize(@class,' ')='leftflap' or tokenize(@class,' ')='rightflap'">[tpb141] prodnote in jacket
-                copy must have a class attribute with one of 'frontcover', 'rearcover', 'leftflap' or 'rightflap'</sch:assert>
+            <sch:assert test="count(*[not(matches(local-name(),'h\d'))])=count(html:section[tokenize(@class,'\s+')=('frontcover','rearcover','leftflap','rightflap')])">[tpb140] Only sections with one
+                of the classes 'frontcover', 'rearcover', 'leftflap' or 'rightflap' is allowed in cover</sch:assert>
+            <sch:assert test="count(html:section[tokenize(@class,'\s+')=('frontcover','rearcover','leftflap','rightflap')])>=1">[tpb140] There must be at least one section with one of the classes
+                'frontcover', 'rearcover', 'leftflap' or 'rightflap' in cover.</sch:assert>
+            <sch:report test="count(html:section[tokenize(@class,'\s+')='frontcover'])>1">[tpb140] Too many sections with class="frontcover" in cover</sch:report>
+            <sch:report test="count(html:section[tokenize(@class,'\s+')='rearcover'])>1">[tpb140] Too many sections with class="rearcover" in cover</sch:report>
+            <sch:report test="count(html:section[tokenize(@class,'\s+')='leftflap'])>1">[tpb140] Too many sections with class="leftflap" in cover</sch:report>
+            <sch:report test="count(html:section[tokenize(@class,'\s+')='rightflap'])>1">[tpb140] Too many sections with class="rightflap" in cover</sch:report>
         </sch:rule>
     </sch:pattern>
 
@@ -570,8 +559,8 @@
 
     <!-- Rule 201: cover -->
     <sch:pattern id="epub_nordic_201">
-        <sch:rule context="html:*[tokenize(@epub:type,' ')='cover']">
-            <!-- no required type other than cover  -->
+        <sch:rule context="html:*[tokenize(@epub:type,'\s+')='cover']">
+            <sch:assert test="not(tokenize(@epub:type,'\s+')=('frontmatter','bodymatter','backmatter'))">[nordic201] cover is not allowed in frontmatter, bodymatter or backmatter.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -579,6 +568,10 @@
     <sch:pattern id="epub_nordic_202">
         <sch:rule context="html:*[tokenize(@epub:type,' ')='frontmatter']">
             <!-- types can be titlepage, colophon, toc, foreword, introduction or blank -->
+            <sch:assert test="count(tokenize(@epub:type,'\s+')) = 1 or tokenize(@epub:type,'\s+')=('titlepage','colophon','toc','foreword','preface','introduction')">[nordic202] '<sch:value-of
+                    select="(tokenize(@epub:type,'\s+')[not(.='frontmatter')])[1]"/>' is not an allowed type in frontmatter. On elements with the epub:type "frontmatter", you can either leave the type
+                blank (and just use 'frontmatter' as the type in the filename), or you can use one of the following types: 'titlepage', 'colophon', 'toc', 'foreword', 'preface' or
+                'introduction'.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -597,7 +590,10 @@
 
     <sch:pattern id="epub_nordic_203_c">
         <sch:rule context="html:body[tokenize(@epub:type,'\s+')='rearnotes'] | html:section[tokenize(@epub:type,'\s+')='rearnotes']">
-            <sch:assert test="descendant::html:*[tokenize(@epub:type,'\s+')='rearnote']">[nordic203c] 'rearnotes' must have descendants with 'rearnote'.</sch:assert>
+            <sch:assert test="descendant::html:*[tokenize(@epub:type,'\s+')='rearnote']">[nordic203c] <sch:value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type
+                'rearnotes' must have descendants with 'rearnote'.</sch:assert>
+            <sch:assert test="html:ol">[nordic204c] <sch:value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'footnotes' must have &lt;ol&gt; child
+                elements.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -608,7 +604,7 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 204: Check that both the epub:types "rearnote" and "rearnotes" are used in rearnotes -->
+    <!-- Rule 204: Check that both the epub:types "footnote" and "footnotes" are used in rearnotes -->
     <sch:pattern id="epub_nordic_204_a">
         <sch:rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='footnote']">
             <sch:assert test="count(ancestor::html:section | ancestor::html:article) = 1">[nordic204a] footnotes must be placed in a top-level section.</sch:assert>
@@ -626,7 +622,10 @@
 
     <sch:pattern id="epub_nordic_204_c">
         <sch:rule context="html:body[tokenize(@epub:type,'\s+')='footnotes'] | html:section[tokenize(@epub:type,'\s+')='footnotes']">
-            <sch:assert test="descendant::html:*[tokenize(@epub:type,'\s+')='footnote']">[nordic204c] 'footnotes' must have descendants with 'footnote'.</sch:assert>
+            <sch:assert test="descendant::html:*[tokenize(@epub:type,'\s+')='footnote']">[nordic204c] <sch:value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type
+                'footnotes' must have descendants with 'footnote'.</sch:assert>
+            <sch:assert test="html:ol">[nordic204c] <sch:value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'footnotes' must have &lt;ol&gt; child
+                elements.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -640,11 +639,9 @@
     <!-- Rule 208: bodymatter -->
     <sch:pattern id="epub_nordic_208">
         <sch:rule context="html:*[tokenize(@epub:type,' ')='bodymatter']">
-            <!-- types can be prologue, preface, part, chapter, conclusion, epilogue -->
-            <sch:assert
-                test="tokenize(@epub:type,' ')=('acknowledgments','afterword','appendix','assessment','bibliography','z3998:biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue','errata','z3998:filmography','footnotes','foreword','z3998:glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works','z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','standard','subchapter','z3998:subsection','titlepage','toc','z3998:translator-note','volume','warning')"
-                >[nordic208] top-level sectioning elements with the type "bodymatter" must also have one of the types
-                'acknowledgments','afterword','appendix','assessment','bibliography','z3998:biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue','errata','z3998:filmography','footnotes','foreword','z3998:glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works','z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','standard','subchapter','z3998:subsection','titlepage','toc','z3998:translator-note','volume','warning'</sch:assert>
+            <sch:assert test="tokenize(@epub:type,'\s+')=('prologue','preface','introduction','chapter','rearnotes','conclusion','epilogue','part')">[nordic208] '<sch:value-of
+                    select="(tokenize(@epub:type,'\s+')[not(.='bodymatter')])[1]"/>' is not an allowed type in bodymatter. Elements with the type "bodymatter" must also have one of the types
+                'prologue', 'preface', 'introduction', 'chapter', 'rearnotes', 'conclusion', 'epilogue' or 'part'.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -652,17 +649,19 @@
     <sch:pattern id="epub_nordic_211">
         <sch:rule context="html:*[self::html:section or self::html:article][parent::html:section[tokenize(@epub:type,' ')=('part','volume')]]">
             <!-- types can be prologue, preface, chapter, conclusion, epilogue -->
-            <sch:assert
-                test="tokenize(@epub:type,' ')=('acknowledgments','afterword','appendix','assessment','bibliography','z3998:biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue','errata','z3998:filmography','footnotes','foreword','z3998:glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works','z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','standard','subchapter','z3998:subsection','titlepage','toc','z3998:translator-note','volume','warning')"
-                >[nordic208] top-level sectioning elements inside sectioning elements with the type "part" must have one of the types:
-                'acknowledgments','afterword','appendix','assessment','bibliography','z3998:biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue','errata','z3998:filmography','footnotes','foreword','z3998:glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works','z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','standard','subchapter','z3998:subsection','titlepage','toc','z3998:translator-note','volume','warning'</sch:assert>
+            <sch:assert test="tokenize(@epub:type,'\s+')=('prologue','preface','introduction','chapter','rearnotes','conclusion','epilogue')">[nordic211] '<sch:value-of
+                    select="(tokenize(@epub:type,'\s+')[not(.=('part','volume'))])[1]"/>' is not an allowed type in a part. Sections inside a part must also have one of the types 'prologue',
+                'preface', 'introduction', 'chapter', 'rearnotes', 'conclusion' or 'epilogue'.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
     <!-- Rule 215: rearmatter -->
     <sch:pattern id="epub_nordic_215">
-        <sch:rule context="html:*[tokenize(@epub:type,' ')='backmatter']">
-            <!-- types can be afterword, toc, index, appendix, glossary, footnotes, rearnotes or blank -->
+        <sch:rule context="html:*[tokenize(@epub:type,'\s+')='backmatter']">
+            <sch:assert test="count(tokenize(@epub:type,'\s+')) = 1 or tokenize(@epub:type,'\s+')=('afterword','toc','index','appendix','glossary','footnotes','rearnotes')">[nordic215] '<sch:value-of
+                    select="(tokenize(@epub:type,'\s+')[not(.='backmatter')])[1]"/>' is not an allowed type in backmatter. On elements with the epub:type "backmatter", you can either leave the type
+                blank (and just use 'backmatter' as the type in the filename), or you can use one of the following types: 'afterword', 'toc', 'index', 'appendix', 'glossary', 'footnotes' or
+                'rearnotes'.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -848,12 +847,11 @@
     <sch:pattern id="epub_nordic_266_a">
         <sch:rule context="html:*[*[tokenize(@epub:type,'\s+')='footnote']]">
             <sch:assert test="self::html:ol">[nordic266a] Footnotes must be wrapped in a "ol" element.</sch:assert>
-            <sch:assert test="tokenize(@epub:type,'\s+')='footnotes'">[nordic266a] The footnotes "ol" element must use the epub:type "footnotes".</sch:assert>
         </sch:rule>
     </sch:pattern>
 
     <sch:pattern id="epub_nordic_266_b">
-        <sch:rule context="html:*[parent::ol[tokenize(@epub:type,'\s+')='footnotes']]">
+        <sch:rule context="html:section[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li">
             <sch:assert test="tokenize(@epub:type,'\s+')='footnote'">[nordic266b] List items inside a footnotes list must use epub:type="footnote"</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -866,7 +864,7 @@
     </sch:pattern>
 
     <sch:pattern id="epub_nordic_267_b">
-        <sch:rule context="html:*[parent::ol[tokenize(@epub:type,'\s+')='footnotes']]">
+        <sch:rule context="html:section[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li">
             <sch:assert test="tokenize(@epub:type,'\s+')='rearnote'">[nordic267b] List items inside a rearnotes list must use epub:type="rearnote"</sch:assert>
         </sch:rule>
     </sch:pattern>

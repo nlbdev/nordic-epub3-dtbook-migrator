@@ -357,7 +357,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="html:aside[f:types(.)='z3998:production'] | html:section[f:types(.)='z3998:production' and parent::*/f:types(.)='cover']">
+    <xsl:template match="html:aside[f:types(.)='z3998:production'] | html:section[f:classes(.)=('frontcover','rearcover','leftflap','rightflap') and parent::*/f:types(.)='cover']">
         <prodnote>
             <xsl:call-template name="attlist.prodnote"/>
             <xsl:apply-templates select="node()"/>

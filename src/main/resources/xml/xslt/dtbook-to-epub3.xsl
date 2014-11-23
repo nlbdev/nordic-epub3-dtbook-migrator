@@ -555,9 +555,9 @@
     <xsl:template name="attlist.prodnote">
         <xsl:param name="all-ids" select="()" tunnel="yes"/>
         <xsl:call-template name="attrs">
-            <xsl:with-param name="types" select="'z3998:production'" tunnel="yes"/>
-            <xsl:with-param name="classes"
-                select="(if (not(parent::dtbook:level1/tokenize(@class,'\s+')=('cover','jacketcopy'))) then 'prodnote' else (), if (@render) then concat('render-',@render) else ())" tunnel="yes"/>
+            <xsl:with-param name="types" select="if (not(parent::*[tokenize(@class,'\s+')=('cover','jacketcopy')])) then 'z3998:production' else ()" tunnel="yes"/>
+            <xsl:with-param name="classes" select="(if (not(parent::*/tokenize(@class,'\s+')=('cover','jacketcopy'))) then 'prodnote' else (), if (@render) then concat('render-',@render) else ())"
+                tunnel="yes"/>
             <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
         <!-- @imgref is dropped, the relationship is preserved in the corresponding img/@longdesc -->
