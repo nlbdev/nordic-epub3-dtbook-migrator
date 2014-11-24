@@ -86,7 +86,7 @@
             <x:document type="port" port="report.out"/>
         </x:context>
         <x:expect label="there should be no errors under d:reports" type="xpath" test="count(/*/d:reports/d:report/d:error)" equals="0"/>
-        <x:expect label="the error count should be 0" type="xpath" test="if (/d:errors) then count(/*/*) else /*/d:document-info/d:error-count/number(.)" equals="0"/>
+        <x:expect label="the error count should be 0" type="xpath" test="if (/d:errors) then count(/*/*) else if (/*/d:document-info) then /*/d:document-info/d:error-count/number(.) else 0" equals="0"/>
 
     </x:scenario>
 
