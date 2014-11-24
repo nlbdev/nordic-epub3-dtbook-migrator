@@ -71,9 +71,21 @@
         </p:otherwise>
     </p:choose>
 
-    <px:validation-report-to-html toc="false">
+    <p:split-sequence test="/*/html:head/html:meta[@name='report.type']/@content = 'category'" name="category-report-split">
         <p:input port="source">
             <p:pipe port="not-matched" step="epubcheck-report-split"/>
+        </p:input>
+    </p:split-sequence>
+    <p:for-each>
+        <p:iteration-source select="/*/html:body"/>
+        <p:rename match="/*" new-name="div" new-namespace="http://www.w3.org/1999/xhtml"/>
+    </p:for-each>
+    <p:identity name="category-report"/>
+    <p:sink/>
+
+    <px:validation-report-to-html toc="false">
+        <p:input port="source">
+            <p:pipe port="not-matched" step="category-report-split"/>
         </p:input>
     </px:validation-report-to-html>
     <p:insert match="//html:body/*[1]" position="after">
@@ -84,6 +96,7 @@
     <p:insert match="//html:body" position="last-child">
         <p:input port="insertion">
             <p:pipe port="extended-info" step="html.epubcheck"/>
+            <p:pipe port="result" step="category-report"/>
         </p:input>
     </p:insert>
 

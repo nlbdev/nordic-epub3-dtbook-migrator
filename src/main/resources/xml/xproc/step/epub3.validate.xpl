@@ -27,6 +27,7 @@
         <p:pipe port="result" step="opf.validate"/>
         <p:pipe port="result" step="html.validate"/>
         <p:pipe port="result" step="opf-and-html.validate"/>
+        <p:pipe port="result" step="category.html-report"/>
     </p:output>
 
     <p:option name="temp-dir" required="true"/>
@@ -419,6 +420,29 @@
         </px:combine-validation-reports>
     </p:group>
     <p:identity name="opf-and-html.validate"/>
+    <p:sink/>
+
+    <px:fileset-filter media-types="application/xhtml+xml">
+        <p:input port="source">
+            <p:pipe port="fileset" step="unzip"/>
+        </p:input>
+    </px:fileset-filter>
+    <p:delete match="/*/*[ends-with(@href,'nav.xhtml')]"/>
+    <px:fileset-load>
+        <p:input port="in-memory">
+            <p:pipe port="in-memory" step="unzip"/>
+        </p:input>
+    </px:fileset-load>
+    <p:wrap-sequence wrapper="wrapper"/>
+    <p:xslt>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:document href="../../xslt/determine-complexity.xsl"/>
+        </p:input>
+    </p:xslt>
+    <p:identity name="category.html-report"/>
     <p:sink/>
 
 </p:declare-step>
