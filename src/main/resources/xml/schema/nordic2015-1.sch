@@ -592,7 +592,7 @@
         <sch:rule context="html:body[tokenize(@epub:type,'\s+')='rearnotes'] | html:section[tokenize(@epub:type,'\s+')='rearnotes']">
             <sch:assert test="descendant::html:*[tokenize(@epub:type,'\s+')='rearnote']">[nordic203c] <sch:value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type
                 'rearnotes' must have descendants with 'rearnote'.</sch:assert>
-            <sch:assert test="html:ol">[nordic204c] <sch:value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'footnotes' must have &lt;ol&gt; child
+            <sch:assert test="html:ol">[nordic204c] <sch:value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'rearnotes' must have &lt;ol&gt; child
                 elements.</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -859,7 +859,6 @@
     <sch:pattern id="epub_nordic_267_a">
         <sch:rule context="html:*[*[tokenize(@epub:type,'\s+')='rearnote']]">
             <sch:assert test="self::html:ol">[nordic267a] Rearnotes must be wrapped in a "ol" element.</sch:assert>
-            <sch:assert test="tokenize(@epub:type,'\s+')='rearnotes'">[nordic266a] The rearnotes "ol" element must use the epub:type "rearnotes".</sch:assert>
         </sch:rule>
     </sch:pattern>
 
