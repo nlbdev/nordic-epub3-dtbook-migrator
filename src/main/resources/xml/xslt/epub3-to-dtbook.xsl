@@ -632,6 +632,7 @@
 
     <!-- <kbd> is not allowed in nordic DTBook. Replacing with code and a "keyboard" class. -->
     <xsl:template name="attlist.kbd">
+        <xsl:attribute name="xml:space" select="'preserve'"/>
         <xsl:call-template name="attrs">
             <xsl:with-param name="classes" select="'keyboard'" tunnel="yes"/>
         </xsl:call-template>
@@ -645,8 +646,22 @@
     </xsl:template>
 
     <xsl:template name="attlist.code">
+        <xsl:attribute name="xml:space" select="'preserve'"/>
         <xsl:call-template name="attrs"/>
         <xsl:call-template name="i18n"/>
+    </xsl:template>
+
+    <xsl:template match="html:pre">
+        <p>
+            <xsl:call-template name="attlist.pre"/>
+            <xsl:apply-templates select="node()"/>
+        </p>
+    </xsl:template>
+
+    <xsl:template name="attlist.pre">
+        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="i18n"/>
+        <xsl:attribute name="xml:space" select="'preserve'"/>
     </xsl:template>
 
     <!-- <samp> is not allowed in nordic DTBook. Replacing with code. -->
@@ -660,6 +675,7 @@
 
     <!-- <samp> is not allowed in nordic DTBook. Replacing with code and a "example" class. -->
     <xsl:template name="attlist.samp">
+        <xsl:attribute name="xml:space" select="'preserve'"/>
         <xsl:call-template name="attrs">
             <xsl:with-param name="classes" select="'example'" tunnel="yes"/>
         </xsl:call-template>

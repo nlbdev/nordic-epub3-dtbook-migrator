@@ -78,6 +78,9 @@
             <p:load>
                 <p:with-option name="href" select="$dtbook"/>
             </p:load>
+            <p:identity>
+                <p:log port="result" href="file:/tmp/dtbook-validate.input.xml"/>
+            </p:identity>
             <p:choose>
                 <p:when test="$allow-legacy='true'">
                     <px:upgrade-dtbook>

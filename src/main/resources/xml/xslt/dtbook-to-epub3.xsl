@@ -3,8 +3,8 @@
     xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
-    <!--    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
+    <!--    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>-->
+    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>
 
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
 
@@ -795,7 +795,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.code">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except" select="'xml:space'" tunnel="yes"/>
+        </xsl:call-template>
         <xsl:call-template name="i18n"/>
         <!-- ignore @smilref -->
         <!-- @showin handled by "attrs" -->
@@ -1118,13 +1120,15 @@
     <xsl:template match="dtbook:p">
         <xsl:variable name="element" select="."/>
         <xsl:variable name="has-block-elements" select="if (dtbook:list or dtbook:dl or dtbook:imggroup) then true() else false()"/>
+        <xsl:variable name="contains-single-code-element" select="count(dtbook:code) = 1 and count(* | text()[normalize-space()]) = 1"/>
         <xsl:if test="f:classes($element)=('precedingemptyline','precedingseparator')">
             <hr class="{if (f:classes($element)='precedingseparator') then 'separator' else 'emptyline'}"/>
         </xsl:if>
-        <xsl:element name="{if ($has-block-elements) then 'div' else 'p'}" namespace="http://www.w3.org/1999/xhtml">
+        <xsl:element name="{if ($has-block-elements) then 'div' else if ($contains-single-code-element) then 'pre' else 'p'}" namespace="http://www.w3.org/1999/xhtml">
             <!-- div allows the same attributes as p -->
             <xsl:call-template name="attlist.p">
                 <xsl:with-param name="except-classes" select="('precedingemptyline','precedingseparator')" tunnel="yes"/>
+                <xsl:with-param name="except" select="if (not($has-block-elements) and $contains-single-code-element) then 'xml:space' else ()" tunnel="yes"/>
             </xsl:call-template>
             <xsl:for-each-group select="node()" group-adjacent="not(self::dtbook:list or self::dtbook:dl or self::dtbook:imggroup)">
                 <xsl:choose>

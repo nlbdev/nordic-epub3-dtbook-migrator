@@ -899,8 +899,8 @@
         <x:context>
             <html:kbd/>
         </x:context>
-        <x:expect label="the resulting element should be a kbd">
-            <dtbook:code class="keyboard"/>
+        <x:expect label="the resulting element should be a code">
+            <dtbook:code xml:space="preserve" class="keyboard"/>
         </x:expect>
     </x:scenario>
 
@@ -913,7 +913,7 @@
             <html:code/>
         </x:context>
         <x:expect label="the resulting element should be a code">
-            <dtbook:code/>
+            <dtbook:code xml:space="preserve"/>
         </x:expect>
     </x:scenario>
 
@@ -926,7 +926,7 @@
             <html:samp/>
         </x:context>
         <x:expect label="the resulting element should be a samp">
-            <dtbook:code class="example"/>
+            <dtbook:code xml:space="preserve" class="example"/>
         </x:expect>
     </x:scenario>
 
@@ -2901,6 +2901,11 @@
                 </dtbook:list>
             </dtbook:level1>
         </x:expect>
+    </x:scenario>
+
+    <x:scenario label="the pre element">
+        <x:context xml:space="preserve"><html:pre><html:code>  1  2  </html:code></html:pre></x:context>
+        <x:expect label="should map to a p element and whitespace should be preserved"><dtbook:p xml:space="preserve"><dtbook:code xml:space="preserve">  1  2  </dtbook:code></dtbook:p></x:expect>
     </x:scenario>
 
 </x:description>

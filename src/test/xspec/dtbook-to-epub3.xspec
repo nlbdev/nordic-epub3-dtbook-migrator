@@ -993,9 +993,9 @@
     <!-- attlist.code -->
     <x:scenario label="when processing the code element attributes">
         <x:context>
-            <dtbook:code smilref="#">TEXT</dtbook:code>
+            <dtbook:code smilref="#" xml:space="preserve">TEXT</dtbook:code>
         </x:context>
-        <x:expect label="the smilref attribute should be dropped">
+        <x:expect label="the smilref and xml:space attributes should be dropped">
             <html:code>TEXT</html:code>
         </x:expect>
     </x:scenario>
@@ -3977,6 +3977,31 @@
             <html:section epub:type="backmatter toc" id="...">
                 <html:ol id="..."/>
             </html:section>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="a p element with code children">
+        <x:context xml:space="preserve">
+            <dtbook:p/>
+            <dtbook:p><dtbook:code/></dtbook:p>
+            <dtbook:p>TEXT<dtbook:code/>TEXT</dtbook:p>
+            <dtbook:p>
+                <dtbook:code/>
+                <dtbook:code/>
+            </dtbook:p>
+            <dtbook:p><dtbook:code>  preserve  whitespace  </dtbook:code></dtbook:p>
+            <dtbook:p xml:space="preserve"><dtbook:code>  preserve  whitespace  </dtbook:code></dtbook:p>
+        </x:context>
+        <x:expect xml:space="preserve" label="should map to a pre element if it contains exactly one code child and nothing else">
+            <html:p/>
+            <html:pre><html:code/></html:pre>
+            <html:p>TEXT<html:code/>TEXT</html:p>
+            <html:p>
+                <html:code/>
+                <html:code/>
+            </html:p>
+            <html:pre><html:code>  preserve  whitespace  </html:code></html:pre>
+            <html:pre><html:code>  preserve  whitespace  </html:code></html:pre>
         </x:expect>
     </x:scenario>
 
