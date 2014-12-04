@@ -6,7 +6,7 @@
   
   <xsl:output method="xml" indent="yes" doctype-system="dtbook110.dtd"/>
 
-  <!--Version 1.0 - 2014.12.03-->
+  <!--Version 0.4 - 2014.12.04-->
   
   <xsl:template match="/">
     <xsl:apply-templates/>
@@ -88,6 +88,17 @@
     <bodymatter>
       <xsl:apply-templates/>
     </bodymatter>
+  </xsl:template>
+
+  <xsl:template match="x:br">
+    <br>
+      <xsl:for-each select="@*">
+        <xsl:attribute name="{name()}">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </xsl:for-each>
+      <xsl:apply-templates/>
+    </br>
   </xsl:template>
 
   <xsl:template match="x:bridgehead">
@@ -392,6 +403,17 @@
     </li>
   </xsl:template>
 
+  <xsl:template match="x:lic">
+    <lic>
+      <xsl:for-each select="@*">
+        <xsl:attribute name="{name()}">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </xsl:for-each>
+      <xsl:apply-templates/>
+    </lic>
+  </xsl:template>
+  
   <xsl:template match="x:list">
     <xsl:choose>
       <xsl:when test="string(@type)='pl'">
@@ -443,17 +465,6 @@
     <p class="line">
       <xsl:apply-templates/>
     </p>
-  </xsl:template>
-  
-  <xsl:template match="x:lic">
-    <lic>
-      <xsl:for-each select="@*">
-        <xsl:attribute name="{name()}">
-          <xsl:value-of select="."/>
-        </xsl:attribute>
-      </xsl:for-each>
-      <xsl:apply-templates/>
-    </lic>
   </xsl:template>
 
   <xsl:template match="x:meta">
