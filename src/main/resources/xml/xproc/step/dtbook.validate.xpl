@@ -20,6 +20,9 @@
         <p:pipe port="report" step="choose"/>
     </p:output>
 
+    <!-- option supporting convert to DTBook 1.1.0 -->
+    <p:option name="dtbook2005" required="true"/>
+
     <p:option name="dtbook" required="true"/>
     <p:option name="check-images" required="false" select="'false'"/>
     <p:option name="allow-legacy" required="false" select="'false'"/>
@@ -62,8 +65,42 @@
             </px:fileset-add-entry>
             <p:identity name="invalid-fileset"/>
         </p:when>
+        <p:when test="$dtbook2005='false'">
+            <!-- validate document as DTBook 1.1.0 -->
+            <p:output port="report" sequence="true">
+                <p:pipe port="report" step="validate.input-dtbook.generic"/>
+            </p:output>
+            <p:output port="in-memory" sequence="true">
+                <p:pipe port="in-memory.out" step="input-dtbook.in-memory"/>
+            </p:output>
+            <p:output port="fileset">
+                <p:pipe port="result" step="input-dtbook.fileset"/>
+            </p:output>
 
+            <p:load>
+                <p:with-option name="href" select="$dtbook"/>
+            </p:load>
+
+            <p:identity name="input-dtbook"/>
+
+            <px:dtbook-load name="input-dtbook.in-memory">
+                <p:input port="source">
+                    <p:pipe port="result" step="input-dtbook"/>
+                </p:input>
+            </px:dtbook-load>
+            <p:viewport match="/*/*">
+                <px:message message="setting original-href for $1 to $2">
+                    <p:with-option name="param1" select="/*/@href"/>
+                    <p:with-option name="param2" select="if (/*/@original-href) then /*/@original-href else resolve-uri(/*/@href, base-uri(/*))"/>
+                </px:message>
+                <p:add-attribute match="/*" attribute-name="original-href">
+                    <p:with-option name="attribute-value" select="if (/*/@original-href) then /*/@original-href else resolve-uri(/*/@href, base-uri(/*))"/>
+                </p:add-attribute>
+            </p:viewport>
+            <px:mediatype-detect name="input-dtbook.fileset"/>
+        </p:when>
         <p:otherwise>
+            <!-- validate document as DTBook 2005 -->
             <p:output port="report" sequence="true">
                 <p:pipe port="report" step="validate.input-dtbook.generic"/>
                 <p:pipe port="result" step="validate.input-dtbook.nordic"/>
