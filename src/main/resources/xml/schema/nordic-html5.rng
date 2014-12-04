@@ -77,6 +77,7 @@
     <define name="block">
         <choice>
             <ref name="p"/> <!-- p, ul, ol, dl, span -->
+            <ref name="pre"/> <!-- pre -->
             <ref name="list"/> <!-- ol, ul -->
             <ref name="dl"/> <!-- dl, span -->
             <ref name="div"/> <!-- div -->
@@ -98,6 +99,7 @@
     <define name="blocknoimggroup">
         <choice>
             <ref name="p"/> <!-- p, ul, ol, dl, span -->
+            <ref name="pre"/> <!-- pre -->
             <ref name="list"/> <!-- ol, ul -->
             <ref name="dl"/> <!-- dl, span -->
             <ref name="div"/> <!-- div -->
@@ -117,6 +119,7 @@
     <define name="blocknoimggroupnotable">
         <choice>
             <ref name="p"/> <!-- p, ul, ol, dl, span -->
+            <ref name="pre"/> <!-- pre -->
             <ref name="list"/> <!-- ol, ul -->
             <ref name="dl"/> <!-- dl, span -->
             <ref name="div"/> <!-- div -->
@@ -1888,6 +1891,7 @@
                 <ref name="note"/> <!-- aside -->
                 <ref name="annotation"/> <!-- aside -->
                 <ref name="p"/> <!-- p, ul, ol, dl, span -->
+                <ref name="pre"/> <!-- pre -->
                 <ref name="blockquote"/> <!-- blockquote -->
                 <ref name="img"/> <!-- img -->
                 <ref name="figure.imggroup"/> <!-- figure -->
@@ -2111,6 +2115,18 @@
         </element>
     </define>
     <define name="attlist.code" combine="interleave">
+        <ref name="attrs"/>
+    </define>
+    
+    <define name="pre">
+        <element name="pre">
+            <ref name="attlist.pre"/>
+            <zeroOrMore>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
+            </zeroOrMore>
+        </element>
+    </define>
+    <define name="attlist.pre" combine="interleave">
         <ref name="attrs"/>
     </define>
     
