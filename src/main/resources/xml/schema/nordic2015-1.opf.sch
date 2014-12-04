@@ -32,6 +32,10 @@
             <assert test="count(dc:identifier) = 1">[opf3a] there must be exactly one dc:identifier element</assert>
             <assert test="parent::opf:package/@unique-identifier = dc:identifier/@id">[opf3a] the id of the dc:identifier must equal the value of the package elements unique-identifier
                 attribute</assert>
+            <assert test="matches(dc:identifier/text(),'^[A-Za-z0-9].*$')">[opf3a] The identifier must start with a upper- or lower-case letter (A-Z or a-z), or a digit (0-9).</assert>
+            <assert test="matches(dc:identifier/text(),'^.*[A-Za-z0-9]$')">[opf3a] The identifier must end with a upper- or lower-case letter (A-Z or a-z), or a digit (0-9).</assert>
+            <assert test="matches(dc:identifier/text(),'^[A-Za-z0-9_-]*$')">[opf3a] The identifier must only contain upper- or lower-case letters (A-Z or a-z), digits (0-9), dashes (-) and underscores
+                (_).</assert>
 
             <assert test="count(dc:title[not(@refines)]) = 1">[opf3b] exactly one dc:title (without a "refines" attribute) must be present</assert>
 
@@ -113,8 +117,6 @@
     <pattern id="opf_nordic_9">
         <rule context="opf:item[@media-type='application/xhtml+xml' and not(tokenize(@properties,'\s+')='nav')]">
             <report test="contains(@href,'/')">[opf9] all content files must be located in the same directory as the package document</report>
-            <assert test="matches(@href,'^[^-]+-\d+-\w+.xhtml$')">[opf9] all content files must have a filename matching "[identifier]-[position]-[type].xhtml"; for instance
-                "C00000-03-chapter.xhtml"</assert>
         </rule>
     </pattern>
 
@@ -132,29 +134,49 @@
 
     <pattern id="opf_nordic_12_a">
         <rule context="opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav')]">
-            <assert test="matches(@href,'^.*-\d+-[a-z]+\.xhtml$')">[opf12a] Content documents must match the "[identifier]-[number]-[string].xhtml" file naming convention.</assert>
+            <assert test="matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')">[opf12a] Content documents must match the "[dc:identifier]-[position in spine]-[epub:type].xhtml" file naming
+                convention. Example: "DTB123-01-cover.xhtml". The identifier are allowed to contain the upper- and lower-case characters A-Z and a-z as well as digits (0-9), dashes (-) and underscores
+                (_). The position is a number (0-9). The epub:type must be all lower-case characters (a-z) and can contain a dash (-). An optional number can be added after the epub:type to be able to
+                easily tell different files with the same epub:type apart. For instance: "DTB123-13-chapter-7.xhtml".</assert>
         </rule>
     </pattern>
 
     <pattern id="opf_nordic_12_b">
-        <rule context="opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^.*-\d+-[a-z]+\.xhtml$')]">
-            <let name="identifier" value="replace(@href,'^(.*)-\d+-[a-z]+.xhtml$','$1')"/>
-            <let name="position" value="replace(@href,'^.*-(\d+)-[a-z]+.xhtml$','$1')"/>
-            <let name="type" value="replace(@href,'^.*-\d+-([a-z]+).xhtml$','$1')"/>
+        <rule context="opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$')]">
+            <let name="identifier" value="replace(@href,'^([A-Za-z0-9_-]+)-\d+-[a-z-]+?(-\d+)?\.xhtml$','$1')"/>
+            <let name="position" value="replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+?(-\d+)?\.xhtml$','$1')"/>
+            <let name="type" value="replace(@href,'^[A-Za-z0-9_-]+-\d+-([a-z-]+?)(-\d+)?\.xhtml$','$1')"/>
+            <let name="number" value="if (matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?-\d+\.xhtml$')) then replace(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?-(\d*)\.xhtml$','$1') else ''"/>
+            <let name="vocab-default"
+                value="('cover','frontmatter','bodymatter','backmatter','volume','part','chapter','subchapter','division','abstract','foreword','preface','prologue','introduction','preamble','conclusion','epilogue','afterword','epigraph','toc','toc-brief','landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','index-headnotes','index-legend','index-group','index-entry-list','index-entry','index-term','index-editor-note','index-locator','index-locator-list','index-locator-range','index-xref-preferred','index-xref-related','index-term-category','index-term-categories','glossary','glossterm','glossdef','bibliography','biblioentry','titlepage','halftitlepage','copyright-page','seriespage ','acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','help','marginalia','notice','pullquote','sidebar','warning','halftitle','fulltitle','covertitle','title','subtitle','label','ordinal','bridgehead','learning-objective','learning-objectives','learning-outcome','learning-outcomes','learning-resource','learning-resources','learning-standard','learning-standards','answer','answers','assessment','assessments','feedback','general-problem','qna','match-problem','practice','practices','question','true-false-problem','panel','panel-group','balloon','text-area','sound-area','annotation','note','footnote','rearnote','footnotes','rearnotes','annoref','biblioref','glossref','noteref','referrer','credit','keyword','topic-sentence','concluding-sentence','pagebreak','page-list','table','table-row','table-cell','list','list-item','figure')"/>
+            <let name="vocab-z3998"
+                value="('fiction','non-fiction','article','essay','textbook','catalogue','frontmatter','bodymatter','backmatter','volume','part','chapter','subchapter','division','section','subsection','foreword','preface','prologue','introduction','preamble','conclusion','epilogue','afterword','toc','appendix','glossary','bibliography','discography','filmography','index','colophon','title','halftitle','fulltitle','subtitle','covertitle','published-works','title-page','halftitle-page','acknowledgments','imprint','imprimatur','loi','lot','publisher-address','publisher-address','editorial-note','grant-acknowledgment','contributors','other-credits','biographical-note','translator-note','errata','promotional-copy','dedication','pgroup','example','epigraph','annotation','introductory-note','commentary','clarification','correction','alteration','presentation','production','attribution','author','editor','general-editor','commentator','translator','republisher','structure','geographic','postal','email','ftp','http','ip','aside','sidebar','practice','notice','warning','marginalia','help','drama','scene','stage-direction','dramatis-personae','persona','actor','role-description','speech','diary','diary-entry','figure','plate','gallery','letter','sender','recipient','salutation','valediction','postscript','email-message','to','from','cc','bcc','subject','collection','orderedlist','unorderedlist','abbreviations','timeline','note','footnotes','footnote','rearnote','rearnotes','verse','poem','song','hymn','lyrics','text','phrase','keyword','sentence','topic-sentence','concluding-sentence','t-form','v-form','acronym','initialism','truncation','cardinal','ordinal','ratio','percentage','phone','isbn','currency','postal-code','result','fraction','mixed','decimal','roman','weight','measure','coordinate','range','result','place','nationality','organization','taxonomy','product','event','award','personal-name','given-name','surname','family-name','name-title','signature','word','compound','homograph','portmanteau','root','stem','prefix','suffix','morpheme','phoneme','grapheme','illustration','photograph','decorative','publisher-logo','frontispiece','reference','resolving-reference','noteref','annoref','citation','nonresolving-citation','continuation','continuation-of','pagebreak','page-header','page-footer','recto','verso','image-placeholder','primary','secondary','tertiary')"/>
+
+            <assert test="$identifier = ../../opf:metadata/dc:identifier/text()">[opf12b_identifier] The "identifier" part of the filename ("<value-of select="$identifier"/>") must be the same as
+                declared in metadata, i.e.: "<value-of select="../../opf:metadata/dc:identifier/text()"/>".</assert>
+
+            <assert test="$type = ($vocab-default, $vocab-z3998)">[opf12b_type] "<value-of select="$type"/>" is not a valid type. <value-of
+                    select="if (count(($vocab-default,$vocab-z3998)[starts-with(.,substring($type,1,3))])) then concat('Did you mean &quot;',(($vocab-default,$vocab-z3998)[starts-with(.,substring($type,1,3))])[1],'&quot;?') else ''"
+                /> The filename of content documents must end with a epub:type defined in either the EPUB3 Structural Semantics Vocabulary (http://www.idpf.org/epub/vocab/structure/#) or the
+                Z39.39-2012 Structural Semantics Vocabulary (http://www.daisy.org/z3998/2012/vocab/structure/).</assert>
+
             <assert
-                test="$type = ('cover','frontmatter','bodymatter','backmatter','acknowledgments','afterword','appendix','assessment','bibliography','chapter','colophon','conclusion','contributors','dedication','discography','division','epigraph','epilogue','errata','filmography','footnotes','foreword','glossary','halftitlepage','imprimatur','imprint','index','introduction','landmarks','loa','loi','lot','lov','notice','part','practices','preamble','preface','prologue','qna','rearnotes','section','standard','subchapter','subsection','titlepage','toc','volume','warning')"
-                >[opf12b] The filename of content documents must end with a epub:type value (the same as the one used on the content documents body tag).</assert>
-            <assert
-                test="string-length($position) = string-length(../opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^.*-\d+-[a-z]+\.xhtml$')][1]/replace(@href,'^.*-(\d+)-[a-z]+.xhtml$','$1'))"
-                >[opf12b] The numbering of the content documents must all have the equal number of digits.</assert>
+                test="string-length($position) = string-length(../opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$')][1]/replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+?(-\d+)?.xhtml$','$1'))"
+                >[opf12b_position] The numbering of the content documents must all have the equal number of digits.</assert>
+
             <report
-                test="number($position) = ( (../opf:item except .)[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^.*-\d+-[a-z]+\.xhtml$')]/number(replace(@href,'^.*-(\d+)-[a-z]+.xhtml$','$1')) )"
-                >[opf12b] The numbering of the content documents must be unique for each content document. <value-of select="$position"/> is also used by another content document in the OPF.</report>
+                test="number($position) = ( (../opf:item except .)[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$')]/number(replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+?(-\d+)?.xhtml$','$1')) )"
+                >[opf12b_position] The numbering of the content documents must be unique for each content document. <value-of select="$position"/> is also used by another content document in the
+                OPF.</report>
+
             <assert
-                test="number($position)-1 = ( 0 , (../opf:item except .)[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^.*-\d+-[a-z]+\.xhtml$')]/number(replace(@href,'^.*-(\d+)-[a-z]+.xhtml$','$1')) )"
-                >[opf12b] The numbering of the content documents must start at 1 and increase with 1 for each item.</assert>
-            <assert test="../../opf:spine/opf:itemref[xs:integer(number($position))]/@idref = @id">[opf12b] iremref #<value-of select="$position"/> (with the id: <value-of
-                    select="../../opf:spine/opf:itemref[xs:integer(number($position))]/@id"/>) should refer to item with href="<value-of select="@href"/>".</assert>
+                test="number($position)-1 = ( 0 , (../opf:item except .)[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$')]/number(replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+(-\d+)?.xhtml$','$1')) )"
+                >[opf12b_position] The numbering of the content documents must start at 1 and increase with 1 for each item.</assert>
+
+            <assert test="../../opf:spine/opf:itemref[xs:integer(number($position))]/@idref = @id">[opf12b_position] The <value-of select="xs:integer(number($position))"/><value-of
+                    select="if (ends-with($position,'1') and not(number($position)=11)) then 'st' else if (ends-with($position,'2') and not(number($position)=12)) then 'nd' else if (ends-with($position,'3') and not(number($position)=13)) then 'rd' else 'th'"
+                /> itemref (&lt;iremref id="<value-of select="../../opf:spine/opf:itemref[xs:integer(number($position))]/@id"/>" href="..."&gt;) should refer to &lt;item href="<value-of select="@href"
+                />"&gt;.</assert>
         </rule>
     </pattern>
 
