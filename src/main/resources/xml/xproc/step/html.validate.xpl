@@ -25,7 +25,6 @@
     </p:output>
 
     <p:option name="document-type" required="false" select="'Nordic HTML'"/>
-    <p:option name="strict" select="'true'"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -55,7 +54,7 @@
     </l:relax-ng-report>
     <p:sink/>
 
-    <p:validate-with-schematron name="validate.sch.generic" assert-valid="false">
+    <p:validate-with-schematron name="validate.sch" assert-valid="false">
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -66,44 +65,6 @@
             <p:document href="../../schema/nordic2015-1.sch"/>
         </p:input>
     </p:validate-with-schematron>
-    <p:sink/>
-
-    <p:choose>
-        <p:when test="$strict='true'">
-            <p:validate-with-schematron name="validate.sch.strict.step" assert-valid="false">
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="source">
-                    <p:pipe step="html" port="result"/>
-                </p:input>
-                <p:input port="schema">
-                    <p:document href="../../schema/nordic2015-1.strict.sch"/>
-                </p:input>
-            </p:validate-with-schematron>
-            <p:identity>
-                <p:input port="source">
-                    <p:pipe port="report" step="validate.sch.strict.step"/>
-                </p:input>
-            </p:identity>
-        </p:when>
-        <p:otherwise>
-            <p:identity>
-                <p:input port="source">
-                    <p:empty/>
-                </p:input>
-            </p:identity>
-        </p:otherwise>
-    </p:choose>
-    <p:identity name="validate.sch.strict"/>
-    <p:sink/>
-
-    <p:identity name="validate.sch">
-        <p:input port="source">
-            <p:pipe step="validate.sch.generic" port="report"/>
-            <p:pipe step="validate.sch.strict" port="result"/>
-        </p:input>
-    </p:identity>
     <p:sink/>
 
     <px:combine-validation-reports>
