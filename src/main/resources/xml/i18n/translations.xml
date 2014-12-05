@@ -13,6 +13,12 @@
         <text xml:lang="fi">Kansi</text>
         <text xml:lang="da">Omslag</text>
         <text xml:lang="da-DK">Omslag</text>
+        <text xml:lang="de">Buchumschlag</text>
+        <text xml:lang="de-CH">Buchumschlag</text>
+        <text xml:lang="de-DE">Buchumschlag</text>
+        <text xml:lang="fr">Couverture</text>
+        <text xml:lang="it">Copertina</text>
+        <text xml:lang="es">Cubierta</text>
     </translation>
     <translation string="Front Cover">
         <text xml:lang="en">Front Cover</text>
@@ -27,6 +33,12 @@
         <text xml:lang="fi">Etukansi</text>
         <text xml:lang="da">Forside</text>
         <text xml:lang="da-DK">Forside</text>
+        <text xml:lang="de">Buchumschlag Vorderseite</text>
+        <text xml:lang="de-CH">Buchumschlag Vorderseite</text>
+        <text xml:lang="de-DE">Buchumschlag Vorderseite</text>
+        <text xml:lang="fr">Première de couverture</text>
+        <text xml:lang="it">Prima di copertina</text>
+        <text xml:lang="es">Primera de cubierta</text>
     </translation>
     <translation string="Rear Cover">
         <text xml:lang="en">Rear Cover</text>
@@ -41,6 +53,12 @@
         <text xml:lang="fi">Takakansi</text>
         <text xml:lang="da">Bagside</text>
         <text xml:lang="da-DK">Bagside</text>
+        <text xml:lang="de">Buchumschlag Rückseite</text>
+        <text xml:lang="de-CH">Buchumschlag Rückseite</text>
+        <text xml:lang="de-DE">Buchumschlag Rückseite</text>
+        <text xml:lang="fr">Quatrième de couverture</text>
+        <text xml:lang="it">Quarta di copertina</text>
+        <text xml:lang="es">Cuarta de cubierta</text>
     </translation>
     <translation string="Left Flap">
         <text xml:lang="en">Left Flap</text>
@@ -55,6 +73,12 @@
         <text xml:lang="fi">Etulieve</text>
         <text xml:lang="da">Venstre Flap</text>
         <text xml:lang="da-DK">Venstre Flap</text>
+        <text xml:lang="de">Vordere Klappe</text>
+        <text xml:lang="de-CH">Vordere Klappe</text>
+        <text xml:lang="de-DE">Vordere Klappe</text>
+        <text xml:lang="fr">Deuxième de couverture</text>
+        <text xml:lang="it">Seconda di copertina</text>
+        <text xml:lang="es">Segunda de cubierta</text>
     </translation>
     <translation string="Right Flap">
         <text xml:lang="en">Right Flap</text>
@@ -69,6 +93,12 @@
         <text xml:lang="fi">Takalieve</text>
         <text xml:lang="da">Højre Flap</text>
         <text xml:lang="da-DK">Højre Flap</text>
+        <text xml:lang="de">Hintere Klappe</text>
+        <text xml:lang="de-CH">Hintere Klappe</text>
+        <text xml:lang="de-DE">Hintere Klappe</text>
+        <text xml:lang="fr">Troisième de couverture</text>
+        <text xml:lang="it">Terza di copertina</text>
+        <text xml:lang="es">Tercera de cubierta</text>
     </translation>
     <translation string="Spine">
         <text xml:lang="en">Spine</text>
@@ -83,6 +113,12 @@
         <text xml:lang="fi">Selkä</text>
         <text xml:lang="da">Ryg</text>
         <text xml:lang="da-DK">Ryg</text>
+        <text xml:lang="de">Buchrücken</text>
+        <text xml:lang="de-CH">Buchrücken</text>
+        <text xml:lang="de-DE">Buchrücken</text>
+        <text xml:lang="fr">Dos</text>
+        <text xml:lang="it">Dorso</text>
+        <text xml:lang="es">Lomo</text>
     </translation>
     <translation string="Untitled Part">
         <text xml:lang="en">Untitled Part</text>
@@ -97,6 +133,12 @@
         <text xml:lang="fi">Nimeämätön Osa</text>
         <text xml:lang="da">Del Uden Titel</text>
         <text xml:lang="da-DK">Del Uden Titel</text>
+        <text xml:lang="de">Buchteil ohne Überschrift</text>
+        <text xml:lang="de-CH">Buchteil ohne Überschrift</text>
+        <text xml:lang="de-DE">Buchteil ohne Überschrift</text>
+        <text xml:lang="fr">Partie sans titre</text>
+        <text xml:lang="it">Parte senza titolo</text>
+        <text xml:lang="es">Parte sin título</text>
     </translation>
     <translation string="Untitled Chapter">
         <text xml:lang="en">Untitled Chapter</text>
@@ -111,6 +153,12 @@
         <text xml:lang="fi">Nimeämätön Luku</text>
         <text xml:lang="da">Kapitel Uden Titel</text>
         <text xml:lang="da-DK">Kapitel Uden Titel</text>
+        <text xml:lang="de">Kapitel ohne Überschrift</text>
+        <text xml:lang="de-CH">Kapitel ohne Überschrift</text>
+        <text xml:lang="de-DE">Kapitel ohne Überschrift</text>
+        <text xml:lang="fr">Chapitre sans titre</text>
+        <text xml:lang="it">Capitolo senza titolo</text>
+        <text xml:lang="es">Capítulo sin título</text>
     </translation>
     <translation string="Untitled Section">
         <text xml:lang="en">Untitled Section</text>
@@ -125,5 +173,11 @@
         <text xml:lang="fi">Nimeämätön Jakso</text>
         <text xml:lang="da">Afsnit Uden Titel</text>
         <text xml:lang="da-DK">Afsnit Uden Titel</text>
+        <text xml:lang="de">Abschnitt ohne Überschrift</text>
+        <text xml:lang="de-CH">Abschnitt ohne Überschrift</text>
+        <text xml:lang="de-DE">Abschnitt ohne Überschrift</text>
+        <text xml:lang="fr">Section sans titre</text>
+        <text xml:lang="it">Sezione senza titolo</text>
+        <text xml:lang="es">Sección sin título</text>
     </translation>
 </i18n>

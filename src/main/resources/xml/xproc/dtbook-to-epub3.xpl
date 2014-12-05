@@ -67,14 +67,6 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="strict" select="'true'" px:type="boolean">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Extra strict markup</h2>
-            <p px:role="desc">Some validation rules are considered extra strict and can be disabled using this option. Examples of extra strict rules are pagebreaks being required in all documents and
-                only a predefined list of languages, suppliers and publishers being allowed.</p>
-        </p:documentation>
-    </p:option>
-
     <p:import href="step/dtbook.validate.xpl"/>
     <p:import href="step/html.validate.xpl"/>
     <p:import href="step/epub3.validate.xpl"/>
@@ -188,7 +180,6 @@
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.out" step="single-html"/>
                 </p:input>
-                <p:with-option name="strict" select="$strict"/>
             </px:nordic-html-validate.step>
             <p:sink/>
 
@@ -312,7 +303,6 @@
                         <p:input port="in-memory.in">
                             <p:pipe port="in-memory.out" step="convert.epub3"/>
                         </p:input>
-                        <p:with-option name="strict" select="$strict"/>
                     </px:nordic-epub3-validate.step>
                     <p:sink/>
 
