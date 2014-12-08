@@ -86,6 +86,9 @@
 
     <p:filter select="/*/opf:manifest/opf:item[matches(@properties,'(^|\s)nav(\s|$)')]"/>
     <p:group>
+        <p:output port="result">
+            <p:pipe port="result" step="nav-with-spine-bodies"/>
+        </p:output>
         <p:variable name="nav-href" select="resolve-uri(/*/@href,base-uri(/*))"/>
         <px:message message="Loading Navigation Document: $1">
             <p:with-option name="param1" select="$nav-href"/>
@@ -102,7 +105,43 @@
         <px:assert test-count-min="1" test-count-max="1" message="The Navigation Document must exist: $1" error-code="NORDICDTBOOKEPUB013">
             <p:with-option name="param1" select="$nav-href"/>
         </px:assert>
+        <p:insert match="/*" position="first-child">
+            <p:input port="insertion">
+                <p:pipe port="result" step="spine-bodies"/>
+            </p:input>
+        </p:insert>
+        <p:identity name="nav-with-spine-bodies"/>
+
+        <p:xslt>
+            <p:input port="parameters">
+                <p:empty/>
+            </p:input>
+            <p:input port="source">
+                <p:pipe port="result" step="package-doc"/>
+            </p:input>
+            <p:input port="stylesheet">
+                <p:document href="../../xslt/opf-to-spine-fileset.xsl"/>
+            </p:input>
+        </p:xslt>
+        <px:message message="Loading &lt;body&gt; tags from spine..."/>
+        <px:fileset-load>
+            <p:input port="in-memory">
+                <p:pipe port="in-memory.in" step="main"/>
+            </p:input>
+        </px:fileset-load>
+        <p:for-each>
+            <p:iteration-source select="/*/html:body"/>
+            <p:delete match="/*/node()"/>
+            <p:add-attribute match="/*" attribute-name="xml:base">
+                <p:with-option name="attribute-value" select="base-uri(/*)"/>
+            </p:add-attribute>
+        </p:for-each>
+        <p:wrap-sequence wrapper="opf:spine"/>
+        <p:identity name="spine-bodies"/>
     </p:group>
+    <px:message message="Creating outline of single-document HTML representation based on navigation document and $1 documents from spine">
+        <p:with-option name="param1" select="count(/*/opf:spine/*)"/>
+    </px:message>
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>
@@ -111,7 +150,6 @@
             <p:document href="../../xslt/navdoc-to-outline.xsl"/>
         </p:input>
     </p:xslt>
-    <p:delete match="//html:section[@xml:base=(preceding::html:section|ancestor::html:section)/@xml:base]"/>
     <pxi:replace-sections-with-documents>
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>

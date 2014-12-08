@@ -395,6 +395,16 @@
         </sch:rule>
     </sch:pattern>
 
+    <!-- Rule 124 (106): The publication must contain pagebreaks -->
+    <sch:pattern id="dtbook_TPB_124">
+        <sch:rule context="html:body[html:nav]">
+            <sch:assert test="count(html:nav[tokenize(@epub:type,'\s+')='page-list']) &gt; 0">[tpb124] The publication must contain pagebreaks, and they must be referenced from a &lt;nav
+                epub:type="page-list"&gt; in the navigation document. There is no such element in the navigation document.</sch:assert>
+            <sch:assert test="count(html:nav[tokenize(@epub:type,'\s+')='page-list']//html:a) &gt; 0">[tpb124] The publication must contain pagebreaks, and they must be referenced from the &lt;nav
+                epub:type="page-list"&gt; in the navigation document. No pagebreaks are referenced from within the page list.</sch:assert>
+        </sch:rule>
+    </sch:pattern>
+
     <!-- Rule 125 (109): Only allow images in JPG format -->
     <sch:pattern id="dtbook_TPB_125">
         <sch:rule context="html:img">

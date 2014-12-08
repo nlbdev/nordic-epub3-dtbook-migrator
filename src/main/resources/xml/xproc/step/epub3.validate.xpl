@@ -31,7 +31,6 @@
     </p:output>
 
     <p:option name="temp-dir" required="true"/>
-    <p:option name="strict" select="'true'"/>
 
     <p:import href="html.validate.xpl"/>
     <p:import href="read-xml-declaration.xpl"/>
@@ -214,7 +213,6 @@
             <p:input port="in-memory.in">
                 <p:pipe port="in-memory" step="unzip"/>
             </p:input>
-            <p:with-option name="strict" select="$strict"/>
         </px:nordic-html-validate.step>
         <p:identity>
             <p:input port="source">
