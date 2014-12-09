@@ -2908,4 +2908,47 @@
         <x:expect label="should map to a p element and whitespace should be preserved"><dtbook:p xml:space="preserve"><dtbook:code xml:space="preserve">  1  2  </dtbook:code></dtbook:p></x:expect>
     </x:scenario>
 
+    <x:scenario label="lists with list item components (class='lic')">
+        <x:context>
+            <html:ol class="tocList">
+                <html:li>
+                    <html:a href="ET10581-05-chapter-1.xhtml#chap1-1"><html:span class="lic"><html:strong>1 Funktionen</html:strong></html:span></html:a>
+                    <html:ol class="tocList">
+                        <html:li>
+                            <html:a href="ET10581-05-chapter-1.xhtml#chap1-2">
+                                <html:span class="lic"><html:strong>1a</html:strong> Geraden</html:span>
+                                <html:span class="lic"><html:strong>4</html:strong></html:span>
+                            </html:a>
+                        </html:li>
+                        <html:li>
+                            <html:a href="ET10581-05-chapter-1.xhtml#chap1-4"><html:strong>1b</html:strong> Lineare und nicht lineare Funktionen <html:strong>8</html:strong></html:a>
+                        </html:li>
+                    </html:ol>
+                </html:li>
+            </html:ol>
+        </x:context>
+        <x:expect label="should not use bullets or numbering">
+            <dtbook:list type="pl" depth="1">
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:span><dtbook:strong>1 Funktionen</dtbook:strong></dtbook:span>
+                    </dtbook:lic>
+                    <dtbook:list type="pl" depth="2">
+                        <dtbook:li>
+                            <dtbook:lic>
+                                <dtbook:span><dtbook:strong>1a</dtbook:strong> Geraden</dtbook:span>
+                            </dtbook:lic>
+                            <dtbook:lic>
+                                <dtbook:span><dtbook:strong>4</dtbook:strong></dtbook:span>
+                            </dtbook:lic>
+                        </dtbook:li>
+                        <dtbook:li>
+                            <dtbook:span><dtbook:strong>1b</dtbook:strong> Lineare und nicht lineare Funktionen <dtbook:strong>8</dtbook:strong></dtbook:span>
+                        </dtbook:li>
+                    </dtbook:list>
+                </dtbook:li>
+            </dtbook:list>
+        </x:expect>
+    </x:scenario>
+
 </x:description>
