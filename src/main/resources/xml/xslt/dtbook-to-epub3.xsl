@@ -3,8 +3,8 @@
     xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
 
-    <!--    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>-->
-    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
+    <!--    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
 
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
 

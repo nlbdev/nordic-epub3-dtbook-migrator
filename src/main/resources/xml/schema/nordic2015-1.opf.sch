@@ -32,54 +32,71 @@
             <assert test="count(dc:identifier) = 1">[opf3a] there must be exactly one dc:identifier element</assert>
             <assert test="parent::opf:package/@unique-identifier = dc:identifier/@id">[opf3a] the id of the dc:identifier must equal the value of the package elements unique-identifier
                 attribute</assert>
-            <assert test="matches(dc:identifier/text(),'^[A-Za-z0-9].*$')">[opf3a] The identifier must start with a upper- or lower-case letter (A-Z or a-z), or a digit (0-9).</assert>
-            <assert test="matches(dc:identifier/text(),'^.*[A-Za-z0-9]$')">[opf3a] The identifier must end with a upper- or lower-case letter (A-Z or a-z), or a digit (0-9).</assert>
-            <assert test="matches(dc:identifier/text(),'^[A-Za-z0-9_-]*$')">[opf3a] The identifier must only contain upper- or lower-case letters (A-Z or a-z), digits (0-9), dashes (-) and underscores
-                (_).</assert>
+            <assert test="count(dc:identifier) = 1 and matches(dc:identifier/text(),'^[A-Za-z0-9].*$')">[opf3a] The identifier ("<value-of select="dc:identifier/text()"/>") must start with a upper- or
+                lower-case letter (A-Z or a-z), or a digit (0-9).</assert>
+            <assert test="count(dc:identifier) = 1 and matches(dc:identifier/text(),'^.*[A-Za-z0-9]$')">[opf3a] The identifier ("<value-of select="dc:identifier/text()"/>") must end with a upper- or
+                lower-case letter (A-Z or a-z), or a digit (0-9).</assert>
+            <assert test="count(dc:identifier) = 1 and matches(dc:identifier/text(),'^[A-Za-z0-9_-]*$')">[opf3a] The identifier ("<value-of select="dc:identifier/text()"/>") must only contain upper-
+                or lower-case letters (A-Z or a-z), digits (0-9), dashes (-) and underscores (_).</assert>
 
-            <assert test="count(dc:title[not(@refines)]) = 1">[opf3b] exactly one dc:title (without a "refines" attribute) must be present</assert>
+            <assert test="count(dc:title[not(@refines)]) = 1">[opf3b] exactly one dc:title <value-of select="if (dc:title[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must be
+                present in the package document.</assert>
 
-            <assert test="count(dc:language[not(@refines)]) = 1">[opf3c] exactly one dc:language (without a "refines" attribute) must be present</assert>
-            <assert test="matches(dc:language, '^[a-z][a-z](-[A-Z][A-Z])?$')">[opf3c] the language code must be either a "two-letter lower case" code or a "two-letter lower case + hyphen + two-letter
-                upper case" code</assert>
+            <assert test="count(dc:language[not(@refines)]) = 1">[opf3c] exactly one dc:language <value-of select="if (dc:language[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"
+                /> must be present in the package document.</assert>
+            <assert test="count(dc:language[not(@refines)]) = 1 and matches(dc:language[not(@refines)]/text(), '^[a-z][a-z](-[A-Z][A-Z])?$')">[opf3c] the language code ("<value-of
+                    select="dc:language[not(@refines)]/text()"/>") must be either a "two-letter lower case" code or a "two-letter lower case + hyphen + two-letter upper case" code.</assert>
             <!--<assert test="dc:language = ('no','nn-NO','nb-NO','sv','sv-FI','fi','da','en','de','de-CH','fr')" flag="warning">the language code should be one of: 'no' (Norwegian), 'nn-NO' (Norwegian
                 Nynorsk), 'nb-NO' (Norwegian Bokmål), 'sv' (Swedish), 'sv-FI' (Swedish (Finland)), 'fi' (Finnish), 'da' (Danish), 'en' (English), 'de' (German), 'de-CH' (German (Switzerland)), 'fr'
                 (French)</assert>-->
 
-            <assert test="count(dc:date[not(@refines)]) = 1">[opf3d] exactly one dc:date (without a "refines" attribute) must be present</assert>
-            <assert test="matches(dc:date[not(@refines)], '\d\d\d\d-\d\d-\d\d')">[opf3d] the dc:date must be of the format YYYY-MM-DD (year-month-day)</assert>
+            <assert test="count(dc:date[not(@refines)]) = 1">[opf3d] exactly one dc:date <value-of select="if (dc:date[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must be
+                present</assert>
+            <assert test="count(dc:date[not(@refines)]) = 1 and matches(dc:date[not(@refines)], '\d\d\d\d-\d\d-\d\d')">[opf3d] the dc:date (<value-of select="dc:date/text()"/>) must be of the format
+                YYYY-MM-DD (year-month-day)</assert>
 
-            <assert test="count(dc:publisher[not(@refines)]) = 1">[opf3e] exactly one dc:publisher (without a "refines" attribute) must be present</assert>
+            <assert test="count(dc:publisher[not(@refines)]) = 1">[opf3e] exactly one dc:publisher <value-of
+                    select="if (dc:publisher[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must be present</assert>
+            <assert test="count(dc:publisher[not(@refines)]) = 1 and dc:publisher[not(@refines)]/normalize-space(text())">[opf3e] the dc:publisher cannot be empty</assert>
             <!--<assert test="dc:publisher[not(@refines)] = ('TPB','MTM','SPSM','Nota','NLB','Celia','SBS')" flag="warning">the publisher should be one of:
                 'TPB','MTM','SPSM','Nota','NLB','Celia','SBS'</assert>-->
 
-            <assert test="opf:meta[@property='dcterms:modified' and not(@refines)]">[opf3f] a last modified date must be present</assert>
-            <assert test="matches(opf:meta[@property='dcterms:modified' and not(@refines)], '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ')">[opf3f] the last modified date must be use UTC time and be on the
-                form "CCYY-MM-DDThh:mm:ssZ" (year-month-date "T" hour:minute:second "Z")</assert>
+            <assert test="count(opf:meta[@property='dcterms:modified' and not(@refines)]) = 1">[opf3f] exactly one last modified date <value-of
+                    select="if (opf:meta[@property='dcterms:modified' and @refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must be present</assert>
+            <assert
+                test="count(opf:meta[@property='dcterms:modified' and not(@refines)]) = 1 and matches(opf:meta[@property='dcterms:modified' and not(@refines)]/text(), '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ')"
+                >[opf3f] the last modified date (<value-of select="opf:meta[@property='dcterms:modified' and not(@refines)]/text()"/>) must use UTC time and be on the form "CCYY-MM-DDThh:mm:ssZ"
+                (year-month-date "T" hour:minute:second "Z")</assert>
 
-            <assert test="count(dc:creator[not(@refines)]) &gt;= 1">[opf3g] at least one author (dc:creator; without a "refines" attribute) must be present</assert>
+            <assert test="count(dc:creator[not(@refines)]) &gt;= 1">[opf3g] at least dc:creator (i.e. book author) <value-of
+                    select="if (dc:creator[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must be present</assert>
 
             <!-- dc:contributor not required -->
 
-            <assert test="count(dc:source[not(@refines)]) = 1">[opf3h] exactly one dc:source (without a "refines" attribute) must be present</assert>
-            <assert test="starts-with(dc:source[not(@refines)],'urn:isbn:')">[opf3h] the dc:source must start with 'urn:isbn:'</assert>
-            <assert test="matches(dc:source[not(@refines)],'urn:isbn:[\d-]+')">the ISBN can only contain numbers and hyphens</assert>
+            <assert test="count(dc:source[not(@refines)]) = 1">[opf3h] exactly one dc:source <value-of select="if (dc:source[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must
+                be present</assert>
+            <assert test="count(dc:source[not(@refines)]) = 1 and starts-with(dc:source[not(@refines)],'urn:isbn:')">[opf3h] the dc:source ("<value-of select="dc:source[not(@refines)]/text()"/>") must
+                start with 'urn:isbn:'</assert>
+            <assert test="count(dc:source[not(@refines)]) = 1 and matches(dc:source[not(@refines)],'urn:isbn:[\d-]+')">the ISBN in dc:source ("<value-of select="dc:source[not(@refines)]/text()"/>")
+                can only contain numbers and hyphens (except for the 'urn:isbn:' prefix)</assert>
 
-            <assert test="count(opf:meta[@property='nordic:guidelines' and not(@refines)]) = 1">[opf3i] there must be exactly one meta element with the property "nordic:guidelines" (without a
-                "refines" attribute)</assert>
+            <assert test="count(opf:meta[@property='nordic:guidelines' and not(@refines)]) = 1">[opf3i] there must be exactly one meta element with the property "nordic:guidelines" <value-of
+                    select="if (opf:meta[@property='nordic:guidelines' and @refines]) then '(without a &quot;refines&quot; attribute)' else ''"/></assert>
             <assert test="opf:meta[@property='nordic:guidelines' and not(@refines)] = '2015-1'">[opf3i] the value of nordic:guidelines must be '2015-1'</assert>
 
-            <assert test="count(opf:meta[@property='nordic:supplier' and not(@refines)]) = 1">[opf3j] there must be exactly one meta element with the property "nordic:supplier" (without a "refines"
-                attribute)</assert>
+            <assert test="count(opf:meta[@property='nordic:supplier' and not(@refines)]) = 1">[opf3j] there must be exactly one meta element with the property "nordic:supplier" <value-of
+                    select="if (opf:meta[@property='nordic:supplier' and @refines]) then '(without a &quot;refines&quot; attribute)' else ''"/></assert>
         </rule>
     </pattern>
 
     <pattern id="opf_nordic_4">
         <rule context="opf:meta[@property and not(@refines)]">
-            <assert test="parent::*/opf:meta/@name = @property">[opf4] all EPUB3 meta elements without a refines attribute must have an equivalent OPF2 meta element (&lt;meta name="..."
-                content="..."/&gt;)</assert>
-            <assert test="parent::*/opf:meta[@name = current()/@property]/string(@content) = string(.)">[opf4] the value of the EPUB3 meta elements must equal their equivalent OPF2 meta
-                elements</assert>
+            <assert test="parent::*/opf:meta/@name = @property">[opf4] all EPUB3 meta elements <value-of
+                    select="if (parent::*/opf:meta[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must have an equivalent OPF2 meta element (&lt;meta name="<value-of
+                    select="@property"/>" content="<value-of select="text()"/>"/&gt;)</assert>
+            <assert test="parent::*/opf:meta[@name = current()/@property]/string(@content) = string(.)">[opf4] the value of the EPUB3 meta elements must equal their equivalent OPF2 meta elements. The
+                EPUB3 meta element is <value-of select="concat('&lt;',name(),' property=&quot;',@property,'&quot;&gt;',text(),'&lt;/',name(),'&gt;')"/> while the OPF2 element is <value-of
+                    select="(parent::*/opf:meta[@name = current()/@property])[1]/concat('&lt;',name(),' name=&quot;',@name,'&quot; content=&quot;',@content,'&quot;/&gt;')"/></assert>
         </rule>
     </pattern>
 
@@ -91,7 +108,7 @@
 
     <pattern id="opf_nordic_5_b">
         <rule context="opf:item[@media-type='application/x-dtbncx+xml']">
-            <assert test="@href = 'nav.ncx'">[opf5b] the NCX must be located in the same directory as the package document, and must be named 'nav.ncx'</assert>
+            <assert test="@href = 'nav.ncx'">[opf5b] the NCX must be located in the same directory as the package document, and must be named "nav.ncx" (not "<value-of select="@href"/>")</assert>
         </rule>
     </pattern>
 
@@ -104,31 +121,36 @@
 
     <pattern id="opf_nordic_7">
         <rule context="opf:item[@media-type='application/xhtml+xml' and tokenize(@properties,'\s+')='nav']">
-            <assert test="@href = 'nav.xhtml'">[opf7] the Navigation Document must be located in the same directory as the package document, and must be named 'nav.xhtml'</assert>
+            <assert test="@href = 'nav.xhtml'">[opf7] the Navigation Document must be located in the same directory as the package document, and must be named 'nav.xhtml' (not "<value-of
+                    select="@href"/>")</assert>
         </rule>
     </pattern>
 
     <pattern id="opf_nordic_8">
         <rule context="opf:item[starts-with(@media-type,'image/')]">
-            <assert test="matches(@href,'^images/[^/]+$')">[opf8] all images must be stored in the "images" directory (which is a subdirectory relative to the package document)</assert>
+            <assert test="matches(@href,'^images/[^/]+$')">[opf8] all images must be stored in the "images" directory (which is a subdirectory relative to the package document). The image file
+                    "<value-of select="replace(@href,'.*/','')"/>" is located in "<value-of select="replace(@href,'[^/]*$','')"/>".</assert>
         </rule>
     </pattern>
 
     <pattern id="opf_nordic_9">
         <rule context="opf:item[@media-type='application/xhtml+xml' and not(tokenize(@properties,'\s+')='nav')]">
-            <report test="contains(@href,'/')">[opf9] all content files must be located in the same directory as the package document</report>
+            <report test="contains(@href,'/')">[opf9] all content files must be located in the same directory as the package document. The content file file "<value-of select="replace(@href,'.*/','')"
+                />" is located in "<value-of select="replace(@href,'[^/]*$','')"/>".</report>
         </rule>
     </pattern>
 
     <pattern id="opf_nordic_10">
         <rule context="opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-cover.xhtml')]/@id = @idref]">
-            <assert test="@linear = 'no'">[opf10] Cover must be marked as secondary in the spine (i.e. set linear="no" on the itemref element corresponding to the cover)</assert>
+            <assert test="@linear = 'no'">[opf10] Cover must be marked as secondary in the spine (i.e. set linear="no" on the itemref with idref="<value-of select="@idref"/>", which refers to the
+                cover)</assert>
         </rule>
     </pattern>
 
     <pattern id="opf_nordic_11">
         <rule context="opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-rearnotes.xhtml')]/@id = @idref]">
-            <assert test="@linear = 'no'">[opf11] Rearnotes must be marked as secondary in the spine (i.e. set linear="no" on the itemref element corresponding to the rearnote)</assert>
+            <assert test="@linear = 'no'">[opf11] Rearnotes must be marked as secondary in the spine (i.e. set linear="no" on the itemref with idref="<value-of select="@idref"/>, which refers to the
+                rearnote)</assert>
         </rule>
     </pattern>
 
@@ -136,8 +158,8 @@
         <rule context="opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav')]">
             <assert test="matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')">[opf12a] Content documents must match the "[dc:identifier]-[position in spine]-[epub:type].xhtml" file naming
                 convention. Example: "DTB123-01-cover.xhtml". The identifier are allowed to contain the upper- and lower-case characters A-Z and a-z as well as digits (0-9), dashes (-) and underscores
-                (_). The position is a number (0-9). The epub:type must be all lower-case characters (a-z) and can contain a dash (-). An optional number can be added after the epub:type to be able to
-                easily tell different files with the same epub:type apart. For instance: "DTB123-13-chapter-7.xhtml".</assert>
+                (_). The position is a positive whole number consisting of the digits 0-9. The epub:type must be all lower-case characters (a-z) and can contain a dash (-). An optional positive whole
+                number (digits 0-9) can be added after the epub:type to be able to easily tell different files with the same epub:type apart. For instance: "DTB123-13-chapter-7.xhtml".</assert>
         </rule>
     </pattern>
 
@@ -182,15 +204,17 @@
 
     <pattern id="opf_nordic_13">
         <rule context="opf:item[@media-type='application/xhtml+xml' and @href='nav.xhtml']">
-            <assert test="tokenize(@properties,'\s+')='nav'">[opf13] the Navigation Document must be identified with the attribute properties="nav" in the OPF manifest</assert>
+            <assert test="tokenize(@properties,'\s+')='nav'">[opf13] the Navigation Document must be identified with the attribute properties="nav" in the OPF manifest. It currently <value-of
+                    select="if (not(@properties)) then 'does not have a &quot;properties&quot; attribute' else concat('has the properties: ',string-join(tokenize(@properties,'\s+'),', '),', but not &quot;nav&quot;')"
+                /></assert>
         </rule>
     </pattern>
 
     <pattern id="opf_nordic_14">
         <rule context="opf:itemref">
             <let name="itemref" value="."/>
-            <report test="count(//opf:item[@id=$itemref/@idref and (tokenize(@properties,'\s+')='nav' or @href='nav.xhtml')])">[opf14] the Navigation Document must not be present in the OPF
-                spine.</report>
+            <report test="count(//opf:item[@id=$itemref/@idref and (tokenize(@properties,'\s+')='nav' or @href='nav.xhtml')])">[opf14] the Navigation Document must not be present in the OPF spine
+                (itemref with idref="<value-of select="@idref"/>").</report>
         </rule>
     </pattern>
 

@@ -170,7 +170,7 @@
         <xsl:choose>
             <xsl:when test="@name='nordic:guidelines'">
                 <xsl:attribute name="name" select="'track:Guidelines'"/>
-                <xsl:attribute name="content" select="'2011-2'"/>
+                <xsl:attribute name="content" select="'2015-1'"/>
             </xsl:when>
             <xsl:when test="@name='nordic:supplier'">
                 <xsl:attribute name="name" select="'track:Supplier'"/>
@@ -1123,6 +1123,7 @@
             <xsl:variable name="marker">
                 <xsl:choose>
                     <xsl:when test="parent::html:*/f:classes(.)='list-style-type-none'"/>
+                    <xsl:when test="parent::html:*//*/f:classes(.)='lic'"/>
                     <xsl:when test="ancestor::html:section[1][f:types(.)='toc' and not(ancestor::html:section | ancestor::html:article)]"/>
                     <xsl:when test="parent::html:ul">
                         <xsl:value-of select="'• '"/>
