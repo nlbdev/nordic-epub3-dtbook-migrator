@@ -44,7 +44,7 @@
     <xsl:template match="head">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
-            <meta name="track:Guidelines" content="2011-2"/>
+            <meta name="track:Guidelines" content="2015-1"/>
             <xsl:if test="not(meta/@name='dc:Source')">
                 <xsl:variable name="isbn"
                     select="(/dtbook/book/frontmatter/level1[tokenize(@class,'\s+')='colophon']//text()[matches(.,'^\s*ISBN[:\s]*([\d\-– ]+)([^\d\-– ]|$)')]/replace(replace(.,'^\s*ISBN[:\s]*([\d\- ]+)([^\d\-– ].*?$|$)','$1'),'[^\d]',''))[1]"/>

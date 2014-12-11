@@ -170,7 +170,7 @@
         <xsl:choose>
             <xsl:when test="@name='nordic:guidelines'">
                 <xsl:attribute name="name" select="'track:Guidelines'"/>
-                <xsl:attribute name="content" select="'2011-2'"/>
+                <xsl:attribute name="content" select="'2015-1'"/>
             </xsl:when>
             <xsl:when test="@name='nordic:supplier'">
                 <xsl:attribute name="name" select="'track:Supplier'"/>
