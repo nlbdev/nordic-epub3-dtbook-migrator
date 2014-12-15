@@ -852,4 +852,25 @@
         </rule>
     </pattern>
 
+    <!-- Rule 268: Check that the heading levels are nested correctly (necessary for sidebars and poems, and maybe other structures as well where the RelaxNG is unable to enforce the level) -->
+    <pattern id="epub_nordic_268">
+        <rule context="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
+            <let name="sectioning-element" value="ancestor::*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body][1]"/>
+            <let name="this-level" value="xs:integer(replace(name(),'.*(\d)$','$1')) + (if (ancestor::html:header[parent::html:body]) then -1 else 0)"/>
+            <let name="child-sectioning-elements"
+                value="$sectioning-element//*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:figure][ancestor::*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body][1] intersect $sectioning-element]"/>
+            <let name="child-sectioning-element-with-wrong-level"
+                value="$child-sectioning-elements[count(html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6) != 0 and (html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6)/xs:integer(replace(name(),'.*(\d)$','$1')) != min((6, $this-level + 1))][1]"/>
+            <assert test="count($child-sectioning-element-with-wrong-level) = 0">[nordic268] The subsections of <value-of
+                    select="concat('&lt;',$sectioning-element/name(),string-join(for $a in ($sectioning-element/@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (which contains
+                the headline <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/><value-of
+                    select="string-join(.//text(),' ')"/>&lt;/<name/>&gt;) must only use &lt;h<value-of select="min((6, $this-level + 1))"/>&gt; for headlines. It contains the element <value-of
+                    select="concat('&lt;',$child-sectioning-element-with-wrong-level/name(),string-join(for $a in ($child-sectioning-element-with-wrong-level/@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"
+                /> which contains the headline <value-of
+                    select="concat('&lt;',$child-sectioning-element-with-wrong-level/(html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6)[1]/name(),string-join(for $a in ($child-sectioning-element-with-wrong-level/(html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6)[1]/@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;',string-join($child-sectioning-element-with-wrong-level/(html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6)[1]//text(),' '),'&lt;/',$child-sectioning-element-with-wrong-level/(html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6)[1]/name(),'&gt;')"
+                />
+            </assert>
+        </rule>
+    </pattern>
+
 </schema>

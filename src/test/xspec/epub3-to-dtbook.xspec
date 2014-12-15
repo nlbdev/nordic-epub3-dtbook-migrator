@@ -717,6 +717,28 @@
                 <dtbook:sidebar render="required"/>
             </x:expect>
         </x:scenario>
+        <x:scenario label="and the element contains a headline">
+            <x:context>
+                <html:section>
+                    <html:aside epub:type="sidebar">
+                        <html:h1>Sidebar 1</html:h1>
+                    </html:aside>
+                    <html:figure epub:type="sidebar">
+                        <html:h1>Sidebar 2</html:h1>
+                    </html:figure>
+                </html:section>
+            </x:context>
+            <x:expect label="the headlines should become hd elements">
+                <dtbook:level1>
+                    <dtbook:sidebar render="optional">
+                        <dtbook:hd>Sidebar 1</dtbook:hd>
+                    </dtbook:sidebar>
+                    <dtbook:sidebar render="required">
+                        <dtbook:hd>Sidebar 2</dtbook:hd>
+                    </dtbook:sidebar>
+                </dtbook:level1>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.sidebar -->
@@ -810,20 +832,50 @@
 
     <!-- poem -->
     <x:scenario label="when processing an element with an epub:type of z3998:poem">
-        <x:context>
-            <html:div>
-                <html:span epub:type="z3998:poem"/>
-                <html:p epub:type="z3998:poem"/>
-                <html:div epub:type="z3998:poem"/>
-            </html:div>
-        </x:context>
-        <x:expect label="the resulting element should be a poem">
-            <dtbook:div>
-                <dtbook:poem/>
-                <dtbook:poem/>
-                <dtbook:poem/>
-            </dtbook:div>
-        </x:expect>
+        <x:scenario label="and no content">
+            <x:context>
+                <html:div>
+                    <html:span epub:type="z3998:poem"/>
+                    <html:p epub:type="z3998:poem"/>
+                    <html:div epub:type="z3998:poem"/>
+                </html:div>
+            </x:context>
+            <x:expect label="the resulting element should be a poem">
+                <dtbook:div>
+                    <dtbook:poem/>
+                    <dtbook:poem/>
+                    <dtbook:poem/>
+                </dtbook:div>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a headline inside">
+            <x:context>
+                <html:section>
+                    <html:span epub:type="z3998:poem">
+                        <html:h1>Poem 1</html:h1>
+                    </html:span>
+                    <html:p epub:type="z3998:poem">
+                        <html:h1>Poem 2</html:h1>
+                    </html:p>
+                    <html:div epub:type="z3998:poem">
+                        <html:h1>Poem 3</html:h1>
+                    </html:div>
+                </html:section>
+            </x:context>
+            <x:expect label="the resulting headlines should become hd elements">
+                <dtbook:level1>
+                    <dtbook:poem>
+                        <dtbook:hd>Poem 1</dtbook:hd>
+                    </dtbook:poem>
+                    <dtbook:poem>
+                        <dtbook:hd>Poem 2</dtbook:hd>
+                    </dtbook:poem>
+                    <dtbook:poem>
+                        <dtbook:hd>Poem 3</dtbook:hd>
+                    </dtbook:poem>
+                </dtbook:level1>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.poem -->
@@ -2948,6 +3000,42 @@
                     </dtbook:list>
                 </dtbook:li>
             </dtbook:list>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="issue #252 - wrap inline content in epub:type=rearnote in a p">
+        <x:context>
+            <html:ol epub:type="rearnotes">
+                <html:li epub:type="rearnote" class="notebody" id="rn1">1 Rearnote</html:li>
+                <html:li epub:type="rearnote" class="notebody" id="rn2"><html:span>2 Rearnote</html:span></html:li>
+                <html:li epub:type="rearnote" class="notebody" id="rn3"><html:p>3 Rearnote</html:p></html:li>
+                <html:li epub:type="rearnote" class="notebody" id="rn4">
+                    <!-- comment -->
+                    <![CDATA[   ]]>
+                    <html:p>4 Rearnote</html:p>
+                </html:li>
+            </html:ol>
+            <html:ol epub:type="footnotes">
+                <html:li id="fn_102" class="notebody" epub:type="footnote">
+                    <html:p>
+                        <html:span id="dtb1121">Henri 1987</html:span>
+                    </html:p>
+                </html:li>
+            </html:ol>
+        </x:context>
+        <x:expect label="the text node and the span element should be wrapped in a p, while the p should not be wrapped in another p">
+            <dtbook:note id="rn1"><dtbook:p>1 Rearnote</dtbook:p></dtbook:note>
+            <dtbook:note id="rn2"><dtbook:p><dtbook:span>2 Rearnote</dtbook:span></dtbook:p></dtbook:note>
+            <dtbook:note id="rn3"><dtbook:p>3 Rearnote</dtbook:p></dtbook:note>
+            <dtbook:note id="rn4">
+                <!-- comment -->
+                <dtbook:p>4 Rearnote</dtbook:p>
+            </dtbook:note>
+            <dtbook:note id="fn_102">
+                <dtbook:p>
+                    <dtbook:span id="dtb1121">Henri 1987</dtbook:span>
+                </dtbook:p>
+            </dtbook:note>
         </x:expect>
     </x:scenario>
 

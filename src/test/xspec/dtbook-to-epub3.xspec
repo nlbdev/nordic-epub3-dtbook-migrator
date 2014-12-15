@@ -755,6 +755,18 @@
                 <html:figure id="..." epub:type="sidebar" class="sidebar"/>
             </x:expect>
         </x:scenario>
+        <x:scenario label="with a hd element">
+            <x:context>
+                <dtbook:sidebar>
+                    <dtbook:hd>Headline</dtbook:hd>
+                </dtbook:sidebar>
+            </x:context>
+            <x:expect label="the hd element should become a headline">
+                <html:aside id="..." epub:type="sidebar" class="sidebar">
+                    <html:h1 id="...">Headline</html:h1>
+                </html:aside>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.sidebar -->
