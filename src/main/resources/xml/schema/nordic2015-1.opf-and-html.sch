@@ -84,13 +84,12 @@
         </rule>
     </pattern>
 
-    <!-- Rule 200: The title element must not be empty and must be the same as the publication dc:title in the OPF -->
-    <pattern id="epub_nordic_200">
+    <!-- Rule 28: The HTML title element must be the same as the OPF publication dc:title -->
+    <pattern id="epub_nordic_28">
         <rule context="html:title">
-            <assert test="text() and not(normalize-space(.)='')">[nordic200] The title element must not be empty.</assert>
-            <assert test="text() = /*/opf:package/opf:metadata/dc:title[not(@refines)]/text()">[nordic200_opf] The title element must contain the same text as the dc:title element in the OPF metadata.
-                The title element contains "<value-of select="."/>" while the dc:title element in the OPF contains "<value-of select="/*/opf:package/opf:metadata/dc:title[not(@refines)]/text()"
-                />".</assert>
+            <assert test="text() = /*/opf:package/opf:metadata/dc:title[not(@refines)]/text()">[nordic28_opf] The HTML title element must contain the same text as the dc:title element in the OPF
+                metadata. The HTML title element contains "<value-of select="."/>" while the dc:title element in the OPF contains "<value-of
+                    select="/*/opf:package/opf:metadata/dc:title[not(@refines)]/text()"/>".</assert>
         </rule>
     </pattern>
 

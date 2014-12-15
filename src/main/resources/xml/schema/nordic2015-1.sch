@@ -186,10 +186,10 @@
             <let name="inline-sibling-element"
                 value="../*[namespace-uri()='http://www.w3.org/1999/xhtml' and local-name()=('a','abbr','bdo','code','dfn','em','kbd','q','samp','span','strong','sub','sup')][1]"/>
             <let name="inline-sibling-text" value="../text()[normalize-space()][1]"/>
-            <report test="count($inline-sibling-element) and not(../html:li)">[nordic29] Block element <value-of
+            <report test="count($inline-sibling-element) and not((self::html:ol or self::html:ul) and parent::html:li)">[nordic29] Block element <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> as sibling to inline element <value-of
                     select="concat('&lt;',$inline-sibling-element/name(),string-join(for $a in ($inline-sibling-element/@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
-            <report test="count($inline-sibling-text) and not(../html:li)">[nordic29] Block element <value-of
+            <report test="count($inline-sibling-text) and not((self::html:ol or self::html:ul) and parent::html:li)">[nordic29] Block element <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> as sibling to text content (<value-of
                     select="if (string-length(normalize-space($inline-sibling-text)) &lt; 100) then normalize-space($inline-sibling-text) else concat(substring(normalize-space($inline-sibling-text),1,100),' (...)')"
                 />)</report>
@@ -526,14 +526,10 @@
         </rule>
     </pattern>
 
-    <!-- Rule 200: The title element must not be empty and must be the same as the publication dc:title (in case of a single-HTML document) -->
+    <!-- Rule 200: The title element must not be empty -->
     <pattern id="epub_nordic_200">
         <rule context="html:title">
             <assert test="text() and not(normalize-space(.)='')">[nordic200] The title element must not be empty.</assert>
-            <assert test="not(//html:body/html:header) or . = /html:html/html:head/html:meta[@name='dc:title'][1]/string(@content)">[nordic200_html] The title element must contain the same text as the
-                dc:title meta element. The title element contains "<value-of select="."/>" while the dc:title meta element <value-of
-                    select="if (/html:html/html:head/html:meta[@name='dc:title']) then concat('contains &quot;',/html:html/html:head/html:meta[@name='dc:title']/string(@content),'&quot;') else 'does not exist'"
-                />.</assert>
         </rule>
     </pattern>
 
