@@ -23,7 +23,7 @@
     </xsl:template>
 
     <xsl:template match="*">
-        <xsl:comment select="concat('No template for element: ',name())"/>
+        <xsl:comment select="concat('No template for element: &lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>
     </xsl:template>
 
     <xsl:template match="html:style"/>
@@ -414,7 +414,16 @@
     <xsl:template match="html:aside[f:types(.)='note'] | html:li[f:types(.)=('rearnote','footnote')]">
         <note>
             <xsl:call-template name="attlist.note"/>
-            <xsl:apply-templates select="node()"/>
+            <xsl:choose>
+                <xsl:when test="(text()[normalize-space()] | *)/f:is-inline(.) = true()">
+                    <p>
+                        <xsl:apply-templates select="node()"/>
+                    </p>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="node()"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </note>
     </xsl:template>
 
@@ -1007,7 +1016,7 @@
     </xsl:template>
 
     <xsl:template match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
-        <xsl:element name="h{f:level(.)}">
+        <xsl:element name="h{if (parent::*/f:types(.)=('sidebar','z3998:poem','z3998:verse') or parent::*/f:classes(.)='linegroup') then 'd' else f:level(.)}">
             <xsl:call-template name="attlist.h"/>
             <xsl:apply-templates select="node()"/>
         </xsl:element>
