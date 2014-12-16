@@ -2,11 +2,11 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:msxsl="urn:schemas-microsoft-com:xslt"
     xmlns:x="http://www.daisy.org/z3986/2005/dtbook/"
-    exclude-result-prefixes="x msxsl">
+    exclude-result-prefixes="x msxsl" >
   
-  <xsl:output method="xml" indent="yes" doctype-system="dtbook110.dtd"/>
+  <xsl:output method="xml" indent="yes" doctype-system="dtbook110.dtd" encoding="utf-8"/>
 
-  <!--Version 0.4 - 2014.12.04-->
+  <!--Version 0.5 - 2014.12.05-->
   
   <xsl:template match="/">
     <xsl:apply-templates/>
@@ -116,9 +116,17 @@
     <xsl:choose>
       <xsl:when test="parent::x:imggroup">
         <prodnote class="caption" render="required">
-          <p>
-            <xsl:apply-templates/>
-          </p>
+          <xsl:choose>
+            <xsl:when test="child::x:p|child::x:table|child::x:div">          
+                <xsl:apply-templates/>  
+            </xsl:when>
+            <xsl:otherwise>
+              <p>
+                <xsl:apply-templates/>
+              </p>         
+            </xsl:otherwise>
+          </xsl:choose>
+        
         </prodnote>
       </xsl:when>
       <xsl:otherwise>
@@ -514,6 +522,8 @@
   <!-- if pagenum is child of imggroup report-->
   <xsl:template match="x:pagenum">
     <xsl:choose>
+      
+      <!--Parent er imggroup: indsæt kommentar-->
       <xsl:when test ="parent::x:imggroup">
         <xsl:comment>
           <xsl:text>Konverteringsproblem: pagenum kan ikke befinde sig på denne position: </xsl:text>
@@ -525,6 +535,46 @@
           <xsl:text>&lt;/pagenum&gt;</xsl:text>
         </xsl:comment>
       </xsl:when>
+      
+      <!--Parent er table: Indsæt ny table-->
+      <xsl:when test ="parent::x:table">
+        <!-- Afslut den forrige-->
+        <xsl:text disable-output-escaping ="yes">&lt;/table&gt;</xsl:text>
+        
+        <!--Indsæt sidetallet-->
+        <pagenum>
+          <xsl:for-each select="@*">
+            <xsl:attribute name="{name()}">
+              <xsl:value-of select="."/>
+            </xsl:attribute>
+          </xsl:for-each>
+          <xsl:apply-templates/>
+        </pagenum>
+        
+        <!-- Begynd en ny tabel-->
+        <xsl:text disable-output-escaping ="yes">&lt;table&gt;</xsl:text>
+        
+      </xsl:when>
+      
+      <!--Parent er tbody: indsæt nyt table/tbody-->
+      <xsl:when test ="parent::x:tbody">
+        <!-- Afslut den forrige-->
+        <xsl:text disable-output-escaping ="yes">&lt;/tbody&gt;&lt;/table&gt;</xsl:text>
+
+        <!--Indsæt sidetallet-->
+        <pagenum>
+          <xsl:for-each select="@*">
+            <xsl:attribute name="{name()}">
+              <xsl:value-of select="."/>
+            </xsl:attribute>
+          </xsl:for-each>
+          <xsl:apply-templates/>
+        </pagenum>
+
+        <!-- Begynd en ny tabel-->
+        <xsl:text disable-output-escaping ="yes">&lt;table&gt;&lt;tbody&gt;</xsl:text>
+      </xsl:when>
+      
       <xsl:otherwise>
         <pagenum>
           <xsl:for-each select="@*">
