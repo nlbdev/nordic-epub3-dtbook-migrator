@@ -1153,20 +1153,26 @@
             <group>
                 <ref name="h6"/> <!-- h6 -->
                 <oneOrMore>
-                    <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
-                    <ref name="level6"/> <!-- section, article -->
+                    <choice>
+                        <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
+                        <ref name="level6"/> <!-- section, article -->
+                    </choice>
                 </oneOrMore>
             </group>
             <group>
                 <oneOrMore>
-                    <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
-                    <ref name="level6"/> <!-- section, article -->
+                    <choice>
+                        <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
+                        <ref name="level6"/> <!-- section, article -->
+                    </choice>
                 </oneOrMore>
                 <optional>
                     <ref name="h6"/> <!-- h6 -->
                     <oneOrMore>
-                        <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
-                        <ref name="level6"/> <!-- section, article -->
+                        <choice>
+                            <ref name="docblockorinline"/> <!-- h1, p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section, a, samp, kbd -->
+                            <ref name="level6"/> <!-- section, article -->
+                        </choice>
                     </oneOrMore>
                 </optional>
             </group>
@@ -2819,7 +2825,6 @@
         <ref name="attrs.notype"/>
     </define>
     
-    <!-- Use: h1 contains the text of the heading for a <level1> structure. -->
     <define name="h1">
         <element name="h1">
             <ref name="attlist.h1"/>
@@ -2832,7 +2837,6 @@
         <ref name="attrs"/>
     </define>
     
-    <!-- Use: h2 contains the text of the heading for a <level2> structure. -->
     <define name="h2">
         <element name="h2">
             <ref name="attlist.h2"/>
@@ -2845,7 +2849,6 @@
         <ref name="attrs"/>
     </define>
     
-    <!-- Use: h3 contains the text of the heading for a <level3> structure. -->
     <define name="h3">
         <element name="h3">
             <ref name="attlist.h3"/>
@@ -2858,7 +2861,6 @@
         <ref name="attrs"/>
     </define>
     
-    <!-- Use: h4 contains the text of the heading for a <level4> structure. -->
     <define name="h4">
         <element name="h4">
             <ref name="attlist.h4"/>
@@ -2871,7 +2873,6 @@
         <ref name="attrs"/>
     </define>
     
-    <!-- Use: h5 contains the text of the heading for a <level5> structure. -->
     <define name="h5">
         <element name="h5">
             <ref name="attlist.h5"/>
@@ -2884,7 +2885,6 @@
         <ref name="attrs"/>
     </define>
     
-    <!-- Use: h6 contains the text of the heading for a <level6> structure. -->
     <define name="h6">
         <element name="h6">
             <ref name="attlist.h6"/>
