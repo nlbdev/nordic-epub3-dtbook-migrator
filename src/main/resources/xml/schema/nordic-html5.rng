@@ -752,11 +752,7 @@
         <optional>
             <choice>
                 <value>titlepage</value>
-                <value>colophon</value>
-                <value>toc</value>
-                <value>foreword</value>
-                <value>preface</value>
-                <value>introduction</value>
+                <ref name="common-top-level-types"/>
             </choice>
         </optional>
     </define>
@@ -816,20 +812,11 @@
                     <ref name="level1.only-headline"/>
                     <ref name="level1.content"/>
                 </choice>
-                <!-- Note: The subsections of a part must have an epub:type of 'chapter'. -->
             </group>
         </choice>
     </define>
     <define name="bodymatter.types">
-        <choice>
-            <value>prologue</value>
-            <value>preface</value>
-            <value>introduction</value>
-            <value>chapter</value>
-            <value>rearnotes</value>
-            <value>conclusion</value>
-            <value>epilogue</value>
-        </choice>
+        <ref name="common-top-level-types"/>
     </define>
     
     <!--
@@ -863,15 +850,7 @@
     </define>
     <define name="backmatter.types">
         <optional>
-            <choice>
-                <value>afterword</value>
-                <value>toc</value>
-                <value>index</value>
-                <value>appendix</value>
-                <value>glossary</value>
-                <value>footnotes</value>
-                <value>rearnotes</value>
-            </choice>
+            <ref name="common-top-level-types"/>
         </optional>
     </define>
     
@@ -982,14 +961,7 @@
                 <list>
                     <ref name="types"/>
                     <optional>
-                        <choice>
-                            <value>prologue</value>
-                            <value>preface</value>
-                            <value>chapter</value>
-                            <value>rearnotes</value>
-                            <value>conclusion</value>
-                            <value>epilogue</value>
-                        </choice>
+                        <ref name="common-top-level-types"/>
                     </optional>
                     <ref name="types"/>
                 </list>
@@ -3599,6 +3571,55 @@
     </define>
     
     <!-- ======================== values for the epub:type and class attributes ======================== -->
+    
+    <define name="common-top-level-types">
+        <choice>
+            <value>chapter</value>
+            <value>abstract</value>
+            <value>foreword</value>
+            <value>preface</value>
+            <value>prologue</value>
+            <value>introduction</value>
+            <value>preamble</value>
+            <value>conclusion</value>
+            <value>epilogue</value>
+            <value>afterword</value>
+            <value>epigraph</value>
+            <value>toc</value>
+            <value>toc-brief</value>
+            <value>landmarks</value>
+            <value>loa</value>
+            <value>loi</value>
+            <value>lot</value>
+            <value>lov</value>
+            <value>appendix</value>
+            <value>colophon</value>
+            <value>credits</value>
+            <value>keywords</value>
+            <value>index</value>
+            <value>glossary</value>
+            <value>bibliography</value>
+            <value>titlepage</value>
+            <value>halftitlepage</value>
+            <value>copyright-page</value>
+            <value>seriespage</value>
+            <value>acknowledgments</value>
+            <value>imprint</value>
+            <value>imprimatur</value>
+            <value>contributors</value>
+            <value>other-credits</value>
+            <value>errata</value>
+            <value>dedication</value>
+            <value>revision-history</value>
+            <value>case-study</value>
+            <value>answers</value>
+            <value>assessments</value>
+            <value>qna</value>
+            <value>practices</value>
+            <value>footnotes</value>
+            <value>rearnotes</value>
+        </choice>
+    </define>
     
     <define name="types">
         <zeroOrMore>
