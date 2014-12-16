@@ -512,7 +512,7 @@
 
     <sch:pattern id="dtbook_TPB_128_b">
         <sch:rule context="dtbk:meta[@name='track:Guidelines']">
-            <sch:assert test="@content='2011-2'">[tpb128] track:Guidelines metadata value must be 2011-2.</sch:assert>
+            <sch:assert test="@content=('2011-1','2011-2','2015-1')">[tpb128] track:Guidelines metadata value must be 2011-1, 2011-2 or 2015-1.</sch:assert>
         </sch:rule>
     </sch:pattern>
 

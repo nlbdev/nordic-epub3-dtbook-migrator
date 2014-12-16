@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic-dtbook-2005-3.rng"?>
-<?xml-model href="http://www.daisy.org/pipeline/modules/nordic/tpb2011-1.sch"?>
+<?xml-model href="http://www.daisy.org/pipeline/modules/nordic/mtm2015-1.sch"?>
 <!DOCTYPE dtbook
   PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
 <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en">
@@ -8,7 +8,7 @@
         <meta name="dtb:uid" content="C00000"/>
         <meta name="dc:Title" content="Valentin Haüy - the father of the education for the blind"/>
         <meta name="dc:Identifier" content="C00000"/>
-        <meta name="track:Guidelines" content="2011-2"/>
+        <meta name="track:Guidelines" content="2015-1"/>
         <meta name="track:Supplier" content="MTM"/>
         <meta name="dc:Creator" content="Beatrice Christensen Sköld"/>
         <meta name="dc:Language" content="en"/>

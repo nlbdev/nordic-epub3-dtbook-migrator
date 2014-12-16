@@ -71,7 +71,7 @@
         <p:with-option name="document-type" select="$document-type"/>
         <p:input port="source">
             <p:pipe port="report" step="validate.rng"/>
-            <p:pipe port="result" step="validate.sch"/>
+            <p:pipe port="report" step="validate.sch"/>
         </p:input>
         <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
             <p:pipe port="result" step="html"/>

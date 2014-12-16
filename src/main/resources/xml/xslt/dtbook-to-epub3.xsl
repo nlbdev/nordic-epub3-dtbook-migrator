@@ -3,8 +3,8 @@
     xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
 
-    <!--    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>-->
-    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
+    <!--    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
 
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
 
@@ -1723,7 +1723,7 @@
         <xsl:param name="element" as="element()"/>
         <xsl:variable name="level"
             select="count($element/ancestor-or-self::*[self::dtbook:level or self::dtbook:level1 or self::dtbook:level2 or self::dtbook:level3 or self::dtbook:level4 or self::dtbook:level5 or self::dtbook:level6 or self::dtbook:linegroup[dtbook:hd] or self::dtbook:poem[dtbook:hd]])"/>
-        <xsl:sequence select="min(($level, 6))"/>
+        <xsl:sequence select="max((1, min(($level, 6))))"/>
     </xsl:function>
 
     <xsl:function name="f:generate-pretty-id" as="xs:string">
