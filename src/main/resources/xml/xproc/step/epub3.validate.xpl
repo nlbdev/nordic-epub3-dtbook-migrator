@@ -26,6 +26,7 @@
         <p:pipe port="result" step="epubcheck.validate"/>
         <p:pipe port="result" step="opf.validate"/>
         <p:pipe port="result" step="html.validate"/>
+        <p:pipe port="result" step="nav-references.validate"/>
         <p:pipe port="result" step="opf-and-html.validate"/>
         <p:pipe port="result" step="category.html-report"/>
     </p:output>
@@ -171,6 +172,20 @@
     </px:fileset-load>
     <px:assert test-count-min="1" message="There must be a HTML file in the spine." error-code="NORDICDTBOOKEPUB005"/>
     <p:identity name="html"/>
+    <p:sink/>
+
+    <px:fileset-filter media-types="application/xhtml+xml">
+        <p:input port="source">
+            <p:pipe port="fileset" step="unzip"/>
+        </p:input>
+    </px:fileset-filter>
+    <p:delete match="/*/*[not(ends-with(@href,'nav.xhtml'))]"/>
+    <px:fileset-load>
+        <p:input port="in-memory">
+            <p:pipe port="in-memory" step="unzip"/>
+        </p:input>
+    </px:fileset-load>
+    <p:identity name="nav"/>
     <p:sink/>
 
     <p:validate-with-schematron name="opf.validate.schematron" assert-valid="false">
@@ -418,6 +433,61 @@
         </px:combine-validation-reports>
     </p:group>
     <p:identity name="opf-and-html.validate"/>
+    <p:sink/>
+
+    <p:group>
+        <p:for-each>
+            <p:iteration-source>
+                <p:pipe step="html" port="result"/>
+            </p:iteration-source>
+            <p:add-attribute match="/*" attribute-name="xml:base">
+                <p:with-option name="attribute-value" select="base-uri(/*)"/>
+            </p:add-attribute>
+            <p:xslt>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/list-heading-references.xsl"/>
+                </p:input>
+            </p:xslt>
+        </p:for-each>
+        <p:wrap-sequence wrapper="c:result"/>
+        <p:unwrap match="/*/*"/>
+        <p:identity name="heading-references"/>
+
+        <p:insert match="/*" position="first-child">
+            <p:input port="source">
+                <p:pipe port="result" step="nav"/>
+            </p:input>
+            <p:input port="insertion">
+                <p:pipe port="result" step="heading-references"/>
+            </p:input>
+        </p:insert>
+        <p:add-attribute match="/*" attribute-name="xml:base">
+            <p:with-option name="attribute-value" select="base-uri(/*)"/>
+        </p:add-attribute>
+
+        <p:validate-with-schematron name="nav-references.validate.schematron" assert-valid="false">
+            <p:input port="parameters">
+                <p:empty/>
+            </p:input>
+            <p:input port="schema">
+                <p:document href="../../schema/nordic2015-1.nav-references.sch"/>
+            </p:input>
+        </p:validate-with-schematron>
+        <p:sink/>
+        <px:combine-validation-reports document-type="Nordic EPUB3 Navigation Document References">
+            <p:input port="source">
+                <p:pipe port="report" step="nav-references.validate.schematron"/>
+            </p:input>
+            <p:with-option name="document-name" select="'The navigation document (HTML) and references to all the headlines in the book'"/>
+            <p:with-option name="document-path" select="base-uri(/*)">
+                <p:pipe port="result" step="nav"/>
+            </p:with-option>
+        </px:combine-validation-reports>
+    </p:group>
+    <p:identity name="nav-references.validate"/>
     <p:sink/>
 
     <px:fileset-filter media-types="application/xhtml+xml">
