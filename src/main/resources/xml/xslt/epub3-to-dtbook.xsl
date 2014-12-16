@@ -1099,7 +1099,7 @@
                     <xsl:apply-templates select="node()"/>
                 </list>
             </xsl:when>
-            <xsl:when test="f:types(.)=('rearnotes','footnotes')">
+            <xsl:when test="f:types(.)=('rearnotes','footnotes') or html:li/f:types(.)=('rearnote','footnote')">
                 <xsl:apply-templates select="node()"/>
             </xsl:when>
             <xsl:otherwise>
