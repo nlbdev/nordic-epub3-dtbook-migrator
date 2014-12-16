@@ -1026,6 +1026,19 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
+    <xsl:template match="text()[ancestor::html:h1 | ancestor::html:h2 | ancestor::html:h3 | ancestor::html:h4 | ancestor::html:h5 | ancestor::html:h6]">
+        <!-- normalize space in headlines -->
+        <xsl:choose>
+            <xsl:when
+                test="normalize-space()='' and count((ancestor::*[matches(name(),'h\d')][1]//text() intersect preceding::text())[normalize-space()]) and count((ancestor::*[matches(name(),'h\d')][1]//text() intersect following::text())[normalize-space()])">
+                <xsl:text> </xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(.)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
     <!-- <bridgehead> is not allowed in nordic DTBook. Using p instead. -->
     <xsl:template match="html:p[f:types(.)='bridgehead']">
         <xsl:message select="'&lt;bridgehead&gt; is not allowed in nordic DTBook. Using p instead with a bridgehead class.'"/>
