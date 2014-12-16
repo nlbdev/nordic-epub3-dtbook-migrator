@@ -3039,4 +3039,15 @@
         </x:expect>
     </x:scenario>
 
+    <x:scenario label="remove note list (ol or ul) even without a epub:type of 'footnotes' or 'rearnotes'">
+        <x:context>
+            <html:ol>
+                <html:li class="notebody" epub:type="footnote" id="n13-1">...</html:li>
+            </html:ol>
+        </x:context>
+        <x:expect label="there should be no wrapping &lt;list&gt; element">
+            <dtbook:note id="n13-1"><dtbook:p>...</dtbook:p></dtbook:note>
+        </x:expect>
+    </x:scenario>
+
 </x:description>
