@@ -535,12 +535,11 @@
           <xsl:text>&lt;/pagenum&gt;</xsl:text>
         </xsl:comment>
       </xsl:when>
-      
-      <!--Parent er table: Indsæt ny table-->
-      <xsl:when test ="parent::x:table">
+
+      <xsl:when test ="preceding-sibling::x:tr">
         <!-- Afslut den forrige-->
         <xsl:text disable-output-escaping ="yes">&lt;/table&gt;</xsl:text>
-        
+
         <!--Indsæt sidetallet-->
         <pagenum>
           <xsl:for-each select="@*">
@@ -550,9 +549,22 @@
           </xsl:for-each>
           <xsl:apply-templates/>
         </pagenum>
-        
+
         <!-- Begynd en ny tabel-->
         <xsl:text disable-output-escaping ="yes">&lt;table&gt;</xsl:text>
+      </xsl:when>
+      
+      <!--Parent er table: Indsæt ny table-->
+      <xsl:when test ="parent::x:table">
+        <xsl:comment>
+          <xsl:text>Konverteringsproblem: pagenum kan ikke befinde sig på denne position: </xsl:text>
+          <xsl:text>&lt;pagenum id='</xsl:text>
+          <xsl:value-of select="@id"/>
+          <xsl:text>'&gt;</xsl:text>
+          <xsl:variable name="nodeAsStr" select="string(.)" />
+          <xsl:copy-of select="$nodeAsStr"/>
+          <xsl:text>&lt;/pagenum&gt;</xsl:text>
+        </xsl:comment>
         
       </xsl:when>
       

@@ -26,7 +26,7 @@
         <p:pipe port="result" step="epubcheck.validate"/>
         <p:pipe port="result" step="opf.validate"/>
         <p:pipe port="result" step="html.validate"/>
-        <p:pipe port="result" step="nav-references.validate"/>
+        <!--<p:pipe port="result" step="nav-references.validate"/>-->
         <p:pipe port="result" step="opf-and-html.validate"/>
         <p:pipe port="result" step="category.html-report"/>
     </p:output>
@@ -174,7 +174,7 @@
     <p:identity name="html"/>
     <p:sink/>
 
-    <px:fileset-filter media-types="application/xhtml+xml">
+    <!--<px:fileset-filter media-types="application/xhtml+xml">
         <p:input port="source">
             <p:pipe port="fileset" step="unzip"/>
         </p:input>
@@ -187,7 +187,7 @@
     </pxi:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There is no navigation document with the filename 'nav.xhtml' in the EPUB" error-code="NORDICDTBOOKEPUB013"/>
     <p:identity name="nav"/>
-    <p:sink/>
+    <p:sink/>-->
 
     <p:validate-with-schematron name="opf.validate.schematron" assert-valid="false">
         <p:input port="parameters">
@@ -436,7 +436,7 @@
     <p:identity name="opf-and-html.validate"/>
     <p:sink/>
 
-    <p:group>
+    <!--<p:group>
         <p:for-each>
             <p:iteration-source>
                 <p:pipe step="html" port="result"/>
@@ -489,7 +489,7 @@
         </px:combine-validation-reports>
     </p:group>
     <p:identity name="nav-references.validate"/>
-    <p:sink/>
+    <p:sink/>-->
 
     <px:fileset-filter media-types="application/xhtml+xml">
         <p:input port="source">
