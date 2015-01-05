@@ -71,7 +71,7 @@
                     </p:input>
                 </p:template>
                 <p:add-attribute match="/*" attribute-name="result">
-                    <p:with-option name="attribute-value" select="if ($version=/*/@version and lower-case($encoding)=lower-case(/*/@encoding) and $standalone=/*/@standalone) then 'passed' else 'failed'">
+                    <p:with-option name="attribute-value" select="if ($version=/*/@version and $encoding=/*/@encoding and $standalone=/*/@standalone) then 'passed' else 'failed'">
                         <p:pipe port="result" step="expected-xml-declaration"/>
                     </p:with-option>
                 </p:add-attribute>

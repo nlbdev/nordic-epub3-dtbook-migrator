@@ -1142,11 +1142,13 @@
     <xsl:template match="html:li">
         <li>
             <xsl:call-template name="attlist.li"/>
+
+            <xsl:variable name="is-block-except-list" select="if ((html:p | html:dl | html:div | html:blockquote | html:table | html:address | html:section | html:aside)) then true() else false()"/>
+
             <xsl:variable name="marker">
                 <xsl:choose>
                     <xsl:when test="parent::html:*/f:classes(.)='list-style-type-none'"/>
-                    <xsl:when test="parent::html:*//*/f:classes(.)='lic'"/>
-                    <xsl:when test="ancestor::html:section[1][f:types(.)='toc' and not(ancestor::html:section | ancestor::html:article)]"/>
+                    <xsl:when test="(ancestor::html:section[1], ancestor::html:body)[1][f:types(.)='toc']"/>
                     <xsl:when test="parent::html:ul">
                         <xsl:value-of select="'• '"/>
                     </xsl:when>
@@ -1167,7 +1169,6 @@
                 </xsl:choose>
             </xsl:variable>
 
-            <xsl:variable name="is-block-except-list" select="if ((html:p | html:dl | html:div | html:blockquote | html:table | html:address | html:section | html:aside)) then true() else false()"/>
             <xsl:choose>
                 <xsl:when test="$is-block-except-list and string-length($marker)">
                     <xsl:choose>
@@ -1189,12 +1190,31 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
-                <xsl:when test="(html:ol or html:ul) and string-length($marker)">
-                    <lic>
-                        <xsl:value-of select="$marker"/>
-                        <xsl:apply-templates select="*[not(self::html:ol or self::html:ul)] | text()[normalize-space()]"/>
-                    </lic>
-                    <xsl:apply-templates select="html:ol | html:ul"/>
+                <xsl:when test="$is-block-except-list">
+                    <xsl:apply-templates select="node()"/>
+                </xsl:when>
+                <xsl:when test="(html:ol or html:ul)">
+                    <xsl:for-each-group select="node() except text()[not(normalize-space())]"
+                        group-adjacent="not(self::html:ol or self::html:ul or self::html:a[html:span[f:classes(.)='lic']] or self::html:span[f:classes(.)='lic'])">
+                        <xsl:choose>
+                            <xsl:when test="current-grouping-key()">
+                                <lic>
+                                    <xsl:if test="position()=1 and string-length($marker)">
+                                        <xsl:value-of select="$marker"/>
+                                    </xsl:if>
+                                    <xsl:apply-templates select="current-group()"/>
+                                </lic>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:if test="position()=1 and string-length($marker)">
+                                    <lic>
+                                        <xsl:value-of select="$marker"/>
+                                    </lic>
+                                </xsl:if>
+                                <xsl:apply-templates select="current-group()"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:for-each-group>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="$marker"/>
@@ -1208,7 +1228,7 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <xsl:template match="html:span[f:classes(.)='lic']">
+    <xsl:template match="html:span[f:classes(.)='lic' or parent::html:a/html:span/f:classes(.)='lic']">
         <xsl:variable name="position" select="count(preceding-sibling::*) + 1"/>
         <xsl:variable name="children" select="node()"/>
         <lic>
@@ -1222,14 +1242,21 @@
                             </xsl:call-template>
                         </xsl:for-each>
                     </xsl:variable>
-                    <xsl:for-each select="$a/*">
-                        <xsl:copy>
-                            <xsl:copy-of select="@* except @id"/>
-                            <xsl:if test="$position = 1">
-                                <xsl:copy-of select="@id"/>
-                            </xsl:if>
-                            <xsl:copy-of select="node()"/>
-                        </xsl:copy>
+                    <xsl:for-each select="$a/node()">
+                        <xsl:choose>
+                            <xsl:when test="count(@* except @id) or ($position = 1 and @id)">
+                                <xsl:copy>
+                                    <xsl:copy-of select="@* except @id"/>
+                                    <xsl:if test="$position = 1">
+                                        <xsl:copy-of select="@id"/>
+                                    </xsl:if>
+                                    <xsl:copy-of select="node()"/>
+                                </xsl:copy>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:copy-of select="node()"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:for-each>
                 </xsl:when>
                 <xsl:otherwise>

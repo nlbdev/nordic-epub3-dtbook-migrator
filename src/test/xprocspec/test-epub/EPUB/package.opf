@@ -28,16 +28,17 @@
         <item id="item_7" media-type="text/plain" href="css/fonts/opendyslexic/LICENSE.txt"/>
         <item id="item_8" media-type="image/jpeg" href="images/valentin.jpg"/>
         <item id="item_9" media-type="application/x-dtbncx+xml" href="nav.ncx"/>
-        <item id="item_10" media-type="application/xhtml+xml" href="C00000-1-cover.xhtml"/>
-        <item id="item_11" media-type="application/xhtml+xml" href="C00000-2-frontmatter.xhtml"/>
-        <item id="item_12" media-type="application/xhtml+xml" href="C00000-3-chapter.xhtml"/>
-        <item id="item_13" media-type="application/xhtml+xml" href="C00000-4-chapter.xhtml"/>
-        <item id="item_14" media-type="application/xhtml+xml" href="C00000-5-chapter.xhtml"/>
-        <item id="item_15" media-type="application/xhtml+xml" href="C00000-6-rearnotes.xhtml"/>
-        <item id="item_16" media-type="application/xhtml+xml" href="C00000-7-chapter.xhtml"/>
-        <item id="item_17" media-type="application/xhtml+xml" href="C00000-8-conclusion.xhtml"/>
-        <item id="item_18" media-type="application/xhtml+xml" href="C00000-9-footnotes.xhtml"/>
-        <item id="item_19" media-type="application/xhtml+xml" href="nav.xhtml" properties="nav"/>
+        <item id="item_10" media-type="application/xhtml+xml" href="C00000-01-cover.xhtml"/>
+        <item id="item_11" media-type="application/xhtml+xml" href="C00000-02-toc.xhtml"/>
+        <item id="item_12" media-type="application/xhtml+xml" href="C00000-03-frontmatter.xhtml"/>
+        <item id="item_13" media-type="application/xhtml+xml" href="C00000-04-chapter.xhtml"/>
+        <item id="item_14" media-type="application/xhtml+xml" href="C00000-05-chapter.xhtml"/>
+        <item id="item_15" media-type="application/xhtml+xml" href="C00000-06-chapter.xhtml"/>
+        <item id="item_16" media-type="application/xhtml+xml" href="C00000-07-rearnotes.xhtml"/>
+        <item id="item_17" media-type="application/xhtml+xml" href="C00000-08-chapter.xhtml"/>
+        <item id="item_18" media-type="application/xhtml+xml" href="C00000-09-conclusion.xhtml"/>
+        <item id="item_19" media-type="application/xhtml+xml" href="C00000-10-footnotes.xhtml"/>
+        <item id="item_20" media-type="application/xhtml+xml" href="nav.xhtml" properties="nav"/>
     </manifest>
     <spine toc="item_9">
         <itemref id="itemref_1" idref="item_10" linear="no"/>
@@ -45,9 +46,10 @@
         <itemref id="itemref_3" idref="item_12"/>
         <itemref id="itemref_4" idref="item_13"/>
         <itemref id="itemref_5" idref="item_14"/>
-        <itemref id="itemref_6" idref="item_15" linear="no"/>
-        <itemref id="itemref_7" idref="item_16"/>
+        <itemref id="itemref_6" idref="item_15"/>
+        <itemref id="itemref_7" idref="item_16" linear="no"/>
         <itemref id="itemref_8" idref="item_17"/>
         <itemref id="itemref_9" idref="item_18"/>
+        <itemref id="itemref_10" idref="item_19"/>
     </spine>
 </package>
