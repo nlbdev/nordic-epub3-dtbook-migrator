@@ -4017,4 +4017,64 @@
         </x:expect>
     </x:scenario>
 
+    <x:scenario label="notes linked to from a table are table notes and should not be treated as rearnotes">
+        <x:context>
+            <dtbook:book>
+                <dtbook:bodymatter>
+                    <dtbook:level1>
+                        <dtbook:h1>Food</dtbook:h1>
+                        <dtbook:p>Let's discuss food.</dtbook:p>
+                        <dtbook:level2>
+                            <dtbook:h2>Carrots and potatoes</dtbook:h2>
+                            <dtbook:p>The table below discusses tastefulness of potatoes and carrots.</dtbook:p>
+                            <dtbook:table>
+                                <dtbook:tr>
+                                    <dtbook:th>Carrots</dtbook:th>
+                                    <dtbook:th>Potatoes</dtbook:th>
+                                </dtbook:tr>
+                                <dtbook:tr>
+                                    <dtbook:td colspan="2">Carrots taste better than potatoes depending on the meal it's part of.<dtbook:noteref idref="#tablenote">*</dtbook:noteref></dtbook:td>
+                                </dtbook:tr>
+                            </dtbook:table>
+                            <dtbook:note id="tablenote">
+                                <!-- table note -->
+                                <dtbook:p>* Carrot vs Potato study, 2014</dtbook:p>
+                            </dtbook:note>
+                            <dtbook:p>Observations were recorded. Conclusions were made.</dtbook:p>
+                        </dtbook:level2>
+                    </dtbook:level1>
+                </dtbook:bodymatter>
+            </dtbook:book>
+        </x:context>
+        <x:expect label="table notes should remain in place, rearnotes should be moved to new top-level section (i.e. new document)">
+            <html:body>
+                <html:section epub:type="bodymatter chapter" id="...">
+                    <html:h1 id="...">Food</html:h1>
+                    <html:p>Let's discuss food.</html:p>
+                    <html:section id="...">
+                        <html:h2 id="...">Carrots and potatoes</html:h2>
+                        <html:p>The table below discusses tastefulness of potatoes and carrots.</html:p>
+                        <html:table id="...">
+                            <html:tbody>
+                                <html:tr>
+                                    <html:th>Carrots</html:th>
+                                    <html:th>Potatoes</html:th>
+                                </html:tr>
+                                <html:tr>
+                                    <html:td colspan="2">Carrots taste better than potatoes depending on the meal it's part of.<html:a id="..." epub:type="noteref" class="noteref" href="#tablenote"
+                                            >*</html:a></html:td>
+                                </html:tr>
+                            </html:tbody>
+                        </html:table>
+                        <html:aside id="tablenote" class="notebody" epub:type="note">
+                            <!-- table note -->
+                            <html:p>* Carrot vs Potato study, 2014</html:p>
+                        </html:aside>
+                        <html:p>Observations were recorded. Conclusions were made.</html:p>
+                    </html:section>
+                </html:section>
+            </html:body>
+        </x:expect>
+    </x:scenario>
+
 </x:description>

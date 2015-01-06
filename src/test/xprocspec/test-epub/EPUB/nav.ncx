@@ -32,157 +32,157 @@
             </navLabel>
             <content src="C00000-02-toc.xhtml#toc-h1"/>
         </navPoint>
-        <navPoint id="navPoint-3" playOrder="4">
+        <navPoint id="navPoint-4" playOrder="4">
             <navLabel>
                 <text>Valentin Haüy - the father of the education for the blind</text>
             </navLabel>
             <content src="C00000-03-frontmatter.xhtml#d910e43"/>
-            <navPoint id="navPoint-3" playOrder="5">
+            <navPoint id="navPoint-5" playOrder="5">
                 <navLabel>
                     <text>List of contents</text>
                 </navLabel>
                 <content src="C00000-03-frontmatter.xhtml#d910e124"/>
             </navPoint>
-            <navPoint id="navPoint-4" playOrder="6">
+            <navPoint id="navPoint-6" playOrder="6">
                 <navLabel>
                     <text>Preface</text>
                 </navLabel>
                 <content src="C00000-03-frontmatter.xhtml#d910e617"/>
             </navPoint>
         </navPoint>
-        <navPoint id="navPoint-5" playOrder="7">
+        <navPoint id="navPoint-7" playOrder="7">
             <navLabel>
                 <text>1. Research questions</text>
             </navLabel>
             <content src="C00000-04-chapter.xhtml#d910e694"/>
         </navPoint>
-        <navPoint id="navPoint-6" playOrder="8">
+        <navPoint id="navPoint-8" playOrder="8">
             <navLabel>
                 <text>2. Purpose, method and sources</text>
             </navLabel>
             <content src="C00000-05-chapter.xhtml#d910e770"/>
         </navPoint>
-        <navPoint id="navPoint-7" playOrder="9">
+        <navPoint id="navPoint-9" playOrder="9">
             <navLabel>
                 <text>3. Valentin Haüy</text>
             </navLabel>
             <content src="C00000-06-chapter.xhtml#d910e1012"/>
-            <navPoint id="navPoint-8" playOrder="10">
+            <navPoint id="navPoint-10" playOrder="10">
                 <navLabel>
                     <text>3.1 Introduction</text>
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e1023"/>
             </navPoint>
-            <navPoint id="navPoint-9" playOrder="11">
+            <navPoint id="navPoint-11" playOrder="11">
                 <navLabel>
                     <text>3.2 Biographical background</text>
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e1199"/>
             </navPoint>
-            <navPoint id="navPoint-10" playOrder="12">
+            <navPoint id="navPoint-12" playOrder="12">
                 <navLabel>
                     <text>3.3 The market in St Ovid's Square</text>
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e1296"/>
             </navPoint>
-            <navPoint id="navPoint-11" playOrder="13">
+            <navPoint id="navPoint-13" playOrder="13">
                 <navLabel>
                     <text>3.4 Maria Theresia von Paradis (1733-1808)</text>
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e1390"/>
             </navPoint>
-            <navPoint id="navPoint-12" playOrder="14">
+            <navPoint id="navPoint-14" playOrder="14">
                 <navLabel>
                     <text>3.5 Haüy's meeting with Lesueur and the founding of l'Institution des Jeunes Aveugles</text>
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e1519"/>
             </navPoint>
-            <navPoint id="navPoint-13" playOrder="15">
+            <navPoint id="navPoint-15" playOrder="15">
                 <navLabel>
                     <text>3.6 Valentin Haüy's teaching methods</text>
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e1775"/>
             </navPoint>
-            <navPoint id="navPoint-14" playOrder="16">
+            <navPoint id="navPoint-16" playOrder="16">
                 <navLabel>
                     <text>3.7 The French Revolution</text>
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e2127"/>
             </navPoint>
-            <navPoint id="navPoint-15" playOrder="17">
+            <navPoint id="navPoint-17" playOrder="17">
                 <navLabel>
                     <text>3.8 Musée des Aveugles</text>
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e2371"/>
             </navPoint>
-            <navPoint id="navPoint-16" playOrder="18">
+            <navPoint id="navPoint-18" playOrder="18">
                 <navLabel>
                     <text>3.9 Valentin Haüy in Russia</text>
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e2441"/>
-                <navPoint id="navPoint-17" playOrder="19">
+                <navPoint id="navPoint-19" playOrder="19">
                     <navLabel>
                         <text>3.9.1 An invitation from Alexander I</text>
                     </navLabel>
                     <content src="C00000-06-chapter.xhtml#d910e2449"/>
                 </navPoint>
-                <navPoint id="navPoint-18" playOrder="20">
+                <navPoint id="navPoint-20" playOrder="20">
                     <navLabel>
                         <text>3.9.2 Berlin</text>
                     </navLabel>
                     <content src="C00000-06-chapter.xhtml#d910e2634"/>
                 </navPoint>
-                <navPoint id="navPoint-19" playOrder="21">
+                <navPoint id="navPoint-21" playOrder="21">
                     <navLabel>
                         <text>3.9.3 In St Petersburg</text>
                     </navLabel>
                     <content src="C00000-06-chapter.xhtml#d910e2710"/>
                 </navPoint>
-                <navPoint id="navPoint-20" playOrder="22">
+                <navPoint id="navPoint-22" playOrder="22">
                     <navLabel>
                         <text>3.9.4 Haüy's last will and testament</text>
                     </navLabel>
                     <content src="C00000-06-chapter.xhtml#d910e3253"/>
                 </navPoint>
-                <navPoint id="navPoint-21" playOrder="23">
+                <navPoint id="navPoint-23" playOrder="23">
                     <navLabel>
                         <text>3.9.5 The education of deaf pupils in St Petersburg</text>
                     </navLabel>
                     <content src="C00000-06-chapter.xhtml#d910e3326"/>
                 </navPoint>
             </navPoint>
-            <navPoint id="navPoint-22" playOrder="24">
+            <navPoint id="navPoint-24" playOrder="24">
                 <navLabel>
                     <text>3.10 Haüy's telegraph</text>
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e3470"/>
             </navPoint>
-            <navPoint id="navPoint-23" playOrder="25">
+            <navPoint id="navPoint-25" playOrder="25">
                 <navLabel>
                     <text>3.11 The final years</text>
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e3633"/>
             </navPoint>
-            <navPoint id="navPoint-24" playOrder="26">
+            <navPoint id="navPoint-26" playOrder="26">
                 <navLabel>
                     <text>Rearmatter</text>
                 </navLabel>
                 <content src="C00000-07-rearnotes.xhtml#rearnotes_body"/>
             </navPoint>
         </navPoint>
-        <navPoint id="navPoint-25" playOrder="27">
+        <navPoint id="navPoint-27" playOrder="27">
             <navLabel>
                 <text>4. The importance of Haüy in the education of the blind in Sweden and elsewhere extra long title extra long title extra long title extra long title</text>
             </navLabel>
             <content src="C00000-08-chapter.xhtml#d910e3694"/>
         </navPoint>
-        <navPoint id="navPoint-26" playOrder="28">
+        <navPoint id="navPoint-28" playOrder="28">
             <navLabel>
                 <text>5. Discussion and conclusions</text>
             </navLabel>
             <content src="C00000-09-conclusion.xhtml#d910e4160"/>
         </navPoint>
-        <navPoint id="navPoint-27" playOrder="29">
+        <navPoint id="navPoint-29" playOrder="29">
             <navLabel>
                 <text>Footnotes</text>
             </navLabel>
