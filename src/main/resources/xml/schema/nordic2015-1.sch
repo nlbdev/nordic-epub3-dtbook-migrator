@@ -432,7 +432,8 @@
         <rule context="html:section[tokenize(@epub:type,'\s+')='toc'] | html:body[tokenize(@epub:type,'\s+')='toc']">
             <assert test="html:ol">[nordic127a] The table of contents must contain a "ol" element as a direct child of the parent <value-of select="if (self::html:body) then 'body' else 'section'"/>
                 element.</assert>
-            <report test="tokenize(@epub:type,'\s+')='bodymatter'">[nordic127b] The table of contents must be in either frontmatter or backmatter; it is not allowed in bodymatter.</report>
+            <report test="ancestor-or-self::*/tokenize(@epub:type,'\s+')=('bodymatter','cover')">[nordic127b] The table of contents must be in either frontmatter or backmatter; it is not allowed in
+                bodymatter or cover.</report>
         </rule>
     </pattern>
 
