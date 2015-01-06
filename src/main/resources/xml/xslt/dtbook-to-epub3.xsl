@@ -432,7 +432,8 @@
     <xsl:template name="attlist.level">
         <xsl:variable name="types"
             select="if (ancestor::*[self::dtbook:level or self::dtbook:level1 or self::dtbook:level2 or self::dtbook:level3 or self::dtbook:level4 or self::dtbook:level5 or self::dtbook:level6]) then () else if (ancestor::dtbook:frontmatter) then 'frontmatter' else if (ancestor::dtbook:bodymatter) then 'bodymatter' else 'backmatter'"/>
-        <xsl:variable name="types" select="($types, if (dtbook:note) then if (ancestor::dtbook:bodymatter) then 'rearnotes' else if (ancestor::dtbook:rearmatter) then 'footnotes' else () else ())"/>
+        <xsl:variable name="types"
+            select="($types, if (dtbook:note[not(//dtbook:table//dtbook:noteref/substring-after(@idref,'#')=@id)]) then if (ancestor::dtbook:bodymatter) then 'rearnotes' else if (ancestor::dtbook:rearmatter) then 'footnotes' else () else ())"/>
         <xsl:variable name="types" select="($types, if (dtbook:list[f:classes(.)='toc']) then 'toc' else ())"/>
         <xsl:call-template name="attrs">
             <xsl:with-param name="types" select="$types" tunnel="yes"/>
@@ -592,7 +593,7 @@
 
     <xsl:template match="dtbook:note">
         <xsl:variable name="type"
-            select="if (count(parent::*[matches(local-name(),'^level\d?$')])) then if (count(ancestor::dtbook:bodymatter)) then 'rearnote' else if (count(ancestor::dtbook:rearmatter)) then 'footnote' else 'note' else 'note'"/>
+            select="if (count(parent::*[matches(local-name(),'^level\d?$')]) and not(//dtbook:table//dtbook:noteref/substring-after(@idref,'#')=@id)) then if (count(ancestor::dtbook:bodymatter)) then 'rearnote' else if (count(ancestor::dtbook:rearmatter)) then 'footnote' else 'note' else 'note'"/>
         <xsl:choose>
             <xsl:when test="$type='note'">
                 <aside>
@@ -935,7 +936,7 @@
         <xsl:variable name="pagenum.parent" select="if (count($pagenum.parent/descendant-or-self::* intersect parent::*/ancestor-or-self::*) &gt;= 3) then parent::* else $pagenum.parent"/>
 
         <xsl:if
-            test="not(count($pagenum.parent[matches(local-name(),'^level\d?$')]) = 1 and not(ancestor::dtbook:frontmatter) and count(following-sibling::*[not(self::dtbook:pagenum)][1][self::dtbook:note]) = 1 and count(preceding-sibling::*[not(self::dtbook:pagenum)][1][self::dtbook:note]) = 1)">
+            test="not(count($pagenum.parent[matches(local-name(),'^level\d?$')]) = 1 and not(ancestor::dtbook:frontmatter) and count(following-sibling::*[not(self::dtbook:pagenum)][1][self::dtbook:note[not(//dtbook:table//dtbook:noteref/substring-after(@idref,'#')=@id)]]) = 1 and count(preceding-sibling::*[not(self::dtbook:pagenum)][1][self::dtbook:note]) = 1)">
             <!-- xsl:if avoids inserting pagenum betwen li elements when rearnotes or footnotes are made into lists. -->
 
             <xsl:element name="{if (f:is-inline($pagenum.parent) and not(parent::dtbook:imggroup)) then 'span' else 'div'}">
