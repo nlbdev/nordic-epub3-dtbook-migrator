@@ -156,10 +156,11 @@
 
     <pattern id="opf_nordic_12_a">
         <rule context="opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav')]">
-            <assert test="matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')">[opf12a] Content documents must match the "[dc:identifier]-[position in spine]-[epub:type].xhtml" file naming
-                convention. Example: "DTB123-01-cover.xhtml". The identifier are allowed to contain the upper- and lower-case characters A-Z and a-z as well as digits (0-9), dashes (-) and underscores
-                (_). The position is a positive whole number consisting of the digits 0-9. The epub:type must be all lower-case characters (a-z) and can contain a dash (-). An optional positive whole
-                number (digits 0-9) can be added after the epub:type to be able to easily tell different files with the same epub:type apart. For instance: "DTB123-13-chapter-7.xhtml".</assert>
+            <assert test="matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')">[opf12a] The content document "<value-of select="@href"/>" has a bad filename. Content documents must match the
+                "[dc:identifier]-[position in spine]-[epub:type].xhtml" file naming convention. Example: "DTB123-01-cover.xhtml". The identifier are allowed to contain the upper- and lower-case
+                characters A-Z and a-z as well as digits (0-9), dashes (-) and underscores (_). The position is a positive whole number consisting of the digits 0-9. The epub:type must be all
+                lower-case characters (a-z) and can contain a dash (-). An optional positive whole number (digits 0-9) can be added after the epub:type to be able to easily tell different files with
+                the same epub:type apart. For instance: "DTB123-13-chapter-7.xhtml".</assert>
         </rule>
     </pattern>
 
@@ -183,19 +184,21 @@
                 Z39.39-2012 Structural Semantics Vocabulary (http://www.daisy.org/z3998/2012/vocab/structure/).</assert>
 
             <assert
-                test="string-length($position) = string-length(../opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$')][1]/replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+?(-\d+)?.xhtml$','$1'))"
+                test="not(count(../opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and not(matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$'))])) and string-length($position) = string-length(../opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$')][1]/replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+?(-\d+)?.xhtml$','$1'))"
                 >[opf12b_position] The numbering of the content documents must all have the equal number of digits.</assert>
 
             <report
-                test="number($position) = ( (../opf:item except .)[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$')]/number(replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+?(-\d+)?.xhtml$','$1')) )"
+                test="not(count(../opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and not(matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$'))])) and number($position) = ( (../opf:item except .)[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$')]/number(replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+?(-\d+)?.xhtml$','$1')) )"
                 >[opf12b_position] The numbering of the content documents must be unique for each content document. <value-of select="$position"/> is also used by another content document in the
                 OPF.</report>
 
             <assert
-                test="number($position)-1 = ( 0 , (../opf:item except .)[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$')]/number(replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+(-\d+)?.xhtml$','$1')) )"
+                test="not(count(../opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and not(matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$'))])) and number($position)-1 = ( 0 , (../opf:item except .)[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$')]/number(replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+(-\d+)?.xhtml$','$1')) )"
                 >[opf12b_position] The numbering of the content documents must start at 1 and increase with 1 for each item.</assert>
 
-            <assert test="../../opf:spine/opf:itemref[xs:integer(number($position))]/@idref = @id">[opf12b_position] The <value-of select="xs:integer(number($position))"/><value-of
+            <assert
+                test="not(count(../opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and not(matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+?(-\d+)?\.xhtml$'))])) and ../../opf:spine/opf:itemref[xs:integer(number($position))]/@idref = @id"
+                >[opf12b_position] The <value-of select="xs:integer(number($position))"/><value-of
                     select="if (ends-with($position,'1') and not(number($position)=11)) then 'st' else if (ends-with($position,'2') and not(number($position)=12)) then 'nd' else if (ends-with($position,'3') and not(number($position)=13)) then 'rd' else 'th'"
                 /> itemref (&lt;iremref id="<value-of select="../../opf:spine/opf:itemref[xs:integer(number($position))]/@id"/>" href="..."&gt;) should refer to &lt;item href="<value-of select="@href"
                 />"&gt;.</assert>
