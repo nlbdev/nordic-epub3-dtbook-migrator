@@ -185,6 +185,7 @@
             <p:pipe port="in-memory" step="unzip"/>
         </p:input>
     </px:fileset-load>
+    <px:assert test-count-min="1" test-count-max="1" message="There is no navigation document with the filename 'nav.xhtml' in the EPUB" error-code="NORDICDTBOOKEPUB013"/>
     <p:identity name="nav"/>
     <p:sink/>
 
