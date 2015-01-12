@@ -23,7 +23,7 @@
             <doctitle>Valentin Haüy - the father of the education for the blind</doctitle>
             <docauthor>Beatrice Christensen Sköld</docauthor>
             <level1 id="level1_1" class="jacketcopy">
-                <prodnote id="prodnote_1" render="optional" class="rearcover">
+                <prodnote id="prodnote_1" class="rearcover" render="optional">
                     <p>Gro försöker att få Runa på gott humör igen.</p>
                     <p>– Vi har det bara så långtråkigt. Du har tur. Du får gå ut och in i tornet. Alvilda och jag måste sitta här dag ut och dag in. Bara om natten får vi komma till kvinnosalen. Om
                         det bara snart ville kommma någon som kan slå ihjäl ormen.</p>
@@ -33,6 +33,75 @@
                     <p>– Jag hörde nog vad du sa. Runa ruskar på huvudet. Du vet inte vad som är bäst för dig. Tänk på allt det besvär din pappa och mamma har haft. Först byggde de det här tornet av
                         koppar. Sedan har de skaffat en orm, som kan vakta din dygd. Många unga män har mist sina liv för din skull.</p>
                 </prodnote>
+            </level1>
+            <level1 id="toc-body" class="toc">
+                <pagenum id="page_3" page="front">iii</pagenum>
+                <h1 id="toc-h1">Table of contents</h1>
+                <list type="pl" class="toc" depth="1">
+                    <li>
+                        <lic>
+                            <span>
+                                <span>Cover</span>
+                            </span>
+                        </lic>
+                        <list type="pl" depth="2">
+                            <li>
+                                <span>
+                                    <span>Rear cover</span>
+                                </span>
+                            </li>
+                        </list>
+                    </li>
+                    <li>
+                        <span>
+                            <span>Table of contents</span>
+                        </span>
+                    </li>
+                    <li>
+                        <lic>
+                            <span>
+                                <span>Valentin Haüy - the father of the education for the blind</span>
+                            </span>
+                        </lic>
+                        <list type="pl" depth="2">
+                            <li>
+                                <span>
+                                    <span>List of contents</span>
+                                </span>
+                            </li>
+                            <li>
+                                <span>
+                                    <span>Preface</span>
+                                </span>
+                            </li>
+                        </list>
+                    </li>
+                    <li>
+                        <lic>1. </lic>
+                        <lic>Research questions</lic>
+                    </li>
+                    <li>
+                        <lic>2. </lic>
+                        <lic>Purpose, method and sources</lic>
+                    </li>
+                    <li>
+                        <lic>3. </lic>
+                        <lic>Valentin Haüy</lic>
+                    </li>
+                    <li>
+                        <lic>4. </lic>
+                        <lic>The importance of Haüy in the education of the blind in Sweden and elsewhere extra long title extra long title extra long title extra long title</lic>
+                    </li>
+                    <li>
+                        <lic>5. </lic>
+                        <lic>Discussion and conclusions</lic>
+                    </li>
+                    <li>
+                        <span>
+                            <span>Footnotes</span>
+                        </span>
+                    </li>
+                </list>
             </level1>
             <level1 id="d910e43">
                 <h1>Valentin Haüy - the father of the education for the blind</h1>
@@ -1960,11 +2029,11 @@
                 <imggroup>
                     <!-- test for un-numbered pages -->
                     <pagenum id="page_unnumbered_1" page="special"/>
-                    <img alt="image" src="valentin.jpg" id="img_3"/>
+                    <img id="img_3" src="valentin.jpg" alt="image"/>
                     <pagenum id="page_unnumbered_2" page="special"/>
-                    <img alt="image" src="valentin.jpg" id="img_4"/>
+                    <img id="img_4" src="valentin.jpg" alt="image"/>
                     <pagenum id="page_unnumbered_3" page="special"/>
-                    <img alt="image" src="valentin.jpg" id="img_5"/>
+                    <img id="img_5" src="valentin.jpg" alt="image"/>
                 </imggroup>
                 <pagenum id="page_26" page="normal">26</pagenum>
                 <p>

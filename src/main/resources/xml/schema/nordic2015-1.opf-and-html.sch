@@ -68,7 +68,7 @@
     <pattern id="epub_nordic_26">
         <rule context="html:*[tokenize(@epub:type,'\s+')='note']">
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
-            <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref'][translate(@idref, '#', '')=current()/@id])>=1">[nordic26] Each note must have at least one &lt;a epub:type="noteref"
+            <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref'][substring-after(@href, '#')=current()/@id])>=1">[nordic26] Each note must have at least one &lt;a epub:type="noteref"
                 ...&gt; referencing it: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in <value-of
                     select="replace(base-uri(),'.*/','')"/>)</assert>
         </rule>
@@ -78,7 +78,7 @@
     <pattern id="epub_nordic_27">
         <rule context="html:*[tokenize(@epub:type,' ')='annotation']">
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
-            <assert test="count(//html:a[tokenize(@epub:type,' ')='annoref'][translate(@idref, '#', '')=current()/@id])>=1">[nordic27] Each annotation must have at least one &lt;a epub:type="annoref"
+            <assert test="count(//html:a[tokenize(@epub:type,' ')='annoref'][substring-after(@href, '#')=current()/@id])>=1">[nordic27] Each annotation must have at least one &lt;a epub:type="annoref"
                 ...&gt; referencing it: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in <value-of
                     select="replace(base-uri(),'.*/','')"/>)</assert>
         </rule>

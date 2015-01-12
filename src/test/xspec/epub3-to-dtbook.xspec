@@ -884,10 +884,10 @@
     <!-- a -->
     <x:scenario label="when processing a a element">
         <x:context>
-            <html:a/>
+            <html:a id="id"/>
         </x:context>
-        <x:expect label="the resulting element should be a span">
-            <dtbook:span/>
+        <x:expect label="the resulting element should be a span by default">
+            <dtbook:span id="id"/>
         </x:expect>
     </x:scenario>
 
@@ -2562,20 +2562,30 @@
                         <html:span class="lic">Chapter 3</html:span>
                         <html:span>non-lic</html:span>
                     </html:a>
-                    <html:span>span</html:span>
+                    <html:span>span with no block sibling (except lic)</html:span>
                 </html:li>
                 <html:li>
                     <html:a id="id4" href="mtm06350-1.xhtml#d130172e14">
                         <html:span class="lic">Chapter 4</html:span>
                         <html:span>non-lic</html:span>
                     </html:a>
-                    <html:span>span</html:span>
+                    <html:span>span 1</html:span>
+                    <html:span>span 2</html:span>
                     <html:ol class="list-style-type-none">
                         <html:li>
                             <html:span class="lic">Chapter 4.1</html:span>
                             <html:span class="lic">4</html:span>
                         </html:li>
                     </html:ol>
+                </html:li>
+                <html:li>
+                    <html:a id="id5" href="#">
+                        <html:span class="lic">lic in a</html:span>
+                    </html:a>
+                    <html:span class="lic">lic outside a</html:span>
+                    <html:span>span 1</html:span>
+                    <html:span>span 2</html:span>
+                    <html:ol class="list-style-type-none"/>
                 </html:li>
             </html:ol>
         </x:context>
@@ -2585,17 +2595,13 @@
                     <dtbook:lic>
                         <dtbook:span id="id1">Chapter 1</dtbook:span>
                     </dtbook:lic>
-                    <dtbook:lic>
-                        <dtbook:span>1</dtbook:span>
-                    </dtbook:lic>
+                    <dtbook:lic>1</dtbook:lic>
                 </dtbook:li>
                 <dtbook:li>
                     <dtbook:lic>
                         <dtbook:span id="id2">Chapter 2</dtbook:span>
                     </dtbook:lic>
-                    <dtbook:lic>
-                        <dtbook:span>2</dtbook:span>
-                    </dtbook:lic>
+                    <dtbook:lic>2</dtbook:lic>
                     <dtbook:list type="pl" depth="2">
                         <dtbook:li>
                             <dtbook:lic>Chapter 2.1</dtbook:lic>
@@ -2607,21 +2613,35 @@
                     <dtbook:lic>
                         <dtbook:span id="id3">Chapter 3</dtbook:span>
                     </dtbook:lic>
-                    <dtbook:span>non-lic</dtbook:span>
-                    <dtbook:span>span</dtbook:span>
+                    <dtbook:lic>non-lic</dtbook:lic>
+                    <dtbook:span>span with no block sibling (except lic)</dtbook:span>
                 </dtbook:li>
                 <dtbook:li>
                     <dtbook:lic>
                         <dtbook:span id="id4">Chapter 4</dtbook:span>
                     </dtbook:lic>
-                    <dtbook:span>non-lic</dtbook:span>
-                    <dtbook:span>span</dtbook:span>
+                    <dtbook:lic>non-lic</dtbook:lic>
+                    <dtbook:lic>
+                        <dtbook:span>span 1</dtbook:span>
+                        <dtbook:span>span 2</dtbook:span>
+                    </dtbook:lic>
                     <dtbook:list type="pl" depth="2">
                         <dtbook:li>
                             <dtbook:lic>Chapter 4.1</dtbook:lic>
                             <dtbook:lic>4</dtbook:lic>
                         </dtbook:li>
                     </dtbook:list>
+                </dtbook:li>
+                <dtbook:li>
+                    <dtbook:lic>
+                        <dtbook:span id="id5">lic in a</dtbook:span>
+                    </dtbook:lic>
+                    <dtbook:lic>lic outside a</dtbook:lic>
+                    <dtbook:lic>
+                        <dtbook:span>span 1</dtbook:span>
+                        <dtbook:span>span 2</dtbook:span>
+                    </dtbook:lic>
+                    <dtbook:list type="pl" depth="2"/>
                 </dtbook:li>
             </dtbook:list>
         </x:expect>
@@ -2935,20 +2955,12 @@
                 <dtbook:h1>Table of Contents</dtbook:h1>
                 <dtbook:list type="pl" depth="1" class="toc">
                     <dtbook:li>
-                        <dtbook:lic>
-                            <dtbook:span>Chapter 1</dtbook:span>
-                        </dtbook:lic>
-                        <dtbook:lic>
-                            <dtbook:span>5</dtbook:span>
-                        </dtbook:lic>
+                        <dtbook:lic>Chapter 1</dtbook:lic>
+                        <dtbook:lic>5</dtbook:lic>
                     </dtbook:li>
                     <dtbook:li>
-                        <dtbook:lic>
-                            <dtbook:span>Chapter 2</dtbook:span>
-                        </dtbook:lic>
-                        <dtbook:lic>
-                            <dtbook:span>42</dtbook:span>
-                        </dtbook:lic>
+                        <dtbook:lic>Chapter 2</dtbook:lic>
+                        <dtbook:lic>42</dtbook:lic>
                     </dtbook:li>
                 </dtbook:list>
             </dtbook:level1>
@@ -2962,44 +2974,74 @@
 
     <x:scenario label="lists with list item components (class='lic')">
         <x:context>
-            <html:ol class="tocList">
-                <html:li>
-                    <html:a href="ET10581-05-chapter-1.xhtml#chap1-1"><html:span class="lic"><html:strong>1 Funktionen</html:strong></html:span></html:a>
-                    <html:ol class="tocList">
-                        <html:li>
-                            <html:a href="ET10581-05-chapter-1.xhtml#chap1-2">
-                                <html:span class="lic"><html:strong>1a</html:strong> Geraden</html:span>
-                                <html:span class="lic"><html:strong>4</html:strong></html:span>
-                            </html:a>
-                        </html:li>
-                        <html:li>
-                            <html:a href="ET10581-05-chapter-1.xhtml#chap1-4"><html:strong>1b</html:strong> Lineare und nicht lineare Funktionen <html:strong>8</html:strong></html:a>
-                        </html:li>
-                    </html:ol>
-                </html:li>
-            </html:ol>
+            <html:section epub:type="toc">
+                <html:ol class="tocList">
+                    <html:li>
+                        <html:a href="#"><html:span>Span without lic class</html:span></html:a>
+                    </html:li>
+                    <html:li>
+                        <html:a href="#">
+                            <html:span class="lic">spans with</html:span>
+                            <html:span class="lic">lic class</html:span>
+                        </html:a>
+                    </html:li>
+                    <html:li>
+                        <html:a href="#"><html:span>Span without lic class</html:span></html:a>
+                        <html:ol class="tocList">
+                            <html:li>FOO</html:li>
+                        </html:ol>
+                    </html:li>
+                    <html:li>
+                        <html:a href="ET10581-05-chapter-1.xhtml#chap1-1"><html:span class="lic"><html:strong>1 Funktionen</html:strong></html:span></html:a>
+                        <html:ol class="tocList">
+                            <html:li>
+                                <html:a href="ET10581-05-chapter-1.xhtml#chap1-2">
+                                    <html:span class="lic"><html:strong>1a</html:strong> Geraden</html:span>
+                                    <html:span class="lic"><html:strong>4</html:strong></html:span>
+                                </html:a>
+                            </html:li>
+                            <html:li>
+                                <html:a href="ET10581-05-chapter-1.xhtml#chap1-4"><html:strong>1b</html:strong> Lineare und nicht lineare Funktionen <html:strong>8</html:strong></html:a>
+                            </html:li>
+                        </html:ol>
+                    </html:li>
+                </html:ol>
+            </html:section>
         </x:context>
         <x:expect label="should not use bullets or numbering">
-            <dtbook:list type="pl" depth="1">
-                <dtbook:li>
-                    <dtbook:lic>
-                        <dtbook:span><dtbook:strong>1 Funktionen</dtbook:strong></dtbook:span>
-                    </dtbook:lic>
-                    <dtbook:list type="pl" depth="2">
-                        <dtbook:li>
-                            <dtbook:lic>
-                                <dtbook:span><dtbook:strong>1a</dtbook:strong> Geraden</dtbook:span>
-                            </dtbook:lic>
-                            <dtbook:lic>
-                                <dtbook:span><dtbook:strong>4</dtbook:strong></dtbook:span>
-                            </dtbook:lic>
-                        </dtbook:li>
-                        <dtbook:li>
-                            <dtbook:span><dtbook:strong>1b</dtbook:strong> Lineare und nicht lineare Funktionen <dtbook:strong>8</dtbook:strong></dtbook:span>
-                        </dtbook:li>
-                    </dtbook:list>
-                </dtbook:li>
-            </dtbook:list>
+            <dtbook:level1 class="toc">
+                <dtbook:list type="pl" depth="1" class="toc">
+                    <dtbook:li>
+                        <dtbook:span><dtbook:span>Span without lic class</dtbook:span></dtbook:span>
+                    </dtbook:li>
+                    <dtbook:li>
+                        <dtbook:lic>spans with</dtbook:lic>
+                        <dtbook:lic>lic class</dtbook:lic>
+                    </dtbook:li>
+                    <dtbook:li>
+                        <dtbook:lic>
+                            <dtbook:span>
+                                <dtbook:span>Span without lic class</dtbook:span>
+                            </dtbook:span>
+                        </dtbook:lic>
+                        <dtbook:list type="pl" depth="2">
+                            <dtbook:li>FOO</dtbook:li>
+                        </dtbook:list>
+                    </dtbook:li>
+                    <dtbook:li>
+                        <dtbook:lic><dtbook:strong>1 Funktionen</dtbook:strong></dtbook:lic>
+                        <dtbook:list type="pl" depth="2">
+                            <dtbook:li>
+                                <dtbook:lic><dtbook:strong>1a</dtbook:strong> Geraden</dtbook:lic>
+                                <dtbook:lic><dtbook:strong>4</dtbook:strong></dtbook:lic>
+                            </dtbook:li>
+                            <dtbook:li>
+                                <dtbook:span><dtbook:strong>1b</dtbook:strong> Lineare und nicht lineare Funktionen <dtbook:strong>8</dtbook:strong></dtbook:span>
+                            </dtbook:li>
+                        </dtbook:list>
+                    </dtbook:li>
+                </dtbook:list>
+            </dtbook:level1>
         </x:expect>
     </x:scenario>
 
