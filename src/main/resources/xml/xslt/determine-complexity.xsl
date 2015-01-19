@@ -12,6 +12,7 @@
     <xsl:variable name="numberof_images" select="count(//html:img)"/>
     <xsl:variable name="numberof_image_series" select="count(//html:figure[tokenize(@class,'\s+')='image-series'])"/>
     <xsl:variable name="numberof_pages" select="count((//html:span | //html:div)[tokenize(@epub:type,'\s+')='pagebreak'])"/>
+    <xsl:variable name="numberof_asciimath" select="count(//@class[tokenize(.,'\s+')='asciimath'])"/>
 
     <xsl:output method="html" encoding="UTF-8" doctype-system="about:legacy-compat"/>
     <xsl:template match="/">
@@ -24,6 +25,7 @@
         <xsl:variable name="category" select="1"/>
         <xsl:variable name="category" select="if ($images-percent &gt; 0.1 or $tables-percent &gt; 0.1 or $sidebars-percent &gt; 0.1 or $total-percent &gt; 0.1) then 2 else $category"/>
         <xsl:variable name="category" select="if ($images-percent &gt;= 0.8 or $tables-percent &gt;= 0.3 or $sidebars-percent &gt;= 0.3 or $total-percent &gt;= 0.8) then 3 else $category"/>
+        <xsl:variable name="category" select="if ($numberof_asciimath=0) then $category else 4"/>
 
         <html xmlns="http://www.w3.org/1999/xhtml">
             <head>
@@ -39,7 +41,7 @@
 
                 <div class="alert alert-info" style="color: black; font-size: 1.6em;">
                     <p>
-                        <strong>Book is category <xsl:value-of select="$category"/></strong>
+                        <strong>Book is category <xsl:value-of select="concat($category, if ($numberof_asciimath=0) then '' else ' (book contains ASCIIMath)')"/></strong>
                     </p>
                 </div>
 
@@ -84,8 +86,19 @@
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:variable name="image-series-pages"
-                            select="for $image-series in (//html:figure[tokenize(@epub:type,'\s+')='image-series']) return ('[unknown]', $image-series/preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][1]/string(@title))[last()]"/>
+                            select="for $image-series in (//html:figure[tokenize(@class,'\s+')='image-series']) return ('[unknown]', $image-series/preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][1]/string(@title))[last()]"/>
                         <p>There are image series on the following pages: <xsl:value-of select="string-join($image-series-pages,', ')"/></p>
+                    </xsl:otherwise>
+                </xsl:choose>
+
+                <xsl:choose>
+                    <xsl:when test="$numberof_asciimath=0">
+                        <p>There are no ASCIIMath in this book.</p>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="asciimath-pages"
+                            select="for $asciimath in (//@class[tokenize(.,'\s+')='asciimath']) return ('[unknown]', $asciimath/preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][1]/string(@title))[last()]"/>
+                        <p>There are ASCIIMath on the following pages: <xsl:value-of select="string-join($asciimath-pages,', ')"/></p>
                     </xsl:otherwise>
                 </xsl:choose>
 
