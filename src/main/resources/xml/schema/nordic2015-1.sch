@@ -151,7 +151,7 @@
 
     <!-- Rule 26: Each note must have a noteref -->
     <pattern id="epub_nordic_26">
-        <rule context="html:*[tokenize(@epub:type,'\s+')='note'][ancestor::html:body[html:header]]">
+        <rule context="html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote')][ancestor::html:body[html:header]]">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
             <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref'][substring-after(@href, '#')=current()/@id])&gt;=1">[nordic26] Each note must have at least one &lt;a epub:type="noteref"
                 ...&gt; referencing it: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
@@ -216,7 +216,7 @@
                                            self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author']  or self::html:h1[tokenize(@epub:type,' ')='fulltitle']   or
                                            self::html:aside[tokenize(@epub:type,' ')='epigraph']   or self::html:p[tokenize(@class,' ')='line']     or
   	                                       self::html:*[tokenize(@class,' ')='linegroup']  or
-                                           self::html:*[self::html:ul or self::html:ol]       or self::html:a[tokenize(@epub:type,' ')='note']       or self::html:p        or
+  	                                       self::html:*[self::html:ul or self::html:ol]       or self::html:a[tokenize(@epub:type,' ')=('note','rearnote','footnote')]       or self::html:p        or
                                            self::html:*[tokenize(@epub:type,' ')='z3998:poem']       or self::html:*[(self::figure or self::aside) and tokenize(@epub:type,'s')='sidebar']    or self::html:table    or
                                            self::html:*[matches(local-name(),'^h\d$') and tokenize(@class,' ')='title']]"
                 >[nordic29] Prodnote in inline context used as block element: <value-of
@@ -561,14 +561,8 @@
     <!-- Rule 203: Check that both the epub:types "rearnote" and "rearnotes" are used in rearnotes -->
     <pattern id="epub_nordic_203_a">
         <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='rearnote']">
-            <assert test="ancestor::html:section[tokenize(@epub:type,'\s+')='rearnotes']">[nordic203a] 'rearnote' must have a section ancestor with 'rearnotes': <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>
-
-    <pattern id="epub_nordic_203_b">
-        <rule context="html:*[not(ancestor::html:body[html:header]) and tokenize(@epub:type,'\s+')='rearnote']">
-            <assert test="ancestor::html:body[tokenize(@epub:type,'\s+')='rearnotes']">[nordic203b] 'rearnote' must have a body ancestor with 'rearnotes': <value-of
+            <assert test="ancestor::html:section[tokenize(@epub:type,'\s+')='rearnotes']">[nordic203a] 'rearnote' must have a section<value-of
+                    select="if (ancestor::html:body[html:section]) then '' else ' or body'"/> ancestor with 'rearnotes': <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
@@ -577,7 +571,8 @@
         <rule context="html:body[tokenize(@epub:type,'\s+')='rearnotes'] | html:section[tokenize(@epub:type,'\s+')='rearnotes']">
             <assert test="descendant::html:*[tokenize(@epub:type,'\s+')='rearnote']">[nordic203c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type
                 'rearnotes' must have descendants with 'rearnote'.</assert>
-            <assert test="html:ol">[nordic204c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'rearnotes' must have &lt;ol&gt; child elements.</assert>
+            <assert test=".//html:ol">[nordic204c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'rearnotes' must have &lt;ol&gt; descendant
+                elements.</assert>
         </rule>
     </pattern>
 
@@ -592,20 +587,9 @@
 
     <!-- Rule 204: Check that both the epub:types "footnote" and "footnotes" are used in rearnotes -->
     <pattern id="epub_nordic_204_a">
-        <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='footnote']">
-            <assert test="count(ancestor::html:section | ancestor::html:article) = 1">[nordic204a] footnotes must be placed in a top-level section: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <assert test="ancestor::html:section[tokenize(@epub:type,'\s+')='footnotes']">[nordic204a] 'footnote' must have a section ancestor with 'footnotes': <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>
-
-    <pattern id="epub_nordic_204_b">
-        <rule context="html:*[not(ancestor::html:body[html:header]) and tokenize(@epub:type,'\s+')='footnote']">
-            <assert test="count(ancestor::html:section | ancestor::html:article) = 0">[nordic204b] footnotes must be placed in the body element, not in a nested section. Remember that footnotes should
-                be placed in a separate file from the rest of the content: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <assert test="ancestor::html:body[tokenize(@epub:type,'\s+')='footnotes']">[nordic204b] 'footnote' must have a body ancestor with 'footnotes': <value-of
+        <rule context="html:*[tokenize(@epub:type,'\s+')='footnote']">
+            <assert test="(ancestor::html:section | ancestor::html:body)[tokenize(@epub:type,'\s+')='footnotes']">[nordic204a] 'footnote' must have a section<value-of
+                    select="if (ancestor::html:body[html:header]) then '' else ' or body'"/> ancestor with 'footnotes': <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
@@ -614,7 +598,8 @@
         <rule context="html:body[tokenize(@epub:type,'\s+')='footnotes'] | html:section[tokenize(@epub:type,'\s+')='footnotes']">
             <assert test="descendant::html:*[tokenize(@epub:type,'\s+')='footnote']">[nordic204c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type
                 'footnotes' must have descendants with 'footnote'.</assert>
-            <assert test="html:ol">[nordic204c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'footnotes' must have &lt;ol&gt; child elements.</assert>
+            <assert test=".//html:ol">[nordic204c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'footnotes' must have &lt;ol&gt; descendant
+                elements.</assert>
         </rule>
     </pattern>
 

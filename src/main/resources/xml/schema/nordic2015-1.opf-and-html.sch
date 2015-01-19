@@ -66,7 +66,7 @@
 
     <!-- Rule 26: Each note must have a noteref -->
     <pattern id="epub_nordic_26">
-        <rule context="html:*[tokenize(@epub:type,'\s+')='note']">
+        <rule context="html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote')]">
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
             <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref'][substring-after(@href, '#')=current()/@id])>=1">[nordic26] Each note must have at least one &lt;a epub:type="noteref"
                 ...&gt; referencing it: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in <value-of
