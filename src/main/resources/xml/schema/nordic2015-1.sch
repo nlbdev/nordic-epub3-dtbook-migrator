@@ -884,4 +884,13 @@
         </rule>
     </pattern>
 
+    <pattern id="epub_nordic_269">
+        <rule context="html:body[not(html:header)]">
+            <let name="filename-regex" value="'^.*/[A-Za-z0-9_-]+-\d+-([a-z-]+?)(-\d+)?\.xhtml$'"/>
+            <let name="base-uri-type" value="if (matches(base-uri(.), $filename-regex)) then replace(base-uri(.), $filename-regex, '$1') else ()"/>
+            <assert test="not(matches(base-uri(.), $filename-regex)) or tokenize(@epub:type,'\s+') = $base-uri-type">[nordic269] The type used in the filename (<value-of select="$base-uri-type"/>)
+                must be present on the body element: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
 </schema>
