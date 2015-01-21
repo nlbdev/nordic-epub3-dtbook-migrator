@@ -2613,14 +2613,14 @@
                     <dtbook:lic>
                         <dtbook:span id="id3">Chapter 3</dtbook:span>
                     </dtbook:lic>
-                    <dtbook:lic>non-lic</dtbook:lic>
+                    <dtbook:span>non-lic</dtbook:span>
                     <dtbook:span>span with no block sibling (except lic)</dtbook:span>
                 </dtbook:li>
                 <dtbook:li>
                     <dtbook:lic>
                         <dtbook:span id="id4">Chapter 4</dtbook:span>
                     </dtbook:lic>
-                    <dtbook:lic>non-lic</dtbook:lic>
+                    <dtbook:span>non-lic</dtbook:span>
                     <dtbook:lic>
                         <dtbook:span>span 1</dtbook:span>
                         <dtbook:span>span 2</dtbook:span>
@@ -3089,6 +3089,87 @@
         </x:context>
         <x:expect label="there should be no wrapping &lt;list&gt; element">
             <dtbook:note id="n13-1"><dtbook:p>...</dtbook:p></dtbook:note>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="pagebreaks in toc should not become lic">
+        <x:context>
+            <html:li>
+                <html:a href="DTB17055-008-chapter.xhtml#h2_0083">
+                    <html:span class="lic">Järnvägen krymper tid och rum</html:span>
+                    <html:span class="lic">45</html:span>
+                    <html:span id="page-6" class="page-normal" epub:type="pagebreak" title="6"/>
+                </html:a>
+            </html:li>
+            <html:li>
+                <html:a href="DTB17055-008-chapter.xhtml#h2_0083">
+                    <html:span class="lic">Järnvägen krymper tid och rum</html:span>
+                    <html:span class="lic">45</html:span>
+                </html:a>
+                <html:span id="page-6" class="page-normal" epub:type="pagebreak" title="6"/>
+            </html:li>
+            <html:li>
+                <html:a href="DTB17055-008-chapter.xhtml#h2_0083">
+                    <html:span class="lic">Järnvägen krymper tid och rum</html:span>
+                    <html:span class="lic">45</html:span>
+                </html:a>
+                <html:span id="page-6" class="page-normal" epub:type="pagebreak" title="6"/>
+                <html:ul class="list-style-type-none">
+                    <html:li/>
+                </html:ul>
+            </html:li>
+            <html:li>
+                <html:a href="DTB17055-008-chapter.xhtml#h2_0083">
+                    <html:span class="lic">Järnvägen krymper tid och rum</html:span>
+                    <html:span class="lic">45</html:span>
+                </html:a>
+                <html:div id="page-6" class="page-normal" epub:type="pagebreak" title="6"/>
+            </html:li>
+            <html:li>
+                <html:a href="DTB17055-008-chapter.xhtml#h2_0083">
+                    <html:span class="lic">Järnvägen krymper tid och rum</html:span>
+                    <html:span class="lic">45</html:span>
+                </html:a>
+                <html:div id="page-6" class="page-normal" epub:type="pagebreak" title="6"/>
+                <html:ul class="list-style-type-none">
+                    <html:li/>
+                </html:ul>
+            </html:li>
+        </x:context>
+        <x:expect label="the pagebreaks should become pagenums">
+            <dtbook:li>
+                <dtbook:lic>Järnvägen krymper tid och rum</dtbook:lic>
+                <dtbook:lic>45</dtbook:lic>
+                <dtbook:pagenum id="page-6" page="normal">6</dtbook:pagenum>
+            </dtbook:li>
+            <dtbook:li>
+                <dtbook:lic>Järnvägen krymper tid och rum</dtbook:lic>
+                <dtbook:lic>45</dtbook:lic>
+                <dtbook:pagenum id="page-6" page="normal">6</dtbook:pagenum>
+            </dtbook:li>
+            <dtbook:li>
+                <dtbook:lic>Järnvägen krymper tid och rum</dtbook:lic>
+                <dtbook:lic>45</dtbook:lic>
+                <dtbook:lic>
+                    <dtbook:pagenum id="page-6" page="normal">6</dtbook:pagenum>
+                </dtbook:lic>
+                <dtbook:list type="pl" depth="2">
+                    <dtbook:li/>
+                </dtbook:list>
+            </dtbook:li>
+            <dtbook:li>
+                <dtbook:lic>Järnvägen krymper tid och rum</dtbook:lic>
+                <dtbook:lic>45</dtbook:lic>
+                <dtbook:pagenum id="page-6" page="normal">6</dtbook:pagenum>
+            </dtbook:li>
+            <dtbook:li>
+                <dtbook:lic>Järnvägen krymper tid och rum</dtbook:lic>
+                <dtbook:lic>45</dtbook:lic>
+                <dtbook:pagenum id="page-6" page="normal">6</dtbook:pagenum>
+                <dtbook:list type="pl" depth="2">
+                    <dtbook:li/>
+                </dtbook:list>
+            </dtbook:li>
         </x:expect>
     </x:scenario>
 

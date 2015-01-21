@@ -28,6 +28,7 @@
                     <p:document href="../../xslt/epubcheck-pipeline-report-to-html-report.xsl"/>
                 </p:input>
             </p:xslt>
+            <p:filter select="/*/html:body/html:div[@class='document-validation-report']"/>
             <p:identity name="html.epubcheck.validation-reports"/>
 
         </p:when>
