@@ -1228,7 +1228,7 @@
         <xsl:call-template name="attrs"/>
     </xsl:template>
 
-    <xsl:template match="html:span[f:classes(.)='lic' or parent::html:a/html:span/f:classes(.)='lic']">
+    <xsl:template match="html:span[f:classes(.)='lic']">
         <xsl:variable name="position" select="count(preceding-sibling::*) + 1"/>
         <xsl:variable name="children" select="node()"/>
         <lic>

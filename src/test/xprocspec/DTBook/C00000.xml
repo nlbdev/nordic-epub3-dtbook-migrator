@@ -2743,7 +2743,13 @@
                         <span id="dtb1122">Didier-Weygand 2000</span>
                     </p>
                 </note>
-
+                <level2 id="footnotes_level2">
+                    <h2>Footnotes level2</h2>
+                    <p><noteref idref="#footnote_level2">Noteref to footnote level2.</noteref></p>
+                    <note id="footnote_level2">
+                        <p>Footnote level2</p>
+                    </note>
+                </level2>
             </level1>
         </rearmatter>
     </book>

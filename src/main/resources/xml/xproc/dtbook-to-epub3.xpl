@@ -95,7 +95,6 @@
     </px:message>
 
     <px:nordic-dtbook-validate.step name="validate.dtbook" check-images="true" cx:depends-on="nordic-version-message">
-        <p:log port="in-memory.out" href="file:/tmp/dtbook-validate.output.xml"/>
         <p:with-option name="dtbook" select="$dtbook-href"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
