@@ -34,9 +34,7 @@
     <px:assert test-count-max="1" message="There are multiple DTBooks in the fileset; only the first one will be converted."/>
     <px:assert test-count-min="1" message="There must be a DTBook file in the fileset." error-code="NORDICDTBOOKEPUB004"/>
     <p:split-sequence initial-only="true" test="position()=1"/>
-    <p:identity name="dtbook">
-        <p:log port="result" href="file:/tmp/dtbook-to-html.input.xml"/>
-    </p:identity>
+    <p:identity name="dtbook"/>
 
     <p:xslt>
         <p:input port="parameters">
@@ -61,9 +59,7 @@
             <p:pipe port="result" step="dtbook"/>
         </p:with-option>
     </p:add-attribute>
-    <p:identity name="result.in-memory">
-        <p:log port="result" href="file:/tmp/dtbook-to-html.output.xml"/>
-    </p:identity>
+    <p:identity name="result.in-memory"/>
 
     <px:mkdir name="mkdir">
         <p:with-option name="href" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
