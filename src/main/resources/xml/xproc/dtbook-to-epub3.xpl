@@ -345,7 +345,7 @@
         <p:output port="title">
             <p:pipe port="result" step="metadata.title"/>
         </p:output>
-        <px:fileset-load media-types="application/x-dtbook+xml">
+        <px:fileset-load media-types="application/x-dtbook+xml" method="xml">
             <p:input port="fileset">
                 <p:pipe port="fileset.out" step="validate.dtbook"/>
             </p:input>

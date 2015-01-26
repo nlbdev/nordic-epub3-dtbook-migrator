@@ -141,7 +141,7 @@
         </p:otherwise>
     </p:choose>
 
-    <px:fileset-load media-types="application/oebps-package+xml">
+    <px:fileset-load media-types="application/oebps-package+xml" method="xml">
         <p:input port="fileset">
             <p:pipe port="fileset" step="unzip"/>
         </p:input>

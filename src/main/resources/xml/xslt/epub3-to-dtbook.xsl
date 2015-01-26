@@ -1135,7 +1135,7 @@
             <xsl:attribute name="enum" select="@type"/>
         </xsl:if>
         -->
-        <xsl:attribute name="depth" select="count(ancestor::html:li)+1"/>
+        <xsl:attribute name="depth" select="count(ancestor::html:li[not(f:types(.)=('rearnote','footnote'))])+1"/>
     </xsl:template>
 
     <!-- Only 'pl' is allowed in nordic DTBook; prepend markers ("• " for ul, "1. " for numbered, etc) to all list items. -->

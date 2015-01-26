@@ -72,7 +72,7 @@
         <p:with-option name="check-images" select="if ($ignore-missing-images='false') then 'true' else 'false'"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
-    <px:fileset-load media-types="application/x-dtbook+xml">
+    <px:fileset-load media-types="application/x-dtbook+xml" method="xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.out" step="validate"/>
         </p:input>
