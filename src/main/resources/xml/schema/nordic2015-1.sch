@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
 
-    <title>DTBook 2005 Schematron tests for NORDIC 2010-1 rules - adapted for HTML5</title>
+    <title>Nordic EPUB3 and HTML5 rules (based on MTMs DTBook schematron rules, targeting nordic guidelines 2015-1)</title>
 
     <ns prefix="html" uri="http://www.w3.org/1999/xhtml"/>
     <ns prefix="epub" uri="http://www.idpf.org/2007/ops"/>

@@ -237,7 +237,7 @@
   	                    following-sibling::dtbk:q      or following-sibling::dtbk:samp or following-sibling::dtbk:sent    or following-sibling::dtbk:span    or
   	                    following-sibling::dtbk:strong or following-sibling::dtbk:sub  or following-sibling::dtbk:sup     or following-sibling::dtbk:w       or
   	                    normalize-space(string-join(following-sibling::text(),''))!=''"
-                >Block element as sibling to inline element</sch:report>
+                >[tpb29] Block element as sibling to inline element</sch:report>
             <sch:report
                 test="preceding-sibling::dtbk:a      or preceding-sibling::dtbk:abbr or preceding-sibling::dtbk:acronym or preceding-sibling::dtbk:annoref or
   	                    preceding-sibling::dtbk:bdo    or preceding-sibling::dtbk:code or preceding-sibling::dtbk:dfn     or preceding-sibling::dtbk:em      or

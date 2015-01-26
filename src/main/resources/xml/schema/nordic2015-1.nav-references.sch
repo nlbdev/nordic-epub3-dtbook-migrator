@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2" xmlns:c="http://www.w3.org/ns/xproc-step">
 
-    <title>Schematron tests for Nordic EPUB 2015-1 rules with regards to the navigation document and its references to the content documents</title>
+    <title>Nordic EPUB3 Navigation Document content reference rules</title>
 
     <!--
         Example input to this schematron:
