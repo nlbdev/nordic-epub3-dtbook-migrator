@@ -22,8 +22,19 @@
     <pattern id="opf_and_html_nordic_1">
         <rule context="*[@id]">
             <let name="id" value="@id"/>
-            <assert test="not(//*[@id=$id] except .)">[opf_and_html_1] id attributes must be unique; <value-of select="@id"/> in <value-of select="replace(base-uri(.),'^.*/','')"/> also exists in
-                    <value-of select="(//*[@id=$id] except .)/replace(base-uri(.),'^.*/','')"/></assert>
+            <assert test="not(//*[@id=$id] except .)">[nordic_opf_and_html_1] id attributes must be unique; <value-of select="@id"/> in <value-of select="replace(base-uri(.),'^.*/','')"/> also exists
+                in <value-of select="(//*[@id=$id] except .)/replace(base-uri(.),'^.*/','')"/></assert>
+        </rule>
+    </pattern>
+
+    <!-- Rule 13: All books must have frontmatter and bodymatter -->
+    <pattern id="epub_nordic_13_a">
+        <!-- see also nordic2015-1.opf-and-html.sch for multi-document version -->
+        <rule context="html:html[not(preceding-sibling::html:html)]">
+            <assert test="((.|following-sibling::html:html)/html:body/tokenize(@epub:type,'\s+')=('cover','frontmatter')) = true()">[nordic_opf_and_html_13a] There must be at least one frontmatter or
+                cover document</assert>
+            <assert test="((.|following-sibling::html:html)/html:body/tokenize(@epub:type,'\s+')='bodymatter') = true()">[nordic_opf_and_html_13a] There must be at least one bodymatter
+                document</assert>
         </rule>
     </pattern>
 
