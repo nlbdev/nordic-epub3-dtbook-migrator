@@ -8,14 +8,6 @@
         <p px:role="desc">Transforms a DTBook document into an EPUB3 publication according to the nordic markup guidelines.</p>
     </p:documentation>
 
-    <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">HTML Report</h1>
-            <p px:role="desc">An HTML-formatted version of the validation report.</p>
-        </p:documentation>
-        <p:pipe port="result" step="html"/>
-    </p:output>
-
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
@@ -23,6 +15,13 @@
         </p:documentation>
         <p:pipe port="result" step="status"/>
     </p:output>
+
+    <p:option name="html-report" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h1 px:role="name">HTML Report</h1>
+            <p px:role="desc">An HTML-formatted version of the validation report.</p>
+        </p:documentation>
+    </p:option>
 
     <p:option name="dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -135,7 +134,7 @@
                 <p:with-option name="temp-dir" select="concat($temp-dir,'html/')"/>
             </px:nordic-dtbook-to-html-convert>
             <p:sink/>
-            
+
             <p:choose>
                 <p:xpath-context>
                     <p:pipe port="result" step="status.dtbook"/>
@@ -320,7 +319,9 @@
             <p:document href="../xslt/pretty-print.xsl"/>
         </p:input>
     </p:xslt>
-    <p:identity name="html"/>
+    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" doctype-system="about:legacy-compat">
+        <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
+    </p:store>
 
     <p:group name="status">
         <p:output port="result"/>

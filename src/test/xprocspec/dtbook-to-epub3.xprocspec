@@ -8,6 +8,7 @@
         <x:call step="px:nordic-dtbook-to-epub3">
             <x:option name="dtbook" select="resolve-uri('DTBook/C00000.xml',base-uri())"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
             <x:option name="discard-intermediary-html" select="'false'"/>
             <x:option name="no-legacy" select="'false'"/>
@@ -20,7 +21,7 @@
         <x:expect type="xpath" label="There should be no validation errors" test="/*/@result" equals="'ok'"/>
 
         <x:context label="validation report">
-            <x:document type="port" port="html-report"/>
+            <x:document type="file" base-uri="temp-dir" href="html-report/report.xhtml" method="html"/>
         </x:context>
         <x:expect type="count" label="There should be exactly one document on the html-report port" min="1" max="1"/>
         <x:expect type="xpath" label="There should be no validation errors in the HTML report"

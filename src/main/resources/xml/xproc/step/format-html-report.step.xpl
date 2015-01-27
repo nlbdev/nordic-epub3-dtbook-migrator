@@ -4,7 +4,7 @@
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
 
     <p:input port="source" sequence="true"/>
-    <p:output port="result" sequence="true">
+    <p:output port="result">
         <p:pipe port="result" step="html"/>
     </p:output>
 
