@@ -3173,4 +3173,33 @@
         </x:expect>
     </x:scenario>
 
+    <x:scenario label="adjust list depth when ancestor list is a note list" focus="">
+        <x:context>
+            <html:ol>
+                <html:li class="notebody" epub:type="footnote" id="n13-1">
+                    <html:ol class="list-style-type-none">
+                        <html:li>
+                            <html:p>original depth: 2, new depth: 1</html:p>
+                            <html:ul class="list-style-type-none">
+                                <html:li>original depth: 3, new depth: 2</html:li>
+                            </html:ul>
+                        </html:li>
+                    </html:ol>
+                </html:li>
+            </html:ol>
+        </x:context>
+        <x:expect label="the nested lists should adjust their depths as the nesting list item becomes a note">
+            <dtbook:note id="n13-1">
+                <dtbook:list depth="1" type="pl">
+                    <dtbook:li>
+                        <dtbook:p>original depth: 2, new depth: 1</dtbook:p>
+                        <dtbook:list depth="2" type="pl">
+                            <dtbook:li>original depth: 3, new depth: 2</dtbook:li>
+                        </dtbook:list>
+                    </dtbook:li>
+                </dtbook:list>
+            </dtbook:note>
+        </x:expect>
+    </x:scenario>
+
 </x:description>

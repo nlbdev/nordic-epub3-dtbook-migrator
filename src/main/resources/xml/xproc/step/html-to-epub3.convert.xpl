@@ -227,6 +227,7 @@
     <p:add-attribute match="/*" attribute-name="unique-identifier" attribute-value="pub-identifier"/>
     <p:add-attribute match="//dc:identifier[not(preceding::dc:identifier)]" attribute-name="id" attribute-value="pub-identifier"/>
     <p:add-attribute match="/*" attribute-name="prefix" attribute-value="nordic: http://www.mtm.se/epub/"/>
+    <p:add-attribute match="/*/opf:spine/opf:itemref[/*/opf:manifest/opf:item[matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml')]/@id = @idref]" attribute-name="linear" attribute-value="no"/>
     <p:delete match="/*//*/@prefix"/>
     <p:xslt>
         <p:input port="parameters">
@@ -323,7 +324,7 @@
             <p:pipe port="fileset.out" step="html-split.moved"/>
         </p:input>
     </px:fileset-filter>
-    <p:delete match="//d:file[@media-type='application/xhtml+xml' and not(ends-with(@href,'-cover.xhtml') or ends-with(@href,'-rearnotes.xhtml'))]"/>
+    <p:delete match="//d:file[@media-type='application/xhtml+xml' and not(matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml'))]"/>
     <p:identity name="non-linear-content"/>
 
 </p:declare-step>

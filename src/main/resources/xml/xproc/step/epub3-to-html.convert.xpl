@@ -29,7 +29,7 @@
                     <p:variable name="base-uri" select="resolve-uri(/*/@xml:base,base-uri(/*))"/>
                     <p:identity name="section"/>
                     <p:rename match="/*" new-name="d:section-wrapper" name="section-wrapped"/>
-                    <px:fileset-load name="content">
+                    <px:fileset-load>
                         <p:with-option name="href" select="$base-uri"/>
                         <p:input port="fileset">
                             <p:pipe port="fileset" step="replace-sections-with-documents"/>
@@ -43,7 +43,14 @@
                             <p:empty/>
                         </p:with-option>
                     </px:assert>
-                    <p:filter select="//html:body">
+                    <p:add-attribute match="/*/html:body[not(@xml:lang)]" attribute-name="xml:lang">
+                        <p:with-option name="attribute-value" select="/*/@xml:lang"/>
+                    </p:add-attribute>
+                    <p:add-attribute match="/*/html:body" attribute-name="lang">
+                        <p:with-option name="attribute-value" select="/*/html:body/@xml:lang"/>
+                    </p:add-attribute>
+                    <p:identity name="content"/>
+                    <p:filter select="/*/html:body">
                         <p:input port="source">
                             <p:pipe port="result" step="content"/>
                         </p:input>
@@ -52,7 +59,7 @@
                         <p:with-option name="attribute-value" select="$base-uri"/>
                     </p:add-attribute>
                     <p:rename match="/*" new-namespace="http://www.w3.org/1999/xhtml">
-                        <p:with-option name="new-name" select="if (matches(/*/@epub:type,'(^|\s)article(\s|$)')) then 'article' else 'section'"/>
+                        <p:with-option name="new-name" select="if (tokenize(/*/@epub:type,'\s+')='article') then 'article' else 'section'"/>
                     </p:rename>
                     <p:insert match="/*" position="last-child">
                         <p:input port="insertion">
@@ -266,6 +273,7 @@
             <p:with-option name="attribute-value" select="/*/@xml:lang"/>
         </p:add-attribute>
     </p:viewport>
+    <p:delete match="//*[@xml:lang = ancestor::*[@xml:lang][1]/@xml:lang]/@xml:lang | //*[@lang = ancestor::*[@lang][1]/@lang]/@lang"/>
     <p:identity name="in-memory"/>
 
     <px:html-to-fileset>
