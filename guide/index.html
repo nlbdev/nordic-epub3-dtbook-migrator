@@ -1,174 +1,309 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Nordic EPUB3/DTBook Migrator User Guide</title>
-<style>
-.page-normal:not(#page1), .page-front:not(#page1), .page-special:not(#page1) {
-    page-break-before: always;
-}
-@media screen {
+    <meta charset="utf-8">
+
+    <title>Nordic EPUB3/DTBook Migrator User Guide</title>
+
+    <meta name="author" content="Jostein Austvik Jacobsen">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script><link rel="stylesheet" type="text/css" href="css/print/paper.css">
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+    <!--<style>
     .page-normal:not(#page1), .page-front:not(#page1), .page-special:not(#page1) {
-        height: 200px;
-        width: 100%;
-        background-color: lightGray;
+        page-break-before: always;
     }
-}
-</style>
+    @media screen {
+        .page-normal:not(#page1), .page-front:not(#page1), .page-special:not(#page1) {
+            height: 200px;
+            width: 100%;
+            background-color: lightGray;
+        }
+    }
+    </style>-->
 </head>
 <body>
+<div class="reveal">
+<div class="slides">
 
-<div epub:type="pagebreak" class="page-normal" title="1" id="page1"></div>
-<h1 id="h1">Nordic EPUB3/DTBook Migrator User Guide</h1>
-<p>This is a basic introduction to installing and using the Nordic EPUB3/DTBook Migrator
-for validating EPUB3 and converting EPUB3 to DTBook according to the nordic guidelines.</p>
-<p>The guide is printer friendly (i.e. contains appropriate page breaks). The guide is
-not complete yet, so for instance it's not very pretty yet. But it should contain the
-basics to get you started using the Nordic Migrator.</p>
-<p>Feedback to what should be clarified or added to this guide can be sent to
-<a href="mailto:josteinaj@gmail.com">Jostein Austvik Jacobsen</a>.</p>
+<section>
+    <h1>User Guide<br><small>Nordic EPUB3/DTBook Migrator</small></h1>
+    <p>This is a basic introduction to installing and using the Nordic EPUB3/DTBook Migrator
+    for validating EPUB3 and converting EPUB3 to DTBook according to the nordic guidelines.</p>
+    <p>Feedback to what should be changed, clarified or added to this guide can be sent to
+    <a href="mailto:josteinaj@gmail.com">Jostein Austvik Jacobsen</a>.</p>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title="2"></div>
-<p>These instructions are for Windows. OSX or Linux users should use the ZIP distribution.</p>
-<ol>
-<li>Download and run the <a href="https://github.com/daisy/pipeline-assembly/releases/download/v1.8.1/pipeline2-1.8.1-webui-desktop.exe">Pipeline 2 v1.8.1 installer</a></li>
-<li>Download and unzip the <a href="https://dl.dropboxusercontent.com/u/6370535/nordic-epub3-dtbook-migrator/epubcheck-adapter-with-dependencies/dependencies-1.8.1.zip">third-party dependencies</a> for the Nordic Migrator into <code>C:\Program Files (x86)\DAISY Pipeline 2\daisy-pipeline\modules</code>.</li>
-<li>Download and put the <a href="https://dl.dropboxusercontent.com/u/6370535/nordic-epub3-dtbook-migrator/builds/nordic-epub3-dtbook-migrator-1.0.0-build_158-commit_02f1665.jar">Nordic Migrator</a> into the same folder as above.</li>
-</ol>
-<p>Note that the links above are relevant for build 158 which is the most recent as of time of writing. Newer versions for testing will be available from the <a href="https://dl.dropboxusercontent.com/u/6370535/nordic-epub3-dtbook-migrator/index.html">Nordic Migrator SNAPSHOTs page</a>.</p>
+<section>
+    <p>These instructions are for Windows. OSX or Linux users should use the ZIP distribution.</p>
+    <ol>
+    <li>Download and run the <a href="https://github.com/daisy/pipeline-assembly/releases/download/v1.9/pipeline2-1.9-webui_windows.exe">Pipeline 2 v1.9 Windows installer</a></li>
+    <li>Download and unzip the <a href="https://dl.dropboxusercontent.com/u/6370535/nordic-epub3-dtbook-migrator/epubcheck-adapter-with-dependencies/dependencies-1.8.1.zip">third-party dependencies</a> for the Nordic Migrator into <code>C:\Program Files (x86)\DAISY Pipeline 2\daisy-pipeline\modules</code>.</li>
+    <li>Download and put the <a href="https://dl.dropboxusercontent.com/u/6370535/nordic-epub3-dtbook-migrator/builds/nordic-epub3-dtbook-migrator-1.0.0-build_252-commit_bc07e49.jar">Nordic Migrator</a> into the same folder as above.</li>
+    </ol>
+    <p><small>Note that the links above are relevant for build 252 which is the most recent as of time of writing. Newer versions for testing will be available from the <a href="https://dl.dropboxusercontent.com/u/6370535/nordic-epub3-dtbook-migrator/index.html">Nordic Migrator SNAPSHOTs page</a>.</small></p>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section>
+    <div style="width: 50%; float: left;">
+        <figure class="image">
+            <img src="20141104091516.png" alt="image">
+        </figure>
+    </div>
+    <div style="width: 50%; float: right;">
+        <p>
+            </p><p>When you start Pipeline 2 (for instance from the start menu), a browser window will open saying
+            "Starting the Pipeline 2 Web UI".</p>
+            <p><small>(Pipeline 2 consists of the engine itself running in the background
+            and user interfaces to interact with the engine. First, the Web UI is started.)</small></p>
+        <p></p>
+    </div>
+</section>
+
+<section>
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104091516.png" alt="image"/>
-    <figcaption>
-        <p>When you start Pipeline 2 (for instance from the start menu), a browser window will open saying
-        "Starting the Pipeline 2 Web UI".</p>
-        <p>Pipeline 2 consists of the engine itself running in the background
-        and user interfaces to interact with the engine. First, the Web UI is started.</p>
-    </figcaption>
+    <img src="20141104091725.png" alt="image">
 </figure>
-
-<div epub:type="pagebreak" class="page-normal" title=""></div>
-<figure class="image">
-    <img src="20141104091725.png" alt="image"/>
-    <figcaption>
+</div>
+    <div style="width: 50%; float: right;">
+    <div>
         <p>After the Web UI is started, the engine will be started. The Web UI will display a page
         saying "Starting the Pipeline 2 engine".</p>
-    </figcaption>
-</figure>
+    </div>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section>
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104091956.png" alt="image"/>
-    <figcaption>
+    <img src="20141104091956.png" alt="image">
+</figure>
+</div>
+    <div style="width: 50%; float: right;">
+    <div>
         <p>When the engine is started, you will arrive at the "Welcome!"-page. You are now ready to use
         Pipeline 2.</p>
-    </figcaption>
-</figure>
+    </div>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section>
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092955.png" alt="image"/>
-    <figcaption>
+    <img src="20141104092955.png" alt="image">
+</figure>
+</div>
+    <div style="width: 50%; float: right;">
+    <div>
         <p>Click "Create Job" in the top-left corner. On the right, a list of "scripts" are displayed.
     On the left, you can upload files. In Pipeline 2, when you execute a script, it's called a "job".</p>
-        <p>Click "Upload Files" (or drag-and-drop) to select the EPUB you want to validate or convert.</p>
-    </figcaption>
-</figure>
+    </div>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section>
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092331.png" alt="image"/>
-    <figcaption>Select the script you want to use. The relevant ones are "Nordic EPUB3 Validator"
-    and "Nordic EPUB3 to DTBook".</figcaption>
+    <img src="20141104092955.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+    <div>
+        <p>Now, click "Upload Files" (or drag-and-drop) to select the EPUB you want to validate or convert.</p>
+    </div>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section>
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092351.png" alt="image"/>
-    <figcaption>Clicking the "Nordic EPUB3 Validator" script will take you to the options panel.
-    Everything should be pre-filled, so you can simply click "Start job" if you want to start the job.</figcaption>
+    <img src="20141104092320.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+    <div>Select the script you want to use. The relevant ones are "Nordic EPUB3 Validator"
+    and "Nordic EPUB3 to DTBook".</div>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section>
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092415.png" alt="image"/>
-    <figcaption>If you click "Show" next to the "Optional parameters" headline, you can see that the "Extra strict markup"
-    option is enabled. This option is meant for testing purposes by agencies other than the Nordic agencies. In production,
-    this option should always be "Yes" (which is the default).</figcaption>
+    <img src="20150128150744.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+    <p>Clicking the "Nordic EPUB3 Validator" script will take you to the options panel.
+    This script does not have any extra parameters, so all you need to do now is click "Start job" to start the job.</p>
+    <p><small>(The "Nordic EPUB3 to DTBook" script has parameters, but you should not need to use them)</small></p>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section>
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092430.png" alt="image"/>
-    <figcaption>When the job is started you will see that it is "Running".</figcaption>
+    <img src="20141104092415.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+    <div>When the job is started you will see that it is "Running".</div>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section>
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092451.png" alt="image"/>
-    <figcaption>TODO</figcaption>
+    <img src="20141104092430.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+        <p>If the validation succeeds, the status will change to "Success".</p>
+        <p>If the validation fails, the status will change to "Validation failed".</p>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section>
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092501.png" alt="image"/>
-    <figcaption>TODO</figcaption>
+    <img src="20141104092451.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+    <p>A custom build of <a href="https://github.com/IDPF/epubcheck">epubcheck</a> (the yet unreleased epubcheck v4)
+    is run as part of the validation. Its validation report will be near the top of the page.</p>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section>
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092521.png" alt="image"/>
-    <figcaption>TODO</figcaption>
+    <img src="20141104092521.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+        <p>Further down the page, a list of how many times each epub:type, class, and element are used in the book will be listed.</p>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section>
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092537.png" alt="image"/>
-    <figcaption>TODO</figcaption>
+    <img src="20141104092556.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+        <p>Next, there's the custom Nordic validation rules. Each content document, the package document,
+        the navigation document, as well as how they fit together, are validated.</p>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section class="present" style="top: 102.5px; display: block;">
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092543.png" alt="image"/>
-    <figcaption>TODO</figcaption>
+    <img src="20150128152344.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+        <p>The last part of the report calculates a suggested nordic "category" for the book.</p>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section class="present" style="top: 102.5px; display: block;">
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092556.png" alt="image"/>
-    <figcaption>TODO</figcaption>
+    <img src="20141104092717.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+        <p>After the report you have a section with the option to download the output (i.e. the HTML report).</p>
+        <p>The execution log contains more details about what happened during validation.
+        Severe errors will be reported here, such as if a document in the EPUB is not well-formed XML.</p>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section class="future" style="top: 102.5px; display: block;">
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092623.png" alt="image"/>
-    <figcaption>TODO</figcaption>
+    <img src="20141104092808.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+        <p>If you click "Jobs" at the top of the page, you will find a list of jobs and their status.</p>
+        <p>You can access jobs that you have run earlier from this page. It might be a good idea to go
+        through and delete old jobs once in a while to save some disk space.</p>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
+<section class="future" style="top: 102.5px; display: block;">
+<div style="width: 50%; float: left;">
 <figure class="image">
-    <img src="20141104092717.png" alt="image"/>
-    <figcaption>TODO</figcaption>
+    <img src="20141104092820.png" alt="image">
 </figure>
+</div>
+    <div style="width: 50%; float: right;">
+        <p>If you click "About" at the top of the page, you will find a short description of Pipeline 2 with
+        some links to the project.</p>
+        <p>At the bottom of this page you can see which version of Pipeline 2 you are using. As of writing,
+        the newest engine version is 1.9 and the newest Web UI version is 1.8.1.</p>
+    </div>
+</section>
 
-<div epub:type="pagebreak" class="page-normal" title=""></div>
-<figure class="image">
-    <img src="20141104092808.png" alt="image"/>
-    <figcaption>TODO</figcaption>
-</figure>
-
-<div epub:type="pagebreak" class="page-normal" title=""></div>
-<figure class="image">
-    <img src="20141104092820.png" alt="image"/>
-    <figcaption>TODO</figcaption>
-</figure>
-
-<div epub:type="pagebreak" class="page-normal" title=""></div>
-<figure class="image">
-    <img src="20141104093202.png" alt="image"/>
-    <figcaption>TODO</figcaption>
-</figure>
+<section>
+    <p>(end)</p>
+</section>
 
 
-</body>
-</html>
+</div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+<script>
+
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+            { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+            { src: 'plugin/zoom-js/zoom.js', async: true },
+            { src: 'plugin/notes/notes.js', async: true }
+        ]
+    });
+
+</script><script type="text/javascript" src="plugin/zoom-js/zoom.js"></script><script type="text/javascript" src="plugin/notes/notes.js"></script>
+
+
+</body></html>
