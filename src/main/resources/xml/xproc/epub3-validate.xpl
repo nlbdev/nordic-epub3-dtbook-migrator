@@ -22,7 +22,7 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="html-report" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
+    <p:option name="html-report" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">HTML Report</h1>
             <p px:role="desc">An HTML-formatted version of the validation report.</p>
@@ -39,6 +39,7 @@
 
     <p:import href="step/epub3.validate.xpl"/>
     <p:import href="step/format-html-report.step.xpl"/>
+    <p:import href="step/set-doctype.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -81,9 +82,15 @@
             <p:pipe port="report.out" step="validate.nordic"/>
         </p:input>
     </px:nordic-format-html-report.step>
-    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" doctype-system="about:legacy-compat">
+    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
+    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+        <p:with-option name="href" select="/*/text()">
+            <p:pipe port="result" step="store-report"/>
+        </p:with-option>
+    </pxi:set-doctype>
+    <p:sink/>
 
     <p:group name="status">
         <p:output port="result"/>

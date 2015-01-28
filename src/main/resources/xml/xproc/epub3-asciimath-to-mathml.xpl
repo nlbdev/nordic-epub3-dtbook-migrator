@@ -8,7 +8,7 @@
         <p px:role="desc">Creates MathML for all HTML elements with the "asciimath" class.</p>
     </p:documentation>
 
-    <!--<p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
+    <!--<p:output port="html-report" required="true" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">HTML Report</h1>
             <p px:role="desc">An HTML-formatted version of the validation report.</p>

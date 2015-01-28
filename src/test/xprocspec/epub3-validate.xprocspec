@@ -21,7 +21,7 @@
         </x:expect>
 
         <x:context label="html-report - publication statistics">
-            <x:document type="file" base-uri="temp-dir" href="html-report/report.xhtml" method="html" select="//html:tbody[html:tr/html:td[starts-with(text(),'element: ')]]"/>
+            <x:document type="file" base-uri="temp-dir" href="html-report/report.xhtml" method="xml" select="//html:tbody[html:tr/html:td[starts-with(text(),'element: ')]]"/>
         </x:context>
         <x:expect label="there should be exactly one table containing statistics of elements, classes and epub:types" type="count" min="1" max="1"/>
         <x:expect label="The publication statistics should contain stuff" type="xpath" test="count(//html:tr) &gt; 0"/>
