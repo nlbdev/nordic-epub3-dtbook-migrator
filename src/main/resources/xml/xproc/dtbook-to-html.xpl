@@ -23,6 +23,8 @@
     </p:option>
 
     <p:import href="library.xpl"/>
+    <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
 
     <p:variable name="base" select="replace(base-uri(/),'[^/]*$','')"/>
     <p:variable name="href" select="replace(base-uri(/),'^.*/([^/]*)$','$1')"/>
@@ -37,9 +39,9 @@
     <px:fileset-create cx:depends-on="nordic-version-message">
         <p:with-option name="base" select="$base"/>
     </px:fileset-create>
-    <px:fileset-add-entry media-type="application/x-dtbook+xml">
+    <pxi:fileset-add-entry media-type="application/x-dtbook+xml">
         <p:with-option name="href" select="$href"/>
-    </px:fileset-add-entry>
+    </pxi:fileset-add-entry>
 
     <px:nordic-dtbook-to-html-convert name="convert">
         <p:with-option name="result-uri" select="$result-uri"/>

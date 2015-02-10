@@ -40,6 +40,8 @@
     <p:import href="step/epub3.validate.xpl"/>
     <p:import href="step/format-html-report.step.xpl"/>
     <p:import href="step/set-doctype.xpl"/>
+    <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -53,18 +55,18 @@
     <px:fileset-create cx:depends-on="nordic-version-message">
         <p:with-option name="base" select="replace($epub,'[^/]+$','')"/>
     </px:fileset-create>
-    <px:fileset-add-entry media-type="application/epub+zip">
+    <pxi:fileset-add-entry media-type="application/epub+zip">
         <p:with-option name="href" select="replace($epub,'^.*/([^/]*)$','$1')"/>
-    </px:fileset-add-entry>
+    </pxi:fileset-add-entry>
 
     <px:nordic-epub3-validate.step name="validate.nordic">
         <p:with-option name="temp-dir" select="concat($temp-dir,'validate/')"/>
     </px:nordic-epub3-validate.step>
-    <px:fileset-load media-types="application/xhtml+xml">
+    <pxi:fileset-load media-types="application/xhtml+xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.out" step="validate.nordic"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>

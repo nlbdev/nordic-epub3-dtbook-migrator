@@ -23,6 +23,8 @@
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -46,20 +48,20 @@
     <px:fileset-filter media-types="application/xhtml+xml"/>
     <p:identity name="spine"/>
 
-    <px:fileset-load name="spine-html">
+    <pxi:fileset-load name="spine-html">
         <p:input port="in-memory">
             <p:pipe port="in-memory.out" step="html-split.moved"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
 
-    <px:fileset-load media-types="application/xhtml+xml">
+    <pxi:fileset-load media-types="application/xhtml+xml">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one HTML file in the single-page HTML fileset." error-code="NORDICDTBOOKEPUB007"/>
     <p:identity name="single-html"/>
 
@@ -193,9 +195,9 @@
             <p:pipe port="ncx" step="nav"/>
         </p:with-option>
     </px:message>
-    <px:fileset-add-entry media-type="application/x-dtbncx+xml">
+    <pxi:fileset-add-entry media-type="application/x-dtbncx+xml">
         <p:with-option name="href" select="'nav.ncx'"/>
-    </px:fileset-add-entry>
+    </pxi:fileset-add-entry>
     <p:identity name="ncx-fileset"/>
     <px:fileset-join>
         <p:input port="source">
@@ -266,14 +268,14 @@
             <p:pipe port="result" step="resource-fileset"/>
         </p:input>
     </p:identity>
-    <px:fileset-add-entry media-type="application/oebps-package+xml">
+    <pxi:fileset-add-entry media-type="application/oebps-package+xml">
         <p:with-option name="href" select="base-uri(/*)">
             <p:pipe port="result" step="package"/>
         </p:with-option>
-    </px:fileset-add-entry>
-    <px:fileset-add-entry media-type="application/xhtml+xml">
+    </pxi:fileset-add-entry>
+    <pxi:fileset-add-entry media-type="application/xhtml+xml">
         <p:with-option name="href" select="concat($publication-dir,'nav.xhtml')"/>
-    </px:fileset-add-entry>
+    </pxi:fileset-add-entry>
     <px:mediatype-detect>
         <p:input port="in-memory">
             <p:pipe port="result" step="result.in-memory-without-ocf-files"/>

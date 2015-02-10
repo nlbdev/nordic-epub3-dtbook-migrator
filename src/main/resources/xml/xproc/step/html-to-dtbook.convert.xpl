@@ -15,14 +15,16 @@
 
     <p:import href="../library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <px:fileset-load media-types="application/xhtml+xml">
+    <pxi:fileset-load media-types="application/xhtml+xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <px:assert test-count-max="1" message="There are multiple HTML files in the fileset; only the first one will be converted."/>
     <px:assert test-count-min="1" message="There must be a HTML file in the fileset." error-code="NORDICDTBOOKEPUB005"/>
     <p:split-sequence initial-only="true" test="position()=1"/>
@@ -72,11 +74,11 @@
         </p:input>
     </p:identity>
     <p:delete match="//d:file[@media-type=('application/xhtml+xml','text/css')]"/>
-    <px:fileset-add-entry media-type="application/x-dtbook+xml">
+    <pxi:fileset-add-entry media-type="application/x-dtbook+xml">
         <p:with-option name="href" select="(/*/d:file[@media-type='application/xhtml+xml'])[1]/replace(replace(@href,'.*/',''),'\.[^\.]*$','.xml')">
             <p:pipe port="fileset.in" step="main"/>
         </p:with-option>
-    </px:fileset-add-entry>
+    </pxi:fileset-add-entry>
     <p:viewport match="//d:file[starts-with(@href,'images/')]">
         <p:add-attribute match="/*" attribute-name="href">
             <p:with-option name="attribute-value" select="replace(/*/@href,'^images/','')"/>

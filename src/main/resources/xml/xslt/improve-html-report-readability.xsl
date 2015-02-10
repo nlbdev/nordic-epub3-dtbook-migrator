@@ -21,12 +21,12 @@
 
     <xsl:template match="@class[tokenize(.,'\s+')=('error','fatal','exception','message-error','message-fatal','message-exception')]">
         <xsl:copy-of select="."/>
-        <xsl:attribute name="style" select="concat(@style, 'background-color: #f2dede; ')"/>
+        <xsl:attribute name="style" select="concat(parent::*/@style, 'background-color: #f2dede; ')"/>
     </xsl:template>
 
     <xsl:template match="@class[tokenize(.,'\s+')=('warn','warning','message-warn','message-warning')]">
         <xsl:copy-of select="."/>
-        <xsl:attribute name="style" select="concat(@style, 'background-color: #fcf8e3; ')"/>
+        <xsl:attribute name="style" select="concat(parent::*/@style, 'background-color: #fcf8e3; ')"/>
     </xsl:template>
 
     <xsl:template match="li[.//pre[starts-with(text(),'/*')]]">
@@ -71,15 +71,18 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="p[starts-with(text(),'org.xml.sax.SAXParseException')]">
-        <xsl:variable name="filename" select="if (matches(text(),'systemId: [^;]*/')) then replace(text(), '.*systemId: [^;]*/([^/;]*)(;.*|$)', '$1') else ''"/>
-        <xsl:variable name="lineNumber" select="if (matches(text(),'lineNumber: \d+')) then replace(text(), '.*lineNumber: (\d+)(;.*|$)', '$1') else ''"/>
-        <xsl:variable name="columnNumber" select="if (matches(text(),'columnNumber: \d+')) then replace(text(), '.*columnNumber: (\d+)(;.*|$)', '$1') else ''"/>
-        <xsl:variable name="message" select="replace(text(),'.*;','')"/>
+    <xsl:template match="p[starts-with(text()[1],'org.xml.sax.SAXParseException')]">
+        <xsl:variable name="parts" select="tokenize(text()[1],'; ')"/>
+        <xsl:variable name="filename" select="replace($parts[starts-with(.,'systemId:')][1],'.*/','')"/>
+        <xsl:variable name="lineNumber" select="replace($parts[starts-with(.,'lineNumber:')][1],'[^\d]','')"/>
+        <xsl:variable name="columnNumber" select="replace($parts[starts-with(.,'columnNumber:')][1],'[^\d]','')"/>
+        <xsl:variable name="message"
+            select="string-join($parts[not(starts-with(.,'org.xml.sax.SAXParseException') or starts-with(.,'systemId:') or starts-with(.,'lineNumber:') or starts-with(.,'columnNumber:'))],'; ')"/>
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:value-of select="$filename"/>
             <xsl:if test="$lineNumber or $columnNumber">
+                <xsl:text> </xsl:text>
                 <xsl:value-of select="if ($filename) then '(' else ''"/>
                 <xsl:value-of select="if ($lineNumber) then concat('line: ',$lineNumber) else ''"/>
                 <xsl:value-of select="if ($lineNumber and $columnNumber) then ', ' else ''"/>

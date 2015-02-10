@@ -15,18 +15,20 @@
         <p:pipe port="result" step="in-memory.other"/>
     </p:output>
 
+    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/asciimath-utils/library.xpl"/>
 
-    <px:fileset-load media-types="application/xhtml+xml">
+    <pxi:fileset-load media-types="application/xhtml+xml">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <p:for-each>
         <px:message message="Checking for ASCIIMath in $1">
             <p:with-option name="param1" select="base-uri(/*)"/>
@@ -76,14 +78,14 @@
     <p:identity name="xhtml-documents-with-mathml"/>
     <p:sink/>
 
-    <px:fileset-load media-types="application/oebps-package+xml" method="xml">
+    <pxi:fileset-load media-types="application/oebps-package+xml" method="xml">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
     <p:viewport match="/opf:package/opf:manifest/opf:item">
         <p:variable name="item-uri" select="resolve-uri(@href,base-uri(/*))"/>

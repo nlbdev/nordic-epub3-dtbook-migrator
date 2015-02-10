@@ -60,6 +60,8 @@
     <p:import href="step/set-doctype.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
 
     <px:message message="$1" name="nordic-version-message">
@@ -73,11 +75,11 @@
         <p:with-option name="check-images" select="if ($ignore-missing-images='false') then 'true' else 'false'"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
-    <px:fileset-load media-types="application/x-dtbook+xml" method="xml">
+    <pxi:fileset-load media-types="application/x-dtbook+xml" method="xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.out" step="validate"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>
