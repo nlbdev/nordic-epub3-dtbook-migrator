@@ -39,7 +39,7 @@
 
     <p:import href="step/epub3.validate.xpl"/>
     <p:import href="step/format-html-report.step.xpl"/>
-    <p:import href="step/set-doctype.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -86,11 +86,11 @@
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
         <p:with-option name="href" select="/*/text()">
             <p:pipe port="result" step="store-report"/>
         </p:with-option>
-    </pxi:set-doctype>
+    </px:set-doctype>
     <p:sink/>
 
     <p:group name="status">

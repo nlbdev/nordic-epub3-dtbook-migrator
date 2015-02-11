@@ -72,7 +72,7 @@
     <p:import href="step/dtbook-to-html.convert.xpl"/>
     <p:import href="step/html-to-epub3.convert.xpl"/>
     <p:import href="step/format-html-report.step.xpl"/>
-    <p:import href="step/set-doctype.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -251,12 +251,12 @@
 
                             <p:choose>
                                 <p:when test="/*/@media-type='application/xhtml+xml'">
-                                    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+                                    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
                                         <p:with-option name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
-                                    </pxi:set-doctype>
+                                    </px:set-doctype>
                                     <p:add-attribute match="/*" attribute-value="&lt;!DOCTYPE html&gt;">
                                         <p:with-option name="attribute-name" select="'doctype'">
-                                            <!-- p:with-option uses default connection as context, thus making sure pxi:set-doctype is run before p:add-attribute -->
+                                            <!-- p:with-option uses default connection as context, thus making sure px:set-doctype is run before p:add-attribute -->
                                         </p:with-option>
                                         <p:input port="source">
                                             <p:pipe port="current" step="store.epub3.doctype"/>
@@ -320,11 +320,11 @@
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
         <p:with-option name="href" select="/*/text()">
             <p:pipe port="result" step="store-report"/>
         </p:with-option>
-    </pxi:set-doctype>
+    </px:set-doctype>
     <p:sink/>
 
     <p:group name="status">

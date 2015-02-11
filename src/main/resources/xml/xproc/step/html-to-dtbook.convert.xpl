@@ -38,7 +38,7 @@
         <p:with-param name="max-depth" select="6"/>
         <p:with-param name="copy-wrapping-elements-into-result" select="true()"/>
         <p:input port="stylesheet">
-            <p:document href="http://www.daisy.org/pipeline/modules/common-utils/deep-level-grouping.xsl"/>
+            <p:document href="../../xslt/deep-level-grouping.xsl"/>
         </p:input>
     </p:xslt>
 
