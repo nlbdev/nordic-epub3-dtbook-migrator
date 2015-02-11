@@ -76,7 +76,7 @@
     <p:identity name="xhtml-documents-with-mathml"/>
     <p:sink/>
 
-    <px:fileset-load media-types="application/oebps-package+xml">
+    <px:fileset-load media-types="application/oebps-package+xml" method="xml">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>

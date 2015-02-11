@@ -34,9 +34,7 @@
     <px:assert test-count-max="1" message="There are multiple DTBooks in the fileset; only the first one will be converted."/>
     <px:assert test-count-min="1" message="There must be a DTBook file in the fileset." error-code="NORDICDTBOOKEPUB004"/>
     <p:split-sequence initial-only="true" test="position()=1"/>
-    <p:identity name="dtbook">
-        <p:log port="result" href="file:/tmp/dtbook-to-html.input.xml"/>
-    </p:identity>
+    <p:identity name="dtbook"/>
 
     <p:xslt>
         <p:input port="parameters">
@@ -61,40 +59,38 @@
             <p:pipe port="result" step="dtbook"/>
         </p:with-option>
     </p:add-attribute>
-    <p:identity name="result.in-memory">
-        <p:log port="result" href="file:/tmp/dtbook-to-html.output.xml"/>
-    </p:identity>
+    <p:identity name="result.in-memory"/>
 
     <px:mkdir name="mkdir">
         <p:with-option name="href" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
     </px:mkdir>
     <px:copy-resource name="store1" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/accessibility.css',$doc-base)"/>
-        <p:with-option name="target" select="concat($temp-dir,'css/')"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/accessibility.css')"/>
     </px:copy-resource>
     <px:copy-resource name="store2" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-Regular.otf',$doc-base)"/>
-        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/OpenDyslexic-Regular.otf')"/>
     </px:copy-resource>
     <px:copy-resource name="store3" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-Italic.otf',$doc-base)"/>
-        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/OpenDyslexic-Italic.otf')"/>
     </px:copy-resource>
     <px:copy-resource name="store4" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-Bold.otf',$doc-base)"/>
-        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/OpenDyslexic-Bold.otf')"/>
     </px:copy-resource>
     <px:copy-resource name="store5" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf',$doc-base)"/>
-        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf')"/>
     </px:copy-resource>
     <px:copy-resource name="store6" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf',$doc-base)"/>
-        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf')"/>
     </px:copy-resource>
     <px:copy-resource name="store7" cx:depends-on="mkdir">
         <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/LICENSE.txt',$doc-base)"/>
-        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
+        <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/LICENSE.txt')"/>
     </px:copy-resource>
     <!-- TODO: add ASCIIMathML.js if there are asciimath elements -->
     <p:identity name="store-dependency">

@@ -8,14 +8,6 @@
         <p px:role="desc">Transforms a DTBook document into an EPUB3 publication according to the nordic markup guidelines.</p>
     </p:documentation>
 
-    <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">HTML Report</h1>
-            <p px:role="desc">An HTML-formatted version of the validation report.</p>
-        </p:documentation>
-        <p:pipe port="result" step="html"/>
-    </p:output>
-
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
@@ -23,6 +15,13 @@
         </p:documentation>
         <p:pipe port="result" step="status"/>
     </p:output>
+
+    <p:option name="html-report" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h1 px:role="name">HTML Report</h1>
+            <p px:role="desc">An HTML-formatted version of the validation report.</p>
+        </p:documentation>
+    </p:option>
 
     <p:option name="dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -95,7 +94,6 @@
     </px:message>
 
     <px:nordic-dtbook-validate.step name="validate.dtbook" check-images="true" cx:depends-on="nordic-version-message">
-        <p:log port="in-memory.out" href="file:/tmp/dtbook-validate.output.xml"/>
         <p:with-option name="dtbook" select="$dtbook-href"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
@@ -136,7 +134,7 @@
                 <p:with-option name="temp-dir" select="concat($temp-dir,'html/')"/>
             </px:nordic-dtbook-to-html-convert>
             <p:sink/>
-            
+
             <p:choose>
                 <p:xpath-context>
                     <p:pipe port="result" step="status.dtbook"/>
@@ -321,7 +319,15 @@
             <p:document href="../xslt/pretty-print.xsl"/>
         </p:input>
     </p:xslt>
-    <p:identity name="html"/>
+    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
+        <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
+    </p:store>
+    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+        <p:with-option name="href" select="/*/text()">
+            <p:pipe port="result" step="store-report"/>
+        </p:with-option>
+    </pxi:set-doctype>
+    <p:sink/>
 
     <p:group name="status">
         <p:output port="result"/>
@@ -346,7 +352,7 @@
         <p:output port="title">
             <p:pipe port="result" step="metadata.title"/>
         </p:output>
-        <px:fileset-load media-types="application/x-dtbook+xml">
+        <px:fileset-load media-types="application/x-dtbook+xml" method="xml">
             <p:input port="fileset">
                 <p:pipe port="fileset.out" step="validate.dtbook"/>
             </p:input>

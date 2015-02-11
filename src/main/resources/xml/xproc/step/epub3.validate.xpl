@@ -141,7 +141,7 @@
         </p:otherwise>
     </p:choose>
 
-    <px:fileset-load media-types="application/oebps-package+xml">
+    <px:fileset-load media-types="application/oebps-package+xml" method="xml">
         <p:input port="fileset">
             <p:pipe port="fileset" step="unzip"/>
         </p:input>
@@ -430,7 +430,7 @@
             <p:input port="source">
                 <p:pipe port="report" step="opf-and-html.validate.schematron"/>
             </p:input>
-            <p:with-option name="document-name" select="'All content documents (HTML) and the package document (OPF)'"/>
+            <p:with-option name="document-name" select="'Cross-document references and metadata'"/>
         </px:combine-validation-reports>
     </p:group>
     <p:identity name="opf-and-html.validate"/>
@@ -482,7 +482,7 @@
             <p:input port="source">
                 <p:pipe port="report" step="nav-references.validate.schematron"/>
             </p:input>
-            <p:with-option name="document-name" select="'The navigation document (HTML) and references to all the headlines in the book'"/>
+            <p:with-option name="document-name" select="'References from the navigation document to the content documents'"/>
             <p:with-option name="document-path" select="base-uri(/*)">
                 <p:pipe port="result" step="nav"/>
             </p:with-option>

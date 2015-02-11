@@ -14,7 +14,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # The location of calabash and xprocspec can be changed in the variables below.
 
 CALABASH="`echo ~/xmlcalabash-1.0.18-95/calabash.jar`"
-XPROCSPEC="`echo ~/xprocspec/src/main/resources/content/xml/xproc/xprocspec.xpl`"
+XPROCSPEC="`echo ~/xprocspec/xprocspec/src/main/resources/content/xml/xproc/xprocspec.xpl`"
 TEMP_DIR="file:/tmp/"
 RESULT_DIR="$DIR/report/"
 
@@ -35,7 +35,7 @@ do
                 --output result="file:$RESULT_DIR/$FILENAME.result.xml" \
                 --output junit="file:$RESULT_DIR/$FILENAME.junit.xml" \
                 --config config-calabash.xml \
-                $XPROCSPEC
+                $XPROCSPEC 2>&1 | grep -v "unknown protocol: org" | grep -v "org.xmlresolver.CatalogSource parse"
     RESULT="`cat $RESULT_DIR/$FILENAME.junit.xml | tr '\n' ' ' | sed -e 's/^.*<testsuites//' | sed -e 's/>.*//'`"
     TESTS="`echo \"$RESULT\" | sed -e 's/.*tests=\"//' | sed -e 's/\".*//'`"
     FAILURES="`echo \"$RESULT\" | sed -e 's/.*failures=\"//' | sed -e 's/\".*//'`"
