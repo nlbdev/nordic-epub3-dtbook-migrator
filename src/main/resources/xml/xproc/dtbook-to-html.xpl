@@ -22,9 +22,11 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="library.xpl"/>
+    <p:import href="step/dtbook-to-html.convert.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
     <p:variable name="base" select="replace(base-uri(/),'[^/]*$','')"/>
     <p:variable name="href" select="replace(base-uri(/),'^.*/([^/]*)$','$1')"/>

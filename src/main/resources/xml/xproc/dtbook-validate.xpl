@@ -58,11 +58,10 @@
     <p:import href="step/dtbook.validate.xpl"/>
     <p:import href="step/format-html-report.step.xpl"/>
     <p:import href="step/set-doctype.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
-    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <!--<p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>-->
+    <!--<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>-->
 
     <px:message message="$1" name="nordic-version-message">
         <p:with-option name="param1" select="/*">

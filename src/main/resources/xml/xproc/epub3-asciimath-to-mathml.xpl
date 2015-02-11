@@ -38,7 +38,6 @@
 
     <p:import href="step/epub3-asciimath-to-mathml.convert.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
 

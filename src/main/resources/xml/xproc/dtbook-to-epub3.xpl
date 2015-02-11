@@ -76,12 +76,8 @@
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
     <p:variable name="dtbook-href" select="resolve-uri($dtbook,base-uri(/*))">
         <p:inline>

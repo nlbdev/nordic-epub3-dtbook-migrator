@@ -19,7 +19,6 @@
     <p:option name="compatibility-mode" select="'true'"/>
 
     <p:import href="html-split.split.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>

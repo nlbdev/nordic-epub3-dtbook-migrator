@@ -36,12 +36,10 @@
     <p:import href="html.validate.xpl"/>
     <p:import href="read-xml-declaration.xpl"/>
     <p:import href="read-doctype-declaration.xpl"/>
-    <p:import href="unzip-fileset.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -93,10 +91,10 @@
             </p:output>
             <px:fileset-filter media-types="application/epub+zip"/>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one EPUB in the fileset." error-code="NORDICDTBOOKEPUB021"/>
-            <pxi:unzip-fileset name="unzip.unzip" encode-as-base64="true">
+            <px:unzip-fileset name="unzip.unzip" encode-as-base64="true">
                 <p:with-option name="href" select="resolve-uri(/*/*/(@original-href,@href)[1],/*/*/base-uri(.))"/>
                 <p:with-option name="unzipped-basedir" select="$temp-dir"/>
-            </pxi:unzip-fileset>
+            </px:unzip-fileset>
 
             <!-- This is a workaround for a bug that should be fixed in Pipeline v1.8
                  see: https://github.com/daisy-consortium/pipeline-modules-common/pull/49 -->
