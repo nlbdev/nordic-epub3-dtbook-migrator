@@ -60,10 +60,10 @@
     </p:option>
 
     <!-- option supporting convert to DTBook 1.1.0 -->
-    <p:option name="dtbook2005" required="true" px:type="boolean">
+    <p:option name="dtbook2005" required="false" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">DTBook 2005</h2>
-            <p px:role="desc">Whether or not to convert the output to DTBook 2005. Set to false to convert to DTBook 1.1.0</p>
+            <p px:role="desc">Whether or not to keep the DTBook 2005-3 output or downgrade to DTBook 1.1.0. Set to false to convert to DTBook 1.1.0.</p>
         </p:documentation>
     </p:option>
 
