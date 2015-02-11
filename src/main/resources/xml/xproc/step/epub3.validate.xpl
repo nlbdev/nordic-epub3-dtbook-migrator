@@ -36,10 +36,10 @@
     <p:import href="html.validate.xpl"/>
     <p:import href="read-xml-declaration.xpl"/>
     <p:import href="read-doctype-declaration.xpl"/>
-    <p:import href="unzip-fileset.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -91,10 +91,10 @@
             </p:output>
             <px:fileset-filter media-types="application/epub+zip"/>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one EPUB in the fileset." error-code="NORDICDTBOOKEPUB021"/>
-            <pxi:unzip-fileset name="unzip.unzip" encode-as-base64="true">
+            <px:unzip-fileset name="unzip.unzip" encode-as-base64="true">
                 <p:with-option name="href" select="resolve-uri(/*/*/(@original-href,@href)[1],/*/*/base-uri(.))"/>
                 <p:with-option name="unzipped-basedir" select="$temp-dir"/>
-            </pxi:unzip-fileset>
+            </px:unzip-fileset>
 
             <!-- This is a workaround for a bug that should be fixed in Pipeline v1.8
                  see: https://github.com/daisy-consortium/pipeline-modules-common/pull/49 -->
@@ -141,14 +141,14 @@
         </p:otherwise>
     </p:choose>
 
-    <px:fileset-load media-types="application/oebps-package+xml" method="xml">
+    <pxi:fileset-load media-types="application/oebps-package+xml" method="xml">
         <p:input port="fileset">
             <p:pipe port="fileset" step="unzip"/>
         </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory" step="unzip"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
     <p:identity name="opf"/>
     <p:sink/>
@@ -165,11 +165,11 @@
             <p:document href="../../xslt/opf-to-spine-fileset.xsl"/>
         </p:input>
     </p:xslt>
-    <px:fileset-load media-types="application/xhtml+xml">
+    <pxi:fileset-load media-types="application/xhtml+xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory" step="unzip"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <px:assert test-count-min="1" message="There must be a HTML file in the spine." error-code="NORDICDTBOOKEPUB005"/>
     <p:identity name="html"/>
     <p:sink/>
@@ -180,11 +180,11 @@
         </p:input>
     </px:fileset-filter>
     <p:delete match="/*/*[not(ends-with(@href,'nav.xhtml'))]"/>
-    <px:fileset-load>
+    <pxi:fileset-load>
         <p:input port="in-memory">
             <p:pipe port="in-memory" step="unzip"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There is no navigation document with the filename 'nav.xhtml' in the EPUB" error-code="NORDICDTBOOKEPUB013"/>
     <p:identity name="nav"/>
     <p:sink/>
@@ -497,11 +497,11 @@
         </p:input>
     </px:fileset-filter>
     <p:delete match="/*/*[ends-with(@href,'nav.xhtml')]"/>
-    <px:fileset-load>
+    <pxi:fileset-load>
         <p:input port="in-memory">
             <p:pipe port="in-memory" step="unzip"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <p:wrap-sequence wrapper="wrapper"/>
     <p:xslt>
         <p:input port="parameters">

@@ -33,8 +33,7 @@
     <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.opf-and-html.sch" uri="../xml/schema/nordic2015-1.opf-and-html.sch"/>
     <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.nav-references.sch" uri="../xml/schema/nordic2015-1.nav-references.sch"/>
 
-    <!-- TODO: This XSLT will be included in Pipeline 2 from v1.8 onwards. Until then, we keep a copy of it in this repo as well. -->
-    <uri name="http://www.daisy.org/pipeline/modules/common-utils/deep-level-grouping.xsl" uri="../xml/xslt/deep-level-grouping.xsl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/xslt/deep-level-grouping.xsl" uri="../xml/xslt/deep-level-grouping.xsl"/>
 
     <nextCatalog catalog="org:daisy:pipeline:modules:epub3-nav-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils"/>

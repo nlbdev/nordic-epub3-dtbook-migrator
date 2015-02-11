@@ -15,6 +15,8 @@
 
     <p:option name="temp-dir" required="true"/>
 
+    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -26,11 +28,11 @@
         </p:inline>
     </p:variable>
 
-    <px:fileset-load media-types="application/x-dtbook+xml">
+    <pxi:fileset-load media-types="application/x-dtbook+xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <px:assert test-count-max="1" message="There are multiple DTBooks in the fileset; only the first one will be converted."/>
     <px:assert test-count-min="1" message="There must be a DTBook file in the fileset." error-code="NORDICDTBOOKEPUB004"/>
     <p:split-sequence initial-only="true" test="position()=1"/>
@@ -124,23 +126,23 @@
     <px:fileset-create>
         <p:with-option name="base" select="$temp-dir"/>
     </px:fileset-create>
-    <px:fileset-add-entry media-type="text/css" href="css/accessibility.css"/>
-    <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Regular.otf"/>
-    <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Italic.otf"/>
-    <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Bold.otf"/>
-    <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf"/>
-    <px:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"/>
-    <px:fileset-add-entry media-type="text/plain" href="css/fonts/opendyslexic/LICENSE.txt"/>
+    <pxi:fileset-add-entry media-type="text/css" href="css/accessibility.css"/>
+    <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Regular.otf"/>
+    <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Italic.otf"/>
+    <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Bold.otf"/>
+    <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf"/>
+    <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"/>
+    <pxi:fileset-add-entry media-type="text/plain" href="css/fonts/opendyslexic/LICENSE.txt"/>
     <p:viewport match="/*/*">
         <p:add-attribute match="/*" attribute-name="original-href">
             <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri(/*))"/>
         </p:add-attribute>
     </p:viewport>
-    <px:fileset-add-entry media-type="application/xhtml+xml">
+    <pxi:fileset-add-entry media-type="application/xhtml+xml">
         <p:with-option name="href" select="base-uri(/*)">
             <p:pipe port="result" step="result.in-memory"/>
         </p:with-option>
-    </px:fileset-add-entry>
+    </pxi:fileset-add-entry>
     <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="omit-xml-declaration" attribute-value="false"/>
     <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="version" attribute-value="1.0"/>
     <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="encoding" attribute-value="utf-8"/>

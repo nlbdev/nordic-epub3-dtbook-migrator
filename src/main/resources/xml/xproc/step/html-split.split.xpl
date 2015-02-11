@@ -14,14 +14,16 @@
         <p:pipe port="result" step="in-memory.resources"/>
     </p:output>
 
+    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <px:fileset-load media-types="application/xhtml+xml">
+    <pxi:fileset-load media-types="application/xhtml+xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one HTML file in the fileset." error-code="NORDICDTBOOKEPUB006"/>
     <p:identity name="html"/>
 
@@ -65,9 +67,9 @@
         <px:fileset-create>
             <p:with-option name="base" select="replace($base,'[^/]+$','')"/>
         </px:fileset-create>
-        <px:fileset-add-entry media-type="application/xhtml+xml">
+        <pxi:fileset-add-entry media-type="application/xhtml+xml">
             <p:with-option name="href" select="replace($base,'^.*/([^/]+)$','$1')"/>
-        </px:fileset-add-entry>
+        </pxi:fileset-add-entry>
         <p:add-attribute match="//d:file" attribute-name="omit-xml-declaration" attribute-value="false"/>
         <p:add-attribute match="//d:file" attribute-name="version" attribute-value="1.0"/>
         <p:add-attribute match="//d:file" attribute-name="encoding" attribute-value="utf-8"/>
@@ -78,14 +80,14 @@
     </p:for-each>
     <p:identity name="in-memory.html"/>
 
-    <px:fileset-load not-media-types="application/xhtml+xml" load-if-not-in-memory="false">
+    <pxi:fileset-load not-media-types="application/xhtml+xml" load-if-not-in-memory="false">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <p:identity name="in-memory.resources"/>
 
     <px:fileset-filter not-media-types="application/xhtml+xml">
