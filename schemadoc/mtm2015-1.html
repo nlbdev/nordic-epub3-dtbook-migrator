@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta charset="utf-8" />
+      <title>DTBook 2005 Schematron tests for TPB 2010-1 rules</title>
+      <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" />
+   </head>
+   <body>
+      <div class="container">
+         <h1>DTBook 2005 Schematron tests for TPB 2010-1 rules</h1>
+         <table class="table">
+            <thead>
+               <tr>
+                  <th>Rule ID</th>
+                  <th>Rule description</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td><code>tpb07</code></td>
+                  <td> Lists are not allowed inside paragraphs.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb07</code></td>
+                  <td> Definition lists are not allowed inside paragraphs.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb08</code></td>
+                  <td>&lt;pagenum page="front"/&gt; may only occur in &lt;frontmatter/&gt;</td>
+               </tr>
+               <tr>
+                  <td><code>tpb09</code></td>
+                  <td> Element may not be empty</td>
+               </tr>
+               <tr>
+                  <td><code>tpb10</code></td>
+                  <td> Meta dc:Language must occur at least once</td>
+               </tr>
+               <tr>
+                  <td><code>tpb10</code></td>
+                  <td> Meta dc:Date=YYYY-MM-DD must occur once</td>
+               </tr>
+               <tr>
+                  <td><code>tpb10</code></td>
+                  <td> Meta dc:Date must have format YYYY-MM-DD</td>
+               </tr>
+               <tr>
+                  <td><code>tpb10</code></td>
+                  <td> Meta dc:Publisher must occur once</td>
+               </tr>
+               <tr>
+                  <td><code>tpb11</code></td>
+                  <td> Root element must have an xml:lang attribute</td>
+               </tr>
+               <tr>
+                  <td><code>tpb12a</code></td>
+                  <td> Frontmatter must begin with a doctitle element</td>
+               </tr>
+               <tr>
+                  <td><code>tpb12b</code></td>
+                  <td> Docauthor may only be preceded by doctitle</td>
+               </tr>
+               <tr>
+                  <td><code>tpb13</code></td>
+                  <td> A document must have frontmatter</td>
+               </tr>
+               <tr>
+                  <td><code>tpb13</code></td>
+                  <td> A document must have bodymatter</td>
+               </tr>
+               <tr>
+                  <td><code>tpb14a</code></td>
+                  <td> level1 with no h1 when level2 is present</td>
+               </tr>
+               <tr>
+                  <td><code>tpb14b</code></td>
+                  <td> level2 with no h2 when level3 is present</td>
+               </tr>
+               <tr>
+                  <td><code>tpb14c</code></td>
+                  <td> level3 with no h3 when level4 is present</td>
+               </tr>
+               <tr>
+                  <td><code>tpb14d</code></td>
+                  <td> level4 with no h4 when level5 is present</td>
+               </tr>
+               <tr>
+                  <td><code>tpb14e</code></td>
+                  <td> level5 with no h5 when level6 is present</td>
+               </tr>
+               <tr>
+                  <td><code>tpb14f</code></td>
+                  <td> level with no hd when level is present</td>
+               </tr>
+               <tr>
+                  <td><code>tpb18</code></td>
+                  <td> Element level is not allowed</td>
+               </tr>
+               <tr>
+                  <td><code>tpb20</code></td>
+                  <td> Image groups are not allowed in inline context</td>
+               </tr>
+               <tr>
+                  <td><code>tpb21</code></td>
+                  <td> Nested tables are not allowed</td>
+               </tr>
+               <tr>
+                  <td><code>tpb23</code></td>
+                  <td> pagenum[@page='normal'] values must increase</td>
+               </tr>
+               <tr>
+                  <td><code>tpb24</code></td>
+                  <td> pagenum[@page='front'] values must be unique</td>
+               </tr>
+               <tr>
+                  <td><code>tpb26</code></td>
+                  <td> Each note must have at least one noteref</td>
+               </tr>
+               <tr>
+                  <td><code>tpb27</code></td>
+                  <td> Each annotation must have at least one annoref</td>
+               </tr>
+               <tr>
+                  <td><code>tpb29</code></td>
+                  <td> Block element ... used in inline context</td>
+               </tr>
+               <tr>
+                  <td><code>tpb29</code></td>
+                  <td> Block element as sibling to inline element</td>
+               </tr>
+               <tr>
+                  <td><code>tpb29</code></td>
+                  <td> Block element ... as sibling to inline element</td>
+               </tr>
+               <tr>
+                  <td><code>tpb29</code></td>
+                  <td> Prodnote in inline context used as block element</td>
+               </tr>
+               <tr>
+                  <td><code>tpb40</code></td>
+                  <td> No gaps may occur in page numbering</td>
+               </tr>
+               <tr>
+                  <td><code>tpb43</code></td>
+                  <td> Meta dc:Publisher must exist and have value 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB',
+                     'Celia' or 'SBS'.
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>tpb50</code></td>
+                  <td> an image in swedish language context must have attribute alt="illustration"</td>
+               </tr>
+               <tr>
+                  <td><code>tpb50</code></td>
+                  <td> an image in english language context must have attribute alt="image"</td>
+               </tr>
+               <tr>
+                  <td><code>tpb52</code></td>
+                  <td> Images must have the .jpg file extension.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb52</code></td>
+                  <td> Images must have a base name, not just an extension.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb51</code></td>
+                  <td> Images must be in the same folder as the DTBook file.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb52</code></td>
+                  <td> Image file name
+                     contains an illegal character (must be -_a-zA-Z0-9).
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>tpb59</code></td>
+                  <td> pagenum in definition list must occur between dd and dt</td>
+               </tr>
+               <tr>
+                  <td><code>tpb63</code></td>
+                  <td> Only note references within the same document are allowed</td>
+               </tr>
+               <tr>
+                  <td><code>tpb64</code></td>
+                  <td> Only annotation references within the same document are allowed</td>
+               </tr>
+               <tr>
+                  <td><code>tpb67a</code></td>
+                  <td> doctitle is only allowed in frontmatter</td>
+               </tr>
+               <tr>
+                  <td><code>tpb67b</code></td>
+                  <td> docauthor is only allowed in frontmatter</td>
+               </tr>
+               <tr>
+                  <td><code>tpb68</code></td>
+                  <td> smilref attributes in a plain DTBook file is not allowed</td>
+               </tr>
+               <tr>
+                  <td><code>tpb72</code></td>
+                  <td> DTBook version must be 2005-3.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb93</code></td>
+                  <td> element ... may not have leading whitespace</td>
+               </tr>
+               <tr>
+                  <td><code>tpb93</code></td>
+                  <td> element ... may not
+                     have trailing whitespace
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>tpb96a</code></td>
+                  <td> nested production notes are not allowed</td>
+               </tr>
+               <tr>
+                  <td><code>tpb96b</code></td>
+                  <td> nested image groups are not allowed</td>
+               </tr>
+               <tr>
+                  <td><code>tpb101</code></td>
+                  <td> There must be an img element in every imggroup</td>
+               </tr>
+               <tr>
+                  <td><code>tpb103</code></td>
+                  <td> There must be an imggroup element wrapping every img</td>
+               </tr>
+               <tr>
+                  <td><code>tpb104</code></td>
+                  <td> Heading ... may not be empty</td>
+               </tr>
+               <tr>
+                  <td><code>tpb105</code></td>
+                  <td> Page attribute must appear on pagenum elements</td>
+               </tr>
+               <tr>
+                  <td><code>tpb110</code></td>
+                  <td> pagenum elements are not
+                     allowed in headings
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>tpb116</code></td>
+                  <td> Arabic numbers in page="front" are not allowed</td>
+               </tr>
+               <tr>
+                  <td><code>tpb120</code></td>
+                  <td> Only pagenum elements are allowed before the heading ....</td>
+               </tr>
+               <tr>
+                  <td><code>tpb121</code></td>
+                  <td> Page numbers in tables must be placed between table rows.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb123</code></td>
+                  <td> Jacket copy must be in frontmatter</td>
+               </tr>
+               <tr>
+                  <td><code>tpb123</code></td>
+                  <td> Jacket copy must follow immediately after docauthor or
+                     doctitle
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>tpb123</code></td>
+                  <td> Colophon is not allowed in bodymatter</td>
+               </tr>
+               <tr>
+                  <td><code>tpb124</code></td>
+                  <td> All documents must contain page numbers</td>
+               </tr>
+               <tr>
+                  <td><code>tpb125</code></td>
+                  <td> Invalid image filename.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb125</code></td>
+                  <td> Images must be in JPG (*.jpg) format.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb126</code></td>
+                  <td> pagenum must not occur directly after hx unless the hx is preceded by a pagenum</td>
+               </tr>
+               <tr>
+                  <td><code>tpb127</code></td>
+                  <td> Table of contents (&lt;list class="toc"&gt;)must be inside a level1</td>
+               </tr>
+               <tr>
+                  <td><code>tpb127</code></td>
+                  <td> Nested lists in table of contents must not have a 'toc' attribute</td>
+               </tr>
+               <tr>
+                  <td><code>tpb128</code></td>
+                  <td> track:Guidelines metadata must occur once.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb128</code></td>
+                  <td> track:Guidelines metadata value must be 2011-1, 2011-2 or 2015-1.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb129</code></td>
+                  <td> Class attribute of &lt;p&gt; must be one (or more) of
+                     'precedingemptyline', 'precedingseparator', 'indented' or 'asciimath'
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>tpb130</code></td>
+                  <td> dc:Language metadata must equal the root element xml:lang</td>
+               </tr>
+               <tr>
+                  <td><code>tpb131</code></td>
+                  <td> xml:lang must match '^[a-z][a-z](-[A-Z][A-Z]+)?$'</td>
+               </tr>
+               <tr>
+                  <td><code>tpb133</code></td>
+                  <td> Element ... is disallowed</td>
+               </tr>
+               <tr>
+                  <td><code>tpb134a</code></td>
+                  <td> Attribute 'class' is not allowed on the ... element</td>
+               </tr>
+               <tr>
+                  <td><code>tpb134b</code></td>
+                  <td> Attribute 'class' is not allowed on the ... element</td>
+               </tr>
+               <tr>
+                  <td><code>tpb134c</code></td>
+                  <td> Attribute 'scheme' is not allowed on the ... element</td>
+               </tr>
+               <tr>
+                  <td><code>tpb134c</code></td>
+                  <td> Attribute 'http-equiv' is not allowed on the ... element</td>
+               </tr>
+               <tr>
+                  <td><code>tpb135a</code></td>
+                  <td> Element ... is only allowed in poem context</td>
+               </tr>
+               <tr>
+                  <td><code>tpb135b</code></td>
+                  <td> Every poem must contain a linegroup</td>
+               </tr>
+               <tr>
+                  <td><code>tpb135b</code></td>
+                  <td> Poem lines must be wrapped in a linegroup</td>
+               </tr>
+               <tr>
+                  <td><code>tpb136</code></td>
+                  <td> Lists must be of type 'pl' (with any bullets or numbers in the text node)</td>
+               </tr>
+               <tr>
+                  <td><code>tpb137</code></td>
+                  <td> Swedish description of unnumbered page used in english context</td>
+               </tr>
+               <tr>
+                  <td><code>tpb137</code></td>
+                  <td> English description of unnumbered page used in swedish context</td>
+               </tr>
+               <tr>
+                  <td><code>tpb140</code></td>
+                  <td> Only prodnote allowed in jacket copy</td>
+               </tr>
+               <tr>
+                  <td><code>tpb140</code></td>
+                  <td> There must be at least one prodnote in jacket copy</td>
+               </tr>
+               <tr>
+                  <td><code>tpb140</code></td>
+                  <td> Too many prodnotes with @class='frontcover' in jacket copy</td>
+               </tr>
+               <tr>
+                  <td><code>tpb140</code></td>
+                  <td> Too many prodnotes with @class='rearcover' in jacket copy</td>
+               </tr>
+               <tr>
+                  <td><code>tpb140</code></td>
+                  <td> Too many prodnotes with @class='leftflap' in jacket copy</td>
+               </tr>
+               <tr>
+                  <td><code>tpb140</code></td>
+                  <td> Too many prodnotes with @class='rightflap' in jacket copy</td>
+               </tr>
+               <tr>
+                  <td><code>tpb141</code></td>
+                  <td> prodnote in jacket copy must have a class attribute with one of
+                     'frontcover', 'rearcover', 'leftflap' or 'rightflap'
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>tpb142</code></td>
+                  <td> Only @page='special' is allowed in level1/@class='nonstandardpagination'</td>
+               </tr>
+               <tr>
+                  <td><code>tpb143</code></td>
+                  <td> pagenum is not allowed last in a list</td>
+               </tr>
+            </tbody>
+         </table><br /><footer><em>Last updated: 2015-02-11 15:44:21</em></footer><br /><br /><br /></div>
+   </body>
+</html>

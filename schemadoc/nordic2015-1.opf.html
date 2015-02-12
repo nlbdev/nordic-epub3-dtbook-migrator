@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta charset="utf-8" />
+      <title>Nordic EPUB3 Package Document rules</title>
+      <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" />
+   </head>
+   <body>
+      <div class="container">
+         <h1>Nordic EPUB3 Package Document rules</h1>
+         <table class="table">
+            <thead>
+               <tr>
+                  <th>Rule ID</th>
+                  <th>Rule description</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td><code>opf1</code></td>
+                  <td> the OPF file must have the extension .opf</td>
+               </tr>
+               <tr>
+                  <td><code>opf1</code></td>
+                  <td> the filename of the OPF must be package.opf</td>
+               </tr>
+               <tr>
+                  <td><code>opf1</code></td>
+                  <td> the OPF must be contained in a folder named EPUB</td>
+               </tr>
+               <tr>
+                  <td><code>opf2</code></td>
+                  <td> the version attribute must be 3.0</td>
+               </tr>
+               <tr>
+                  <td><code>opf2</code></td>
+                  <td> on the package element; the unique-identifier-attribute must be present and equal
+                     'pub-identifier'
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf2</code></td>
+                  <td> on the package element; the dublin core namespace (xmlns:dc="http://purl.org/dc/elements/1.1/")
+                     must be declared on the package element
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf2</code></td>
+                  <td> on the package element; the prefix attribute must declare the nordic metadata namespace
+                     (prefix="nordic:
+                     http://www.mtm.se/epub/")
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3a</code></td>
+                  <td> there must be exactly one dc:identifier element</td>
+               </tr>
+               <tr>
+                  <td><code>opf3a</code></td>
+                  <td> the id of the dc:identifier must equal the value of the package elements unique-identifier
+                     attribute
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3a</code></td>
+                  <td> The identifier ("...") must start with a upper- or
+                     lower-case letter (A-Z or a-z), or a digit (0-9).
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3a</code></td>
+                  <td> The identifier ("...") must end with a upper- or
+                     lower-case letter (A-Z or a-z), or a digit (0-9).
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3a</code></td>
+                  <td> The identifier ("...") must only contain upper-
+                     or lower-case letters (A-Z or a-z), digits (0-9), dashes (-) and underscores (_).
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3b</code></td>
+                  <td> exactly one dc:title ... must be
+                     present in the package document.
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3c</code></td>
+                  <td> exactly one dc:language ... must be present in the package document.</td>
+               </tr>
+               <tr>
+                  <td><code>opf3c</code></td>
+                  <td> the language code ("...") must be either a "two-letter lower case" code or a "two-letter lower case + hyphen
+                     + two-letter upper case" code.
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3d</code></td>
+                  <td> exactly one dc:date ... must be
+                     present
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3d</code></td>
+                  <td> the dc:date (...) must be of the format
+                     YYYY-MM-DD (year-month-day)
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3e</code></td>
+                  <td> exactly one dc:publisher ... must be present</td>
+               </tr>
+               <tr>
+                  <td><code>opf3e</code></td>
+                  <td> the dc:publisher cannot be empty</td>
+               </tr>
+               <tr>
+                  <td><code>opf3f</code></td>
+                  <td> exactly one last modified date ... must be present</td>
+               </tr>
+               <tr>
+                  <td><code>opf3f</code></td>
+                  <td> the last modified date (...) must use UTC time and be on the form "CCYY-MM-DDThh:mm:ssZ"
+                     (year-month-date "T" hour:minute:second "Z")
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3g</code></td>
+                  <td> at least dc:creator (i.e. book author) ... must be present</td>
+               </tr>
+               <tr>
+                  <td><code>opf3h</code></td>
+                  <td> exactly one dc:source ... must
+                     be present
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3h</code></td>
+                  <td> the dc:source ("...") must
+                     start with 'urn:isbn:'
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3h</code></td>
+                  <td> the ISBN in dc:source ("...")
+                     can only contain numbers and hyphens (except for the 'urn:isbn:' prefix)
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf3i</code></td>
+                  <td> there must be exactly one meta element with the property "nordic:guidelines" ...</td>
+               </tr>
+               <tr>
+                  <td><code>opf3i</code></td>
+                  <td> the value of nordic:guidelines must be '2015-1'</td>
+               </tr>
+               <tr>
+                  <td><code>opf3j</code></td>
+                  <td> there must be exactly one meta element with the property "nordic:supplier" ...</td>
+               </tr>
+               <tr>
+                  <td><code>opf4</code></td>
+                  <td> all EPUB3 meta elements ... must have an equivalent OPF2 meta element (&lt;meta name="..." content="..."/&gt;)</td>
+               </tr>
+               <tr>
+                  <td><code>opf4</code></td>
+                  <td> the value of the EPUB3 meta elements must equal their equivalent OPF2 meta elements.
+                     The
+                     EPUB3 meta element is ... while the OPF2 element is ...
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf5a</code></td>
+                  <td> a NCX must be present in the manifest (media-type="application/x-dtbncx+xml")</td>
+               </tr>
+               <tr>
+                  <td><code>opf5b</code></td>
+                  <td> the NCX must be located in the same directory as the package document, and must be
+                     named "nav.ncx" (not "...")
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf6</code></td>
+                  <td> the toc attribute must be present</td>
+               </tr>
+               <tr>
+                  <td><code>opf6</code></td>
+                  <td> the toc attribute must refer to an item in the manifest</td>
+               </tr>
+               <tr>
+                  <td><code>opf7</code></td>
+                  <td> the Navigation Document must be located in the same directory as the package document,
+                     and must be named 'nav.xhtml' (not "...")
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf8</code></td>
+                  <td> all images must be stored in the "images" directory (which is a subdirectory relative
+                     to the package document). The image file
+                     "..." is located in "...".
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf9</code></td>
+                  <td> all content files must be located in the same directory as the package document.
+                     The content file file "..." is located in "...".
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf10</code></td>
+                  <td> Cover must be marked as secondary in the spine (i.e. set linear="no" on the itemref
+                     with idref="...", which refers to the
+                     cover)
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf11</code></td>
+                  <td> Rearnotes must be marked as secondary in the spine (i.e. set linear="no" on the itemref
+                     with idref="..., which refers to the
+                     rearnote)
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf12a</code></td>
+                  <td> The content document "..." has a bad filename. Content documents must match the
+                     "[dc:identifier]-[position in spine]-[epub:type].xhtml" file naming convention. Example:
+                     "DTB123-01-cover.xhtml". The identifier are allowed to contain the upper- and lower-case
+                     characters A-Z and a-z as well as digits (0-9), dashes (-) and underscores (_). The
+                     position is a positive whole number consisting of the digits 0-9. The epub:type must
+                     be all
+                     lower-case characters (a-z) and can contain a dash (-). An optional positive whole
+                     number (digits 0-9) can be added after the epub:type to be able to easily tell different
+                     files with
+                     the same epub:type apart. For instance: "DTB123-13-chapter-7.xhtml".
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf12b_identifier</code></td>
+                  <td> The "identifier" part of the filename ("...") must be the same as
+                     declared in metadata, i.e.: "...".
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf12b_type</code></td>
+                  <td> "..." is not a valid type. ... The filename of content documents must end with a epub:type defined in either the
+                     EPUB3 Structural Semantics Vocabulary (http://www.idpf.org/epub/vocab/structure/#)
+                     or the
+                     Z39.39-2012 Structural Semantics Vocabulary (http://www.daisy.org/z3998/2012/vocab/structure/).
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf12b_position</code></td>
+                  <td> The numbering of the content documents must all have the equal number of digits.</td>
+               </tr>
+               <tr>
+                  <td><code>opf12b_position</code></td>
+                  <td> The numbering of the content documents must be unique for each content document.
+                     ... is also used by another content document in the
+                     OPF.
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf12b_position</code></td>
+                  <td> The numbering of the content documents must start at 1 and increase with 1 for each
+                     item.
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf12b_position</code></td>
+                  <td> The ...... itemref (&lt;iremref id="..." href="..."&gt;) should refer to &lt;item href="..."&gt;.</td>
+               </tr>
+               <tr>
+                  <td><code>opf13</code></td>
+                  <td> the Navigation Document must be identified with the attribute properties="nav" in
+                     the OPF manifest. It currently ...
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf14</code></td>
+                  <td> the Navigation Document must not be present in the OPF spine
+                     (itemref with idref="...").
+                  </td>
+               </tr>
+            </tbody>
+         </table><br /><footer><em>Last updated: 2015-02-11 15:44:19</em></footer><br /><br /><br /></div>
+   </body>
+</html>

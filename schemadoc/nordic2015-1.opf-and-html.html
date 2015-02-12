@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta charset="utf-8" />
+      <title>Nordic EPUB3 Package Document and Content Document cross-reference rules</title>
+      <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" />
+   </head>
+   <body>
+      <div class="container">
+         <h1>Nordic EPUB3 Package Document and Content Document cross-reference rules</h1>
+         <table class="table">
+            <thead>
+               <tr>
+                  <th>Rule ID</th>
+                  <th>Rule description</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td><code>nordic_opf_and_html_1</code></td>
+                  <td> id attributes must be unique; ... in ... also exists
+                     in ...
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_opf_and_html_13a</code></td>
+                  <td> There must be at least one frontmatter or
+                     cover document
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_opf_and_html_13a</code></td>
+                  <td> There must be at least one bodymatter
+                     document
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_opf_and_html_40b</code></td>
+                  <td> No gaps may occur in page numbering (see pagebreak with title="..."
+                     in ... and compare with pagebreak with title="..." in ...)
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_opf_and_html_23</code></td>
+                  <td> pagebreak values must increase for pagebreaks with class="page-normal" (see pagebreak
+                     with
+                     title="..." in ... and compare with pagebreak with title="... in
+                     ...)
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_opf_and_html_24</code></td>
+                  <td> pagebreak values must
+                     be unique for pagebreaks with class="page-front" (see pagebreak with title="..." in ...)
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_opf_and_html_26</code></td>
+                  <td> Each note must have at least one &lt;a
+                     epub:type="noteref" ...&gt; referencing it: ... (in
+                     ...)
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_opf_and_html_27</code></td>
+                  <td> Each annotation must have at least one &lt;a
+                     epub:type="annoref" ...&gt; referencing it: ... (in
+                     ...)
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_opf_and_html_28</code></td>
+                  <td> The HTML title element in ...
+                     must contain the same text as the dc:title element in the OPF metadata. The HTML title
+                     element contains "..." while the dc:title element in the OPF contains
+                     "...".
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_opf_and_html_28</code></td>
+                  <td> The HTML meta element in ... with dc:identifier must have as content the same as the OPF publication dc:identifier.
+                     The OPF dc:identifier is "..." while the HTML dc:identifier is "...".
+                  </td>
+               </tr>
+            </tbody>
+         </table><br /><footer><em>Last updated: 2015-02-11 15:44:20</em></footer><br /><br /><br /></div>
+   </body>
+</html>
