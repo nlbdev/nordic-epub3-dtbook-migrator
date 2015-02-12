@@ -22,8 +22,9 @@
     </p:output>
     <p:output port="report.out" sequence="true">
         <p:pipe port="report.in" step="main"/>
-        <p:pipe port="result" step="xml-declaration.validate"/>
         <p:pipe port="result" step="epubcheck.validate"/>
+        <p:pipe port="result" step="epub-filename.validate"/>
+        <p:pipe port="result" step="xml-declaration.validate"/>
         <p:pipe port="result" step="opf.validate"/>
         <p:pipe port="result" step="html.validate"/>
         <p:pipe port="result" step="nav-references.validate"/>
@@ -213,6 +214,64 @@
         </p:with-option>
     </px:combine-validation-reports>
     <p:identity name="opf.validate"/>
+    <p:sink/>
+
+    <p:choose>
+        <p:xpath-context>
+            <p:pipe port="fileset.in" step="main"/>
+        </p:xpath-context>
+        <p:when test="/*/d:file[@media-type='application/epub+zip']">
+            <p:variable name="opf-identifier" select="/opf:package/opf:metadata/dc:identifier[not(@refines)][1]/text()">
+                <p:pipe port="result" step="opf"/>
+            </p:variable>
+            <p:variable name="epub-filename" select="(/*/d:file[@media-type='application/epub+zip'])[1]/@href">
+                <p:pipe port="fileset.in" step="main"/>
+            </p:variable>
+            <p:variable name="error-count" select="if ($epub-filename = concat($opf-identifier,'.epub')) then 0 else 1"/>
+            <p:in-scope-names name="vars"/>
+            <p:template>
+                <p:input port="source">
+                    <p:empty/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:pipe port="result" step="vars"/>
+                </p:input>
+                <p:input port="template">
+                    <p:inline>
+                        <d:document-validation-report>
+                            <d:document-info>
+                                <d:document-name>{$epub-filename}</d:document-name>
+                                <d:document-type>Nordic EPUB3 Filename</d:document-type>
+                                <d:error-count>{$error-count}</d:error-count>
+                            </d:document-info>
+                            <d:reports>
+                                <d:report type="filecheck">
+                                    <d:message severity="{if ($error-count=0) then 'info' else 'error'}" type="file-not-wellformed">
+                                        <d:desc xml:space="preserve">{concat('The EPUB filename (',replace($epub-filename,'.epub$',''),') ',if ($error-count=0) then 'matches' else 'does not match',' the identifier in the package document (',$opf-identifier,')')}</d:desc>
+                                        <d:location>{$epub-filename}</d:location>
+                                        <d:expected>{$opf-identifier}.epub</d:expected>
+                                        <d:was>{$epub-filename}</d:was>
+                                    </d:message>
+                                </d:report>
+                            </d:reports>
+                        </d:document-validation-report>
+                    </p:inline>
+                </p:input>
+            </p:template>
+            <px:message severity="DEBUG" message="Input EPUB is zipped; filename is $1">
+                <p:with-option name="param1" select="if ($error-count=1) then 'valid' else 'invalid'"/>
+            </px:message>
+        </p:when>
+        <p:otherwise>
+            <p:identity>
+                <p:input port="source">
+                    <p:empty/>
+                </p:input>
+            </p:identity>
+            <px:message severity="DEBUG" message="Input EPUB is not zipped; unable to perform filename validation"/>
+        </p:otherwise>
+    </p:choose>
+    <p:identity name="epub-filename.validate"/>
     <p:sink/>
 
     <p:for-each>
