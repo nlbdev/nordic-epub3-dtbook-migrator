@@ -1465,22 +1465,16 @@
                     <dtbook:img src="img.jpg" id="img3"/>
                 </dtbook:imggroup>
             </x:context>
-            <x:expect label="the text nodes should be wrapped in p elements">
+            <x:expect label="the text nodes should remain as text nodes">
                 <html:figure id="..." class="image">
                     <html:img src="images/img.jpg" id="img1" alt="image"/>
-                    <html:figcaption id="caption1">
-                        <html:p>TEXT</html:p>
-                    </html:figcaption>
+                    <html:figcaption id="caption1">TEXT</html:figcaption>
                 </html:figure>
                 <html:figure id="..." class="image-series">
-                    <html:figcaption id="caption2">
-                        <html:p>TEXT</html:p>
-                    </html:figcaption>
+                    <html:figcaption id="caption2">TEXT</html:figcaption>
                     <html:figure class="image">
                         <html:img src="images/img.jpg" id="img2" alt="image"/>
-                        <html:figcaption id="caption3">
-                            <html:p>TEXT</html:p>
-                        </html:figcaption>
+                        <html:figcaption id="caption3">TEXT</html:figcaption>
                     </html:figure>
                     <html:figure class="image">
                         <html:img src="images/img.jpg" id="img3" alt="image"/>
