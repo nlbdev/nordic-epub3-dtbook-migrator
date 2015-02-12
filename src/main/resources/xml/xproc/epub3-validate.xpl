@@ -79,8 +79,8 @@
 
     <px:nordic-format-html-report.step name="html">
         <p:input port="source">
-            <p:pipe port="result" step="report.nordic"/>
             <p:pipe port="report.out" step="validate.nordic"/>
+            <p:pipe port="result" step="report.nordic"/>
         </p:input>
     </px:nordic-format-html-report.step>
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
