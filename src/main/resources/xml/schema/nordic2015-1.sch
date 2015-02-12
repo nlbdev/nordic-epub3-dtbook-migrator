@@ -561,8 +561,8 @@
 
     <!-- Rule 203: Check that both the epub:types "rearnote" and "rearnotes" are used in rearnotes -->
     <pattern id="epub_nordic_203_a">
-        <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='rearnote']">
-            <assert test="ancestor::html:section[tokenize(@epub:type,'\s+')='rearnotes']">[nordic203a] 'rearnote' must have a section<value-of
+        <rule context="html:*[tokenize(@epub:type,'\s+')='rearnote']">
+            <assert test="(ancestor::html:section | ancestor::html:body)[tokenize(@epub:type,'\s+')='rearnotes']">[nordic203a] 'rearnote' must have a section<value-of
                     select="if (ancestor::html:body[html:section]) then '' else ' or body'"/> ancestor with 'rearnotes': <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
