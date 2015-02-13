@@ -13,7 +13,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="result" step="status"/>
+        <p:pipe port="status.out" step="epub3-validate"/>
     </p:output>
 
     <p:option name="html-report" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
@@ -67,17 +67,16 @@
     </p:option>
 
     <p:import href="step/dtbook-validate.step.xpl"/>
-    <p:import href="step/html-validate.step.xpl"/>
-    <p:import href="step/epub3-validate.step.xpl"/>
     <p:import href="step/dtbook-to-html.step.xpl"/>
+    <p:import href="step/html-validate.step.xpl"/>
     <p:import href="step/html-to-epub3.step.xpl"/>
-    <p:import href="step/format-html-report.step.xpl"/>
+    <p:import href="step/epub3-store.step.xpl"/>
+    <p:import href="step/epub3-validate.step.xpl"/>
+    <p:import href="step/format-html-report.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
 
     <p:variable name="dtbook-href" select="resolve-uri($dtbook,static-base-uri())"/>
 
@@ -159,17 +158,18 @@
     <p:sink/>
 
     <px:nordic-format-html-report>
-        <p:input port="reports">
+        <p:input port="source">
             <p:pipe port="report.out" step="epub3-validate"/>
         </p:input>
     </px:nordic-format-html-report>
-    <p:xslt>
-        <!-- pretty print to make debugging easier -->
-        <p:with-param name="preserve-empty-whitespace" select="'false'"/>
-        <p:input port="stylesheet">
-            <p:document href="../xslt/pretty-print.xsl"/>
-        </p:input>
-    </p:xslt>
-    <p:identity name="html-report"/>
+    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
+        <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
+    </p:store>
+    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+        <p:with-option name="href" select="/*/text()">
+            <p:pipe port="result" step="store-report"/>
+        </p:with-option>
+    </px:set-doctype>
+    <p:sink/>
 
 </p:declare-step>

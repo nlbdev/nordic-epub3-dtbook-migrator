@@ -8,14 +8,6 @@
         <p px:role="desc">Creates MathML for all HTML elements with the "asciimath" class.</p>
     </p:documentation>
 
-    <!--<p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">HTML Report</h1>
-            <p px:role="desc">An HTML-formatted version of the validation report.</p>
-        </p:documentation>
-        <p:pipe port="result" step="html"/>
-    </p:output>-->
-
     <p:option name="epub" required="true" px:type="anyFileURI" px:media-type="application/epub+zip">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">EPUB3 Publication</h2>
@@ -62,7 +54,6 @@
 
     <px:message message="Converting from ASCIIMath to MathML"/>
     <px:nordic-epub3-asciimath-to-mathml.step name="convert">
-        <p:log port="fileset.out" href="file:/tmp/tmp.xml"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="unzip"/>
         </p:input>

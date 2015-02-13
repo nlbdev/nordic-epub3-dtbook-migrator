@@ -7,6 +7,7 @@
     <x:scenario label="px:nordic-dtbook-to-html">
         <x:call step="px:nordic-dtbook-to-html">
             <x:option name="dtbook" select="resolve-uri('DTBook/C00000.xml')"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
             <x:option name="assert-valid" select="'true'"/>
             <x:option name="no-legacy" select="'true'"/>
@@ -19,7 +20,7 @@
         <x:expect type="xpath" label="There should be no validation errors" test="/*/@result" equals="'ok'"/>
 
         <x:context label="validation report">
-            <x:document type="port" port="html-report"/>
+            <x:document type="file" href="html-report/report.xhtml" base-uri="temp-dir"/>
         </x:context>
         <x:expect type="count" label="There should be exactly one document on the html-report port" min="1" max="1"/>
         <x:expect type="xpath" label="There should be no validation errors in the HTML report"

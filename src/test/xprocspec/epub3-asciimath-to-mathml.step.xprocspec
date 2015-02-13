@@ -7,7 +7,7 @@
     <x:scenario label="px:nordic-epub3-asciimath-to-mathml.step">
         <x:call step="px:nordic-epub3-asciimath-to-mathml.step">
             <x:input port="fileset.in">
-                <x:document type="inline" xml:base="test-epub/">
+                <x:document type="inline" xml:base="C00000/">
                     <d:fileset>
                         <d:file href="mimetype" media-type="text/plain"/>
                         <d:file href="META-INF/container.xml"/>

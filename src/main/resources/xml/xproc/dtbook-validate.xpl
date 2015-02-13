@@ -24,7 +24,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="result" step="status"/>
+        <p:pipe port="status.out" step="dtbook-validate"/>
     </p:output>
 
     <p:option name="dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
@@ -57,6 +57,7 @@
 
     <p:import href="step/dtbook-validate.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
@@ -96,7 +97,7 @@
     <p:sink/>
 
     <px:nordic-format-html-report>
-        <p:input port="reports">
+        <p:input port="source">
             <p:pipe port="result" step="report.nordic"/>
             <p:pipe port="report.out" step="dtbook-validate"/>
         </p:input>
@@ -109,22 +110,6 @@
             <p:pipe port="result" step="store-report"/>
         </p:with-option>
     </px:set-doctype>
-    <p:sink/>
-
-    <p:group name="status">
-        <p:output port="result"/>
-        <p:for-each>
-            <p:iteration-source select="/d:document-validation-report/d:document-info/d:error-count">
-                <p:pipe port="report.out" step="validate"/>
-            </p:iteration-source>
-            <p:identity/>
-        </p:for-each>
-        <p:wrap-sequence wrapper="d:validation-status"/>
-        <p:add-attribute attribute-name="result" match="/*">
-            <p:with-option name="attribute-value" select="if (sum(/*/*/number(.))&gt;0) then 'error' else 'ok'"/>
-        </p:add-attribute>
-        <p:delete match="/*/node()"/>
-    </p:group>
     <p:sink/>
 
 </p:declare-step>

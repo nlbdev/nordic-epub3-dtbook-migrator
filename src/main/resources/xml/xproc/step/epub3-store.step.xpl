@@ -37,7 +37,7 @@
     <p:option name="output-dir" required="true"/>
 
     <p:import href="validation-status.xpl"/>
-    <p:import href="set-doctype.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
@@ -96,12 +96,12 @@
 
                     <p:choose>
                         <p:when test="/*/@media-type='application/xhtml+xml'">
-                            <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+                            <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
                                 <p:with-option name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
-                            </pxi:set-doctype>
+                            </px:set-doctype>
                             <p:add-attribute match="/*" attribute-value="&lt;!DOCTYPE html&gt;">
                                 <p:with-option name="attribute-name" select="'doctype'">
-                                    <!-- p:with-option uses default connection as context, thus making sure pxi:set-doctype is run before p:add-attribute -->
+                                    <!-- p:with-option uses default connection as context, thus making sure px:set-doctype is run before p:add-attribute -->
                                 </p:with-option>
                                 <p:input port="source">
                                     <p:pipe port="current" step="store.epub3.doctype"/>

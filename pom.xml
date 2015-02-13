@@ -22,7 +22,7 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <buildNr/>
-        <version-description>Version: ${pom.version}${buildNr}, build date: ${timestamp}.</version-description>
+        <version-description>Version: ${project.version}${buildNr}, build date: ${timestamp}.</version-description>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>

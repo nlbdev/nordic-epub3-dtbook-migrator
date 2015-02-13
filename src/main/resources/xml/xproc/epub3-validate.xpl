@@ -78,12 +78,12 @@
     <p:identity name="report.nordic"/>
     <p:sink/>
 
-    <px:nordic-format-html-report.step name="html">
+    <px:nordic-format-html-report name="html">
         <p:input port="source">
             <p:pipe port="report.out" step="validate.nordic"/>
             <p:pipe port="result" step="report.nordic"/>
         </p:input>
-    </px:nordic-format-html-report.step>
+    </px:nordic-format-html-report>
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>

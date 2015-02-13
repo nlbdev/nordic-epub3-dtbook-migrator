@@ -78,6 +78,7 @@
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
@@ -105,14 +106,14 @@
 
     <px:nordic-epub3-to-html.step name="epub3-to-html">
         <p:input port="in-memory.in">
-            <p:pipe port="result" step="load.in-memory"/>
+            <p:pipe port="in-memory.out" step="epub3-validate"/>
         </p:input>
-        <p:input port="report.in">
-            <p:pipe port="report.out" step="load.in-memory"/>
-        </p:input>
-        <p:input port="status.in">
-            <p:pipe port="status.out" step="load.in-memory"/>
-        </p:input>
+        <!--<p:input port="report.in">
+            <p:pipe port="report.out" step="epub3-validate"/>
+        </p:input>-->
+        <!--<p:input port="status.in">
+            <p:pipe port="status.out" step="epub3-validate"/>
+        </p:input>-->
     </px:nordic-epub3-to-html.step>
 
     <px:nordic-html-validate.step name="validate.html" document-type="Nordic HTML (intermediary single-document)">
@@ -224,14 +225,7 @@
 
     <p:identity name="reports"/>
 
-    <px:nordic-format-html-report.step/>
-    <p:xslt>
-        <!-- pretty print to make debugging easier -->
-        <p:with-param name="preserve-empty-whitespace" select="'false'"/>
-        <p:input port="stylesheet">
-            <p:document href="../xslt/pretty-print.xsl"/>
-        </p:input>
-    </p:xslt>
+    <px:nordic-format-html-report/>
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
@@ -241,7 +235,7 @@
         </p:with-option>
     </px:set-doctype>
     <p:sink/>
-
+    
     <p:group name="status">
         <p:output port="result"/>
         <p:for-each>

@@ -8,14 +8,6 @@
         <p px:role="desc">Transforms a HTML document into an EPUB3 publication according to the nordic markup guidelines.</p>
     </p:documentation>
 
-    <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">HTML Report</h1>
-            <p px:role="desc">An HTML-formatted version of the validation report.</p>
-        </p:documentation>
-        <p:pipe port="result" step="html"/>
-    </p:output>
-
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
@@ -23,6 +15,13 @@
         </p:documentation>
         <p:pipe port="result" step="status"/>
     </p:output>
+
+    <p:option name="html-report" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h1 px:role="name">HTML Report</h1>
+            <p px:role="desc">An HTML-formatted version of the validation report.</p>
+        </p:documentation>
+    </p:option>
 
     <p:option name="html" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -64,7 +63,7 @@
     <p:import href="step/epub3-validate.step.xpl"/>
     <p:import href="step/html-to-epub3.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
-    <p:import href="step/set-doctype.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -190,7 +189,7 @@
         <p:otherwise>
             <p:output port="result" sequence="true"/>
 
-            <px:nordic-html-to-html.step name="single-html">
+            <px:nordic-html-to-epub3.step name="single-html">
                 <p:input port="fileset.in">
                     <p:pipe port="fileset.out" step="validate.html"/>
                 </p:input>
@@ -198,7 +197,7 @@
                     <p:pipe port="in-memory.out" step="validate.html"/>
                 </p:input>
                 <p:with-option name="temp-dir" select="concat($temp-dir,'html/')"/>
-            </px:nordic-html-to-html.step>
+            </px:nordic-html-to-epub3.step>
             <p:sink/>
 
             <p:choose>
@@ -319,12 +318,12 @@
 
                             <p:choose>
                                 <p:when test="/*/@media-type='application/xhtml+xml'">
-                                    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+                                    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
                                         <p:with-option name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
-                                    </pxi:set-doctype>
+                                    </px:set-doctype>
                                     <p:add-attribute match="/*" attribute-value="&lt;!DOCTYPE html&gt;">
                                         <p:with-option name="attribute-name" select="'doctype'">
-                                            <!-- p:with-option uses default connection as context, thus making sure pxi:set-doctype is run before p:add-attribute -->
+                                            <!-- p:with-option uses default connection as context, thus making sure px:set-doctype is run before p:add-attribute -->
                                         </p:with-option>
                                         <p:input port="source">
                                             <p:pipe port="current" step="store.epub3.doctype"/>
@@ -377,15 +376,16 @@
     </p:choose>
     <p:identity name="reports"/>
 
-    <px:nordic-format-html-report.step/>
-    <p:xslt>
-        <!-- pretty print to make debugging easier -->
-        <p:with-param name="preserve-empty-whitespace" select="'false'"/>
-        <p:input port="stylesheet">
-            <p:document href="../xslt/pretty-print.xsl"/>
-        </p:input>
-    </p:xslt>
-    <p:identity name="html"/>
+    <px:nordic-format-html-report/>
+    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
+        <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
+    </p:store>
+    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+        <p:with-option name="href" select="/*/text()">
+            <p:pipe port="result" step="store-report"/>
+        </p:with-option>
+    </px:set-doctype>
+    <p:sink/>
 
     <p:group name="status">
         <p:output port="result"/>

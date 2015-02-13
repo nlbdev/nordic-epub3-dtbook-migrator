@@ -24,7 +24,6 @@
     <p:output port="in-memory.out" sequence="true">
         <p:pipe port="in-memory.out" step="choose"/>
     </p:output>
-
     <p:output port="report.out" sequence="true">
         <p:pipe port="report.in" step="main"/>
         <p:pipe port="report.out" step="choose"/>

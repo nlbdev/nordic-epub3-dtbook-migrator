@@ -14,12 +14,12 @@
         </p:documentation>
     </p:input>
 
-    <p:input port="result" primary="true" px:name="result" px:media-type="application/x-dtbook+xml">
+    <p:output port="result" primary="true" px:name="result" px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">DTBook</h2>
             <p px:role="desc">The resulting DTBook.</p>
         </p:documentation>
-    </p:input>
+    </p:output>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
