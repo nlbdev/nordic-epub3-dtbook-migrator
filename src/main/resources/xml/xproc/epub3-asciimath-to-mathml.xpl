@@ -8,7 +8,7 @@
         <p px:role="desc">Creates MathML for all HTML elements with the "asciimath" class.</p>
     </p:documentation>
 
-    <!--<p:output port="html-report" required="true" px:media-type="application/vnd.pipeline.report+xml">
+    <!--<p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">HTML Report</h1>
             <p px:role="desc">An HTML-formatted version of the validation report.</p>
@@ -36,8 +36,9 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="step/epub3-asciimath-to-mathml.convert.xpl"/>
+    <p:import href="step/epub3-asciimath-to-mathml.step.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
 
@@ -53,19 +54,21 @@
         </p:with-option>
     </px:message>
 
-    <px:unzip-fileset name="unzip" cx:depends-on="nordic-version-message">
+    <px:message message="Unzipping EPUB" cx:depends-on="nordic-version-message" name="message.epub-unzipped"/>
+    <px:unzip-fileset name="unzip" cx:depends-on="message.epub-unzipped">
         <p:with-option name="href" select="$epub-href"/>
         <p:with-option name="unzipped-basedir" select="concat($temp-dir,'epub/')"/>
     </px:unzip-fileset>
-    <px:message message="EPUB unzipped"/>
 
-    <px:nordic-epub3-asciimath-to-mathml-convert name="convert">
+    <px:message message="Converting from ASCIIMath to MathML"/>
+    <px:nordic-epub3-asciimath-to-mathml.step name="convert">
+        <p:log port="fileset.out" href="file:/tmp/tmp.xml"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="unzip"/>
         </p:input>
-    </px:nordic-epub3-asciimath-to-mathml-convert>
-    <px:message message="Finished converting from ASCIIMath to MathML"/>
+    </px:nordic-epub3-asciimath-to-mathml.step>
 
+    <px:message message="Zipping EPUB"/>
     <px:epub3-store name="store">
         <p:with-option name="href" select="concat($output-dir,replace($epub-href,'.*/',''))"/>
         <p:input port="in-memory.in">

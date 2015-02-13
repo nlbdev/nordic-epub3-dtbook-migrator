@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/html-to-epub3.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <x:scenario label="px:nordic-html-to-epub3">
+        <x:call step="px:nordic-html-to-epub3">
+            <x:option name="html" select="resolve-uri('single-html/C00000.xhtml')"/>
+            <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+            <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
+            <x:option name="assert-valid" select="'true'"/>
+            <x:option name="require-wellformed" select="'true'"/>
+        </x:call>
+
+        <x:context label="validation status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one document on the validation-status port" min="1" max="1"/>
+        <x:expect type="xpath" label="There should be no validation errors" test="/*/@result" equals="'ok'"/>
+
+        <x:context label="validation report">
+            <x:document type="port" port="html-report"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one document on the html-report port" min="1" max="1"/>
+        <x:expect type="xpath" label="There should be no validation errors in the HTML report"
+            test="sum(//*[matches(@class,'(^|\s)document-validation-report(\s|$)')]//html:p[matches(normalize-space(string-join(text(),' ')),'^\d+ issue.*')]/xs:integer(replace(normalize-space(string-join(text(),' ')),'(\d+) .*','$1')))"
+            equals="0"/>
+
+    </x:scenario>
+
+</x:description>
