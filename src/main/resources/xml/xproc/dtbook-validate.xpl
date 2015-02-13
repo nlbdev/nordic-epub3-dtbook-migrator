@@ -55,9 +55,9 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="step/dtbook.validate.xpl"/>
-    <p:import href="step/format-html-report.step.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="step/dtbook-validate.step.xpl"/>
+    <p:import href="step/format-html-report.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
     <!--<p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>-->
@@ -69,14 +69,19 @@
         </p:with-option>
     </px:message>
 
-    <px:nordic-dtbook-validate.step name="validate" cx:depends-on="nordic-version-message">
+    <px:nordic-dtbook-validate.step name="dtbook-validate" cx:depends-on="nordic-version-message">
         <p:with-option name="dtbook" select="$dtbook"/>
         <p:with-option name="check-images" select="if ($ignore-missing-images='false') then 'true' else 'false'"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
+    <p:sink/>
+
     <pxi:fileset-load media-types="application/x-dtbook+xml" method="xml">
+        <p:input port="fileset">
+            <p:pipe port="fileset.out" step="dtbook-validate"/>
+        </p:input>
         <p:input port="in-memory">
-            <p:pipe port="in-memory.out" step="validate"/>
+            <p:pipe port="in-memory.out" step="dtbook-validate"/>
         </p:input>
     </pxi:fileset-load>
     <p:xslt>
@@ -90,12 +95,12 @@
     <p:identity name="report.nordic"/>
     <p:sink/>
 
-    <px:nordic-format-html-report.step>
-        <p:input port="source">
+    <px:nordic-format-html-report>
+        <p:input port="reports">
             <p:pipe port="result" step="report.nordic"/>
-            <p:pipe port="report.out" step="validate"/>
+            <p:pipe port="report.out" step="dtbook-validate"/>
         </p:input>
-    </px:nordic-format-html-report.step>
+    </px:nordic-format-html-report>
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>

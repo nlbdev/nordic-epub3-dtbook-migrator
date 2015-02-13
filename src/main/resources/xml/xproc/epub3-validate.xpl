@@ -37,12 +37,13 @@
         <p:pipe port="result" step="status"/>
     </p:output>
 
-    <p:import href="step/epub3.validate.xpl"/>
-    <p:import href="step/format-html-report.step.xpl"/>
+    <p:import href="step/epub3-validate.step.xpl"/>
+    <p:import href="step/format-html-report.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
     <px:message message="$1" name="nordic-version-message">

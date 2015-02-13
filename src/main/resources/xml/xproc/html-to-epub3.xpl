@@ -190,7 +190,7 @@
         <p:otherwise>
             <p:output port="result" sequence="true"/>
 
-            <px:nordic-html-to-html-convert name="single-html">
+            <px:nordic-html-to-html.step name="single-html">
                 <p:input port="fileset.in">
                     <p:pipe port="fileset.out" step="validate.html"/>
                 </p:input>
@@ -198,7 +198,7 @@
                     <p:pipe port="in-memory.out" step="validate.html"/>
                 </p:input>
                 <p:with-option name="temp-dir" select="concat($temp-dir,'html/')"/>
-            </px:nordic-html-to-html-convert>
+            </px:nordic-html-to-html.step>
             <p:sink/>
 
             <p:choose>
@@ -283,7 +283,7 @@
                         <p:pipe port="report.out" step="validate.epub3"/>
                     </p:output>
 
-                    <px:nordic-html-to-epub3-convert name="convert.epub3">
+                    <px:nordic-html-to-epub3.step name="convert.epub3">
                         <p:input port="fileset.in">
                             <p:pipe port="fileset.out" step="single-html"/>
                         </p:input>
@@ -292,7 +292,7 @@
                         </p:input>
                         <p:with-option name="temp-dir" select="concat($temp-dir,'epub/')"/>
                         <p:with-option name="compatibility-mode" select="'true'"/>
-                    </px:nordic-html-to-epub3-convert>
+                    </px:nordic-html-to-epub3.step>
 
 
                     <p:group name="store.epub3">

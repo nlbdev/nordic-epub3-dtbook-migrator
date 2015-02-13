@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-epub3-asciimath-to-mathml-convert" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:mathml="http://www.w3.org/1998/Math/MathML">
+    type="px:nordic-epub3-asciimath-to-mathml.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:mathml="http://www.w3.org/1998/Math/MathML">
 
     <p:input port="fileset.in" primary="true"/>
-    <p:input port="in-memory.in" sequence="true"/>
+    <p:input port="in-memory.in" sequence="true">
+        <p:empty/>
+    </p:input>
+    <p:input port="report.in" sequence="true">
+        <p:empty/>
+    </p:input>
+    <p:input port="status.in">
+        <p:inline>
+            <d:validation-status result="ok"/>
+        </p:inline>
+    </p:input>
 
     <p:output port="fileset.out" primary="true">
         <p:pipe port="fileset.in" step="main"/>
@@ -13,6 +23,12 @@
         <p:pipe port="result" step="in-memory.opf"/>
         <p:pipe port="result" step="in-memory.xhtml"/>
         <p:pipe port="result" step="in-memory.other"/>
+    </p:output>
+    <p:output port="report.out" sequence="true">
+        <p:pipe port="report.in" step="main"/>
+    </p:output>
+    <p:output port="status.out">
+        <p:pipe port="status.in" step="main"/>
     </p:output>
 
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
@@ -39,30 +55,46 @@
             </px:message>
 
             <p:identity name="asciimath"/>
-            <px:asciimathml name="mathml">
-                <p:with-option name="asciimath" select="string-join(.//text(),'')"/>
-            </px:asciimathml>
+            <p:choose>
+                <p:when test="p:step-available('px:asciimath')">
+                    <px:asciimathml name="mathml">
+                        <p:with-option name="asciimath" select="string-join(.//text(),'')"/>
+                    </px:asciimathml>
 
-            <p:identity>
-                <p:input port="source">
-                    <p:inline exclude-inline-prefixes="#all">
-                        <epub:switch>
-                            <epub:case required-namespace="http://www.w3.org/1998/Math/MathML"/>
-                            <epub:default/>
-                        </epub:switch>
-                    </p:inline>
-                </p:input>
-            </p:identity>
-            <p:insert match="/*/epub:case" position="first-child">
-                <p:input port="insertion">
-                    <p:pipe port="result" step="mathml"/>
-                </p:input>
-            </p:insert>
-            <p:insert match="/*/epub:default" position="first-child">
-                <p:input port="insertion">
-                    <p:pipe port="result" step="asciimath"/>
-                </p:input>
-            </p:insert>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:inline exclude-inline-prefixes="#all">
+                                <epub:switch>
+                                    <epub:case required-namespace="http://www.w3.org/1998/Math/MathML"/>
+                                    <epub:default/>
+                                </epub:switch>
+                            </p:inline>
+                        </p:input>
+                    </p:identity>
+                    <p:insert match="/*/epub:case" position="first-child">
+                        <p:input port="insertion">
+                            <p:pipe port="result" step="mathml"/>
+                        </p:input>
+                    </p:insert>
+                    <p:insert match="/*/epub:default" position="first-child">
+                        <p:input port="insertion">
+                            <p:pipe port="result" step="asciimath"/>
+                        </p:input>
+                    </p:insert>
+
+                </p:when>
+                <p:otherwise>
+                    <px:message severity="WARNING" message="px:asciimath is not available; asciimath element will be replaced by placeholder"/>
+                    <p:add-attribute match="/*" attribute-name="alt">
+                        <p:input port="source">
+                            <p:inline>
+                                <math xmlns="http://www.w3.org/1998/Math/MathML"/>
+                            </p:inline>
+                        </p:input>
+                        <p:with-option name="attribute-value" select="string-join(.//text(),'')"/>
+                    </p:add-attribute>
+                </p:otherwise>
+            </p:choose>
 
         </p:viewport>
     </p:for-each>
