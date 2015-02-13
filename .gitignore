@@ -1,6 +1,9 @@
 # Maven
 target/
 
+# Source code not to be included in gh-pages
+src/
+
 # Eclipse
 .classpath
 .project

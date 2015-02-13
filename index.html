@@ -41,31 +41,61 @@
           <h1>
 <a name="nordic-epub3dtbook-migrator" class="anchor" href="#nordic-epub3dtbook-migrator"><span class="octicon octicon-link"></span></a>Nordic EPUB3/DTBook Migrator</h1>
 
-<p>The main goal of this project is to provide a EPUB3 to DTBook conversion tool for the libraries in the Nordic countries providing accessible litterature to visually impaired readers
-(<a href="http://www.nlb.no/">NLB</a>, <a href="http://mtm.se/">MTM</a>, <a href="http://www.celia.fi/">Celia</a>, <a href="http://www.nota.nu/">Nota</a> and <a href="http://sbs.ch/">SBS</a>).
-The conversion will be implemented in XProc and XSLT. As a tool, <a href="http://www.daisy.org/pipeline2">DAISY Pipeline 2</a> is recommended,
-as the conversion will be made available as a Pipeline 2 script.
-This conversion will allow the organizations to continue to use their respective DTBook-based tools for production of Braille and Synthetic Speech, as long as those are necessary.</p>
+<p>The main goal of this project is to provide a EPUB3 to DTBook conversion tool
+for the libraries in the Nordic countries providing accessible litterature to
+visually impaired readers (<a href="http://www.nlb.no/">NLB</a>, <a href="http://mtm.se/">MTM</a>,
+<a href="http://www.spsm.se/">SPSM</a>,
+<a href="http://www.celia.fi/">Celia</a>, <a href="http://www.nota.nu/">Nota</a> and <a href="http://sbs.ch/">SBS</a>).
+The conversion will be implemented in XProc and XSLT and provided as a
+<a href="http://www.daisy.org/pipeline2">DAISY Pipeline 2</a> script.
+This conversion will allow the organizations to continue to use their respective
+DTBook-based tools for production of Braille and Synthetic Speech,
+as long as those are necessary.</p>
 
-<p>The intention is also to create a 1:1 mapping between DTBook and EPUB3. As a convenience the reverse conversion, DTBook to EPUB3, will also be provided (strictly following the
-Nordic markup guidelines and limitations, as opposed to the more generic script bundled with the official Pipeline 2 distribution). This allows us to generate some EPUB3 files
-similar to what we can expect to receive when in production (books marked up according to the Nordic markup requirements).</p>
+<p>This tool attempts to map EPUB3 to DTBook with as little loss as possible (a 1:1 mapping).</p>
 
-<p>While the EPUB3 will consist of multiple HTML files internally, an intermediate single-page HTML representation is useful for converting to and from DTBook. Steps for converting
-between the intermediate single-document and multi-document HTML representations will also be provided, mainly so that those not familiar with XProc or XSLT can inspect the intermediate formats and help with testing the converter.</p>
+<p>While the EPUB3 will consist of multiple HTML files internally, an intermediate
+single-page HTML representation is useful for converting to and from DTBook.</p>
 
 <p>This project provides the following Pipeline 2 scripts:</p>
 
 <ul>
-<li>Nordic EPUB3 Validator</li>
-<li>Nordic DTBook Validator</li>
-<li>Nordic EPUB3 to DTBook Converter</li>
-<li>Nordic DTBook to EPUB3 Converter</li>
+<li>EPUB3 to DTBook</li>
+<li>EPUB3 to HTML</li>
+<li>EPUB3 Validator</li>
+<li>EPUB3 ASCIIMath to MathML</li>
+<li>HTML to EPUB3</li>
+<li>HTML to DTBook</li>
+<li>HTML Validator</li>
+<li>DTBook to EPUB3</li>
+<li>DTBook to HTML</li>
+<li>DTBook Validator</li>
 </ul>
 
-<p>The grammar used in the EPUB3 and DTBook files is a strict subset of EPUB3 and DTBook, and is defined in the Nordic markup guidelines. Most DTBooks will work with these scripts, there
-are few limitations to the DTBook grammar. There are more limitations to the HTML/EPUB3 grammar however, because there must be a way to convert it to DTBook.
-Most notably, audio and video are not allowed in these EPUB3s.</p>
+<p>The EPUB3 to DTBook script will be used to allow new EPUB3 files to be used
+with legacy DTBook-based systems.</p>
+
+<p>The DTBook to EPUB3 script allows legacy DTBooks to be upgraded to new
+EPUB3-based production systems.</p>
+
+<p>Scripts for converting to and from the intermediary single-HTML representation
+of the publications are also provided. These are useful either for debugging,
+or if a single-document HTML representation is needed as input to or output from
+a HTML-based production system.</p>
+
+<p>Validators for EPUB3, DTBook and single-document HTML files are provided.
+The EPUB3 validator allows us to check that new EPUB3 files are valid according
+to the nordic markup guidelines. The DTBook and HTML validators can be useful
+for DTBook- or HTML-based production systems.</p>
+
+<p>In the nordic markup guidelines, math is marked up using ASCIIMath.
+An experimental script for converting this ASCIIMath to MathML is provided.</p>
+
+<p>The grammar used in the EPUB3, HTML and DTBook files is a strict subset of EPUB3, HTML and DTBook,
+and is defined in the Nordic markup guidelines. Most DTBooks will work with these scripts,
+there are few limitations to the input DTBook grammar. There are more limitations to the HTML/EPUB3
+grammar however, because there must be a way to convert it to DTBook.
+Most notably, multimedia such as audio and video are currently not allowed in these EPUB3s.</p>
 
 <h2>Resources</h2>
 <ul>
