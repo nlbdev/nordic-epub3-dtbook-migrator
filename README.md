@@ -6,6 +6,7 @@ Nordic EPUB3/DTBook Migrator
 The main goal of this project is to provide a EPUB3 to DTBook conversion tool
 for the libraries in the Nordic countries providing accessible litterature to
 visually impaired readers ([NLB](http://www.nlb.no/), [MTM](http://mtm.se/),
+[SPSM](http://www.spsm.se/),
 [Celia](http://www.celia.fi/), [Nota](http://www.nota.nu/) and [SBS](http://sbs.ch/)).
 The conversion will be implemented in XProc and XSLT and provided as a
 [DAISY Pipeline 2](http://www.daisy.org/pipeline2) script.
@@ -49,16 +50,6 @@ for DTBook- or HTML-based production systems.
 
 In the nordic markup guidelines, math is marked up using ASCIIMath.
 An experimental script for converting this ASCIIMath to MathML is provided.
-
-Steps for converting between the intermediate single-document and multi-document
-HTML representations will also be provided, mainly so that those not familiar with
-XProc or XSLT can inspect the intermediate formats and help with testing the converter.
-
-As a convenience the reverse conversion, DTBook to EPUB3, will also be provided
-(strictly following the Nordic markup guidelines and limitations, as opposed
-to the more generic script bundled with the official Pipeline 2 distribution).
-This allows us to generate some EPUB3 files similar to what we can expect to
-receive when in production (books marked up according to the Nordic markup requirements).
 
 The grammar used in the EPUB3, HTML and DTBook files is a strict subset of EPUB3, HTML and DTBook,
 and is defined in the Nordic markup guidelines. Most DTBooks will work with these scripts,
