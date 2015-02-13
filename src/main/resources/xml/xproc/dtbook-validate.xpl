@@ -58,7 +58,6 @@
     <p:import href="step/dtbook-validate.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
     <!--<p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>-->

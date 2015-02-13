@@ -39,9 +39,10 @@
     <p:import href="validation-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
     <px:assert message="'fail-on-error' whould be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
@@ -134,22 +135,22 @@
                     <p:pipe port="result" step="store.epub3"/>
                 </p:with-option>
             </px:fileset-create>
-            <px:fileset-add-entry media-type="application/epub+zip">
+            <pxi:fileset-add-entry media-type="application/epub+zip">
                 <p:with-option name="href" select="concat(/*/text(),'.epub')">
                     <p:pipe port="result" step="metadata.identifier"/>
                 </p:with-option>
-            </px:fileset-add-entry>
+            </pxi:fileset-add-entry>
             <p:identity name="result.fileset"/>
 
             <!-- get metadata -->
-            <px:fileset-load media-types="application/oebps-package+xml">
+            <pxi:fileset-load media-types="application/oebps-package+xml">
                 <p:input port="fileset">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
-            </px:fileset-load>
+            </pxi:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
             <p:filter select="//dc:identifier"/>
             <px:assert message="The EPUB Package Document (the OPF file) must have a 'dc:identifier' element" test-count-min="1" error-code="NORDICDTBOOKEPUB012"/>

@@ -7,14 +7,16 @@
 
     <p:import href="step/dtbook-to-html.step.xpl"/>
     <p:import href="step/html-to-dtbook.step.xpl"/>
-    <p:import href="step/html-store.step.xpl"/>
 
-    <p:import href="step/html-split.xpl"/>
     <p:import href="step/html-to-epub3.step.xpl"/>
     <p:import href="step/epub3-to-html.step.xpl"/>
+
+    <p:import href="step/html-store.step.xpl"/>
     <p:import href="step/epub3-store.step.xpl"/>
 
     <p:import href="step/epub3-asciimath-to-mathml.step.xpl"/>
+
+    <p:import href="step/html-split.xpl"/>
 
     <p:import href="step/format-html-report.xpl"/>
 
