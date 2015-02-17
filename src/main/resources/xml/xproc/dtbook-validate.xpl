@@ -34,9 +34,9 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="ignore-missing-images" required="false" px:type="boolean" select="'true'">
+    <p:option name="check-images" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Ignore non-existing images</h2>
+            <h2 px:role="name">Check that images exist on disk</h2>
             <p px:role="desc">Whether or not to see that referenced images exist on disk.</p>
         </p:documentation>
     </p:option>
@@ -55,13 +55,23 @@
         </p:documentation>
     </p:option>
 
+    <p:option name="fail-on-error" required="false" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Stop processing on validation error</h2>
+            <p px:role="desc">Whether or not to stop the conversion when a validation error occurs. Setting this to false may be useful for debugging or if the validation error is a minor one. The
+                output is not guaranteed to be valid if this option is set to false.</p>
+        </p:documentation>
+    </p:option>
+
     <p:import href="step/dtbook-validate.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
-    <!--<p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>-->
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>-->
+    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+
+    <p:variable name="dtbook-href" select="resolve-uri($dtbook,static-base-uri())"/>
 
     <px:message message="$1" name="nordic-version-message">
         <p:with-option name="param1" select="/*">
@@ -69,9 +79,15 @@
         </p:with-option>
     </px:message>
 
+    <px:fileset-create>
+        <p:with-option name="base" select="replace($dtbook-href,'[^/]+$','')"/>
+    </px:fileset-create>
+    <pxi:fileset-add-entry media-type="application/x-dtbook+xml">
+        <p:with-option name="href" select="replace($dtbook-href,'.*/','')"/>
+    </pxi:fileset-add-entry>
     <px:nordic-dtbook-validate.step name="dtbook-validate" cx:depends-on="nordic-version-message">
-        <p:with-option name="dtbook" select="$dtbook"/>
-        <p:with-option name="check-images" select="if ($ignore-missing-images='false') then 'true' else 'false'"/>
+        <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
     <p:sink/>

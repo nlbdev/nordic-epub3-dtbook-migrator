@@ -1,39 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/epub3-to-html.xpl" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/epub3-to-html.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <x:scenario label="px:nordic-epub3-to-html" pending="">
+    <x:scenario label="px:nordic-epub3-to-html">
         <x:call step="px:nordic-epub3-to-html">
             <x:option name="epub" select="resolve-uri('C00000.epub',base-uri())"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
-            <x:option name="discard-intermediary-html" select="'false'"/>
         </x:call>
 
-        <x:context label="result fileset">
-            <x:document type="port" port="fileset.out"/>
+        <x:context label="validation status">
+            <x:document type="port" port="validation-status"/>
         </x:context>
-        <x:expect label="The fileset should consist of two files" type="xpath" test="count(/*/*)" equals="2"/>
-        <x:expect label="The fileset should contain one image file with the href 'valentin.jpg'" type="xpath" test="(/*/*[@media-type='image/jpeg'])[1]/@href" equals="'valentin.jpg'"/>
-        <x:expect label="The fileset should contain one HTML file with the href 'C00000.xhtml'" type="xpath" test="(/*/*[@media-type='application/xhtml+xml'])[1]/@href" equals="'C00000.xhtml'"/>
+        <x:expect type="count" label="There should be exactly one document on the validation-status port" min="1" max="1"/>
+        <x:expect type="xpath" label="There should be no validation errors" test="/*/@result" equals="'ok'"/>
 
-        <x:context label="result HTML head">
-            <x:document type="port" port="in-memory.out" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
+        <x:context label="validation report">
+            <x:document type="file" href="html-report/report.xhtml" base-uri="temp-dir"/>
         </x:context>
-        <x:expect label="The head of the resulting HTML-file should be as expected" type="compare">
-            <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:head/*[not(self::html:meta and @name='dcterms:modified')]"/>
-        </x:expect>
-
-        <x:context label="result HTML body">
-            <x:document type="port" port="in-memory.out" select="/html:html/html:body"/>
-        </x:context>
-        <x:expect label="The body of the resulting HTML-file should be as expected" type="compare">
-            <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:body"/>
-        </x:expect>
-
+        <x:expect type="count" label="There should be exactly one document on the html-report port" min="1" max="1"/>
+        <x:expect type="xpath" label="There should be no validation errors in the HTML report"
+            test="sum(//*[matches(@class,'(^|\s)document-validation-report(\s|$)')]//html:p[matches(normalize-space(string-join(text(),' ')),'^\d+ issue.*')]/xs:integer(replace(normalize-space(string-join(text(),' ')),'(\d+) .*','$1')))"
+            equals="0"/>
     </x:scenario>
 
 </x:description>

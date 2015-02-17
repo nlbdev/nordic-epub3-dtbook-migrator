@@ -4,14 +4,12 @@
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <x:scenario label="px:nordic-html-to-epub3" pending="">
+    <x:scenario label="px:nordic-html-to-epub3">
         <x:call step="px:nordic-html-to-epub3">
             <x:option name="html" select="resolve-uri('single-html/C00000.xhtml')"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
-            <x:option name="assert-valid" select="'true'"/>
-            <x:option name="require-wellformed" select="'true'"/>
         </x:call>
 
         <x:context label="validation status">

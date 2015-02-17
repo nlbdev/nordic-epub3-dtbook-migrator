@@ -6,9 +6,7 @@
 
     <p:serialization port="report.out" indent="true"/>
 
-    <p:input port="fileset.in" primary="true">
-        <p:empty/>
-    </p:input>
+    <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
         <p:empty/>
     </p:input>
@@ -51,7 +49,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epubcheck-adapter/library.xpl"/>
 
-    <px:assert message="'fail-on-error' whould be either 'true' or 'false'. was: '$1'. will default to 'true'.">
+    <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
         <p:with-option name="test" select="$fail-on-error = ('true','false')"/>
     </px:assert>
@@ -105,9 +103,9 @@
             </p:choose>
             <p:delete match="jhove:message[starts-with(.,'HTM-047')]">
                 <!--
-            https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/111
-            https://github.com/IDPF/epubcheck/issues/419
-        -->
+                    https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/111
+                    https://github.com/IDPF/epubcheck/issues/419
+                -->
             </p:delete>
             <p:xslt>
                 <p:input port="parameters">

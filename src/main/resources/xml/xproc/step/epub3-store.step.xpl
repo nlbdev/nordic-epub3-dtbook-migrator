@@ -4,9 +4,7 @@
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator"
     xmlns:dc="http://purl.org/dc/elements/1.1/">
 
-    <p:input port="fileset.in" primary="true">
-        <p:empty/>
-    </p:input>
+    <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
         <p:empty/>
     </p:input>
@@ -44,7 +42,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
 
-    <px:assert message="'fail-on-error' whould be either 'true' or 'false'. was: '$1'. will default to 'true'.">
+    <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
         <p:with-option name="test" select="$fail-on-error = ('true','false')"/>
     </px:assert>

@@ -32,20 +32,21 @@
             <x:document type="directory" base-uri="temp-dir" href="output-dir/" recursive="true"/>
         </x:context>
         <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
-        <x:expect type="xpath" label="There should be no directories in the resulting fileset" test="count(/*//c:directory)" equals="0"/>
-        <x:expect type="xpath" label="The resulting EPUB should be named C00000.epub" test="/*/c:file[ends-with(@name,'.epub')]/@name" equals="'C00000.epub'"/>
-        <!--<x:expect type="xpath" label="The intermediary HTML should be named C00000.xhtml (in the same directory as the EPUB)" test="/*/c:file[ends-with(@name,'.xhtml')]/@name" equals="'C00000.xhtml'"/>
-        <x:expect type="xpath" label="There should be exactly two files in the resulting fileset" test="count(//c:file)" equals="2"/>
-        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/count(namespace::*)" equals="4"
+        <x:expect type="xpath" label="There should be exactly one top-level directory in the resulting fileset" test="count(/*/c:directory)" equals="1"/>
+        <x:expect type="xpath" label="There should be a top-level directory in the resulting fileset called 'C00000'" test="/*/c:directory[1]/@name" equals="'C00000'"/>
+        <x:expect type="xpath" label="There should be exactly one top-level file in the resulting fileset" test="count(/*/c:file)" equals="1"/>
+        <x:expect type="xpath" label="The resulting EPUB should be named C00000.epub" test="/*/c:file[1]/@name" equals="'C00000.epub'"/>
+        <x:expect type="xpath" label="The intermediary HTML should be named C00000.xhtml (in the C00000 subdirectory)" test="/*/c:directory[1]/c:file[1]/@name" equals="'C00000.xhtml'"/>
+        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xhtml',$temp-dir))/*/count(namespace::*)" equals="4"
             label="There should be exactly four namespaces declared on the root element (the default namespace, nordic, epub and the implicit xml namespace)"/>
-        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/namespace::*[name()='']" equals="'http://www.w3.org/1999/xhtml'"
+        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xhtml',$temp-dir))/*/namespace::*[name()='']" equals="'http://www.w3.org/1999/xhtml'"
             label="The HTML namespace should be the default namespace on the root element"/>
-        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/namespace::*[name()='nordic']" equals="'http://www.mtm.se/epub/'"
+        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xhtml',$temp-dir))/*/namespace::*[name()='nordic']" equals="'http://www.mtm.se/epub/'"
             label="The Nordic EPUB namespace should be declared with prefix nordic on the root element"/>
-        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*/namespace::*[name()='epub']" equals="'http://www.idpf.org/2007/ops'"
+        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xhtml',$temp-dir))/*/namespace::*[name()='epub']" equals="'http://www.idpf.org/2007/ops'"
             label="The EPUB namespace should be declared with the prefix epub on the root element"/>
-        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000.xhtml',$temp-dir))/*//*/count(namespace::*[not(.=../../namespace::*)])" equals="0"
-            label="No namespaces should be declared other than on the root element"/>-->
+        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xhtml',$temp-dir))/*//*/count(namespace::*[not(.=../../namespace::*)])" equals="0"
+            label="No namespaces should be declared other than on the root element"/>
 
     </x:scenario>
 

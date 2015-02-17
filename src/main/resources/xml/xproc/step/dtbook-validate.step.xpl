@@ -3,11 +3,7 @@
     type="px:nordic-dtbook-validate.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:l="http://xproc.org/library">
 
-    <p:documentation>Validates and loads the DTBook at the href $dtbook according to generic and nordic guidelines.</p:documentation>
-
-    <p:input port="fileset.in" primary="true">
-        <p:empty/>
-    </p:input>
+    <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
         <p:empty/>
     </p:input>
@@ -30,39 +26,45 @@
         <p:pipe port="report.in" step="main"/>
         <p:pipe port="report.out" step="choose"/>
     </p:output>
-
     <p:output port="status.out">
         <p:pipe port="result" step="status"/>
     </p:output>
 
     <p:option name="fail-on-error" select="'true'"/>
-    <p:option name="dtbook" required="true"/>
-    <p:option name="check-images" required="false" select="'false'"/>
-    <p:option name="allow-legacy" required="false" select="'false'"/>
+    <p:option name="check-images" required="false" select="'true'"/>
+    <p:option name="allow-legacy" required="false" select="'true'"/>
 
     <!-- option supporting convert to DTBook 1.1.0 -->
     <p:option name="dtbook2005" required="false" select="'true'"/>
 
     <p:import href="validation-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <!--<p:import href="../upstream/fileset-utils/fileset-load.xpl"/>-->
-    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
+    <!--<p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
-    <px:assert message="'fail-on-error' whould be either 'true' or 'false'. was: '$1'. will default to 'true'.">
+    <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
         <p:with-option name="test" select="$fail-on-error = ('true','false')"/>
+    </px:assert>
+    <px:assert message="'check-images' should be either 'true' or 'false'. was: '$1'. will default to 'false'.">
+        <p:with-option name="param1" select="$check-images"/>
+        <p:with-option name="test" select="$check-images = ('true','false')"/>
+    </px:assert>
+    <px:assert message="'allow-legacy' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
+        <p:with-option name="param1" select="$allow-legacy"/>
+        <p:with-option name="test" select="$allow-legacy = ('true','false')"/>
     </px:assert>
 
     <p:choose name="choose">
         <p:xpath-context>
             <p:pipe port="status.in" step="main"/>
         </p:xpath-context>
-        <p:when test="/* and /*/@result='ok' or $fail-on-error = 'false'">
+        <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
             <p:output port="fileset.out" primary="true">
                 <p:pipe port="fileset.out" step="choose.inner"/>
             </p:output>
@@ -73,9 +75,9 @@
                 <p:pipe port="report.out" step="choose.inner"/>
             </p:output>
 
-            <px:message message="Validating DTBook according to DTBook specification..."/>
+            <px:message severity="DEBUG" message="Validating DTBook according to DTBook specification..."/>
             <px:dtbook-validator name="validate.input-dtbook.generic">
-                <p:with-option name="input-dtbook" select="$dtbook"/>
+                <p:with-option name="input-dtbook" select="(/*/*[@media-type='application/x-dtbook+xml']/resolve-uri(@href,base-uri(.)))[1]"/>
                 <p:with-option name="check-images" select="$check-images"/>
             </px:dtbook-validator>
 
@@ -84,41 +86,50 @@
                     <p:pipe port="validation-status" step="validate.input-dtbook.generic"/>
                 </p:xpath-context>
                 <p:when test="not(/*/@result='ok')">
+                    <p:output port="fileset.out">
+                        <p:pipe port="fileset.in" step="main"/>
+                    </p:output>
+                    <p:output port="in-memory.out" sequence="true">
+                        <p:pipe port="in-memory.in" step="main"/>
+                    </p:output>
                     <p:output port="report.out" sequence="true">
                         <p:pipe port="report" step="validate.input-dtbook.generic"/>
                     </p:output>
-                    <p:output port="in-memory.out" sequence="true">
-                        <p:empty/>
-                    </p:output>
-                    <p:output port="fileset.out">
-                        <p:pipe port="result" step="invalid-fileset"/>
-                    </p:output>
 
-                    <px:fileset-create>
-                        <p:with-option name="base" select="replace($dtbook,'[^/]+$','')"/>
-                    </px:fileset-create>
-                    <pxi:fileset-add-entry media-type="application/x-dtbook+xml">
-                        <p:with-option name="href" select="$dtbook"/>
-                        <p:with-option name="original-href" select="$dtbook"/>
-                    </pxi:fileset-add-entry>
-                    <p:identity name="invalid-fileset"/>
+                    <p:sink>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:sink>
                 </p:when>
 
                 <p:otherwise>
-                    <p:output port="report.out" sequence="true">
-                        <p:pipe port="report" step="validate.input-dtbook.generic"/>
-                        <p:pipe port="result" step="validate.input-dtbook.nordic"/>
+                    <p:output port="fileset.out">
+                        <p:pipe port="result" step="input-dtbook.fileset"/>
                     </p:output>
                     <p:output port="in-memory.out" sequence="true">
                         <p:pipe port="in-memory.out" step="input-dtbook.in-memory"/>
                     </p:output>
-                    <p:output port="fileset.out">
-                        <p:pipe port="result" step="input-dtbook.fileset"/>
+                    <p:output port="report.out" sequence="true">
+                        <p:pipe port="report" step="validate.input-dtbook.generic"/>
+                        <p:pipe port="result" step="validate.input-dtbook.nordic"/>
                     </p:output>
 
-                    <p:load>
-                        <p:with-option name="href" select="$dtbook"/>
-                    </p:load>
+                    <px:fileset-filter media-types="application/x-dtbook+xml">
+                        <p:input port="source">
+                            <p:pipe port="fileset.in" step="main"/>
+                        </p:input>
+                    </px:fileset-filter>
+                    <px:assert message="There should be exactly one DTBook (was: $1)">
+                        <p:with-option name="test" select="count(/*/*) = 1"/>
+                        <p:with-option name="param1" select="count(/*/*)"/>
+                    </px:assert>
+                    <p:delete match="/*/*[position() &gt; 1]"/>
+                    <pxi:fileset-load media-types="application/x-dtbook+xml">
+                        <p:input port="in-memory">
+                            <p:pipe port="in-memory.in" step="main"/>
+                        </p:input>
+                    </pxi:fileset-load>
                     <p:choose>
                         <p:when test="$allow-legacy='true' and $dtbook2005='true'">
                             <px:upgrade-dtbook>
@@ -126,6 +137,7 @@
                                     <p:empty/>
                                 </p:input>
                             </px:upgrade-dtbook>
+                            <px:message severity="DEBUG" message="Cleaning up legacy markup"/>
                             <p:xslt>
                                 <p:input port="parameters">
                                     <p:empty/>
@@ -134,6 +146,7 @@
                                     <p:document href="../../xslt/dtbook-legacy-fix.xsl"/>
                                 </p:input>
                             </p:xslt>
+                            <p:identity/>
                         </p:when>
                         <p:otherwise>
                             <p:identity/>
@@ -168,13 +181,17 @@
                             </p:validate-with-schematron>
                             <p:sink/>
 
-                            <px:combine-validation-reports name="validate.input-dtbook.nordic" document-type="Nordic DTBook">
+                            <px:combine-validation-reports document-type="Nordic DTBook">
                                 <p:input port="source">
                                     <p:pipe port="report" step="validate.input-dtbook.nordic.validation"/>
                                     <p:pipe port="report" step="validate.input-dtbook.tpb.validation"/>
                                 </p:input>
-                                <p:with-option name="document-name" select="replace($dtbook,'.*/','')"/>
-                                <p:with-option name="document-path" select="$dtbook"/>
+                                <p:with-option name="document-name" select="replace((/*/*[@media-type='application/x-dtbook+xml']/@href)[1],'.*/','')">
+                                    <p:pipe port="fileset.in" step="main"/>
+                                </p:with-option>
+                                <p:with-option name="document-path" select="(/*/*[@media-type='application/x-dtbook+xml']/resolve-uri(@href,base-uri()))[1]">
+                                    <p:pipe port="fileset.in" step="main"/>
+                                </p:with-option>
                             </px:combine-validation-reports>
 
                         </p:when>
@@ -189,6 +206,7 @@
                             </p:identity>
                         </p:otherwise>
                     </p:choose>
+                    <p:identity name="validate.input-dtbook.nordic"/>
 
                     <px:dtbook-load name="input-dtbook.in-memory">
                         <p:input port="source">
@@ -205,17 +223,16 @@
                         </p:add-attribute>
                     </p:viewport>
                     <px:mediatype-detect name="input-dtbook.fileset"/>
+                    <p:sink/>
 
                 </p:otherwise>
             </p:choose>
-
-
 
         </p:when>
         <p:otherwise>
             <p:output port="fileset.out" primary="true"/>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="fileset.in" step="main"/>
+                <p:pipe port="in-memory.in" step="main"/>
             </p:output>
             <p:output port="report.out" sequence="true">
                 <p:empty/>

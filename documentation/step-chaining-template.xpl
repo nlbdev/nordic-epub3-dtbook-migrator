@@ -2,9 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     xmlns:cx="http://xmlcalabash.com/ns/extensions" type="px:identity.step" name="main" version="1.0">
 
-    <p:input port="fileset.in" primary="true">
-        <p:empty/>
-    </p:input>
+    <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
         <p:empty/>
     </p:input>
@@ -36,7 +34,7 @@
     <p:import href="validation-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <px:assert message="'fail-on-error' whould be either 'true' or 'false'. was: '$1'. will default to 'true'.">
+    <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
         <p:with-option name="test" select="$fail-on-error = ('true','false')"/>
     </px:assert>

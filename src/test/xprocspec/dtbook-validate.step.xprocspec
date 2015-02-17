@@ -2,12 +2,17 @@
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/step/dtbook-validate.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf">
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/">
 
     <x:scenario label="px:nordic-dtbook-validate.step">
         <x:call step="px:nordic-dtbook-validate.step">
-            <x:option name="dtbook" select="resolve-uri('DTBook/C00000.xml')"/>
-            <x:input port="report.in"/>
+            <x:input port="fileset.in">
+                <x:document type="inline" xml:base="DTBook/">
+                    <d:fileset>
+                        <d:file href="C00000.xml" media-type="application/x-dtbook+xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
         </x:call>
 
         <x:context label="fileset.out">
@@ -18,10 +23,10 @@
         <x:expect label="The fileset should one DTBook file" type="xpath" test="/*/*[@media-type='application/x-dtbook+xml']/@href" equals="'C00000.xml'"/>
 
         <x:context label="in-memory.out">
-            <x:document type="port" port="in-memory.out"/>
+            <x:document type="port" port="in-memory.out" select="/dtbook:dtbook/dtbook:book/*/*[not(@id='level1_1')]"/>
         </x:context>
         <x:expect type="compare" label="the in-memory.out port should contain the DTBook">
-            <x:document href="DTBook/C00000.xml" type="file" method="xml"/>
+            <x:document href="DTBook/C00000.xml" type="file" method="xml" select="/dtbook:dtbook/dtbook:book/*/*[not(@id='level1_1')]"/>
         </x:expect>
 
         <x:context label="report.out">

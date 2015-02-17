@@ -9,7 +9,7 @@
             <x:option name="dtbook" select="resolve-uri('DTBook/C00000.xml')"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
-            <x:option name="assert-valid" select="'true'"/>
+            <x:option name="fail-on-error" select="'true'"/>
             <x:option name="no-legacy" select="'true'"/>
         </x:call>
 

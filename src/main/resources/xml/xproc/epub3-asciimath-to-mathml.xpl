@@ -33,11 +33,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
 
-    <p:variable name="epub-href" select="resolve-uri($epub,base-uri(/*))">
-        <p:inline>
-            <irrelevant/>
-        </p:inline>
-    </p:variable>
+    <p:variable name="epub-href" select="resolve-uri($epub,static-base-uri())"/>
 
     <px:message message="$1" name="nordic-version-message">
         <p:with-option name="param1" select="/*">
@@ -53,6 +49,7 @@
 
     <px:message message="Converting from ASCIIMath to MathML"/>
     <px:nordic-epub3-asciimath-to-mathml.step name="convert">
+        <p:with-option name="fail-on-error" select="'true'"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="unzip"/>
         </p:input>
