@@ -72,14 +72,12 @@
     <p:import href="step/dtbook-to-html.convert.xpl"/>
     <p:import href="step/html-to-epub3.convert.xpl"/>
     <p:import href="step/format-html-report.step.xpl"/>
-    <p:import href="step/set-doctype.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
     <p:variable name="dtbook-href" select="resolve-uri($dtbook,base-uri(/*))">
         <p:inline>
@@ -140,14 +138,14 @@
                     <p:pipe port="result" step="status.dtbook"/>
                 </p:xpath-context>
                 <p:when test="$discard-intermediary-html='false' or (/*/@result='error' and $assert-valid='true')">
-                    <px:fileset-load media-types="application/xhtml+xml">
+                    <pxi:fileset-load media-types="application/xhtml+xml">
                         <p:input port="fileset">
                             <p:pipe port="fileset.out" step="single-html"/>
                         </p:input>
                         <p:input port="in-memory">
                             <p:pipe port="in-memory.out" step="single-html"/>
                         </p:input>
-                    </px:fileset-load>
+                    </pxi:fileset-load>
                     <px:assert message="There should be exactly one intermediary HTML file" test-count-min="1" test-count-max="1"/>
                     <p:store name="intermediary.store">
                         <p:with-option name="href" select="concat($output-dir,/*/@content,'.xhtml')">
@@ -253,12 +251,12 @@
 
                             <p:choose>
                                 <p:when test="/*/@media-type='application/xhtml+xml'">
-                                    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+                                    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
                                         <p:with-option name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
-                                    </pxi:set-doctype>
+                                    </px:set-doctype>
                                     <p:add-attribute match="/*" attribute-value="&lt;!DOCTYPE html&gt;">
                                         <p:with-option name="attribute-name" select="'doctype'">
-                                            <!-- p:with-option uses default connection as context, thus making sure pxi:set-doctype is run before p:add-attribute -->
+                                            <!-- p:with-option uses default connection as context, thus making sure px:set-doctype is run before p:add-attribute -->
                                         </p:with-option>
                                         <p:input port="source">
                                             <p:pipe port="current" step="store.epub3.doctype"/>
@@ -291,11 +289,11 @@
                             <p:pipe port="result" step="store.epub3"/>
                         </p:with-option>
                     </px:fileset-create>
-                    <px:fileset-add-entry media-type="application/epub+zip">
+                    <pxi:fileset-add-entry media-type="application/epub+zip">
                         <p:with-option name="href" select="concat(/*/@content,'.epub')">
                             <p:pipe port="identifier" step="metadata"/>
                         </p:with-option>
-                    </px:fileset-add-entry>
+                    </pxi:fileset-add-entry>
                     <px:nordic-epub3-validate.step name="validate.epub3" cx:depends-on="store.epub3">
                         <p:with-option name="temp-dir" select="concat($temp-dir,'validate-epub/')"/>
                         <p:input port="in-memory.in">
@@ -322,11 +320,11 @@
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
         <p:with-option name="href" select="/*/text()">
             <p:pipe port="result" step="store-report"/>
         </p:with-option>
-    </pxi:set-doctype>
+    </px:set-doctype>
     <p:sink/>
 
     <p:group name="status">
@@ -352,14 +350,14 @@
         <p:output port="title">
             <p:pipe port="result" step="metadata.title"/>
         </p:output>
-        <px:fileset-load media-types="application/x-dtbook+xml" method="xml">
+        <pxi:fileset-load media-types="application/x-dtbook+xml" method="xml">
             <p:input port="fileset">
                 <p:pipe port="fileset.out" step="validate.dtbook"/>
             </p:input>
             <p:input port="in-memory">
                 <p:pipe port="in-memory.out" step="validate.dtbook"/>
             </p:input>
-        </px:fileset-load>
+        </pxi:fileset-load>
         <px:assert message="There must be exactly one DTBook in the input fileset" test-count-min="1" test-count-max="1" error-code="NORDICDTBOOKEPUB008"/>
         <p:identity name="metadata.dtbook"/>
         <p:sink/>

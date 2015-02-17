@@ -14,6 +14,8 @@
     </p:output>
 
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -29,7 +31,7 @@
                     <p:variable name="base-uri" select="resolve-uri(/*/@xml:base,base-uri(/*))"/>
                     <p:identity name="section"/>
                     <p:rename match="/*" new-name="d:section-wrapper" name="section-wrapped"/>
-                    <px:fileset-load>
+                    <pxi:fileset-load>
                         <p:with-option name="href" select="$base-uri"/>
                         <p:input port="fileset">
                             <p:pipe port="fileset" step="replace-sections-with-documents"/>
@@ -37,7 +39,7 @@
                         <p:input port="in-memory">
                             <p:pipe port="in-memory" step="replace-sections-with-documents"/>
                         </p:input>
-                    </px:fileset-load>
+                    </pxi:fileset-load>
                     <px:assert test-count-min="1" test-count-max="1" message="The document referenced from the Navigation Document must exist: $1" error-code="NORDICDTBOOKEPUB012">
                         <p:with-option name="param1" select="$base-uri">
                             <p:empty/>
@@ -83,11 +85,11 @@
         </p:viewport>
     </p:declare-step>
 
-    <px:fileset-load media-types="application/oebps-package+xml">
+    <pxi:fileset-load media-types="application/oebps-package+xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
     <p:identity name="package-doc"/>
 
@@ -100,7 +102,7 @@
         <px:message message="Loading Navigation Document: $1">
             <p:with-option name="param1" select="$nav-href"/>
         </px:message>
-        <px:fileset-load>
+        <pxi:fileset-load>
             <p:input port="fileset">
                 <p:pipe port="fileset.in" step="main"/>
             </p:input>
@@ -108,7 +110,7 @@
                 <p:pipe port="in-memory.in" step="main"/>
             </p:input>
             <p:with-option name="href" select="$nav-href"/>
-        </px:fileset-load>
+        </pxi:fileset-load>
         <px:assert test-count-min="1" test-count-max="1" message="The Navigation Document must exist: $1" error-code="NORDICDTBOOKEPUB013">
             <p:with-option name="param1" select="$nav-href"/>
         </px:assert>
@@ -131,11 +133,11 @@
             </p:input>
         </p:xslt>
         <px:message message="Loading &lt;body&gt; tags from spine..."/>
-        <px:fileset-load>
+        <pxi:fileset-load>
             <p:input port="in-memory">
                 <p:pipe port="in-memory.in" step="main"/>
             </p:input>
-        </px:fileset-load>
+        </pxi:fileset-load>
         <p:for-each>
             <p:iteration-source select="/*/html:body"/>
             <p:delete match="/*/node()"/>
@@ -290,11 +292,11 @@
             <p:with-option name="attribute-value" select="replace(/*/@href,'^images/','')"/>
         </p:add-attribute>
     </p:viewport>
-    <px:fileset-add-entry media-type="application/xhtml+xml">
+    <pxi:fileset-add-entry media-type="application/xhtml+xml">
         <p:with-option name="href" select="base-uri(/*)">
             <p:pipe port="result" step="in-memory"/>
         </p:with-option>
-    </px:fileset-add-entry>
+    </pxi:fileset-add-entry>
     <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="omit-xml-declaration" attribute-value="false"/>
     <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="version" attribute-value="1.0"/>
     <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="encoding" attribute-value="utf-8"/>

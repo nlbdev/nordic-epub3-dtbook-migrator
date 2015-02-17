@@ -28,11 +28,12 @@
     <p:option name="dtbook2005" required="false" select="'true'"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
-    <!--    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
     <px:message message="Validating DTBook according to DTBook specification..."/>
@@ -40,11 +41,14 @@
         <p:with-option name="input-dtbook" select="$dtbook"/>
         <p:with-option name="check-images" select="$check-images"/>
     </px:dtbook-validator>
+    <p:identity>
+        <p:input port="source">
+            <p:pipe port="validation-status" step="validate.input-dtbook.generic"/>
+        </p:input>
+    </p:identity>
+    <px:message severity="DEBUG" message="Done validating DTBook according to DTBook specification."/>
 
     <p:choose name="choose">
-        <p:xpath-context>
-            <p:pipe port="validation-status" step="validate.input-dtbook.generic"/>
-        </p:xpath-context>
         <p:when test="not(/*/@result='ok')">
             <p:output port="report" sequence="true">
                 <p:pipe port="report" step="validate.input-dtbook.generic"/>
@@ -59,10 +63,10 @@
             <px:fileset-create>
                 <p:with-option name="base" select="replace($dtbook,'[^/]+$','')"/>
             </px:fileset-create>
-            <px:fileset-add-entry media-type="application/x-dtbook+xml">
+            <pxi:fileset-add-entry media-type="application/x-dtbook+xml">
                 <p:with-option name="href" select="$dtbook"/>
                 <p:with-option name="original-href" select="$dtbook"/>
-            </px:fileset-add-entry>
+            </pxi:fileset-add-entry>
             <p:identity name="invalid-fileset"/>
         </p:when>
         <p:when test="$dtbook2005='false'">

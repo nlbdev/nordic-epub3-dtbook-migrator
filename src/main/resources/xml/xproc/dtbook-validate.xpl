@@ -6,7 +6,7 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic DTBook Validator</h1>
         <p px:role="desc">Validates an dtbook publication according to the nordic markup guidelines.</p>
-        <a px:role="homepage" href="https://github.com/josteinaj/nordic-epub3-dtbook-migrator">https://github.com/josteinaj/nordic-epub3-dtbook-migrator</a>
+        <a px:role="homepage" href="http://nlbdev.github.io/nordic-epub3-dtbook-migrator/">https://github.com/josteinaj/nordic-epub3-dtbook-migrator</a>
         <div px:role="author maintainer">
             <p px:role="name">Jostein Austvik Jacobsen</p>
             <a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a>
@@ -57,10 +57,11 @@
 
     <p:import href="step/dtbook.validate.xpl"/>
     <p:import href="step/format-html-report.step.xpl"/>
-    <p:import href="step/set-doctype.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
+    <!--<p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>-->
+    <!--<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>-->
 
     <px:message message="$1" name="nordic-version-message">
         <p:with-option name="param1" select="/*">
@@ -73,11 +74,11 @@
         <p:with-option name="check-images" select="if ($ignore-missing-images='false') then 'true' else 'false'"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
-    <px:fileset-load media-types="application/x-dtbook+xml" method="xml">
+    <pxi:fileset-load media-types="application/x-dtbook+xml" method="xml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.out" step="validate"/>
         </p:input>
-    </px:fileset-load>
+    </pxi:fileset-load>
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>
@@ -98,11 +99,11 @@
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
         <p:with-option name="href" select="/*/text()">
             <p:pipe port="result" step="store-report"/>
         </p:with-option>
-    </pxi:set-doctype>
+    </px:set-doctype>
     <p:sink/>
 
     <p:group name="status">

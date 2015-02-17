@@ -3,7 +3,7 @@
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:d="http://www.daisy.org/ns/pipeline/data" exclude-inline-prefixes="#all" version="1.0"
     xmlns:cx="http://xmlcalabash.com/ns/extensions">
     
-    <!-- TODO: move this to pipeline 2 common-utils before the v1.8 release -->
+    <!-- TODO: move this to pipeline 2 common-utils before the v1.10 release -->
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Example usage:</p>
