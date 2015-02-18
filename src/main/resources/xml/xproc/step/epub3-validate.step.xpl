@@ -73,6 +73,7 @@
                 <p:pipe port="result" step="opf.validate"/>
                 <p:pipe port="result" step="html.validate"/>
                 <p:pipe port="result" step="nav-references.validate"/>
+                <p:pipe port="result" step="nav-ncx.validate"/>
                 <p:pipe port="result" step="opf-and-html.validate"/>
                 <p:pipe port="result" step="category.html-report"/>
             </p:output>
@@ -232,6 +233,21 @@
             </pxi:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There is no navigation document with the filename 'nav.xhtml' in the EPUB" error-code="NORDICDTBOOKEPUB013"/>
             <p:identity name="nav"/>
+            <p:sink/>
+
+            <px:fileset-filter media-types="application/x-dtbncx+xml">
+                <p:input port="source">
+                    <p:pipe port="fileset" step="unzip"/>
+                </p:input>
+            </px:fileset-filter>
+            <p:delete match="/*/*[not(ends-with(@href,'nav.ncx'))]"/>
+            <pxi:fileset-load>
+                <p:input port="in-memory">
+                    <p:pipe port="in-memory" step="unzip"/>
+                </p:input>
+            </pxi:fileset-load>
+            <px:assert test-count-min="1" test-count-max="1" message="There is no NCX with the filename 'nav.ncx' in the EPUB" error-code="NORDICDTBOOKEPUB014"/>
+            <p:identity name="ncx"/>
             <p:sink/>
 
             <p:validate-with-schematron name="opf.validate.schematron" assert-valid="false">
@@ -592,6 +608,37 @@
                 </px:combine-validation-reports>
             </p:group>
             <p:identity name="nav-references.validate"/>
+            <p:sink/>
+
+            <p:group>
+                <p:wrap-sequence wrapper="wrapper">
+                    <p:input port="source">
+                        <p:pipe port="result" step="nav"/>
+                        <p:pipe port="result" step="ncx"/>
+                    </p:input>
+                </p:wrap-sequence>
+                <p:validate-with-schematron name="nav-ncx.validate.schematron" assert-valid="false">
+                    <p:input port="parameters">
+                        <p:empty/>
+                    </p:input>
+                    <p:input port="schema">
+                        <p:document href="../../schema/nordic2015-1.nav-ncx.sch"/>
+                    </p:input>
+                </p:validate-with-schematron>
+                <p:sink/>
+                <px:combine-validation-reports document-type="Nordic EPUB3 NCX and Navigation Document">
+                    <p:input port="source">
+                        <p:pipe port="report" step="nav-ncx.validate.schematron"/>
+                    </p:input>
+                    <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
+                        <p:pipe port="result" step="ncx"/>
+                    </p:with-option>
+                    <p:with-option name="document-path" select="base-uri(/*)">
+                        <p:pipe port="result" step="ncx"/>
+                    </p:with-option>
+                </px:combine-validation-reports>
+            </p:group>
+            <p:identity name="nav-ncx.validate"/>
             <p:sink/>
 
             <px:fileset-filter media-types="application/xhtml+xml">
