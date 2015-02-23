@@ -35,6 +35,7 @@
 
     <p:option name="fail-on-error" select="'true'"/>
     <p:option name="temp-dir" required="true"/>
+    <p:option name="check-images" select="'true'"/>
 
     <p:import href="validation-status.xpl"/>
     <p:import href="html-validate.step.xpl"/>
@@ -48,6 +49,8 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epubcheck-adapter/library.xpl"/>
+    <p:import href="../upstream/file-utils/xproc/peek.xpl"/>
+    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
 
     <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
@@ -75,6 +78,7 @@
                 <p:pipe port="result" step="nav-references.validate"/>
                 <p:pipe port="result" step="nav-ncx.validate"/>
                 <p:pipe port="result" step="opf-and-html.validate"/>
+                <p:pipe port="result" step="images.validate"/>
                 <p:pipe port="result" step="category.html-report"/>
             </p:output>
 
@@ -553,6 +557,35 @@
                 </px:combine-validation-reports>
             </p:group>
             <p:identity name="opf-and-html.validate"/>
+            <p:sink/>
+
+            <p:group>
+                <px:fileset-filter media-types="image/*">
+                    <p:input port="source">
+                        <p:pipe port="fileset" step="unzip"/>
+                    </p:input>
+                </px:fileset-filter>
+                <p:for-each>
+                    <p:iteration-source select="/*/*"/>
+                    <p:variable name="href" select="resolve-uri(/*/(@original-href,@href) [1]base-uri()"/>
+                    <px:message severity="DEBUG" message="Checking file signature for image: $1">
+                        <p:with-option name="param1" select="replace($1,'.*/','')"/>
+                    </px:message>
+                    <!--
+                        // JPEG
+                        - read first 10 bytes
+                        - compare with JPEG signature: First 10 bytes are: 0xff 0xd8 0xff 0xe0 0x?? 0x?? 0x4a 0x46 0x49 0x46
+                        
+                        // PNG
+                        - read first 8 bytes
+                        - compare with PNG signature: First 8 bytes are: 0x89 0x50 0x4e 0x47 0x0d 0x0a 0x1a 0x0a
+                    -->
+                    <px:file-peek offset="0" length="12">
+                        <p:with-option name="href" select="$href"/>
+                    </px:file-peek>
+                    
+                </p:for-each>
+            </p:group>
             <p:sink/>
 
             <p:group>

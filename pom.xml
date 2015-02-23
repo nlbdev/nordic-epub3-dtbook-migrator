@@ -34,6 +34,31 @@
         <tag>HEAD</tag>
     </scm>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.daisy.pipeline</groupId>
+                <artifactId>framework-bom</artifactId>
+                <version>1.9</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+  
+    <dependencies>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>calabash-adapter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+  
     <build>
         <resources>
             <resource>
@@ -92,6 +117,18 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Import-Package>org.daisy.pipeline.script;version="[2.2,3)"</Import-Package>
+                        <Service-Component>
+                            OSGI-INF/nordic-dtbook-to-epub3.xml,OSGI-INF/nordic-epub3-to-html.xml,OSGI-INF/nordic-dtbook-to-html.xml,OSGI-INF/nordic-epub3-validate.xml,OSGI-INF/nordic-dtbook-validate.xml,OSGI-INF/nordic-html-to-dtbook.xml,OSGI-INF/nordic-epub3-asciimath-to-mathml.xml,OSGI-INF/nordic-html-to-epub3.xml,OSGI-INF/nordic-epub3-to-dtbook.xml,OSGI-INF/nordic-html-validate.xml,OSGI-INF/peek-step.xml,OSGI-INF/xml-peek-step.xml
+                        </Service-Component>
+                    </instructions>
+                </configuration>
             </plugin>
         </plugins>
     </build>
