@@ -25,8 +25,8 @@
 
     <p:option name="check-images" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Check that images exist on disk</h2>
-            <p px:role="desc">Whether or not to see that referenced images exist on disk.</p>
+            <h2 px:role="name">Validate images</h2>
+            <p px:role="desc">Whether or not to check that referenced images exist and has the right file signatures.</p>
         </p:documentation>
     </p:option>
 

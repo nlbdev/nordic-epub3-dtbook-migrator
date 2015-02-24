@@ -119,7 +119,7 @@
     </px:nordic-epub3-to-html.step>
 
     <px:message message="Validating HTML"/>
-    <px:nordic-html-validate.step name="html-validate" document-type="Nordic HTML (intermediary single-document)">
+    <px:nordic-html-validate.step name="html-validate" document-type="Nordic HTML (intermediary single-document)" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="epub3-to-html"/>
@@ -192,7 +192,7 @@
     </p:identity>
 
     <px:message message="Validating DTBook"/>
-    <px:nordic-dtbook-validate.step name="dtbook-validate">
+    <px:nordic-dtbook-validate.step name="dtbook-validate" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <!-- call with dtbook2005 option whether to validate a DTBook 2005 or DTBook 1.1.0 -->
         <p:with-option name="dtbook2005" select="$dtbook2005"/>

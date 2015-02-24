@@ -38,6 +38,7 @@
     <p:option name="dtbook2005" required="false" select="'true'"/>
 
     <p:import href="validation-status.xpl"/>
+    <p:import href="check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
     <!--<p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>-->
@@ -113,6 +114,7 @@
                     <p:output port="report.out" sequence="true">
                         <p:pipe port="report" step="validate.input-dtbook.generic"/>
                         <p:pipe port="result" step="validate.input-dtbook.nordic"/>
+                        <p:pipe port="result" step="validate.images"/>
                     </p:output>
 
                     <px:fileset-filter media-types="application/x-dtbook+xml">
@@ -207,6 +209,7 @@
                         </p:otherwise>
                     </p:choose>
                     <p:identity name="validate.input-dtbook.nordic"/>
+                    <p:sink/>
 
                     <px:dtbook-load name="input-dtbook.in-memory">
                         <p:input port="source">
@@ -223,6 +226,25 @@
                         </p:add-attribute>
                     </p:viewport>
                     <px:mediatype-detect name="input-dtbook.fileset"/>
+                    <p:sink/>
+
+                    <p:choose>
+                        <p:when test="$check-images = 'true'">
+                            <px:nordic-check-image-file-signatures>
+                                <p:input port="source">
+                                    <p:pipe port="result" step="input-dtbook.fileset"/>
+                                </p:input>
+                            </px:nordic-check-image-file-signatures>
+                        </p:when>
+                        <p:otherwise>
+                            <p:identity>
+                                <p:input port="source">
+                                    <p:empty/>
+                                </p:input>
+                            </p:identity>
+                        </p:otherwise>
+                    </p:choose>
+                    <p:identity name="validate.images"/>
                     <p:sink/>
 
                 </p:otherwise>

@@ -37,6 +37,7 @@
     <p:option name="document-type" required="false" select="'Nordic HTML'"/>
 
     <p:import href="validation-status.xpl"/>
+    <p:import href="check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
     <!--<p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>-->
@@ -60,7 +61,8 @@
                 <p:pipe port="in-memory.in" step="main"/>
             </p:output>
             <p:output port="report.out" sequence="true">
-                <p:pipe port="result" step="report"/>
+                <p:pipe port="result" step="html.validate"/>
+                <p:pipe port="result" step="images.validate"/>
             </p:output>
 
 
@@ -147,10 +149,27 @@
                     <p:document href="../../xslt/pretty-print.xsl"/>
                 </p:input>
             </p:xslt>
-            <p:identity name="report"/>
+            <p:identity name="html.validate"/>
             <p:sink/>
 
-
+            <p:choose>
+                <p:when test="$check-images = 'true'">
+                    <px:nordic-check-image-file-signatures>
+                        <p:input port="source">
+                            <p:pipe port="fileset.in" step="main"/>
+                        </p:input>
+                    </px:nordic-check-image-file-signatures>
+                </p:when>
+                <p:otherwise>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:identity>
+                </p:otherwise>
+            </p:choose>
+            <p:identity name="images.validate"/>
+            <p:sink/>
 
 
 

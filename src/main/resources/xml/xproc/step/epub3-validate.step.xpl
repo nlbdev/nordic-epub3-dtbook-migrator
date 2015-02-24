@@ -14,7 +14,7 @@
         <p:empty/>
     </p:input>
     <p:input port="status.in">
-        <p:inline>
+        <p:inline exclude-inline-prefixes="#all">
             <d:validation-status result="ok"/>
         </p:inline>
     </p:input>
@@ -41,6 +41,7 @@
     <p:import href="html-validate.step.xpl"/>
     <p:import href="read-xml-declaration.xpl"/>
     <p:import href="read-doctype-declaration.xpl"/>
+    <p:import href="check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
     <!--<p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>-->
@@ -49,8 +50,6 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epubcheck-adapter/library.xpl"/>
-    <p:import href="../upstream/file-utils/xproc/peek.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
 
     <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
@@ -146,29 +145,13 @@
                         <p:with-option name="unzipped-basedir" select="$temp-dir"/>
                     </px:unzip-fileset>
 
-                    <!-- This is a workaround for a bug that should be fixed in Pipeline v1.8
-                 see: https://github.com/daisy-consortium/pipeline-modules-common/pull/49 -->
-                    <p:delete match="/*/*[ends-with(@href,'/')]"/>
                     <px:mediatype-detect name="unzip.fileset" cx:depends-on="unzip.in-memory.store"/>
 
-                    <p:for-each>
+                    <p:for-each name="unzip.in-memory.store">
                         <p:iteration-source>
                             <p:pipe port="in-memory.out" step="unzip.unzip"/>
                         </p:iteration-source>
-                        <p:choose>
-                            <p:when test="ends-with(base-uri(/*),'/')">
-                                <p:identity>
-                                    <p:input port="source">
-                                        <p:empty/>
-                                    </p:input>
-                                </p:identity>
-                            </p:when>
-                            <p:otherwise>
-                                <p:identity/>
-                            </p:otherwise>
-                        </p:choose>
-                    </p:for-each>
-                    <p:for-each name="unzip.in-memory.store">
+
                         <!-- we know that everything is base64 encoded since we used encode-as-base64="true" in px:unzip-fileset -->
                         <p:store cx:decode="true" encoding="base64">
                             <p:with-option name="href" select="base-uri(/*)"/>
@@ -301,7 +284,7 @@
                             <p:pipe port="result" step="vars"/>
                         </p:input>
                         <p:input port="template">
-                            <p:inline>
+                            <p:inline exclude-inline-prefixes="#all">
                                 <d:document-validation-report>
                                     <d:document-info>
                                         <d:document-name>{$epub-filename}</d:document-name>
@@ -348,7 +331,7 @@
                         <p:pipe port="fileset" step="unzip"/>
                     </p:input>
                 </p:delete>
-                <px:nordic-html-validate.step name="validate.html" document-type="Nordic HTML (EPUB3 Content Document)">
+                <px:nordic-html-validate.step name="validate.html" document-type="Nordic HTML (EPUB3 Content Document)" check-images="false">
                     <p:input port="in-memory.in">
                         <p:pipe port="in-memory" step="unzip"/>
                     </p:input>
@@ -418,13 +401,13 @@
                             <p:wrap-sequence wrapper="d:error"/>
                             <p:insert match="/*" position="first-child">
                                 <p:input port="insertion">
-                                    <p:inline>
+                                    <p:inline exclude-inline-prefixes="#all">
                                         <d:desc>PLACEHOLDER</d:desc>
                                     </p:inline>
-                                    <p:inline>
+                                    <p:inline exclude-inline-prefixes="#all">
                                         <d:file>PLACEHOLDER</d:file>
                                     </p:inline>
-                                    <p:inline>
+                                    <p:inline exclude-inline-prefixes="#all">
                                         <d:expected>&lt;?xml version="1.0" encoding="utf-8"?&gt;</d:expected>
                                     </p:inline>
                                 </p:input>
@@ -499,13 +482,13 @@
                                     <p:wrap-sequence wrapper="d:error"/>
                                     <p:insert match="/*" position="first-child">
                                         <p:input port="insertion">
-                                            <p:inline>
+                                            <p:inline exclude-inline-prefixes="#all">
                                                 <d:desc>PLACEHOLDER</d:desc>
                                             </p:inline>
-                                            <p:inline>
+                                            <p:inline exclude-inline-prefixes="#all">
                                                 <d:file>PLACEHOLDER</d:file>
                                             </p:inline>
-                                            <p:inline>
+                                            <p:inline exclude-inline-prefixes="#all">
                                                 <d:expected>&lt;!DOCTYPE html&gt;</d:expected>
                                             </p:inline>
                                         </p:input>
@@ -559,33 +542,23 @@
             <p:identity name="opf-and-html.validate"/>
             <p:sink/>
 
-            <p:group>
-                <px:fileset-filter media-types="image/*">
-                    <p:input port="source">
-                        <p:pipe port="fileset" step="unzip"/>
-                    </p:input>
-                </px:fileset-filter>
-                <p:for-each>
-                    <p:iteration-source select="/*/*"/>
-                    <p:variable name="href" select="resolve-uri(/*/(@original-href,@href) [1]base-uri()"/>
-                    <px:message severity="DEBUG" message="Checking file signature for image: $1">
-                        <p:with-option name="param1" select="replace($1,'.*/','')"/>
-                    </px:message>
-                    <!--
-                        // JPEG
-                        - read first 10 bytes
-                        - compare with JPEG signature: First 10 bytes are: 0xff 0xd8 0xff 0xe0 0x?? 0x?? 0x4a 0x46 0x49 0x46
-                        
-                        // PNG
-                        - read first 8 bytes
-                        - compare with PNG signature: First 8 bytes are: 0x89 0x50 0x4e 0x47 0x0d 0x0a 0x1a 0x0a
-                    -->
-                    <px:file-peek offset="0" length="12">
-                        <p:with-option name="href" select="$href"/>
-                    </px:file-peek>
-                    
-                </p:for-each>
-            </p:group>
+            <p:choose>
+                <p:when test="$check-images = 'true'">
+                    <px:nordic-check-image-file-signatures>
+                        <p:input port="source">
+                            <p:pipe port="fileset" step="unzip"/>
+                        </p:input>
+                    </px:nordic-check-image-file-signatures>
+                </p:when>
+                <p:otherwise>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:identity>
+                </p:otherwise>
+            </p:choose>
+            <p:identity name="images.validate"/>
             <p:sink/>
 
             <p:group>

@@ -77,7 +77,7 @@
     <pxi:fileset-add-entry media-type="application/x-dtbook+xml">
         <p:with-option name="href" select="replace($dtbook-href,'.*/','')"/>
     </pxi:fileset-add-entry>
-    <px:nordic-dtbook-validate.step name="dtbook-validate" check-images="true" cx:depends-on="nordic-version-message">
+    <px:nordic-dtbook-validate.step name="dtbook-validate" cx:depends-on="nordic-version-message">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
@@ -109,7 +109,7 @@
         </p:input>
     </px:nordic-html-store.step>
 
-    <px:nordic-html-validate.step name="html-validate" document-type="Nordic HTML (single-document)">
+    <px:nordic-html-validate.step name="html-validate" document-type="Nordic HTML (single-document)" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="html-store"/>

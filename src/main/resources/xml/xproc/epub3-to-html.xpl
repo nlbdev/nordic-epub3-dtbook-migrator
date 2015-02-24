@@ -118,7 +118,7 @@
     </px:nordic-html-store.step>
 
     <px:message message="Validating HTML"/>
-    <px:nordic-html-validate.step name="html-validate" document-type="Nordic HTML (single-document)">
+    <px:nordic-html-validate.step name="html-validate" document-type="Nordic HTML (single-document)" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="html-store"/>

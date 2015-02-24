@@ -172,7 +172,7 @@
         </p:input>
     </px:nordic-epub3-store.step>
 
-    <px:nordic-epub3-validate.step name="epub3-validate">
+    <px:nordic-epub3-validate.step name="epub3-validate" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="temp-dir" select="concat($temp-dir,'validate-epub/')"/>
         <p:input port="in-memory.in">

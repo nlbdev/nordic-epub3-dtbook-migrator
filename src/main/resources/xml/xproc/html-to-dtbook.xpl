@@ -25,8 +25,8 @@
 
     <p:option name="check-images" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Check that images exist on disk</h2>
-            <p px:role="desc">Whether or not to see that referenced images exist on disk.</p>
+            <h2 px:role="name">Validate images</h2>
+            <p px:role="desc">Whether or not to check that referenced images exist and has the right file signatures.</p>
         </p:documentation>
     </p:option>
 
@@ -186,7 +186,7 @@
     </p:identity>
 
     <px:message message="Validating DTBook"/>
-    <px:nordic-dtbook-validate.step name="dtbook-validate">
+    <px:nordic-dtbook-validate.step name="dtbook-validate" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <!-- call with dtbook2005 option whether to validate a DTBook 2005 or DTBook 1.1.0 -->
         <p:with-option name="dtbook2005" select="$dtbook2005"/>

@@ -113,7 +113,7 @@
         </p:input>
     </px:nordic-dtbook-to-html.step>
 
-    <px:nordic-html-validate.step name="html-validate">
+    <px:nordic-html-validate.step name="html-validate" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="dtbook-to-html"/>
@@ -181,7 +181,7 @@
         <p:with-option name="output-dir" select="$output-dir"/>
     </px:nordic-epub3-store.step>
 
-    <px:nordic-epub3-validate.step name="epub3-validate">
+    <px:nordic-epub3-validate.step name="epub3-validate" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="epub3-store"/>
