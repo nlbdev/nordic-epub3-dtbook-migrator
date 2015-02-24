@@ -99,9 +99,11 @@
 
     <!-- Rule 14:  Don't allow <h x+1> in section w/depth x+1 unless <h x> in section w/depth x is present -->
     <pattern id="epub_nordic_14">
-        <rule context="html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section|html:article]">
+        <rule
+            context="html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section[not(tokenize(@epub:type,'\t+')=('z3998:poem','z3998:verse'))]|html:article]">
             <assert test="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">[nordic14] sectioning element with no headline (h1-h6) when sub-section is present (is only allowed for sectioning
-                element with epub:type="cover"): <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+                element with epub:type="cover" or when sub-section is a poem): <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
@@ -551,11 +553,12 @@
                 'afterword','epigraph','toc','toc-brief','landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','glossary','bibliography','titlepage','halftitlepage',
                 'copyright-page','seriespage','acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','answers','assessments','qna',
                 'practices','footnotes','rearnotes')"
-                >[nordic202] '<value-of select="(tokenize(@epub:type,'\s+')[not(.='frontmatter')],'(missing type)')[1]"/>' is not an allowed type in frontmatter. On elements with the epub:type "frontmatter", you can
-                either leave the type blank (and just use 'frontmatter' as the type in the filename), or you can use one of the following types: 'titlepage', 'chapter', 'abstract', 'foreword',
-                'preface', 'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc', 'toc-brief', 'landmarks', 'loa', 'loi', 'lot', 'lov', 'appendix',
-                'colophon', 'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage', 'copyright-page', 'seriespage', 'acknowledgments', 'imprint', 'imprimatur',
-                'contributors', 'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers', 'assessments', 'qna', 'practices', 'footnotes' or 'rearnotes'.</assert>
+                >[nordic202] '<value-of select="(tokenize(@epub:type,'\s+')[not(.='frontmatter')],'(missing type)')[1]"/>' is not an allowed type in frontmatter. On elements with the epub:type
+                "frontmatter", you can either leave the type blank (and just use 'frontmatter' as the type in the filename), or you can use one of the following types: 'titlepage', 'chapter',
+                'abstract', 'foreword', 'preface', 'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc', 'toc-brief', 'landmarks', 'loa', 'loi', 'lot',
+                'lov', 'appendix', 'colophon', 'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage', 'copyright-page', 'seriespage', 'acknowledgments', 'imprint',
+                'imprimatur', 'contributors', 'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers', 'assessments', 'qna', 'practices', 'footnotes' or
+                'rearnotes'.</assert>
         </rule>
     </pattern>
 
@@ -621,11 +624,11 @@
                 'toc-brief','landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','glossary','bibliography','titlepage','halftitlepage','copyright-page',
                 'seriespage','acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','answers','assessments','qna',
                 'practices','footnotes','rearnotes')"
-                >[nordic208] '<value-of select="(tokenize(@epub:type,'\s+')[not(.='bodymatter')],'(missing type)')[1]"/>' is not an allowed type in bodymatter. Elements with the type "bodymatter" must also have one of
-                the types 'part', 'chapter', 'abstract', 'foreword', 'preface', 'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc', 'toc-brief',
-                'landmarks', 'loa', 'loi', 'lot', 'lov', 'appendix', 'colophon', 'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage', 'copyright-page',
-                'seriespage', 'acknowledgments', 'imprint', 'imprimatur', 'contributors', 'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers', 'assessments', 'qna',
-                'practices', 'footnotes' or 'rearnotes'.</assert>
+                >[nordic208] '<value-of select="(tokenize(@epub:type,'\s+')[not(.='bodymatter')],'(missing type)')[1]"/>' is not an allowed type in bodymatter. Elements with the type "bodymatter" must
+                also have one of the types 'part', 'chapter', 'abstract', 'foreword', 'preface', 'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc',
+                'toc-brief', 'landmarks', 'loa', 'loi', 'lot', 'lov', 'appendix', 'colophon', 'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage',
+                'copyright-page', 'seriespage', 'acknowledgments', 'imprint', 'imprimatur', 'contributors', 'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers',
+                'assessments', 'qna', 'practices', 'footnotes' or 'rearnotes'.</assert>
         </rule>
     </pattern>
 
@@ -637,11 +640,11 @@
                 'landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','glossary','bibliography','titlepage','halftitlepage','copyright-page','seriespage',
                 'acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','answers','assessments','qna','practices',
                 'footnotes','rearnotes')"
-                >[nordic211] '<value-of select="(tokenize(@epub:type,'\s+')[not(.=('part','volume'))],'(missing type)')[1]"/>' is not an allowed type in a part. Sections inside a part must also have one of the types
-                'chapter', 'abstract', 'foreword', 'preface', 'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc', 'toc-brief', 'landmarks', 'loa', 'loi',
-                'lot', 'lov', 'appendix', 'colophon', 'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage', 'copyright-page', 'seriespage', 'acknowledgments',
-                'imprint', 'imprimatur', 'contributors', 'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers', 'assessments', 'qna', 'practices', 'footnotes' or
-                'rearnotes'.</assert>
+                >[nordic211] '<value-of select="(tokenize(@epub:type,'\s+')[not(.=('part','volume'))],'(missing type)')[1]"/>' is not an allowed type in a part. Sections inside a part must also have
+                one of the types 'chapter', 'abstract', 'foreword', 'preface', 'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc', 'toc-brief',
+                'landmarks', 'loa', 'loi', 'lot', 'lov', 'appendix', 'colophon', 'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage', 'copyright-page',
+                'seriespage', 'acknowledgments', 'imprint', 'imprimatur', 'contributors', 'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers', 'assessments', 'qna',
+                'practices', 'footnotes' or 'rearnotes'.</assert>
         </rule>
     </pattern>
 
@@ -653,11 +656,11 @@
                 'epigraph','toc','toc-brief','landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','glossary','bibliography','titlepage','halftitlepage','copyright-page',
                 'seriespage','acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','answers','assessments','qna','practices',
                 'footnotes','rearnotes')"
-                >[nordic215] '<value-of select="(tokenize(@epub:type,'\s+')[not(.='backmatter')],'(missing type)')[1]"/>' is not an allowed type in backmatter. On elements with the epub:type "backmatter", you can
-                either leave the type blank (and just use 'backmatter' as the type in the filename), or you can use one of the following types: 'chapter', 'abstract', 'foreword', 'preface',
-                'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc', 'toc-brief', 'landmarks', 'loa', 'loi', 'lot', 'lov', 'appendix', 'colophon',
-                'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage', 'copyright-page', 'seriespage', 'acknowledgments', 'imprint', 'imprimatur', 'contributors',
-                'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers', 'assessments', 'qna', 'practices', 'footnotes' or 'rearnotes'.</assert>
+                >[nordic215] '<value-of select="(tokenize(@epub:type,'\s+')[not(.='backmatter')],'(missing type)')[1]"/>' is not an allowed type in backmatter. On elements with the epub:type
+                "backmatter", you can either leave the type blank (and just use 'backmatter' as the type in the filename), or you can use one of the following types: 'chapter', 'abstract', 'foreword',
+                'preface', 'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc', 'toc-brief', 'landmarks', 'loa', 'loi', 'lot', 'lov', 'appendix',
+                'colophon', 'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage', 'copyright-page', 'seriespage', 'acknowledgments', 'imprint', 'imprimatur',
+                'contributors', 'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers', 'assessments', 'qna', 'practices', 'footnotes' or 'rearnotes'.</assert>
         </rule>
     </pattern>
 
@@ -891,6 +894,14 @@
             <let name="base-uri-type" value="if (matches(base-uri(.), $filename-regex)) then replace(base-uri(.), $filename-regex, '$1') else ()"/>
             <assert test="not(matches(base-uri(.), $filename-regex)) or tokenize(@epub:type,'\s+') = $base-uri-type">[nordic269] The type used in the filename (<value-of select="$base-uri-type"/>)
                 must be present on the body element: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <pattern id="epub_nordic_270">
+        <rule context="html:p[tokenize(@epub:type,'\t+')='bridgehead']">
+            <assert test="parent::html:body | parent::html:section | parent::html:article | parent::html:div">[nordic270] Bridgehead is only allowed as a child of <value-of
+                    select="if (ancestor::html:body[not(html:header)]) then 'body, ' else ' '"/>section, article and div: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
