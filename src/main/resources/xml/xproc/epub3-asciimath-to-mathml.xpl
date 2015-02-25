@@ -29,9 +29,11 @@
     </p:option>
 
     <p:import href="step/epub3-asciimath-to-mathml.step.xpl"/>
+    <p:import href="upstream/zip-utils/unzip-fileset.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
 
     <p:variable name="epub-href" select="resolve-uri($epub,static-base-uri())"/>
 
@@ -42,17 +44,20 @@
     </px:message>
 
     <px:message message="Unzipping EPUB" cx:depends-on="nordic-version-message" name="message.epub-unzipped"/>
-    <px:unzip-fileset name="unzip" cx:depends-on="message.epub-unzipped">
+    <pxi:unzip-fileset name="unzip" cx:depends-on="message.epub-unzipped" load-to-memory="false" store-to-disk="true">
         <p:with-option name="href" select="$epub-href"/>
         <p:with-option name="unzipped-basedir" select="concat($temp-dir,'epub/')"/>
-    </px:unzip-fileset>
-
+    </pxi:unzip-fileset>
+    <p:sink/>
+    <px:mediatype-detect>
+        <p:input port="source">
+            <p:pipe port="fileset" step="unzip"/>
+        </p:input>
+    </px:mediatype-detect>
+    
     <px:message message="Converting from ASCIIMath to MathML"/>
     <px:nordic-epub3-asciimath-to-mathml.step name="convert">
         <p:with-option name="fail-on-error" select="'true'"/>
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="unzip"/>
-        </p:input>
     </px:nordic-epub3-asciimath-to-mathml.step>
 
     <px:message message="Zipping EPUB"/>

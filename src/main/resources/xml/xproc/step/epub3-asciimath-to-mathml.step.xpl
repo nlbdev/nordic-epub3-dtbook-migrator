@@ -43,8 +43,7 @@
     <!--<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/asciimath-utils/library.xpl"/>
 
-    <px:assert
-        message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
+    <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
         <p:with-option name="test" select="$fail-on-error = ('true','false')"/>
     </px:assert>
@@ -96,8 +95,7 @@
                                 <p:input port="source">
                                     <p:inline exclude-inline-prefixes="#all">
                                         <epub:switch>
-                                            <epub:case
-                                                required-namespace="http://www.w3.org/1998/Math/MathML"/>
+                                            <epub:case required-namespace="http://www.w3.org/1998/Math/MathML"/>
                                             <epub:default/>
                                         </epub:switch>
                                     </p:inline>
@@ -116,16 +114,14 @@
 
                         </p:when>
                         <p:otherwise>
-                            <px:message severity="WARNING"
-                                message="px:asciimath is not available; asciimath element will be replaced by placeholder"/>
+                            <px:message severity="WARNING" message="px:asciimath is not available; asciimath element will be replaced by placeholder"/>
                             <p:add-attribute match="/*" attribute-name="alt">
                                 <p:input port="source">
                                     <p:inline>
                                         <math xmlns="http://www.w3.org/1998/Math/MathML"/>
                                     </p:inline>
                                 </p:input>
-                                <p:with-option name="attribute-value"
-                                    select="string-join(.//text(),'')"/>
+                                <p:with-option name="attribute-value" select="string-join(.//text(),'')"/>
                             </p:add-attribute>
                         </p:otherwise>
                     </p:choose>
@@ -152,9 +148,7 @@
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
             </pxi:fileset-load>
-            <px:assert test-count-min="1" test-count-max="1"
-                message="There must be exactly one Package Document in the EPUB."
-                error-code="NORDICDTBOOKEPUB011"/>
+            <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
             <p:viewport match="/opf:package/opf:manifest/opf:item">
                 <p:variable name="item-uri" select="resolve-uri(@href,base-uri(/*))"/>
                 <p:choose>
@@ -163,9 +157,7 @@
                     </p:xpath-context>
                     <p:when test="$item-uri = /*/*/@xml:base">
                         <!-- item contains MathML; add "mathml" to list of properties -->
-                        <p:add-attribute match="/*" attribute-name="properties"
-                            attribute-value="string-join(distinct-values((/*/tokenize(@properties,'\s+'), 'mathml')),' ')"
-                        />
+                        <p:add-attribute match="/*" attribute-name="properties" attribute-value="string-join(distinct-values((/*/tokenize(@properties,'\s+'), 'mathml')),' ')"/>
                     </p:when>
                     <p:otherwise>
                         <!-- MathML was not added to the item; don't do anything -->
@@ -181,8 +173,7 @@
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:iteration-source>
                 <p:choose>
-                    <p:when
-                        test="ends-with(base-uri(/*),'.xhtml') or ends-with(base-uri(/*),'.opf')">
+                    <p:when test="ends-with(base-uri(/*),'.xhtml') or ends-with(base-uri(/*),'.opf')">
                         <p:identity>
                             <p:input port="source">
                                 <p:empty/>

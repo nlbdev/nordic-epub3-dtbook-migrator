@@ -42,6 +42,7 @@
     <p:import href="read-xml-declaration.xpl"/>
     <p:import href="read-doctype-declaration.xpl"/>
     <p:import href="check-image-file-signatures.xpl"/>
+    <p:import href="../upstream/zip-utils/unzip-fileset.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
     <!--<p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>-->
@@ -140,24 +141,18 @@
                         <p:with-option name="test" select="count(/*/d:file) = 1"/>
                         <p:with-option name="param1" select="count(/*/d:file)"/>
                     </px:assert>
-                    <px:unzip-fileset name="unzip.unzip" encode-as-base64="true">
+                    <pxi:unzip-fileset name="unzip.unzip" load-to-memory="false" store-to-disk="true">
                         <p:with-option name="href" select="resolve-uri(/*/*/(@original-href,@href)[1],/*/*/base-uri(.))"/>
                         <p:with-option name="unzipped-basedir" select="$temp-dir"/>
-                    </px:unzip-fileset>
+                    </pxi:unzip-fileset>
+                    <p:sink/>
 
-                    <px:mediatype-detect name="unzip.fileset" cx:depends-on="unzip.in-memory.store"/>
-
-                    <p:for-each name="unzip.in-memory.store">
-                        <p:iteration-source>
-                            <p:pipe port="in-memory.out" step="unzip.unzip"/>
-                        </p:iteration-source>
-
-                        <!-- we know that everything is base64 encoded since we used encode-as-base64="true" in px:unzip-fileset -->
-                        <p:store cx:decode="true" encoding="base64">
-                            <p:with-option name="href" select="base-uri(/*)"/>
-                            <p:with-option name="media-type" select="/*/@content-type"/>
-                        </p:store>
-                    </p:for-each>
+                    <px:mediatype-detect name="unzip.fileset">
+                        <p:input port="source">
+                            <p:pipe port="fileset" step="unzip.unzip"/>
+                        </p:input>
+                    </px:mediatype-detect>
+                    
                 </p:when>
                 <p:otherwise>
                     <p:output port="fileset">

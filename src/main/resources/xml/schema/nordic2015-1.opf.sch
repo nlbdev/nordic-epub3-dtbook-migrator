@@ -41,6 +41,7 @@
 
             <assert test="count(dc:title[not(@refines)]) = 1">[opf3b] exactly one dc:title <value-of select="if (dc:title[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must be
                 present in the package document.</assert>
+            <assert test="string-length(normalize-space(dc:title[not(@refines)]/text()))">[opf3b] the dc:title <value-of select="if (dc:title[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must not be empty.</assert>
 
             <assert test="count(dc:language[not(@refines)]) = 1">[opf3c] exactly one dc:language <value-of select="if (dc:language[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"
                 /> must be present in the package document.</assert>

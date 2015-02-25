@@ -6,6 +6,7 @@
     <ns prefix="html" uri="http://www.w3.org/1999/xhtml"/>
     <ns prefix="epub" uri="http://www.idpf.org/2007/ops"/>
     <ns prefix="nordic" uri="http://www.mtm.se/epub/"/>
+    <ns prefix="mathml" uri="http://www.w3.org/1998/Math/MathML"/>
 
     <!-- Rule 7: No <ul>, <ol> or <dl> inside <p> -->
     <pattern id="epub_nordic_7">
@@ -152,21 +153,42 @@
         </rule>
     </pattern>
 
-    <!-- Rule 26: Each note must have a noteref -->
-    <pattern id="epub_nordic_26">
-        <rule context="html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote')][ancestor::html:body[html:header]]">
+    <!-- Rule 26a: Each note must have a noteref -->
+    <pattern id="epub_nordic_26_a">
+        <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')=('note','rearnote','footnote')]">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
-            <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref'][substring-after(@href, '#')=current()/@id])&gt;=1">[nordic26] Each note must have at least one &lt;a epub:type="noteref"
+            <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref'][substring-after(@href, '#')=current()/@id])&gt;=1">[nordic26a] Each note must have at least one &lt;a epub:type="noteref"
                 ...&gt; referencing it: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
-    <!-- Rule 27: Each annotation must have an annoref -->
-    <pattern id="epub_nordic_27">
-        <rule context="html:*[tokenize(@epub:type,' ')='annotation'][ancestor::html:body[html:header]]">
+    <!-- Rule 26b: Each noteref must reference a note -->
+    <pattern id="epub_nordic_26_b">
+        <rule context="html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='noteref']">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
-            <assert test="count(//html:a[tokenize(@epub:type,' ')='annoref'][substring-after(@href, '#')=current()/@id])&gt;=1">[nordic27] Each annotation must have at least one &lt;a
+            <assert
+                test="count(//html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1"
+                >[nordic26b] The note reference with the href "<value-of select="@href"/>" attribute must resolve to a note, rearnote or footnote in the publication: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!-- Rule 27a: Each annotation must have an annoref -->
+    <pattern id="epub_nordic_27_a">
+        <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,' ')='annotation']">
+            <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
+            <assert test="count(//html:a[tokenize(@epub:type,' ')='annoref'][substring-after(@href, '#')=current()/@id])&gt;=1">[nordic27a] Each annotation must have at least one &lt;a
                 epub:type="annoref" ...&gt; referencing it: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!-- Rule 27b: Each noteref must reference a note -->
+    <pattern id="epub_nordic_27_b">
+        <rule context="html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='annoref']">
+            <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
+            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('annotation') and @id = current()/substring-after(@href,'#')]) &gt;= 1"
+                >[nordic26b] The annotation with the href "<value-of select="@href"/>" must resolve to a annotation in the publication: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
@@ -904,5 +926,208 @@
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
+
+
+    <!-- Imported from Pipeline 1 DTBook validator and adapted to EPUB3 -->
+    <!--<pattern id="epub_nordic_271">
+        <rule context="html:a[tokenize(@epub:type,'\s+')='noteref']">
+            <assert test="contains(@href, '#')">[nordic271a] Note reference href attribute does not contain a fragment identifier: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <report test="ancestor::html:body[html:header] and contains(@href, '#') and substring-after(@href, '#')=//html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote')]/@id"
+                >[nordic271b] Note reference href attribute does not resolve to a note, rearnote or footnote in the publication: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>-->
+
+    <!-- Imported from Pipeline 1 DTBook validator and adapted to EPUB3 -->
+    <pattern id="epub_nordic_272">
+        <rule context="html:a[tokenize(@epub:type,'\s+')='annoref']">
+            <assert test="contains(@href, '#')">[nordic272a] Note reference href attribute does not contain a fragment identifier: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <report test="ancestor::html:body[html:header] and contains(@href, '#') and substring-after(@href, '#')=//html:*[tokenize(@epub:type,'\s+')=('annotation')]/@id">[nordic272b] Annotation
+                reference href attribute does not resolve to a note, rearnote or footnote in the publication: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>
+
+    <!-- Imported from Pipeline 1 DTBook validator and adapted to EPUB3 -->
+    <pattern id="epub_nordic_273">
+        <rule context="html:a[starts-with(@href, '#')]">
+            <assert test="count(//html:*[@id=substring(current()/@href, 2)])=1">[nordic273] Internal link ("<value-of select="@href"/>") does not resolve: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_274">
+        <rule context="html:th[@headers] | html:td[@headers]">
+            <assert
+                test="count(
+                ancestor::html:table//html:th/@id[contains( concat(' ',current()/@headers,' '), concat(' ',normalize-space(),' ') )]
+                ) = 
+                string-length(normalize-space(@headers)) - string-length(translate(normalize-space(@headers), ' ','')) + 1
+                "
+                >[nordic274] Not all the tokens in the headers attribute match the id attributes of 'th' elements in this or a parent table: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_275">
+        <rule context="html:img[@longdesc and ancestor::html:body[html:header]]">
+            <assert test="substring-after(normalize-space(@longdesc),'#') = //@id">[nordic275] The URL in the img longdesc attribute does not reference any element in the publication: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <!--<pattern id="dtbook_accesskeyTabindex">
+        <rule context="html:a">
+            <report test="@accesskey and string-length(@accesskey)!=1">The accesskey attribute value is not 1 character long.</report>
+            <report test="@tabindex and string-length(translate(@width,'0123456789',''))!=0">The tabindex attribute value is not expressed in numbers.</report>
+            <report test="@accesskey and count(//html:a/@accesskey=@accesskey)!=1">The accesskey attribute value is not unique within the document.</report>
+            <report test="@tabindex and count(//html:a/@tabindex=@tabindex)!=1">The tabindex attribute value is not unique within the document.</report>
+        </rule>
+    </pattern>-->
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <!--<pattern id="dtbook_charAttribute">
+        <rule context="dtb:*[self::dtb:col   or self::dtb:colgroup or self::dtb:tbody or self::dtb:td or 
+            self::dtb:tfoot or self::dtb:th       or self::dtb:thead or self::dtb:tr]">
+            <report test="@char and string-length(@char)!=1">The char attribute value is not 1 character long.</report>
+            <report test="@char and @align!='char'">char attribute may only occur when align attribute value is 'char'.</report>
+        </rule>
+    </pattern>-->
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <!--<pattern id="dtbook_imgWidthHeight">
+        <rule context="dtb:img">
+            <assert
+                test="not(@width) or 
+                string-length(translate(@width,'0123456789',''))=0 or
+                (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)>=2)"
+                >The image width is not expressed in pixels or percentage.</assert>
+            <assert
+                test="not(@height) or 
+                string-length(translate(@height,'0123456789',''))=0 or
+                (contains(@height,'%') and substring-after(@height,'%')='' and translate(@height,'%0123456789','')='' and string-length(@height)>=2)"
+                >The image height is not expressed in pixels or percentage.</assert>
+        </rule>
+    </pattern>-->
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <!--<pattern id="dtbook_tableAttributes">
+        <rule context="dtb:table">
+            <assert
+                test="not(@width) or 
+                string-length(translate(@width,'0123456789',''))=0 or
+                (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)>=2)"
+                >Table width is not expressed in pixels or percentage.</assert>
+            <assert
+                test="not(@cellspacing) or 
+                string-length(translate(@cellspacing,'0123456789',''))=0 or
+                (contains(@cellspacing,'%') and substring-after(@cellspacing,'%')='' and translate(@cellspacing,'%0123456789','')='' and string-length(@cellspacing)>=2)"
+                >Table cellspacing is not expressed in pixels or percentage.</assert>
+            <assert
+                test="not(@cellpadding) or 
+                string-length(translate(@cellpadding,'0123456789',''))=0 or
+                (contains(@cellpadding,'%') and substring-after(@cellpadding,'%')='' and translate(@cellpadding,'%0123456789','')='' and string-length(@cellpadding)>=2)"
+                >Table cellpadding is not expressed in pixels or percentage.</assert>
+        </rule>
+    </pattern>-->
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <!--<pattern id="dtbook_startAttrInList">
+        <rule context="dtb:list">
+            <report test="@start and @type!='ol'">The start attribute occurs in a non-numbered list.</report>
+            <report test="@start='' or string-length(translate(@start,'0123456789',''))!=0">The start attribute is not a non negative number.</report>
+        </rule>
+    </pattern>-->
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <!--<pattern id="dtbook_dcMetadata">
+        <rule context="dtb:meta">
+            <report
+                test="starts-with(@name, 'dc:') and not(@name='dc:Title' or @name='dc:Subject' or @name='dc:Description' or
+                @name='dc:Type' or @name='dc:Source' or @name='dc:Relation' or 
+                @name='dc:Coverage' or @name='dc:Creator' or @name='dc:Publisher' or 
+                @name='dc:Contributor' or @name='dc:Rights' or @name='dc:Date' or 
+                @name='dc:Format' or @name='dc:Identifier' or @name='dc:Language')"
+                >Unrecognized Dublin Core metadata name.</report>
+            <report test="starts-with(@name, 'DC:') or starts-with(@name, 'Dc:') or starts-with(@name, 'dC:')">Unrecognized Dublin Core metadata prefix.</report>
+        </rule>
+    </pattern>-->
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <!--<pattern id="dtbook_spanColColgroup">
+        <rule context="dtb:*[self::dtb:col or self::dtb:colgroup]">
+            <report test="@span and (translate(@span,'0123456789','')!='' or starts-with(@span,'0'))">span attribute is not a positive integer.</report>
+        </rule>
+    </pattern>-->
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <!--<pattern>
+        <rule context="dtb:*[self::dtb:td or self::dtb:th]">
+            <report test="@rowspan and (translate(@rowspan,'0123456789','')!='' or starts-with(@rowspan,'0'))"> The rowspan attribute value is not a positive integer.</report>
+            <report test="@colspan and (translate(@colspan,'0123456789','')!='' or starts-with(@colspan,'0'))"> The colspan attribute value is not a positive integer.</report>
+            <report test="@rowspan and number(@rowspan) > count(parent::dtb:tr/following-sibling::dtb:tr)+1"> The rowspan attribute value is larger than the number of rows left in the table.</report>
+        </rule>
+    </pattern>-->
+
+    <!--
+        MG20070522: added as a consequence of zedval feature request #1593192: http://sourceforge.net/p/zedval/feature-requests/13/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <!--<pattern id="dtbook_levelDepth">
+        <rule context="dtb:level[@depth]">
+            <assert test="@depth=count(ancestor-or-self::dtb:level)">The value of the depth attribute on the level element does not correspond to actual nesting level.</assert>
+        </rule>
+    </pattern>-->
+
+    <!-- 
+        The math element has optional attributes alttext and altimg. To be valid with the MathML in DAISY spec, 
+        the alttext and altimg attributes must be part of the math element.
+    -->
+    <!--<pattern>
+        <rule context="mathml:math">
+            <assert test="@alttext">alttext attribute must be present</assert>
+            <assert test="not(empty(@alttext))">alttext attribute must be non-empty</assert>
+
+            <assert test="@altimg">altimg attribute must be present</assert>
+            <assert test="not(empty(@altimg))">altimg attribute must be non-empty</assert>
+        </rule>
+    </pattern>-->
+
+    <!-- TODO: if we allow MathML in EPUB; look at whether or not we can import more of the rules declared in and referenced from dtbook.mathml.sch in the dtbook-validator script from the main DP2 distribution -->
 
 </schema>

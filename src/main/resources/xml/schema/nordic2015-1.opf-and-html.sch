@@ -68,23 +68,48 @@
         </rule>
     </pattern>
 
-    <!-- Rule 26: Each note must have a noteref -->
-    <pattern id="epub_nordic_26">
+    <!-- Rule 26a: Each note must have a noteref -->
+    <pattern id="epub_nordic_26_a">
         <rule context="html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote')]">
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
-            <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref'][substring-after(@href, '#')=current()/@id])>=1">[nordic_opf_and_html_26] Each note must have at least one &lt;a
-                epub:type="noteref" ...&gt; referencing it: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in
-                    <value-of select="replace(base-uri(),'.*/','')"/>)</assert>
+            <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref' and substring-after(@href,'#') = current()/@id]) &gt;= 1">[nordic_opf_and_html_26a] The <value-of
+                    select="(tokenize(@epub:type,'\s+')[.=('note','rearnote','footnote')],'note')[1]"/><value-of select="if (@id) then concat(' with the id &quot;',@id,'&quot;') else ''"/> must have
+                at least one &lt;a epub:type="noteref" ...&gt; referencing it: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in <value-of select="replace(base-uri(),'.*/','')"
+                />)</assert>
         </rule>
     </pattern>
 
-    <!-- Rule 27: Each annotation must have an annoref -->
-    <pattern id="epub_nordic_27">
-        <rule context="html:*[tokenize(@epub:type,' ')='annotation']">
+    <!-- Rule 26b: Each noteref must reference a note -->
+    <pattern id="epub_nordic_26_b">
+        <rule context="html:a[tokenize(@epub:type,'\s+')='noteref']">
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
-            <assert test="count(//html:a[tokenize(@epub:type,' ')='annoref'][substring-after(@href, '#')=current()/@id])>=1">[nordic_opf_and_html_27] Each annotation must have at least one &lt;a
-                epub:type="annoref" ...&gt; referencing it: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in
-                    <value-of select="replace(base-uri(),'.*/','')"/>)</assert>
+            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic_opf_and_html_26b] The note
+                reference with the href "<value-of select="@href"/>" attribute must resolve to a note, rearnote or footnote in the publication: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in <value-of select="replace(base-uri(),'.*/','')"
+                />)</assert>
+        </rule>
+    </pattern>
+
+    <!-- Rule 27a: Each note must have a noteref -->
+    <pattern id="epub_nordic_27_a">
+        <rule context="html:*[tokenize(@epub:type,'\s+')=('annotation')]">
+            <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
+            <assert test="count(//html:a[tokenize(@epub:type,'\s+')='annoref' and substring-after(@href,'#') = current()/@id]) &gt;= 1">[nordic_opf_and_html_27a] The annotation<value-of
+                    select="if (@id) then concat(' with the id &quot;',@id,'&quot;') else ''"/> must have at least one &lt;a epub:type="annoref" ...&gt; referencing it: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in <value-of select="replace(base-uri(),'.*/','')"
+                />)</assert>
+        </rule>
+    </pattern>
+
+    <!-- Rule 27b: Each noteref must reference a note -->
+    <pattern id="epub_nordic_27_b">
+        <rule context="html:a[tokenize(@epub:type,'\s+')='annoref']">
+            <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
+            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('annotation') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic_opf_and_html_26b] The annotation with the href
+                    "<value-of select="@href"/>" must resolve to a annotation in the publication: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in <value-of select="replace(base-uri(),'.*/','')"
+                />)</assert>
         </rule>
     </pattern>
 
@@ -100,9 +125,20 @@
     <!-- Rule 29: The HTML meta element with dc:identifier must have as content the same as the OPF publication dc:identifier -->
     <pattern id="epub_nordic_29">
         <rule context="html:meta[@name='dc:identifier']">
-            <assert test="@content = /*/opf:package/opf:metadata/dc:identifier[not(@refines)]/text()">[nordic_opf_and_html_28] The HTML meta element in <value-of select="replace(base-uri(.),'.*/','')"
+            <assert test="@content = /*/opf:package/opf:metadata/dc:identifier[not(@refines)]/text()">[nordic_opf_and_html_29] The HTML meta element in <value-of select="replace(base-uri(.),'.*/','')"
                 /> with dc:identifier must have as content the same as the OPF publication dc:identifier. The OPF dc:identifier is "<value-of
                     select="/*/opf:package/opf:metadata/dc:identifier[not(@refines)]/text()"/>" while the HTML dc:identifier is "<value-of select="@content"/>".</assert>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_32">
+        <rule context="html:img[@longdesc]">
+            <assert test="substring-after(normalize-space(@longdesc),'#') = //@id">[nordic_opf_and_html_32] The URL in the img longdesc attribute does not reference any element in the publication:
+                    <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
