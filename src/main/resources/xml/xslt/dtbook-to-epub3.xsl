@@ -18,19 +18,7 @@
     </xsl:template>
 
     <xsl:template match="text()">
-        <xsl:choose>
-            <xsl:when test="normalize-space(.)=''">
-                <xsl:copy-of select="."/>
-            </xsl:when>
-            <xsl:when test="parent::dtbook:caption[parent::dtbook:imggroup]">
-                <p>
-                    <xsl:copy-of select="."/>
-                </p>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:copy-of select="."/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:copy-of select="."/>
     </xsl:template>
 
     <xsl:template match="*">

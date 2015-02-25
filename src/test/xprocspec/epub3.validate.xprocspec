@@ -8,7 +8,7 @@
         <x:call step="px:nordic-epub3-validate.step">
 
             <x:input port="fileset.in">
-                <x:document type="inline" xml:base="test-epub/">
+                <x:document type="inline" xml:base="C00000/">
                     <d:fileset>
                         <d:file href="mimetype" media-type="text/plain"/>
                         <d:file href="META-INF/container.xml"/>
@@ -38,19 +38,19 @@
             </x:input>
 
             <x:input port="in-memory.in">
-                <x:document href="test-epub/EPUB/package.opf" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/nav.xhtml" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/C00000-01-cover.xhtml" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/C00000-02-toc.xhtml" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/C00000-03-frontmatter.xhtml" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/C00000-04-chapter.xhtml" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/C00000-05-chapter.xhtml" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/C00000-06-chapter.xhtml" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/C00000-07-rearnotes.xhtml" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/C00000-08-chapter.xhtml" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/C00000-09-conclusion.xhtml" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/C00000-10-footnotes.xhtml" type="file" method="xml"/>
-                <x:document href="test-epub/EPUB/nav.ncx" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/package.opf" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/nav.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/C00000-01-cover.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/C00000-02-toc.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/C00000-03-frontmatter.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/C00000-04-chapter.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/C00000-05-chapter.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/C00000-06-chapter.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/C00000-07-rearnotes.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/C00000-08-chapter.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/C00000-09-conclusion.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/C00000-10-footnotes.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/nav.ncx" type="file" method="xml"/>
             </x:input>
 
             <x:input port="report.in"/>
@@ -70,19 +70,19 @@
             <x:document type="port" port="in-memory.out"/>
         </x:context>
         <x:expect type="compare" label="the in-memory.out port should contain the same documents as was received on the in-memory.in port">
-            <x:document href="test-epub/EPUB/package.opf" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/nav.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/C00000-01-cover.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/C00000-02-toc.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/C00000-03-frontmatter.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/C00000-04-chapter.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/C00000-05-chapter.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/C00000-06-chapter.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/C00000-07-rearnotes.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/C00000-08-chapter.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/C00000-09-conclusion.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/C00000-10-footnotes.xhtml" type="file" method="xml"/>
-            <x:document href="test-epub/EPUB/nav.ncx" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/package.opf" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/nav.xhtml" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/C00000-01-cover.xhtml" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/C00000-02-toc.xhtml" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/C00000-03-frontmatter.xhtml" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/C00000-04-chapter.xhtml" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/C00000-05-chapter.xhtml" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/C00000-06-chapter.xhtml" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/C00000-07-rearnotes.xhtml" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/C00000-08-chapter.xhtml" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/C00000-09-conclusion.xhtml" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/C00000-10-footnotes.xhtml" type="file" method="xml"/>
+            <x:document href="C00000/EPUB/nav.ncx" type="file" method="xml"/>
         </x:expect>
 
         <x:context label="report.out">

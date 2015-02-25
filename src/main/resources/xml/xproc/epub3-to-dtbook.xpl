@@ -59,6 +59,14 @@
         </p:documentation>
     </p:option>
 
+    <!-- option supporting convert to DTBook 1.1.0 -->
+    <p:option name="dtbook2005" required="false" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">DTBook 2005</h2>
+            <p px:role="desc">Whether or not to keep the DTBook 2005-3 output or downgrade to DTBook 1.1.0. Set to false to convert to DTBook 1.1.0.</p>
+        </p:documentation>
+    </p:option>
+
     <p:import href="step/epub3.validate.xpl"/>
     <p:import href="step/html.validate.xpl"/>
     <p:import href="step/dtbook.validate.xpl"/>
@@ -242,6 +250,8 @@
                         <p:input port="in-memory.in">
                             <p:pipe port="in-memory.out" step="convert.html"/>
                         </p:input>
+                        <!-- call with dtbook2005 option whether to convert to a DTBook 2005 or DTBook 1.1.0 -->
+                        <p:with-option name="dtbook2005" select="$dtbook2005"/>
                     </px:nordic-html-to-dtbook-convert>
 
                     <px:fileset-move name="move">
@@ -264,6 +274,8 @@
                         <p:with-option name="dtbook" select="(/*/d:file[@media-type='application/x-dtbook+xml'])[1]/resolve-uri(@href,base-uri(.))">
                             <p:pipe port="fileset.out" step="fileset-store"/>
                         </p:with-option>
+                        <!-- call with dtbook2005 option whether to validate a DTBook 2005 or DTBook 1.1.0 -->
+                        <p:with-option name="dtbook2005" select="$dtbook2005"/>
                     </px:nordic-dtbook-validate.step>
                     <p:sink/>
 

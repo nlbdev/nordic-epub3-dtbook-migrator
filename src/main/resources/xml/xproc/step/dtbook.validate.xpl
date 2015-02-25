@@ -24,6 +24,9 @@
     <p:option name="check-images" required="false" select="'false'"/>
     <p:option name="allow-legacy" required="false" select="'false'"/>
 
+    <!-- option supporting convert to DTBook 1.1.0 -->
+    <p:option name="dtbook2005" required="false" select="'true'"/>
+
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
@@ -66,7 +69,6 @@
             </pxi:fileset-add-entry>
             <p:identity name="invalid-fileset"/>
         </p:when>
-
         <p:otherwise>
             <p:output port="report" sequence="true">
                 <p:pipe port="report" step="validate.input-dtbook.generic"/>
@@ -82,8 +84,9 @@
             <p:load>
                 <p:with-option name="href" select="$dtbook"/>
             </p:load>
+
             <p:choose>
-                <p:when test="$allow-legacy='true'">
+                <p:when test="$allow-legacy='true' and $dtbook2005='true'">
                     <px:upgrade-dtbook>
                         <p:input port="parameters">
                             <p:empty/>
@@ -102,51 +105,69 @@
                     <p:identity/>
                 </p:otherwise>
             </p:choose>
+
             <p:identity name="input-dtbook"/>
 
-            <px:message message="Validating DTBook according to Nordic specification..."/>
-            <l:relax-ng-report name="validate.input-dtbook.nordic.validation">
-                <p:input port="schema">
-                    <p:document href="../../schema/nordic-dtbook-2005-3.rng"/>
-                </p:input>
-                <p:with-option name="dtd-attribute-values" select="'false'"/>
-                <p:with-option name="dtd-id-idref-warnings" select="'false'"/>
-            </l:relax-ng-report>
-            <p:sink/>
+            <p:choose name="validate.input-dtbook.nordic">
+                <p:when test="$dtbook2005='true'">
+                    <p:output port="result" sequence="true"/>
 
-            <p:validate-with-schematron name="validate.input-dtbook.tpb.validation" assert-valid="false">
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="source">
-                    <p:pipe step="input-dtbook" port="result"/>
-                </p:input>
-                <p:input port="schema">
-                    <p:document href="../../schema/mtm2015-1.sch"/>
-                </p:input>
-            </p:validate-with-schematron>
-            <p:sink/>
+                    <px:message message="Validating DTBook according to Nordic specification..."/>
+                    <l:relax-ng-report name="validate.input-dtbook.nordic.validation">
+                        <p:input port="schema">
+                            <p:document href="../../schema/nordic-dtbook-2005-3.rng"/>
+                        </p:input>
+                        <p:with-option name="dtd-attribute-values" select="'false'"/>
+                        <p:with-option name="dtd-id-idref-warnings" select="'false'"/>
+                    </l:relax-ng-report>
+                    <p:sink/>
 
-            <px:combine-validation-reports name="validate.input-dtbook.nordic">
-                <p:input port="source">
-                    <p:pipe port="report" step="validate.input-dtbook.nordic.validation"/>
-                    <p:pipe port="report" step="validate.input-dtbook.tpb.validation"/>
-                    <p:inline>
-                        <c:errors>
-                            <!-- Temporary fix for v1.7. Will probably be fixed in v1.8. See: https://github.com/daisy-consortium/pipeline-modules-common/pull/48 -->
-                        </c:errors>
-                    </p:inline>
-                </p:input>
-                <p:with-option name="document-name" select="replace($dtbook,'.*/','')">
-                    <p:empty/>
-                </p:with-option>
-                <p:with-option name="document-type" select="'Nordic DTBook'">
-                    <p:empty/>
-                </p:with-option>
-                <p:with-option name="document-path" select="$dtbook">
-                    <p:empty/>
-                </p:with-option>
-            </px:combine-validation-reports>
+                    <p:validate-with-schematron name="validate.input-dtbook.tpb.validation" assert-valid="false">
+                        <p:input port="parameters">
+                            <p:empty/>
+                        </p:input>
+                        <p:input port="source">
+                            <p:pipe step="input-dtbook" port="result"/>
+                        </p:input>
+                        <p:input port="schema">
+                            <p:document href="../../schema/mtm2015-1.sch"/>
+                        </p:input>
+                    </p:validate-with-schematron>
+                    <p:sink/>
+
+                    <px:combine-validation-reports>
+                        <p:input port="source">
+                            <p:pipe port="report" step="validate.input-dtbook.nordic.validation"/>
+                            <p:pipe port="report" step="validate.input-dtbook.tpb.validation"/>
+                            <p:inline>
+                                <c:errors>
+                                    <!-- Temporary fix for v1.7. Will probably be fixed in v1.8. See: https://github.com/daisy-consortium/pipeline-modules-common/pull/48 -->
+                                </c:errors>
+                            </p:inline>
+                        </p:input>
+                        <p:with-option name="document-name" select="replace($dtbook,'.*/','')">
+                            <p:empty/>
+                        </p:with-option>
+                        <p:with-option name="document-type" select="'Nordic DTBook'">
+                            <p:empty/>
+                        </p:with-option>
+                        <p:with-option name="document-path" select="$dtbook">
+                            <p:empty/>
+                        </p:with-option>
+                    </px:combine-validation-reports>
+
+                </p:when>
+                <p:otherwise>
+                    <p:output port="result" sequence="true"/>
+
+                    <!-- DTBook 1.1.0 => no validation -->
+                    <p:identity>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:identity>
+                </p:otherwise>
+            </p:choose>
 
             <px:dtbook-load name="input-dtbook.in-memory">
                 <p:input port="source">

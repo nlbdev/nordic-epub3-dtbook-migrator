@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
 
-    <title>Schematron tests for Nordic EPUB 2015-1 rules with regards to OPF+HTML filesets in the EPUBs</title>
+    <title>Nordic EPUB3 Package Document and Content Document cross-reference rules</title>
 
     <!--
         Example input to this schematron:

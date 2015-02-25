@@ -12,6 +12,9 @@
     <p:output port="in-memory.out" sequence="true">
         <p:pipe port="result" step="result.in-memory"/>
     </p:output>
+    
+    <!-- option supporting convert to DTBook 1.1.0 -->
+    <p:option name="dtbook2005" required="false" select="'true'"/>
 
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
@@ -41,7 +44,7 @@
             <p:document href="../../xslt/deep-level-grouping.xsl"/>
         </p:input>
     </p:xslt>
-
+    
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>
@@ -50,6 +53,23 @@
             <p:document href="../../xslt/epub3-to-dtbook.xsl"/>
         </p:input>
     </p:xslt>
+    <p:choose>
+        <p:when test="$dtbook2005='true'">
+            <!-- keep DTBook 2005-3 -->
+            <p:identity/>
+        </p:when>
+        <p:otherwise>
+            <!-- convert to DTBook 1.1.0 -->
+            <p:xslt>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/dtbook2005-to-dtbook110.xsl"/>
+                </p:input>
+            </p:xslt>
+        </p:otherwise>
+    </p:choose>
 
     <p:add-attribute match="/*" attribute-name="xml:base">
         <p:with-option name="attribute-value" select="concat(replace(base-uri(/*),'^(.*)\.[^/\.]*$','$1'),'.xml')">
@@ -82,11 +102,20 @@
             <p:with-option name="attribute-value" select="replace(/*/@href,'^images/','')"/>
         </p:add-attribute>
     </p:viewport>
-    <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-public" attribute-value="-//NISO//DTD dtbook 2005-3//EN"/>
-    <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-system" attribute-value="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
     <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="omit-xml-declaration" attribute-value="false"/>
     <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="version" attribute-value="1.0"/>
     <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="encoding" attribute-value="utf-8"/>
+    <p:choose>
+        <p:when test="$dtbook2005='true'">
+            <!-- add doctype attributes to DTBook 2005-3 -->
+            <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-public" attribute-value="-//NISO//DTD dtbook 2005-3//EN"/>
+            <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-system" attribute-value="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
+        </p:when>
+        <p:otherwise>
+            <!-- add standalone 'yes' to DTBook 1.1.0 -->
+            <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="standalone" attribute-value="true"/>
+        </p:otherwise>
+    </p:choose>
     <p:xslt>
         <p:with-param name="preserve-empty-whitespace" select="'false'"/>
         <p:input port="stylesheet">

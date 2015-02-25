@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
 
-    <title>Schematron tests for Nordic EPUB 2015-1 OPF rules</title>
+    <title>Nordic EPUB3 Package Document rules</title>
 
     <ns prefix="opf" uri="http://www.idpf.org/2007/opf"/>
     <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
@@ -77,7 +77,7 @@
                 be present</assert>
             <assert test="count(dc:source[not(@refines)]) = 1 and starts-with(dc:source[not(@refines)],'urn:isbn:')">[opf3h] the dc:source ("<value-of select="dc:source[not(@refines)]/text()"/>") must
                 start with 'urn:isbn:'</assert>
-            <assert test="count(dc:source[not(@refines)]) = 1 and matches(dc:source[not(@refines)],'urn:isbn:[\d-]+')">the ISBN in dc:source ("<value-of select="dc:source[not(@refines)]/text()"/>")
+            <assert test="count(dc:source[not(@refines)]) = 1 and matches(dc:source[not(@refines)],'urn:isbn:[\d-]+')">[opf3h] the ISBN in dc:source ("<value-of select="dc:source[not(@refines)]/text()"/>")
                 can only contain numbers and hyphens (except for the 'urn:isbn:' prefix)</assert>
 
             <assert test="count(opf:meta[@property='nordic:guidelines' and not(@refines)]) = 1">[opf3i] there must be exactly one meta element with the property "nordic:guidelines" <value-of
@@ -114,7 +114,7 @@
 
     <pattern id="opf_nordic_6">
         <rule context="opf:spine">
-            <assert test="@toc">the toc attribute must be present</assert>
+            <assert test="@toc">[opf6] the toc attribute must be present</assert>
             <assert test="/opf:package/opf:manifest/opf:item/@id = @toc">[opf6] the toc attribute must refer to an item in the manifest</assert>
         </rule>
     </pattern>
