@@ -91,7 +91,10 @@
                 <p:empty/>
             </p:output>
             <px:fileset-filter media-types="application/epub+zip"/>
-            <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one EPUB in the fileset." error-code="NORDICDTBOOKEPUB021"/>
+            <px:assert message="There must be exactly one EPUB in the fileset (was: $1)." error-code="NORDICDTBOOKEPUB021">
+                <p:with-option name="test" select="count(/*/d:file) = 1"/>
+                <p:with-option name="param1" select="count(/*/d:file)"/>
+            </px:assert>
             <px:unzip-fileset name="unzip.unzip" encode-as-base64="true">
                 <p:with-option name="href" select="resolve-uri(/*/*/(@original-href,@href)[1],/*/*/base-uri(.))"/>
                 <p:with-option name="unzipped-basedir" select="$temp-dir"/>
