@@ -130,14 +130,14 @@
     <pattern id="opf_nordic_8">
         <rule context="opf:item[starts-with(@media-type,'image/')]">
             <assert test="matches(@href,'^images/[^/]+$')">[opf8] all images must be stored in the "images" directory (which is a subdirectory relative to the package document). The image file
-                    "<value-of select="replace(@href,'.*/','')"/>" is located in "<value-of select="replace(@href,'[^/]*$','')"/>".</assert>
+                    "<value-of select="replace(@href,'.*/','')"/>" is located in "<value-of select="replace(@href,'[^/]+$','')"/>".</assert>
         </rule>
     </pattern>
 
     <pattern id="opf_nordic_9">
         <rule context="opf:item[@media-type='application/xhtml+xml' and not(tokenize(@properties,'\s+')='nav')]">
             <report test="contains(@href,'/')">[opf9] all content files must be located in the same directory as the package document. The content file file "<value-of select="replace(@href,'.*/','')"
-                />" is located in "<value-of select="replace(@href,'[^/]*$','')"/>".</report>
+                />" is located in "<value-of select="replace(@href,'[^/]+$','')"/>".</report>
         </rule>
     </pattern>
 
