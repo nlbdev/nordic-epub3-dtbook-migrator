@@ -45,6 +45,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -77,12 +78,12 @@
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
             </px:nordic-html-split-perform>
-            <px:fileset-move name="html-split.moved">
+            <pxi:fileset-move name="html-split.moved">
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.out" step="html-split"/>
                 </p:input>
                 <p:with-option name="new-base" select="$publication-dir"/>
-            </px:fileset-move>
+            </pxi:fileset-move>
 
             <!-- Create spine -->
             <px:fileset-filter media-types="application/xhtml+xml"/>

@@ -26,14 +26,8 @@
     <p:import href="../fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-
-    <p:declare-step type="letex:unzip">
-        <p:option name="zip" required="true"/>
-        <p:option name="dest-dir" required="true"/>
-        <p:option name="overwrite" required="false" select="'no'"/>
-        <p:option name="file" required="false"/>
-        <p:output port="result" primary="true"/>
-    </p:declare-step>
+    <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
+    <p:import href="library.xpl"/>
 
     <p:choose name="choose">
         <p:when test="p:value-available('load-to-memory')">

@@ -19,5 +19,8 @@
     <p:import href="step/html-split.xpl"/>
 
     <p:import href="step/format-html-report.xpl"/>
+    
+    <p:import href="upstream/file-utils/xproc/library.xpl"/>
+    <p:import href="upstream/zip-utils/library.xpl"/>
 
 </p:library>

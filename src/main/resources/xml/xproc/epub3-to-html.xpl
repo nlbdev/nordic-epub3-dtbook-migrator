@@ -59,6 +59,7 @@
     <p:import href="step/format-html-report.xpl"/>
     <!--<p:import href="upstream/fileset-utils/fileset-load.xpl"/>-->
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
+    <p:import href="upstream/fileset-utils/fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -97,13 +98,13 @@
     </px:nordic-epub3-to-html.step>
 
     <px:message message="Storing HTML"/>
-    <px:fileset-move name="html-move">
+    <pxi:fileset-move name="html-move">
         <p:with-option name="new-base"
             select="concat(if (ends-with($output-dir,'/')) then $output-dir else concat($output-dir,'/'), substring-before(replace(/*/d:file[@media-type='application/xhtml+xml'][1]/@href,'^.*/',''),'.'), '/')"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="epub3-to-html"/>
         </p:input>
-    </px:fileset-move>
+    </pxi:fileset-move>
     <px:nordic-html-store.step name="html-store">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">

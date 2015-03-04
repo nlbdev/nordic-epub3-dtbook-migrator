@@ -67,6 +67,7 @@
     <p:import href="step/format-html-report.xpl"/>
     <!--<p:import href="upstream/fileset-utils/fileset-load.xpl"/>-->
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
+    <p:import href="upstream/fileset-utils/fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
@@ -168,12 +169,12 @@
         </p:input>
     </px:nordic-html-to-dtbook.step>
 
-    <px:fileset-move name="dtbook-move">
+    <pxi:fileset-move name="dtbook-move">
         <p:with-option name="new-base" select="concat($output-dir,(//d:file[@media-type='application/x-dtbook+xml'])[1]/replace(replace(@href,'.*/',''),'^(.[^\.]*).*?$','$1/'))"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="html-to-dtbook"/>
         </p:input>
-    </px:fileset-move>
+    </pxi:fileset-move>
     <px:fileset-store name="fileset-store">
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="dtbook-move"/>

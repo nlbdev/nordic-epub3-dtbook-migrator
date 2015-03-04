@@ -36,6 +36,7 @@
     <p:import href="validation-status.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
+    <p:import href="../upstream/fileset-utils/fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -161,9 +162,9 @@
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
             </px:fileset-filter>
-            <px:fileset-move>
+            <pxi:fileset-move>
                 <p:with-option name="new-base" select="$temp-dir"/>
-            </px:fileset-move>
+            </pxi:fileset-move>
             <p:viewport match="/*/*[starts-with(@media-type,'image/')]">
                 <p:add-attribute match="/*" attribute-name="href">
                     <p:with-option name="attribute-value" select="concat('images/',/*/@href)"/>

@@ -15,11 +15,7 @@
     </p:output>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-
-    <p:declare-step type="pxi:file-xml-peek">
-        <p:option name="href" required="true"/>
-        <p:output port="result"/>
-    </p:declare-step>
+    <p:import href="library.xpl"/>
 
     <p:choose name="choose">
         <p:when test="p:step-available('pxi:file-xml-peek')">

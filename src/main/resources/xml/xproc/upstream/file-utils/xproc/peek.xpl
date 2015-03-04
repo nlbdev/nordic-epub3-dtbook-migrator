@@ -29,13 +29,7 @@
     <p:output port="result"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-
-    <p:declare-step type="pxi:file-peek">
-        <p:option name="href" required="true"/>
-        <p:option name="offset" required="true"/>
-        <p:option name="length" required="true"/>
-        <p:output port="result"/>
-    </p:declare-step>
+    <p:import href="library.xpl"/>
 
     <p:choose>
         <p:when test="p:step-available('pxi:file-peek')">
