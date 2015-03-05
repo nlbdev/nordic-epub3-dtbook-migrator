@@ -349,10 +349,13 @@
         <rule context="html:figure[tokenize(@class,'\s+')='image']">
             <assert test="html:img">[nordic102] There must be an img element in every figure with class="image": <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert test="parent::html:figure[tokenize(@class,'\s+')='image']">[nordic102] Wrapping &lt;figure class="image"&gt; inside another &lt;figure class="image"&gt; is not allowed. Did you
+                mean to use "image-series" as a class on the outer figure? <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
-    <!-- Rule 103: No img without imggroup -->
+    <!-- Rule 103: All img elements with non-empty alt text must be wrapped in a image-series -->
     <pattern id="epub_nordic_103">
         <rule context="html:img[string-length(@alt)!=0]">
             <assert test="parent::html:figure">[nordic103] There must be a figure element wrapping every img with a non-empty alt text: <value-of
