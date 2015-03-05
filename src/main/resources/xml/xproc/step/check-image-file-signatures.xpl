@@ -49,7 +49,6 @@
                         <d:message severity="{if ($matches='true') then 'info' else 'error'}">
                             <d:desc>{if ($matches='true') then 'File signature is correct: ' else 'Incorrect file signature ("magic number") for image: '}{replace($href,'.*/','')}</d:desc>
                             <d:file>{replace($href,'.*/','')}</d:file>
-                            <d:location href="{$href}"/>
                             <d:was>{$actual-file-signature-pretty}</d:was>
                             <d:expected>{$expected-file-signature}</d:expected>
                         </d:message>

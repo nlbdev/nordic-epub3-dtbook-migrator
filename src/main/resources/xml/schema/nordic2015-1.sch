@@ -166,9 +166,8 @@
     <pattern id="epub_nordic_26_b">
         <rule context="html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='noteref']">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
-            <assert
-                test="count(//html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1"
-                >[nordic26b] The note reference with the href "<value-of select="@href"/>" attribute must resolve to a note, rearnote or footnote in the publication: <value-of
+            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic26b] The note reference with the
+                href "<value-of select="@href"/>" attribute must resolve to a note, rearnote or footnote in the publication: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
@@ -182,12 +181,12 @@
         </rule>
     </pattern>
 
-    <!-- Rule 27b: Each noteref must reference a note -->
+    <!-- Rule 27b: Each annoref must reference a annotation -->
     <pattern id="epub_nordic_27_b">
         <rule context="html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='annoref']">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
-            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('annotation') and @id = current()/substring-after(@href,'#')]) &gt;= 1"
-                >[nordic26b] The annotation with the href "<value-of select="@href"/>" must resolve to a annotation in the publication: <value-of
+            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('annotation') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic26b] The annotation with the href "<value-of
+                    select="@href"/>" must resolve to a annotation in the publication: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
@@ -929,17 +928,6 @@
 
 
     <!-- Imported from Pipeline 1 DTBook validator and adapted to EPUB3 -->
-    <!--<pattern id="epub_nordic_271">
-        <rule context="html:a[tokenize(@epub:type,'\s+')='noteref']">
-            <assert test="contains(@href, '#')">[nordic271a] Note reference href attribute does not contain a fragment identifier: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <report test="ancestor::html:body[html:header] and contains(@href, '#') and substring-after(@href, '#')=//html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote')]/@id"
-                >[nordic271b] Note reference href attribute does not resolve to a note, rearnote or footnote in the publication: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
-        </rule>
-    </pattern>-->
-
-    <!-- Imported from Pipeline 1 DTBook validator and adapted to EPUB3 -->
     <pattern id="epub_nordic_272">
         <rule context="html:a[tokenize(@epub:type,'\s+')='annoref']">
             <assert test="contains(@href, '#')">[nordic272a] Note reference href attribute does not contain a fragment identifier: <value-of
@@ -990,143 +978,145 @@
         MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
         JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
     -->
-    <!--<pattern id="dtbook_accesskeyTabindex">
+    <pattern id="epub_nordic_276">
+        <!-- see also nordic_opf_and_html_276 in nordic2015-1.opf-and-html.sch -->
         <rule context="html:a">
-            <report test="@accesskey and string-length(@accesskey)!=1">The accesskey attribute value is not 1 character long.</report>
-            <report test="@tabindex and string-length(translate(@width,'0123456789',''))!=0">The tabindex attribute value is not expressed in numbers.</report>
-            <report test="@accesskey and count(//html:a/@accesskey=@accesskey)!=1">The accesskey attribute value is not unique within the document.</report>
-            <report test="@tabindex and count(//html:a/@tabindex=@tabindex)!=1">The tabindex attribute value is not unique within the document.</report>
+            <report test="@accesskey and string-length(@accesskey)!=1">[nordic276] The accesskey attribute value is not 1 character long: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+            <report test="@tabindex and string-length(translate(@width,'0123456789',''))!=0">[nordic276] The tabindex attribute value is not expressed in numbers: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
-    </pattern>-->
+    </pattern>
 
     <!--
         MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
         JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
     -->
-    <!--<pattern id="dtbook_charAttribute">
-        <rule context="dtb:*[self::dtb:col   or self::dtb:colgroup or self::dtb:tbody or self::dtb:td or 
-            self::dtb:tfoot or self::dtb:th       or self::dtb:thead or self::dtb:tr]">
-            <report test="@char and string-length(@char)!=1">The char attribute value is not 1 character long.</report>
-            <report test="@char and @align!='char'">char attribute may only occur when align attribute value is 'char'.</report>
-        </rule>
-    </pattern>-->
-
-    <!--
-        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
-        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
-    -->
-    <!--<pattern id="dtbook_imgWidthHeight">
-        <rule context="dtb:img">
+    <pattern id="epub_nordic_277">
+        <rule context="html:img">
             <assert
                 test="not(@width) or 
                 string-length(translate(@width,'0123456789',''))=0 or
                 (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)>=2)"
-                >The image width is not expressed in pixels or percentage.</assert>
+                >[nordic277] The image width is not expressed in pixels or percentage: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert
                 test="not(@height) or 
                 string-length(translate(@height,'0123456789',''))=0 or
                 (contains(@height,'%') and substring-after(@height,'%')='' and translate(@height,'%0123456789','')='' and string-length(@height)>=2)"
-                >The image height is not expressed in pixels or percentage.</assert>
+                >[nordic277] The image height is not expressed in pixels or percentage: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
-    </pattern>-->
+    </pattern>
 
     <!--
         MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
         JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
     -->
-    <!--<pattern id="dtbook_tableAttributes">
-        <rule context="dtb:table">
+    <pattern id="epub_nordic_278">
+        <rule context="html:table">
             <assert
                 test="not(@width) or 
                 string-length(translate(@width,'0123456789',''))=0 or
                 (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)>=2)"
-                >Table width is not expressed in pixels or percentage.</assert>
+                >[nordic278] Table width is not expressed in pixels or percentage: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert
                 test="not(@cellspacing) or 
                 string-length(translate(@cellspacing,'0123456789',''))=0 or
                 (contains(@cellspacing,'%') and substring-after(@cellspacing,'%')='' and translate(@cellspacing,'%0123456789','')='' and string-length(@cellspacing)>=2)"
-                >Table cellspacing is not expressed in pixels or percentage.</assert>
+                >[nordic278] Table cellspacing is not expressed in pixels or percentage: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert
                 test="not(@cellpadding) or 
                 string-length(translate(@cellpadding,'0123456789',''))=0 or
                 (contains(@cellpadding,'%') and substring-after(@cellpadding,'%')='' and translate(@cellpadding,'%0123456789','')='' and string-length(@cellpadding)>=2)"
-                >Table cellpadding is not expressed in pixels or percentage.</assert>
+                >[nordic278] Table cellpadding is not expressed in pixels or percentage: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
-    </pattern>-->
+    </pattern>
 
     <!--
         MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
         JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
     -->
-    <!--<pattern id="dtbook_startAttrInList">
-        <rule context="dtb:list">
-            <report test="@start and @type!='ol'">The start attribute occurs in a non-numbered list.</report>
-            <report test="@start='' or string-length(translate(@start,'0123456789',''))!=0">The start attribute is not a non negative number.</report>
+    <pattern id="epub_nordic_279a">
+        <rule context="html:ul | html:ol[matches(@style,'list-style-type:\s*none;')]">
+            <report test="@start">[nordic279a] The start attribute occurs in a non-numbered list: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
-    </pattern>-->
+    </pattern>
+
+    <pattern id="epub_nordic_279b">
+        <rule context="html:ol[@start]">
+            <report test="@start='' or string-length(translate(@start,'0123456789',''))!=0">[nordic279b] The start attribute is not a non negative number: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>
 
     <!--
         MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
         JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
     -->
-    <!--<pattern id="dtbook_dcMetadata">
-        <rule context="dtb:meta">
+    <pattern id="epub_nordic_280">
+        <rule context="html:meta">
             <report
-                test="starts-with(@name, 'dc:') and not(@name='dc:Title' or @name='dc:Subject' or @name='dc:Description' or
-                @name='dc:Type' or @name='dc:Source' or @name='dc:Relation' or 
-                @name='dc:Coverage' or @name='dc:Creator' or @name='dc:Publisher' or 
-                @name='dc:Contributor' or @name='dc:Rights' or @name='dc:Date' or 
-                @name='dc:Format' or @name='dc:Identifier' or @name='dc:Language')"
-                >Unrecognized Dublin Core metadata name.</report>
-            <report test="starts-with(@name, 'DC:') or starts-with(@name, 'Dc:') or starts-with(@name, 'dC:')">Unrecognized Dublin Core metadata prefix.</report>
+                test="starts-with(@name, 'dc:') and not(@name='dc:title' or @name='dc:subject' or @name='dc:description' or
+                @name='dc:type' or @name='dc:source' or @name='dc:relation' or 
+                @name='dc:coverage' or @name='dc:creator' or @name='dc:publisher' or 
+                @name='dc:contributor' or @name='dc:rights' or @name='dc:date' or 
+                @name='dc:format' or @name='dc:identifier' or @name='dc:language')"
+                >[nordic280] Unrecognized Dublin Core metadata name: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"
+                /></report>
+            <report test="starts-with(@name, 'DC:') or starts-with(@name, 'Dc:') or starts-with(@name, 'dC:')">[nordic280] Unrecognized Dublin Core metadata prefix: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
-    </pattern>-->
+    </pattern>
 
     <!--
         MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
         JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
     -->
-    <!--<pattern id="dtbook_spanColColgroup">
-        <rule context="dtb:*[self::dtb:col or self::dtb:colgroup]">
-            <report test="@span and (translate(@span,'0123456789','')!='' or starts-with(@span,'0'))">span attribute is not a positive integer.</report>
+    <pattern id="epub_nordic_281">
+        <rule context="html:col | html:colgroup">
+            <report test="@span and (translate(@span,'0123456789','')!='' or starts-with(@span,'0'))">[nordic281] span attribute is not a positive integer: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
-    </pattern>-->
+    </pattern>
 
     <!--
         MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
         JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
     -->
-    <!--<pattern>
-        <rule context="dtb:*[self::dtb:td or self::dtb:th]">
-            <report test="@rowspan and (translate(@rowspan,'0123456789','')!='' or starts-with(@rowspan,'0'))"> The rowspan attribute value is not a positive integer.</report>
-            <report test="@colspan and (translate(@colspan,'0123456789','')!='' or starts-with(@colspan,'0'))"> The colspan attribute value is not a positive integer.</report>
-            <report test="@rowspan and number(@rowspan) > count(parent::dtb:tr/following-sibling::dtb:tr)+1"> The rowspan attribute value is larger than the number of rows left in the table.</report>
+    <pattern id="epub_nordic_282">
+        <rule context="html:td | html:th">
+            <report test="@rowspan and (translate(@rowspan,'0123456789','')!='' or starts-with(@rowspan,'0'))">[nordic282] The rowspan attribute value is not a positive integer: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+            <report test="@colspan and (translate(@colspan,'0123456789','')!='' or starts-with(@colspan,'0'))">[nordic282] The colspan attribute value is not a positive integer: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+            <report test="@rowspan and number(@rowspan) &gt; count(parent::html:tr/following-sibling::html:tr | parent::html:tr/parent::html:*/following-sibling::html:*/html:tr)+1">[nordic282] The
+                rowspan attribute value is larger than the number of rows left in the table: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
-    </pattern>-->
-
-    <!--
-        MG20070522: added as a consequence of zedval feature request #1593192: http://sourceforge.net/p/zedval/feature-requests/13/
-        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
-    -->
-    <!--<pattern id="dtbook_levelDepth">
-        <rule context="dtb:level[@depth]">
-            <assert test="@depth=count(ancestor-or-self::dtb:level)">The value of the depth attribute on the level element does not correspond to actual nesting level.</assert>
-        </rule>
-    </pattern>-->
+    </pattern>
 
     <!-- 
         The math element has optional attributes alttext and altimg. To be valid with the MathML in DAISY spec, 
         the alttext and altimg attributes must be part of the math element.
     -->
-    <!--<pattern>
+    <pattern>
         <rule context="mathml:math">
-            <assert test="@alttext">alttext attribute must be present</assert>
-            <assert test="not(empty(@alttext))">alttext attribute must be non-empty</assert>
+            <assert test="@alttext">[nordic283] alttext attribute must be present: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert test="not(empty(@alttext))">[nordic283] alttext attribute must be non-empty: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
 
-            <assert test="@altimg">altimg attribute must be present</assert>
-            <assert test="not(empty(@altimg))">altimg attribute must be non-empty</assert>
+            <assert test="@altimg">[nordic283] altimg attribute must be present: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert test="not(empty(@altimg))">[nordic283] altimg attribute must be non-empty: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
-    </pattern>-->
+    </pattern>
 
     <!-- TODO: if we allow MathML in EPUB; look at whether or not we can import more of the rules declared in and referenced from dtbook.mathml.sch in the dtbook-validator script from the main DP2 distribution -->
 

@@ -141,5 +141,17 @@
                     <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
+    
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_276">
+        <!-- see also nordic276 in nordic2015-1.sch -->
+        <rule context="html:a">
+            <report test="@accesskey and count(//html:a/@accesskey=@accesskey)!=1">[nordic_opf_and_html_276] The accesskey attribute value is not unique within the publication.</report>
+            <report test="@tabindex and count(//html:a/@tabindex=@tabindex)!=1">[nordic_opf_and_html_276] The tabindex attribute value is not unique within the publication.</report>
+        </rule>
+    </pattern>
 
 </schema>
