@@ -214,7 +214,7 @@
     <px:message message="Building report"/>
     <px:nordic-format-html-report/>
 
-    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
+    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report" encoding="us-ascii">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
     <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">

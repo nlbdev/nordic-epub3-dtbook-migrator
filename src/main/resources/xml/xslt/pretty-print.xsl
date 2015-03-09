@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all" version="2.0">
 
+    <!--
+        
+        Serialization can't currently be done from XSLT as XProc discards the serialization information.
+        XProc does not support character maps. However Calabash supports us-ascii.
+        
+    <xsl:output encoding="us-ascii" use-character-maps="character-map"/>
+    <xsl:character-map name="character-map">
+        <xsl:output-character character="&apos;" string="&amp;#x27;"/>
+        <xsl:output-character character="&quot;" string="&amp;#x22;"/>
+        <xsl:output-character character="&amp;" string="&amp;#x26;"/>
+        <xsl:output-character character="&lt;" string="&amp;#x3c;"/>
+        <xsl:output-character character="&gt;" string="&amp;#x3e;"/>
+        <xsl:output-character character="-" string="&amp;#x2d;"/>
+    </xsl:character-map>
+    -->
+
     <xsl:param name="preserve-empty-whitespace" select="'true'"/>
 
     <xsl:template match="@*|node()">
