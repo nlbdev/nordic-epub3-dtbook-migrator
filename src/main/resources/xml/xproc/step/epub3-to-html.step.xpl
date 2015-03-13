@@ -327,14 +327,6 @@
                 </p:input>
             </px:html-to-fileset>
             <p:delete match="//d:file[preceding-sibling::d:file/resolve-uri(@href,base-uri(.))=resolve-uri(@href,base-uri(.))]"/>
-            <p:viewport match="//d:file[starts-with(@media-type,'image/')]">
-                <p:add-attribute match="/*" attribute-name="original-href">
-                    <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri(/*))"/>
-                </p:add-attribute>
-                <p:add-attribute match="/*" attribute-name="href">
-                    <p:with-option name="attribute-value" select="replace(/*/@href,'^images/','')"/>
-                </p:add-attribute>
-            </p:viewport>
             <pxi:fileset-add-entry media-type="application/xhtml+xml">
                 <p:with-option name="href" select="base-uri(/*)">
                     <p:pipe port="result" step="in-memory"/>

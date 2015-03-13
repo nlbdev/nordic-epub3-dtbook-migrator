@@ -103,6 +103,14 @@
                     </p:inline>
                 </p:input>
             </p:insert>
+            <p:viewport match="/html:html/html:head">
+                <p:xslt>
+                    <p:with-param name="preserve-empty-whitespace" select="'false'"/>
+                    <p:input port="stylesheet">
+                        <p:document href="../../xslt/pretty-print.xsl"/>
+                    </p:input>
+                </p:xslt>
+            </p:viewport>
             <!-- TODO: add ASCIIMathML.js if there are asciimath elements -->
 
             <p:add-attribute match="/*" attribute-name="xml:base">

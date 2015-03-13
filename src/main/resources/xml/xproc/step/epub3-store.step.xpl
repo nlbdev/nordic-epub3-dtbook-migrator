@@ -35,7 +35,9 @@
     <p:option name="output-dir" required="true"/>
 
     <p:import href="validation-status.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="../upstream/file-utils/xproc/set-doctype.xpl"/>
+    <p:import href="../upstream/file-utils/xproc/set-xml-declaration.xpl"/>
+    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
@@ -88,30 +90,40 @@
                         <p:pipe port="in-memory.in" step="main"/>
                     </p:input>
                 </px:fileset-store>
-
-                <p:viewport match="/*/d:file" name="store.epub3.doctype">
-                    <p:viewport-source>
+                <p:identity>
+                    <p:input port="source">
                         <p:pipe port="fileset.out" step="fileset-store"/>
-                    </p:viewport-source>
-
-                    <p:choose>
-                        <p:when test="/*/@media-type='application/xhtml+xml'">
-                            <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
-                                <p:with-option name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
-                            </px:set-doctype>
-                            <p:add-attribute match="/*" attribute-value="&lt;!DOCTYPE html&gt;">
-                                <p:with-option name="attribute-name" select="'doctype'">
-                                    <!-- p:with-option uses default connection as context, thus making sure px:set-doctype is run before p:add-attribute -->
-                                </p:with-option>
-                                <p:input port="source">
-                                    <p:pipe port="current" step="store.epub3.doctype"/>
-                                </p:input>
-                            </p:add-attribute>
-                        </p:when>
-                        <p:otherwise>
-                            <p:identity/>
-                        </p:otherwise>
-                    </p:choose>
+                    </p:input>
+                </p:identity>
+                <p:viewport match="d:file[@media-type='application/xhtml+xml']" name="store.doctype">
+                    <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
+                    <p:variable name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
+                    <pxi:set-doctype>
+                        <p:with-option name="doctype" select="$doctype"/>
+                        <p:with-option name="href" select="$href"/>
+                    </pxi:set-doctype>
+                    <p:add-attribute match="/*" attribute-name="doctype">
+                        <p:input port="source">
+                            <p:pipe port="current" step="store.doctype"/>
+                        </p:input>
+                        <p:with-option name="attribute-value" select="$doctype"/>
+                    </p:add-attribute>
+                </p:viewport>
+                <p:viewport match="d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" name="store.xml-declaration">
+                    <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
+                    <p:variable name="xml-declaration" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'"/>
+                    <px:set-xml-declaration name="set-xml-declaration">
+                        <p:with-option name="xml-declaration" select="$xml-declaration"/>
+                        <p:with-option name="href" select="$href"/>
+                    </px:set-xml-declaration>
+                    <p:add-attribute match="/*" attribute-name="xml-declaration">
+                        <p:input port="source">
+                            <p:pipe port="current" step="store.xml-declaration"/>
+                        </p:input>
+                        <p:with-option name="attribute-value" select="$xml-declaration">
+                            <p:pipe port="result" step="set-xml-declaration"/>
+                        </p:with-option>
+                    </p:add-attribute>
                 </p:viewport>
 
                 <px:epub3-ocf-zip name="zip" cx:depends-on="fileset-store">

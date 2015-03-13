@@ -40,6 +40,13 @@
         <x:expect label="The body of the resulting DTBook-file should be as expected" type="compare">
             <x:document type="file" href="DTBook/C00000.xml" select="//dtbook:book"/>
         </x:expect>
+        
+        <x:context label="the DTBook metadata">
+            <x:document type="port" port="in-memory.out" select="/dtbook:dtbook/dtbook:head"/>
+        </x:context>
+        <x:expect label="there must be a DTBook head element" type="count" min="1"/>
+        <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
+        <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
 
     </x:scenario>
 

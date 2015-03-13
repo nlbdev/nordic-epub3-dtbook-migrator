@@ -89,11 +89,22 @@
             <px:fileset-filter media-types="application/xhtml+xml"/>
             <p:identity name="spine"/>
 
-            <pxi:fileset-load name="spine-html">
+            <pxi:fileset-load>
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.out" step="html-split.moved"/>
                 </p:input>
             </pxi:fileset-load>
+            <p:for-each>
+                <p:viewport match="/html:html/html:head">
+                    <p:xslt>
+                        <p:with-param name="preserve-empty-whitespace" select="'false'"/>
+                        <p:input port="stylesheet">
+                            <p:document href="../../xslt/pretty-print.xsl"/>
+                        </p:input>
+                    </p:xslt>
+                </p:viewport>
+            </p:for-each>
+            <p:identity name="spine-html"/>
 
             <pxi:fileset-load media-types="application/xhtml+xml">
                 <p:input port="fileset">
@@ -210,6 +221,14 @@
                         <p:document href="../../xslt/navdoc-nordic-normalization.xsl"/>
                     </p:input>
                 </p:xslt>
+                <p:viewport match="/html:html/html:head">
+                    <p:xslt>
+                        <p:with-param name="preserve-empty-whitespace" select="'false'"/>
+                        <p:input port="stylesheet">
+                            <p:document href="../../xslt/pretty-print.xsl"/>
+                        </p:input>
+                    </p:xslt>
+                </p:viewport>
                 <p:identity name="nav.html"/>
 
                 <p:xslt>
@@ -218,6 +237,12 @@
                     </p:input>
                     <p:input port="stylesheet">
                         <p:document href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/nav-to-ncx.xsl"/>
+                    </p:input>
+                </p:xslt>
+                <p:xslt>
+                    <p:with-param name="preserve-empty-whitespace" select="'false'"/>
+                    <p:input port="stylesheet">
+                        <p:document href="../../xslt/pretty-print.xsl"/>
                     </p:input>
                 </p:xslt>
                 <p:add-attribute match="/*" attribute-name="xml:base">
@@ -292,6 +317,12 @@
             <p:add-attribute match="/*" attribute-name="xml:base">
                 <p:with-option name="attribute-value" select="concat($publication-dir,'package.opf')"/>
             </p:add-attribute>
+            <p:xslt>
+                <p:with-param name="preserve-empty-whitespace" select="'false'"/>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/pretty-print.xsl"/>
+                </p:input>
+            </p:xslt>
             <p:identity name="package"/>
 
             <p:identity name="result.in-memory-without-ocf-files">

@@ -26,6 +26,13 @@
         <x:expect type="xpath" label="There should be no validation errors in the HTML report"
             test="sum(//*[matches(@class,'(^|\s)document-validation-report(\s|$)')]//html:p[matches(normalize-space(string-join(text(),' ')),'^\d+ issue.*')]/xs:integer(replace(normalize-space(string-join(text(),' ')),'(\d+) .*','$1')))"
             equals="0"/>
+        
+        <x:context label="the HTML metadata">
+            <x:document type="file" href="output-dir/C00000.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+        </x:context>
+        <x:expect label="there must be HTML head elements" type="count" min="1"/>
+        <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
+        <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
 
     </x:scenario>
 

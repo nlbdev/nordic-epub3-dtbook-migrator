@@ -86,7 +86,7 @@
 
                     <p:identity name="asciimath"/>
                     <p:choose>
-                        <p:when test="p:step-available('px:asciimath')">
+                        <p:when test="p:step-available('px:asciimathml')">
                             <px:asciimathml name="mathml">
                                 <p:with-option name="asciimath" select="string-join(.//text(),'')"/>
                             </px:asciimathml>
@@ -114,7 +114,7 @@
 
                         </p:when>
                         <p:otherwise>
-                            <px:message severity="WARNING" message="px:asciimath is not available; asciimath element will be replaced by placeholder"/>
+                            <px:message severity="WARNING" message="px:asciimathml is not available; asciimath element will be replaced by placeholder"/>
                             <p:add-attribute match="/*" attribute-name="alt">
                                 <p:input port="source">
                                     <p:inline>

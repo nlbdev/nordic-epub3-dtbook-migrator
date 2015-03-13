@@ -43,7 +43,7 @@
             <x:document type="port" port="fileset.out"/>
         </x:context>
         <x:expect label="The fileset should consist of two files" type="xpath" test="count(/*/*)" equals="2"/>
-        <x:expect label="The fileset should contain one image file with the href 'valentin.jpg'" type="xpath" test="(/*/*[@media-type='image/jpeg'])[1]/@href" equals="'valentin.jpg'"/>
+        <x:expect label="The fileset should contain one image file with the href 'images/valentin.jpg'" type="xpath" test="(/*/*[@media-type='image/jpeg'])[1]/@href" equals="'images/valentin.jpg'"/>
         <x:expect label="The fileset should contain one HTML file with the href 'C00000.xhtml'" type="xpath" test="(/*/*[@media-type='application/xhtml+xml'])[1]/@href" equals="'C00000.xhtml'"/>
 
         <x:context label="result HTML head">
@@ -59,6 +59,18 @@
         <x:expect label="The body of the resulting HTML-file should be as expected" type="compare">
             <x:document type="file" href="single-html/C00000.xhtml" select="/html:html/html:body"/>
         </x:expect>
+        
+        <x:context label="img elements">
+            <x:document type="port" port="in-memory.out" select="/html:html/html:body//html:img"/>
+        </x:context>
+        <x:expect label="All img elements should refer to images in the 'images' directory" type="xpath" test="replace(/*/@src,'[^/]+$','')" equals="'images/'"/>
+        
+        <x:context label="the HTML metadata">
+            <x:document type="port" port="in-memory.out" select="/html:html/html:head"/>
+        </x:context>
+        <x:expect label="there must be HTML head elements" type="count" min="1"/>
+        <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
+        <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
 
     </x:scenario>
 

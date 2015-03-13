@@ -2,7 +2,7 @@
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/step/html-to-epub3.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/">
 
     <x:scenario label="px:nordic-html-to-epub3.step">
         <x:call step="px:nordic-html-to-epub3.step">
@@ -80,6 +80,33 @@
         </x:context>
         <x:expect type="count" label="There should only be one file on disk" min="1" max="1"/>
         <x:expect type="xpath" label="The only file on disk should be valentin.jpg" test="//d:file/@href" equals="'EPUB/images/valentin.jpg'"/>
+        
+        <x:context label="the in-memory.out port">
+            <x:document type="port" port="in-memory.out"/>
+        </x:context>
+        <x:expect label="there should be 14 documents on the in-memory.out port" type="count" min="14" max="14"/>
+        
+        <x:context label="the OPF">
+            <x:document type="port" port="in-memory.out" select="/opf:package"/>
+        </x:context>
+        <x:expect label="there must be a OPF" type="count" min="1"/>
+        <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
+        <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
+        
+        <x:context label="the NCX metadata">
+            <x:document type="port" port="in-memory.out" select="/ncx:ncx/ncx:head"/>
+        </x:context>
+        <x:expect label="there must be NCX head element" type="count" min="1"/>
+        <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
+        <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
+        
+        <x:context label="the HTML metadata">
+            <x:document type="port" port="in-memory.out" select="/html:html/html:head"/>
+        </x:context>
+        <x:expect label="there must be HTML head elements" type="count" min="1"/>
+        <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
+        <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
+        
     </x:scenario>
 
 </x:description>

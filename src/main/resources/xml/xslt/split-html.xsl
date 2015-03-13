@@ -25,7 +25,11 @@
                 <html>
                     <xsl:namespace name="nordic" select="'http://www.mtm.se/epub/'"/>
                     <xsl:copy-of select="/*/@* | @xml:base"/>
+                    <xsl:text>
+</xsl:text>
                     <head>
+                        <xsl:namespace name="dc" select="'http://purl.org/dc/elements/1.1/'"/>
+                        <xsl:namespace name="dcterms" select="'http://purl.org/dc/terms/'"/>
                         <xsl:copy-of select="/html/head/@*"/>
                         <xsl:for-each select="/html/head/*">
                             <xsl:choose>
@@ -42,14 +46,24 @@
                             <link rel="next" href="{pf:relativize-uri(base-uri(following-sibling::*[1]),base-uri(.))}"/>
                         </xsl:if>
                     </head>
+                    <xsl:text>
+</xsl:text>
                     <body>
                         <xsl:apply-templates select="$body/(@* except @xml:base)"/>
                         <xsl:if test="$body[self::header]">
                             <xsl:attribute name="epub:type" select="string-join(('frontmatter','titlepage',tokenize($body/@epub:type,'\s+')),' ')"/>
                         </xsl:if>
+                        <xsl:text>
+</xsl:text>
                         <xsl:apply-templates select="$body/*"/>
+                        <xsl:text>
+</xsl:text>
                     </body>
+                    <xsl:text>
+</xsl:text>
                 </html>
+                <xsl:text>
+</xsl:text>
             </xsl:for-each>
 
         </wrapper>

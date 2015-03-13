@@ -217,7 +217,7 @@
                     <p:rename match="/*/*/@name" new-name="href"/>
                     <p:viewport match="/*/*">
                         <p:add-attribute match="/*" attribute-name="original-href">
-                            <p:with-option name="attribute-value" select="/*/@href"/>
+                            <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri(.))"/>
                         </p:add-attribute>
                     </p:viewport>
 

@@ -69,7 +69,9 @@
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="upstream/file-utils/xproc/set-doctype.xpl"/>
+    <p:import href="upstream/file-utils/xproc/set-xml-declaration.xpl"/>
+    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -175,6 +177,7 @@
             <p:pipe port="in-memory.out" step="html-to-dtbook"/>
         </p:input>
     </pxi:fileset-move>
+    <p:add-attribute match="/*/d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" attribute-name="encoding" attribute-value="us-ascii"/>
     <px:fileset-store name="fileset-store">
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="dtbook-move"/>
@@ -185,6 +188,22 @@
             <p:pipe port="fileset.out" step="fileset-store"/>
         </p:input>
     </p:identity>
+    <p:viewport match="d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" name="store.xml-declaration">
+        <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
+        <p:variable name="xml-declaration" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'"/>
+        <px:set-xml-declaration name="set-xml-declaration">
+            <p:with-option name="xml-declaration" select="$xml-declaration"/>
+            <p:with-option name="href" select="$href"/>
+        </px:set-xml-declaration>
+        <p:add-attribute match="/*" attribute-name="xml-declaration">
+            <p:input port="source">
+                <p:pipe port="current" step="store.xml-declaration"/>
+            </p:input>
+            <p:with-option name="attribute-value" select="$xml-declaration">
+                <p:pipe port="result" step="set-xml-declaration"/>
+            </p:with-option>
+        </p:add-attribute>
+    </p:viewport>
 
     <px:message message="Validating DTBook"/>
     <px:nordic-dtbook-validate.step name="dtbook-validate" check-images="false">
@@ -211,11 +230,11 @@
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report" encoding="us-ascii">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
         <p:with-option name="href" select="/*/text()">
             <p:pipe port="result" step="store-report"/>
         </p:with-option>
-    </px:set-doctype>
+    </pxi:set-doctype>
     <p:sink/>
 
 </p:declare-step>
