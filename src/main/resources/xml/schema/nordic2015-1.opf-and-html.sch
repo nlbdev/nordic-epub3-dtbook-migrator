@@ -141,7 +141,7 @@
                     <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
-    
+
     <!--
         MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
         JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
@@ -151,6 +151,19 @@
         <rule context="html:a">
             <report test="@accesskey and count(//html:a/@accesskey=@accesskey)!=1">[nordic_opf_and_html_276] The accesskey attribute value is not unique within the publication.</report>
             <report test="@tabindex and count(//html:a/@tabindex=@tabindex)!=1">[nordic_opf_and_html_276] The tabindex attribute value is not unique within the publication.</report>
+        </rule>
+    </pattern>
+
+    <pattern id="epub_nordic_284">
+        <rule context="html:p[tokenize(@class,'\s+') = ('isbn', 'issn')]">
+            <let name="source-element" value="/*/opf:package/opf:metadata/dc:source[not(@refines) and matches(.,'urn:is[bs]n:[\d-]+X?')]"/>
+            <let name="source-type" value="substring-before(substring-after($source-element,':'),':')"/>
+            <assert test="replace($source-element,'[^\dX]','') = replace(replace(string-join(.//text(),''),'^IS[SB]N:?\s*([\d –-]+X?).*?$','$1'),'[^\dX]','')">[nordic_opf_and_html_284] The <value-of
+                    select="upper-case($source-type)"/> in a paragraph with the class "<value-of select="string-join(tokenize(@class,'\s+')[.=('isbn','issn')],' ')"/>" in <value-of
+                    select="replace(base-uri(.),'.*/','')"/> must be the same as the one in the OPF metadata. The OPF contains a <value-of select="upper-case($source-type)"/> in a &lt;dc:source&gt;
+                element with the value "<value-of select="$source-element"/>", so the paragraph should have a value of for instance "<![CDATA[ISBN: ]]><value-of
+                    select="substring-after(substring-after($source-element,':'),':')"/>": <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 

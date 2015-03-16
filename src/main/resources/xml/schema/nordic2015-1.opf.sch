@@ -77,10 +77,11 @@
 
             <assert test="count(dc:source[not(@refines)]) = 1">[opf3h] exactly one dc:source <value-of select="if (dc:source[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must
                 be present</assert>
-            <assert test="count(dc:source[not(@refines)]) = 1 and starts-with(dc:source[not(@refines)],'urn:isbn:')">[opf3h] the dc:source ("<value-of select="dc:source[not(@refines)]/text()"/>") must
-                start with 'urn:isbn:'</assert>
-            <assert test="count(dc:source[not(@refines)]) = 1 and matches(dc:source[not(@refines)],'urn:isbn:[\d-]+')">[opf3h] the ISBN in dc:source ("<value-of
-                    select="dc:source[not(@refines)]/text()"/>") can only contain numbers and hyphens (except for the 'urn:isbn:' prefix)</assert>
+            <assert test="count(dc:source[not(@refines)]) = 1 and (starts-with(dc:source[not(@refines)],'urn:isbn:') or starts-with(dc:source[not(@refines)],'urn:issn:'))">[opf3h] the dc:source
+                    ("<value-of select="dc:source[not(@refines)]/text()"/>") must start with 'urn:isbn:' or 'urn:issn'</assert>
+            <assert test="count(dc:source[not(@refines)]) = 1 and matches(dc:source[not(@refines)],'^urn:is[bs]n:[\d-]+X?$')">[opf3h] the ISBN or ISSN in dc:source ("<value-of
+                    select="dc:source[not(@refines)]/text()"/>") can only contain numbers and hyphens, in addition to the 'urn:isbn:' or 'urn:issn:' prefix. The last digit can also be a 'X' in some
+                ISBNs.</assert>
 
             <assert test="count(opf:meta[@property='nordic:guidelines' and not(@refines)]) = 1">[opf3i] there must be exactly one meta element with the property "nordic:guidelines" <value-of
                     select="if (opf:meta[@property='nordic:guidelines' and @refines]) then '(without a &quot;refines&quot; attribute)' else ''"/></assert>

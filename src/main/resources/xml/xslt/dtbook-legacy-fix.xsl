@@ -46,24 +46,27 @@
             <xsl:apply-templates select="@*|node()"/>
             <meta name="track:Guidelines" content="2015-1"/>
             <xsl:if test="not(meta/@name='dc:Source')">
-                <xsl:variable name="isbn"
-                    select="(/dtbook/book/frontmatter/level1[tokenize(@class,'\s+')='colophon']//text()[matches(.,'^\s*ISBN[:\s]*([\d\-– ]+)([^\d\-– ]|$)')]/replace(replace(.,'^\s*ISBN[:\s]*([\d\- ]+)([^\d\-– ].*?$|$)','$1'),'[^\d]',''))[1]"/>
+                <xsl:variable name="source-element" select="(/dtbook/book/frontmatter/level1[tokenize(@class,'\s+')='colophon']//text()[matches(.,'^\s*IS[BS]N:?\s*([\dX –-]+)([^\dX –-]|$)')])[1]"/>
+                <xsl:variable name="source-type" select="if (contains($source-element,'ISBN')) then 'isbn' else if (contains($source-element,'ISSN')) then 'issn' else ''"/>
+                <xsl:variable name="source"
+                    select="replace(replace(replace(replace(replace($source-element,'^\s*IS[BS]N:?\s*([\dX –-]+)([^\dX –-].*?$|$)','$1'),'[^\dX-]','-'),'-+','-'),'^-+',''),'-+$','')"/>
                 <xsl:choose>
-                    <xsl:when test="$isbn">
-                        <meta name="dc:Source" content="urn:isbn:{$isbn}"/>
+                    <xsl:when test="$source">
+                        <meta name="dc:Source" content="urn:isbn:{$source}"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <!-- ISBN is in a non-standard position => do a broader search in frontmatter -->
-                        <xsl:variable name="isbn" select="string-join(/dtbook/book/frontmatter/level1//text(),' ')"/>
-                        <xsl:variable name="isbn" select="if (not(contains($isbn,'ISBN'))) then '' else substring-after($isbn,'ISBN')"/>
-                        <xsl:variable name="isbn" select="if ($isbn='') then '' else replace($isbn,'^[:\s]*([\d\-– ]+).*?$','$1','s')"/>
-                        <xsl:variable name="isbn" select="if ($isbn='') then '' else replace($isbn,'[^\d]','','s')"/>
+                        <xsl:variable name="source" select="string-join(/dtbook/book/frontmatter/level1//text(),' ')"/>
+                        <xsl:variable name="source"
+                            select="if (not(contains($source,'ISBN'))) then if (not(contains($source,'ISSN'))) then '' else substring-after($source,'ISSN') else substring-after($source,'ISBN')"/>
+                        <xsl:variable name="source" select="if ($source='') then '' else replace($source,'^[:\s]*([\dX –-]+).*?$','$1','s')"/>
+                        <xsl:variable name="source" select="if ($source='') then '' else replace(replace(replace($source,'[^\dX]','-','s'),'^-+',''),'-+$','')"/>
                         <xsl:choose>
-                            <xsl:when test="$isbn">
-                                <meta name="dc:Source" content="urn:isbn:{$isbn}"/>
+                            <xsl:when test="$source">
+                                <meta name="dc:Source" content="urn:isbn:{$source}"/>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:message select="'No ISBN found, can''t create dc:Source !'"/>
+                                <xsl:message select="'No ISBN or ISSN found, can''t create dc:Source !'"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:otherwise>
