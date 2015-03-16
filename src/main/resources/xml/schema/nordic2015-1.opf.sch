@@ -41,7 +41,8 @@
 
             <assert test="count(dc:title[not(@refines)]) = 1">[opf3b] exactly one dc:title <value-of select="if (dc:title[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must be
                 present in the package document.</assert>
-            <assert test="string-length(normalize-space(dc:title[not(@refines)]/text()))">[opf3b] the dc:title <value-of select="if (dc:title[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must not be empty.</assert>
+            <assert test="string-length(normalize-space(dc:title[not(@refines)]/text()))">[opf3b] the dc:title <value-of
+                    select="if (dc:title[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must not be empty.</assert>
 
             <assert test="count(dc:language[not(@refines)]) = 1">[opf3c] exactly one dc:language <value-of select="if (dc:language[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"
                 /> must be present in the package document.</assert>
@@ -78,8 +79,8 @@
                 be present</assert>
             <assert test="count(dc:source[not(@refines)]) = 1 and starts-with(dc:source[not(@refines)],'urn:isbn:')">[opf3h] the dc:source ("<value-of select="dc:source[not(@refines)]/text()"/>") must
                 start with 'urn:isbn:'</assert>
-            <assert test="count(dc:source[not(@refines)]) = 1 and matches(dc:source[not(@refines)],'urn:isbn:[\d-]+')">[opf3h] the ISBN in dc:source ("<value-of select="dc:source[not(@refines)]/text()"/>")
-                can only contain numbers and hyphens (except for the 'urn:isbn:' prefix)</assert>
+            <assert test="count(dc:source[not(@refines)]) = 1 and matches(dc:source[not(@refines)],'urn:isbn:[\d-]+')">[opf3h] the ISBN in dc:source ("<value-of
+                    select="dc:source[not(@refines)]/text()"/>") can only contain numbers and hyphens (except for the 'urn:isbn:' prefix)</assert>
 
             <assert test="count(opf:meta[@property='nordic:guidelines' and not(@refines)]) = 1">[opf3i] there must be exactly one meta element with the property "nordic:guidelines" <value-of
                     select="if (opf:meta[@property='nordic:guidelines' and @refines]) then '(without a &quot;refines&quot; attribute)' else ''"/></assert>
@@ -219,6 +220,20 @@
             <let name="itemref" value="."/>
             <report test="count(//opf:item[@id=$itemref/@idref and (tokenize(@properties,'\s+')='nav' or @href='nav.xhtml')])">[opf14] the Navigation Document must not be present in the OPF spine
                 (itemref with idref="<value-of select="@idref"/>").</report>
+        </rule>
+    </pattern>
+
+    <pattern id="opf_nordic_15_a">
+        <rule context="opf:item[substring-after(@href,'/') = 'cover.jpg']">
+            <assert test="tokenize(@properties,'\s+') = 'cover-image'">[opf15a] The cover image must have a properties attribute containing the value 'cover-image': <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <pattern id="opf_nordic_15_b">
+        <rule context="opf:item[tokenize(@properties,'\s+') = 'cover-image']">
+            <assert test="substring-after(@href,'/') = 'cover.jpg'">[opf15b] The image with property value 'cover-image' must have the filename 'cover.jpg': <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
