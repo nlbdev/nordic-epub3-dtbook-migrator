@@ -108,6 +108,20 @@
         </rule>
     </pattern>
 
+    <pattern id="epub_nordic_15">
+        <!-- see also nordic2015-1.opf-and-html.sch for multi-document version -->
+        <rule context="html:body[html:header]/html:*[self::html:section or self::html:article]">
+            <report test="tokenize(@epub:type,'\s+')[.='cover'] and preceding-sibling::html:*[self::html:section or self::html:article]">[nordic15] Cover must not be preceded by any other top-level
+                sections (<value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>)</report>
+            <report test="tokenize(@epub:type,'\s+')[.='frontmatter'] and preceding-sibling::html:*[self::html:section or self::html:article]/tokenize(@epub:type,'\s') = ('bodymatter', 'backmatter')"
+                >[nordic15] Frontmatter must not be preceded by bodymatter or rearmatter (<value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>)</report>
+            <report test="tokenize(@epub:type,'\s+')[.='frontmatter'] and preceding-sibling::html:*[self::html:section or self::html:article]/tokenize(@epub:type,'\s') = ('backmatter')">[nordic15]
+                Bodymatter must not be preceded by backmatter (<value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"
+                />)</report>
+        </rule>
+    </pattern>
+
     <!-- Rule 20: No image series in inline context -->
     <pattern id="epub_nordic_20">
         <rule context="html:figure">

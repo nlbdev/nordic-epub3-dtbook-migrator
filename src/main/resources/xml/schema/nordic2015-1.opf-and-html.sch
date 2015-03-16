@@ -29,12 +29,40 @@
 
     <!-- Rule 13: All books must have frontmatter and bodymatter -->
     <pattern id="epub_nordic_13_a">
-        <!-- see also nordic2015-1.opf-and-html.sch for multi-document version -->
+        <!-- see also nordic2015-1.sch for single-document version -->
         <rule context="html:html[not(preceding-sibling::html:html)]">
             <assert test="((.|following-sibling::html:html)/html:body/tokenize(@epub:type,'\s+')=('cover','frontmatter')) = true()">[nordic_opf_and_html_13a] There must be at least one frontmatter or
                 cover document</assert>
             <assert test="((.|following-sibling::html:html)/html:body/tokenize(@epub:type,'\s+')='bodymatter') = true()">[nordic_opf_and_html_13a] There must be at least one bodymatter
                 document</assert>
+        </rule>
+    </pattern>
+
+    <pattern id="epub_nordic_15">
+        <!-- see also nordic2015-1.sch for single-document version -->
+        <rule context="opf:itemref">
+            <let name="this" value="."/>
+            <let name="this-item" value="../../opf:manifest/opf:item[@id = $this/@idref]"/>
+            <let name="this-type"
+                value="/*/html:html/html:body[replace(base-uri(),'.*/','') = $this-item/@href]/(tokenize(@epub:type,'\s+')[.=('cover','frontmatter','bodymatter','backmatter')],'bodymatter')[1]"/>
+            <let name="preceding-items" value="../../opf:manifest/opf:item[@id = $this/preceding-sibling::opf:item/@idref]"/>
+            <let name="preceding-cover" value="/*/html:html/html:body[replace(base-uri(),'.*/','') = $preceding-items/@href and tokenize(@epub:type,'\s+') = 'cover']"/>
+            <let name="preceding-frontmatter" value="/*/html:html/html:body[replace(base-uri(),'.*/','') = $preceding-items/@href and tokenize(@epub:type,'\s+') = 'frontmatter']"/>
+            <let name="preceding-bodymatter"
+                value="/*/html:html/html:body[replace(base-uri(),'.*/','') = $preceding-items/@href and (tokenize(@epub:type,'\s+') = 'bodymatter' or not(tokenize(@epub:type,'\s+') = ('cover','frontmatter','backmatter')))]"/>
+            <let name="preceding-backmatter" value="/*/html:html/html:body[replace(base-uri(),'.*/','') = $preceding-items/@href and tokenize(@epub:type,'\s+') = 'backmatter']"/>
+            <report test="$this-type = 'cover' and count($preceding-items)">[nordic_opf_and_html_15] Cover must not be preceded by any other itemrefs in the OPF spine: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in <value-of select="replace(base-uri(),'.*/','')"
+                /></report>
+            <report test="$this-type = 'frontmatter' and $preceding-bodymatter">[nordic_opf_and_html_15] Frontmatter must be placed before all bodymatter in the spine: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in <value-of select="replace(base-uri(),'.*/','')"
+                /></report>
+            <report test="$this-type = 'frontmatter' and $preceding-backmatter">[nordic_opf_and_html_15] Frontmatter must be placed before all backmatter in the spine: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in <value-of select="replace(base-uri(),'.*/','')"
+                /></report>
+            <report test="$this-type = 'bodymatter' and $preceding-backmatter">[nordic_opf_and_html_15] Bodymatter must be placed before all backmatter in the spine: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/> (in <value-of select="replace(base-uri(),'.*/','')"
+                /></report>
         </rule>
     </pattern>
 
