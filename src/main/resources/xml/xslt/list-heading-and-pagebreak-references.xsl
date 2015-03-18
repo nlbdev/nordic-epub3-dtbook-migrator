@@ -27,7 +27,18 @@
             <xsl:if test="@id">
                 <xsl:attribute name="data-heading-id" select="@id"/>
             </xsl:if>
-            <xsl:value-of select="normalize-space(string-join(.//text(),''))"/>
+            <xsl:value-of select="normalize-space(string-join(.//text() except .//*[tokenize(@epub:type,'\s+') = 'noteref']//text(),''))"/>
+        </c:result>
+    </xsl:template>
+
+    <xsl:template match="*[@epub:type='pagebreak']">
+        <c:result>
+            <xsl:attribute name="xml:base" select="base-uri(.)"/>
+            <xsl:attribute name="data-pagebreak-element" select="name()"/>
+            <xsl:if test="@id">
+                <xsl:attribute name="data-pagebreak-id" select="@id"/>
+            </xsl:if>
+            <xsl:value-of select="@title"/>
         </c:result>
     </xsl:template>
 
