@@ -63,23 +63,23 @@
         </p:xpath-context>
         <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
             <p:output port="fileset.out" primary="true">
-                <p:pipe port="fileset" step="unzip"/>
+                <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
             </p:output>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="in-memory" step="unzip"/>
+                <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
             </p:output>
             <p:output port="report.out" sequence="true">
                 <p:pipe port="report.in" step="main"/>
-                <p:pipe port="result" step="epubcheck.validate"/>
-                <p:pipe port="result" step="epub-filename.validate"/>
-                <p:pipe port="result" step="xml-declaration.validate"/>
-                <p:pipe port="result" step="opf.validate"/>
-                <p:pipe port="result" step="html.validate"/>
-                <p:pipe port="result" step="nav-references.validate"/>
-                <p:pipe port="result" step="nav-ncx.validate"/>
-                <p:pipe port="result" step="opf-and-html.validate"/>
-                <p:pipe port="result" step="images.validate"/>
-                <p:pipe port="result" step="category.html-report"/>
+                <p:pipe port="result" step="epub3-validate.step.epubcheck.validate"/>
+                <p:pipe port="result" step="epub3-validate.step.epub-filename.validate"/>
+                <p:pipe port="result" step="epub3-validate.step.xml-declaration.validate"/>
+                <p:pipe port="result" step="epub3-validate.step.opf.validate"/>
+                <p:pipe port="result" step="epub3-validate.step.html.validate"/>
+                <p:pipe port="result" step="epub3-validate.step.nav-references.validate"/>
+                <p:pipe port="result" step="epub3-validate.step.nav-ncx.validate"/>
+                <p:pipe port="result" step="epub3-validate.step.opf-and-html.validate"/>
+                <p:pipe port="result" step="epub3-validate.step.images.validate"/>
+                <p:pipe port="result" step="epub3-validate.step.category.html-report"/>
             </p:output>
 
 
@@ -94,25 +94,25 @@
 
             <p:variable name="basedir" select="if (/*/d:file[@media-type='application/epub+zip']) then $temp-dir else base-uri(/*)"/>
 
-            <p:choose>
+            <p:choose name="epub3-validate.step.choose-zipped-or-not">
                 <p:when test="/*/d:file[@media-type='application/epub+zip']">
-                    <px:epubcheck mode="epub" version="3">
+                    <px:epubcheck mode="epub" version="3" name="epub3-validate.step.choose-zipped-or-not.epubcheck-zipped">
                         <p:with-option name="epub" select="(/*/d:file[@media-type='application/epub+zip'])[1]/resolve-uri(@href,base-uri(.))"/>
                     </px:epubcheck>
                 </p:when>
                 <p:otherwise>
-                    <px:epubcheck mode="expanded" version="3">
+                    <px:epubcheck mode="expanded" version="3" name="epub3-validate.step.choose-zipped-or-not.epubcheck-not-zipped">
                         <p:with-option name="epub" select="(/*/d:file[@media-type='application/oebps-package+xml'])[1]/resolve-uri(@href,base-uri(.))"/>
                     </px:epubcheck>
                 </p:otherwise>
             </p:choose>
-            <p:delete match="jhove:message[starts-with(.,'HTM-047')]">
+            <p:delete match="jhove:message[starts-with(.,'HTM-047')]" name="epub3-validate.step.delete-htm047">
                 <!--
                     https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/111
                     https://github.com/IDPF/epubcheck/issues/419
                 -->
             </p:delete>
-            <p:xslt>
+            <p:xslt name="epub3-validate.step.epubcheck-report-to-pipeline-report">
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -120,7 +120,7 @@
                     <p:document href="../../xslt/epubcheck-report-to-pipeline-report.xsl"/>
                 </p:input>
             </p:xslt>
-            <p:identity name="epubcheck.validate"/>
+            <p:identity name="epub3-validate.step.epubcheck.validate"/>
             <p:sink/>
 
             <p:identity>
@@ -128,31 +128,31 @@
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
             </p:identity>
-            <p:choose name="unzip">
+            <p:choose name="epub3-validate.step.unzip">
                 <p:when test="/*/d:file[@media-type='application/epub+zip']">
                     <p:output port="fileset">
-                        <p:pipe port="result" step="unzip.fileset"/>
+                        <p:pipe port="result" step="epub3-validate.step.unzip.fileset"/>
                     </p:output>
                     <p:output port="in-memory" sequence="true">
                         <p:empty/>
                     </p:output>
-                    <px:fileset-filter media-types="application/epub+zip"/>
+                    <px:fileset-filter media-types="application/epub+zip" name="epub3-validate.step.unzip.filter-epub-from-fileset"/>
                     <px:assert message="There must be exactly one EPUB in the fileset (was: $1)." error-code="NORDICDTBOOKEPUB021">
                         <p:with-option name="test" select="count(/*/d:file) = 1"/>
                         <p:with-option name="param1" select="count(/*/d:file)"/>
                     </px:assert>
-                    <pxi:unzip-fileset name="unzip.unzip" load-to-memory="false" store-to-disk="true">
+                    <pxi:unzip-fileset name="epub3-validate.step.unzip.unzip" load-to-memory="false" store-to-disk="true">
                         <p:with-option name="href" select="resolve-uri(/*/*/(@original-href,@href)[1],/*/*/base-uri(.))"/>
                         <p:with-option name="unzipped-basedir" select="$temp-dir"/>
                     </pxi:unzip-fileset>
                     <p:sink/>
 
-                    <px:mediatype-detect name="unzip.fileset">
+                    <px:mediatype-detect name="epub3-validate.step.unzip.fileset">
                         <p:input port="source">
-                            <p:pipe port="fileset" step="unzip.unzip"/>
+                            <p:pipe port="fileset" step="epub3-validate.step.unzip.unzip"/>
                         </p:input>
                     </px:mediatype-detect>
-                    
+
                 </p:when>
                 <p:otherwise>
                     <p:output port="fileset">
@@ -161,7 +161,7 @@
                     <p:output port="in-memory" sequence="true">
                         <p:pipe port="in-memory.in" step="main"/>
                     </p:output>
-                    <p:sink>
+                    <p:sink name="epub3-validate.step.unzip.no-epub-to-unzip">
                         <p:input port="source">
                             <p:empty/>
                         </p:input>
@@ -169,114 +169,114 @@
                 </p:otherwise>
             </p:choose>
 
-            <pxi:fileset-load media-types="application/oebps-package+xml" method="xml">
+            <pxi:fileset-load media-types="application/oebps-package+xml" method="xml" name="epub3-validate.step.load-unzipped-fileset">
                 <p:input port="fileset">
-                    <p:pipe port="fileset" step="unzip"/>
+                    <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
                 </p:input>
                 <p:input port="in-memory">
-                    <p:pipe port="in-memory" step="unzip"/>
+                    <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                 </p:input>
             </pxi:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
-            <p:identity name="opf"/>
+            <p:identity name="epub3-validate.step.opf"/>
             <p:sink/>
 
-            <p:xslt>
+            <p:xslt name="epub3-validate.step.opf-to-spine-fileset">
                 <!-- get fileset of HTML documents in spine order -->
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
                 <p:input port="source">
-                    <p:pipe port="result" step="opf"/>
+                    <p:pipe port="result" step="epub3-validate.step.opf"/>
                 </p:input>
                 <p:input port="stylesheet">
                     <p:document href="../../xslt/opf-to-spine-fileset.xsl"/>
                 </p:input>
             </p:xslt>
-            <pxi:fileset-load media-types="application/xhtml+xml">
+            <pxi:fileset-load media-types="application/xhtml+xml" name="epub3-validate.step.load-unzipped-spine">
                 <p:input port="in-memory">
-                    <p:pipe port="in-memory" step="unzip"/>
+                    <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                 </p:input>
             </pxi:fileset-load>
             <px:assert test-count-min="1" message="There must be a HTML file in the spine." error-code="NORDICDTBOOKEPUB005"/>
-            <p:identity name="html"/>
+            <p:identity name="epub3-validate.step.html"/>
             <p:sink/>
 
-            <px:fileset-filter media-types="application/xhtml+xml">
+            <px:fileset-filter media-types="application/xhtml+xml" name="epub3-validate.step.filter-unzipped-html">
                 <p:input port="source">
-                    <p:pipe port="fileset" step="unzip"/>
+                    <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
                 </p:input>
             </px:fileset-filter>
-            <p:delete match="/*/*[not(ends-with(@href,'nav.xhtml'))]"/>
-            <pxi:fileset-load>
+            <p:delete match="/*/*[not(ends-with(@href,'nav.xhtml'))]" name="epub3-validate.step.delete-nav-from-fileset"/>
+            <pxi:fileset-load name="epub3-validate.step.load-unzipped-content-except-nav">
                 <p:input port="in-memory">
-                    <p:pipe port="in-memory" step="unzip"/>
+                    <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                 </p:input>
             </pxi:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There is no navigation document with the filename 'nav.xhtml' in the EPUB" error-code="NORDICDTBOOKEPUB013"/>
-            <p:identity name="nav"/>
+            <p:identity name="epub3-validate.step.nav"/>
             <p:sink/>
 
-            <px:fileset-filter media-types="application/x-dtbncx+xml">
+            <px:fileset-filter media-types="application/x-dtbncx+xml" name="epub3-validate.step.filter-unzipped-ncx">
                 <p:input port="source">
-                    <p:pipe port="fileset" step="unzip"/>
+                    <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
                 </p:input>
             </px:fileset-filter>
-            <p:delete match="/*/*[not(ends-with(@href,'nav.ncx'))]"/>
-            <pxi:fileset-load>
+            <p:delete match="/*/*[not(ends-with(@href,'nav.ncx'))]" name="epub3-validate.step.delete-non-ncx"/>
+            <pxi:fileset-load name="epub3-validate.step.load-ncx">
                 <p:input port="in-memory">
-                    <p:pipe port="in-memory" step="unzip"/>
+                    <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                 </p:input>
             </pxi:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There is no NCX with the filename 'nav.ncx' in the EPUB" error-code="NORDICDTBOOKEPUB014"/>
-            <p:identity name="ncx"/>
+            <p:identity name="epub3-validate.step.ncx"/>
             <p:sink/>
 
-            <p:validate-with-schematron name="opf.validate.schematron" assert-valid="false">
+            <p:validate-with-schematron name="epub3-validate.step.opf.validate.schematron" assert-valid="false">
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
                 <p:input port="source">
-                    <p:pipe step="opf" port="result"/>
+                    <p:pipe step="epub3-validate.step.opf" port="result"/>
                 </p:input>
                 <p:input port="schema">
                     <p:document href="../../schema/nordic2015-1.opf.sch"/>
                 </p:input>
             </p:validate-with-schematron>
             <p:sink/>
-            <px:combine-validation-reports document-type="Nordic EPUB3 Package Document">
+            <px:combine-validation-reports document-type="Nordic EPUB3 Package Document" name="epub3-validate.step.combine-validation-reports">
                 <p:input port="source">
-                    <p:pipe port="report" step="opf.validate.schematron"/>
+                    <p:pipe port="report" step="epub3-validate.step.opf.validate.schematron"/>
                 </p:input>
                 <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
-                    <p:pipe port="result" step="opf"/>
+                    <p:pipe port="result" step="epub3-validate.step.opf"/>
                 </p:with-option>
                 <p:with-option name="document-path" select="base-uri(/*)">
-                    <p:pipe port="result" step="opf"/>
+                    <p:pipe port="result" step="epub3-validate.step.opf"/>
                 </p:with-option>
             </px:combine-validation-reports>
-            <p:identity name="opf.validate"/>
+            <p:identity name="epub3-validate.step.opf.validate"/>
             <p:sink/>
 
-            <p:choose>
+            <p:choose name="epub3-validate.step.choose-epub-filename">
                 <p:xpath-context>
                     <p:pipe port="fileset.in" step="main"/>
                 </p:xpath-context>
                 <p:when test="/*/d:file[@media-type='application/epub+zip']">
                     <p:variable name="opf-identifier" select="/opf:package/opf:metadata/dc:identifier[not(@refines)][1]/text()">
-                        <p:pipe port="result" step="opf"/>
+                        <p:pipe port="result" step="epub3-validate.step.opf"/>
                     </p:variable>
                     <p:variable name="epub-filename" select="(/*/d:file[@media-type='application/epub+zip'])[1]/@href">
                         <p:pipe port="fileset.in" step="main"/>
                     </p:variable>
                     <p:variable name="error-count" select="if ($epub-filename = concat($opf-identifier,'.epub')) then 0 else 1"/>
-                    <p:in-scope-names name="vars"/>
-                    <p:template>
+                    <p:in-scope-names name="epub3-validate.step.choose-epub-filename.vars"/>
+                    <p:template name="epub3-validate.step.choose-epub-filename.template">
                         <p:input port="source">
                             <p:empty/>
                         </p:input>
                         <p:input port="parameters">
-                            <p:pipe port="result" step="vars"/>
+                            <p:pipe port="result" step="epub3-validate.step.choose-epub-filename.vars"/>
                         </p:input>
                         <p:input port="template">
                             <p:inline exclude-inline-prefixes="#all">
@@ -313,55 +313,55 @@
                     <px:message severity="DEBUG" message="Input EPUB is not zipped; unable to perform filename validation"/>
                 </p:otherwise>
             </p:choose>
-            <p:identity name="epub-filename.validate"/>
+            <p:identity name="epub3-validate.step.epub-filename.validate"/>
             <p:sink/>
 
-            <p:for-each>
+            <p:for-each name="epub3-validate.step.for-each-html-validate">
                 <p:iteration-source select="/*/d:file[@media-type='application/xhtml+xml']">
-                    <p:pipe port="fileset" step="unzip"/>
+                    <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
                 </p:iteration-source>
-                <p:delete>
+                <p:delete name="epub3-validate.step.for-each-html-validate.delete-everything-except-this-html-file-from-the-fileset">
                     <p:with-option name="match" select="concat('//d:file[not(@href=&quot;',/*/@href,'&quot;) or preceding-sibling::d:file/@href=&quot;',/*/@href,'&quot;]')"/>
                     <p:input port="source">
-                        <p:pipe port="fileset" step="unzip"/>
+                        <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
                     </p:input>
                 </p:delete>
-                <px:nordic-html-validate.step name="validate.html" document-type="Nordic HTML (EPUB3 Content Document)" check-images="false">
+                <px:nordic-html-validate.step name="epub3-validate.step.for-each-html-validate.validate.html" document-type="Nordic HTML (EPUB3 Content Document)" check-images="false">
                     <p:input port="in-memory.in">
-                        <p:pipe port="in-memory" step="unzip"/>
+                        <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                     </p:input>
                 </px:nordic-html-validate.step>
                 <p:identity>
                     <p:input port="source">
-                        <p:pipe port="report.out" step="validate.html"/>
+                        <p:pipe port="report.out" step="epub3-validate.step.for-each-html-validate.validate.html"/>
                     </p:input>
                 </p:identity>
             </p:for-each>
-            <p:identity name="html.validate" cx:depends-on="xml-declaration.validate"/>
+            <p:identity name="epub3-validate.step.html.validate" cx:depends-on="epub3-validate.step.xml-declaration.validate"/>
             <p:sink/>
 
-            <p:group>
+            <p:group name="epub3-validate.step.group-xml-declaration">
                 <p:identity>
                     <p:input port="source">
-                        <p:pipe port="fileset" step="unzip"/>
+                        <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
                     </p:input>
                 </p:identity>
-                <px:fileset-filter media-types="application/xml application/*+xml"/>
-                <p:for-each name="xml-declaration.iterate-files">
+                <px:fileset-filter media-types="application/xml application/*+xml" name="epub3-validate.step.group-xml-declaration.filter-xml-files"/>
+                <p:for-each name="epub3-validate.step.group-xml-declaration.iterate-files">
                     <p:iteration-source select="/*/d:file"/>
                     <p:output port="result" sequence="true">
-                        <p:pipe port="result" step="xml-declaration.iterate-files.xml"/>
-                        <p:pipe port="result" step="xml-declaration.iterate-files.doctype"/>
+                        <p:pipe port="result" step="epub3-validate.step.group-xml-declaration.iterate-files.xml"/>
+                        <p:pipe port="result" step="epub3-validate.step.group-xml-declaration.iterate-files.doctype"/>
                     </p:output>
                     <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
 
                     <!-- XML declaration -->
-                    <p:try>
+                    <p:try name="epub3-validate.step.group-xml-declaration.iterate-files.try">
                         <p:group>
                             <px:message message="trying to read xml declaration from $1">
                                 <p:with-option name="param1" select="$href"/>
                             </px:message>
-                            <px:read-xml-declaration>
+                            <px:read-xml-declaration name="epub3-validate.step.group-xml-declaration.iterate-files.try.group.read-xml-declaration">
                                 <p:with-option name="href" select="$href"/>
                             </px:read-xml-declaration>
                             <px:message message="xml declaration from $1 is $2">
@@ -373,8 +373,8 @@
                             <px:message message="inferring xml declaration from d:file instead: $1">
                                 <p:with-option name="param1" select="$href"/>
                             </px:message>
-                            <p:rename match="/*" new-name="c:result"/>
-                            <p:delete match="/*/@*[not(local-name()=('version','encoding','standalone'))]"/>
+                            <p:rename match="/*" new-name="c:result" name="epub3-validate.step.group-xml-declaration.iterate-files.try.catch.rename-c-result"/>
+                            <p:delete match="/*/@*[not(local-name()=('version','encoding','standalone'))]" name="epub3-validate.step.group-xml-declaration.iterate-files.try.catch.delete-irrelevant-attributes"/>
                             <px:message message="xml declaration: |$1|$2|$3|">
                                 <p:with-option name="param1" select="/*/@version"/>
                                 <p:with-option name="param2" select="/*/@encoding"/>
@@ -382,19 +382,19 @@
                             </px:message>
                         </p:catch>
                     </p:try>
-                    <p:choose>
+                    <p:choose name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration">
                         <p:when test="/*/@version='1.0' and /*/@encoding=('utf-8','UTF-8') and not(/*/@standalone)">
-                            <p:identity>
+                            <p:identity name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.correct-xml-declaration">
                                 <p:input port="source">
                                     <p:empty/>
                                 </p:input>
                             </p:identity>
                         </p:when>
                         <p:otherwise>
-                            <p:wrap-sequence wrapper="d:was"/>
-                            <p:string-replace match="/*/c:result" replace="/*/c:result/@xml-declaration"/>
-                            <p:wrap-sequence wrapper="d:error"/>
-                            <p:insert match="/*" position="first-child">
+                            <p:wrap-sequence wrapper="d:was" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.wrap-d-was"/>
+                            <p:string-replace match="/*/c:result" replace="/*/c:result/@xml-declaration" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.replace-result-with-xml-declaration"/>
+                            <p:wrap-sequence wrapper="d:error" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.wrap-d-error"/>
+                            <p:insert match="/*" position="first-child" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.insert-desc-file-expected-placeholders">
                                 <p:input port="insertion">
                                     <p:inline exclude-inline-prefixes="#all">
                                         <d:desc>PLACEHOLDER</d:desc>
@@ -407,41 +407,41 @@
                                     </p:inline>
                                 </p:input>
                             </p:insert>
-                            <p:string-replace match="/*/d:desc/text()">
+                            <p:string-replace match="/*/d:desc/text()" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.string-replace-desc">
                                 <p:with-option name="replace" select="concat('&quot;Bad or missing XML declaration in: ',replace($href,'^.*/([^/]*)$','$1'),'&quot;')"/>
                             </p:string-replace>
-                            <p:string-replace match="/*/d:file/text()">
+                            <p:string-replace match="/*/d:file/text()" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.string-replace-file">
                                 <p:with-option name="replace" select="concat('&quot;',$href,'&quot;')"/>
                             </p:string-replace>
                         </p:otherwise>
                     </p:choose>
-                    <p:identity name="xml-declaration.iterate-files.xml"/>
+                    <p:identity name="epub3-validate.step.group-xml-declaration.iterate-files.xml"/>
 
                     <p:identity>
                         <p:input port="source">
-                            <p:pipe port="current" step="xml-declaration.iterate-files"/>
+                            <p:pipe port="current" step="epub3-validate.step.group-xml-declaration.iterate-files"/>
                         </p:input>
                     </p:identity>
 
                     <!-- DOCTYPE declaration -->
-                    <p:choose>
+                    <p:choose name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html">
                         <p:when test="not(/*/@media-type='application/xhtml+xml')">
                             <px:message message="skipping doctype check for non-HTML document: $1">
                                 <p:with-option name="param1" select="$href"/>
                             </px:message>
-                            <p:identity>
+                            <p:identity name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.not-html">
                                 <p:input port="source">
                                     <p:empty/>
                                 </p:input>
                             </p:identity>
                         </p:when>
                         <p:otherwise>
-                            <p:try>
+                            <p:try name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try">
                                 <p:group>
                                     <px:message message="trying to read doctype declaration from $1">
                                         <p:with-option name="param1" select="$href"/>
                                     </px:message>
-                                    <px:read-doctype-declaration>
+                                    <px:read-doctype-declaration name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try.group.read-doctype-declaration">
                                         <p:with-option name="href" select="$href"/>
                                     </px:read-doctype-declaration>
                                     <px:message message="doctype declaration from $1 is: $2 $3 $4">
@@ -455,27 +455,27 @@
                                     <px:message message="inferring doctype declaration from d:file instead: $1">
                                         <p:with-option name="param1" select="$href"/>
                                     </px:message>
-                                    <p:rename match="/*" new-name="c:result"/>
-                                    <p:delete match="/*/@*[not(local-name()=('doctype-public','doctype-system'))]"/>
+                                    <p:rename match="/*" new-name="c:result" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try.catch.rename-c-result"/>
+                                    <p:delete match="/*/@*[not(local-name()=('doctype-public','doctype-system'))]" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try.catch.delete-doctype"/>
                                     <px:message message="doctype declaration: $1 $2">
                                         <p:with-option name="param1" select="/*/@doctype-public"/>
                                         <p:with-option name="param2" select="/*/@doctype-system"/>
                                     </px:message>
                                 </p:catch>
                             </p:try>
-                            <p:choose>
+                            <p:choose name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype">
                                 <p:when test="/*/@has-doctype-declaration='true' and /*/@name='html' and not(/*/@doctype-public) and not(/*/@doctype-system)">
-                                    <p:identity>
+                                    <p:identity name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.correct-doctype">
                                         <p:input port="source">
                                             <p:empty/>
                                         </p:input>
                                     </p:identity>
                                 </p:when>
                                 <p:otherwise>
-                                    <p:wrap-sequence wrapper="d:was"/>
-                                    <p:string-replace match="/*/c:result" replace="/*/c:result/@doctype-declaration"/>
-                                    <p:wrap-sequence wrapper="d:error"/>
-                                    <p:insert match="/*" position="first-child">
+                                    <p:wrap-sequence wrapper="d:was" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.wrap-d-was"/>
+                                    <p:string-replace match="/*/c:result" replace="/*/c:result/@doctype-declaration" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.string-replace-result-with-actual-doctype"/>
+                                    <p:wrap-sequence wrapper="d:error" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.wrap-in-d-error"/>
+                                    <p:insert match="/*" position="first-child" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.insert-desc-file-expected-placeholders">
                                         <p:input port="insertion">
                                             <p:inline exclude-inline-prefixes="#all">
                                                 <d:desc>PLACEHOLDER</d:desc>
@@ -488,10 +488,10 @@
                                             </p:inline>
                                         </p:input>
                                     </p:insert>
-                                    <p:string-replace match="/*/d:desc/text()">
+                                    <p:string-replace match="/*/d:desc/text()" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.replace-string-desc">
                                         <p:with-option name="replace" select="concat('&quot;Bad or missing DOCTYPE declaration in: ',replace($href,'^.*/([^/]*)$','$1'),'&quot;')"/>
                                     </p:string-replace>
-                                    <p:string-replace match="/*/d:file/text()">
+                                    <p:string-replace match="/*/d:file/text()" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.replace-string-file">
                                         <p:with-option name="replace" select="concat('&quot;',$href,'&quot;')"/>
                                     </p:string-replace>
                                 </p:otherwise>
@@ -499,26 +499,26 @@
                         </p:otherwise>
                     </p:choose>
 
-                    <p:identity name="xml-declaration.iterate-files.doctype"/>
+                    <p:identity name="epub3-validate.step.group-xml-declaration.iterate-files.doctype"/>
 
                 </p:for-each>
-                <p:wrap-sequence wrapper="d:errors"/>
+                <p:wrap-sequence wrapper="d:errors" name="epub3-validate.step.group-xml-declaration.wrap-d-errors"/>
             </p:group>
-            <p:identity name="xml-declaration.validate"/>
+            <p:identity name="epub3-validate.step.xml-declaration.validate"/>
             <p:sink/>
 
-            <p:group>
-                <p:for-each>
+            <p:group name="epub3-validate.step.group-opf-and-html">
+                <p:for-each name="epub3-validate.step.group-opf-and-html.iterate-opf-and-html">
                     <p:iteration-source>
-                        <p:pipe step="opf" port="result"/>
-                        <p:pipe step="html" port="result"/>
+                        <p:pipe step="epub3-validate.step.opf" port="result"/>
+                        <p:pipe step="epub3-validate.step.html" port="result"/>
                     </p:iteration-source>
-                    <p:add-attribute match="/*" attribute-name="xml:base">
+                    <p:add-attribute match="/*" attribute-name="xml:base" name="epub3-validate.step.group-opf-and-html.iterate-opf-and-html.add-xml-base">
                         <p:with-option name="attribute-value" select="base-uri(/*)"/>
                     </p:add-attribute>
                 </p:for-each>
-                <p:wrap-sequence wrapper="c:result"/>
-                <p:validate-with-schematron name="opf-and-html.validate.schematron" assert-valid="false">
+                <p:wrap-sequence wrapper="c:result" name="epub3-validate.step.group-opf-and-html.wrap-c-result"/>
+                <p:validate-with-schematron name="epub3-validate.step.group-opf-and-html.validate.schematron" assert-valid="false">
                     <p:input port="parameters">
                         <p:empty/>
                     </p:input>
@@ -527,44 +527,44 @@
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>
-                <px:combine-validation-reports document-type="Nordic EPUB3 OPF+HTML" document-path="/">
+                <px:combine-validation-reports document-type="Nordic EPUB3 OPF+HTML" document-path="/" name="epub3-validate.step.group-opf-and-html.combine-validation-reports">
                     <p:input port="source">
-                        <p:pipe port="report" step="opf-and-html.validate.schematron"/>
+                        <p:pipe port="report" step="epub3-validate.step.group-opf-and-html.validate.schematron"/>
                     </p:input>
                     <p:with-option name="document-name" select="'Cross-document references and metadata'"/>
                 </px:combine-validation-reports>
             </p:group>
-            <p:identity name="opf-and-html.validate"/>
+            <p:identity name="epub3-validate.step.opf-and-html.validate"/>
             <p:sink/>
 
-            <p:choose>
+            <p:choose name="epub3-validate.step.choose-if-check-images">
                 <p:when test="$check-images = 'true'">
-                    <px:nordic-check-image-file-signatures>
+                    <px:nordic-check-image-file-signatures name="epub3-validate.step.choose-if-check-images.check-image-file-signatures">
                         <p:input port="source">
-                            <p:pipe port="fileset" step="unzip"/>
+                            <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
                         </p:input>
                     </px:nordic-check-image-file-signatures>
                 </p:when>
                 <p:otherwise>
-                    <p:identity>
+                    <p:identity name="epub3-validate.step.choose-if-check-images.dont-check-images">
                         <p:input port="source">
                             <p:empty/>
                         </p:input>
                     </p:identity>
                 </p:otherwise>
             </p:choose>
-            <p:identity name="images.validate"/>
+            <p:identity name="epub3-validate.step.images.validate"/>
             <p:sink/>
 
-            <p:group>
-                <p:for-each>
+            <p:group name="epub3-validate.step.group-nav-references">
+                <p:for-each name="epub3-validate.step.group-nav-references.iterate-html">
                     <p:iteration-source>
-                        <p:pipe step="html" port="result"/>
+                        <p:pipe step="epub3-validate.step.html" port="result"/>
                     </p:iteration-source>
-                    <p:add-attribute match="/*" attribute-name="xml:base">
+                    <p:add-attribute match="/*" attribute-name="xml:base" name="epub3-validate.step.group-nav-references.iterate-html.add-xml-base">
                         <p:with-option name="attribute-value" select="base-uri(/*)"/>
                     </p:add-attribute>
-                    <p:xslt>
+                    <p:xslt name="epub3-validate.step.group-nav-references.iterate-html.list-heading-and-pagebreak-references">
                         <p:input port="parameters">
                             <p:empty/>
                         </p:input>
@@ -573,23 +573,23 @@
                         </p:input>
                     </p:xslt>
                 </p:for-each>
-                <p:wrap-sequence wrapper="c:result"/>
-                <p:unwrap match="/*/*"/>
-                <p:identity name="heading-references"/>
+                <p:wrap-sequence wrapper="c:result" name="epub3-validate.step.group-nav-references.iterate-html.wrap-c-result"/>
+                <p:unwrap match="/*/*" name="epub3-validate.step.group-nav-references.iterate-html.unwrap-children"/>
+                <p:identity name="epub3-validate.step.group-nav-references.iterate-html.heading-references"/>
 
-                <p:insert match="/*" position="first-child">
+                <p:insert match="/*" position="first-child" name="epub3-validate.step.group-nav-references.iterate-html.insert-heading-references-into-nav">
                     <p:input port="source">
-                        <p:pipe port="result" step="nav"/>
+                        <p:pipe port="result" step="epub3-validate.step.nav"/>
                     </p:input>
                     <p:input port="insertion">
-                        <p:pipe port="result" step="heading-references"/>
+                        <p:pipe port="result" step="epub3-validate.step.group-nav-references.iterate-html.heading-references"/>
                     </p:input>
                 </p:insert>
-                <p:add-attribute match="/*" attribute-name="xml:base">
+                <p:add-attribute match="/*" attribute-name="xml:base" name="epub3-validate.step.group-nav-references.iterate-html.add-xml-base-to-nav">
                     <p:with-option name="attribute-value" select="base-uri(/*)"/>
                 </p:add-attribute>
 
-                <p:validate-with-schematron name="nav-references.validate.schematron" assert-valid="false">
+                <p:validate-with-schematron name="epub3-validate.step.group-nav-references.iterate-html.nav-references.validate.schematron" assert-valid="false">
                     <p:input port="parameters">
                         <p:empty/>
                     </p:input>
@@ -598,27 +598,27 @@
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>
-                <px:combine-validation-reports document-type="Nordic EPUB3 Navigation Document References">
+                <px:combine-validation-reports document-type="Nordic EPUB3 Navigation Document References" name="epub3-validate.step.group-nav-references.iterate-html.combine-validation-reports">
                     <p:input port="source">
-                        <p:pipe port="report" step="nav-references.validate.schematron"/>
+                        <p:pipe port="report" step="epub3-validate.step.group-nav-references.iterate-html.nav-references.validate.schematron"/>
                     </p:input>
                     <p:with-option name="document-name" select="'References from the navigation document to the content documents'"/>
                     <p:with-option name="document-path" select="base-uri(/*)">
-                        <p:pipe port="result" step="nav"/>
+                        <p:pipe port="result" step="epub3-validate.step.nav"/>
                     </p:with-option>
                 </px:combine-validation-reports>
             </p:group>
-            <p:identity name="nav-references.validate"/>
+            <p:identity name="epub3-validate.step.nav-references.validate"/>
             <p:sink/>
 
-            <p:group>
-                <p:wrap-sequence wrapper="wrapper">
+            <p:group name="epub3-validate.step.group-nav-ncx">
+                <p:wrap-sequence wrapper="wrapper" name="epub3-validate.step.group-nav-ncx.wrap-wrapper">
                     <p:input port="source">
-                        <p:pipe port="result" step="nav"/>
-                        <p:pipe port="result" step="ncx"/>
+                        <p:pipe port="result" step="epub3-validate.step.nav"/>
+                        <p:pipe port="result" step="epub3-validate.step.ncx"/>
                     </p:input>
                 </p:wrap-sequence>
-                <p:validate-with-schematron name="nav-ncx.validate.schematron" assert-valid="false">
+                <p:validate-with-schematron name="epub3-validate.step.group-nav-ncx.nav-ncx.validate.schematron" assert-valid="false">
                     <p:input port="parameters">
                         <p:empty/>
                     </p:input>
@@ -627,42 +627,44 @@
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>
-                <px:combine-validation-reports document-type="Nordic EPUB3 NCX and Navigation Document">
+                <px:combine-validation-reports document-type="Nordic EPUB3 NCX and Navigation Document" name="epub3-validate.step.group-nav-ncx.combine-validation-reports">
                     <p:input port="source">
-                        <p:pipe port="report" step="nav-ncx.validate.schematron"/>
+                        <p:pipe port="report" step="epub3-validate.step.group-nav-ncx.nav-ncx.validate.schematron"/>
                     </p:input>
                     <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
-                        <p:pipe port="result" step="ncx"/>
+                        <p:pipe port="result" step="epub3-validate.step.ncx"/>
                     </p:with-option>
                     <p:with-option name="document-path" select="base-uri(/*)">
-                        <p:pipe port="result" step="ncx"/>
+                        <p:pipe port="result" step="epub3-validate.step.ncx"/>
                     </p:with-option>
                 </px:combine-validation-reports>
             </p:group>
-            <p:identity name="nav-ncx.validate"/>
+            <p:identity name="epub3-validate.step.nav-ncx.validate"/>
             <p:sink/>
-
-            <px:fileset-filter media-types="application/xhtml+xml">
-                <p:input port="source">
-                    <p:pipe port="fileset" step="unzip"/>
-                </p:input>
-            </px:fileset-filter>
-            <p:delete match="/*/*[ends-with(@href,'nav.xhtml')]"/>
-            <pxi:fileset-load>
-                <p:input port="in-memory">
-                    <p:pipe port="in-memory" step="unzip"/>
-                </p:input>
-            </pxi:fileset-load>
-            <p:wrap-sequence wrapper="wrapper"/>
-            <p:xslt>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/determine-complexity.xsl"/>
-                </p:input>
-            </p:xslt>
-            <p:identity name="category.html-report"/>
+            
+            <p:group name="epub3-validate.step.category-report">
+                <px:fileset-filter media-types="application/xhtml+xml" name="epub3-validate.step.category-report.filter-html">
+                    <p:input port="source">
+                        <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
+                    </p:input>
+                </px:fileset-filter>
+                <p:delete match="/*/*[ends-with(@href,'nav.xhtml')]" name="epub3-validate.step.category-report.delete-nav-from-fileset"/>
+                <pxi:fileset-load name="epub3-validate.step.category-report.load-html">
+                    <p:input port="in-memory">
+                        <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
+                    </p:input>
+                </pxi:fileset-load>
+                <p:wrap-sequence wrapper="wrapper" name="epub3-validate.step.category-report.wrap-wrapper"/>
+                <p:xslt name="epub3-validate.step.category-report.determine-complexity">
+                    <p:input port="parameters">
+                        <p:empty/>
+                    </p:input>
+                    <p:input port="stylesheet">
+                        <p:document href="../../xslt/determine-complexity.xsl"/>
+                    </p:input>
+                </p:xslt>
+            </p:group>
+            <p:identity name="epub3-validate.step.category.html-report"/>
             <p:sink/>
 
         </p:when>
@@ -679,11 +681,12 @@
         </p:otherwise>
     </p:choose>
 
-    <p:choose>
+    <p:choose name="status">
         <p:xpath-context>
             <p:pipe port="status.in" step="main"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok'">
+            <p:output port="result"/>
             <px:nordic-validation-status>
                 <p:input port="source">
                     <p:pipe port="report.out" step="choose"/>
@@ -691,6 +694,7 @@
             </px:nordic-validation-status>
         </p:when>
         <p:otherwise>
+            <p:output port="result"/>
             <p:identity>
                 <p:input port="source">
                     <p:pipe port="status.in" step="main"/>
@@ -698,6 +702,5 @@
             </p:identity>
         </p:otherwise>
     </p:choose>
-    <p:identity name="status"/>
 
 </p:declare-step>

@@ -51,10 +51,10 @@
         </p:xpath-context>
         <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
             <p:output port="fileset.out" primary="true">
-                <p:pipe port="result" step="result.fileset"/>
+                <p:pipe port="result" step="html-to-dtbook.step.result.fileset"/>
             </p:output>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="result" step="result.in-memory"/>
+                <p:pipe port="result" step="html-to-dtbook.step.result.in-memory"/>
             </p:output>
             <p:output port="report.out" sequence="true">
                 <p:empty/>
@@ -62,21 +62,21 @@
 
 
 
-            <pxi:fileset-load media-types="application/xhtml+xml">
+            <pxi:fileset-load media-types="application/xhtml+xml" name="html-to-dtbook.step.load-xhtml">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
             </pxi:fileset-load>
             <px:assert test-count-max="1" message="There are multiple HTML files in the fileset; only the first one will be converted."/>
             <px:assert test-count-min="1" message="There must be a HTML file in the fileset." error-code="NORDICDTBOOKEPUB005"/>
-            <p:split-sequence initial-only="true" test="position()=1"/>
+            <p:split-sequence initial-only="true" test="position()=1" name="html-to-dtbook.step.split-sequence-only-first"/>
             <px:assert message="The HTML file must have a file extension." error-code="NORDICDTBOOKEPUB006">
                 <p:with-option name="test" select="matches(base-uri(/*),'.*[^\.]\.[^\.]*$')"/>
             </px:assert>
-            <p:identity name="input-html"/>
+            <p:identity name="html-to-dtbook.step.input-html"/>
 
             <!-- Make sure only sections corresponding to html:h[1-6] are used. -->
-            <p:xslt>
+            <p:xslt name="html-to-dtbook.step.deep-level-grouping">
                 <p:with-param name="name" select="'section article'"/>
                 <p:with-param name="namespace" select="'http://www.w3.org/1999/xhtml'"/>
                 <p:with-param name="max-depth" select="6"/>
@@ -86,7 +86,7 @@
                 </p:input>
             </p:xslt>
 
-            <p:xslt>
+            <p:xslt name="html-to-dtbook.step.epub3-to-dtbook">
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -94,14 +94,14 @@
                     <p:document href="../../xslt/epub3-to-dtbook.xsl"/>
                 </p:input>
             </p:xslt>
-            <p:choose>
+            <p:choose name="html-to-dtbook.step.choose-convert-to-dtbook110">
                 <p:when test="$dtbook2005='true'">
                     <!-- keep DTBook 2005-3 -->
-                    <p:identity/>
+                    <p:identity name="html-to-dtbook.step.choose-convert-to-dtbook110.do-not-convert"/>
                 </p:when>
                 <p:otherwise>
                     <!-- convert to DTBook 1.1.0 -->
-                    <p:xslt>
+                    <p:xslt name="html-to-dtbook.step.choose-convert-to-dtbook110.dtbook2005-to-dtbook110">
                         <p:input port="parameters">
                             <p:empty/>
                         </p:input>
@@ -112,12 +112,13 @@
                 </p:otherwise>
             </p:choose>
 
-            <p:add-attribute match="/*" attribute-name="xml:base">
+            <p:add-attribute match="/*" attribute-name="xml:base" name="html-to-dtbook.step.add-xml-base-to-dtbook">
                 <p:with-option name="attribute-value" select="concat(replace(base-uri(/*),'^(.*)\.[^/\.]*$','$1'),'.xml')">
-                    <p:pipe port="result" step="input-html"/>
+                    <p:pipe port="result" step="html-to-dtbook.step.input-html"/>
                 </p:with-option>
             </p:add-attribute>
-            <p:xslt>
+            <p:xslt name="html-to-dtbook.step.pretty-print-dtbook">
+                <!-- TODO: remove all pretty-printing to improve performance -->
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -125,45 +126,47 @@
                     <p:document href="../../xslt/pretty-print.xsl"/>
                 </p:input>
             </p:xslt>
-            <p:identity name="result.in-memory"/>
+            <p:identity name="html-to-dtbook.step.result.in-memory"/>
+            <p:sink/>
 
             <p:identity>
                 <p:input port="source">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
             </p:identity>
-            <p:delete match="//d:file[@media-type=('application/xhtml+xml','text/css')]"/>
-            <pxi:fileset-add-entry media-type="application/x-dtbook+xml">
+            <p:delete match="//d:file[@media-type=('application/xhtml+xml','text/css')]" name="html-to-dtbook.step.input-fileset-delete-xhtml-and-css"/>
+            <pxi:fileset-add-entry media-type="application/x-dtbook+xml" name="html-to-dtbook.step.add-dtbook-to-fileset">
                 <p:with-option name="href" select="(/*/d:file[@media-type='application/xhtml+xml'])[1]/replace(replace(@href,'.*/',''),'\.[^\.]*$','.xml')">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:with-option>
             </pxi:fileset-add-entry>
-            <p:viewport match="//d:file[starts-with(@href,'images/')]">
-                <p:add-attribute match="/*" attribute-name="href">
+            <p:viewport match="//d:file[starts-with(@href,'images/')]" name="html-to-dtbook.step.move-images-in-fileset-to-images-directory">
+                <p:add-attribute match="/*" attribute-name="href" name="html-to-dtbook.step.move-images-in-fileset-to-images-directory.add-attribute">
                     <p:with-option name="attribute-value" select="replace(/*/@href,'^images/','')"/>
                 </p:add-attribute>
             </p:viewport>
-            <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="omit-xml-declaration" attribute-value="false"/>
-            <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="version" attribute-value="1.0"/>
-            <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="encoding" attribute-value="utf-8"/>
-            <p:choose>
+            <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="omit-xml-declaration" attribute-value="false" name="html-to-dtbook.step.dtbook-omit-xml-declaration"/>
+            <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="version" attribute-value="1.0" name="html-to-dtbook.step.dtbook-xml-version"/>
+            <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="encoding" attribute-value="utf-8" name="html-to-dtbook.step.dtbook-xml-encoding"/>
+            <p:choose name="html-to-dtbook.step.choose-dtbook2005-or-dtbook110-doctype">
                 <p:when test="$dtbook2005='true'">
                     <!-- add doctype attributes to DTBook 2005-3 -->
-                    <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-public" attribute-value="-//NISO//DTD dtbook 2005-3//EN"/>
-                    <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-system" attribute-value="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
+                    <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-public" attribute-value="-//NISO//DTD dtbook 2005-3//EN" name="html-to-dtbook.step.choose-dtbook2005-or-dtbook110-doctype.2005-3.public"/>
+                    <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-system" attribute-value="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd" name="html-to-dtbook.step.choose-dtbook2005-or-dtbook110-doctype.2005-3.system"/>
                 </p:when>
                 <p:otherwise>
                     <!-- add standalone 'yes' to DTBook 1.1.0 -->
-                    <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="standalone" attribute-value="true"/>
+                    <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="standalone" attribute-value="true" name="html-to-dtbook.step.choose-dtbook2005-or-dtbook110-doctype.1.1.0.standalone"/>
                 </p:otherwise>
             </p:choose>
-            <p:xslt>
+            <p:xslt name="html-to-dtbook.step.pretty-print-fileset">
+                <!-- TODO: remove all pretty-printing to improve performance -->
                 <p:with-param name="preserve-empty-whitespace" select="'false'"/>
                 <p:input port="stylesheet">
                     <p:document href="../../xslt/pretty-print.xsl"/>
                 </p:input>
             </p:xslt>
-            <p:identity name="result.fileset"/>
+            <p:identity name="html-to-dtbook.step.result.fileset"/>
 
 
 
@@ -182,11 +185,12 @@
         </p:otherwise>
     </p:choose>
 
-    <p:choose>
+    <p:choose name="status">
         <p:xpath-context>
             <p:pipe port="status.in" step="main"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok'">
+            <p:output port="result"/>
             <px:nordic-validation-status>
                 <p:input port="source">
                     <p:pipe port="report.out" step="choose"/>
@@ -194,6 +198,7 @@
             </px:nordic-validation-status>
         </p:when>
         <p:otherwise>
+            <p:output port="result"/>
             <p:identity>
                 <p:input port="source">
                     <p:pipe port="status.in" step="main"/>
@@ -201,6 +206,5 @@
             </p:identity>
         </p:otherwise>
     </p:choose>
-    <p:identity name="status"/>
 
 </p:declare-step>

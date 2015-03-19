@@ -13,7 +13,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="status.out" step="html-validate"/>
+        <p:pipe port="status.out" step="dtbook-to-html.html-validate"/>
     </p:output>
 
     <p:option name="html-report" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
@@ -66,75 +66,75 @@
 
     <p:variable name="dtbook-href" select="resolve-uri($dtbook,static-base-uri())"/>
 
-    <px:message message="$1" name="nordic-version-message">
+    <px:message message="$1" name="dtbook-to-html.nordic-version-message">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
 
-    <px:fileset-create>
+    <px:fileset-create name="dtbook-to-html.create-dtbook-fileset">
         <p:with-option name="base" select="replace($dtbook-href,'[^/]+$','')"/>
     </px:fileset-create>
-    <pxi:fileset-add-entry media-type="application/x-dtbook+xml">
+    <pxi:fileset-add-entry media-type="application/x-dtbook+xml" name="dtbook-to-html.add-dtbook-to-fileset">
         <p:with-option name="href" select="replace($dtbook-href,'.*/','')"/>
     </pxi:fileset-add-entry>
-    <px:nordic-dtbook-validate.step name="dtbook-validate" cx:depends-on="nordic-version-message">
+    <px:nordic-dtbook-validate.step name="dtbook-to-html.dtbook-validate" cx:depends-on="dtbook-to-html.nordic-version-message">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
 
-    <px:nordic-dtbook-to-html.step name="dtbook-to-html">
+    <px:nordic-dtbook-to-html.step name="dtbook-to-html.dtbook-to-html">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="temp-dir" select="$output-dir"/>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="dtbook-validate"/>
+            <p:pipe port="in-memory.out" step="dtbook-to-html.dtbook-validate"/>
         </p:input>
         <p:input port="report.in">
-            <p:pipe port="report.out" step="dtbook-validate"/>
+            <p:pipe port="report.out" step="dtbook-to-html.dtbook-validate"/>
         </p:input>
         <p:input port="status.in">
-            <p:pipe port="status.out" step="dtbook-validate"/>
+            <p:pipe port="status.out" step="dtbook-to-html.dtbook-validate"/>
         </p:input>
     </px:nordic-dtbook-to-html.step>
 
-    <px:nordic-html-store.step name="html-store">
+    <px:nordic-html-store.step name="dtbook-to-html.html-store">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="dtbook-to-html"/>
+            <p:pipe port="in-memory.out" step="dtbook-to-html.dtbook-to-html"/>
         </p:input>
         <p:input port="report.in">
-            <p:pipe port="report.out" step="dtbook-to-html"/>
+            <p:pipe port="report.out" step="dtbook-to-html.dtbook-to-html"/>
         </p:input>
         <p:input port="status.in">
-            <p:pipe port="status.out" step="dtbook-to-html"/>
+            <p:pipe port="status.out" step="dtbook-to-html.dtbook-to-html"/>
         </p:input>
     </px:nordic-html-store.step>
 
-    <px:nordic-html-validate.step name="html-validate" document-type="Nordic HTML (single-document)" check-images="false">
+    <px:nordic-html-validate.step name="dtbook-to-html.html-validate" document-type="Nordic HTML (single-document)" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="html-store"/>
+            <p:pipe port="in-memory.out" step="dtbook-to-html.html-store"/>
         </p:input>
         <p:input port="report.in">
-            <p:pipe port="report.out" step="html-store"/>
+            <p:pipe port="report.out" step="dtbook-to-html.html-store"/>
         </p:input>
         <p:input port="status.in">
-            <p:pipe port="status.out" step="html-store"/>
+            <p:pipe port="status.out" step="dtbook-to-html.html-store"/>
         </p:input>
     </px:nordic-html-validate.step>
     <p:sink/>
 
-    <px:nordic-format-html-report>
+    <px:nordic-format-html-report name="dtbook-to-html.nordic-format-html-report">
         <p:input port="source">
-            <p:pipe port="report.out" step="html-validate"/>
+            <p:pipe port="report.out" step="dtbook-to-html.html-validate"/>
         </p:input>
     </px:nordic-format-html-report>
-    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
+    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="dtbook-to-html.store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="dtbook-to-html.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
-            <p:pipe port="result" step="store-report"/>
+            <p:pipe port="result" step="dtbook-to-html.store-report"/>
         </p:with-option>
     </pxi:set-doctype>
     <p:sink/>

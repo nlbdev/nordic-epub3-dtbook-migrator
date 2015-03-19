@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/list-heading-references.xsl" xmlns:c="http://www.w3.org/ns/xproc-step">
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/list-heading-and-pagebreak-references.xsl" xmlns:c="http://www.w3.org/ns/xproc-step">
 
     <x:scenario label="Some HTML files">
         <x:context>
@@ -78,6 +78,7 @@
         </x:context>
         <x:expect label="The result should be a c:result with a list of c:result elements describing all headlines">
             <c:result xmlns:c="http://www.w3.org/ns/xproc-step">
+                <c:result xml:base="file:/tmp/EPUB1234-01-cover.xhtml" data-pagebreak-element="div" data-pagebreak-id="page_5"><![CDATA[5]]></c:result>
                 <c:result xml:base="file:/tmp/EPUB1234-01-cover.xhtml" data-sectioning-element="body" data-sectioning-id="d910e694" data-heading-element="h1" data-heading-id="d910e696"
                     ><![CDATA[1. Research questions]]></c:result>
                 <c:result xml:base="file:/tmp/EPUB1234-02-chapter.xhtml" data-sectioning-element="body" data-sectioning-id="d910e770" data-heading-element="h1" data-heading-id="d910e772"

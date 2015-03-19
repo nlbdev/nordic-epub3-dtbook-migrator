@@ -52,10 +52,10 @@
         </p:xpath-context>
         <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
             <p:output port="fileset.out" primary="true">
-                <p:pipe port="result" step="result.fileset"/>
+                <p:pipe port="result" step="dtbook-to-html.step.result.fileset"/>
             </p:output>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="result" step="result.in-memory"/>
+                <p:pipe port="result" step="dtbook-to-html.step.result.in-memory"/>
             </p:output>
             <p:output port="report.out" sequence="true">
                 <p:empty/>
@@ -77,17 +77,17 @@
                 </p:inline>
             </p:variable>
 
-            <pxi:fileset-load media-types="application/x-dtbook+xml">
+            <pxi:fileset-load media-types="application/x-dtbook+xml" name="dtbook-to-html.step.load-dtbook">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
             </pxi:fileset-load>
             <px:assert test-count-max="1" message="There are multiple DTBooks in the fileset; only the first one will be converted."/>
             <px:assert test-count-min="1" message="There must be a DTBook file in the fileset." error-code="NORDICDTBOOKEPUB004"/>
-            <p:split-sequence initial-only="true" test="position()=1"/>
-            <p:identity name="dtbook"/>
+            <p:split-sequence initial-only="true" test="position()=1" name="dtbook-to-html.step.only-use-first-dtbook"/>
+            <p:identity name="dtbook-to-html.step.dtbook"/>
 
-            <p:xslt>
+            <p:xslt name="dtbook-to-html.step.dtbook-to-epub3">
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -96,15 +96,16 @@
                 </p:input>
             </p:xslt>
 
-            <p:insert match="/html:html/html:head" position="last-child">
+            <p:insert match="/html:html/html:head" position="last-child" name="dtbook-to-html.step.insert-accessibility-css-link">
                 <p:input port="insertion">
                     <p:inline exclude-inline-prefixes="#all">
                         <link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" type="text/css" href="css/accessibility.css"/>
                     </p:inline>
                 </p:input>
             </p:insert>
-            <p:viewport match="/html:html/html:head">
-                <p:xslt>
+            <p:viewport match="/html:html/html:head" name="dtbook-to-html.step.viewport-html-head">
+                <p:xslt name="dtbook-to-html.step.viewport-html-head.pretty-print">
+                    <!-- TODO: consider dropping this if it causes performance issues -->
                     <p:with-param name="preserve-empty-whitespace" select="'false'"/>
                     <p:input port="stylesheet">
                         <p:document href="../../xslt/pretty-print.xsl"/>
@@ -113,104 +114,104 @@
             </p:viewport>
             <!-- TODO: add ASCIIMathML.js if there are asciimath elements -->
 
-            <p:add-attribute match="/*" attribute-name="xml:base">
+            <p:add-attribute match="/*" attribute-name="xml:base" name="dtbook-to-html.step.set-xml-base">
                 <p:with-option name="attribute-value" select="concat($temp-dir,(//dtbook:meta[@name='dtb:uid']/@content,'missing-uid')[1],'.xhtml')">
-                    <p:pipe port="result" step="dtbook"/>
+                    <p:pipe port="result" step="dtbook-to-html.step.dtbook"/>
                 </p:with-option>
             </p:add-attribute>
-            <p:identity name="result.in-memory"/>
+            <p:identity name="dtbook-to-html.step.result.in-memory"/>
 
-            <px:mkdir name="mkdir">
+            <px:mkdir name="dtbook-to-html.step.mkdir">
                 <p:with-option name="href" select="concat($temp-dir,'css/fonts/opendyslexic/')"/>
             </px:mkdir>
-            <px:copy-resource name="store1" cx:depends-on="mkdir">
+            <px:copy-resource name="dtbook-to-html.step.store1" cx:depends-on="dtbook-to-html.step.mkdir">
                 <p:with-option name="href" select="resolve-uri('../../../css/accessibility.css',$doc-base)"/>
                 <p:with-option name="target" select="concat($temp-dir,'css/accessibility.css')"/>
             </px:copy-resource>
-            <px:copy-resource name="store2" cx:depends-on="mkdir">
+            <px:copy-resource name="dtbook-to-html.step.store2" cx:depends-on="dtbook-to-html.step.mkdir">
                 <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-Regular.otf',$doc-base)"/>
                 <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/OpenDyslexic-Regular.otf')"/>
             </px:copy-resource>
-            <px:copy-resource name="store3" cx:depends-on="mkdir">
+            <px:copy-resource name="dtbook-to-html.step.store3" cx:depends-on="dtbook-to-html.step.mkdir">
                 <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-Italic.otf',$doc-base)"/>
                 <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/OpenDyslexic-Italic.otf')"/>
             </px:copy-resource>
-            <px:copy-resource name="store4" cx:depends-on="mkdir">
+            <px:copy-resource name="dtbook-to-html.step.store4" cx:depends-on="dtbook-to-html.step.mkdir">
                 <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-Bold.otf',$doc-base)"/>
                 <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/OpenDyslexic-Bold.otf')"/>
             </px:copy-resource>
-            <px:copy-resource name="store5" cx:depends-on="mkdir">
+            <px:copy-resource name="dtbook-to-html.step.store5" cx:depends-on="dtbook-to-html.step.mkdir">
                 <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf',$doc-base)"/>
                 <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf')"/>
             </px:copy-resource>
-            <px:copy-resource name="store6" cx:depends-on="mkdir">
+            <px:copy-resource name="dtbook-to-html.step.store6" cx:depends-on="dtbook-to-html.step.mkdir">
                 <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf',$doc-base)"/>
                 <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf')"/>
             </px:copy-resource>
-            <px:copy-resource name="store7" cx:depends-on="mkdir">
+            <px:copy-resource name="dtbook-to-html.step.store7" cx:depends-on="dtbook-to-html.step.mkdir">
                 <p:with-option name="href" select="resolve-uri('../../../css/fonts/opendyslexic/LICENSE.txt',$doc-base)"/>
                 <p:with-option name="target" select="concat($temp-dir,'css/fonts/opendyslexic/LICENSE.txt')"/>
             </px:copy-resource>
             <!-- TODO: add ASCIIMathML.js if there are asciimath elements -->
-            <p:identity name="store-dependency">
+            <p:identity name="dtbook-to-html.step.store-dependency">
                 <p:input port="source">
-                    <p:pipe port="result" step="store1"/>
-                    <p:pipe port="result" step="store2"/>
-                    <p:pipe port="result" step="store3"/>
-                    <p:pipe port="result" step="store4"/>
-                    <p:pipe port="result" step="store5"/>
-                    <p:pipe port="result" step="store6"/>
-                    <p:pipe port="result" step="store7"/>
+                    <p:pipe port="result" step="dtbook-to-html.step.store1"/>
+                    <p:pipe port="result" step="dtbook-to-html.step.store2"/>
+                    <p:pipe port="result" step="dtbook-to-html.step.store3"/>
+                    <p:pipe port="result" step="dtbook-to-html.step.store4"/>
+                    <p:pipe port="result" step="dtbook-to-html.step.store5"/>
+                    <p:pipe port="result" step="dtbook-to-html.step.store6"/>
+                    <p:pipe port="result" step="dtbook-to-html.step.store7"/>
                 </p:input>
             </p:identity>
             <p:sink/>
 
-            <px:fileset-filter not-media-types="application/x-dtbook+xml text/css">
+            <px:fileset-filter not-media-types="application/x-dtbook+xml text/css" name="dtbook-to-html.step.filter-resources">
                 <p:input port="source">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
             </px:fileset-filter>
-            <pxi:fileset-move>
+            <pxi:fileset-move name="dtbook-to-html.step.move-resources">
                 <p:with-option name="new-base" select="$temp-dir"/>
             </pxi:fileset-move>
-            <p:viewport match="/*/*[starts-with(@media-type,'image/')]">
-                <p:add-attribute match="/*" attribute-name="href">
+            <p:viewport match="/*/*[starts-with(@media-type,'image/')]" name="dtbook-to-html.step.viewport-images">
+                <p:add-attribute match="/*" attribute-name="href" name="dtbook-to-html.step.viewport-images.change-href">
                     <p:with-option name="attribute-value" select="concat('images/',/*/@href)"/>
                 </p:add-attribute>
             </p:viewport>
-            <p:identity name="fileset.existing-resources"/>
+            <p:identity name="dtbook-to-html.step.fileset.existing-resources"/>
 
-            <px:fileset-create>
+            <px:fileset-create name="dtbook-to-html.step.create-temp-dir-fileset">
                 <p:with-option name="base" select="$temp-dir"/>
             </px:fileset-create>
-            <pxi:fileset-add-entry media-type="text/css" href="css/accessibility.css"/>
-            <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Regular.otf"/>
-            <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Italic.otf"/>
-            <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Bold.otf"/>
-            <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf"/>
-            <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"/>
-            <pxi:fileset-add-entry media-type="text/plain" href="css/fonts/opendyslexic/LICENSE.txt"/>
-            <p:viewport match="/*/*">
-                <p:add-attribute match="/*" attribute-name="original-href">
+            <pxi:fileset-add-entry media-type="text/css" href="css/accessibility.css" name="dtbook-to-html.step.add-to-fileset-accessibility-css"/>
+            <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Regular.otf" name="dtbook-to-html.step.add-to-fileset-opendyslexic-regular"/>
+            <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Italic.otf" name="dtbook-to-html.step.add-to-fileset-opendyslexic-italic"/>
+            <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Bold.otf" name="dtbook-to-html.step.add-to-fileset-opendyslexic-bold"/>
+            <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf" name="dtbook-to-html.step.add-to-fileset-opendyslexic-bolditalic"/>
+            <pxi:fileset-add-entry media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf" name="dtbook-to-html.step.add-to-fileset-opendyslexicmono-regular"/>
+            <pxi:fileset-add-entry media-type="text/plain" href="css/fonts/opendyslexic/LICENSE.txt" name="dtbook-to-html.step.add-to-fileset-opendyslexic-license"/>
+            <p:viewport match="/*/*" name="dtbook-to-html.step.viewport-fileset">
+                <p:add-attribute match="/*" attribute-name="original-href" name="dtbook-to-html.step.viewport-fileset.add-original-href">
                     <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri(/*))"/>
                 </p:add-attribute>
             </p:viewport>
-            <pxi:fileset-add-entry media-type="application/xhtml+xml">
+            <pxi:fileset-add-entry media-type="application/xhtml+xml" name="dtbook-to-html.step.add-html-to-fileset">
                 <p:with-option name="href" select="base-uri(/*)">
-                    <p:pipe port="result" step="result.in-memory"/>
+                    <p:pipe port="result" step="dtbook-to-html.step.result.in-memory"/>
                 </p:with-option>
             </pxi:fileset-add-entry>
-            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="omit-xml-declaration" attribute-value="false"/>
-            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="version" attribute-value="1.0"/>
-            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="encoding" attribute-value="utf-8"/>
-            <p:identity name="fileset.new-resources"/>
-            <px:fileset-join>
+            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="omit-xml-declaration" attribute-value="false" name="dtbook-to-html.step.dont-omit-xml-declaration"/>
+            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="version" attribute-value="1.0" name="dtbook-to-html.step.set-xml-version"/>
+            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="encoding" attribute-value="utf-8" name="dtbook-to-html.step.set-xml-encoding"/>
+            <p:identity name="dtbook-to-html.step.fileset.new-resources"/>
+            <px:fileset-join name="dtbook-to-html.step.fileset.join-old-and-new-resources">
                 <p:input port="source">
-                    <p:pipe port="result" step="fileset.existing-resources"/>
-                    <p:pipe port="result" step="fileset.new-resources"/>
+                    <p:pipe port="result" step="dtbook-to-html.step.fileset.existing-resources"/>
+                    <p:pipe port="result" step="dtbook-to-html.step.fileset.new-resources"/>
                 </p:input>
             </px:fileset-join>
-            <p:identity name="result.fileset" cx:depends-on="store-dependency"/>
+            <p:identity name="dtbook-to-html.step.result.fileset" cx:depends-on="dtbook-to-html.step.store-dependency"/>
 
 
 
@@ -235,11 +236,12 @@
         </p:otherwise>
     </p:choose>
 
-    <p:choose>
+    <p:choose name="status">
         <p:xpath-context>
             <p:pipe port="status.in" step="main"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok'">
+            <p:output port="result"/>
             <px:nordic-validation-status>
                 <p:input port="source">
                     <p:pipe port="report.out" step="choose"/>
@@ -247,6 +249,7 @@
             </px:nordic-validation-status>
         </p:when>
         <p:otherwise>
+            <p:output port="result"/>
             <p:identity>
                 <p:input port="source">
                     <p:pipe port="status.in" step="main"/>
@@ -254,6 +257,5 @@
             </p:identity>
         </p:otherwise>
     </p:choose>
-    <p:identity name="status"/>
 
 </p:declare-step>

@@ -37,34 +37,34 @@
 
     <p:variable name="epub-href" select="resolve-uri($epub,static-base-uri())"/>
 
-    <px:message message="$1" name="nordic-version-message">
+    <px:message message="$1" name="epub3-asciimath-to-mathml.nordic-version-message">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
 
-    <px:message message="Unzipping EPUB" cx:depends-on="nordic-version-message" name="message.epub-unzipped"/>
-    <pxi:unzip-fileset name="unzip" cx:depends-on="message.epub-unzipped" load-to-memory="false" store-to-disk="true">
+    <px:message message="Unzipping EPUB" cx:depends-on="epub3-asciimath-to-mathml.nordic-version-message" name="epub3-asciimath-to-mathml.message.epub-unzipped"/>
+    <pxi:unzip-fileset name="epub3-asciimath-to-mathml.unzip" cx:depends-on="epub3-asciimath-to-mathml.message.epub-unzipped" load-to-memory="false" store-to-disk="true">
         <p:with-option name="href" select="$epub-href"/>
         <p:with-option name="unzipped-basedir" select="concat($temp-dir,'epub/')"/>
     </pxi:unzip-fileset>
     <p:sink/>
-    <px:mediatype-detect>
+    <px:mediatype-detect name="epub3-asciimath-to-mathml.mediatype-detect">
         <p:input port="source">
-            <p:pipe port="fileset" step="unzip"/>
+            <p:pipe port="fileset" step="epub3-asciimath-to-mathml.unzip"/>
         </p:input>
     </px:mediatype-detect>
-    
+
     <px:message message="Converting from ASCIIMath to MathML"/>
-    <px:nordic-epub3-asciimath-to-mathml.step name="convert">
+    <px:nordic-epub3-asciimath-to-mathml.step name="epub3-asciimath-to-mathml.convert">
         <p:with-option name="fail-on-error" select="'true'"/>
     </px:nordic-epub3-asciimath-to-mathml.step>
 
     <px:message message="Zipping EPUB"/>
-    <px:epub3-store name="store">
+    <px:epub3-store name="epub3-asciimath-to-mathml.store">
         <p:with-option name="href" select="concat($output-dir,replace($epub-href,'.*/',''))"/>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="convert"/>
+            <p:pipe port="in-memory.out" step="epub3-asciimath-to-mathml.convert"/>
         </p:input>
     </px:epub3-store>
 

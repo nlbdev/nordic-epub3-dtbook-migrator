@@ -24,7 +24,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="status.out" step="dtbook-validate"/>
+        <p:pipe port="status.out" step="dtbook-validate.dtbook-validate"/>
     </p:output>
 
     <p:option name="dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
@@ -74,34 +74,34 @@
 
     <p:variable name="dtbook-href" select="resolve-uri($dtbook,static-base-uri())"/>
 
-    <px:message message="$1" name="nordic-version-message">
+    <px:message message="$1" name="dtbook-validate.nordic-version-message">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
 
-    <px:fileset-create>
+    <px:fileset-create name="dtbook-validate.create-dtbook-fileset">
         <p:with-option name="base" select="replace($dtbook-href,'[^/]+$','')"/>
     </px:fileset-create>
-    <pxi:fileset-add-entry media-type="application/x-dtbook+xml">
+    <pxi:fileset-add-entry media-type="application/x-dtbook+xml" name="dtbook-validate.add-dtbook-to-fileset">
         <p:with-option name="href" select="replace($dtbook-href,'.*/','')"/>
     </pxi:fileset-add-entry>
-    <px:nordic-dtbook-validate.step name="dtbook-validate" cx:depends-on="nordic-version-message">
+    <px:nordic-dtbook-validate.step name="dtbook-validate.dtbook-validate" cx:depends-on="dtbook-validate.nordic-version-message">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
     <p:sink/>
 
-    <pxi:fileset-load media-types="application/x-dtbook+xml" method="xml">
+    <pxi:fileset-load media-types="application/x-dtbook+xml" method="xml" name="dtbook-validate.load-dtbook">
         <p:input port="fileset">
-            <p:pipe port="fileset.out" step="dtbook-validate"/>
+            <p:pipe port="fileset.out" step="dtbook-validate.dtbook-validate"/>
         </p:input>
         <p:input port="in-memory">
-            <p:pipe port="in-memory.out" step="dtbook-validate"/>
+            <p:pipe port="in-memory.out" step="dtbook-validate.dtbook-validate"/>
         </p:input>
     </pxi:fileset-load>
-    <p:xslt>
+    <p:xslt name="dtbook-validate.info-report">
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -109,21 +109,21 @@
             <p:document href="../xslt/info-report.xsl"/>
         </p:input>
     </p:xslt>
-    <p:identity name="report.nordic"/>
+    <p:identity name="dtbook-validate.report.nordic"/>
     <p:sink/>
 
-    <px:nordic-format-html-report>
+    <px:nordic-format-html-report name="dtbook-validate.nordic-format-html-report">
         <p:input port="source">
-            <p:pipe port="result" step="report.nordic"/>
-            <p:pipe port="report.out" step="dtbook-validate"/>
+            <p:pipe port="result" step="dtbook-validate.report.nordic"/>
+            <p:pipe port="report.out" step="dtbook-validate.dtbook-validate"/>
         </p:input>
     </px:nordic-format-html-report>
-    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
+    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="dtbook-validate.store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="dtbook-validate.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
-            <p:pipe port="result" step="store-report"/>
+            <p:pipe port="result" step="dtbook-validate.store-report"/>
         </p:with-option>
     </pxi:set-doctype>
     <p:sink/>

@@ -63,13 +63,12 @@
         <!-- deep-levels can be resource intensive for big documents; so only call the deep-levels template if necessary -->
         <xsl:choose>
             <xsl:when test="$level &lt; $max-depth-int">
-                <xsl:message select="concat('level is less than ',$max-depth-int,', will not unwrap; at: ',f:xpath-string(.))"/>
                 <xsl:copy>
                     <xsl:apply-templates select="@*|node()"/>
                 </xsl:copy>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message select="concat('level is more than or equal to ',$max-depth-int,', will unwrap; at: ',f:xpath-string(.))"/>
+                <xsl:message select="concat('level is more than or equal to ',$max-depth-int,', will unwrap deeper levels; at: ',f:xpath-string(.))"/>
                 <xsl:call-template name="deep-levels"/>
             </xsl:otherwise>
         </xsl:choose>
@@ -78,7 +77,7 @@
     <xsl:template name="deep-levels">
         <xsl:variable name="this" select="."/>
         <xsl:variable name="deep-levels" select=".//*[f:is-level(.)] | .//*[f:is-level(.)]/following-sibling::*[not(.//*[f:is-level(.)])][1][not(self::*[f:is-level(.)])]"/>
-        <xsl:message select="concat('found ',count($deep-levels),' deep levels at: ',f:xpath-string(.))"/>
+        <xsl:message select="if (count($deep-levels)) then concat('found ',count($deep-levels),' deep levels at: ',f:xpath-string(.)) else concat('No deeper levels found at: ',f:xpath-string(.))"/>
         <xsl:choose>
 
             <xsl:when test="not($deep-levels)">

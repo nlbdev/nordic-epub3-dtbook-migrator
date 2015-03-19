@@ -57,9 +57,9 @@
                 <p:pipe port="fileset.in" step="main"/>
             </p:output>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="result" step="in-memory.opf"/>
-                <p:pipe port="result" step="in-memory.xhtml"/>
-                <p:pipe port="result" step="in-memory.other"/>
+                <p:pipe port="result" step="epub3-asciimath-to-mathml.step.in-memory.opf"/>
+                <p:pipe port="result" step="epub3-asciimath-to-mathml.step.in-memory.xhtml"/>
+                <p:pipe port="result" step="epub3-asciimath-to-mathml.step.in-memory.other"/>
             </p:output>
             <p:output port="report.out" sequence="true">
                 <p:empty/>
@@ -67,7 +67,7 @@
 
 
 
-            <pxi:fileset-load media-types="application/xhtml+xml">
+            <pxi:fileset-load media-types="application/xhtml+xml" name="epub3-asciimath-to-mathml.step.load-html-files">
                 <p:input port="fileset">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
@@ -75,23 +75,23 @@
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
             </pxi:fileset-load>
-            <p:for-each>
+            <p:for-each name="epub3-asciimath-to-mathml.step.iterate-html-files">
                 <px:message message="Checking for ASCIIMath in $1">
                     <p:with-option name="param1" select="base-uri(/*)"/>
                 </px:message>
-                <p:viewport match="//*[tokenize(@class,'\s+')='asciimath']">
+                <p:viewport match="//*[tokenize(@class,'\s+')='asciimath']" name="epub3-asciimath-to-mathml.step.iterate-html-files.viewport-asciimath-elements">
                     <px:message message="Converting to MathML: '$1'">
                         <p:with-option name="param1" select="string-join(.//text(),'')"/>
                     </px:message>
 
-                    <p:identity name="asciimath"/>
-                    <p:choose>
+                    <p:identity name="epub3-asciimath-to-mathml.step.iterate-html-files.viewport-asciimath-elements.asciimath"/>
+                    <p:choose name="epub3-asciimath-to-mathml.step.iterate-html-files.viewport-asciimath-elements.choose-step-available">
                         <p:when test="p:step-available('px:asciimathml')">
-                            <px:asciimathml name="mathml">
+                            <px:asciimathml name="epub3-asciimath-to-mathml.step.iterate-html-files.viewport-asciimath-elements.choose-step-available.mathml">
                                 <p:with-option name="asciimath" select="string-join(.//text(),'')"/>
                             </px:asciimathml>
 
-                            <p:identity>
+                            <p:identity name="epub3-asciimath-to-mathml.step.iterate-html-files.viewport-asciimath-elements.choose-step-available.epub-switch-wrapper">
                                 <p:input port="source">
                                     <p:inline exclude-inline-prefixes="#all">
                                         <epub:switch>
@@ -101,21 +101,21 @@
                                     </p:inline>
                                 </p:input>
                             </p:identity>
-                            <p:insert match="/*/epub:case" position="first-child">
+                            <p:insert match="/*/epub:case" position="first-child" name="epub3-asciimath-to-mathml.step.iterate-html-files.viewport-asciimath-elements.choose-step-available.insert-mathml-into-epub-case">
                                 <p:input port="insertion">
-                                    <p:pipe port="result" step="mathml"/>
+                                    <p:pipe port="result" step="epub3-asciimath-to-mathml.step.iterate-html-files.viewport-asciimath-elements.choose-step-available.mathml"/>
                                 </p:input>
                             </p:insert>
-                            <p:insert match="/*/epub:default" position="first-child">
+                            <p:insert match="/*/epub:default" position="first-child" name="epub3-asciimath-to-mathml.step.iterate-html-files.viewport-asciimath-elements.choose-step-available.insert-asciimath-into-epub-default">
                                 <p:input port="insertion">
-                                    <p:pipe port="result" step="asciimath"/>
+                                    <p:pipe port="result" step="epub3-asciimath-to-mathml.step.iterate-html-files.viewport-asciimath-elements.asciimath"/>
                                 </p:input>
                             </p:insert>
 
                         </p:when>
                         <p:otherwise>
                             <px:message severity="WARNING" message="px:asciimathml is not available; asciimath element will be replaced by placeholder"/>
-                            <p:add-attribute match="/*" attribute-name="alt">
+                            <p:add-attribute match="/*" attribute-name="alt" name="epub3-asciimath-to-mathml.step.iterate-html-files.viewport-asciimath-elements.choose-step-available.step-not-available">
                                 <p:input port="source">
                                     <p:inline>
                                         <math xmlns="http://www.w3.org/1998/Math/MathML"/>
@@ -128,19 +128,19 @@
 
                 </p:viewport>
             </p:for-each>
-            <p:identity name="in-memory.xhtml"/>
-            <p:split-sequence test="//mathml:*"/>
-            <p:for-each>
-                <p:delete match="/*/node()"/>
-                <p:add-attribute match="/*" attribute-name="xml:base">
+            <p:identity name="epub3-asciimath-to-mathml.step.in-memory.xhtml"/>
+            <p:split-sequence test="//mathml:*" name="epub3-asciimath-to-mathml.step.split-sequence-mathml"/>
+            <p:for-each name="epub3-asciimath-to-mathml.step.iterate-mathml">
+                <p:delete match="/*/node()" name="epub3-asciimath-to-mathml.step.iterate-mathml.delete-content"/>
+                <p:add-attribute match="/*" attribute-name="xml:base" name="epub3-asciimath-to-mathml.step.iterate-mathml.add-xml-base">
                     <p:with-option name="attribute-value" select="base-uri(/*)"/>
                 </p:add-attribute>
             </p:for-each>
-            <p:wrap-sequence wrapper="wrapper"/>
-            <p:identity name="xhtml-documents-with-mathml"/>
+            <p:wrap-sequence wrapper="wrapper" name="epub3-asciimath-to-mathml.step.mathml-sequence-wrapper"/>
+            <p:identity name="epub3-asciimath-to-mathml.step.xhtml-documents-with-mathml"/>
             <p:sink/>
 
-            <pxi:fileset-load media-types="application/oebps-package+xml" method="xml">
+            <pxi:fileset-load media-types="application/oebps-package+xml" method="xml" name="epub3-asciimath-to-mathml.step.load-opf">
                 <p:input port="fileset">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
@@ -149,43 +149,43 @@
                 </p:input>
             </pxi:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
-            <p:viewport match="/opf:package/opf:manifest/opf:item">
+            <p:viewport match="/opf:package/opf:manifest/opf:item" name="epub3-asciimath-to-mathml.step.viewport-opf-items">
                 <p:variable name="item-uri" select="resolve-uri(@href,base-uri(/*))"/>
-                <p:choose>
+                <p:choose name="epub3-asciimath-to-mathml.step.viewport-opf-items.choose-if-contains-mathml">
                     <p:xpath-context>
-                        <p:pipe port="result" step="xhtml-documents-with-mathml"/>
+                        <p:pipe port="result" step="epub3-asciimath-to-mathml.step.xhtml-documents-with-mathml"/>
                     </p:xpath-context>
                     <p:when test="$item-uri = /*/*/@xml:base">
                         <!-- item contains MathML; add "mathml" to list of properties -->
-                        <p:add-attribute match="/*" attribute-name="properties" attribute-value="string-join(distinct-values((/*/tokenize(@properties,'\s+'), 'mathml')),' ')"/>
+                        <p:add-attribute match="/*" attribute-name="properties" attribute-value="string-join(distinct-values((/*/tokenize(@properties,'\s+'), 'mathml')),' ')" name="epub3-asciimath-to-mathml.step.viewport-opf-items.choose-if-contains-mathml.item-contains-mathml"/>
                     </p:when>
                     <p:otherwise>
                         <!-- MathML was not added to the item; don't do anything -->
-                        <p:identity/>
+                        <p:identity name="epub3-asciimath-to-mathml.step.viewport-opf-items.choose-if-contains-mathml.item-does-not-contain-mathml"/>
                     </p:otherwise>
                 </p:choose>
             </p:viewport>
-            <p:identity name="in-memory.opf"/>
+            <p:identity name="epub3-asciimath-to-mathml.step.in-memory.opf"/>
             <p:sink/>
 
-            <p:for-each>
+            <p:for-each name="epub3-asciimath-to-mathml.step.iterate-in-memory.in">
                 <p:iteration-source>
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:iteration-source>
-                <p:choose>
+                <p:choose name="epub3-asciimath-to-mathml.step.iterate-in-memory.in.choose-if-xhtml-or-opf">
                     <p:when test="ends-with(base-uri(/*),'.xhtml') or ends-with(base-uri(/*),'.opf')">
-                        <p:identity>
+                        <p:identity name="epub3-asciimath-to-mathml.step.iterate-in-memory.in.choose-if-xhtml-or-opf.discard-xhtml-or-opf">
                             <p:input port="source">
                                 <p:empty/>
                             </p:input>
                         </p:identity>
                     </p:when>
                     <p:otherwise>
-                        <p:identity/>
+                        <p:identity name="epub3-asciimath-to-mathml.step.iterate-in-memory.in.choose-if-xhtml-or-opf.retain-other-resources"/>
                     </p:otherwise>
                 </p:choose>
             </p:for-each>
-            <p:identity name="in-memory.other"/>
+            <p:identity name="epub3-asciimath-to-mathml.step.in-memory.other"/>
             <p:sink/>
 
 
@@ -205,11 +205,12 @@
         </p:otherwise>
     </p:choose>
 
-    <p:choose>
+    <p:choose name="status">
         <p:xpath-context>
             <p:pipe port="status.in" step="main"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok'">
+            <p:output port="result"/>
             <px:nordic-validation-status>
                 <p:input port="source">
                     <p:pipe port="report.out" step="choose"/>
@@ -217,6 +218,7 @@
             </px:nordic-validation-status>
         </p:when>
         <p:otherwise>
+            <p:output port="result"/>
             <p:identity>
                 <p:input port="source">
                     <p:pipe port="status.in" step="main"/>
@@ -224,6 +226,5 @@
             </p:identity>
         </p:otherwise>
     </p:choose>
-    <p:identity name="status"/>
 
 </p:declare-step>

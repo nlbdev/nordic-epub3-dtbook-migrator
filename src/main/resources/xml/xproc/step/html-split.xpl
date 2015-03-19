@@ -9,11 +9,11 @@
     </p:input>
 
     <p:output port="fileset.out" primary="true">
-        <p:pipe port="result" step="fileset.result"/>
+        <p:pipe port="result" step="html-split.fileset.result"/>
     </p:output>
     <p:output port="in-memory.out" sequence="true">
-        <p:pipe port="result" step="in-memory.html"/>
-        <p:pipe port="result" step="in-memory.resources"/>
+        <p:pipe port="result" step="html-split.in-memory.html"/>
+        <p:pipe port="result" step="html-split.in-memory.resources"/>
     </p:output>
 
     <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
@@ -21,68 +21,68 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <pxi:fileset-load media-types="application/xhtml+xml">
+    <pxi:fileset-load media-types="application/xhtml+xml" name="html-split.load-html">
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
     </pxi:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one HTML file in the fileset." error-code="NORDICDTBOOKEPUB006"/>
-    <p:identity name="html"/>
+    <p:identity name="html-split.html"/>
 
-    <p:xslt>
+    <p:xslt name="html-split.split-html.annotate">
         <p:with-param name="output-dir" select="replace(base-uri(/*),'[^/]+$','')">
-            <p:pipe port="result" step="html"/>
+            <p:pipe port="result" step="html-split.html"/>
         </p:with-param>
         <p:input port="stylesheet">
             <p:document href="../../xslt/split-html.annotate.xsl"/>
         </p:input>
     </p:xslt>
-    <p:xslt>
+    <p:xslt name="html-split.split-html">
         <p:with-param name="output-dir" select="replace(base-uri(/*),'[^/]+$','')">
-            <p:pipe port="result" step="html"/>
+            <p:pipe port="result" step="html-split.html"/>
         </p:with-param>
         <p:input port="stylesheet">
             <p:document href="../../xslt/split-html.xsl"/>
         </p:input>
     </p:xslt>
-    <p:xslt>
+    <p:xslt name="html-split.fix-section-hierarchy">
         <p:with-param name="body-is-section" select="'true'"/>
         <p:input port="stylesheet">
             <p:document href="../../xslt/fix-section-hierarchy.xsl"/>
         </p:input>
     </p:xslt>
-    <p:identity name="split"/>
+    <p:identity name="html-split.split"/>
 
-    <p:for-each name="for-each">
+    <p:for-each name="html-split.for-each">
         <p:iteration-source select="/*/*"/>
         <p:output port="html" primary="true" sequence="true">
-            <p:pipe port="result" step="for-each.html"/>
+            <p:pipe port="result" step="html-split.for-each.html"/>
         </p:output>
         <p:output port="fileset" sequence="true">
-            <p:pipe port="result" step="for-each.fileset"/>
+            <p:pipe port="result" step="html-split.for-each.fileset"/>
         </p:output>
 
         <p:variable name="base" select="base-uri(/*)"/>
 
-        <p:identity name="for-each.html"/>
+        <p:identity name="html-split.for-each.html"/>
 
-        <px:fileset-create>
+        <px:fileset-create name="html-split.for-each.create-fileset">
             <p:with-option name="base" select="replace($base,'[^/]+$','')"/>
         </px:fileset-create>
-        <pxi:fileset-add-entry media-type="application/xhtml+xml">
+        <pxi:fileset-add-entry media-type="application/xhtml+xml" name="html-split.for-each.add-html-to-fileset">
             <p:with-option name="href" select="replace($base,'^.*/([^/]+)$','$1')"/>
         </pxi:fileset-add-entry>
-        <p:add-attribute match="//d:file" attribute-name="omit-xml-declaration" attribute-value="false"/>
-        <p:add-attribute match="//d:file" attribute-name="version" attribute-value="1.0"/>
-        <p:add-attribute match="//d:file" attribute-name="encoding" attribute-value="utf-8"/>
-        <p:add-attribute match="//d:file" attribute-name="method" attribute-value="xhtml"/>
-        <p:add-attribute match="//d:file" attribute-name="indent" attribute-value="true"/>
-        <p:add-attribute match="//d:file" attribute-name="doctype" attribute-value="&lt;!DOCTYPE html&gt;"/>
-        <p:identity name="for-each.fileset"/>
+        <p:add-attribute match="//d:file" attribute-name="omit-xml-declaration" attribute-value="false" name="html-split.for-each.dont-omit-xml-declaration"/>
+        <p:add-attribute match="//d:file" attribute-name="version" attribute-value="1.0" name="html-split.for-each.xml-version"/>
+        <p:add-attribute match="//d:file" attribute-name="encoding" attribute-value="utf-8" name="html-split.for-each.xml-encoding"/>
+        <p:add-attribute match="//d:file" attribute-name="method" attribute-value="xhtml" name="html-split.for-each.method-xhtml"/>
+        <p:add-attribute match="//d:file" attribute-name="indent" attribute-value="true" name="html-split.for-each.indent-true"/>
+        <p:add-attribute match="//d:file" attribute-name="doctype" attribute-value="&lt;!DOCTYPE html&gt;" name="html-split.for-each.doctype-html"/>
+        <p:identity name="html-split.for-each.fileset"/>
     </p:for-each>
-    <p:identity name="in-memory.html"/>
+    <p:identity name="html-split.in-memory.html"/>
 
-    <pxi:fileset-load not-media-types="application/xhtml+xml" load-if-not-in-memory="false">
+    <pxi:fileset-load not-media-types="application/xhtml+xml" load-if-not-in-memory="false" name="html-split.load-resources">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
@@ -90,20 +90,20 @@
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
     </pxi:fileset-load>
-    <p:identity name="in-memory.resources"/>
+    <p:identity name="html-split.in-memory.resources"/>
 
-    <px:fileset-filter not-media-types="application/xhtml+xml">
+    <px:fileset-filter not-media-types="application/xhtml+xml" name="html-split.filter-html">
         <p:input port="source">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
     </px:fileset-filter>
-    <p:identity name="fileset.resources"/>
-    <px:fileset-join>
+    <p:identity name="html-split.fileset.resources"/>
+    <px:fileset-join name="html-split.join-html-and-resource-filesets">
         <p:input port="source">
-            <p:pipe port="fileset" step="for-each"/>
-            <p:pipe port="result" step="fileset.resources"/>
+            <p:pipe port="fileset" step="html-split.for-each"/>
+            <p:pipe port="result" step="html-split.fileset.resources"/>
         </p:input>
     </px:fileset-join>
-    <p:identity name="fileset.result"/>
+    <p:identity name="html-split.fileset.result"/>
 
 </p:declare-step>

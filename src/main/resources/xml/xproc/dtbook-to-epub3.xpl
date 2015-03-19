@@ -13,7 +13,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="status.out" step="epub3-validate"/>
+        <p:pipe port="status.out" step="dtbook-to-epub3.epub3-validate"/>
     </p:output>
 
     <p:option name="html-report" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
@@ -90,62 +90,62 @@
         </p:with-option>
     </px:message>
 
-    <px:fileset-create>
+    <px:fileset-create name="dtbook-to-epub3.create-dtbook-fileset">
         <p:with-option name="base" select="replace($dtbook-href,'[^/]+$','')"/>
     </px:fileset-create>
-    <pxi:fileset-add-entry media-type="application/x-dtbook+xml">
+    <pxi:fileset-add-entry name="dtbook-to-epub3.add-dtbook-to-fileset" media-type="application/x-dtbook+xml">
         <p:with-option name="href" select="replace($dtbook-href,'.*/','')"/>
     </pxi:fileset-add-entry>
-    <px:nordic-dtbook-validate.step name="dtbook-validate" check-images="true" cx:depends-on="nordic-version-message">
+    <px:nordic-dtbook-validate.step name="dtbook-to-epub3.dtbook-validate" check-images="true" cx:depends-on="nordic-version-message">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
 
-    <px:nordic-dtbook-to-html.step name="dtbook-to-html">
+    <px:nordic-dtbook-to-html.step name="dtbook-to-epub3.dtbook-to-html">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="temp-dir" select="concat($temp-dir,'html/')"/>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="dtbook-validate"/>
+            <p:pipe port="in-memory.out" step="dtbook-to-epub3.dtbook-validate"/>
         </p:input>
         <p:input port="report.in">
-            <p:pipe port="report.out" step="dtbook-validate"/>
+            <p:pipe port="report.out" step="dtbook-to-epub3.dtbook-validate"/>
         </p:input>
         <p:input port="status.in">
-            <p:pipe port="status.out" step="dtbook-validate"/>
+            <p:pipe port="status.out" step="dtbook-to-epub3.dtbook-validate"/>
         </p:input>
     </px:nordic-dtbook-to-html.step>
 
-    <px:nordic-html-validate.step name="html-validate" check-images="false">
+    <px:nordic-html-validate.step name="dtbook-to-epub3.html-validate" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="dtbook-to-html"/>
+            <p:pipe port="in-memory.out" step="dtbook-to-epub3.dtbook-to-html"/>
         </p:input>
         <p:input port="report.in">
-            <p:pipe port="report.out" step="dtbook-to-html"/>
+            <p:pipe port="report.out" step="dtbook-to-epub3.dtbook-to-html"/>
         </p:input>
         <p:input port="status.in">
-            <p:pipe port="status.out" step="dtbook-to-html"/>
+            <p:pipe port="status.out" step="dtbook-to-epub3.dtbook-to-html"/>
         </p:input>
     </px:nordic-html-validate.step>
 
-    <p:choose>
+    <p:choose name="dtbook-to-epub3.choose-discard-intermediary">
         <p:xpath-context>
-            <p:pipe port="status.out" step="html-validate"/>
+            <p:pipe port="status.out" step="dtbook-to-epub3.html-validate"/>
         </p:xpath-context>
         <p:when test="$discard-intermediary-html='false' or (/*/@result='error' and $fail-on-error='true')">
             <px:message message="Storing intermediary HTML$1">
                 <p:with-option name="param1" select="if ($discard-intermediary-html) then '' else ' (contains errors)'"/>
             </px:message>
-            <pxi:fileset-move name="html-move">
+            <pxi:fileset-move name="dtbook-to-epub3.choose-discard-intermediary.html-move">
                 <p:with-option name="new-base"
                     select="concat(if (ends-with($output-dir,'/')) then $output-dir else concat($output-dir,'/'), substring-before(replace(/*/d:file[@media-type='application/xhtml+xml'][1]/@href,'^.*/',''),'.'), '/')"/>
                 <p:input port="in-memory.in">
-                    <p:pipe port="in-memory.out" step="html-validate"/>
+                    <p:pipe port="in-memory.out" step="dtbook-to-epub3.html-validate"/>
                 </p:input>
             </pxi:fileset-move>
-            <px:nordic-html-store.step>
+            <px:nordic-html-store.step name="dtbook-to-epub3.choose-discard-intermediary.nordic-html-store">
                 <p:input port="in-memory.in">
-                    <p:pipe port="in-memory.out" step="html-move"/>
+                    <p:pipe port="in-memory.out" step="dtbook-to-epub3.choose-discard-intermediary.html-move"/>
                 </p:input>
             </px:nordic-html-store.step>
         </p:when>
@@ -154,61 +154,61 @@
         </p:otherwise>
     </p:choose>
 
-    <px:nordic-html-to-epub3.step name="html-to-epub3">
+    <px:nordic-html-to-epub3.step name="dtbook-to-epub3.html-to-epub3">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="html-validate"/>
+            <p:pipe port="in-memory.out" step="dtbook-to-epub3.html-validate"/>
         </p:input>
         <p:input port="report.in">
-            <p:pipe port="report.out" step="html-validate"/>
+            <p:pipe port="report.out" step="dtbook-to-epub3.html-validate"/>
         </p:input>
         <p:input port="status.in">
-            <p:pipe port="status.out" step="html-validate"/>
+            <p:pipe port="status.out" step="dtbook-to-epub3.html-validate"/>
         </p:input>
         <p:with-option name="temp-dir" select="concat($temp-dir,'epub/')"/>
         <p:with-option name="compatibility-mode" select="'true'"/>
     </px:nordic-html-to-epub3.step>
 
-    <px:nordic-epub3-store.step name="epub3-store">
+    <px:nordic-epub3-store.step name="dtbook-to-epub3.epub3-store">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="html-to-epub3"/>
+            <p:pipe port="in-memory.out" step="dtbook-to-epub3.html-to-epub3"/>
         </p:input>
         <p:input port="report.in">
-            <p:pipe port="report.out" step="html-to-epub3"/>
+            <p:pipe port="report.out" step="dtbook-to-epub3.html-to-epub3"/>
         </p:input>
         <p:input port="status.in">
-            <p:pipe port="status.out" step="html-to-epub3"/>
+            <p:pipe port="status.out" step="dtbook-to-epub3.html-to-epub3"/>
         </p:input>
         <p:with-option name="output-dir" select="$output-dir"/>
     </px:nordic-epub3-store.step>
 
-    <px:nordic-epub3-validate.step name="epub3-validate" check-images="false">
+    <px:nordic-epub3-validate.step name="dtbook-to-epub3.epub3-validate" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="epub3-store"/>
+            <p:pipe port="in-memory.out" step="dtbook-to-epub3.epub3-store"/>
         </p:input>
         <p:input port="report.in">
-            <p:pipe port="report.out" step="epub3-store"/>
+            <p:pipe port="report.out" step="dtbook-to-epub3.epub3-store"/>
         </p:input>
         <p:input port="status.in">
-            <p:pipe port="status.out" step="epub3-store"/>
+            <p:pipe port="status.out" step="dtbook-to-epub3.epub3-store"/>
         </p:input>
         <p:with-option name="temp-dir" select="concat($temp-dir,'validate-epub/')"/>
     </px:nordic-epub3-validate.step>
     <p:sink/>
 
-    <px:nordic-format-html-report>
+    <px:nordic-format-html-report name="dtbook-to-epub3.nordic-format-html-report">
         <p:input port="source">
-            <p:pipe port="report.out" step="epub3-validate"/>
+            <p:pipe port="report.out" step="dtbook-to-epub3.epub3-validate"/>
         </p:input>
     </px:nordic-format-html-report>
-    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
+    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="dtbook-to-epub3.store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="dtbook-to-epub3.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
-            <p:pipe port="result" step="store-report"/>
+            <p:pipe port="result" step="dtbook-to-epub3.store-report"/>
         </p:with-option>
     </pxi:set-doctype>
     <p:sink/>

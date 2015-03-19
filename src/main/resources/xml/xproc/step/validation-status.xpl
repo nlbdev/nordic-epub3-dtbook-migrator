@@ -7,13 +7,36 @@
     <p:input port="source" sequence="true"/>
     <p:output port="result"/>
 
-    <p:for-each>
-        <p:filter select="/d:document-validation-report/d:document-info/d:error-count"/>
-    </p:for-each>
-    <p:wrap-sequence wrapper="d:validation-status"/>
-    <p:add-attribute attribute-name="result" match="/*">
-        <p:with-option name="attribute-value" select="if (sum(/*/*/number(.))&gt;0) then 'error' else 'ok'"/>
-    </p:add-attribute>
-    <p:delete match="/*/node()"/>
+    <p:count/>
+    <p:choose>
+        <p:when test=".='0'">
+            <p:identity>
+                <p:input port="source">
+                    <p:inline exclude-inline-prefixes="#all">
+                        <d:validation-status result="ok"/>
+                    </p:inline>
+                </p:input>
+            </p:identity>
+        </p:when>
+        <p:otherwise>
+            <p:xslt>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="source">
+                    <p:pipe port="source" step="main"/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:inline>
+                        <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" exclude-result-prefixes="#all" xmlns:d="http://www.daisy.org/ns/pipeline/data">
+                            <xsl:template match="/*">
+                                <d:validation-status result="{if (collection()//d:error-count[text() and not(normalize-space(text())='0')]) then 'error' else 'ok'}"/>
+                            </xsl:template>
+                        </xsl:stylesheet>
+                    </p:inline>
+                </p:input>
+            </p:xslt>
+        </p:otherwise>
+    </p:choose>
 
 </p:declare-step>

@@ -6,8 +6,6 @@
     <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
     <!--    <xsl:import href="../../../../test/xspec/mock/uri-functions.xsl"/>-->
 
-    <xsl:param name="output-dir" required="yes"/>
-
     <xsl:template match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
@@ -90,10 +88,5 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
-    <xsl:function name="f:types" as="xs:string*">
-        <xsl:param name="element" as="element()"/>
-        <xsl:sequence select="tokenize($element/@epub:type,'\s+')"/>
-    </xsl:function>
 
 </xsl:stylesheet>

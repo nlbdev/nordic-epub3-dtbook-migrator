@@ -14,7 +14,7 @@
     <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <p:for-each>
+    <p:for-each name="check-image-file-signatures.iterate-images">
         <p:iteration-source select="/*/d:file[starts-with(@media-type,'image/')]"/>
         <p:variable name="href" select="resolve-uri(/*/(@original-href,@href)[1], base-uri())"/>
         <p:variable name="type" select="/*/@media-type"/>
@@ -23,10 +23,10 @@
             <p:with-option name="param1" select="replace($href,'.*/','')"/>
         </px:message>
 
-        <px:file-peek offset="0" length="10" name="peek">
+        <px:file-peek offset="0" length="10" name="check-image-file-signatures.iterate-images.peek">
             <p:with-option name="href" select="$href"/>
         </px:file-peek>
-        <p:group>
+        <p:group name="check-image-file-signatures.iterate-images.group">
             <p:variable name="expected-file-signature"
                 select="if ($type = 'image/jpeg') then '0xFF 0xD8 0xFF 0xE0 0x?? 0x?? 0x4A 0x46 0x49 0x46'
                 else if ($type = 'image/png')  then '0x89 0x50 0x4E 0x47 0x0D 0x0A 0x1A 0x0A'
@@ -36,13 +36,13 @@
             <p:variable name="actual-file-signature-pretty" select="normalize-space(replace($actual-file-signature,'(..)',' 0x$1'))"/>
             <p:variable name="matches" select="if ($expected-file-signature='') then true() else matches($actual-file-signature, concat('^',$expected-file-signature-regex))"/>
 
-            <p:in-scope-names name="vars"/>
-            <p:template>
+            <p:in-scope-names name="check-image-file-signatures.iterate-images.group.vars"/>
+            <p:template name="check-image-file-signatures.iterate-images.group.template">
                 <p:input port="source">
-                    <p:pipe port="result" step="peek"/>
+                    <p:pipe port="result" step="check-image-file-signatures.iterate-images.peek"/>
                 </p:input>
                 <p:input port="parameters">
-                    <p:pipe port="result" step="vars"/>
+                    <p:pipe port="result" step="check-image-file-signatures.iterate-images.group.vars"/>
                 </p:input>
                 <p:input port="template">
                     <p:inline exclude-inline-prefixes="#all">
@@ -57,11 +57,11 @@
             </p:template>
         </p:group>
     </p:for-each>
-    <p:wrap-sequence wrapper="d:report"/>
-    <p:add-attribute match="/*" attribute-name="type" attribute-value="filecheck"/>
-    <p:wrap-sequence wrapper="d:reports"/>
-    <p:wrap-sequence wrapper="d:document-validation-report"/>
-    <p:insert match="/*" position="first-child">
+    <p:wrap-sequence wrapper="d:report" name="check-image-file-signatures.wrap-d-report"/>
+    <p:add-attribute match="/*" attribute-name="type" attribute-value="filecheck" name="check-image-file-signatures.add-type-attribute"/>
+    <p:wrap-sequence wrapper="d:reports" name="check-image-file-signatures.wrap-d-reports"/>
+    <p:wrap-sequence wrapper="d:document-validation-report" name="check-image-file-signatures.wrap-document-validation-report"/>
+    <p:insert match="/*" position="first-child" name="check-image-file-signatures.insert-name-type-error-count">
         <p:input port="insertion">
             <p:inline exclude-inline-prefixes="#all">
                 <d:document-info>
@@ -72,7 +72,7 @@
             </p:inline>
         </p:input>
     </p:insert>
-    <p:string-replace match="/*/d:document-info/d:error-count/text()">
+    <p:string-replace match="/*/d:document-info/d:error-count/text()" name="check-image-file-signatures.string-replace-error-count">
         <p:with-option name="replace" select="concat('''',count(/*/d:reports/*/d:message[@severity='error']),'''')"/>
     </p:string-replace>
 

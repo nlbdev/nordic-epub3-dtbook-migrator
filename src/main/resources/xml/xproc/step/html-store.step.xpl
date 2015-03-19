@@ -51,7 +51,7 @@
         </p:xpath-context>
         <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
             <p:output port="fileset.out" primary="true">
-                <p:pipe port="result" step="result-fileset"/>
+                <p:pipe port="result" step="html-store.step.result-fileset"/>
             </p:output>
             <p:output port="in-memory.out" sequence="true">
                 <p:pipe port="in-memory.in" step="main"/>
@@ -68,61 +68,61 @@
 
 
 
-            <p:choose>
+            <p:choose name="html-store.step.choose-include-resources">
                 <p:when test="$include-resources = 'false'">
-                    <p:delete match="/*/d:file[@media-type != 'application/xhtml+xml']"/>
+                    <p:delete match="/*/d:file[@media-type != 'application/xhtml+xml']" name="html-store.step.choose-include-resources.delete-auxiliary-resources-from-fileset"/>
                 </p:when>
                 <p:otherwise>
-                    <p:identity/>
+                    <p:identity name="html-store.step.choose-include-resources.include-resources"/>
                 </p:otherwise>
             </p:choose>
             
-            <p:delete match="/*/d:file/@doctype"/>
-            <p:add-attribute match="/*/d:file[@indent='true']" attribute-name="indent" attribute-value="false">
+            <p:delete match="/*/d:file/@doctype" name="html-store.step.delete-doctype-attribute"/>
+            <p:add-attribute match="/*/d:file[@indent='true']" attribute-name="indent" attribute-value="false" name="html-store.step.set-indent-false">
                 <!-- temporary workaround until https://github.com/daisy/pipeline-modules-common/issues/69 is fixed -->
             </p:add-attribute>
-            <p:add-attribute match="/*/d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" attribute-name="encoding" attribute-value="us-ascii"/>
-            <px:fileset-store name="html-store">
+            <p:add-attribute match="/*/d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" attribute-name="encoding" attribute-value="us-ascii" name="html-store.step.set-encoding-to-ascii"/>
+            <px:fileset-store name="html-store.step.html-store">
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
             </px:fileset-store>
             <p:identity>
                 <p:input port="source">
-                    <p:pipe port="fileset.out" step="html-store"/>
+                    <p:pipe port="fileset.out" step="html-store.step.html-store"/>
                 </p:input>
             </p:identity>
-            <p:viewport match="d:file[@media-type='application/xhtml+xml']" name="store.doctype">
+            <p:viewport match="d:file[@media-type='application/xhtml+xml']" name="html-store.step.viewport-doctype">
                 <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
                 <p:variable name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
-                <pxi:set-doctype>
+                <pxi:set-doctype name="html-store.step.viewport-doctype.set-doctype">
                     <p:with-option name="doctype" select="$doctype"/>
                     <p:with-option name="href" select="$href"/>
                 </pxi:set-doctype>
-                <p:add-attribute match="/*" attribute-name="doctype">
+                <p:add-attribute match="/*" attribute-name="doctype" name="html-store.step.viewport-doctype.add-doctype-attribute-to-fileset">
                     <p:input port="source">
-                        <p:pipe port="current" step="store.doctype"/>
+                        <p:pipe port="current" step="html-store.step.viewport-doctype"/>
                     </p:input>
                     <p:with-option name="attribute-value" select="$doctype"/>
                 </p:add-attribute>
             </p:viewport>
-            <p:viewport match="d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" name="store.xml-declaration">
+            <p:viewport match="d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" name="html-store.step.store.xml-declaration">
                 <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
                 <p:variable name="xml-declaration" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'"/>
-                <px:set-xml-declaration name="set-xml-declaration">
+                <px:set-xml-declaration name="html-store.step.set-xml-declaration">
                     <p:with-option name="xml-declaration" select="$xml-declaration"/>
                     <p:with-option name="href" select="$href"/>
                 </px:set-xml-declaration>
-                <p:add-attribute match="/*" attribute-name="xml-declaration">
+                <p:add-attribute match="/*" attribute-name="xml-declaration" name="html-store.step.add-xml-declaration-attribute">
                     <p:input port="source">
-                        <p:pipe port="current" step="store.xml-declaration"/>
+                        <p:pipe port="current" step="html-store.step.store.xml-declaration"/>
                     </p:input>
                     <p:with-option name="attribute-value" select="$xml-declaration">
-                        <p:pipe port="result" step="set-xml-declaration"/>
+                        <p:pipe port="result" step="html-store.step.set-xml-declaration"/>
                     </p:with-option>
                 </p:add-attribute>
             </p:viewport>
-            <p:identity name="result-fileset"/>
+            <p:identity name="html-store.step.result-fileset"/>
 
 
 
@@ -147,11 +147,12 @@
         </p:otherwise>
     </p:choose>
 
-    <p:choose>
+    <p:choose name="status">
         <p:xpath-context>
             <p:pipe port="status.in" step="main"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok'">
+            <p:output port="result"/>
             <px:nordic-validation-status>
                 <p:input port="source">
                     <p:pipe port="report.out" step="choose"/>
@@ -159,6 +160,7 @@
             </px:nordic-validation-status>
         </p:when>
         <p:otherwise>
+            <p:output port="result"/>
             <p:identity>
                 <p:input port="source">
                     <p:pipe port="status.in" step="main"/>
@@ -166,6 +168,5 @@
             </p:identity>
         </p:otherwise>
     </p:choose>
-    <p:identity name="status"/>
 
 </p:declare-step>

@@ -61,10 +61,10 @@
         </p:xpath-context>
         <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
             <p:output port="fileset.out" primary="true">
-                <p:pipe port="result" step="result.fileset"/>
+                <p:pipe port="result" step="html-to-epub3.step.result.fileset"/>
             </p:output>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="result" step="result.in-memory"/>
+                <p:pipe port="result" step="html-to-epub3.step.result.in-memory"/>
             </p:output>
             <p:output port="report.out" sequence="true">
                 <p:empty/>
@@ -73,40 +73,7 @@
             <p:variable name="epub-dir" select="concat($temp-dir,'epub/')"/>
             <p:variable name="publication-dir" select="concat($epub-dir,'EPUB/')"/>
 
-            <px:nordic-html-split-perform name="html-split">
-                <p:input port="in-memory.in">
-                    <p:pipe port="in-memory.in" step="main"/>
-                </p:input>
-            </px:nordic-html-split-perform>
-            <pxi:fileset-move name="html-split.moved">
-                <p:input port="in-memory.in">
-                    <p:pipe port="in-memory.out" step="html-split"/>
-                </p:input>
-                <p:with-option name="new-base" select="$publication-dir"/>
-            </pxi:fileset-move>
-
-            <!-- Create spine -->
-            <px:fileset-filter media-types="application/xhtml+xml"/>
-            <p:identity name="spine"/>
-
-            <pxi:fileset-load>
-                <p:input port="in-memory">
-                    <p:pipe port="in-memory.out" step="html-split.moved"/>
-                </p:input>
-            </pxi:fileset-load>
-            <p:for-each>
-                <p:viewport match="/html:html/html:head">
-                    <p:xslt>
-                        <p:with-param name="preserve-empty-whitespace" select="'false'"/>
-                        <p:input port="stylesheet">
-                            <p:document href="../../xslt/pretty-print.xsl"/>
-                        </p:input>
-                    </p:xslt>
-                </p:viewport>
-            </p:for-each>
-            <p:identity name="spine-html"/>
-
-            <pxi:fileset-load media-types="application/xhtml+xml">
+            <pxi:fileset-load media-types="application/xhtml+xml" name="html-to-epub3.step.load-single-html">
                 <p:input port="fileset">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
@@ -115,10 +82,52 @@
                 </p:input>
             </pxi:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one HTML file in the single-page HTML fileset." error-code="NORDICDTBOOKEPUB007"/>
-            <p:identity name="single-html"/>
+            <p:identity name="html-to-epub3.step.single-html"/>
+            <p:sink/>
+
+            <px:nordic-html-split-perform name="html-to-epub3.step.html-split">
+                <p:input port="fileset.in">
+                    <p:pipe port="fileset.in" step="main"/>
+                </p:input>
+                <p:input port="in-memory.in">
+                    <p:pipe port="in-memory.in" step="main"/>
+                </p:input>
+            </px:nordic-html-split-perform>
+            <pxi:fileset-move name="html-to-epub3.step.html-split.moved">
+                <p:input port="in-memory.in">
+                    <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split"/>
+                </p:input>
+                <p:with-option name="new-base" select="$publication-dir"/>
+            </pxi:fileset-move>
+
+            <!-- Create spine -->
+            <px:fileset-filter media-types="application/xhtml+xml" name="html-to-epub3.step.filter-html-split-fileset-xhtml"/>
+            <p:identity name="html-to-epub3.step.spine"/>
+
+            <pxi:fileset-load name="html-to-epub3.step.load-spine">
+                <p:input port="in-memory">
+                    <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split.moved"/>
+                </p:input>
+            </pxi:fileset-load>
+            <p:for-each name="html-to-epub3.step.iterate-spine">
+                <p:viewport match="/html:html/html:head" name="html-to-epub3.step.iterate-spine.viewport-html-head">
+                    <p:xslt name="html-to-epub3.step.iterate-spine.viewport-html-head.pretty-print">
+                        <!-- TODO: remove as many pretty printing steps as possible to improve performance -->
+                        <p:with-param name="preserve-empty-whitespace" select="'false'"/>
+                        <p:input port="stylesheet">
+                            <p:document href="../../xslt/pretty-print.xsl"/>
+                        </p:input>
+                    </p:xslt>
+                </p:viewport>
+            </p:for-each>
+            <p:identity name="html-to-epub3.step.spine-html"/>
+            <p:sink/>
 
             <!-- Create OPF metadata -->
-            <p:xslt name="opf-metadata">
+            <p:xslt name="html-to-epub3.step.opf-metadata">
+                <p:input port="source">
+                    <p:pipe port="result" step="html-to-epub3.step.single-html"/>
+                </p:input>
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -129,22 +138,22 @@
             <p:sink/>
 
             <!-- Create Navigation Document -->
-            <p:group name="nav">
+            <p:group name="html-to-epub3.step.nav">
                 <p:output port="html">
-                    <p:pipe port="result" step="nav.html"/>
+                    <p:pipe port="result" step="html-to-epub3.step.nav.html"/>
                 </p:output>
                 <p:output port="ncx">
-                    <p:pipe port="result" step="nav.ncx"/>
+                    <p:pipe port="result" step="html-to-epub3.step.nav.ncx"/>
                 </p:output>
 
-                <p:group name="nav.toc">
+                <p:group name="html-to-epub3.step.nav.toc">
                     <p:output port="result"/>
                     <p:identity>
                         <p:input port="source">
-                            <p:pipe port="result" step="single-html"/>
+                            <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                         </p:input>
                     </p:identity>
-                    <p:xslt>
+                    <p:xslt name="html-to-epub3.step.nav.toc.generate-missing-headlines">
                         <p:input port="parameters">
                             <p:empty/>
                         </p:input>
@@ -152,25 +161,25 @@
                             <p:document href="../../xslt/generate-missing-headlines.xsl"/>
                         </p:input>
                     </p:xslt>
-                    <px:epub3-nav-create-toc>
+                    <px:epub3-nav-create-toc name="html-to-epub3.step.nav.toc.nav-create-toc">
                         <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
-                            <p:pipe port="result" step="single-html"/>
+                            <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                         </p:with-option>
                     </px:epub3-nav-create-toc>
-                    <p:add-attribute match="/*" attribute-name="xml:base">
+                    <p:add-attribute match="/*" attribute-name="xml:base" name="html-to-epub3.step.nav.toc.add-xml-base">
                         <p:with-option name="attribute-value" select="base-uri(/*)">
-                            <p:pipe port="result" step="single-html"/>
+                            <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                         </p:with-option>
                     </p:add-attribute>
-                    <p:delete match="/*/@xml:base"/>
-                    <p:delete match="/html:nav/html:ol/html:li/html:a"/>
-                    <p:unwrap match="/html:nav/html:ol/html:li"/>
-                    <p:unwrap match="/html:nav/html:ol"/>
-                    <p:identity name="nav.toc.single-html-hrefs"/>
-                    <p:xslt>
+                    <p:delete match="/*/@xml:base" name="html-to-epub3.step.nav.toc.delete-xml-base"/>
+                    <p:delete match="/html:nav/html:ol/html:li/html:a" name="html-to-epub3.step.nav.toc.delete-nav-ol-li-a"/>
+                    <p:unwrap match="/html:nav/html:ol/html:li" name="html-to-epub3.step.nav.toc.unwrap-nav-ol-li"/>
+                    <p:unwrap match="/html:nav/html:ol" name="html-to-epub3.step.nav.toc.unwrap-nav-ol"/>
+                    <p:identity name="html-to-epub3.step.nav.toc.single-html-hrefs"/>
+                    <p:xslt name="html-to-epub3.step.nav.toc.replace-single-html-hrefs-with-multi-html-hrefs">
                         <p:input port="source">
-                            <p:pipe port="result" step="nav.toc.single-html-hrefs"/>
-                            <p:pipe port="in-memory.out" step="html-split"/>
+                            <p:pipe port="result" step="html-to-epub3.step.nav.toc.single-html-hrefs"/>
+                            <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split"/>
                         </p:input>
                         <p:input port="parameters">
                             <p:empty/>
@@ -182,56 +191,57 @@
                 </p:group>
                 <p:sink/>
 
-                <px:epub3-nav-create-page-list name="nav.page-list">
+                <px:epub3-nav-create-page-list name="html-to-epub3.step.nav.page-list">
                     <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
-                        <p:pipe port="result" step="single-html"/>
+                        <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                     </p:with-option>
                     <p:input port="source">
-                        <p:pipe port="in-memory.out" step="html-split"/>
+                        <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split"/>
                     </p:input>
                 </px:epub3-nav-create-page-list>
                 <p:sink/>
 
-                <px:epub3-nav-aggregate>
+                <px:epub3-nav-aggregate name="html-to-epub3.step.nav-aggregate">
                     <p:input port="source">
-                        <p:pipe step="nav.toc" port="result"/>
-                        <p:pipe step="nav.page-list" port="result"/>
+                        <p:pipe step="html-to-epub3.step.nav.toc" port="result"/>
+                        <p:pipe step="html-to-epub3.step.nav.page-list" port="result"/>
                     </p:input>
                     <p:with-option name="language" select="/*/(@xml:lang,@lang)[1]">
-                        <p:pipe port="result" step="single-html"/>
+                        <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                     </p:with-option>
                 </px:epub3-nav-aggregate>
-                <p:add-attribute match="/*" attribute-name="xml:base">
+                <p:add-attribute match="/*" attribute-name="xml:base" name="html-to-epub3.step.add-nav-xml-base">
                     <p:with-option name="attribute-value" select="concat($publication-dir,'nav.xhtml')"/>
                 </p:add-attribute>
-                <p:xslt>
+                <p:xslt name="html-to-epub3.step.navdoc-nordic-normalization">
                     <p:with-param name="identifier" select="/*/html:head/html:meta[@name='dc:identifier']/@content">
-                        <p:pipe port="result" step="single-html"/>
+                        <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                     </p:with-param>
                     <p:with-param name="title" select="/*/html:head/html:title/text()">
-                        <p:pipe port="result" step="single-html"/>
+                        <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                     </p:with-param>
                     <p:with-param name="supplier" select="/*/html:head/html:meta[@name='nordic:supplier']/@content">
-                        <p:pipe port="result" step="single-html"/>
+                        <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                     </p:with-param>
                     <p:with-param name="publisher" select="/*/html:head/html:meta[@name='dc:publisher']/@content">
-                        <p:pipe port="result" step="single-html"/>
+                        <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                     </p:with-param>
                     <p:input port="stylesheet">
                         <p:document href="../../xslt/navdoc-nordic-normalization.xsl"/>
                     </p:input>
                 </p:xslt>
-                <p:viewport match="/html:html/html:head">
-                    <p:xslt>
+                <p:viewport match="/html:html/html:head" name="html-to-epub3.step.viewport-html-head">
+                    <p:xslt name="html-to-epub3.step.viewport-html-head.pretty-print">
+                        <!-- TODO: consider which pretty-print.xsl invocations can be removed to improve performance -->
                         <p:with-param name="preserve-empty-whitespace" select="'false'"/>
                         <p:input port="stylesheet">
                             <p:document href="../../xslt/pretty-print.xsl"/>
                         </p:input>
                     </p:xslt>
                 </p:viewport>
-                <p:identity name="nav.html"/>
+                <p:identity name="html-to-epub3.step.nav.html"/>
 
-                <p:xslt>
+                <p:xslt name="html-to-epub3.step.nav-to-ncx">
                     <p:input port="parameters">
                         <p:empty/>
                     </p:input>
@@ -239,65 +249,67 @@
                         <p:document href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/nav-to-ncx.xsl"/>
                     </p:input>
                 </p:xslt>
-                <p:xslt>
+                <p:xslt name="html-to-epub3.step.ncx-pretty-print">
+                    <!-- TODO: remove pretty printing to improve performance -->
                     <p:with-param name="preserve-empty-whitespace" select="'false'"/>
                     <p:input port="stylesheet">
                         <p:document href="../../xslt/pretty-print.xsl"/>
                     </p:input>
                 </p:xslt>
-                <p:add-attribute match="/*" attribute-name="xml:base">
+                <p:add-attribute match="/*" attribute-name="xml:base" name="html-to-epub3.step.ncx-add-xml-base">
                     <p:with-option name="attribute-value" select="concat($publication-dir,'nav.ncx')"/>
                 </p:add-attribute>
-                <p:identity name="nav.ncx"/>
+                <p:identity name="html-to-epub3.step.nav.ncx"/>
             </p:group>
 
-            <px:fileset-create>
+            <px:fileset-create name="html-to-epub3.step.create-ncx-fileset">
                 <p:with-option name="base" select="replace(base-uri(/*),'[^/]+$','')">
-                    <p:pipe port="ncx" step="nav"/>
+                    <p:pipe port="ncx" step="html-to-epub3.step.nav"/>
                 </p:with-option>
             </px:fileset-create>
             <px:message message="ncx base: $1">
                 <p:with-option name="param1" select="replace(base-uri(/*),'[^/]+$','')">
-                    <p:pipe port="ncx" step="nav"/>
+                    <p:pipe port="ncx" step="html-to-epub3.step.nav"/>
                 </p:with-option>
             </px:message>
-            <pxi:fileset-add-entry media-type="application/x-dtbncx+xml">
+            <pxi:fileset-add-entry media-type="application/x-dtbncx+xml" name="html-to-epub3.step.add-ncx-to-fileset">
                 <p:with-option name="href" select="'nav.ncx'"/>
             </pxi:fileset-add-entry>
-            <p:identity name="ncx-fileset"/>
-            <px:fileset-join>
+            <p:identity name="html-to-epub3.step.ncx-fileset"/>
+            <px:fileset-join name="html-to-epub3.step.join-ncx-and-non-linear-content-filesets">
                 <p:input port="source">
-                    <p:pipe port="result" step="ncx-fileset"/>
-                    <p:pipe port="result" step="non-linear-content"/>
+                    <p:pipe port="result" step="html-to-epub3.step.ncx-fileset"/>
+                    <p:pipe port="result" step="html-to-epub3.step.non-linear-content"/>
                 </p:input>
             </px:fileset-join>
-            <px:mediatype-detect name="resource-fileset"/>
+            <px:mediatype-detect name="html-to-epub3.step.resource-fileset"/>
             <p:sink/>
 
-            <px:epub3-pub-create-package-doc>
+            <px:epub3-pub-create-package-doc name="html-to-epub3.step.create-package-doc">
                 <p:with-option name="result-uri" select="concat($publication-dir,'package.opf')"/>
                 <p:with-option name="compatibility-mode" select="$compatibility-mode"/>
                 <p:with-option name="detect-properties" select="'false'"/>
                 <p:input port="spine-filesets">
-                    <p:pipe port="result" step="spine"/>
+                    <p:pipe port="result" step="html-to-epub3.step.spine"/>
                 </p:input>
                 <p:input port="metadata">
-                    <p:pipe port="result" step="opf-metadata"/>
+                    <p:pipe port="result" step="html-to-epub3.step.opf-metadata"/>
                 </p:input>
                 <p:input port="content-docs">
-                    <p:pipe port="html" step="nav"/>
-                    <p:pipe port="result" step="spine-html"/>
+                    <p:pipe port="html" step="html-to-epub3.step.nav"/>
+                    <p:pipe port="result" step="html-to-epub3.step.spine-html"/>
                 </p:input>
                 <p:input port="publication-resources">
-                    <p:pipe port="result" step="resource-fileset"/>
+                    <p:pipe port="result" step="html-to-epub3.step.resource-fileset"/>
                 </p:input>
             </px:epub3-pub-create-package-doc>
-            <p:add-attribute match="/*" attribute-name="unique-identifier" attribute-value="pub-identifier"/>
-            <p:add-attribute match="//dc:identifier[not(preceding::dc:identifier)]" attribute-name="id" attribute-value="pub-identifier"/>
-            <p:add-attribute match="/*" attribute-name="prefix" attribute-value="nordic: http://www.mtm.se/epub/"/>
-            <p:add-attribute match="/*/opf:spine/opf:itemref[/*/opf:manifest/opf:item[matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml')]/@id = @idref]" attribute-name="linear" attribute-value="no"/>
-            <p:delete match="/*//*/@prefix"/>
-            <p:xslt>
+            <p:add-attribute match="/*" attribute-name="unique-identifier" attribute-value="pub-identifier" name="html-to-epub3.step.add-opf-attribute.unique-identifier"/>
+            <p:add-attribute match="//dc:identifier[not(preceding::dc:identifier)]" attribute-name="id" attribute-value="pub-identifier" name="html-to-epub3.step.add-opf-attribute.dc-identifier-id"/>
+            <p:add-attribute match="/*" attribute-name="prefix" attribute-value="nordic: http://www.mtm.se/epub/" name="html-to-epub3.step.add-opf-attribute.nordic-prefix"/>
+            <p:add-attribute match="/*/opf:spine/opf:itemref[/*/opf:manifest/opf:item[matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml')]/@id = @idref]" attribute-name="linear" attribute-value="no"
+                name="html-to-epub3.step.add-opf-attribute.non-linear-spine-items"/>
+            <p:delete match="/*//*/@prefix" name="html-to-epub3.step.delete-non-root-opf-prefix-attributes"/>
+            <p:xslt name="html-to-epub3.step.add-dc-namespace">
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -314,92 +326,98 @@
                     </p:inline>
                 </p:input>
             </p:xslt>
-            <p:add-attribute match="/*" attribute-name="xml:base">
+            <p:add-attribute match="/*" attribute-name="xml:base" name="html-to-epub3.step.set-opf-xml-base">
                 <p:with-option name="attribute-value" select="concat($publication-dir,'package.opf')"/>
             </p:add-attribute>
-            <p:xslt>
+            <p:xslt name="html-to-epub3.step.pretty-print-opf">
+                <!-- TODO: consider removing this XSLT invocation to improve performance -->
                 <p:with-param name="preserve-empty-whitespace" select="'false'"/>
                 <p:input port="stylesheet">
                     <p:document href="../../xslt/pretty-print.xsl"/>
                 </p:input>
             </p:xslt>
-            <p:identity name="package"/>
+            <p:identity name="html-to-epub3.step.package"/>
 
-            <p:identity name="result.in-memory-without-ocf-files">
+            <p:identity name="html-to-epub3.step.result.in-memory-without-ocf-files">
                 <p:input port="source">
-                    <p:pipe port="html" step="nav"/>
-                    <p:pipe port="ncx" step="nav"/>
-                    <p:pipe port="result" step="spine-html"/>
-                    <p:pipe port="result" step="package"/>
+                    <p:pipe port="html" step="html-to-epub3.step.nav"/>
+                    <p:pipe port="ncx" step="html-to-epub3.step.nav"/>
+                    <p:pipe port="result" step="html-to-epub3.step.spine-html"/>
+                    <p:pipe port="result" step="html-to-epub3.step.package"/>
                 </p:input>
             </p:identity>
             <p:sink/>
 
             <p:identity>
                 <p:input port="source">
-                    <p:pipe port="result" step="resource-fileset"/>
+                    <p:pipe port="result" step="html-to-epub3.step.resource-fileset"/>
                 </p:input>
             </p:identity>
-            <pxi:fileset-add-entry media-type="application/oebps-package+xml">
+            <pxi:fileset-add-entry media-type="application/oebps-package+xml" name="html-to-epub3.step.add-opf-to-resource-fileset">
                 <p:with-option name="href" select="base-uri(/*)">
-                    <p:pipe port="result" step="package"/>
+                    <p:pipe port="result" step="html-to-epub3.step.package"/>
                 </p:with-option>
             </pxi:fileset-add-entry>
-            <pxi:fileset-add-entry media-type="application/xhtml+xml">
+            <pxi:fileset-add-entry media-type="application/xhtml+xml" name="html-to-epub3.step.add-nav-to-resource-fileset">
                 <p:with-option name="href" select="concat($publication-dir,'nav.xhtml')"/>
             </pxi:fileset-add-entry>
-            <px:mediatype-detect>
+            <px:mediatype-detect name="html-to-epub3.step.mediatype-detect">
                 <p:input port="in-memory">
-                    <p:pipe port="result" step="result.in-memory-without-ocf-files"/>
+                    <p:pipe port="result" step="html-to-epub3.step.result.in-memory-without-ocf-files"/>
                 </p:input>
             </px:mediatype-detect>
             <px:message message="epub-dir: $1">
                 <p:with-option name="param1" select="$epub-dir"/>
             </px:message>
-            <px:fileset-rebase>
+            <px:fileset-rebase name="html-to-epub3.step.rebase-fileset-to-epub-dir">
                 <p:with-option name="new-base" select="$epub-dir"/>
             </px:fileset-rebase>
-            <p:identity name="result.fileset-without-ocf-files"/>
+            <p:identity name="html-to-epub3.step.result.fileset-without-ocf-files"/>
             <p:sink/>
 
-            <px:epub3-ocf-finalize name="finalize">
+            <px:epub3-ocf-finalize name="html-to-epub3.step.finalize">
                 <p:with-option name="epub-dir" select="$epub-dir"/>
                 <p:input port="source">
-                    <p:pipe port="result" step="result.fileset-without-ocf-files"/>
+                    <p:pipe port="result" step="html-to-epub3.step.result.fileset-without-ocf-files"/>
                 </p:input>
             </px:epub3-ocf-finalize>
-            <px:fileset-join>
+            <px:fileset-join name="html-to-epub3.step.join-result-fileset">
                 <p:input port="source">
-                    <p:pipe port="result" step="finalize"/>
-                    <p:pipe port="result" step="spine"/>
-                    <p:pipe port="result" step="result.fileset-without-ocf-files"/>
+                    <p:pipe port="result" step="html-to-epub3.step.finalize"/>
+                    <p:pipe port="result" step="html-to-epub3.step.spine"/>
+                    <p:pipe port="result" step="html-to-epub3.step.result.fileset-without-ocf-files"/>
                 </p:input>
             </px:fileset-join>
-            <p:add-attribute match="//d:file[@href='META-INF/container.xml']" attribute-name="media-type" attribute-value="application/xml"/>
-            <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="omit-xml-declaration" attribute-value="false"/>
-            <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="indent" attribute-value="true"/>
-            <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$') and not(@media-type='application/xhtml+xml')]" attribute-name="method" attribute-value="xml"/>
-            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="method" attribute-value="xhtml"/>
-            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="doctype" attribute-value="&lt;!DOCTYPE html&gt;"/>
-            <p:identity name="result.fileset"/>
+            <p:add-attribute match="//d:file[@href='META-INF/container.xml']" attribute-name="media-type" attribute-value="application/xml"
+                name="html-to-epub3.step.result-fileset.add-container-media-type"/>
+            <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="omit-xml-declaration" attribute-value="false"
+                name="html-to-epub3.step.result-fileset.dont-omit-xml-declarations"/>
+            <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$')]" attribute-name="indent" attribute-value="true" name="html-to-epub3.step.result-fileset.indent"/>
+            <p:add-attribute match="//d:file[matches(@media-type,'[/+]xml$') and not(@media-type='application/xhtml+xml')]" attribute-name="method" attribute-value="xml"
+                name="html-to-epub3.step.result-fileset.method-xml"/>
+            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="method" attribute-value="xhtml" name="html-to-epub3.step.result-fileset.method-xhtml"/>
+            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="doctype" attribute-value="&lt;!DOCTYPE html&gt;"
+                name="html-to-epub3.step.result-fileset.doctype-html"/>
+            <p:identity name="html-to-epub3.step.result.fileset"/>
             <p:sink/>
 
-            <p:identity name="result.in-memory">
+            <p:identity name="html-to-epub3.step.result.in-memory">
                 <p:input port="source">
-                    <p:pipe port="result" step="result.in-memory-without-ocf-files"/>
-                    <p:pipe port="in-memory.out" step="finalize"/>
+                    <p:pipe port="result" step="html-to-epub3.step.result.in-memory-without-ocf-files"/>
+                    <p:pipe port="in-memory.out" step="html-to-epub3.step.finalize"/>
                 </p:input>
             </p:identity>
             <p:sink/>
 
             <!-- List auxiliary resources (i.e. all non-content files: images, CSS, NCX, etc. as well as content files that are non-primary) -->
-            <px:fileset-filter>
+            <px:fileset-filter name="html-to-epub3.step.filter-non-linear-content">
                 <p:input port="source">
-                    <p:pipe port="fileset.out" step="html-split.moved"/>
+                    <p:pipe port="fileset.out" step="html-to-epub3.step.html-split.moved"/>
                 </p:input>
             </px:fileset-filter>
-            <p:delete match="//d:file[@media-type='application/xhtml+xml' and not(matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml'))]"/>
-            <p:identity name="non-linear-content"/>
+            <p:delete match="//d:file[@media-type='application/xhtml+xml' and not(matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml'))]"
+                name="html-to-epub3.step.non-linear-content-fileset.delete-linear-content"/>
+            <p:identity name="html-to-epub3.step.non-linear-content"/>
 
 
 
@@ -424,11 +442,12 @@
         </p:otherwise>
     </p:choose>
 
-    <p:choose>
+    <p:choose name="status">
         <p:xpath-context>
             <p:pipe port="status.in" step="main"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok'">
+            <p:output port="result"/>
             <px:nordic-validation-status>
                 <p:input port="source">
                     <p:pipe port="report.out" step="choose"/>
@@ -436,6 +455,7 @@
             </px:nordic-validation-status>
         </p:when>
         <p:otherwise>
+            <p:output port="result"/>
             <p:identity>
                 <p:input port="source">
                     <p:pipe port="status.in" step="main"/>
@@ -443,6 +463,5 @@
             </p:identity>
         </p:otherwise>
     </p:choose>
-    <p:identity name="status"/>
 
 </p:declare-step>

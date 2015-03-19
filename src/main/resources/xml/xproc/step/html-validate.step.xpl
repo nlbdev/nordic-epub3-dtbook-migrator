@@ -61,50 +61,50 @@
                 <p:pipe port="in-memory.in" step="main"/>
             </p:output>
             <p:output port="report.out" sequence="true">
-                <p:pipe port="result" step="html.validate"/>
-                <p:pipe port="result" step="images.validate"/>
+                <p:pipe port="result" step="html-validate.step.html.validate"/>
+                <p:pipe port="result" step="html-validate.step.images.validate"/>
             </p:output>
 
 
 
             <!-- either load from memory or using p:load; avoid using px:html-load as it will remove the nordic namespace -->
-            <pxi:fileset-load media-types="application/xhtml+xml" load-if-not-in-memory="false">
+            <pxi:fileset-load media-types="application/xhtml+xml" load-if-not-in-memory="false" name="html-validate.step.load-xhtml">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
             </pxi:fileset-load>
-            <p:identity name="html.from-memory"/>
-            <p:count/>
-            <p:choose>
+            <p:identity name="html-validate.step.html.from-memory"/>
+            <p:count name="html-validate.step.count-xhtml"/>
+            <p:choose name="html-validate.step.choose-already-in-memory">
                 <p:when test="/*=0">
-                    <px:fileset-filter media-types="application/xhtml+xml">
+                    <px:fileset-filter media-types="application/xhtml+xml" name="html-validate.step.choose-already-in-memory.filter-fileset">
                         <p:input port="source">
                             <p:pipe port="fileset.in" step="main"/>
                         </p:input>
                     </px:fileset-filter>
                     <px:assert message="There must be exactly one HTML-file in the fileset." error-code="NORDICDTBOOKEPUB031">
-                        <p:with-option name="test" select="count(/*/*) &gt; 0"/>
+                        <p:with-option name="test" select="count(/*/*) = 1"/>
                     </px:assert>
-                    <p:load>
+                    <p:load name="html-validate.step.choose-already-in-memory.load-from-disk">
                         <p:with-option name="href" select="/*/*[1]/resolve-uri(@href,base-uri(.))"/>
                     </p:load>
                 </p:when>
                 <p:otherwise>
-                    <p:identity>
+                    <p:identity name="html-validate.step.choose-already-in-memory.pipe-from-memory">
                         <p:input port="source">
-                            <p:pipe port="result" step="html.from-memory"/>
+                            <p:pipe port="result" step="html-validate.step.html.from-memory"/>
                         </p:input>
                     </p:identity>
                     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one HTML-file in the fileset." error-code="NORDICDTBOOKEPUB031"/>
                 </p:otherwise>
             </p:choose>
-            <p:delete match="/*/@xml:base"/>
-            <p:identity name="html"/>
+            <p:delete match="/*/@xml:base" name="html-validate.step.delete-xml-base-from-input-html"/>
+            <p:identity name="html-validate.step.html"/>
             <p:sink/>
 
-            <l:relax-ng-report name="validate.rng">
+            <l:relax-ng-report name="html-validate.step.validate.rng">
                 <p:input port="source">
-                    <p:pipe step="html" port="result"/>
+                    <p:pipe step="html-validate.step.html" port="result"/>
                 </p:input>
                 <p:input port="schema">
                     <p:document href="../../schema/nordic-html5.rng"/>
@@ -114,12 +114,12 @@
             </l:relax-ng-report>
             <p:sink/>
 
-            <p:validate-with-schematron name="validate.sch" assert-valid="false">
+            <p:validate-with-schematron name="html-validate.step.validate.sch" assert-valid="false">
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
                 <p:input port="source">
-                    <p:pipe step="html" port="result"/>
+                    <p:pipe step="html-validate.step.html" port="result"/>
                 </p:input>
                 <p:input port="schema">
                     <p:document href="../../schema/nordic2015-1.sch"/>
@@ -127,48 +127,39 @@
             </p:validate-with-schematron>
             <p:sink/>
 
-            <px:combine-validation-reports>
+            <px:combine-validation-reports name="html-validate.step.combine-validation-reports">
                 <p:with-option name="document-type" select="$document-type"/>
                 <p:input port="source">
-                    <p:pipe port="report" step="validate.rng"/>
-                    <p:pipe port="report" step="validate.sch"/>
+                    <p:pipe port="report" step="html-validate.step.validate.rng"/>
+                    <p:pipe port="report" step="html-validate.step.validate.sch"/>
                 </p:input>
                 <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
-                    <p:pipe port="result" step="html"/>
+                    <p:pipe port="result" step="html-validate.step.html"/>
                 </p:with-option>
                 <p:with-option name="document-path" select="base-uri(/*)">
-                    <p:pipe port="result" step="html"/>
+                    <p:pipe port="result" step="html-validate.step.html"/>
                 </p:with-option>
             </px:combine-validation-reports>
-            <p:xslt>
-                <!-- pretty print to make debugging easier -->
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/pretty-print.xsl"/>
-                </p:input>
-            </p:xslt>
-            <p:identity name="html.validate"/>
+            <p:identity name="html-validate.step.html.validate"/>
             <p:sink/>
 
-            <p:choose>
+            <p:choose name="html-validate.step.choose-if-check-images">
                 <p:when test="$check-images = 'true'">
-                    <px:nordic-check-image-file-signatures>
+                    <px:nordic-check-image-file-signatures name="html-validate.step.choose-if-check-images.check-image-file-signatures">
                         <p:input port="source">
                             <p:pipe port="fileset.in" step="main"/>
                         </p:input>
                     </px:nordic-check-image-file-signatures>
                 </p:when>
                 <p:otherwise>
-                    <p:identity>
+                    <p:identity name="html-validate.step.choose-if-check-images.not-checking-images">
                         <p:input port="source">
                             <p:empty/>
                         </p:input>
                     </p:identity>
                 </p:otherwise>
             </p:choose>
-            <p:identity name="images.validate"/>
+            <p:identity name="html-validate.step.images.validate"/>
             <p:sink/>
 
 
@@ -192,11 +183,12 @@
         </p:otherwise>
     </p:choose>
 
-    <p:choose>
+    <p:choose name="status">
         <p:xpath-context>
             <p:pipe port="status.in" step="main"/>
         </p:xpath-context>
         <p:when test="/*/@result='ok'">
+            <p:output port="result"/>
             <px:nordic-validation-status>
                 <p:input port="source">
                     <p:pipe port="report.out" step="choose"/>
@@ -204,6 +196,7 @@
             </px:nordic-validation-status>
         </p:when>
         <p:otherwise>
+            <p:output port="result"/>
             <p:identity>
                 <p:input port="source">
                     <p:pipe port="status.in" step="main"/>
@@ -211,6 +204,5 @@
             </p:identity>
         </p:otherwise>
     </p:choose>
-    <p:identity name="status"/>
 
 </p:declare-step>

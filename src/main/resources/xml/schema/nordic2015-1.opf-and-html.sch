@@ -18,11 +18,13 @@
     <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
     <ns prefix="epub" uri="http://www.idpf.org/2007/ops"/>
     <ns prefix="nordic" uri="http://www.mtm.se/epub/"/>
+    
+    <let name="ids" value="//xs:string(@id)"/>
 
     <pattern id="opf_and_html_nordic_1">
         <rule context="*[@id]">
             <let name="id" value="@id"/>
-            <assert test="not(//*[@id=$id] except .)">[nordic_opf_and_html_1] id attributes must be unique; <value-of select="@id"/> in <value-of select="replace(base-uri(.),'^.*/','')"/> also exists
+            <assert test="count($ids[.=$id]) = 1">[nordic_opf_and_html_1] id attributes must be unique; <value-of select="@id"/> in <value-of select="replace(base-uri(.),'^.*/','')"/> also exists
                 in <value-of select="(//*[@id=$id] except .)/replace(base-uri(.),'^.*/','')"/></assert>
         </rule>
     </pattern>
