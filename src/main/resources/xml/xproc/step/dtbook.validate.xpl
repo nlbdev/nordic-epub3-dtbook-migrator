@@ -23,9 +23,6 @@
     <p:option name="dtbook" required="true"/>
     <p:option name="check-images" required="false" select="'false'"/>
     <p:option name="allow-legacy" required="false" select="'false'"/>
-    
-    <!-- option supporting convert to DTBook 1.1.0 -->
-    <p:option name="dtbook2005" required="false" select="'true'"/>
 
     <!-- option supporting convert to DTBook 1.1.0 -->
     <p:option name="dtbook2005" required="false" select="'true'"/>
