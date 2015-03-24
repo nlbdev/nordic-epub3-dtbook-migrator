@@ -6,7 +6,7 @@
 
     <x:scenario label="px:nordic-epub3-validate">
         <x:call step="px:nordic-epub3-validate">
-            <x:option name="epub" select="resolve-uri('test-epub.epub',base-uri())"/>
+            <x:option name="epub" select="resolve-uri('C00000.epub',base-uri())"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
         </x:call>
@@ -14,7 +14,7 @@
         <x:context label="validation-status">
             <x:document type="port" port="validation-status"/>
         </x:context>
-        <x:expect type="compare" label="test-epub.epub should be valid">
+        <x:expect type="compare" label="C00000.epub should be valid">
             <x:document type="inline">
                 <d:validation-status result="ok"/>
             </x:document>

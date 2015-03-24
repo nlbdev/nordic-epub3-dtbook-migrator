@@ -44,30 +44,21 @@
             <p:document href="../../xslt/deep-level-grouping.xsl"/>
         </p:input>
     </p:xslt>
-
+    <p:xslt>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:document href="../../xslt/epub3-to-dtbook.xsl"/>
+        </p:input>
+    </p:xslt>
     <p:choose>
         <p:when test="$dtbook2005='true'">
-            <!-- convert to DTBook 2005 -->
-            <p:xslt>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/epub3-to-dtbook.xsl"/>
-                </p:input>
-            </p:xslt>
+            <!-- keep DTBook 2005-3 -->
+            <p:identity/>
         </p:when>
         <p:otherwise>
-            <!-- convert to DTBook 2005 -->
-            <p:xslt>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/epub3-to-dtbook.xsl"/>
-                </p:input>
-            </p:xslt>
-            <!-- then convert to DTBook 1.1.0 -->
+            <!-- convert to DTBook 1.1.0 -->
             <p:xslt>
                 <p:input port="parameters">
                     <p:empty/>
@@ -115,7 +106,7 @@
     <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="encoding" attribute-value="utf-8"/>
     <p:choose>
         <p:when test="$dtbook2005='true'">
-            <!-- add doctype attributes to DTBook 2005 -->
+            <!-- add doctype attributes to DTBook 2005-3 -->
             <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-public" attribute-value="-//NISO//DTD dtbook 2005-3//EN"/>
             <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="doctype-system" attribute-value="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
         </p:when>

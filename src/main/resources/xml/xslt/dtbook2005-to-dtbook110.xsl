@@ -16,7 +16,7 @@
       <xsl:apply-templates/>
     </dtbook>
   </xsl:template>
-  
+
   <xsl:template match="x:a">
     <a>
       <xsl:for-each select="@*">
@@ -125,7 +125,6 @@
               </p>         
             </xsl:otherwise>
           </xsl:choose>
-        
         </prodnote>
       </xsl:when>
       <xsl:otherwise>
@@ -424,7 +423,6 @@
   <xsl:template match="x:list">
     <xsl:choose>
       <xsl:when test="string(@type)='pl'">
-        
         <!--Check om første li har &#x25A0; eller &#x2022; som første karakter-->
 
         <xsl:choose>
@@ -446,7 +444,6 @@
             </list>
           </xsl:otherwise>
         </xsl:choose>
-       
       </xsl:when>
       
       <xsl:when test="string(@type)='ul'">
@@ -517,7 +514,7 @@
       <xsl:apply-templates/>
     </p>
   </xsl:template>
-  
+
   <!-- if pagenum is child of imggroup report-->
   <xsl:template match="x:pagenum">
     <xsl:choose>
@@ -605,7 +602,6 @@
   </xsl:template>
 
   <!--Attributten render er forbudt i 110-->
-  
   <xsl:template match="x:sidebar">
     <sidebar>
 
@@ -691,7 +687,7 @@
       <xsl:apply-templates/>
     </tbody>
   </xsl:template>
-  
+
   <xsl:template match="x:td">
     <td>
       <xsl:for-each select="@*">

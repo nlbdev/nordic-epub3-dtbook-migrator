@@ -16,7 +16,8 @@
     <packaging>bundle</packaging>
 
     <name>DAISY Pipeline 2 module :: Nordic DTBook to EPUB3</name>
-
+    <description>A DAISY Pipeline 2 module containing scripts for converting between and validating DTBook, HTML and EPUB3 according to nordic markup guidelines.</description>
+    
     <properties>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
@@ -25,6 +26,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+    
+    <scm>
+        <connection>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</connection>
+        <url>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</url>
+        <developerConnection>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <build>
         <resources>

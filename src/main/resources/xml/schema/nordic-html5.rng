@@ -1013,7 +1013,21 @@
         </choice>
     </define>
     <define name="attlist.level3" combine="interleave">
-        <ref name="attrsrqd"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
+        <optional>
+            <attribute name="epub:type">
+                <list>
+                    <ref name="types"/>
+                    <optional>
+                        <choice>
+                            <value>footnotes</value>
+                            <value>rearnotes</value>
+                        </choice>
+                    </optional>
+                    <ref name="types"/>
+                </list>
+            </attribute>
+        </optional>
+        <ref name="attrsrqd.notype"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
     
     <define name="level4">
