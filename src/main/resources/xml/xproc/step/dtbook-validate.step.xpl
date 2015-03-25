@@ -161,6 +161,7 @@
                             <p:output port="result" sequence="true"/>
 
                             <px:message message="Validating DTBook according to Nordic specification..."/>
+                            <px:message severity="DEBUG" message="Validating against nordic-dtbook-2005-3.rng"/>
                             <l:relax-ng-report name="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.nordic.validation">
                                 <p:input port="schema">
                                     <p:document href="../../schema/nordic-dtbook-2005-3.rng"/>
@@ -170,12 +171,17 @@
                             </l:relax-ng-report>
                             <p:sink/>
 
+                            <p:identity>
+                                <p:input port="source">
+                                    <p:pipe step="dtbook-validate.step.input-dtbook" port="result"/>
+                                </p:input>
+                            </p:identity>
+                            <px:message severity="DEBUG" message="Validating against mtm2015-1.sch: $1">
+                                <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
+                            </px:message>
                             <p:validate-with-schematron name="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.tpb.validation" assert-valid="false">
                                 <p:input port="parameters">
                                     <p:empty/>
-                                </p:input>
-                                <p:input port="source">
-                                    <p:pipe step="dtbook-validate.step.input-dtbook" port="result"/>
                                 </p:input>
                                 <p:input port="schema">
                                     <p:document href="../../schema/mtm2015-1.sch"/>

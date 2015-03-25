@@ -232,12 +232,17 @@
             <p:identity name="epub3-validate.step.ncx"/>
             <p:sink/>
 
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="epub3-validate.step.opf" port="result"/>
+                </p:input>
+            </p:identity>
+            <px:message severity="DEBUG" message="Validating against nordic2015-1.opf.sch: $1">
+                <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
+            </px:message>
             <p:validate-with-schematron name="epub3-validate.step.opf.validate.schematron" assert-valid="false">
                 <p:input port="parameters">
                     <p:empty/>
-                </p:input>
-                <p:input port="source">
-                    <p:pipe step="epub3-validate.step.opf" port="result"/>
                 </p:input>
                 <p:input port="schema">
                     <p:document href="../../schema/nordic2015-1.opf.sch"/>
@@ -374,7 +379,8 @@
                                 <p:with-option name="param1" select="$href"/>
                             </px:message>
                             <p:rename match="/*" new-name="c:result" name="epub3-validate.step.group-xml-declaration.iterate-files.try.catch.rename-c-result"/>
-                            <p:delete match="/*/@*[not(local-name()=('version','encoding','standalone'))]" name="epub3-validate.step.group-xml-declaration.iterate-files.try.catch.delete-irrelevant-attributes"/>
+                            <p:delete match="/*/@*[not(local-name()=('version','encoding','standalone'))]"
+                                name="epub3-validate.step.group-xml-declaration.iterate-files.try.catch.delete-irrelevant-attributes"/>
                             <px:message message="xml declaration: |$1|$2|$3|">
                                 <p:with-option name="param1" select="/*/@version"/>
                                 <p:with-option name="param2" select="/*/@encoding"/>
@@ -392,9 +398,11 @@
                         </p:when>
                         <p:otherwise>
                             <p:wrap-sequence wrapper="d:was" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.wrap-d-was"/>
-                            <p:string-replace match="/*/c:result" replace="/*/c:result/@xml-declaration" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.replace-result-with-xml-declaration"/>
+                            <p:string-replace match="/*/c:result" replace="/*/c:result/@xml-declaration"
+                                name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.replace-result-with-xml-declaration"/>
                             <p:wrap-sequence wrapper="d:error" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.wrap-d-error"/>
-                            <p:insert match="/*" position="first-child" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.insert-desc-file-expected-placeholders">
+                            <p:insert match="/*" position="first-child"
+                                name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-correct-xml-declaration.insert-desc-file-expected-placeholders">
                                 <p:input port="insertion">
                                     <p:inline exclude-inline-prefixes="#all">
                                         <d:desc>PLACEHOLDER</d:desc>
@@ -456,7 +464,8 @@
                                         <p:with-option name="param1" select="$href"/>
                                     </px:message>
                                     <p:rename match="/*" new-name="c:result" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try.catch.rename-c-result"/>
-                                    <p:delete match="/*/@*[not(local-name()=('doctype-public','doctype-system'))]" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try.catch.delete-doctype"/>
+                                    <p:delete match="/*/@*[not(local-name()=('doctype-public','doctype-system'))]"
+                                        name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try.catch.delete-doctype"/>
                                     <px:message message="doctype declaration: $1 $2">
                                         <p:with-option name="param1" select="/*/@doctype-public"/>
                                         <p:with-option name="param2" select="/*/@doctype-system"/>
@@ -473,9 +482,12 @@
                                 </p:when>
                                 <p:otherwise>
                                     <p:wrap-sequence wrapper="d:was" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.wrap-d-was"/>
-                                    <p:string-replace match="/*/c:result" replace="/*/c:result/@doctype-declaration" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.string-replace-result-with-actual-doctype"/>
-                                    <p:wrap-sequence wrapper="d:error" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.wrap-in-d-error"/>
-                                    <p:insert match="/*" position="first-child" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.insert-desc-file-expected-placeholders">
+                                    <p:string-replace match="/*/c:result" replace="/*/c:result/@doctype-declaration"
+                                        name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.string-replace-result-with-actual-doctype"/>
+                                    <p:wrap-sequence wrapper="d:error"
+                                        name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.wrap-in-d-error"/>
+                                    <p:insert match="/*" position="first-child"
+                                        name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.insert-desc-file-expected-placeholders">
                                         <p:input port="insertion">
                                             <p:inline exclude-inline-prefixes="#all">
                                                 <d:desc>PLACEHOLDER</d:desc>
@@ -488,10 +500,12 @@
                                             </p:inline>
                                         </p:input>
                                     </p:insert>
-                                    <p:string-replace match="/*/d:desc/text()" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.replace-string-desc">
+                                    <p:string-replace match="/*/d:desc/text()"
+                                        name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.replace-string-desc">
                                         <p:with-option name="replace" select="concat('&quot;Bad or missing DOCTYPE declaration in: ',replace($href,'^.*/([^/]*)$','$1'),'&quot;')"/>
                                     </p:string-replace>
-                                    <p:string-replace match="/*/d:file/text()" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.replace-string-file">
+                                    <p:string-replace match="/*/d:file/text()"
+                                        name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.choose-if-correct-doctype.wrong-doctype.replace-string-file">
                                         <p:with-option name="replace" select="concat('&quot;',$href,'&quot;')"/>
                                     </p:string-replace>
                                 </p:otherwise>
@@ -518,6 +532,9 @@
                     </p:add-attribute>
                 </p:for-each>
                 <p:wrap-sequence wrapper="c:result" name="epub3-validate.step.group-opf-and-html.wrap-c-result"/>
+                <px:message severity="DEBUG" message="Validating against nordic2015-1.opf-and-html.sch: $1">
+                    <p:with-option name="param1" select="replace(base-uri(/*/*[1]),'.*/','')"/>
+                </px:message>
                 <p:validate-with-schematron name="epub3-validate.step.group-opf-and-html.validate.schematron" assert-valid="false">
                     <p:input port="parameters">
                         <p:empty/>
@@ -589,6 +606,10 @@
                     <p:with-option name="attribute-value" select="base-uri(/*)"/>
                 </p:add-attribute>
 
+                <px:message severity="DEBUG" message="Validating against nordic2015-1.nav-references.sch: $1">
+                    <p:log port="result" href="file:/tmp/nav-references.xml"/>
+                    <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
+                </px:message>
                 <p:validate-with-schematron name="epub3-validate.step.group-nav-references.iterate-html.nav-references.validate.schematron" assert-valid="false">
                     <p:input port="parameters">
                         <p:empty/>
@@ -618,6 +639,9 @@
                         <p:pipe port="result" step="epub3-validate.step.ncx"/>
                     </p:input>
                 </p:wrap-sequence>
+                <px:message severity="DEBUG" message="Validating against nordic2015-1.nav-ncx.sch: $1">
+                    <p:with-option name="param1" select="replace(base-uri(/*/*[last()]),'.*/','')"/>
+                </px:message>
                 <p:validate-with-schematron name="epub3-validate.step.group-nav-ncx.nav-ncx.validate.schematron" assert-valid="false">
                     <p:input port="parameters">
                         <p:empty/>
@@ -641,7 +665,7 @@
             </p:group>
             <p:identity name="epub3-validate.step.nav-ncx.validate"/>
             <p:sink/>
-            
+
             <p:group name="epub3-validate.step.category-report">
                 <px:fileset-filter media-types="application/xhtml+xml" name="epub3-validate.step.category-report.filter-html">
                     <p:input port="source">

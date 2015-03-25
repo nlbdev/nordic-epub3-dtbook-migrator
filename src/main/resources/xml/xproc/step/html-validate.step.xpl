@@ -114,12 +114,17 @@
             </l:relax-ng-report>
             <p:sink/>
 
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="html-validate.step.html" port="result"/>
+                </p:input>
+            </p:identity>
+            <px:message severity="DEBUG" message="Validating against nordic2015-1.sch: $1">
+                <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
+            </px:message>
             <p:validate-with-schematron name="html-validate.step.validate.sch" assert-valid="false">
                 <p:input port="parameters">
                     <p:empty/>
-                </p:input>
-                <p:input port="source">
-                    <p:pipe step="html-validate.step.html" port="result"/>
                 </p:input>
                 <p:input port="schema">
                     <p:document href="../../schema/nordic2015-1.sch"/>
