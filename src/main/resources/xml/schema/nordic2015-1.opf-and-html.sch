@@ -184,7 +184,7 @@
         </rule>
     </pattern>
 
-    <pattern id="nordic_opf_and_html_284">
+    <!--<pattern id="nordic_opf_and_html_284">
         <rule context="html:p[tokenize(@class,'\s+') = ('isbn', 'issn')]">
             <let name="source-element" value="/*/opf:package/opf:metadata/dc:source[not(@refines) and matches(.,'urn:is[bs]n:[\d-]+X?')]"/>
             <let name="source-type" value="substring-before(substring-after($source-element,':'),':')"/>
@@ -195,6 +195,6 @@
                     select="substring-after(substring-after($source-element,':'),':')"/>": <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
-    </pattern>
+    </pattern>-->
 
 </schema>

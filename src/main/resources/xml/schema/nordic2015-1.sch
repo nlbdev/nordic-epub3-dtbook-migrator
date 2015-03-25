@@ -1138,7 +1138,7 @@
 
     <!-- TODO: if we allow MathML in EPUB; look at whether or not we can import more of the rules declared in and referenced from dtbook.mathml.sch in the dtbook-validator script from the main DP2 distribution -->
 
-    <pattern id="epub_nordic_284">
+    <!--<pattern id="epub_nordic_284">
         <rule context="html:p[tokenize(@class,'\s+') = ('isbn', 'issn')]">
             <let name="source-element" value="ancestor::html:html/html:head/html:meta[@name='dc:source' and matches(@content,'urn:is[bs]n:[\d-]+X?')]/@content"/>
             <let name="source-type" value="substring-before(substring-after($source-element,':'),':')"/>
@@ -1154,6 +1154,6 @@
                     select="substring-after(substring-after($source-element,':'),':')"/>": <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
-    </pattern>
+    </pattern>-->
 
 </schema>

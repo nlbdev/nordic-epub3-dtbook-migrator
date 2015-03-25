@@ -44,10 +44,10 @@
             <let name="nav-ref" value="//html:nav[tokenize(@epub:type,'\s+')='toc']//html:a[$sectioning-ref and ends-with(@href, $sectioning-ref) or $heading-ref and ends-with(@href, $heading-ref)]"/>
 
             <assert test="count($nav-ref) = 1">[nordic_nav_references_1] All headings in the content documents must be referenced exactly once in the navigation document. In the content document
-                    "<value-of select="replace(@xml:base,'.*/','')"/>", the heading "<value-of select="text()"/>"<value-of
-                    select="if (@data-heading-id) then concat(' with id=&quot;', @data-heading-id,'&quot;') else ''"/> inside the "<value-of select="@data-sectioning-element"/>" element<value-of
-                    select="if (@data-heading-id) then concat(' with id=&quot;', @data-sectioning-id,'&quot;') else ''"/> is <value-of
-                    select="if (count($nav-ref)=0) then 'not referenced' else 'referenced multiple times'"/> from the navigation document.</assert>
+                    "<value-of select="replace(@xml:base,'.*/','')"/>", the <value-of
+                    select="if (@data-heading-element) then concat('heading &quot;', text(), '&quot;', if (@data-heading-id) then concat(' with id=&quot;', @data-heading-id,'&quot;') else '', ' inside the ') else ''"
+                /> "<value-of select="@data-sectioning-element"/>" element<value-of select="if (@data-sectioning-id) then concat(' with id=&quot;', @data-sectioning-id,'&quot;') else ''"/> is
+                    <value-of select="if (count($nav-ref)=0) then 'not referenced' else 'referenced multiple times'"/> from the navigation document.</assert>
 
             <assert test="count($nav-ref) = 0 or not(@data-heading-id) or normalize-space(string-join(.//text(),'')) = normalize-space(string-join($nav-ref//text(),''))">[nordic_nav_references_1] The
                 text for the heading in the navigation document ("<value-of select="normalize-space(string-join($nav-ref//text(),''))"/>") should match the headline in the content document ("<value-of
