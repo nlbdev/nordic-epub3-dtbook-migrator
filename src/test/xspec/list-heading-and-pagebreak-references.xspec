@@ -17,7 +17,6 @@
                 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:base="file:/tmp/EPUB1234-02-chapter.xhtml">
                     <head/>
                     <body id="d910e770" epub:type="bodymatter chapter">
-                        <h1 id="d910e772">2. Purpose, method and sources</h1>
                         <p>
                             <span id="dtb142">...</span>
                         </p>
@@ -80,29 +79,28 @@
             <c:result xmlns:c="http://www.w3.org/ns/xproc-step">
                 <c:result xml:base="file:/tmp/EPUB1234-01-cover.xhtml" data-pagebreak-element="div" data-pagebreak-id="page_5"><![CDATA[5]]></c:result>
                 <c:result xml:base="file:/tmp/EPUB1234-01-cover.xhtml" data-sectioning-element="body" data-sectioning-id="d910e694" data-heading-element="h1" data-heading-id="d910e696"
-                    ><![CDATA[1. Research questions]]></c:result>
-                <c:result xml:base="file:/tmp/EPUB1234-02-chapter.xhtml" data-sectioning-element="body" data-sectioning-id="d910e770" data-heading-element="h1" data-heading-id="d910e772"
-                    ><![CDATA[2. Purpose, method and sources]]></c:result>
-                <c:result xml:base="file:/tmp/EPUB1234-02-chapter.xhtml" data-sectioning-element="section" data-heading-element="h2" data-heading-id="x1"
-                    ><![CDATA[heading with id - section without id]]></c:result>
-                <c:result xml:base="file:/tmp/EPUB1234-02-chapter.xhtml" data-sectioning-element="section" data-sectioning-id="x2" data-heading-element="h2"
-                    ><![CDATA[heading without id - section with id]]></c:result>
+                    data-heading-depth="1" data-sectioning-depth="1"><![CDATA[1. Research questions]]></c:result>
+                <c:result xml:base="file:/tmp/EPUB1234-02-chapter.xhtml" data-sectioning-element="body" data-sectioning-id="d910e770" data-sectioning-depth="1"/>
+                <c:result xml:base="file:/tmp/EPUB1234-02-chapter.xhtml" data-sectioning-element="section" data-heading-element="h2" data-heading-id="x1" data-heading-depth="2"
+                    data-sectioning-depth="2"><![CDATA[heading with id - section without id]]></c:result>
+                <c:result xml:base="file:/tmp/EPUB1234-02-chapter.xhtml" data-sectioning-element="section" data-sectioning-id="x2" data-heading-element="h2" data-heading-depth="2"
+                    data-sectioning-depth="2"><![CDATA[heading without id - section with id]]></c:result>
                 <c:result xml:base="file:/tmp/EPUB1234-03-chapter.xhtml" data-sectioning-element="body" data-sectioning-id="d910e1012" data-heading-element="h1" data-heading-id="d910e1014"
-                    ><![CDATA[3. Valentin Haüy]]></c:result>
+                    data-heading-depth="1" data-sectioning-depth="1"><![CDATA[3. Valentin Haüy]]></c:result>
                 <c:result xml:base="file:/tmp/EPUB1234-03-chapter.xhtml" data-sectioning-element="section" data-sectioning-id="d910e1023" data-heading-element="h2" data-heading-id="d910e1025"
-                    ><![CDATA[3.1 Introduction]]></c:result>
+                    data-heading-depth="2" data-sectioning-depth="2"><![CDATA[3.1 Introduction]]></c:result>
                 <c:result xml:base="file:/tmp/EPUB1234-03-chapter.xhtml" data-sectioning-element="section" data-sectioning-id="d910e1199" data-heading-element="h2" data-heading-id="d910e1201"
-                    ><![CDATA[3.2 Biographical background]]></c:result>
+                    data-heading-depth="2" data-sectioning-depth="2"><![CDATA[3.2 Biographical background]]></c:result>
                 <c:result xml:base="file:/tmp/EPUB1234-03-chapter.xhtml" data-sectioning-element="section" data-sectioning-id="d910e1775" data-heading-element="h2" data-heading-id="d910e1777"
-                    ><![CDATA[3.6 Valentin Haüy's teaching methods]]></c:result>
+                    data-heading-depth="2" data-sectioning-depth="2"><![CDATA[3.6 Valentin Haüy's teaching methods]]></c:result>
                 <c:result xml:base="file:/tmp/EPUB1234-03-chapter.xhtml" data-sectioning-element="section" data-sectioning-id="d910e2441" data-heading-element="h2" data-heading-id="d910e2443"
-                    ><![CDATA[3.9 Valentin Haüy in Russia]]></c:result>
+                    data-heading-depth="2" data-sectioning-depth="2"><![CDATA[3.9 Valentin Haüy in Russia]]></c:result>
                 <c:result xml:base="file:/tmp/EPUB1234-03-chapter.xhtml" data-sectioning-element="section" data-sectioning-id="d910e2449" data-heading-element="h3" data-heading-id="d910e2451"
-                    ><![CDATA[3.9.1 An invitation from Alexander I]]></c:result>
+                    data-heading-depth="3" data-sectioning-depth="3"><![CDATA[3.9.1 An invitation from Alexander I]]></c:result>
                 <c:result xml:base="file:/tmp/EPUB1234-03-chapter.xhtml" data-sectioning-element="section" data-sectioning-id="d910e2634" data-heading-element="h3" data-heading-id="d910e2636"
-                    ><![CDATA[3.9.2 Berlin]]></c:result>
+                    data-heading-depth="3" data-sectioning-depth="3"><![CDATA[3.9.2 Berlin]]></c:result>
                 <c:result xml:base="file:/tmp/EPUB1234-03-chapter.xhtml" data-sectioning-element="section" data-sectioning-id="d910e2710" data-heading-element="h3" data-heading-id="d910e2712"
-                    ><![CDATA[3.9.3 In St Petersburg]]></c:result>
+                    data-heading-depth="3" data-sectioning-depth="3"><![CDATA[3.9.3 In St Petersburg]]></c:result>
             </c:result>
         </x:expect>
     </x:scenario>

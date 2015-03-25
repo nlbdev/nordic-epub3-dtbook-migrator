@@ -5,7 +5,7 @@
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic EPUB3 ASCIIMath to MathML</h1>
-        <p px:role="desc">Creates MathML for all HTML elements with the "asciimath" class.</p>
+        <p px:role="desc">Creates MathML for all HTML elements with the "asciimath" class. (experimental)</p>
     </p:documentation>
 
     <p:option name="epub" required="true" px:type="anyFileURI" px:media-type="application/epub+zip">

@@ -4,7 +4,7 @@
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Nordic DTBook to HTML</h1>
+        <h1 px:role="name">Nordic DTBook to HTML5</h1>
         <p px:role="desc">Transforms a DTBook document into an single HTML file according to the nordic markup guidelines.</p>
     </p:documentation>
 

@@ -27,8 +27,24 @@
             <xsl:if test="@id">
                 <xsl:attribute name="data-heading-id" select="@id"/>
             </xsl:if>
+            <xsl:attribute name="data-heading-depth" select="substring-after(local-name(),'h')"/>
+            <xsl:attribute name="data-sectioning-depth" select="count(ancestor::body | ancestor::section | ancestor::article)"/>
             <xsl:value-of select="normalize-space(string-join(.//text() except .//*[tokenize(@epub:type,'\s+') = 'noteref']//text(),''))"/>
         </c:result>
+    </xsl:template>
+
+    <xsl:template match="body | section | article">
+        <xsl:if test="not(h1 | h2 | h3 | h4 | h5 | h6)">
+            <c:result>
+                <xsl:attribute name="xml:base" select="base-uri(.)"/>
+                <xsl:attribute name="data-sectioning-element" select="name()"/>
+                <xsl:if test="@id">
+                    <xsl:attribute name="data-sectioning-id" select="@id"/>
+                </xsl:if>
+                <xsl:attribute name="data-sectioning-depth" select="count(ancestor-or-self::body | ancestor-or-self::section | ancestor-or-self::article)"/>
+            </c:result>
+        </xsl:if>
+        <xsl:apply-templates/>
     </xsl:template>
 
     <xsl:template match="*[@epub:type='pagebreak']">
