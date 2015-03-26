@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>nordic-epub3-dtbook-migrator</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>DAISY Pipeline 2 module :: Nordic EPUB3/DTBook Migrator</name>
@@ -30,7 +30,7 @@
         <connection>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</connection>
         <url>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</url>
         <developerConnection>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</developerConnection>
-        <tag>1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <dependencyManagement>
