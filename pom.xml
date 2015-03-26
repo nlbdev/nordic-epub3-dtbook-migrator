@@ -15,7 +15,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>DAISY Pipeline 2 module :: Nordic DTBook to EPUB3</name>
+    <name>DAISY Pipeline 2 module :: Nordic EPUB3/DTBook Migrator</name>
     <description>A DAISY Pipeline 2 module containing scripts for converting between and validating DTBook, HTML and EPUB3 according to nordic markup guidelines.</description>
     
     <properties>
