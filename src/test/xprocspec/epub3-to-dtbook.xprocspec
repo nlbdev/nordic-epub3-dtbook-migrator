@@ -2,7 +2,7 @@
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/epub3-to-dtbook.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/">
 
     <x:scenario label="px:nordic-epub3-to-dtbook">
         <x:call step="px:nordic-epub3-to-dtbook">
@@ -50,6 +50,14 @@
         <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xml',$temp-dir))/*/count(namespace::*)" equals="2" label="There should be exactly two namespaces declared on the root element (the default namespace and the implicit xml namespace)"/>
         <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xml',$temp-dir))/*/namespace::*[name()='']" equals="'http://www.daisy.org/z3986/2005/dtbook/'" label="The DTBook namespace should be the default namespace on the root element"/>
         <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xml',$temp-dir))/*//*/count(namespace::*[not(.=../../namespace::*)])" equals="0" label="No namespaces should be declared other than on the root element"/>
+        
+        <x:context label="the DTBook metadata">
+            <x:document type="file" href="output-dir/C00000/C00000.xml" base-uri="temp-dir" select="/dtbook:dtbook/dtbook:head"/>
+        </x:context>
+        <x:expect label="there must be a DTBook head element" type="count" min="1"/>
+        <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
+        <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
+        
     </x:scenario>
 
 </x:description>

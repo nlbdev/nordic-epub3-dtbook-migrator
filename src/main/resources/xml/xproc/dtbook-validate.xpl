@@ -24,7 +24,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="result" step="status"/>
+        <p:pipe port="status.out" step="dtbook-validate.dtbook-validate"/>
     </p:output>
 
     <p:option name="dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
@@ -34,10 +34,10 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="ignore-missing-images" required="false" px:type="boolean" select="'true'">
+    <p:option name="check-images" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Ignore non-existing images</h2>
-            <p px:role="desc">Whether or not to see that referenced images exist on disk.</p>
+            <h2 px:role="name">Validate images</h2>
+            <p px:role="desc">Whether or not to check that referenced images exist and has the right file signatures.</p>
         </p:documentation>
     </p:option>
 
@@ -55,31 +55,53 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="step/dtbook.validate.xpl"/>
-    <p:import href="step/format-html-report.step.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:option name="fail-on-error" required="false" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Stop processing on validation error</h2>
+            <p px:role="desc">Whether or not to stop the conversion when a validation error occurs. Setting this to false may be useful for debugging or if the validation error is a minor one. The
+                output is not guaranteed to be valid if this option is set to false.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:import href="step/dtbook-validate.step.xpl"/>
+    <p:import href="step/format-html-report.xpl"/>
+    <p:import href="upstream/file-utils/xproc/set-doctype.xpl"/>
+    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
-    <!--<p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>-->
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>-->
+    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
 
-    <px:message message="$1" name="nordic-version-message">
+    <p:variable name="dtbook-href" select="resolve-uri($dtbook,static-base-uri())"/>
+
+    <px:message message="$1" name="dtbook-validate.nordic-version-message">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
 
-    <px:nordic-dtbook-validate.step name="validate" cx:depends-on="nordic-version-message">
-        <p:with-option name="dtbook" select="$dtbook"/>
-        <p:with-option name="check-images" select="if ($ignore-missing-images='false') then 'true' else 'false'"/>
+    <px:fileset-create name="dtbook-validate.create-dtbook-fileset">
+        <p:with-option name="base" select="replace($dtbook-href,'[^/]+$','')"/>
+    </px:fileset-create>
+    <pxi:fileset-add-entry media-type="application/x-dtbook+xml" name="dtbook-validate.add-dtbook-to-fileset">
+        <p:with-option name="href" select="replace($dtbook-href,'.*/','')"/>
+    </pxi:fileset-add-entry>
+    <px:nordic-dtbook-validate.step name="dtbook-validate.dtbook-validate" cx:depends-on="dtbook-validate.nordic-version-message">
+        <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
     </px:nordic-dtbook-validate.step>
-    <pxi:fileset-load media-types="application/x-dtbook+xml" method="xml">
+    <p:sink/>
+
+    <pxi:fileset-load media-types="application/x-dtbook+xml" method="xml" name="dtbook-validate.load-dtbook">
+        <p:input port="fileset">
+            <p:pipe port="fileset.out" step="dtbook-validate.dtbook-validate"/>
+        </p:input>
         <p:input port="in-memory">
-            <p:pipe port="in-memory.out" step="validate"/>
+            <p:pipe port="in-memory.out" step="dtbook-validate.dtbook-validate"/>
         </p:input>
     </pxi:fileset-load>
-    <p:xslt>
+    <p:xslt name="dtbook-validate.info-report">
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -87,39 +109,23 @@
             <p:document href="../xslt/info-report.xsl"/>
         </p:input>
     </p:xslt>
-    <p:identity name="report.nordic"/>
+    <p:identity name="dtbook-validate.report.nordic"/>
     <p:sink/>
 
-    <px:nordic-format-html-report.step>
+    <px:nordic-format-html-report name="dtbook-validate.nordic-format-html-report">
         <p:input port="source">
-            <p:pipe port="result" step="report.nordic"/>
-            <p:pipe port="report.out" step="validate"/>
+            <p:pipe port="result" step="dtbook-validate.report.nordic"/>
+            <p:pipe port="report.out" step="dtbook-validate.dtbook-validate"/>
         </p:input>
-    </px:nordic-format-html-report.step>
-    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
+    </px:nordic-format-html-report>
+    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="dtbook-validate.store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="dtbook-validate.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
-            <p:pipe port="result" step="store-report"/>
+            <p:pipe port="result" step="dtbook-validate.store-report"/>
         </p:with-option>
-    </px:set-doctype>
-    <p:sink/>
-
-    <p:group name="status">
-        <p:output port="result"/>
-        <p:for-each>
-            <p:iteration-source select="/d:document-validation-report/d:document-info/d:error-count">
-                <p:pipe port="report.out" step="validate"/>
-            </p:iteration-source>
-            <p:identity/>
-        </p:for-each>
-        <p:wrap-sequence wrapper="d:validation-status"/>
-        <p:add-attribute attribute-name="result" match="/*">
-            <p:with-option name="attribute-value" select="if (sum(/*/*/number(.))&gt;0) then 'error' else 'ok'"/>
-        </p:add-attribute>
-        <p:delete match="/*/node()"/>
-    </p:group>
+    </pxi:set-doctype>
     <p:sink/>
 
 </p:declare-step>

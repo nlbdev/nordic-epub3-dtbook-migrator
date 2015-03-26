@@ -3173,7 +3173,7 @@
         </x:expect>
     </x:scenario>
 
-    <x:scenario label="adjust list depth when ancestor list is a note list" focus="">
+    <x:scenario label="adjust list depth when ancestor list is a note list">
         <x:context>
             <html:ol>
                 <html:li class="notebody" epub:type="footnote" id="n13-1">

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -8,21 +7,21 @@
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-parent</artifactId>
         <version>1.2</version>
-        <relativePath/>
+        <relativePath />
     </parent>
 
     <artifactId>nordic-epub3-dtbook-migrator</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
-    <name>DAISY Pipeline 2 module :: Nordic DTBook to EPUB3</name>
+    <name>DAISY Pipeline 2 module :: Nordic EPUB3/DTBook Migrator</name>
     <description>A DAISY Pipeline 2 module containing scripts for converting between and validating DTBook, HTML and EPUB3 according to nordic markup guidelines.</description>
     
     <properties>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
-        <buildNr/>
-        <version-description>Version: ${pom.version}${buildNr}, build date: ${timestamp}.</version-description>
+        <buildNr />
+        <version-description>Version: ${project.version}${buildNr}, build date: ${timestamp}.</version-description>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -33,6 +32,31 @@
         <developerConnection>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.daisy.pipeline</groupId>
+                <artifactId>framework-bom</artifactId>
+                <version>1.9</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>calabash-adapter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
 
     <build>
         <resources>
@@ -45,6 +69,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>xml/version-description.xml</include>
+                    <include>OSGI-INF/nordic-*.xml</include>
                 </includes>
             </resource>
         </resources>
@@ -82,7 +107,7 @@
             <plugin>
                 <groupId>org.daisy.maven</groupId>
                 <artifactId>xspec-maven-plugin</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <version>1.0.0</version>
                 <executions>
                     <execution>
                         <id>xspecTest</id>
@@ -92,6 +117,16 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Import-Package>org.daisy.pipeline.script;version="[2.2,3)",com.google.common.io;version="[15.0,16)",com.xmlcalabash.core;version="[1.0,2)",com.xmlcalabash.io;version="[1.0,2)",com.xmlcalabash.library;version="[1.0,2)",com.xmlcalabash.model;version="[1.0,2)",com.xmlcalabash.runtime;version="[1.0,2)",com.xmlcalabash.util;version="[1.0,2)",net.sf.saxon.expr,net.sf.saxon.lib,net.sf.saxon.om,net.sf.saxon.s9api,net.sf.saxon.trans,net.sf.saxon.type,net.sf.saxon.value,org.daisy.common.xproc.calabash;version="[2.0,3)",org.slf4j;version="[1.7,2)",javax.xml.transform,javax.xml.transform.stream</Import-Package>
+                        <Service-Component>OSGI-INF/nordic-dtbook-to-epub3.xml,OSGI-INF/nordic-epub3-to-html.xml,OSGI-INF/nordic-dtbook-to-html.xml,OSGI-INF/nordic-epub3-validate.xml,OSGI-INF/nordic-dtbook-validate.xml,OSGI-INF/nordic-html-to-dtbook.xml,OSGI-INF/nordic-epub3-asciimath-to-mathml.xml,OSGI-INF/nordic-html-to-epub3.xml,OSGI-INF/nordic-epub3-to-dtbook.xml,OSGI-INF/nordic-html-validate.xml,OSGI-INF/peek-step.xml,OSGI-INF/xml-peek-step.xml,OSGI-INF/letex-unzip.xml,OSGI-INF/set-doctype-step.xml,OSGI-INF/set-xml-declaration-step.xml</Service-Component>
+                    </instructions>
+                </configuration>
             </plugin>
         </plugins>
     </build>

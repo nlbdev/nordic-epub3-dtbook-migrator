@@ -46,24 +46,27 @@
             <xsl:apply-templates select="@*|node()"/>
             <meta name="track:Guidelines" content="2015-1"/>
             <xsl:if test="not(meta/@name='dc:Source')">
-                <xsl:variable name="isbn"
-                    select="(/dtbook/book/frontmatter/level1[tokenize(@class,'\s+')='colophon']//text()[matches(.,'^\s*ISBN[:\s]*([\d\-– ]+)([^\d\-– ]|$)')]/replace(replace(.,'^\s*ISBN[:\s]*([\d\- ]+)([^\d\-– ].*?$|$)','$1'),'[^\d]',''))[1]"/>
+                <xsl:variable name="source-element" select="(/dtbook/book/frontmatter/level1[tokenize(@class,'\s+')='colophon']//text()[matches(.,'^\s*IS[BS]N:?\s*([\dX –-]+)([^\dX –-]|$)')])[1]"/>
+                <xsl:variable name="source-type" select="if (contains($source-element,'ISBN')) then 'isbn' else if (contains($source-element,'ISSN')) then 'issn' else ''"/>
+                <xsl:variable name="source"
+                    select="replace(replace(replace(replace(replace($source-element,'^\s*IS[BS]N:?\s*([\dX –-]+)([^\dX –-].*?$|$)','$1'),'[^\dX-]','-'),'-+','-'),'^-+',''),'-+$','')"/>
                 <xsl:choose>
-                    <xsl:when test="$isbn">
-                        <meta name="dc:Source" content="urn:isbn:{$isbn}"/>
+                    <xsl:when test="$source">
+                        <meta name="dc:Source" content="urn:isbn:{$source}"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <!-- ISBN is in a non-standard position => do a broader search in frontmatter -->
-                        <xsl:variable name="isbn" select="string-join(/dtbook/book/frontmatter/level1//text(),' ')"/>
-                        <xsl:variable name="isbn" select="if (not(contains($isbn,'ISBN'))) then '' else substring-after($isbn,'ISBN')"/>
-                        <xsl:variable name="isbn" select="if ($isbn='') then '' else replace($isbn,'^[:\s]*([\d\-– ]+).*?$','$1','s')"/>
-                        <xsl:variable name="isbn" select="if ($isbn='') then '' else replace($isbn,'[^\d]','','s')"/>
+                        <xsl:variable name="source" select="string-join(/dtbook/book/frontmatter/level1//text(),' ')"/>
+                        <xsl:variable name="source"
+                            select="if (not(contains($source,'ISBN'))) then if (not(contains($source,'ISSN'))) then '' else substring-after($source,'ISSN') else substring-after($source,'ISBN')"/>
+                        <xsl:variable name="source" select="if ($source='') then '' else replace($source,'^[:\s]*([\dX –-]+).*?$','$1','s')"/>
+                        <xsl:variable name="source" select="if ($source='') then '' else replace(replace(replace($source,'[^\dX]','-','s'),'^-+',''),'-+$','')"/>
                         <xsl:choose>
-                            <xsl:when test="$isbn">
-                                <meta name="dc:Source" content="urn:isbn:{$isbn}"/>
+                            <xsl:when test="$source">
+                                <meta name="dc:Source" content="urn:isbn:{$source}"/>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:message select="'No ISBN found, can''t create dc:Source !'"/>
+                                <xsl:message select="'No ISBN or ISSN found, can''t create dc:Source !'"/>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:otherwise>
@@ -111,7 +114,7 @@
 
     <xsl:variable name="partition-type-classes" select="('cover','frontmatter','bodymatter','backmatter')"/>
     <xsl:variable name="division-type-classes"
-        select="('acknowledgments','afterword','appendix','assessment','bibliography','biographical-note','chapter','colophon','conclusion','contributors','copyright-page','dedication','discography','division','editorial-note','epigraph','epilogue','errata','filmography','footnotes','foreword','glossary','grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','promotional-copy','published-works','publisher-address','qna','rearnotes','revision-history','section','standard','subchapter','subsection','titlepage','toc','translator-note','volume','warning')"/>
+        select="('abstract','acknowledgments','afterword','answers','appendix','assessments','assessment','bibliography','biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','discography','division','editorial-note','epigraph','epilogue','errata','filmography','footnotes','foreword','glossary','grant-acknowledgment','halftitlepage','imprimatur','imprint','index-group','index-headnotes','index-legend','index','introduction','keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','part','practices','preamble','preface','prologue','promotional-copy','published-works','publisher-address','qna','rearnotes','revision-history','section','seriespage','subchapter','subsection','titlepage','toc-brief','toc','translator-note','volume')"/>
     <xsl:variable name="special-classes" select="('part','cover','colophon','nonstandardpagination')"/>
     <!-- 'part','cover','colophon','nonstandardpagination','jacketcopy','precedingemptyline','precedingseparator','byline','dateline' -->
     <xsl:variable name="allowed-classes" select="distinct-values(($partition-type-classes, $division-type-classes, $special-classes))"/>

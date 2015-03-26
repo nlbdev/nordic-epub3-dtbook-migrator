@@ -19,9 +19,4 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:function name="f:types" as="xs:string*">
-        <xsl:param name="element" as="element()"/>
-        <xsl:sequence select="tokenize($element/@epub:type,'\s+')"/>
-    </xsl:function>
-
 </xsl:stylesheet>

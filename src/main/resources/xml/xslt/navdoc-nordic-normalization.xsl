@@ -28,6 +28,8 @@
 
     <xsl:template match="head">
         <head>
+            <xsl:namespace name="dc" select="'http://purl.org/dc/elements/1.1/'"/>
+            <xsl:namespace name="dcterms" select="'http://purl.org/dc/terms/'"/>
             <meta charset="UTF-8"/>
             <title>
                 <xsl:value-of select="$title"/>
