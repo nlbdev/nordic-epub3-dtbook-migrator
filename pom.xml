@@ -69,7 +69,6 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>xml/version-description.xml</include>
-                    <include>OSGI-INF/nordic-*.xml</include>
                 </includes>
             </resource>
         </resources>
