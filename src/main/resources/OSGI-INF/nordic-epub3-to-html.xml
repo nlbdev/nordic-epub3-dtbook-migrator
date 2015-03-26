@@ -8,5 +8,5 @@
     <scr:property name="script.name" type="String" value="Nordic EPUB3 to HTML5"/>
     <scr:property name="script.description" type="String" value="Transforms an EPUB3 publication into HTML5 according to the nordic markup guidelines."/>
     <scr:property name="script.url" type="String" value="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-html.xpl"/>
-    <scr:property name="script.version" type="String" value="1.0.0-SNAPSHOT"/>
+    <scr:property name="script.version" type="String" value="${project.version}"/>
 </scr:component>
