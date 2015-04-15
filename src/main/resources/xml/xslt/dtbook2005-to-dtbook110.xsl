@@ -410,7 +410,7 @@
   </xsl:template>
 
   <xsl:template match="x:lic">
-    <lic>
+    <lic class="pageref">
       <xsl:for-each select="@*">
         <xsl:attribute name="{name()}">
           <xsl:value-of select="."/>
