@@ -34,39 +34,41 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="result" step="status"/>
+        <p:pipe port="result" step="epub3-validate.status"/>
     </p:output>
 
-    <p:import href="step/epub3.validate.xpl"/>
-    <p:import href="step/format-html-report.step.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="step/epub3-validate.step.xpl"/>
+    <p:import href="step/validation-status.xpl"/>
+    <p:import href="step/format-html-report.xpl"/>
+    <p:import href="upstream/file-utils/xproc/set-doctype.xpl"/>
+    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
     <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <px:message message="$1" name="nordic-version-message">
+    <px:message message="$1" name="epub3-validate.nordic-version-message">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
 
-    <px:fileset-create cx:depends-on="nordic-version-message">
+    <px:fileset-create cx:depends-on="epub3-validate.nordic-version-message" name="epub3-validate.create-epub-fileset">
         <p:with-option name="base" select="replace($epub,'[^/]+$','')"/>
     </px:fileset-create>
-    <pxi:fileset-add-entry media-type="application/epub+zip">
+    <pxi:fileset-add-entry media-type="application/epub+zip" name="epub3-validate.add-epub-to-fileset">
         <p:with-option name="href" select="replace($epub,'^.*/([^/]*)$','$1')"/>
     </pxi:fileset-add-entry>
 
-    <px:nordic-epub3-validate.step name="validate.nordic">
+    <px:nordic-epub3-validate.step name="epub3-validate.validate.nordic">
         <p:with-option name="temp-dir" select="concat($temp-dir,'validate/')"/>
     </px:nordic-epub3-validate.step>
-    <pxi:fileset-load media-types="application/xhtml+xml">
+    <pxi:fileset-load media-types="application/xhtml+xml" name="epub3-validate.load-epub-xhtml">
         <p:input port="in-memory">
-            <p:pipe port="in-memory.out" step="validate.nordic"/>
+            <p:pipe port="in-memory.out" step="epub3-validate.validate.nordic"/>
         </p:input>
     </pxi:fileset-load>
-    <p:xslt>
+    <p:xslt name="epub3-validate.info-report">
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -74,39 +76,30 @@
             <p:document href="../xslt/info-report.xsl"/>
         </p:input>
     </p:xslt>
-    <p:identity name="report.nordic"/>
+    <p:identity name="epub3-validate.report.nordic"/>
     <p:sink/>
 
-    <px:nordic-format-html-report.step name="html">
+    <px:nordic-format-html-report name="epub3-validate.html">
         <p:input port="source">
-            <p:pipe port="report.out" step="validate.nordic"/>
-            <p:pipe port="result" step="report.nordic"/>
+            <p:pipe port="report.out" step="epub3-validate.validate.nordic"/>
+            <p:pipe port="result" step="epub3-validate.report.nordic"/>
         </p:input>
-    </px:nordic-format-html-report.step>
-    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="store-report">
+    </px:nordic-format-html-report>
+    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="epub3-validate.store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;">
+    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="epub3-validate.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
-            <p:pipe port="result" step="store-report"/>
+            <p:pipe port="result" step="epub3-validate.store-report"/>
         </p:with-option>
-    </px:set-doctype>
+    </pxi:set-doctype>
     <p:sink/>
 
-    <p:group name="status">
-        <p:output port="result"/>
-        <p:for-each>
-            <p:iteration-source select="/d:document-validation-report/d:document-info/d:error-count">
-                <p:pipe port="report.out" step="validate.nordic"/>
-            </p:iteration-source>
-            <p:identity/>
-        </p:for-each>
-        <p:wrap-sequence wrapper="d:validation-status"/>
-        <p:add-attribute attribute-name="result" match="/*">
-            <p:with-option name="attribute-value" select="if (sum(/*/*/number(.))&gt;0) then 'error' else 'ok'"/>
-        </p:add-attribute>
-        <p:delete match="/*/node()"/>
-    </p:group>
+    <px:nordic-validation-status name="epub3-validate.status">
+        <p:input port="source">
+            <p:pipe port="report.out" step="epub3-validate.validate.nordic"/>
+        </p:input>
+    </px:nordic-validation-status>
     <p:sink/>
 
 </p:declare-step>

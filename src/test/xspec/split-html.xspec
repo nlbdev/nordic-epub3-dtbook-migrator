@@ -2,8 +2,6 @@
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/split-html.xsl" xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"
     xslt-version="2.0">
 
-    <x:param name="output-dir" select="'file:/tmp/'"/>
-
     <x:scenario label="when processing a HTML document with all kinds of sections">
         <x:context>
             <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/content.xhtml">

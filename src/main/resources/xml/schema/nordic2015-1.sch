@@ -6,6 +6,7 @@
     <ns prefix="html" uri="http://www.w3.org/1999/xhtml"/>
     <ns prefix="epub" uri="http://www.idpf.org/2007/ops"/>
     <ns prefix="nordic" uri="http://www.mtm.se/epub/"/>
+    <ns prefix="mathml" uri="http://www.w3.org/1998/Math/MathML"/>
 
     <!-- Rule 7: No <ul>, <ol> or <dl> inside <p> -->
     <pattern id="epub_nordic_7">
@@ -99,9 +100,25 @@
 
     <!-- Rule 14:  Don't allow <h x+1> in section w/depth x+1 unless <h x> in section w/depth x is present -->
     <pattern id="epub_nordic_14">
-        <rule context="html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section|html:article]">
+        <rule
+            context="html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section[not(tokenize(@epub:type,'\t+')=('z3998:poem','z3998:verse'))]|html:article]">
             <assert test="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">[nordic14] sectioning element with no headline (h1-h6) when sub-section is present (is only allowed for sectioning
-                element with epub:type="cover"): <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+                element with epub:type="cover" or when sub-section is a poem): <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <pattern id="epub_nordic_15">
+        <!-- see also nordic2015-1.opf-and-html.sch for multi-document version -->
+        <rule context="html:body[html:header]/html:*[self::html:section or self::html:article]">
+            <report test="tokenize(@epub:type,'\s+')[.='cover'] and preceding-sibling::html:*[self::html:section or self::html:article]">[nordic15] Cover must not be preceded by any other top-level
+                sections (<value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>)</report>
+            <report test="tokenize(@epub:type,'\s+')[.='frontmatter'] and preceding-sibling::html:*[self::html:section or self::html:article]/tokenize(@epub:type,'\s') = ('bodymatter', 'backmatter')"
+                >[nordic15] Frontmatter must not be preceded by bodymatter or rearmatter (<value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>)</report>
+            <report test="tokenize(@epub:type,'\s+')[.='frontmatter'] and preceding-sibling::html:*[self::html:section or self::html:article]/tokenize(@epub:type,'\s') = ('backmatter')">[nordic15]
+                Bodymatter must not be preceded by backmatter (<value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"
+                />)</report>
         </rule>
     </pattern>
 
@@ -150,21 +167,41 @@
         </rule>
     </pattern>
 
-    <!-- Rule 26: Each note must have a noteref -->
-    <pattern id="epub_nordic_26">
-        <rule context="html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote')][ancestor::html:body[html:header]]">
+    <!-- Rule 26a: Each note must have a noteref -->
+    <pattern id="epub_nordic_26_a">
+        <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')=('note','rearnote','footnote')]">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
-            <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref'][substring-after(@href, '#')=current()/@id])&gt;=1">[nordic26] Each note must have at least one &lt;a epub:type="noteref"
+            <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref'][substring-after(@href, '#')=current()/@id])&gt;=1">[nordic26a] Each note must have at least one &lt;a epub:type="noteref"
                 ...&gt; referencing it: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
-    <!-- Rule 27: Each annotation must have an annoref -->
-    <pattern id="epub_nordic_27">
-        <rule context="html:*[tokenize(@epub:type,' ')='annotation'][ancestor::html:body[html:header]]">
+    <!-- Rule 26b: Each noteref must reference a note -->
+    <pattern id="epub_nordic_26_b">
+        <rule context="html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='noteref']">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
-            <assert test="count(//html:a[tokenize(@epub:type,' ')='annoref'][substring-after(@href, '#')=current()/@id])&gt;=1">[nordic27] Each annotation must have at least one &lt;a
+            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic26b] The note reference with the
+                href "<value-of select="@href"/>" attribute must resolve to a note, rearnote or footnote in the publication: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!-- Rule 27a: Each annotation must have an annoref -->
+    <pattern id="epub_nordic_27_a">
+        <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,' ')='annotation']">
+            <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
+            <assert test="count(//html:a[tokenize(@epub:type,' ')='annoref'][substring-after(@href, '#')=current()/@id])&gt;=1">[nordic27a] Each annotation must have at least one &lt;a
                 epub:type="annoref" ...&gt; referencing it: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!-- Rule 27b: Each annoref must reference a annotation -->
+    <pattern id="epub_nordic_27_b">
+        <rule context="html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='annoref']">
+            <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
+            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('annotation') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic26b] The annotation with the href "<value-of
+                    select="@href"/>" must resolve to a annotation in the publication: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
@@ -326,10 +363,13 @@
         <rule context="html:figure[tokenize(@class,'\s+')='image']">
             <assert test="html:img">[nordic102] There must be an img element in every figure with class="image": <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <report test="parent::html:figure[tokenize(@class,'\s+')='image']">[nordic102] Wrapping &lt;figure class="image"&gt; inside another &lt;figure class="image"&gt; is not allowed. Did you
+                mean to use "image-series" as a class on the outer figure? <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
     </pattern>
 
-    <!-- Rule 103: No img without imggroup -->
+    <!-- Rule 103: All img elements with non-empty alt text must be wrapped in a image-series -->
     <pattern id="epub_nordic_103">
         <rule context="html:img[string-length(@alt)!=0]">
             <assert test="parent::html:figure">[nordic103] There must be a figure element wrapping every img with a non-empty alt text: <value-of
@@ -545,17 +585,17 @@
     <!-- Rule 202: frontmatter -->
     <pattern id="epub_nordic_202">
         <rule context="html:*[tokenize(@epub:type,' ')='frontmatter']">
-            <!-- types can be titlepage, colophon, toc, foreword, introduction or blank -->
-            <assert
-                test="count(tokenize(@epub:type,'\s+')) = 1 or tokenize(@epub:type,'\s+')=('titlepage','chapter','abstract','foreword','preface','prologue','introduction','preamble','conclusion','epilogue',
-                'afterword','epigraph','toc','toc-brief','landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','glossary','bibliography','titlepage','halftitlepage',
-                'copyright-page','seriespage','acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','answers','assessments','qna',
-                'practices','footnotes','rearnotes')"
-                >[nordic202] '<value-of select="(tokenize(@epub:type,'\s+')[not(.='frontmatter')],'(missing type)')[1]"/>' is not an allowed type in frontmatter. On elements with the epub:type "frontmatter", you can
-                either leave the type blank (and just use 'frontmatter' as the type in the filename), or you can use one of the following types: 'titlepage', 'chapter', 'abstract', 'foreword',
-                'preface', 'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc', 'toc-brief', 'landmarks', 'loa', 'loi', 'lot', 'lov', 'appendix',
-                'colophon', 'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage', 'copyright-page', 'seriespage', 'acknowledgments', 'imprint', 'imprimatur',
-                'contributors', 'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers', 'assessments', 'qna', 'practices', 'footnotes' or 'rearnotes'.</assert>
+            <let name="always-allowed-types"
+                value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
+                'z3998:biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue',
+                'errata','z3998:filmography','footnotes','foreword','glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
+                'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',
+                'z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
+            <let name="allowed-types" value="($always-allowed-types, 'titlepage')"/>
+            <assert test="count(tokenize(@epub:type,'\s+')) = 1 or tokenize(@epub:type,'\s+')=$allowed-types">[nordic202] '<value-of
+                    select="(tokenize(@epub:type,'\s+')[not(.='frontmatter')],'(missing type)')[1]"/>' is not an allowed type in frontmatter. On elements with the epub:type "frontmatter", you can
+                either leave the type blank<value-of select="if (ancestor::html:body[not(html:header)]) then '(and just use ''frontmatter'' as the type in the filename)' else ''"/>, or you can use one
+                of the following types: <value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<value-of select="$allowed-types[last()]"/>'.</assert>
         </rule>
     </pattern>
 
@@ -616,48 +656,49 @@
     <!-- Rule 208: bodymatter -->
     <pattern id="epub_nordic_208">
         <rule context="html:*[tokenize(@epub:type,' ')='bodymatter']">
-            <assert
-                test="tokenize(@epub:type,'\s+')=('part','chapter','abstract','foreword','preface','prologue','introduction','preamble','conclusion','epilogue','afterword','epigraph','toc',
-                'toc-brief','landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','glossary','bibliography','titlepage','halftitlepage','copyright-page',
-                'seriespage','acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','answers','assessments','qna',
-                'practices','footnotes','rearnotes')"
-                >[nordic208] '<value-of select="(tokenize(@epub:type,'\s+')[not(.='bodymatter')],'(missing type)')[1]"/>' is not an allowed type in bodymatter. Elements with the type "bodymatter" must also have one of
-                the types 'part', 'chapter', 'abstract', 'foreword', 'preface', 'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc', 'toc-brief',
-                'landmarks', 'loa', 'loi', 'lot', 'lov', 'appendix', 'colophon', 'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage', 'copyright-page',
-                'seriespage', 'acknowledgments', 'imprint', 'imprimatur', 'contributors', 'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers', 'assessments', 'qna',
-                'practices', 'footnotes' or 'rearnotes'.</assert>
+            <let name="always-allowed-types"
+                value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
+                'z3998:biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue',
+                'errata','z3998:filmography','footnotes','foreword','glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
+                'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',
+                'z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
+            <let name="allowed-types" value="($always-allowed-types, 'part')"/>
+            <assert test="tokenize(@epub:type,'\s+')=$allowed-types">[nordic208] '<value-of select="(tokenize(@epub:type,'\s+')[not(.='bodymatter')],'(missing type)')[1]"/>' is not an allowed type in
+                bodymatter. Elements with the type "bodymatter" must also have one of the types <value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<value-of
+                    select="$allowed-types[last()]"/>'.</assert>
         </rule>
     </pattern>
 
     <!-- Rule 211: bodymatter.part -->
     <pattern id="epub_nordic_211">
         <rule context="html:*[self::html:section or self::html:article][parent::html:*[tokenize(@epub:type,' ')=('part','volume')]]">
-            <assert
-                test="tokenize(@epub:type,'\s+')=('chapter','abstract','foreword','preface','prologue','introduction','preamble','conclusion','epilogue','afterword','epigraph','toc','toc-brief',
-                'landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','glossary','bibliography','titlepage','halftitlepage','copyright-page','seriespage',
-                'acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','answers','assessments','qna','practices',
-                'footnotes','rearnotes')"
-                >[nordic211] '<value-of select="(tokenize(@epub:type,'\s+')[not(.=('part','volume'))],'(missing type)')[1]"/>' is not an allowed type in a part. Sections inside a part must also have one of the types
-                'chapter', 'abstract', 'foreword', 'preface', 'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc', 'toc-brief', 'landmarks', 'loa', 'loi',
-                'lot', 'lov', 'appendix', 'colophon', 'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage', 'copyright-page', 'seriespage', 'acknowledgments',
-                'imprint', 'imprimatur', 'contributors', 'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers', 'assessments', 'qna', 'practices', 'footnotes' or
-                'rearnotes'.</assert>
+            <let name="always-allowed-types"
+                value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
+                'z3998:biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue',
+                'errata','z3998:filmography','footnotes','foreword','glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
+                'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',
+                'z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
+            <let name="allowed-types" value="($always-allowed-types)"/>
+            <assert test="tokenize(@epub:type,'\s+')=$allowed-types">[nordic211] '<value-of select="(tokenize(@epub:type,'\s+')[not(.=('part','volume'))],'(missing type)')[1]"/>' is not an allowed
+                type in a part. Sections inside a part must also have one of the types <value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<value-of
+                    select="$allowed-types[last()]"/>'.</assert>
         </rule>
     </pattern>
 
-    <!-- Rule 215: rearmatter -->
+    <!-- Rule 215: backmatter -->
     <pattern id="epub_nordic_215">
         <rule context="html:*[tokenize(@epub:type,'\s+')='backmatter']">
-            <assert
-                test="count(tokenize(@epub:type,'\s+')) = 1 or tokenize(@epub:type,'\s+')=('chapter','abstract','foreword','preface','prologue','introduction','preamble','conclusion','epilogue','afterword',
-                'epigraph','toc','toc-brief','landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','glossary','bibliography','titlepage','halftitlepage','copyright-page',
-                'seriespage','acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','answers','assessments','qna','practices',
-                'footnotes','rearnotes')"
-                >[nordic215] '<value-of select="(tokenize(@epub:type,'\s+')[not(.='backmatter')],'(missing type)')[1]"/>' is not an allowed type in backmatter. On elements with the epub:type "backmatter", you can
-                either leave the type blank (and just use 'backmatter' as the type in the filename), or you can use one of the following types: 'chapter', 'abstract', 'foreword', 'preface',
-                'prologue', 'introduction', 'preamble', 'conclusion', 'epilogue', 'afterword', 'epigraph', 'toc', 'toc-brief', 'landmarks', 'loa', 'loi', 'lot', 'lov', 'appendix', 'colophon',
-                'credits', 'keywords', 'index', 'glossary', 'bibliography', 'titlepage', 'halftitlepage', 'copyright-page', 'seriespage', 'acknowledgments', 'imprint', 'imprimatur', 'contributors',
-                'other-credits', 'errata', 'dedication', 'revision-history', 'case-study', 'answers', 'assessments', 'qna', 'practices', 'footnotes' or 'rearnotes'.</assert>
+            <let name="always-allowed-types"
+                value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
+                'z3998:biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue',
+                'errata','z3998:filmography','footnotes','foreword','glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
+                'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',
+                'z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
+            <let name="allowed-types" value="($always-allowed-types)"/>
+            <assert test="count(tokenize(@epub:type,'\s+')) = 1 or tokenize(@epub:type,'\s+')=$allowed-types">[nordic215] '<value-of
+                    select="(tokenize(@epub:type,'\s+')[not(.='backmatter')],'(missing type)')[1]"/>' is not an allowed type in backmatter. On elements with the epub:type "backmatter", you can either
+                leave the type blank<value-of select="if (ancestor::html:body[not(html:header)]) then '(and just use ''backmatter'' as the type in the filename)' else ''"/>, or you can use one of the
+                following types: <value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<value-of select="$allowed-types[last()]"/>'.</assert>
         </rule>
     </pattern>
 
@@ -887,11 +928,232 @@
 
     <pattern id="epub_nordic_269">
         <rule context="html:body[not(html:header)]">
-            <let name="filename-regex" value="'^.*/[A-Za-z0-9_-]+-\d+-([a-z-]+?)(-\d+)?\.xhtml$'"/>
+            <let name="filename-regex" value="'^.*/[A-Za-z0-9_-]+-\d+-([a-z-]+)(-\d+)?\.xhtml$'"/>
             <let name="base-uri-type" value="if (matches(base-uri(.), $filename-regex)) then replace(base-uri(.), $filename-regex, '$1') else ()"/>
-            <assert test="not(matches(base-uri(.), $filename-regex)) or tokenize(@epub:type,'\s+') = $base-uri-type">[nordic269] The type used in the filename (<value-of select="$base-uri-type"/>)
-                must be present on the body element: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert test="not(matches(base-uri(.), $filename-regex)) or (for $t in tokenize(@epub:type,'\s+') return tokenize($t,':')[last()]) = $base-uri-type">[nordic269] The type used in the
+                filename (<value-of select="$base-uri-type"/>) must be present on the body element: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
+
+    <pattern id="epub_nordic_270">
+        <rule context="html:p[tokenize(@epub:type,'\t+')='bridgehead']">
+            <assert test="parent::html:body | parent::html:section | parent::html:article | parent::html:div">[nordic270] Bridgehead is only allowed as a child of <value-of
+                    select="if (ancestor::html:body[not(html:header)]) then 'body, ' else ' '"/>section, article and div: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+
+    <!-- Imported from Pipeline 1 DTBook validator and adapted to EPUB3 -->
+    <pattern id="epub_nordic_272">
+        <rule context="html:a[tokenize(@epub:type,'\s+')='annoref']">
+            <assert test="contains(@href, '#')">[nordic272a] Note reference href attribute does not contain a fragment identifier: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <report test="ancestor::html:body[html:header] and contains(@href, '#') and substring-after(@href, '#')=//html:*[tokenize(@epub:type,'\s+')=('annotation')]/@id">[nordic272b] Annotation
+                reference href attribute does not resolve to a note, rearnote or footnote in the publication: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>
+
+    <!-- Imported from Pipeline 1 DTBook validator and adapted to EPUB3 -->
+    <pattern id="epub_nordic_273">
+        <rule context="html:a[starts-with(@href, '#')]">
+            <assert test="count(//html:*[@id=substring(current()/@href, 2)])=1">[nordic273] Internal link ("<value-of select="@href"/>") does not resolve: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_274">
+        <rule context="html:th[@headers] | html:td[@headers]">
+            <assert
+                test="count(
+                ancestor::html:table//html:th/@id[contains( concat(' ',current()/@headers,' '), concat(' ',normalize-space(),' ') )]
+                ) = 
+                string-length(normalize-space(@headers)) - string-length(translate(normalize-space(@headers), ' ','')) + 1
+                "
+                >[nordic274] Not all the tokens in the headers attribute match the id attributes of 'th' elements in this or a parent table: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_275">
+        <rule context="html:img[@longdesc and ancestor::html:body[html:header]]">
+            <assert test="substring-after(normalize-space(@longdesc),'#') = //@id">[nordic275] The URL in the img longdesc attribute does not reference any element in the publication: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_276">
+        <!-- see also nordic_opf_and_html_276 in nordic2015-1.opf-and-html.sch -->
+        <rule context="html:a">
+            <report test="@accesskey and string-length(@accesskey)!=1">[nordic276] The accesskey attribute value is not 1 character long: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+            <report test="@tabindex and string-length(translate(@width,'0123456789',''))!=0">[nordic276] The tabindex attribute value is not expressed in numbers: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_277">
+        <rule context="html:img">
+            <assert
+                test="not(@width) or 
+                string-length(translate(@width,'0123456789',''))=0 or
+                (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)>=2)"
+                >[nordic277] The image width is not expressed in pixels or percentage: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert
+                test="not(@height) or 
+                string-length(translate(@height,'0123456789',''))=0 or
+                (contains(@height,'%') and substring-after(@height,'%')='' and translate(@height,'%0123456789','')='' and string-length(@height)>=2)"
+                >[nordic277] The image height is not expressed in pixels or percentage: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_278">
+        <rule context="html:table">
+            <assert
+                test="not(@width) or 
+                string-length(translate(@width,'0123456789',''))=0 or
+                (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)>=2)"
+                >[nordic278] Table width is not expressed in pixels or percentage: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert
+                test="not(@cellspacing) or 
+                string-length(translate(@cellspacing,'0123456789',''))=0 or
+                (contains(@cellspacing,'%') and substring-after(@cellspacing,'%')='' and translate(@cellspacing,'%0123456789','')='' and string-length(@cellspacing)>=2)"
+                >[nordic278] Table cellspacing is not expressed in pixels or percentage: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert
+                test="not(@cellpadding) or 
+                string-length(translate(@cellpadding,'0123456789',''))=0 or
+                (contains(@cellpadding,'%') and substring-after(@cellpadding,'%')='' and translate(@cellpadding,'%0123456789','')='' and string-length(@cellpadding)>=2)"
+                >[nordic278] Table cellpadding is not expressed in pixels or percentage: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_279a">
+        <rule context="html:ul | html:ol[matches(@style,'list-style-type:\s*none;')]">
+            <report test="@start">[nordic279a] The start attribute occurs in a non-numbered list: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>
+
+    <pattern id="epub_nordic_279b">
+        <rule context="html:ol[@start]">
+            <report test="@start='' or string-length(translate(@start,'0123456789',''))!=0">[nordic279b] The start attribute is not a non negative number: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_280">
+        <rule context="html:meta">
+            <report
+                test="starts-with(@name, 'dc:') and not(@name='dc:title' or @name='dc:subject' or @name='dc:description' or
+                @name='dc:type' or @name='dc:source' or @name='dc:relation' or 
+                @name='dc:coverage' or @name='dc:creator' or @name='dc:publisher' or 
+                @name='dc:contributor' or @name='dc:rights' or @name='dc:date' or 
+                @name='dc:format' or @name='dc:identifier' or @name='dc:language')"
+                >[nordic280] Unrecognized Dublin Core metadata name: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"
+                /></report>
+            <report test="starts-with(@name, 'DC:') or starts-with(@name, 'Dc:') or starts-with(@name, 'dC:')">[nordic280] Unrecognized Dublin Core metadata prefix: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_281">
+        <rule context="html:col | html:colgroup">
+            <report test="@span and (translate(@span,'0123456789','')!='' or starts-with(@span,'0'))">[nordic281] span attribute is not a positive integer: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>
+
+    <!--
+        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
+        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
+    -->
+    <pattern id="epub_nordic_282">
+        <rule context="html:td | html:th">
+            <report test="@rowspan and (translate(@rowspan,'0123456789','')!='' or starts-with(@rowspan,'0'))">[nordic282] The rowspan attribute value is not a positive integer: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+            <report test="@colspan and (translate(@colspan,'0123456789','')!='' or starts-with(@colspan,'0'))">[nordic282] The colspan attribute value is not a positive integer: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+            <report test="@rowspan and number(@rowspan) &gt; count(parent::html:tr/following-sibling::html:tr | parent::html:tr/parent::html:*/following-sibling::html:*/html:tr)+1">[nordic282] The
+                rowspan attribute value is larger than the number of rows left in the table: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>
+
+    <!-- 
+        The math element has optional attributes alttext and altimg. To be valid with the MathML in DAISY spec, 
+        the alttext and altimg attributes must be part of the math element.
+    -->
+    <pattern id="epub_nordic_283">
+        <rule context="mathml:math">
+            <assert test="@alttext">[nordic283] alttext attribute must be present: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert test="not(empty(@alttext))">[nordic283] alttext attribute must be non-empty: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+
+            <assert test="@altimg">[nordic283] altimg attribute must be present: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert test="not(empty(@altimg))">[nordic283] altimg attribute must be non-empty: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
+
+    <!-- TODO: if we allow MathML in EPUB; look at whether or not we can import more of the rules declared in and referenced from dtbook.mathml.sch in the dtbook-validator script from the main DP2 distribution -->
+
+    <!--<pattern id="epub_nordic_284">
+        <rule context="html:p[tokenize(@class,'\s+') = ('isbn', 'issn')]">
+            <let name="source-element" value="ancestor::html:html/html:head/html:meta[@name='dc:source' and matches(@content,'urn:is[bs]n:[\d-]+X?')]/@content"/>
+            <let name="source-type" value="substring-before(substring-after($source-element,':'),':')"/>
+            <assert test="matches(string-join(.//text(),''), '^IS[SB]N:?\s*[\d –-]+X?')">[nordic284] Paragraphs with the class "<value-of
+                    select="string-join(tokenize(@class,'\s+')[.=('isbn','issn')],' ')"/>" must start with "<value-of select="upper-case(string-join(tokenize(@class,'\s+')[.=('isbn','issn')][1],' '))"
+                />", followed by an optional colon (:), then any number of spaces, then a ISBN value containing only digits (0-9), dashes (-) and spaces, and optionally ending with a "X" as some ISBNs
+                do. An example is <![CDATA["ISBN: 0-8044-2957-X"]]>. The value in the paragraph was "<value-of select="string-join(.//text(),'')"/>": <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert test="not($source-element) or replace($source-element,'[^\dX]','') = replace(replace(string-join(.//text(),''),'^IS[SB]N:?\s*([\d –-]+X?).*?$','$1'),'[^\dX]','')">[nordic284] The
+                    <value-of select="upper-case($source-type)"/><![CDATA[ ]]> in a paragraph with the class "<value-of select="string-join(tokenize(@class,'\s+')[.=('isbn','issn')],' ')"/>" must be
+                the same as the one in the HTML metadata. The HTML head contains a <value-of select="upper-case($source-type)"/> in a &lt;meta name="dc:source"&gt; element with the content attribute
+                    "<value-of select="$source-element"/>", so the paragraph should have a value of for instance "<![CDATA[ISBN: ]]><value-of
+                    select="substring-after(substring-after($source-element,':'),':')"/>": <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>-->
 
 </schema>
