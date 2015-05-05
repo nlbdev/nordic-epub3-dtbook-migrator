@@ -275,15 +275,8 @@
     <!-- Rule 50: image alt attribute -->
     <pattern id="epub_nordic_50_a">
         <rule context="html:img[parent::html:figure/tokenize(@class,'\s+')='image']">
-            <report test="string(@alt)!='image'">[nordic50a] an image inside a figure with class='image' must have attribute alt="image": <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
-        </rule>
-    </pattern>
-
-    <pattern id="epub_nordic_50_b">
-        <rule context="html:img[not(parent::html:figure/tokenize(@class,'\s+')='image')]">
-            <report test="string(@alt)!=''">[nordic50b] an image which is not inside a figure with class='image' is irrelevant or redundant with regards to the understanding of the book, so the alt
-                attribute must be present but empty: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+            <assert test="@alt and @alt!=''">[nordic50a] an image inside a figure with class='image' must have a non-empty alt attribute: <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
@@ -366,14 +359,6 @@
             <report test="parent::html:figure[tokenize(@class,'\s+')='image']">[nordic102] Wrapping &lt;figure class="image"&gt; inside another &lt;figure class="image"&gt; is not allowed. Did you
                 mean to use "image-series" as a class on the outer figure? <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
-        </rule>
-    </pattern>
-
-    <!-- Rule 103: All img elements with non-empty alt text must be wrapped in a image-series -->
-    <pattern id="epub_nordic_103">
-        <rule context="html:img[string-length(@alt)!=0]">
-            <assert test="parent::html:figure">[nordic103] There must be a figure element wrapping every img with a non-empty alt text: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 

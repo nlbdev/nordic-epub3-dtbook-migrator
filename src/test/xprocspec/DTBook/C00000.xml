@@ -121,6 +121,64 @@
                         <span id="dtb5-test">Valentin Haüy</span>
                     </caption>
                 </imggroup>
+                <div id="image-tests">
+                    <div>
+                        <!-- image in block context - with placeholder alt text: -->
+                        <img id="image-tests-img-1" src="valentin.jpg" alt="image"/>
+                    </div>
+                    <div>
+                        <!-- image in inline context - with placeholder alt text: -->
+                        <p>
+                            <img id="image-tests-img-2" src="valentin.jpg" alt="image"/>
+                        </p>
+                    </div>
+                    <div>
+                        <!-- image in figure - with placeholder alt text: -->
+                        <imggroup id="image-tests-figure-1">
+                            <img id="image-tests-img-3" src="valentin.jpg" alt="image"/>
+                        </imggroup>
+                    </div>
+                    <div>
+                        <!-- image in image series figure - with placeholder alt text: -->
+                        <imggroup id="image-tests-figure-2">
+                            <img id="image-tests-img-4" src="valentin.jpg" alt="image"/>
+                            <img id="image-tests-img-5" src="valentin.jpg" alt="image"/>
+                        </imggroup>
+                    </div>
+                    <div>
+                        <!-- image in block context - decorative: -->
+                        <img id="image-tests-img-6" src="valentin.jpg" alt=""/>
+                    </div>
+                    <div>
+                        <!-- image in inline context - decorative: -->
+                        <p>
+                            <img id="image-tests-img-7" src="valentin.jpg" alt=""/>
+                        </p>
+                    </div>
+                    <div>
+                        <!-- image in block context - with custom alt text: -->
+                        <img id="image-tests-img-11" src="valentin.jpg" alt="中国文字"/>
+                    </div>
+                    <div>
+                        <!-- image in inline context - with custom alt text: -->
+                        <p>
+                            <img id="image-tests-img-12" src="valentin.jpg" alt="中国文字"/>
+                        </p>
+                    </div>
+                    <div>
+                        <!-- image in figure - with custom alt text: -->
+                        <imggroup id="image-tests-figure-8">
+                            <img id="image-tests-img-13" src="valentin.jpg" alt="中国文字"/>
+                        </imggroup>
+                    </div>
+                    <div>
+                        <!-- image in image series figure - with custom alt text: -->
+                        <imggroup id="image-tests-figure-9">
+                            <img id="image-tests-img-14" src="valentin.jpg" alt="中国文字"/>
+                            <img id="image-tests-img-15" src="valentin.jpg" alt="中国文字"/>
+                        </imggroup>
+                    </div>
+                </div>
                 <prodnote id="dtb6" render="optional">
                     <p>
                         <span id="dtb7">This version is a for-test-use-only modification of the published original.</span>

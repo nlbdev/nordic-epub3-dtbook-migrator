@@ -2427,7 +2427,7 @@
                     <html:img src="images/img.jpg" lang="en" alt="image"/>
                 </html:div>
             </x:context>
-            <x:expect label="the resulting element should be a img">
+            <x:expect label="the closest ancestor or self xml:lang should be used">
                 <dtbook:div xml:lang="en">
                     <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
                     <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
@@ -3199,6 +3199,167 @@
                     </dtbook:li>
                 </dtbook:list>
             </dtbook:note>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="allowing inline images and custom alt attributes - issue 313">
+        <x:context>
+            <html:div id="image-tests">
+                <html:div>
+                    <!-- image in block context - with placeholder alt text: -->
+                    <html:img id="image-tests-img-1" src="images/valentin.jpg" alt="image"/>
+                </html:div>
+                <html:div>
+                    <!-- image in inline context - with placeholder alt text: -->
+                    <html:p>
+                        <html:img id="image-tests-img-2" src="images/valentin.jpg" alt="image"/>
+                    </html:p>
+                </html:div>
+                <html:div>
+                    <!-- image in figure - with placeholder alt text: -->
+                    <html:figure id="image-tests-figure-1" class="image">
+                        <html:img id="image-tests-img-3" src="images/valentin.jpg" alt="image"/>
+                    </html:figure>
+                </html:div>
+                <html:div>
+                    <!-- image in image series figure - with placeholder alt text: -->
+                    <html:figure id="image-tests-figure-2" class="image-series">
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-4" src="images/valentin.jpg" alt="image"/>
+                        </html:figure>
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-5" src="images/valentin.jpg" alt="image"/>
+                        </html:figure>
+                    </html:figure>
+                </html:div>
+                <html:div>
+                    <!-- image in block context - decorative: -->
+                    <html:img id="image-tests-img-6" src="images/valentin.jpg" alt=""/>
+                </html:div>
+                <html:div>
+                    <!-- image in inline context - decorative: -->
+                    <html:p>
+                        <html:img id="image-tests-img-7" src="images/valentin.jpg" alt=""/>
+                    </html:p>
+                </html:div>
+                <html:div>
+                    <!-- image in figure - decorative (should not be allowed/valid): -->
+                    <html:figure id="image-tests-figure-5" class="image">
+                        <html:img id="image-tests-img-8" src="images/valentin.jpg" alt=""/>
+                    </html:figure>
+                </html:div>
+                <html:div>
+                    <!-- image in image series figure - decorative (should not be allowed/valid): -->
+                    <html:figure id="image-tests-figure-6" class="image-series">
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-9" src="images/valentin.jpg" alt=""/>
+                        </html:figure>
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-10" src="images/valentin.jpg" alt=""/>
+                        </html:figure>
+                    </html:figure>
+                </html:div>
+                <html:div>
+                    <!-- image in block context - with custom alt text: -->
+                    <html:img id="image-tests-img-11" src="images/valentin.jpg" alt="中国文字"/>
+                </html:div>
+                <html:div>
+                    <!-- image in inline context - with custom alt text: -->
+                    <html:p>
+                        <html:img id="image-tests-img-12" src="images/valentin.jpg" alt="中国文字"/>
+                    </html:p>
+                </html:div>
+                <html:div>
+                    <!-- image in figure - with custom alt text: -->
+                    <html:figure id="image-tests-figure-8" class="image">
+                        <html:img id="image-tests-img-13" src="images/valentin.jpg" alt="中国文字"/>
+                    </html:figure>
+                </html:div>
+                <html:div>
+                    <!-- image in image series figure - with custom alt text: -->
+                    <html:figure id="image-tests-figure-9" class="image-series">
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-14" src="images/valentin.jpg" alt="中国文字"/>
+                        </html:figure>
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-15" src="images/valentin.jpg" alt="中国文字"/>
+                        </html:figure>
+                    </html:figure>
+                </html:div>
+            </html:div>
+        </x:context>
+        <x:expect label="inline images and custom alt texts should be allowed">
+            <dtbook:div id="image-tests">
+                <dtbook:div>
+                    <!-- image in block context - with placeholder alt text: -->
+                    <dtbook:img id="image-tests-img-1" src="valentin.jpg" alt="image"/>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in inline context - with placeholder alt text: -->
+                    <dtbook:p>
+                        <dtbook:img id="image-tests-img-2" src="valentin.jpg" alt="image"/>
+                    </dtbook:p>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in figure - with placeholder alt text: -->
+                    <dtbook:imggroup id="image-tests-figure-1">
+                        <dtbook:img id="image-tests-img-3" src="valentin.jpg" alt="image"/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in image series figure - with placeholder alt text: -->
+                    <dtbook:imggroup id="image-tests-figure-2">
+                        <dtbook:img id="image-tests-img-4" src="valentin.jpg" alt="image"/>
+                        <dtbook:img id="image-tests-img-5" src="valentin.jpg" alt="image"/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in block context - decorative: -->
+                    <dtbook:img id="image-tests-img-6" src="valentin.jpg" alt=""/>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in inline context - decorative: -->
+                    <dtbook:p>
+                        <dtbook:img id="image-tests-img-7" src="valentin.jpg" alt=""/>
+                    </dtbook:p>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in figure - decorative (should not be allowed/valid): -->
+                    <dtbook:imggroup id="image-tests-figure-5">
+                        <dtbook:img id="image-tests-img-8" src="valentin.jpg" alt=""/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in image series figure - decorative (should not be allowed/valid): -->
+                    <dtbook:imggroup id="image-tests-figure-6">
+                        <dtbook:img id="image-tests-img-9" src="valentin.jpg" alt=""/>
+                        <dtbook:img id="image-tests-img-10" src="valentin.jpg" alt=""/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in block context - with custom alt text: -->
+                    <dtbook:img id="image-tests-img-11" src="valentin.jpg" alt="中国文字"/>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in inline context - with custom alt text: -->
+                    <dtbook:p>
+                        <dtbook:img id="image-tests-img-12" src="valentin.jpg" alt="中国文字"/>
+                    </dtbook:p>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in figure - with custom alt text: -->
+                    <dtbook:imggroup id="image-tests-figure-8">
+                        <dtbook:img id="image-tests-img-13" src="valentin.jpg" alt="中国文字"/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in image series figure - with custom alt text: -->
+                    <dtbook:imggroup id="image-tests-figure-9">
+                        <dtbook:img id="image-tests-img-14" src="valentin.jpg" alt="中国文字"/>
+                        <dtbook:img id="image-tests-img-15" src="valentin.jpg" alt="中国文字"/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+            </dtbook:div>
         </x:expect>
     </x:scenario>
 

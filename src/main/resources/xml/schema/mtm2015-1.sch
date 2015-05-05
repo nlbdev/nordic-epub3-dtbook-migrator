@@ -292,14 +292,6 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 50: image alt attribute -->
-    <sch:pattern id="dtbook_TPB_50">
-        <sch:rule context="dtbk:img">
-            <sch:report test="lang('sv') and @alt!='illustration'">[tpb50] an image in swedish language context must have attribute alt="illustration"</sch:report>
-            <sch:report test="lang('en') and @alt!='image'">[tpb50] an image in english language context must have attribute alt="image"</sch:report>
-        </sch:rule>
-    </sch:pattern>
-
     <!-- Rule 51 & 52: -->
     <sch:pattern id="dtbook_TPB_5152">
         <sch:rule context="dtbk:img">
@@ -393,13 +385,6 @@
     <sch:pattern id="dtbook_TPB_101">
         <sch:rule context="dtbk:imggroup">
             <sch:assert test="dtbk:img">[tpb101] There must be an img element in every imggroup</sch:assert>
-        </sch:rule>
-    </sch:pattern>
-
-    <!-- Rule 103: No img without imggroup -->
-    <sch:pattern id="dtbook_TPB_103">
-        <sch:rule context="dtbk:img">
-            <sch:assert test="parent::dtbk:imggroup">[tpb103] There must be an imggroup element wrapping every img</sch:assert>
         </sch:rule>
     </sch:pattern>
 

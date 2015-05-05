@@ -161,6 +161,7 @@
                             <p:document href="../../xslt/generate-missing-headlines.xsl"/>
                         </p:input>
                     </p:xslt>
+                    <p:delete match="html:a[tokenize(@epub:type,'\s+')='noteref']" name="html-to-epub3.step.nav.toc.delete-noterefs"/>
                     <px:epub3-nav-create-toc name="html-to-epub3.step.nav.toc.nav-create-toc">
                         <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
                             <p:pipe port="result" step="html-to-epub3.step.single-html"/>
@@ -308,6 +309,7 @@
             <p:add-attribute match="/*" attribute-name="prefix" attribute-value="nordic: http://www.mtm.se/epub/" name="html-to-epub3.step.add-opf-attribute.nordic-prefix"/>
             <p:add-attribute match="/*/opf:spine/opf:itemref[/*/opf:manifest/opf:item[matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml')]/@id = @idref]" attribute-name="linear" attribute-value="no"
                 name="html-to-epub3.step.add-opf-attribute.non-linear-spine-items"/>
+            <p:add-attribute match="opf:item[matches(@href,'(^|/)cover.jpg')]" attribute-name="properties" attribute-value="cover-image"/>
             <p:delete match="/*//*/@prefix" name="html-to-epub3.step.delete-non-root-opf-prefix-attributes"/>
             <p:xslt name="html-to-epub3.step.add-dc-namespace">
                 <p:input port="parameters">

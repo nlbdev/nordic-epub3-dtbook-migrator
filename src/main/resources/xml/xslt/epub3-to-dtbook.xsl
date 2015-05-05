@@ -3,8 +3,8 @@
     xmlns="http://www.daisy.org/z3986/2005/dtbook/" xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/" exclude-result-prefixes="#all" xmlns:epub="http://www.idpf.org/2007/ops"
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
-    <!--    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
+    <!--    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>-->
+    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>
 
     <xsl:param name="allow-links" select="false()"/>
 
@@ -904,7 +904,7 @@
         <xsl:call-template name="attrs"/>
         <xsl:attribute name="src" select="replace(@src,'^images/','')"/>
         <xsl:choose>
-            <xsl:when test="(ancestor-or-self::*/(@xml:lang|@lang))[last()]='sv'">
+            <xsl:when test="@alt='image' and (ancestor-or-self::*/(@xml:lang|@lang))[last()]='sv'">
                 <xsl:attribute name="alt" select="'illustration'"/>
             </xsl:when>
             <xsl:otherwise>

@@ -364,14 +364,14 @@
                     <p:try name="epub3-validate.step.group-xml-declaration.iterate-files.try">
                         <p:group>
                             <px:message message="trying to read xml declaration from $1">
-                                <p:with-option name="param1" select="$href"/>
+                                <p:with-option name="param1" select="replace($href,'.*/','')"/>
                             </px:message>
                             <px:read-xml-declaration name="epub3-validate.step.group-xml-declaration.iterate-files.try.group.read-xml-declaration">
                                 <p:with-option name="href" select="$href"/>
                             </px:read-xml-declaration>
                             <px:message message="xml declaration from $1 is $2">
-                                <p:with-option name="param1" select="$href"/>
-                                <p:with-option name="param2" select="/*/@xml-declaration"/>
+                                <p:with-option name="param1" select="replace($href,'.*/','')"/>
+                                <p:with-option name="param2" select="/*/replace(@xml-declaration,'[&lt;&gt;]','')"/>
                             </px:message>
                         </p:group>
                         <p:catch>
@@ -381,10 +381,11 @@
                             <p:rename match="/*" new-name="c:result" name="epub3-validate.step.group-xml-declaration.iterate-files.try.catch.rename-c-result"/>
                             <p:delete match="/*/@*[not(local-name()=('version','encoding','standalone'))]"
                                 name="epub3-validate.step.group-xml-declaration.iterate-files.try.catch.delete-irrelevant-attributes"/>
-                            <px:message message="xml declaration: |$1|$2|$3|">
-                                <p:with-option name="param1" select="/*/@version"/>
-                                <p:with-option name="param2" select="/*/@encoding"/>
-                                <p:with-option name="param3" select="/*/@standalone"/>
+                            <px:message message="xml declaration for $1 is: ?xml $2 $3 $4 ?">
+                                <p:with-option name="param1" select="replace($href,'.*/','')"/>
+                                <p:with-option name="param2" select="if (/*/@version) then concat('version=&quot;',/*/@version,'&quot;') else ''"/>
+                                <p:with-option name="param3" select="if (/*/@encoding) then concat('encoding=&quot;',/*/@encoding,'&quot;') else ''"/>
+                                <p:with-option name="param4" select="if (/*/@standalone) then concat('standalone=&quot;',/*/@standalone,'&quot;') else ''"/>
                             </px:message>
                         </p:catch>
                     </p:try>
@@ -447,16 +448,14 @@
                             <p:try name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try">
                                 <p:group>
                                     <px:message message="trying to read doctype declaration from $1">
-                                        <p:with-option name="param1" select="$href"/>
+                                        <p:with-option name="param1" select="replace($href,'.*/','')"/>
                                     </px:message>
                                     <px:read-doctype-declaration name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try.group.read-doctype-declaration">
                                         <p:with-option name="href" select="$href"/>
                                     </px:read-doctype-declaration>
-                                    <px:message message="doctype declaration from $1 is: $2 $3 $4">
-                                        <p:with-option name="param1" select="$href"/>
-                                        <p:with-option name="param2" select="/*/@name"/>
-                                        <p:with-option name="param3" select="/*/@doctype-public"/>
-                                        <p:with-option name="param4" select="/*/@doctype-system"/>
+                                    <px:message message="doctype declaration from $1 is: $2">
+                                        <p:with-option name="param1" select="replace($href,'.*/','')"/>
+                                        <p:with-option name="param2" select="replace(/*/@doctype-declaration,'[&lt;&gt;],'')"/>
                                     </px:message>
                                 </p:group>
                                 <p:catch>
@@ -466,9 +465,13 @@
                                     <p:rename match="/*" new-name="c:result" name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try.catch.rename-c-result"/>
                                     <p:delete match="/*/@*[not(local-name()=('doctype-public','doctype-system'))]"
                                         name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try.catch.delete-doctype"/>
-                                    <px:message message="doctype declaration: $1 $2">
-                                        <p:with-option name="param1" select="/*/@doctype-public"/>
-                                        <p:with-option name="param2" select="/*/@doctype-system"/>
+                                    <px:message message="doctype declaration for $1 is: !DOCTYPE $2 $3 $4">
+                                        <p:with-option name="param1" select="replace($href,'.*/','')"/>
+                                        <p:with-option name="param2"
+                                            select="if (@media-type='application/xhtml+xml') then 'html' else if (@media-type='application/x-dtbook+xml') then 'dtbook' else if (ends-with(@href,'opf')) then 'opf' else if (ends-with(@href,'ncx')) then 'ncx' else '(name?)'"/>
+                                        <p:with-option name="param3" select="if (/*/@doctype-public) then concat('PUBLIC &quot;',/*/@doctype-public,'&quot;') else ''"/>
+                                        <p:with-option name="param4"
+                                            select="if (/*/@doctype-system) then concat(if (/*/@doctype-public) then '' else 'SYSTEM ', concat('&quot;',/*/@doctype-system,'&quot;')) else ''"/>
                                     </px:message>
                                 </p:catch>
                             </p:try>
@@ -607,7 +610,6 @@
                 </p:add-attribute>
 
                 <px:message severity="DEBUG" message="Validating against nordic2015-1.nav-references.sch: $1">
-                    <p:log port="result" href="file:/tmp/nav-references.xml"/>
                     <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
                 </px:message>
                 <p:validate-with-schematron name="epub3-validate.step.group-nav-references.iterate-html.nav-references.validate.schematron" assert-valid="false">
