@@ -673,12 +673,30 @@
 
     <!-- prodnote -->
     <x:scenario label="when processing an aside element with a epub:type of z3998:production">
-        <x:context>
-            <html:aside epub:type="z3998:production"/>
-        </x:context>
-        <x:expect label="the resulting element should be a prodnote">
-            <dtbook:prodnote render="optional"/>
-        </x:expect>
+        <x:scenario label="a generic one">
+            <x:context>
+                <html:aside epub:type="z3998:production"/>
+            </x:context>
+            <x:expect label="the resulting element should be a prodnote">
+                <dtbook:prodnote render="optional"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="one that is inside one of the cover parts">
+            <x:context>
+                <html:section epub:type="cover">
+                    <html:section class="frontcover">
+                        <html:aside epub:type="z3998:production"/>
+                    </html:section>
+                </html:section>
+            </x:context>
+            <x:expect label="the resulting element should be a prodnote">
+                <dtbook:level1 class="jacketcopy">
+                    <dtbook:prodnote class="frontcover" render="optional">
+                        <dtbook:div class="render-optional production"/>
+                    </dtbook:prodnote>
+                </dtbook:level1>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.prodnote -->

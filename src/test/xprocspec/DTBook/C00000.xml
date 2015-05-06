@@ -32,6 +32,7 @@
                     <p>– Jag vill hellre lära mig att slåss, mumlar hon. Då skulle jag själv kunna slå ihjäl odjuret.</p>
                     <p>– Jag hörde nog vad du sa. Runa ruskar på huvudet. Du vet inte vad som är bäst för dig. Tänk på allt det besvär din pappa och mamma har haft. Först byggde de det här tornet av
                         koppar. Sedan har de skaffat en orm, som kan vakta din dygd. Många unga män har mist sina liv för din skull.</p>
+                    <div id="nested-prodnote-in-rearcover" class="render-optional prodnote production"><p>Prodnote inside rearcover</p></div>
                 </prodnote>
             </level1>
             <level1 id="toc-body" class="toc">

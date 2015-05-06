@@ -524,7 +524,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="dtbook:prodnote">
+    <xsl:template match="dtbook:prodnote | dtbook:div[f:classes(.) = ('prodnote','production')]">
         <xsl:choose>
             <xsl:when test="parent::*[tokenize(@class,'\s+')=('cover','jacketcopy')]">
                 <section>

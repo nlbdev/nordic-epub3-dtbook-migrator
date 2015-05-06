@@ -357,10 +357,22 @@
     </xsl:template>
 
     <xsl:template match="html:aside[f:types(.)='z3998:production'] | html:section[f:classes(.)=('frontcover','rearcover','leftflap','rightflap') and parent::*/f:types(.)='cover']">
-        <prodnote>
-            <xsl:call-template name="attlist.prodnote"/>
-            <xsl:apply-templates select="node()"/>
-        </prodnote>
+        <xsl:choose>
+            <xsl:when test="ancestor::html:section[f:classes(.)=('frontcover','rearcover','leftflap','rightflap') and parent::*/f:types(.)='cover']">
+                <div>
+                    <xsl:call-template name="attlist.div">
+                        <xsl:with-param name="classes" select="if (f:classes(.) = ('render-required','render-optional')) then () else ('render-optional')" tunnel="yes"/>
+                    </xsl:call-template>
+                    <xsl:apply-templates select="node()"/>
+                </div>
+            </xsl:when>
+            <xsl:otherwise>
+                <prodnote>
+                    <xsl:call-template name="attlist.prodnote"/>
+                    <xsl:apply-templates select="node()"/>
+                </prodnote>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.prodnote">

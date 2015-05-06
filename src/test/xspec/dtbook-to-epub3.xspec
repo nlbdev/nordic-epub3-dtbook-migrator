@@ -705,6 +705,24 @@
                 </html:section>
             </x:expect>
         </x:scenario>
+        <x:scenario label="which is a div inside one of the cover parts">
+            <x:context>
+                <dtbook:frontmatter>
+                    <dtbook:level1 class="jacketcopy">
+                        <dtbook:prodnote class="frontcover" render="optional">
+                            <dtbook:div class="render-optional production"/>
+                        </dtbook:prodnote>
+                    </dtbook:level1>
+                </dtbook:frontmatter>
+            </x:context>
+            <x:expect label="the resulting element should be a prodnote">
+                <html:section epub:type="cover" id="...">
+                    <html:section class="render-optional frontcover" id="...">
+                        <html:aside epub:type="z3998:production" class="prodnote render-optional" id="..."/>
+                    </html:section>
+                </html:section>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.prodnote -->
