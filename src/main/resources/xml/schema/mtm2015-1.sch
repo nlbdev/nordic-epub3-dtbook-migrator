@@ -258,12 +258,12 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 43: dc:Publisher must be 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia', or 'SBS' -->
+    <!-- Rule 43: dc:Publisher must be 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia', 'SBS' or 'Dedicon' -->
     <sch:pattern id="dtbook_TPB_43">
         <sch:rule context="dtbk:head">
             <!-- dc:Publisher -->
-            <sch:assert test="dtbk:meta[@name='dc:Publisher' and (@content='TPB' or @content='MTM' or @content='SPSM' or @content='Nota' or @content='NLB' or @content='Celia' or @content='SBS')]"
-                >[tpb43] Meta dc:Publisher must exist and have value 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia' or 'SBS'.</sch:assert>
+            <sch:assert test="dtbk:meta[@name='dc:Publisher' and (@content='TPB' or @content='MTM' or @content='SPSM' or @content='Nota' or @content='NLB' or @content='Celia' or @content='SBS' or @content='Dedicon')]"
+                >[tpb43] Meta dc:Publisher must exist and have value 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia', 'SBS' or 'Dedicon'.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
