@@ -1523,6 +1523,14 @@
                 </html:div>
             </x:expect>
         </x:scenario>
+        <x:scenario label="with a bunch of custom classes">
+            <x:context>
+                <dtbook:p class="custom classes should be allowed">TEXT</dtbook:p>
+            </x:context>
+            <x:expect label="the resulting element should be a p">
+                <html:p class="custom classes should be allowed">TEXT</html:p>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.p -->

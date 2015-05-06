@@ -455,7 +455,7 @@
                                     </px:read-doctype-declaration>
                                     <px:message message="doctype declaration from $1 is: $2">
                                         <p:with-option name="param1" select="replace($href,'.*/','')"/>
-                                        <p:with-option name="param2" select="replace(/*/@doctype-declaration,'[&lt;&gt;],'')"/>
+                                        <p:with-option name="param2" select="/*/replace(string(@doctype-declaration),'[&lt;&gt;]','')"/>
                                     </px:message>
                                 </p:group>
                                 <p:catch>

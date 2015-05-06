@@ -73,13 +73,10 @@
             <px:assert message="The HTML file must have a file extension." error-code="NORDICDTBOOKEPUB006">
                 <p:with-option name="test" select="matches(base-uri(/*),'.*[^\.]\.[^\.]*$')"/>
             </px:assert>
-            <p:identity name="html-to-dtbook.step.input-html">
-                <p:log port="result" href="file:/tmp/tmp1.xml"/>
-            </p:identity>
+            <p:identity name="html-to-dtbook.step.input-html"/>
 
             <!-- Make sure only sections corresponding to html:h[1-6] are used. -->
             <p:xslt name="html-to-dtbook.step.deep-level-grouping">
-                <p:log port="result" href="file:/tmp/tmp2.xml"/>
                 <p:with-param name="name" select="'section article'"/>
                 <p:with-param name="namespace" select="'http://www.w3.org/1999/xhtml'"/>
                 <p:with-param name="max-depth" select="6"/>
@@ -90,7 +87,6 @@
             </p:xslt>
 
             <p:xslt name="html-to-dtbook.step.epub3-to-dtbook">
-                <p:log port="result" href="file:/tmp/tmp3.xml"/>
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -117,13 +113,11 @@
             </p:choose>
 
             <p:add-attribute match="/*" attribute-name="xml:base" name="html-to-dtbook.step.add-xml-base-to-dtbook">
-                <p:log port="result" href="file:/tmp/tmp4.xml"/>
                 <p:with-option name="attribute-value" select="concat(replace(base-uri(/*),'^(.*)\.[^/\.]*$','$1'),'.xml')">
                     <p:pipe port="result" step="html-to-dtbook.step.input-html"/>
                 </p:with-option>
             </p:add-attribute>
             <p:xslt name="html-to-dtbook.step.pretty-print-dtbook">
-                <p:log port="result" href="file:/tmp/tmp5.xml"/>
                 <!-- TODO: remove all pretty-printing to improve performance -->
                 <p:input port="parameters">
                     <p:empty/>
@@ -132,9 +126,7 @@
                     <p:document href="../../xslt/pretty-print.xsl"/>
                 </p:input>
             </p:xslt>
-            <p:identity name="html-to-dtbook.step.result.in-memory">
-                <p:log port="result" href="file:/tmp/tmp6.xml"/>
-            </p:identity>
+            <p:identity name="html-to-dtbook.step.result.in-memory"/>
             <p:sink/>
 
             <p:identity>

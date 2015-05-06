@@ -29,7 +29,7 @@
             </html:span>
         </x:context>
         <x:expect label="all the attributes should be preserved, except for the epub:type attribute which should be made into a class. also only allowed classes should be kept">
-            <dtbook:span id="myid" class="precedingemptyline fulltitle" title="mytitle" xml:space="preserve">...</dtbook:span>
+            <dtbook:span id="myid" class="myclass precedingemptyline fulltitle" title="mytitle" xml:space="preserve">...</dtbook:span>
         </x:expect>
         <x:expect label="all the epub:type values in the default vocabulary should be made into classes"
             test="/*/*[@id='default']/@class='acknowledgments afterword annoref annotation appendix biblioentry bibliography bridgehead chapter colophon concluding-sentence conclusion contributors copyright-page jacketcopy covertitle dedication division epigraph epilogue errata footnote footnotes foreword fulltitle glossary glossdef glossterm halftitle halftitlepage help imprimatur imprint index introduction keyword landmarks list list-item loi lot marginalia note noteref notice other-credits pagebreak page-list part practice preamble preface prologue rearnote rearnotes sidebar subchapter subtitle table table-cell table-row title titlepage toc topic-sentence volume warning'"/>
@@ -58,7 +58,7 @@
             <html:span class="other showin-blp" epub:type="z3998:acronym warning frontmatter bodymatter backmatter">...</html:span>
         </x:context>
         <x:expect label="the epub:types should be converted to classes (except frontmatter, bodymatter and rearmatter) and the showin-* class should be converted to a showin attribute">
-            <dtbook:span class="acronym warning" showin="blp">...</dtbook:span>
+            <dtbook:span class="other acronym warning" showin="blp">...</dtbook:span>
         </x:expect>
     </x:scenario>
 
@@ -242,7 +242,7 @@
             <x:expect label="the resulting element should be a level1 inside the frontmatter">
                 <dtbook:book>
                     <dtbook:frontmatter>
-                        <dtbook:level1 class="jacketcopy">
+                        <dtbook:level1 class="classA classB jacketcopy">
                             <dtbook:p/>
                         </dtbook:level1>
                     </dtbook:frontmatter>
@@ -660,7 +660,7 @@
                             <dtbook:author>Author in poem context (2015-2)</dtbook:author>
                             <dtbook:linegroup class="verse"/>
                         </dtbook:poem>
-                        <dtbook:p>Author on p element</dtbook:p>
+                        <dtbook:p class="author">Author on p element</dtbook:p>
                         <dtbook:p><dtbook:span class="author">Author on span element</dtbook:span></dtbook:p>
                     </dtbook:level1>
                 </dtbook:bodymatter>
@@ -898,7 +898,7 @@
                 >TEXT</html:a>
         </x:context>
         <x:expect label="the id are preserved but the rest of the attributes are dropped">
-            <dtbook:span id="a-id">TEXT</dtbook:span>
+            <dtbook:span id="a-id" class="external-true rev-chapter myclass">TEXT</dtbook:span>
         </x:expect>
         <!--<x:expect
             label="any external-* and rev-* classes are converted to attributes, the target attribute are converted to a class, the download and media attributes are dropped, and the rest of the attributes are copied over as is">
@@ -1415,19 +1415,28 @@
 
     <!-- p -->
     <x:scenario label="when processing a p element">
-        <x:context>
-            <html:p/>
-        </x:context>
-        <x:expect label="the resulting element should be a p">
-            <dtbook:p/>
-        </x:expect>
+        <x:scenario label="with no attributes">
+            <x:context>
+                <html:p/>
+            </x:context>
+            <x:expect label="the resulting element should be a p">
+                <dtbook:p/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with several classes">
+            <x:context>
+                <html:p class="paragraphs can have many different classes">Paragraphs can have many different classes</html:p>
+            </x:context>
+            <x:expect label="the resulting element should be a p">
+                <dtbook:p class="paragraphs can have many different classes">Paragraphs can have many different classes</dtbook:p>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.p -->
     <!-- test not needed (attrs) -->
 
     <!-- hr -->
-
     <x:scenario label="when processing a hr">
         <!-- see also discussion: https://github.com/josteinaj/nordic-epub3-dtbook-migrator/issues/2 -->
         <x:scenario label="without a class attribute">
@@ -1453,13 +1462,16 @@
                 <html:p>Paragraph 1</html:p>
                 <html:hr class="separator"/>
                 <html:p>Paragraph 2</html:p>
-                <html:hr class="invalidclass"/>
+                <html:hr class="unrecognized-class"/>
                 <html:p>Paragraph 3</html:p>
+                <html:hr/>
+                <html:p class="paragraph with pre-existing classes">Paragraph 4</html:p>
             </x:context>
             <x:expect label="the resulting p elements should have 'precedingemptyline', 'precedingseparator', and 'precedingemptyline' respectively">
                 <dtbook:p class="precedingemptyline">Paragraph 1</dtbook:p>
                 <dtbook:p class="precedingseparator">Paragraph 2</dtbook:p>
                 <dtbook:p class="precedingemptyline">Paragraph 3</dtbook:p>
+                <dtbook:p class="precedingemptyline paragraph with pre-existing classes">Paragraph 4</dtbook:p>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -1519,7 +1531,7 @@
                 <dtbook:book>
                     <dtbook:frontmatter>
                         <dtbook:level1 class="titlepage">
-                            <dtbook:p>AUTHOR</dtbook:p>
+                            <dtbook:p class="author">AUTHOR</dtbook:p>
                         </dtbook:level1>
                     </dtbook:frontmatter>
                 </dtbook:book>
@@ -2532,7 +2544,7 @@
             <html:p class="indented">TEXT</html:p>
         </x:context>
         <x:expect label="the resulting class attribute should not throw an error">
-            <dtbook:p class="indented precedingemptyline">TEXT</dtbook:p>
+            <dtbook:p class="precedingemptyline indented">TEXT</dtbook:p>
         </x:expect>
     </x:scenario>
 
@@ -3010,7 +3022,7 @@
         </x:context>
         <x:expect label="should not use bullets or numbering">
             <dtbook:level1 class="toc">
-                <dtbook:list type="pl" depth="1" class="toc">
+                <dtbook:list type="pl" depth="1" class="toc tocList">
                     <dtbook:li>
                         <dtbook:span><dtbook:span>Span without lic class</dtbook:span></dtbook:span>
                     </dtbook:li>
@@ -3024,13 +3036,13 @@
                                 <dtbook:span>Span without lic class</dtbook:span>
                             </dtbook:span>
                         </dtbook:lic>
-                        <dtbook:list type="pl" depth="2">
+                        <dtbook:list class="tocList" type="pl" depth="2">
                             <dtbook:li>FOO</dtbook:li>
                         </dtbook:list>
                     </dtbook:li>
                     <dtbook:li>
                         <dtbook:lic><dtbook:strong>1 Funktionen</dtbook:strong></dtbook:lic>
-                        <dtbook:list type="pl" depth="2">
+                        <dtbook:list class="tocList" type="pl" depth="2">
                             <dtbook:li>
                                 <dtbook:lic><dtbook:strong>1a</dtbook:strong> Geraden</dtbook:lic>
                                 <dtbook:lic><dtbook:strong>4</dtbook:strong></dtbook:lic>

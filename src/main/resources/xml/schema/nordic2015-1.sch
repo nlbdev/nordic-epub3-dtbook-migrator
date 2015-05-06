@@ -40,7 +40,7 @@
     <pattern id="epub_nordic_10">
         <rule context="html:head[following-sibling::html:body/html:header]">
             <!-- dc:language -->
-            <assert test="count(html:meta[@name='dc:language'])>=1">[nordic10] Meta dc:language must occur at least once in HTML head</assert>
+            <assert test="count(html:meta[@name='dc:language'])&gt;=1">[nordic10] Meta dc:language must occur at least once in HTML head</assert>
             <!-- dc:date -->
             <assert test="count(html:meta[@name='dc:date'])=1">[nordic10] Meta dc:date=YYYY-MM-DD must occur exactly once in HTML head</assert>
             <report test="html:meta[@name='dc:date' and translate(@content, '0123456789', '0000000000')!='0000-00-00']">[nordic10] Meta dc:date ("<value-of select="@content"/>") must have format
@@ -154,7 +154,7 @@
         <rule
             context="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][tokenize(@class,'\s+')='page-normal']]">
             <let name="preceding" value="preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'][1]"/>
-            <assert test="number(current()/@title) > number($preceding/@title)">[nordic23] pagebreak values must increase for pagebreaks with class="page-normal" (see pagebreak with title="<value-of
+            <assert test="number(current()/@title) &gt; number($preceding/@title)">[nordic23] pagebreak values must increase for pagebreaks with class="page-normal" (see pagebreak with title="<value-of
                     select="@title"/>" and compare with pagebreak with title="<value-of select="$preceding/@title"/>")</assert>
         </rule>
     </pattern>
@@ -435,7 +435,7 @@
     <!-- Rule 125 (109): Only allow images in JPG format -->
     <pattern id="epub_nordic_125">
         <rule context="html:img">
-            <assert test="string-length(@src)>=5">[nordic125] Invalid image filename: <value-of
+            <assert test="string-length(@src)&gt;=5">[nordic125] Invalid image filename: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert test="substring(@src,string-length(@src) - 3, 4)='.jpg'">[nordic125] Images must be in JPG (*.jpg) format: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
@@ -520,12 +520,12 @@
         <rule context="html:body[tokenize(@epub:type,'\s+')='cover'] | html:section[tokenize(@epub:type,'\s+')='cover']">
             <assert test="count(*[not(matches(local-name(),'h\d'))])=count(html:section[tokenize(@class,'\s+')=('frontcover','rearcover','leftflap','rightflap')])">[nordic140] Only sections with one
                 of the classes 'frontcover', 'rearcover', 'leftflap' or 'rightflap' is allowed in cover</assert>
-            <assert test="count(html:section[tokenize(@class,'\s+')=('frontcover','rearcover','leftflap','rightflap')])>=1">[nordic140] There must be at least one section with one of the classes
+            <assert test="count(html:section[tokenize(@class,'\s+')=('frontcover','rearcover','leftflap','rightflap')])&gt;=1">[nordic140] There must be at least one section with one of the classes
                 'frontcover', 'rearcover', 'leftflap' or 'rightflap' in cover.</assert>
-            <report test="count(html:section[tokenize(@class,'\s+')='frontcover'])>1">[nordic140] Too many sections with class="frontcover" in cover</report>
-            <report test="count(html:section[tokenize(@class,'\s+')='rearcover'])>1">[nordic140] Too many sections with class="rearcover" in cover</report>
-            <report test="count(html:section[tokenize(@class,'\s+')='leftflap'])>1">[nordic140] Too many sections with class="leftflap" in cover</report>
-            <report test="count(html:section[tokenize(@class,'\s+')='rightflap'])>1">[nordic140] Too many sections with class="rightflap" in cover</report>
+            <report test="count(html:section[tokenize(@class,'\s+')='frontcover'])&gt;1">[nordic140] Too many sections with class="frontcover" in cover</report>
+            <report test="count(html:section[tokenize(@class,'\s+')='rearcover'])&gt;1">[nordic140] Too many sections with class="rearcover" in cover</report>
+            <report test="count(html:section[tokenize(@class,'\s+')='leftflap'])&gt;1">[nordic140] Too many sections with class="leftflap" in cover</report>
+            <report test="count(html:section[tokenize(@class,'\s+')='rightflap'])&gt;1">[nordic140] Too many sections with class="rightflap" in cover</report>
         </rule>
     </pattern>
 
@@ -1000,13 +1000,13 @@
             <assert
                 test="not(@width) or 
                 string-length(translate(@width,'0123456789',''))=0 or
-                (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)>=2)"
+                (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)&gt;=2)"
                 >[nordic277] The image width is not expressed in pixels or percentage: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert
                 test="not(@height) or 
                 string-length(translate(@height,'0123456789',''))=0 or
-                (contains(@height,'%') and substring-after(@height,'%')='' and translate(@height,'%0123456789','')='' and string-length(@height)>=2)"
+                (contains(@height,'%') and substring-after(@height,'%')='' and translate(@height,'%0123456789','')='' and string-length(@height)&gt;=2)"
                 >[nordic277] The image height is not expressed in pixels or percentage: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
@@ -1021,19 +1021,19 @@
             <assert
                 test="not(@width) or 
                 string-length(translate(@width,'0123456789',''))=0 or
-                (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)>=2)"
+                (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)&gt;=2)"
                 >[nordic278] Table width is not expressed in pixels or percentage: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert
                 test="not(@cellspacing) or 
                 string-length(translate(@cellspacing,'0123456789',''))=0 or
-                (contains(@cellspacing,'%') and substring-after(@cellspacing,'%')='' and translate(@cellspacing,'%0123456789','')='' and string-length(@cellspacing)>=2)"
+                (contains(@cellspacing,'%') and substring-after(@cellspacing,'%')='' and translate(@cellspacing,'%0123456789','')='' and string-length(@cellspacing)&gt;=2)"
                 >[nordic278] Table cellspacing is not expressed in pixels or percentage: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert
                 test="not(@cellpadding) or 
                 string-length(translate(@cellpadding,'0123456789',''))=0 or
-                (contains(@cellpadding,'%') and substring-after(@cellpadding,'%')='' and translate(@cellpadding,'%0123456789','')='' and string-length(@cellpadding)>=2)"
+                (contains(@cellpadding,'%') and substring-after(@cellpadding,'%')='' and translate(@cellpadding,'%0123456789','')='' and string-length(@cellpadding)&gt;=2)"
                 >[nordic278] Table cellpadding is not expressed in pixels or percentage: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
