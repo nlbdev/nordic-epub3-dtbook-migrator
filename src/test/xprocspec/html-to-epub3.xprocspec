@@ -58,5 +58,5 @@
         <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
         
     </x:scenario>
-
+    
 </x:description>

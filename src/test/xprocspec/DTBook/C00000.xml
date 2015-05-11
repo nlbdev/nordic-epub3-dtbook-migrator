@@ -32,6 +32,7 @@
                     <p>– Jag vill hellre lära mig att slåss, mumlar hon. Då skulle jag själv kunna slå ihjäl odjuret.</p>
                     <p>– Jag hörde nog vad du sa. Runa ruskar på huvudet. Du vet inte vad som är bäst för dig. Tänk på allt det besvär din pappa och mamma har haft. Först byggde de det här tornet av
                         koppar. Sedan har de skaffat en orm, som kan vakta din dygd. Många unga män har mist sina liv för din skull.</p>
+                    <div id="nested-prodnote-in-rearcover" class="render-optional prodnote production"><p>Prodnote inside rearcover</p></div>
                 </prodnote>
             </level1>
             <level1 id="toc-body" class="toc">
@@ -121,7 +122,66 @@
                         <span id="dtb5-test">Valentin Haüy</span>
                     </caption>
                 </imggroup>
-                <prodnote id="dtb6" render="optional">
+                <div id="image-tests">
+                    <div>
+                        <!-- image in block context - with placeholder alt text: -->
+                        <img id="image-tests-img-1" src="valentin.jpg" alt="image"/>
+                    </div>
+                    <div>
+                        <!-- image in inline context - with placeholder alt text: -->
+                        <p>
+                            <img id="image-tests-img-2" src="valentin.jpg" alt="image"/>
+                        </p>
+                    </div>
+                    <div>
+                        <!-- image in figure - with placeholder alt text: -->
+                        <imggroup id="image-tests-figure-1">
+                            <img id="image-tests-img-3" src="valentin.jpg" alt="image"/>
+                        </imggroup>
+                    </div>
+                    <div>
+                        <!-- image in image series figure - with placeholder alt text: -->
+                        <imggroup id="image-tests-figure-2">
+                            <img id="image-tests-img-4" src="valentin.jpg" alt="image"/>
+                            <img id="image-tests-img-5" src="valentin.jpg" alt="image"/>
+                        </imggroup>
+                    </div>
+                    <div>
+                        <!-- image in block context - decorative: -->
+                        <img id="image-tests-img-6" src="valentin.jpg" alt=""/>
+                    </div>
+                    <div>
+                        <!-- image in inline context - decorative: -->
+                        <p>
+                            <img id="image-tests-img-7" src="valentin.jpg" alt=""/>
+                        </p>
+                    </div>
+                    <div>
+                        <!-- image in block context - with custom alt text: -->
+                        <img id="image-tests-img-11" src="valentin.jpg" alt="中国文字"/>
+                    </div>
+                    <div>
+                        <!-- image in inline context - with custom alt text: -->
+                        <p>
+                            <img id="image-tests-img-12" src="valentin.jpg" alt="中国文字"/>
+                        </p>
+                    </div>
+                    <div>
+                        <!-- image in figure - with custom alt text: -->
+                        <imggroup id="image-tests-figure-8">
+                            <img id="image-tests-img-13" src="valentin.jpg" alt="中国文字"/>
+                        </imggroup>
+                    </div>
+                    <div>
+                        <!-- image in image series figure - with custom alt text: -->
+                        <imggroup id="image-tests-figure-9">
+                            <img id="image-tests-img-14" src="valentin.jpg" alt="中国文字"/>
+                            <img id="image-tests-img-15" src="valentin.jpg" alt="中国文字"/>
+                        </imggroup>
+                    </div>
+                </div>
+                <p class="paragraphs can have many different classes">Paragraphs can have many different classes</p>
+                <prodnote id="dtb6" class="prodnote" render="optional">
                     <p>
                         <span id="dtb7">This version is a for-test-use-only modification of the published original.</span>
                     </p>
@@ -575,7 +635,7 @@
                     <span id="dtb193">To illustrate Haüy's influence on the development of education for the blind in other countries, I have chosen D.G. </span>
                     <span id="dtb194">Pritchard's Education and the Handicapped 1760-1960 (1963) as my main source since it is considered a standard work. </span>
                     <span id="dtb195">My sources on the work of pioneers in the education of the blind in Sweden are O.E. </span>
-                    <span id="dtb196">Borg's Minnen från den svenska blindundervisningens <span id="d910e1000">70-års</span> jubileum den 21 maj 1883, Kjell-åke Johanssons research report Om
+                    <span id="dtb196">Borg's Minnen från den svenska blindundervisningens <span id="d910e1000" class="num-word">70-års</span> jubileum den 21 maj 1883, Kjell-åke Johanssons research report Om
                         blindundervisningen i Sverige från 1809 (1974) and Staffan Förhammar's doctoral thesis Från tärande till närande (1991).</span>
                 </p>
                 <p>
@@ -1152,7 +1212,7 @@
                     </p>
                     <p>
                         <span id="dtb495">At the end of the revolutionary decade, the institute was bankrupt. </span>
-                        <span id="dtb496">The State owed the institute <span id="d910e2310">30 000</span> francs, apart from nine months' salary to teachers and other staff. </span>
+                        <span id="dtb496">The State owed the institute <span id="d910e2310" class="num-with-space">30 000</span> francs, apart from nine months' salary to teachers and other staff. </span>
                         <span id="dtb497">Teachers and pupils alike starved and froze. </span>
                         <span id="dtb498">Haüy lodged a complaint with the consular government but this was rejected outright; no money was forthcoming. </span>
                         <span id="d910e2320">
@@ -1278,16 +1338,16 @@
                                 mankind in general.</span>
                         </p>
                         <p>
-                            <span id="dtb562">Haüy asked his imperial highness for an annual salary of at least <span id="d910e2586">40 000</span> roubles, of which half would be paid in advance when
+                            <span id="dtb562">Haüy asked his imperial highness for an annual salary of at least <span id="d910e2586" class="num-with-space">40 000</span> roubles, of which half would be paid in advance when
                                 Haüy began his work. </span>
                             <span id="dtb563">He also asked the crown to provide, at no cost to himself, a furnished house, light and fuel.</span>
                         </p>
                         <pagenum id="page_16" page="normal">16</pagenum>
                         <p>
-                            <span id="dtb564">Finally, he asked for <span id="d910e2601">2 000</span> roubles in advance, as travel allowance for himself and his blind pupil. </span>
+                            <span id="dtb564">Finally, he asked for <span id="d910e2601" class="num-with-space">2 000</span> roubles in advance, as travel allowance for himself and his blind pupil. </span>
                             <span id="dtb565">Haüy did not ask for travel allowances for his wife and son, who accompanied him to Russia. </span>
-                            <span id="dtb566">He estimated the costs of inventories, including teaching material such as maps and a globe, at <span id="d910e2610">4 500</span> francs and the annual
-                                operating costs, including salaries, at <span id="d910e2613">54 700</span> francs. </span>
+                            <span id="dtb566">He estimated the costs of inventories, including teaching material such as maps and a globe, at <span id="d910e2610" class="num-with-space">4 500</span> francs and the annual
+                                operating costs, including salaries, at <span id="d910e2613" class="num-with-space">54 700</span> francs. </span>
                             <span id="dtb567">The institute should be staffed by three teachers, one of them a music teacher, and a manager for the printing works.</span>
                         </p>
                         <p>
@@ -1472,7 +1532,7 @@
                         <p>
                             <span id="dtb656">Once again Haüy asked to be allowed to select some blind children from the Smolny asylum as pupils. </span>
                             <span id="dtb657">Skrébitsky states that he found no answer to this letter, although he did discover a decision by the tsar, dated 10th August 1807, giving Haüy permission
-                                to teach 15 pupils at an annual cost of <span id="d910e2986">14 150</span> roubles with an extra allowance of <span id="d910e2989">5 185</span> roubles, but this did
+                                to teach 15 pupils at an annual cost of <span id="d910e2986" class="num-with-space">14 150</span> roubles with an extra allowance of <span id="d910e2989" class="num-with-space">5 185</span> roubles, but this did
                                 not solve Haüy's problems. </span>
                             <span id="dtb658">Now the authorities concerned began to harass him and demand that he should deduct the amount granted from what he had previously received. </span>
                             <span id="dtb659">In addition, a heated debate ensued on the carriage required by Haüy to transport his purchases to the institute. </span>

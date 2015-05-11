@@ -18,6 +18,7 @@
                 <x:document type="file" href="DTBook/C00000.xml"/>
             </x:input>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+            <x:option name="fail-on-error" select="'true'"/>
         </x:call>
 
         <x:context label="the dtbook">

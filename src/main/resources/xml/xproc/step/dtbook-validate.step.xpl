@@ -30,7 +30,7 @@
         <p:pipe port="result" step="status"/>
     </p:output>
 
-    <p:option name="fail-on-error" select="'true'"/>
+    <p:option name="fail-on-error" required="true"/>
     <p:option name="check-images" required="false" select="'true'"/>
     <p:option name="allow-legacy" required="false" select="'true'"/>
 

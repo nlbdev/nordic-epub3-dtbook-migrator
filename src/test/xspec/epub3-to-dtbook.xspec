@@ -29,7 +29,7 @@
             </html:span>
         </x:context>
         <x:expect label="all the attributes should be preserved, except for the epub:type attribute which should be made into a class. also only allowed classes should be kept">
-            <dtbook:span id="myid" class="precedingemptyline fulltitle" title="mytitle" xml:space="preserve">...</dtbook:span>
+            <dtbook:span id="myid" class="myclass precedingemptyline fulltitle" title="mytitle" xml:space="preserve">...</dtbook:span>
         </x:expect>
         <x:expect label="all the epub:type values in the default vocabulary should be made into classes"
             test="/*/*[@id='default']/@class='acknowledgments afterword annoref annotation appendix biblioentry bibliography bridgehead chapter colophon concluding-sentence conclusion contributors copyright-page jacketcopy covertitle dedication division epigraph epilogue errata footnote footnotes foreword fulltitle glossary glossdef glossterm halftitle halftitlepage help imprimatur imprint index introduction keyword landmarks list list-item loi lot marginalia note noteref notice other-credits pagebreak page-list part practice preamble preface prologue rearnote rearnotes sidebar subchapter subtitle table table-cell table-row title titlepage toc topic-sentence volume warning'"/>
@@ -58,7 +58,7 @@
             <html:span class="other showin-blp" epub:type="z3998:acronym warning frontmatter bodymatter backmatter">...</html:span>
         </x:context>
         <x:expect label="the epub:types should be converted to classes (except frontmatter, bodymatter and rearmatter) and the showin-* class should be converted to a showin attribute">
-            <dtbook:span class="acronym warning" showin="blp">...</dtbook:span>
+            <dtbook:span class="other acronym warning" showin="blp">...</dtbook:span>
         </x:expect>
     </x:scenario>
 
@@ -242,7 +242,7 @@
             <x:expect label="the resulting element should be a level1 inside the frontmatter">
                 <dtbook:book>
                     <dtbook:frontmatter>
-                        <dtbook:level1 class="jacketcopy">
+                        <dtbook:level1 class="classA classB jacketcopy">
                             <dtbook:p/>
                         </dtbook:level1>
                     </dtbook:frontmatter>
@@ -660,7 +660,7 @@
                             <dtbook:author>Author in poem context (2015-2)</dtbook:author>
                             <dtbook:linegroup class="verse"/>
                         </dtbook:poem>
-                        <dtbook:p>Author on p element</dtbook:p>
+                        <dtbook:p class="author">Author on p element</dtbook:p>
                         <dtbook:p><dtbook:span class="author">Author on span element</dtbook:span></dtbook:p>
                     </dtbook:level1>
                 </dtbook:bodymatter>
@@ -673,12 +673,30 @@
 
     <!-- prodnote -->
     <x:scenario label="when processing an aside element with a epub:type of z3998:production">
-        <x:context>
-            <html:aside epub:type="z3998:production"/>
-        </x:context>
-        <x:expect label="the resulting element should be a prodnote">
-            <dtbook:prodnote render="optional"/>
-        </x:expect>
+        <x:scenario label="a generic one">
+            <x:context>
+                <html:aside epub:type="z3998:production"/>
+            </x:context>
+            <x:expect label="the resulting element should be a prodnote">
+                <dtbook:prodnote render="optional"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="one that is inside one of the cover parts">
+            <x:context>
+                <html:section epub:type="cover">
+                    <html:section class="frontcover">
+                        <html:aside epub:type="z3998:production"/>
+                    </html:section>
+                </html:section>
+            </x:context>
+            <x:expect label="the resulting element should be a prodnote">
+                <dtbook:level1 class="jacketcopy">
+                    <dtbook:prodnote class="frontcover" render="optional">
+                        <dtbook:div class="render-optional production"/>
+                    </dtbook:prodnote>
+                </dtbook:level1>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.prodnote -->
@@ -898,7 +916,7 @@
                 >TEXT</html:a>
         </x:context>
         <x:expect label="the id are preserved but the rest of the attributes are dropped">
-            <dtbook:span id="a-id">TEXT</dtbook:span>
+            <dtbook:span id="a-id" class="external-true rev-chapter myclass">TEXT</dtbook:span>
         </x:expect>
         <!--<x:expect
             label="any external-* and rev-* classes are converted to attributes, the target attribute are converted to a class, the download and media attributes are dropped, and the rest of the attributes are copied over as is">
@@ -1415,19 +1433,28 @@
 
     <!-- p -->
     <x:scenario label="when processing a p element">
-        <x:context>
-            <html:p/>
-        </x:context>
-        <x:expect label="the resulting element should be a p">
-            <dtbook:p/>
-        </x:expect>
+        <x:scenario label="with no attributes">
+            <x:context>
+                <html:p/>
+            </x:context>
+            <x:expect label="the resulting element should be a p">
+                <dtbook:p/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with several classes">
+            <x:context>
+                <html:p class="paragraphs can have many different classes">Paragraphs can have many different classes</html:p>
+            </x:context>
+            <x:expect label="the resulting element should be a p">
+                <dtbook:p class="paragraphs can have many different classes">Paragraphs can have many different classes</dtbook:p>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.p -->
     <!-- test not needed (attrs) -->
 
     <!-- hr -->
-
     <x:scenario label="when processing a hr">
         <!-- see also discussion: https://github.com/josteinaj/nordic-epub3-dtbook-migrator/issues/2 -->
         <x:scenario label="without a class attribute">
@@ -1453,13 +1480,16 @@
                 <html:p>Paragraph 1</html:p>
                 <html:hr class="separator"/>
                 <html:p>Paragraph 2</html:p>
-                <html:hr class="invalidclass"/>
+                <html:hr class="unrecognized-class"/>
                 <html:p>Paragraph 3</html:p>
+                <html:hr/>
+                <html:p class="paragraph with pre-existing classes">Paragraph 4</html:p>
             </x:context>
             <x:expect label="the resulting p elements should have 'precedingemptyline', 'precedingseparator', and 'precedingemptyline' respectively">
                 <dtbook:p class="precedingemptyline">Paragraph 1</dtbook:p>
                 <dtbook:p class="precedingseparator">Paragraph 2</dtbook:p>
                 <dtbook:p class="precedingemptyline">Paragraph 3</dtbook:p>
+                <dtbook:p class="precedingemptyline paragraph with pre-existing classes">Paragraph 4</dtbook:p>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -1519,7 +1549,7 @@
                 <dtbook:book>
                     <dtbook:frontmatter>
                         <dtbook:level1 class="titlepage">
-                            <dtbook:p>AUTHOR</dtbook:p>
+                            <dtbook:p class="author">AUTHOR</dtbook:p>
                         </dtbook:level1>
                     </dtbook:frontmatter>
                 </dtbook:book>
@@ -2427,7 +2457,7 @@
                     <html:img src="images/img.jpg" lang="en" alt="image"/>
                 </html:div>
             </x:context>
-            <x:expect label="the resulting element should be a img">
+            <x:expect label="the closest ancestor or self xml:lang should be used">
                 <dtbook:div xml:lang="en">
                     <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
                     <dtbook:img src="..." id="..." xml:lang="sv" alt="illustration"/>
@@ -2532,7 +2562,7 @@
             <html:p class="indented">TEXT</html:p>
         </x:context>
         <x:expect label="the resulting class attribute should not throw an error">
-            <dtbook:p class="indented precedingemptyline">TEXT</dtbook:p>
+            <dtbook:p class="precedingemptyline indented">TEXT</dtbook:p>
         </x:expect>
     </x:scenario>
 
@@ -3010,7 +3040,7 @@
         </x:context>
         <x:expect label="should not use bullets or numbering">
             <dtbook:level1 class="toc">
-                <dtbook:list type="pl" depth="1" class="toc">
+                <dtbook:list type="pl" depth="1" class="toc tocList">
                     <dtbook:li>
                         <dtbook:span><dtbook:span>Span without lic class</dtbook:span></dtbook:span>
                     </dtbook:li>
@@ -3024,13 +3054,13 @@
                                 <dtbook:span>Span without lic class</dtbook:span>
                             </dtbook:span>
                         </dtbook:lic>
-                        <dtbook:list type="pl" depth="2">
+                        <dtbook:list class="tocList" type="pl" depth="2">
                             <dtbook:li>FOO</dtbook:li>
                         </dtbook:list>
                     </dtbook:li>
                     <dtbook:li>
                         <dtbook:lic><dtbook:strong>1 Funktionen</dtbook:strong></dtbook:lic>
-                        <dtbook:list type="pl" depth="2">
+                        <dtbook:list class="tocList" type="pl" depth="2">
                             <dtbook:li>
                                 <dtbook:lic><dtbook:strong>1a</dtbook:strong> Geraden</dtbook:lic>
                                 <dtbook:lic><dtbook:strong>4</dtbook:strong></dtbook:lic>
@@ -3199,6 +3229,211 @@
                     </dtbook:li>
                 </dtbook:list>
             </dtbook:note>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="allowing inline images and custom alt attributes - issue 313">
+        <x:context>
+            <html:div id="image-tests">
+                <html:div>
+                    <!-- image in block context - with placeholder alt text: -->
+                    <html:img id="image-tests-img-1" src="images/valentin.jpg" alt="image"/>
+                </html:div>
+                <html:div>
+                    <!-- image in inline context - with placeholder alt text: -->
+                    <html:p>
+                        <html:img id="image-tests-img-2" src="images/valentin.jpg" alt="image"/>
+                    </html:p>
+                </html:div>
+                <html:div>
+                    <!-- image in figure - with placeholder alt text: -->
+                    <html:figure id="image-tests-figure-1" class="image">
+                        <html:img id="image-tests-img-3" src="images/valentin.jpg" alt="image"/>
+                    </html:figure>
+                </html:div>
+                <html:div>
+                    <!-- image in image series figure - with placeholder alt text: -->
+                    <html:figure id="image-tests-figure-2" class="image-series">
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-4" src="images/valentin.jpg" alt="image"/>
+                        </html:figure>
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-5" src="images/valentin.jpg" alt="image"/>
+                        </html:figure>
+                    </html:figure>
+                </html:div>
+                <html:div>
+                    <!-- image in block context - decorative: -->
+                    <html:img id="image-tests-img-6" src="images/valentin.jpg" alt=""/>
+                </html:div>
+                <html:div>
+                    <!-- image in inline context - decorative: -->
+                    <html:p>
+                        <html:img id="image-tests-img-7" src="images/valentin.jpg" alt=""/>
+                    </html:p>
+                </html:div>
+                <html:div>
+                    <!-- image in figure - decorative (should not be allowed/valid): -->
+                    <html:figure id="image-tests-figure-5" class="image">
+                        <html:img id="image-tests-img-8" src="images/valentin.jpg" alt=""/>
+                    </html:figure>
+                </html:div>
+                <html:div>
+                    <!-- image in image series figure - decorative (should not be allowed/valid): -->
+                    <html:figure id="image-tests-figure-6" class="image-series">
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-9" src="images/valentin.jpg" alt=""/>
+                        </html:figure>
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-10" src="images/valentin.jpg" alt=""/>
+                        </html:figure>
+                    </html:figure>
+                </html:div>
+                <html:div>
+                    <!-- image in block context - with custom alt text: -->
+                    <html:img id="image-tests-img-11" src="images/valentin.jpg" alt="中国文字"/>
+                </html:div>
+                <html:div>
+                    <!-- image in inline context - with custom alt text: -->
+                    <html:p>
+                        <html:img id="image-tests-img-12" src="images/valentin.jpg" alt="中国文字"/>
+                    </html:p>
+                </html:div>
+                <html:div>
+                    <!-- image in figure - with custom alt text: -->
+                    <html:figure id="image-tests-figure-8" class="image">
+                        <html:img id="image-tests-img-13" src="images/valentin.jpg" alt="中国文字"/>
+                    </html:figure>
+                </html:div>
+                <html:div>
+                    <!-- image in image series figure - with custom alt text: -->
+                    <html:figure id="image-tests-figure-9" class="image-series">
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-14" src="images/valentin.jpg" alt="中国文字"/>
+                        </html:figure>
+                        <html:figure class="image">
+                            <html:img id="image-tests-img-15" src="images/valentin.jpg" alt="中国文字"/>
+                        </html:figure>
+                    </html:figure>
+                </html:div>
+            </html:div>
+        </x:context>
+        <x:expect label="inline images and custom alt texts should be allowed">
+            <dtbook:div id="image-tests">
+                <dtbook:div>
+                    <!-- image in block context - with placeholder alt text: -->
+                    <dtbook:img id="image-tests-img-1" src="valentin.jpg" alt="image"/>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in inline context - with placeholder alt text: -->
+                    <dtbook:p>
+                        <dtbook:img id="image-tests-img-2" src="valentin.jpg" alt="image"/>
+                    </dtbook:p>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in figure - with placeholder alt text: -->
+                    <dtbook:imggroup id="image-tests-figure-1">
+                        <dtbook:img id="image-tests-img-3" src="valentin.jpg" alt="image"/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in image series figure - with placeholder alt text: -->
+                    <dtbook:imggroup id="image-tests-figure-2">
+                        <dtbook:img id="image-tests-img-4" src="valentin.jpg" alt="image"/>
+                        <dtbook:img id="image-tests-img-5" src="valentin.jpg" alt="image"/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in block context - decorative: -->
+                    <dtbook:img id="image-tests-img-6" src="valentin.jpg" alt=""/>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in inline context - decorative: -->
+                    <dtbook:p>
+                        <dtbook:img id="image-tests-img-7" src="valentin.jpg" alt=""/>
+                    </dtbook:p>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in figure - decorative (should not be allowed/valid): -->
+                    <dtbook:imggroup id="image-tests-figure-5">
+                        <dtbook:img id="image-tests-img-8" src="valentin.jpg" alt=""/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in image series figure - decorative (should not be allowed/valid): -->
+                    <dtbook:imggroup id="image-tests-figure-6">
+                        <dtbook:img id="image-tests-img-9" src="valentin.jpg" alt=""/>
+                        <dtbook:img id="image-tests-img-10" src="valentin.jpg" alt=""/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in block context - with custom alt text: -->
+                    <dtbook:img id="image-tests-img-11" src="valentin.jpg" alt="中国文字"/>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in inline context - with custom alt text: -->
+                    <dtbook:p>
+                        <dtbook:img id="image-tests-img-12" src="valentin.jpg" alt="中国文字"/>
+                    </dtbook:p>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in figure - with custom alt text: -->
+                    <dtbook:imggroup id="image-tests-figure-8">
+                        <dtbook:img id="image-tests-img-13" src="valentin.jpg" alt="中国文字"/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+                <dtbook:div>
+                    <!-- image in image series figure - with custom alt text: -->
+                    <dtbook:imggroup id="image-tests-figure-9">
+                        <dtbook:img id="image-tests-img-14" src="valentin.jpg" alt="中国文字"/>
+                        <dtbook:img id="image-tests-img-15" src="valentin.jpg" alt="中国文字"/>
+                    </dtbook:imggroup>
+                </dtbook:div>
+            </dtbook:div>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="headings in aside - issue #317">
+        <x:context>
+            <html:section epub:type="cover" id="id1">
+                <html:section class="frontcover" id="id2">
+                    <html:aside epub:type="sidebar" class="sidebar" id="id3">
+                        <html:h3 id="id4">Heading</html:h3>
+                        <html:p>content</html:p>
+                    </html:aside>
+                </html:section>
+            </html:section>
+            <html:section epub:type="bodymatter chapter" id="id5">
+                <html:aside epub:type="sidebar" class="sidebar" id="id6">
+                    <html:h3 id="id7">Heading</html:h3>
+                    <html:p>content</html:p>
+                </html:aside>
+            </html:section>
+        </x:context>
+        <x:expect label="the heading should become a hd">
+            <dtbook:level1 class="jacketcopy" id="id1">
+                <dtbook:prodnote class="frontcover" render="optional" id="id2">
+                    <dtbook:sidebar render="optional" id="id3">
+                        <dtbook:hd id="id4">Heading</dtbook:hd>
+                        <dtbook:p>content</dtbook:p>
+                    </dtbook:sidebar>
+                </dtbook:prodnote>
+            </dtbook:level1>
+            <dtbook:level1 class="chapter" id="id5">
+                <dtbook:sidebar render="optional" id="id6">
+                    <dtbook:hd id="id7">Heading</dtbook:hd>
+                    <dtbook:p>content</dtbook:p>
+                </dtbook:sidebar>
+            </dtbook:level1>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="bridgehead conversion - issue #315">
+        <x:context>
+            <html:p epub:type="bridgehead" class="bridgehead">test bridgehead 1</html:p>
+        </x:context>
+        <x:expect label="the heading should become a hd">
+            <dtbook:p class="bridgehead">test bridgehead 1</dtbook:p>
         </x:expect>
     </x:scenario>
 

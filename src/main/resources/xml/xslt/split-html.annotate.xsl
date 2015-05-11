@@ -20,10 +20,13 @@
             <xsl:for-each select="body">
                 <xsl:copy>
                     <xsl:copy-of select="@*"/>
-                    <xsl:for-each select="section | article | section[f:types(.)='part']/(section|article) | (section|article)[f:types(.)='bodymatter']/section[f:types(.)='rearnotes']">
+                    <xsl:variable name="top-level-sections" select="section | article"/>
+                    <xsl:variable name="part-sections" select="$top-level-sections[f:types(.)='part']/(section | article)"/>
+                    <xsl:variable name="bodymatter-rearnotes" select="($top-level-sections, $part-sections)[not(f:types(.)=('cover','frontmatter','backmatter'))]/section[f:types(.)='rearnotes']"/>
+                    <xsl:for-each select="$top-level-sections | $part-sections | $bodymatter-rearnotes">
                         <xsl:copy>
                             <xsl:variable name="types" select="f:types(.)"/>
-                            <xsl:variable name="partition" select="(f:types(.)[.=$partition-types], 'bodymatter')[1]"/>
+                            <xsl:variable name="partition" select="((ancestor-or-self::*/f:types(.)[.=$partition-types]), 'bodymatter')[1]"/>
                             <xsl:variable name="division" select="if (count($types[.=$division-types])) then ($types[.=$division-types])[1] else if ($partition='bodymatter') then 'chapter' else ()"/>
                             <xsl:variable name="filename"
                                 select="concat($identifier,'-',f:zero-pad(string(position()),$padding-size),'-',if ($division) then tokenize($division,':')[last()] else $partition)"/>
@@ -34,15 +37,15 @@
 
                             <xsl:choose>
                                 <xsl:when test="$division='part'">
-                                    <xsl:copy-of select="node()[not(self::section) and not(self::article)]"/>
+                                    <xsl:copy-of select="node()[not(self::section | self::article)]"/>
 
                                 </xsl:when>
-                                <xsl:when test="$partition='rearnotes'">
-                                    <xsl:copy-of select="node()"/>
+                                <xsl:when test="$partition='bodymatter'">
+                                    <xsl:copy-of select="node()[not(self::section[f:types(.)='rearnotes'])]"/>
 
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:copy-of select="node()[not(self::section and $partition='bodymatter' and f:types(.)='rearnotes')]"/>
+                                    <xsl:copy-of select="node()"/>
 
                                 </xsl:otherwise>
                             </xsl:choose>

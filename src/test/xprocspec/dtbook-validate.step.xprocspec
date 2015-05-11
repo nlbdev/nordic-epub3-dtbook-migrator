@@ -13,6 +13,7 @@
                     </d:fileset>
                 </x:document>
             </x:input>
+            <x:option name="fail-on-error" select="'true'"/>
         </x:call>
 
         <x:context label="fileset.out">

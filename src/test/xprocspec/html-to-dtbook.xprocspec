@@ -4,11 +4,11 @@
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/">
 
-    <x:scenario label="px:nordic-html-to-dtbook">
+    <x:scenario label="px:nordic-html-to-dtbook" focus="">
         <x:call step="px:nordic-html-to-dtbook">
             <x:option name="html" select="resolve-uri('single-html/C00000.xhtml')"/>
-            <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
         </x:call>
 
         <x:context label="validation status">
@@ -42,6 +42,42 @@
         <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
         <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
 
+    </x:scenario>
+    
+    <x:scenario label="px:nordic-html-to-dtbook - with an invalid HTML and fail-on-error set to 'false'">
+        <x:call step="px:nordic-html-to-dtbook">
+            <x:option name="html" select="resolve-uri('single-html.invalid/C00000.invalid.xhtml')"/>
+            <x:option name="output-dir" select="concat($temp-dir,'output-dir-2/')"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report-2/')"/>
+            <x:option name="fail-on-error" select="'false'"/>
+        </x:call>
+        
+        <x:context label="validation-status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect type="compare" label="conversion should succeed">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="px:nordic-html-to-dtbook - with an invalid HTML and fail-on-error set to 'true'">
+        <x:call step="px:nordic-html-to-dtbook">
+            <x:option name="html" select="resolve-uri('single-html.invalid/C00000.invalid.xhtml')"/>
+            <x:option name="output-dir" select="concat($temp-dir,'output-dir-3/')"/>
+            <x:option name="html-report" select="concat($temp-dir,'html-report-3/')"/>
+            <x:option name="fail-on-error" select="'true'"/>
+        </x:call>
+        
+        <x:context label="validation-status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect type="compare" label="conversion should fail">
+            <x:document type="inline">
+                <d:validation-status result="error"/>
+            </x:document>
+        </x:expect>
     </x:scenario>
 
 </x:description>

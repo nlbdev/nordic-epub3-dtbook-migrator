@@ -6,7 +6,6 @@
 
     <x:scenario label="px:nordic-html-validate.step">
         <x:call step="px:nordic-html-validate.step">
-
             <x:input port="fileset.in">
                 <x:document type="inline">
                     <d:fileset>
@@ -15,13 +14,11 @@
                     </d:fileset>
                 </x:document>
             </x:input>
-
             <x:input port="in-memory.in">
                 <x:document href="single-html/C00000.xhtml" type="file" method="xml"/>
             </x:input>
-
             <x:input port="report.in"/>
-            
+            <x:option name="fail-on-error" select="'true'"/>
         </x:call>
 
         <x:context label="fileset.out">

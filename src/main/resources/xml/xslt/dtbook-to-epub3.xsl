@@ -4,7 +4,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
-    <!--    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
+    <!--<xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
 
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
 
@@ -164,6 +164,10 @@
             <xsl:for-each select="dtbook:meta[starts-with(@name,'track:') and not(@name='track:Guidelines')]">
                 <meta name="nordic:{lower-case(substring-after(@name,'track:'))}" content="{@content}"/>
             </xsl:for-each>
+            <xsl:if test="not(dtbook:meta[@name='dc:Source'])">
+                <!-- Set ISBN to 0 to avoid validation errors -->
+                <meta name="dc:source" content="urn:isbn:0"/>
+            </xsl:if>
             <xsl:call-template name="headmisc"/>
             <style type="text/css" xml:space="preserve"><![CDATA[
                 .initialism{
@@ -524,7 +528,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="dtbook:prodnote">
+    <xsl:template match="dtbook:prodnote | dtbook:div[f:classes(.) = ('prodnote','production')]">
         <xsl:choose>
             <xsl:when test="parent::*[tokenize(@class,'\s+')=('cover','jacketcopy')]">
                 <section>
@@ -689,10 +693,10 @@
     </xsl:template>
 
     <xsl:template match="dtbook:poem">
-        <xsl:element name="{if (dtbook:hd) then 'section' else 'div'}">
+        <section>
             <xsl:call-template name="attlist.poem"/>
             <xsl:apply-templates select="node()"/>
-        </xsl:element>
+        </section>
     </xsl:template>
 
     <xsl:template name="attlist.poem">
@@ -1005,7 +1009,7 @@
             <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
         <xsl:attribute name="src" select="concat('images/',@src)"/>
-        <xsl:attribute name="alt" select="if (@alt and @alt='') then '' else 'image'"/>
+        <xsl:attribute name="alt" select="if (@alt and @alt='') then '' else if (not(@alt)) then 'image' else @alt"/>
         <xsl:copy-of select="@longdesc|@height|@width"/>
         <xsl:if test="not(@longdesc) and @id">
             <xsl:variable name="id" select="@id"/>
@@ -1236,6 +1240,9 @@
             <xsl:call-template name="attlist.dl"/>
             <xsl:apply-templates
                 select="dtbook:dt|dtbook:dd | (comment()|text())[preceding-sibling::*[self::dtbook:dt or self::dtbook:dd] and following-sibling::*[self::dtbook:dt or self::dtbook:dd]]"/>
+            <xsl:if test="(dtbook:dt|dtbook:dd)[last()][self::dtbook:dt]">
+                <dd/>
+            </xsl:if>
         </dl>
         <xsl:apply-templates
             select="node()[self::dtbook:pagenum|self::text()|self::comment()][preceding-sibling::*[self::dtbook:dt or self::dtbook:dd] and not(following-sibling::*[self::dtbook:dt or self::dtbook:dd])]">
