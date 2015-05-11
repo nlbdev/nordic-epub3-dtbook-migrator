@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-html-store.step" name="main" version="1.0" xmlns:l="http://xproc.org/library" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions"
+    type="px:nordic-dtbook-store.step" name="main" version="1.0" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/" xmlns:cx="http://xmlcalabash.com/ns/extensions"
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
 
     <p:input port="fileset.in" primary="true"/>
@@ -34,7 +34,6 @@
     <p:option name="include-resources" select="'true'"/>
 
     <p:import href="validation-status.xpl"/>
-    <p:import href="../upstream/file-utils/xproc/set-doctype.xpl"/>
     <p:import href="../upstream/file-utils/xproc/set-xml-declaration.xpl"/>
     <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -51,7 +50,7 @@
         </p:xpath-context>
         <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
             <p:output port="fileset.out" primary="true">
-                <p:pipe port="result" step="html-store.step.result-fileset"/>
+                <p:pipe port="result" step="dtbook-store.step.result-fileset"/>
             </p:output>
             <p:output port="in-memory.out" sequence="true">
                 <p:pipe port="in-memory.in" step="main"/>
@@ -61,68 +60,56 @@
             </p:output>
 
 
+            
+            
+            
+            
 
 
 
 
 
 
-
-            <p:choose name="html-store.step.choose-include-resources">
+            <p:choose name="dtbook-store.step.choose-include-resources">
                 <p:when test="$include-resources = 'false'">
-                    <p:delete match="/*/d:file[@media-type != 'application/xhtml+xml']" name="html-store.step.choose-include-resources.delete-auxiliary-resources-from-fileset"/>
+                    <p:delete match="/*/d:file[@media-type != 'application/x-dtbook+xml']" name="dtbook-store.step.choose-include-resources.delete-auxiliary-resources-from-fileset"/>
                 </p:when>
                 <p:otherwise>
-                    <p:identity name="html-store.step.choose-include-resources.include-resources"/>
+                    <p:identity name="dtbook-store.step.choose-include-resources.include-resources"/>
                 </p:otherwise>
             </p:choose>
             
-            <p:delete match="/*/d:file/@doctype" name="html-store.step.delete-doctype-attribute"/>
-            <p:add-attribute match="/*/d:file[@indent='true']" attribute-name="indent" attribute-value="false" name="html-store.step.set-indent-false">
+            <p:add-attribute match="/*/d:file[@indent='true']" attribute-name="indent" attribute-value="false" name="dtbook-store.step.set-indent-false">
                 <!-- temporary workaround until https://github.com/daisy/pipeline-modules-common/issues/69 is fixed -->
             </p:add-attribute>
-            <p:add-attribute match="/*/d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" attribute-name="encoding" attribute-value="us-ascii" name="html-store.step.set-encoding-to-ascii"/>
-            <px:fileset-store name="html-store.step.html-store">
+            <p:add-attribute match="/*/d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" attribute-name="encoding" attribute-value="us-ascii" name="dtbook-store.step.set-encoding-to-ascii"/>
+            <px:fileset-store name="dtbook-store.step.dtbook-store">
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
             </px:fileset-store>
             <p:identity>
                 <p:input port="source">
-                    <p:pipe port="fileset.out" step="html-store.step.html-store"/>
+                    <p:pipe port="fileset.out" step="dtbook-store.step.dtbook-store"/>
                 </p:input>
             </p:identity>
-            <p:viewport match="d:file[@media-type='application/xhtml+xml']" name="html-store.step.viewport-doctype">
-                <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
-                <p:variable name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
-                <pxi:set-doctype name="html-store.step.viewport-doctype.set-doctype">
-                    <p:with-option name="doctype" select="$doctype"/>
-                    <p:with-option name="href" select="$href"/>
-                </pxi:set-doctype>
-                <p:add-attribute match="/*" attribute-name="doctype" name="html-store.step.viewport-doctype.add-doctype-attribute-to-fileset">
-                    <p:input port="source">
-                        <p:pipe port="current" step="html-store.step.viewport-doctype"/>
-                    </p:input>
-                    <p:with-option name="attribute-value" select="$doctype"/>
-                </p:add-attribute>
-            </p:viewport>
-            <p:viewport match="d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" name="html-store.step.store.xml-declaration">
+            <p:viewport match="d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" name="dtbook-store.step.store.xml-declaration">
                 <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
                 <p:variable name="xml-declaration" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'"/>
-                <px:set-xml-declaration name="html-store.step.set-xml-declaration">
+                <px:set-xml-declaration name="dtbook-store.step.set-xml-declaration">
                     <p:with-option name="xml-declaration" select="$xml-declaration"/>
                     <p:with-option name="href" select="$href"/>
                 </px:set-xml-declaration>
-                <p:add-attribute match="/*" attribute-name="xml-declaration" name="html-store.step.add-xml-declaration-attribute">
+                <p:add-attribute match="/*" attribute-name="xml-declaration" name="dtbook-store.step.add-xml-declaration-attribute">
                     <p:input port="source">
-                        <p:pipe port="current" step="html-store.step.store.xml-declaration"/>
+                        <p:pipe port="current" step="dtbook-store.step.store.xml-declaration"/>
                     </p:input>
                     <p:with-option name="attribute-value" select="$xml-declaration">
-                        <p:pipe port="result" step="html-store.step.set-xml-declaration"/>
+                        <p:pipe port="result" step="dtbook-store.step.set-xml-declaration"/>
                     </p:with-option>
                 </p:add-attribute>
             </p:viewport>
-            <p:identity name="html-store.step.result-fileset"/>
+            <p:identity name="dtbook-store.step.result-fileset"/>
 
 
 

@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ ! -z $1 ] 
+then 
+    export JOBS="$1"
+else
+    export JOBS="3"
+fi
+
 export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # This script allows for easy execution and reporting of all xprocspec tests at once
@@ -57,7 +64,7 @@ echo "<head><title>xprocspec tests</title></head>" >> $RESULT_DIR/index.html
 echo "<body><h1>xprocspec tests</h1><ul>" >> $RESULT_DIR/index.html
 
 # Using GNU Parallel
-ls *.xprocspec | parallel --bar run-test
+ls *.xprocspec | parallel --bar --delay 1 --jobs $JOBS run-test
 ls *.xprocspec | while read TESTFILE;
 do
     FILENAME="`echo \"$TESTFILE\" | sed -e 's/\.xprocspec$//'`"

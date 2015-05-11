@@ -14,10 +14,10 @@
                     </d:fileset>
                 </x:document>
             </x:input>
-
             <x:input port="in-memory.in">
                 <x:document href="single-html/C00000.xhtml" type="file" method="xml"/>
             </x:input>
+            <x:option name="fail-on-error" select="'true'"/>
         </x:call>
 
         <x:context label="result fileset">

@@ -30,7 +30,7 @@
         <p:pipe port="result" step="status"/>
     </p:output>
 
-    <p:option name="fail-on-error" select="'true'"/>
+    <p:option name="fail-on-error" required="true"/>
     <p:option name="temp-dir" required="true"/>
 
     <p:import href="validation-status.xpl"/>

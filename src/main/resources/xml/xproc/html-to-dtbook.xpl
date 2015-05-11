@@ -13,7 +13,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="status.out" step="html-to-dtbook.html-validate"/>
+        <p:pipe port="result" step="status"/>
     </p:output>
 
     <p:option name="html" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml">
@@ -64,7 +64,9 @@
     <p:import href="step/html-store.step.xpl"/>
     <p:import href="step/html-to-dtbook.step.xpl"/>
     <p:import href="step/dtbook-validate.step.xpl"/>
+    <p:import href="step/dtbook-store.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
+    <p:import href="step/fail-on-error-status.xpl"/>
     <!--<p:import href="upstream/fileset-utils/fileset-load.xpl"/>-->
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-move.xpl"/>
@@ -158,6 +160,7 @@
 
     <px:message message="Converting from HTML to DTBook"/>
     <px:nordic-html-to-dtbook.step name="html-to-dtbook.html-to-dtbook">
+        <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <!-- call with dtbook2005 option whether to convert to a DTBook 2005 or DTBook 1.1.0 -->
         <p:with-option name="dtbook2005" select="$dtbook2005"/>
         <p:input port="in-memory.in">
@@ -170,40 +173,26 @@
             <p:pipe port="status.out" step="html-to-dtbook.html-validate"/>
         </p:input>
     </px:nordic-html-to-dtbook.step>
-
+    
+    <px:message message="Storing DTBook"/>
     <pxi:fileset-move name="html-to-dtbook.dtbook-move">
         <p:with-option name="new-base" select="concat($output-dir,(//d:file[@media-type='application/x-dtbook+xml'])[1]/replace(replace(@href,'.*/',''),'^(.[^\.]*).*?$','$1/'))"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="html-to-dtbook.html-to-dtbook"/>
         </p:input>
     </pxi:fileset-move>
-    <p:add-attribute match="/*/d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" attribute-name="encoding" attribute-value="us-ascii" name="html-to-dtbook.encode-as-ascii"/>
-    <px:fileset-store name="html-to-dtbook.fileset-store">
+    <px:nordic-dtbook-store.step name="html-to-dtbook.dtbook-store">
+        <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="html-to-dtbook.dtbook-move"/>
         </p:input>
-    </px:fileset-store>
-    <p:identity>
-        <p:input port="source">
-            <p:pipe port="fileset.out" step="html-to-dtbook.fileset-store"/>
+        <p:input port="report.in">
+            <p:pipe port="report.out" step="html-to-dtbook.html-to-dtbook"/>
         </p:input>
-    </p:identity>
-    <p:viewport match="d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" name="html-to-dtbook.store.xml-declaration">
-        <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
-        <p:variable name="xml-declaration" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'"/>
-        <px:set-xml-declaration name="html-to-dtbook.set-xml-declaration">
-            <p:with-option name="xml-declaration" select="$xml-declaration"/>
-            <p:with-option name="href" select="$href"/>
-        </px:set-xml-declaration>
-        <p:add-attribute match="/*" attribute-name="xml-declaration" name="html-to-dtbook.add-xml-declaration">
-            <p:input port="source">
-                <p:pipe port="current" step="html-to-dtbook.store.xml-declaration"/>
-            </p:input>
-            <p:with-option name="attribute-value" select="$xml-declaration">
-                <p:pipe port="result" step="html-to-dtbook.set-xml-declaration"/>
-            </p:with-option>
-        </p:add-attribute>
-    </p:viewport>
+        <p:input port="status.in">
+            <p:pipe port="status.out" step="html-to-dtbook.html-to-dtbook"/>
+        </p:input>
+    </px:nordic-dtbook-store.step>
 
     <px:message message="Validating DTBook"/>
     <px:nordic-dtbook-validate.step name="html-to-dtbook.dtbook-validate" check-images="false">
@@ -235,6 +224,15 @@
             <p:pipe port="result" step="html-to-dtbook.store-report"/>
         </p:with-option>
     </pxi:set-doctype>
+    <p:sink/>
+    
+    <px:nordic-fail-on-error-status name="status">
+        <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="output-dir" select="$output-dir"/>
+        <p:input port="source">
+            <p:pipe port="status.out" step="html-to-dtbook.html-validate"/>
+        </p:input>
+    </px:nordic-fail-on-error-status>
     <p:sink/>
 
 </p:declare-step>
