@@ -3392,5 +3392,49 @@
             </dtbook:div>
         </x:expect>
     </x:scenario>
+    
+    <x:scenario label="headings in aside - issue #317">
+        <x:context>
+            <html:section epub:type="cover" id="id1">
+                <html:section class="frontcover" id="id2">
+                    <html:aside epub:type="sidebar" class="sidebar" id="id3">
+                        <html:h3 id="id4">Heading</html:h3>
+                        <html:p>content</html:p>
+                    </html:aside>
+                </html:section>
+            </html:section>
+            <html:section epub:type="bodymatter chapter" id="id5">
+                <html:aside epub:type="sidebar" class="sidebar" id="id6">
+                    <html:h3 id="id7">Heading</html:h3>
+                    <html:p>content</html:p>
+                </html:aside>
+            </html:section>
+        </x:context>
+        <x:expect label="the heading should become a hd">
+            <dtbook:level1 class="jacketcopy" id="id1">
+                <dtbook:prodnote class="frontcover" render="optional" id="id2">
+                    <dtbook:sidebar render="optional" id="id3">
+                        <dtbook:hd id="id4">Heading</dtbook:hd>
+                        <dtbook:p>content</dtbook:p>
+                    </dtbook:sidebar>
+                </dtbook:prodnote>
+            </dtbook:level1>
+            <dtbook:level1 class="chapter" id="id5">
+                <dtbook:sidebar render="optional" id="id6">
+                    <dtbook:hd id="id7">Heading</dtbook:hd>
+                    <dtbook:p>content</dtbook:p>
+                </dtbook:sidebar>
+            </dtbook:level1>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="bridgehead conversion - issue #315">
+        <x:context>
+            <html:p epub:type="bridgehead" class="bridgehead">test bridgehead 1</html:p>
+        </x:context>
+        <x:expect label="the heading should become a hd">
+            <dtbook:p class="bridgehead">test bridgehead 1</dtbook:p>
+        </x:expect>
+    </x:scenario>
 
 </x:description>

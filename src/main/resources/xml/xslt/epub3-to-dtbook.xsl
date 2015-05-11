@@ -4,7 +4,7 @@
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
-    <!--    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
+    <!--<xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
 
     <xsl:param name="allow-links" select="false()"/>
 
