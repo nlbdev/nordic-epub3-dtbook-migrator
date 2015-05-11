@@ -123,13 +123,14 @@
         <x:context>
             <dtbook:head profile="http://www.nlb.no/metadata-profile"/>
         </x:context>
-        <x:expect label="the profile attribute should be converted to a link element">
+        <x:expect label="the profile attribute should be converted to a link element; and also a dc:source element should be created because there was no dc:Source in the DTBook">
             <html:head>
                 <html:meta charset="UTF-8"/>
                 <html:title>...</html:title>
                 <html:meta name="dc:identifier" content=""/>
                 <html:meta name="viewport" content="..."/>
                 <html:meta name="nordic:guidelines" content="2015-1"/>
+                <html:meta name="dc:source" content="urn:isbn:0"/>
                 <html:style type="text/css" xml:space="preserve">...</html:style>
                 <html:link rel="profile" href="http://www.nlb.no/metadata-profile"/>
             </html:head>
@@ -141,6 +142,7 @@
         <x:context>
             <dtbook:head>
                 <dtbook:link/>
+                <dtbook:meta name="dc:Source" content="urn:isbn:1234"/>
             </dtbook:head>
         </x:context>
         <x:expect label="the link element should be converted into a link element">
@@ -151,6 +153,7 @@
                 <html:meta name="viewport" content="..."/>
                 <html:meta name="nordic:guidelines" content="2015-1"/>
                 <html:link/>
+                <html:meta name="dc:source" content="urn:isbn:1234"/>
                 <html:style type="text/css" xml:space="preserve">...</html:style>
             </html:head>
         </x:expect>
@@ -892,9 +895,9 @@
                 </dtbook:poem>
             </x:context>
             <x:expect label="the resulting element should be given an added epub:type of z3998:verse">
-                <html:div id="..." epub:type="z3998:poem" class="poem">
+                <html:section id="..." epub:type="z3998:poem" class="poem">
                     <html:div id="..." class="linegroup" epub:type="z3998:verse"/>
-                </html:div>
+                </html:section>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -928,8 +931,8 @@
             <x:context>
                 <dtbook:poem/>
             </x:context>
-            <x:expect label="the resulting element should be a div with an added epub:type of z3998:poem">
-                <html:div id="..." epub:type="z3998:poem" class="poem"/>
+            <x:expect label="the resulting element should also be a section with an added epub:type of z3998:poem">
+                <html:section id="..." epub:type="z3998:poem" class="poem"/>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -4255,6 +4258,20 @@
                     </html:figure>
                 </html:div>
             </html:div>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="insert empty dd at the end of dl if dt is last element">
+        <x:context>
+            <dtbook:dl>
+                <dtbook:dt>dt</dtbook:dt>
+            </dtbook:dl>
+        </x:context>
+        <x:expect label="inserting a dd will avoid epubcheck error RSC-005">
+            <html:dl id="...">
+                <html:dt id="...">dt</html:dt>
+                <html:dd/>
+            </html:dl>
         </x:expect>
     </x:scenario>
 
