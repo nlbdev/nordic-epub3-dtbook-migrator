@@ -4,7 +4,7 @@
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
-    <!--    <xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
+    <!--<xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
 
     <xsl:param name="allow-links" select="false()"/>
 
@@ -16,7 +16,6 @@
         select="('abbreviations','acknowledgments','acronym','actor','afterword','alteration','annoref','annotation','appendix','article','aside','attribution','author','award','backmatter','bcc','bibliography','biographical-note','bodymatter','cardinal','catalogue','cc','chapter','citation','clarification','collection','colophon','commentary','commentator','compound','concluding-sentence','conclusion','continuation','continuation-of','contributors','coordinate','correction','covertitle','currency','decimal','decorative','dedication','diary','diary-entry','discography','division','drama','dramatis-personae','editor','editorial-note','email','email-message','epigraph','epilogue','errata','essay','event','example','family-name','fiction','figure','filmography','footnote','footnotes','foreword','fraction','from','frontispiece','frontmatter','ftp','fulltitle','gallery','general-editor','geographic','given-name','glossary','grant-acknowledgment','grapheme','halftitle','halftitle-page','help','homograph','http','hymn','illustration','image-placeholder','imprimatur','imprint','index','initialism','introduction','introductory-note','ip','isbn','keyword','letter','loi','lot','lyrics','marginalia','measure','mixed','morpheme','name-title','nationality','non-fiction','nonresolving-citation','nonresolving-reference','note','noteref','notice','orderedlist','ordinal','organization','other-credits','pagebreak','page-footer','page-header','part','percentage','persona','personal-name','pgroup','phone','phoneme','photograph','phrase','place','plate','poem','portmanteau','postal','postal-code','postscript','practice','preamble','preface','prefix','presentation','primary','product','production','prologue','promotional-copy','published-works','publisher-address','publisher-logo','range','ratio','rearnote','rearnotes','recipient','recto','reference','republisher','resolving-reference','result','role-description','roman','root','salutation','scene','secondary','section','sender','sentence','sidebar','signature','song','speech','stage-direction','stem','structure','subchapter','subject','subsection','subtitle','suffix','surname','taxonomy','tertiary','text','textbook','t-form','timeline','title','title-page','to','toc','topic-sentence','translator','translator-note','truncation','unorderedlist','valediction','verse','verso','v-form','volume','warning','weight','word')"/>
     <xsl:variable name="special-classes"
         select="('part','cover','colophon','nonstandardpagination','jacketcopy','frontcover','rearcover','leftflap','rightflap','precedingemptyline','precedingseparator','indented','asciimath','byline','dateline','address','definition','keyboard','initialism','truncation','cite','bdo','quote','exercisenumber','exercisepart','answer','answer_1','box')"/>
-    <xsl:variable name="allowed-classes" select="($special-classes, $vocab-default, $vocab-z3998)"/>
 
     <xsl:template match="text()|comment()">
         <xsl:copy-of select="."/>
@@ -59,6 +58,9 @@
             <xsl:if test="$showin and not('_showin'=$except)">
                 <xsl:attribute name="showin" select="$showin"/>
             </xsl:if>
+            
+            <!-- remove classes used for the conversion -->
+            <xsl:variable name="old-classes" select="$old-classes[not(starts-with(.,'showin-')) and not(.=('list-style-type-none'))]"/>
 
             <xsl:if test="not('_class'=$except)">
                 <xsl:variable name="epub-type-classes">
@@ -81,7 +83,7 @@
                 </xsl:variable>
 
                 <xsl:variable name="class-string"
-                    select="string-join(distinct-values(($classes[.=$allowed-classes], if (preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]) then (if (preceding-sibling::html:hr[1]/tokenize(@class,'\s')='separator') then 'precedingseparator' else 'precedingemptyline') else (), $old-classes[.=$allowed-classes], $epub-type-classes)[not(.='') and not(.=$except-classes)]),' ')"/>
+                    select="string-join(distinct-values(($classes, if (preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]) then (if (preceding-sibling::html:hr[1]/tokenize(@class,'\s')='separator') then 'precedingseparator' else 'precedingemptyline') else (), $old-classes, $epub-type-classes)[not(.='') and not(.=$except-classes)]),' ')"/>
                 <xsl:if test="not($class-string='')">
                     <xsl:attribute name="class" select="$class-string"/>
                 </xsl:if>
@@ -314,10 +316,7 @@
     <xsl:template name="attlist.address">
         <xsl:call-template name="attrs">
             <xsl:with-param name="classes" select="'address'" tunnel="yes"/>
-            <!--            <xsl:with-param name="except-classes" select="'*'" tunnel="yes"/>-->
-            <!--            <xsl:with-param name="except-classes" select="'address'" tunnel="yes"/>-->
         </xsl:call-template>
-        <xsl:call-template name="attlist.p.class"/>
     </xsl:template>
 
     <xsl:template match="html:div">
@@ -358,10 +357,22 @@
     </xsl:template>
 
     <xsl:template match="html:aside[f:types(.)='z3998:production'] | html:section[f:classes(.)=('frontcover','rearcover','leftflap','rightflap') and parent::*/f:types(.)='cover']">
-        <prodnote>
-            <xsl:call-template name="attlist.prodnote"/>
-            <xsl:apply-templates select="node()"/>
-        </prodnote>
+        <xsl:choose>
+            <xsl:when test="ancestor::html:section[f:classes(.)=('frontcover','rearcover','leftflap','rightflap') and parent::*/f:types(.)='cover']">
+                <div>
+                    <xsl:call-template name="attlist.div">
+                        <xsl:with-param name="classes" select="if (f:classes(.) = ('render-required','render-optional')) then () else ('render-optional')" tunnel="yes"/>
+                    </xsl:call-template>
+                    <xsl:apply-templates select="node()"/>
+                </div>
+            </xsl:when>
+            <xsl:otherwise>
+                <prodnote>
+                    <xsl:call-template name="attlist.prodnote"/>
+                    <xsl:apply-templates select="node()"/>
+                </prodnote>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="attlist.prodnote">
@@ -446,10 +457,7 @@
     <xsl:template name="attlist.annotation">
         <xsl:call-template name="attrsrqd">
             <xsl:with-param name="classes" select="'annotation'" tunnel="yes"/>
-            <!--            <xsl:with-param name="except-classes" select="'*'" tunnel="yes"/>-->
-            <!--            <xsl:with-param name="except-classes" select="'annotation'" tunnel="yes"/>-->
         </xsl:call-template>
-        <xsl:call-template name="attlist.p.class"/>
     </xsl:template>
 
     <!-- <epigraph> is not allowed in nordic DTBook. Using p instead. -->
@@ -465,10 +473,7 @@
     <xsl:template name="attlist.epigraph">
         <xsl:call-template name="attrs">
             <xsl:with-param name="classes" select="'epigraph'" tunnel="yes"/>
-            <!--            <xsl:with-param name="except-classes" select="'*'" tunnel="yes"/>-->
-            <!--            <xsl:with-param name="except-classes" select="'epigraph'" tunnel="yes"/>-->
         </xsl:call-template>
-        <xsl:call-template name="attlist.p.class"/>
     </xsl:template>
 
     <!-- <byline> is not allowed in nordic DTBook. Using span instead. -->
@@ -563,7 +568,7 @@
     <xsl:template name="attlist.a">
 
         <xsl:call-template name="attrs">
-            <xsl:with-param name="classes" select="'a'" tunnel="yes"/>
+            <!--<xsl:with-param name="classes" select="'a'" tunnel="yes"/>-->
 
             <!--
             <!-\- Preserve @target as class attribute. Assumes that only characters that are valid for class names are used. -\->
@@ -904,7 +909,7 @@
         <xsl:call-template name="attrs"/>
         <xsl:attribute name="src" select="replace(@src,'^images/','')"/>
         <xsl:choose>
-            <xsl:when test="(ancestor-or-self::*/(@xml:lang|@lang))[last()]='sv'">
+            <xsl:when test="@alt='image' and (ancestor-or-self::*/(@xml:lang|@lang))[last()]='sv'">
                 <xsl:attribute name="alt" select="'illustration'"/>
             </xsl:when>
             <xsl:otherwise>
@@ -943,7 +948,9 @@
     </xsl:template>
 
     <xsl:template name="attlist.imggroup">
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="attrs">
+            <xsl:with-param name="except-classes" select="('image-series','image')" tunnel="yes"/>
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:p">
@@ -958,19 +965,7 @@
     </xsl:template>
 
     <xsl:template name="attlist.p">
-        <xsl:call-template name="attrs">
-            <xsl:with-param name="except-classes" select="'*'" tunnel="yes"/>
-        </xsl:call-template>
-        <xsl:call-template name="attlist.p.class"/>
-    </xsl:template>
-
-    <xsl:template name="attlist.p.class">
-        <xsl:param name="classes" select="()" tunnel="yes"/>
-        <xsl:variable name="classes"
-            select="(for $class in ((tokenize(@class,'\s'),$classes)) return if ($class = ('part','jacketcopy','colophon','nonstandardpagination','indented')) then $class else (), if (preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]) then (if (preceding-sibling::html:hr[1]/tokenize(@class,'\s')='separator') then 'precedingseparator' else 'precedingemptyline') else ())"/>
-        <xsl:if test="count($classes)">
-            <xsl:attribute name="class" select="string-join($classes,' ')"/>
-        </xsl:if>
+        <xsl:call-template name="attrs"/>
     </xsl:template>
 
     <xsl:template match="html:hr"/>
@@ -1009,10 +1004,8 @@
     <!-- <covertitle> is not allowed in nordic DTBook. Using p instead with a "covertitle" class. -->
     <xsl:template name="attlist.covertitle">
         <xsl:call-template name="attrs">
-            <xsl:with-param name="except-classes" select="'*'" tunnel="yes"/>
-            <!--            <xsl:with-param name="except-classes" select="'covertitle'" tunnel="yes"/>-->
+            <xsl:with-param name="classes" select="'covertitle'" tunnel="yes"/>
         </xsl:call-template>
-        <xsl:call-template name="attlist.p.class"/>
     </xsl:template>
 
     <xsl:template match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
@@ -1051,10 +1044,8 @@
     <!-- <bridgehead> is not allowed in nordic DTBook. Using p instead with a bridgehead class. -->
     <xsl:template name="attlist.bridgehead">
         <xsl:call-template name="attrs">
-            <!--<xsl:with-param name="except-classes" select="'*'" tunnel="yes"/>-->
             <xsl:with-param name="classes" select="'bridgehead'" tunnel="yes"/>
         </xsl:call-template>
-        <xsl:call-template name="attlist.p.class"/>
     </xsl:template>
 
     <xsl:template match="html:blockquote">

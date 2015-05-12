@@ -56,9 +56,7 @@
     </px:mediatype-detect>
 
     <px:message message="Converting from ASCIIMath to MathML"/>
-    <px:nordic-epub3-asciimath-to-mathml.step name="epub3-asciimath-to-mathml.convert">
-        <p:with-option name="fail-on-error" select="'true'"/>
-    </px:nordic-epub3-asciimath-to-mathml.step>
+    <px:nordic-epub3-asciimath-to-mathml.step name="epub3-asciimath-to-mathml.convert" fail-on-error="true"/>
 
     <px:message message="Zipping EPUB"/>
     <px:epub3-store name="epub3-asciimath-to-mathml.store">

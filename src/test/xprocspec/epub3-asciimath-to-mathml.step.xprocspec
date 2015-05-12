@@ -6,6 +6,7 @@
 
     <x:scenario label="px:nordic-epub3-asciimath-to-mathml.step">
         <x:call step="px:nordic-epub3-asciimath-to-mathml.step">
+            <x:option name="fail-on-error" select="'true'"/>
             <x:input port="fileset.in">
                 <x:document type="inline" xml:base="C00000/">
                     <d:fileset>

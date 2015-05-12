@@ -60,7 +60,7 @@
         <p:with-option name="href" select="replace($epub,'^.*/([^/]*)$','$1')"/>
     </pxi:fileset-add-entry>
 
-    <px:nordic-epub3-validate.step name="epub3-validate.validate.nordic">
+    <px:nordic-epub3-validate.step name="epub3-validate.validate.nordic" fail-on-error="true">
         <p:with-option name="temp-dir" select="concat($temp-dir,'validate/')"/>
     </px:nordic-epub3-validate.step>
     <pxi:fileset-load media-types="application/xhtml+xml" name="epub3-validate.load-epub-xhtml">

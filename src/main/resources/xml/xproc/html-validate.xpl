@@ -37,14 +37,6 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="fail-on-error" required="false" select="'true'" px:type="boolean">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Stop processing on validation error</h2>
-            <p px:role="desc">Whether or not to stop the conversion when a validation error occurs. Setting this to false may be useful for debugging or if the validation error is a minor one. The
-                output is not guaranteed to be valid if this option is set to false.</p>
-        </p:documentation>
-    </p:option>
-
     <p:import href="step/validation-status.xpl"/>
     <p:import href="step/html-validate.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
@@ -79,7 +71,7 @@
         <p:xpath-context>
             <p:pipe port="validation-status" step="html-validate.check-html-wellformed"/>
         </p:xpath-context>
-        <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
+        <p:when test="/*/@result='ok'">
             <p:output port="fileset.out" primary="true">
                 <p:pipe port="result" step="html-validate.html-load.fileset"/>
             </p:output>
@@ -122,8 +114,7 @@
         </p:otherwise>
     </p:choose>
 
-    <px:nordic-html-validate.step name="html-validate.html-validate">
-        <p:with-option name="fail-on-error" select="$fail-on-error"/>
+    <px:nordic-html-validate.step name="html-validate.html-validate" fail-on-error="true">
         <p:with-option name="check-images" select="$check-images"/>
         <p:input port="in-memory.in">
             <p:pipe step="html-validate.html-load" port="in-memory.out"/>

@@ -125,6 +125,73 @@
                 <span id="dtb5-test">Valentin Haüy</span>
             </figcaption>
         </figure>
+        <div id="image-tests">
+            <div>
+                <!-- image in block context - with placeholder alt text: -->
+                <img id="image-tests-img-1" src="images/valentin.jpg" alt="image" />
+            </div>
+            <div>
+                <!-- image in inline context - with placeholder alt text: -->
+                <p>
+                    <img id="image-tests-img-2" src="images/valentin.jpg" alt="image" />
+                </p>
+            </div>
+            <div>
+                <!-- image in figure - with placeholder alt text: -->
+                <figure id="image-tests-figure-1" class="image">
+                    <img id="image-tests-img-3" src="images/valentin.jpg" alt="image" />
+                </figure>
+            </div>
+            <div>
+                <!-- image in image series figure - with placeholder alt text: -->
+                <figure id="image-tests-figure-2" class="image-series">
+                    <figure class="image">
+                        <img id="image-tests-img-4" src="images/valentin.jpg" alt="image" />
+                    </figure>
+                    <figure class="image">
+                        <img id="image-tests-img-5" src="images/valentin.jpg" alt="image" />
+                    </figure>
+                </figure>
+            </div>
+            <div>
+                <!-- image in block context - decorative: -->
+                <img id="image-tests-img-6" src="images/valentin.jpg" alt="" />
+            </div>
+            <div>
+                <!-- image in inline context - decorative: -->
+                <p>
+                    <img id="image-tests-img-7" src="images/valentin.jpg" alt="" />
+                </p>
+            </div>
+            <div>
+                <!-- image in block context - with custom alt text: -->
+                <img id="image-tests-img-11" src="images/valentin.jpg" alt="中国文字" />
+            </div>
+            <div>
+                <!-- image in inline context - with custom alt text: -->
+                <p>
+                    <img id="image-tests-img-12" src="images/valentin.jpg" alt="中国文字" />
+                </p>
+            </div>
+            <div>
+                <!-- image in figure - with custom alt text: -->
+                <figure id="image-tests-figure-8" class="image">
+                    <img id="image-tests-img-13" src="images/valentin.jpg" alt="中国文字" />
+                </figure>
+            </div>
+            <div>
+                <!-- image in image series figure - with custom alt text: -->
+                <figure id="image-tests-figure-9" class="image-series">
+                    <figure class="image">
+                        <img id="image-tests-img-14" src="images/valentin.jpg" alt="中国文字" />
+                    </figure>
+                    <figure class="image">
+                        <img id="image-tests-img-15" src="images/valentin.jpg" alt="中国文字" />
+                    </figure>
+                </figure>
+            </div>
+        </div>
+        <p class="paragraphs can have many different classes">Paragraphs can have many different classes</p>
         <aside id="dtb6" class="prodnote" epub:type="z3998:production">
             <p>
                 <span id="dtb7">This version is a for-test-use-only modification of the published original.</span>

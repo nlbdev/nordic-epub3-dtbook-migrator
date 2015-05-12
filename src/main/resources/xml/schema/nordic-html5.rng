@@ -85,7 +85,7 @@
             <ref name="img"/> <!-- img -->
             <ref name="figure.imggroup"/> <!-- figure -->
             <ref name="poem"/> <!-- section -->
-            <ref name="linegroup"/> <!-- section -->
+            <ref name="linegroup"/> <!-- section, div -->
             <ref name="byline"/> <!-- span -->
             <ref name="dateline"/> <!-- span -->
             <ref name="epigraph"/> <!-- p -->
@@ -105,7 +105,7 @@
             <ref name="div"/> <!-- div -->
             <ref name="blockquote"/> <!-- blockquote -->
             <ref name="poem"/> <!-- section -->
-            <ref name="linegroup"/> <!-- section -->
+            <ref name="linegroup"/> <!-- section, div -->
             <ref name="byline"/> <!-- span -->
             <ref name="dateline"/> <!-- span -->
             <ref name="epigraph"/> <!-- p -->
@@ -125,7 +125,7 @@
             <ref name="div"/> <!-- div -->
             <ref name="blockquote"/> <!-- blockquote -->
             <ref name="poem"/> <!-- section -->
-            <ref name="linegroup"/> <!-- section -->
+            <ref name="linegroup"/> <!-- section, div -->
             <ref name="byline"/> <!-- span -->
             <ref name="dateline"/> <!-- span -->
             <ref name="epigraph"/> <!-- p -->
@@ -663,58 +663,24 @@
             </list>
         </attribute>
         <ref name="attrsrqd.notype"/>
-        <optional>
+        <zeroOrMore>
             <element name="section">
                 <attribute name="class">
                     <list>
                         <ref name="classes"/>
-                        <value>frontcover</value>
+                        <choice>
+                            <value>frontcover</value>
+                            <value>rearcover</value>
+                            <value>leftflap</value>
+                            <value>rightflap</value>
+                        </choice>
                         <ref name="classes"/>
                     </list>
                 </attribute>
                 <ref name="attrsrqd.noclass"/>
                 <ref name="level2.content.noattrs"/>
-            </element>
-        </optional>
-        <optional>
-            <element name="section">
-                <attribute name="class">
-                    <list>
-                        <ref name="classes"/>
-                        <value>rearcover</value>
-                        <ref name="classes"/>
-                    </list>
-                </attribute>
-                <ref name="attrsrqd.noclass"/>
-                <ref name="level2.content.noattrs"/>
-            </element>
-        </optional>
-        <optional>
-            <element name="section">
-                <attribute name="class">
-                    <list>
-                        <ref name="classes"/>
-                        <value>leftflap</value>
-                        <ref name="classes"/>
-                    </list>
-                </attribute>
-                <ref name="attrsrqd.noclass"/>
-                <ref name="level2.content.noattrs"/>
-            </element>
-        </optional>
-        <optional>
-            <element name="section">
-                <attribute name="class">
-                    <list>
-                        <ref name="classes"/>
-                        <value>rightflap</value>
-                        <ref name="classes"/>
-                    </list>
-                </attribute>
-                <ref name="attrsrqd.noclass"/>
-                <ref name="level2.content.noattrs"/>
-            </element>
-        </optional>
+           </element>
+        </zeroOrMore>
     </define>
     
     <!--
@@ -1883,12 +1849,12 @@
         <!-- linegroups with headlines must be section elements; otherwise they must be div elements -->
         <choice>
             <element name="div">
-                <ref name="attrs.noclass"/>
+                <ref name="attrs.base"/>
                 <ref name="attlist.linegroup"/>
                 <ref name="linegroup.common"/>
             </element>
             <element name="section">
-                <ref name="attrsrqd.noclass"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
+                <ref name="attrsrqd.base"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
                 <ref name="attlist.linegroup"/>
                 <ref name="linegroup.common"/>
                 <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
@@ -1904,7 +1870,7 @@
                 <ref name="dateline"/> <!-- span -->
                 <ref name="epigraph"/> <!-- p -->
                 <ref name="byline"/> <!-- span -->
-                <ref name="linegroup"/> <!-- section -->
+                <ref name="linegroup"/> <!-- section, div -->
                 <ref name="line"/> <!-- p -->
                 <ref name="pagebreak.block"/> <!-- div -->
                 <ref name="prodnote"/> <!-- aside -->
@@ -1928,6 +1894,17 @@
                 <ref name="classes"/>
             </list>
         </attribute>
+        <optional>
+            <attribute name="epub:type">
+                <list>
+                    <ref name="types"/>
+                    <optional>
+                        <value>z3998:verse</value>
+                    </optional>
+                    <ref name="types"/>
+                </list>
+            </attribute>
+        </optional>
     </define>
     
     <!-- Use: poem is a complete poem or fragment thereof. -->
@@ -1944,7 +1921,7 @@
                     <ref name="dateline"/> <!-- span -->
                     <ref name="epigraph"/> <!-- p -->
                     <ref name="byline"/> <!-- span -->
-                    <ref name="linegroup"/> <!-- section -->
+                    <ref name="linegroup"/> <!-- section, div -->
                     <ref name="line"/> <!-- p -->
                     <ref name="pagebreak.block"/> <!-- div -->
                     <ref name="img"/> <!-- img -->
@@ -3043,16 +3020,12 @@
         -->
         <element name="dl">
             <ref name="attlist.dl"/>
-            <zeroOrMore>
-                <group>
-                    <oneOrMore>
-                        <ref name="dt"/> <!-- dt -->
-                    </oneOrMore>
-                    <oneOrMore>
-                        <ref name="dd"/> <!-- dd -->
-                    </oneOrMore>
-                </group>
-            </zeroOrMore>
+            <oneOrMore>
+                <choice>
+                    <ref name="dt"/> <!-- dt -->
+                    <ref name="dd"/> <!-- dd -->
+                </choice>
+            </oneOrMore>
         </element>
     </define>
     <define name="attlist.dl" combine="interleave">
@@ -3692,6 +3665,7 @@
                 <!--<value>afterword</value>-->
                 <!--<value>annoref</value>-->
                 <!--<value>annotation</value>-->
+                <value>answer</value>
                 <!--<value>appendix</value>-->
                 <!--<value>backmatter</value>-->
                 <value>biblioentry</value>

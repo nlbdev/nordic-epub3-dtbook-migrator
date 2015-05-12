@@ -35,8 +35,8 @@
                     </d:fileset>
                 </x:document>
             </x:input>
-
             <x:input port="in-memory.in"/>
+            <x:option name="fail-on-error" select="'true'"/>
         </x:call>
 
         <x:context label="result fileset">

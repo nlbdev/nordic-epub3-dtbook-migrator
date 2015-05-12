@@ -5,28 +5,6 @@
 
     <sch:ns prefix="dtbk" uri="http://www.daisy.org/z3986/2005/dtbook/"/>
 
-    <!--<sch:key name="noterefs" match="dtbk:noteref[@idref]" path="substring-after(@idref,'#')"/>
-  <sch:key name="annorefs" match="dtbk:annoref[@idref]" path="substring-after(@idref,'#')"/>
-  <sch:key name="pageFrontValues" match="dtbk:pagenum[@page='front']" path="."/>
-  <sch:key name="notes" match="dtbk:note[@id]" path="@id"/>-->
-
-    <!--
-   copy: 102,
-     done: (6), 7, 8, 10, 11, 12, 13, 14, 18, 20, 21, 24, (25), 26, 27, 29, (31), (32), (33),
-         (34), 40, 43, 49, 50, 51, 52, 59, 63, 64, 67, 68, 71, 93, 96, 101, 103, 104, 105, 110
-
-   mod?:
-     done: 9, (35), (44), 72, (112)
-
-   mod_new:
-
-   narr:
-	done: 97, 98
-
-   ?: 100
-
-  -->
-
     <!-- Rule 7: No <list> or <dl> inside <p> -->
     <sch:pattern id="dtbook_TPB_7">
         <!--
@@ -175,7 +153,6 @@
     <!-- Rule 24: Values of pagenum[@page='front'] must be unique -->
     <sch:pattern id="dtbook_TPB_24">
         <sch:rule context="dtbk:pagenum[@page='front']">
-            <!--  		<sch:assert test="count(key('pageFrontValues', .))=1">[tpb24] pagenum[@page='front'] values must be unique</sch:assert>-->
             <sch:assert test="count(//dtbk:pagenum[@page='front' and string(.)=string(current())])=1">[tpb24] pagenum[@page='front'] values must be unique</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -183,7 +160,6 @@
     <!-- Rule 26: Each note must have a noteref -->
     <sch:pattern id="dtbook_TPB_26">
         <sch:rule context="dtbk:note">
-            <!--  		<sch:assert test="count(key('noterefs', @id))>=1">[tpb26] Each note must have at least one noteref</sch:assert>-->
             <sch:assert test="count(//dtbk:noteref[translate(@idref, '#', '')=current()/@id])>=1">[tpb26] Each note must have at least one noteref</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -191,7 +167,6 @@
     <!-- Rule 27: Each annotation must have an annoref -->
     <sch:pattern id="dtbook_TPB_27">
         <sch:rule context="dtbk:annotation">
-            <!--  		<sch:assert test="count(key('annorefs', @id))>=1">[tpb27] Each annotation must have at least one annoref</sch:assert>-->
             <sch:assert test="count(//dtbk:annoref[translate(@idref, '#', '')=current()/@id])>=1">[tpb27] Each annotation must have at least one annoref</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -283,20 +258,12 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 43: dc:Publisher must be 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia', or 'SBS' -->
+    <!-- Rule 43: dc:Publisher must be 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia', 'SBS' or 'Dedicon' -->
     <sch:pattern id="dtbook_TPB_43">
         <sch:rule context="dtbk:head">
             <!-- dc:Publisher -->
-            <sch:assert test="dtbk:meta[@name='dc:Publisher' and (@content='TPB' or @content='MTM' or @content='SPSM' or @content='Nota' or @content='NLB' or @content='Celia' or @content='SBS')]"
-                >[tpb43] Meta dc:Publisher must exist and have value 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia' or 'SBS'.</sch:assert>
-        </sch:rule>
-    </sch:pattern>
-
-    <!-- Rule 50: image alt attribute -->
-    <sch:pattern id="dtbook_TPB_50">
-        <sch:rule context="dtbk:img">
-            <sch:report test="lang('sv') and @alt!='illustration'">[tpb50] an image in swedish language context must have attribute alt="illustration"</sch:report>
-            <sch:report test="lang('en') and @alt!='image'">[tpb50] an image in english language context must have attribute alt="image"</sch:report>
+            <sch:assert test="dtbk:meta[@name='dc:Publisher' and (@content='TPB' or @content='MTM' or @content='SPSM' or @content='Nota' or @content='NLB' or @content='Celia' or @content='SBS' or @content='Dedicon')]"
+                >[tpb43] Meta dc:Publisher must exist and have value 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB', 'Celia', 'SBS' or 'Dedicon'.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -352,14 +319,6 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 71: Nested toc if there are several levels
-  <sch:pattern  id="dtbook_TPB_71">
-    <sch:rule context="dtbk:level1/dtbk:list[@class='toc']">
-    	<sch:report test="//dtbk:level2 and not(descendant::dtbk:list)">[tpb71] The table of contents must be nested if the documents contains multiple levels</sch:report>
-    </sch:rule>
-  </sch:pattern>
-  -->
-
     <!-- Rule 72: Only allow DTBook 2005-3 -->
     <sch:pattern id="dtbook_TPB_72">
         <sch:rule context="dtbk:dtbook">
@@ -393,13 +352,6 @@
     <sch:pattern id="dtbook_TPB_101">
         <sch:rule context="dtbk:imggroup">
             <sch:assert test="dtbk:img">[tpb101] There must be an img element in every imggroup</sch:assert>
-        </sch:rule>
-    </sch:pattern>
-
-    <!-- Rule 103: No img without imggroup -->
-    <sch:pattern id="dtbook_TPB_103">
-        <sch:rule context="dtbk:img">
-            <sch:assert test="parent::dtbk:imggroup">[tpb103] There must be an imggroup element wrapping every img</sch:assert>
         </sch:rule>
     </sch:pattern>
 
@@ -446,28 +398,15 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 122:  pagenum in lists must occur between list items
-  <sch:pattern  id="dtbook_TPB_122">
-    <sch:rule context="dtbk:pagenum[ancestor::dtbk:list]">
-      <sch:assert test="parent::dtbk:list">[tpb122] Page numbers in lists must be placed between list items.</sch:assert>
-    </sch:rule>
-  </sch:pattern>
-  -->
-
     <!-- Rule 123 (39): No class attributes on level[2-6]. level1 allows 'part', 'nonstandardpagination', 'colophon' (if located in frontmatter) and 'jacketcopy' (if located in frontmatter and immediately after docauthor or doctitle) -->
     <sch:pattern id="dtbook_TPB_123">
         <sch:rule context="dtbk:level1">
-            <!--<sch:assert test="not(@class) or @class='part' or @class='jacketcopy' or @class='colophon' or @class='nonstandardpagination'">[tpb123] No class attributes except 'part', 'jacketcopy', 'colophon' and 'nonstandardpagination' are allowed on level1</sch:assert>-->
-
-            <sch:report test="@class='jacketcopy' and (not(parent::dtbk:frontmatter))">[tpb123] Jacket copy must be in frontmatter</sch:report>
-            <sch:report test="@class='jacketcopy' and (not(preceding-sibling::*[1][self::dtbk:docauthor or self::dtbk:doctitle]))">[tpb123] Jacket copy must follow immediately after docauthor or
+            <sch:report test="tokenize(@class,'\s+')='jacketcopy' and (not(parent::dtbk:frontmatter))">[tpb123] Jacket copy must be in frontmatter</sch:report>
+            <sch:report test="tokenize(@class,'\s+')='jacketcopy' and (not(preceding-sibling::*[1][self::dtbk:docauthor or self::dtbk:doctitle]))">[tpb123] Jacket copy must follow immediately after docauthor or
                 doctitle</sch:report>
 
-            <sch:report test="@class='colophon' and parent::dtbk:bodymatter">[tpb123] Colophon is not allowed in bodymatter</sch:report>
+            <sch:report test="tokenize(@class,'\s+')='colophon' and parent::dtbk:bodymatter">[tpb123] Colophon is not allowed in bodymatter</sch:report>
         </sch:rule>
-        <!--<sch:rule context="dtbk:*[self::dtbk:level2 or self::dtbk:level3 or self::dtbk:level4 or self::dtbk:level5 or self::dtbk:level6]">
-  		<sch:assert test="not(@class)">[tpb123] No class attributes are allowed on level2 to level6</sch:assert>
-  	</sch:rule>-->
     </sch:pattern>
 
     <!-- Rule 124 (106): All documents must have at least one pagenum -->
@@ -497,9 +436,9 @@
 
     <!-- Rule 127: Table of contents must be inside a level1 -->
     <sch:pattern id="dtbook_TPB_127">
-        <sch:rule context="dtbk:list[@class='toc']">
+        <sch:rule context="dtbk:list[tokenize(@class,'\s+')='toc']">
             <sch:assert test="parent::dtbk:level1">[tpb127] Table of contents (&lt;list class="toc"&gt;)must be inside a level1</sch:assert>
-            <sch:report test="ancestor::dtbk:list[@class='toc']">[tpb127] Nested lists in table of contents must not have a 'toc' attribute</sch:report>
+            <sch:report test="ancestor::dtbk:list[tokenize(@class,'\s+')='toc']">[tpb127] Nested lists in table of contents must not have a 'toc' class</sch:report>
         </sch:rule>
     </sch:pattern>
 
@@ -516,14 +455,6 @@
         </sch:rule>
     </sch:pattern>
 
-    <!-- Rule 129: Class attribute of p -->
-    <sch:pattern id="dtbook_TPB_129">
-        <sch:rule context="dtbk:p[@class]">
-            <sch:assert test="not(tokenize(@class,'\s+')[not(. = ('precedingemptyline','precedingseparator','indented','asciimath'))])">[tpb129] Class attribute of &lt;p&gt; must be one (or more) of
-                'precedingemptyline', 'precedingseparator', 'indented' or 'asciimath'</sch:assert>
-        </sch:rule>
-    </sch:pattern>
-
     <!-- Rule 130 (44): dc:Language must equal root element xml:lang -->
     <sch:pattern id="dtbook_TPB_130">
         <sch:rule context="dtbk:meta[@name='dc:Language']">
@@ -534,7 +465,6 @@
     <!-- Rule 131 (35): Allowed values in xml:lang -->
     <sch:pattern id="dtbook_TPB_131">
         <sch:rule context="*[@xml:lang]">
-            <!--<sch:assert test="@xml:lang='sv' or @xml:lang='en' or @xml:lang='da' or @xml:lang='it' or @xml:lang='la' or @xml:lang='el' or @xml:lang='de' or @xml:lang='fr' or @xml:lang='es' or @xml:lang='fi' or @xml:lang='no' or @xml:lang='is'">[tpb131] xml:lang must be one of: 'sv', 'en', 'da', 'it', 'la', 'el', 'de', 'fr', 'es', 'fi', 'no' or 'is'</sch:assert>-->
             <sch:assert test="matches(@xml:lang,'^[a-z][a-z](-[A-Z][A-Z]+)?$')">[tpb131] xml:lang must match '^[a-z][a-z](-[A-Z][A-Z]+)?$'</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -554,18 +484,6 @@
     </sch:pattern>
 
     <!-- Rule 134: Disallowed attributes -->
-    <sch:pattern id="dtbook_TPB_134_a">
-        <sch:rule context="dtbk:note">
-            <sch:report test="@class">[tpb134a] Attribute 'class' is not allowed on the <sch:name/> element</sch:report>
-        </sch:rule>
-    </sch:pattern>
-
-    <sch:pattern id="dtbook_TPB_134_b">
-        <sch:rule context="dtbk:noteref">
-            <sch:report test="@class">[tpb134b] Attribute 'class' is not allowed on the <sch:name/> element</sch:report>
-        </sch:rule>
-    </sch:pattern>
-
     <sch:pattern id="dtbook_TPB_134_c">
         <sch:rule context="dtbk:meta">
             <sch:report test="@scheme">[tpb134c] Attribute 'scheme' is not allowed on the <sch:name/> element</sch:report>
@@ -604,27 +522,27 @@
 
     <!-- Rule 140: Jacket copy must contain at least one prodnote, at most one of each @class value and no other elements -->
     <sch:pattern id="dtbook_TPB_140">
-        <sch:rule context="dtbk:level1[@class='jacketcopy']">
+        <sch:rule context="dtbk:level1[tokenize(@class,'\s+')='jacketcopy']">
             <sch:assert test="count(*)=count(dtbk:prodnote)">[tpb140] Only prodnote allowed in jacket copy</sch:assert>
             <sch:assert test="count(dtbk:prodnote)>=1">[tpb140] There must be at least one prodnote in jacket copy</sch:assert>
-            <sch:report test="count(dtbk:prodnote[@class='frontcover'])>1">[tpb140] Too many prodnotes with @class='frontcover' in jacket copy</sch:report>
-            <sch:report test="count(dtbk:prodnote[@class='rearcover'])>1">[tpb140] Too many prodnotes with @class='rearcover' in jacket copy</sch:report>
-            <sch:report test="count(dtbk:prodnote[@class='leftflap'])>1">[tpb140] Too many prodnotes with @class='leftflap' in jacket copy</sch:report>
-            <sch:report test="count(dtbk:prodnote[@class='rightflap'])>1">[tpb140] Too many prodnotes with @class='rightflap' in jacket copy</sch:report>
+            <sch:report test="count(dtbk:prodnote[tokenize(@class,'\s+')='frontcover'])>1">[tpb140] Too many prodnotes with @class='frontcover' in jacket copy</sch:report>
+            <sch:report test="count(dtbk:prodnote[tokenize(@class,'\s+')='rearcover'])>1">[tpb140] Too many prodnotes with @class='rearcover' in jacket copy</sch:report>
+            <sch:report test="count(dtbk:prodnote[tokenize(@class,'\s+')='leftflap'])>1">[tpb140] Too many prodnotes with @class='leftflap' in jacket copy</sch:report>
+            <sch:report test="count(dtbk:prodnote[tokenize(@class,'\s+')='rightflap'])>1">[tpb140] Too many prodnotes with @class='rightflap' in jacket copy</sch:report>
         </sch:rule>
     </sch:pattern>
 
     <!-- Rule 141: Prodnotes in jacket copy must contain text and have a @class=['frontcover', 'rearcover', 'leftflap' or 'rightflap'] -->
     <sch:pattern id="dtbook_TPB_141">
-        <sch:rule context="dtbk:prodnote[parent::dtbk:level1[@class='jacketcopy']]">
-            <sch:assert test="@class='frontcover' or @class='rearcover' or @class='leftflap' or @class='rightflap'">[tpb141] prodnote in jacket copy must have a class attribute with one of
+        <sch:rule context="dtbk:prodnote[parent::dtbk:level1[tokenize(@class,'\s+')='jacketcopy']]">
+            <sch:assert test="count(tokenize(@class,'\s+')[.=('frontcover','rearcover','leftflap','rightflap')]) = 1">[tpb141] prodnote in jacket copy must have a class attribute with one of
                 'frontcover', 'rearcover', 'leftflap' or 'rightflap'</sch:assert>
         </sch:rule>
     </sch:pattern>
 
     <!-- Rule 142: Only @page='special' in level1/@class='nonstandardpagination' -->
     <sch:pattern id="dtbook_TPB_142">
-        <sch:rule context="dtbk:pagenum[ancestor::dtbk:level1[@class='nonstandardpagination']]">
+        <sch:rule context="dtbk:pagenum[ancestor::dtbk:level1[tokenize(@class,'\s+')='nonstandardpagination']]">
             <sch:assert test="@page='special'">[tpb142] Only @page='special' is allowed in level1/@class='nonstandardpagination'</sch:assert>
         </sch:rule>
     </sch:pattern>

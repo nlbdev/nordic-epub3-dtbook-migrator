@@ -34,6 +34,7 @@
                 <p>– Jag vill hellre lära mig att slåss, mumlar hon. Då skulle jag själv kunna slå ihjäl odjuret.</p>
                 <p>– Jag hörde nog vad du sa. Runa ruskar på huvudet. Du vet inte vad som är bäst för dig. Tänk på allt det besvär din pappa och mamma har haft. Först byggde de det här tornet av
                     koppar. Sedan har de skaffat en orm, som kan vakta din dygd. Många unga män har mist sina liv för din skull.</p>
+                <aside id="nested-prodnote-in-rearcover" epub:type="z3998:production" class="prodnote"><p>Prodnote inside rearcover</p></aside>
             </section>
         </section>
         <section epub:type="frontmatter toc" id="toc-body">
@@ -129,6 +130,73 @@
                     <span id="dtb5-test">Valentin Haüy</span>
                 </figcaption>
             </figure>
+            <div id="image-tests">
+                <div>
+                    <!-- image in block context - with placeholder alt text: -->
+                    <img id="image-tests-img-1" src="images/valentin.jpg" alt="image" />
+                </div>
+                <div>
+                    <!-- image in inline context - with placeholder alt text: -->
+                    <p>
+                        <img id="image-tests-img-2" src="images/valentin.jpg" alt="image" />
+                    </p>
+                </div>
+                <div>
+                    <!-- image in figure - with placeholder alt text: -->
+                    <figure id="image-tests-figure-1" class="image">
+                        <img id="image-tests-img-3" src="images/valentin.jpg" alt="image" />
+                    </figure>
+                </div>
+                <div>
+                    <!-- image in image series figure - with placeholder alt text: -->
+                    <figure id="image-tests-figure-2" class="image-series">
+                        <figure class="image">
+                            <img id="image-tests-img-4" src="images/valentin.jpg" alt="image" />
+                        </figure>
+                        <figure class="image">
+                            <img id="image-tests-img-5" src="images/valentin.jpg" alt="image" />
+                        </figure>
+                    </figure>
+                </div>
+                <div>
+                    <!-- image in block context - decorative: -->
+                    <img id="image-tests-img-6" src="images/valentin.jpg" alt="" />
+                </div>
+                <div>
+                    <!-- image in inline context - decorative: -->
+                    <p>
+                        <img id="image-tests-img-7" src="images/valentin.jpg" alt="" />
+                    </p>
+                </div>
+                <div>
+                    <!-- image in block context - with custom alt text: -->
+                    <img id="image-tests-img-11" src="images/valentin.jpg" alt="中国文字" />
+                </div>
+                <div>
+                    <!-- image in inline context - with custom alt text: -->
+                    <p>
+                        <img id="image-tests-img-12" src="images/valentin.jpg" alt="中国文字" />
+                    </p>
+                </div>
+                <div>
+                    <!-- image in figure - with custom alt text: -->
+                    <figure id="image-tests-figure-8" class="image">
+                        <img id="image-tests-img-13" src="images/valentin.jpg" alt="中国文字" />
+                    </figure>
+                </div>
+                <div>
+                    <!-- image in image series figure - with custom alt text: -->
+                    <figure id="image-tests-figure-9" class="image-series">
+                        <figure class="image">
+                            <img id="image-tests-img-14" src="images/valentin.jpg" alt="中国文字" />
+                        </figure>
+                        <figure class="image">
+                            <img id="image-tests-img-15" src="images/valentin.jpg" alt="中国文字" />
+                        </figure>
+                    </figure>
+                </div>
+            </div>
+            <p class="paragraphs can have many different classes">Paragraphs can have many different classes</p>
             <aside id="dtb6" epub:type="z3998:production" class="prodnote">
                 <p>
                     <span id="dtb7">This version is a for-test-use-only modification of the published original.</span>

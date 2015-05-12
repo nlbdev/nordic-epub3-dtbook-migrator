@@ -13,7 +13,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="status.out" step="dtbook-to-epub3.epub3-validate"/>
+        <p:pipe port="result" step="status"/>
     </p:output>
 
     <p:option name="html-report" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
@@ -74,6 +74,7 @@
     <p:import href="step/epub3-store.step.xpl"/>
     <p:import href="step/epub3-validate.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
+    <p:import href="step/fail-on-error-status.xpl"/>
     <p:import href="upstream/file-utils/xproc/set-doctype.xpl"/>
     <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
     <!--<p:import href="upstream/fileset-utils/fileset-load.xpl"/>-->
@@ -144,6 +145,7 @@
                 </p:input>
             </pxi:fileset-move>
             <px:nordic-html-store.step name="dtbook-to-epub3.choose-discard-intermediary.nordic-html-store">
+                <p:with-option name="fail-on-error" select="$fail-on-error"/>
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.out" step="dtbook-to-epub3.choose-discard-intermediary.html-move"/>
                 </p:input>
@@ -211,6 +213,15 @@
             <p:pipe port="result" step="dtbook-to-epub3.store-report"/>
         </p:with-option>
     </pxi:set-doctype>
+    <p:sink/>
+    
+    <px:nordic-fail-on-error-status name="status">
+        <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="output-dir" select="$output-dir"/>
+        <p:input port="source">
+            <p:pipe port="status.out" step="dtbook-to-epub3.epub3-validate"/>
+        </p:input>
+    </px:nordic-fail-on-error-status>
     <p:sink/>
 
 </p:declare-step>

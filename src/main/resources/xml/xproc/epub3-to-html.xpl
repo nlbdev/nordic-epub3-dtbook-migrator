@@ -13,7 +13,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="status.out" step="epub3-to-html.html-validate"/>
+        <p:pipe port="result" step="status"/>
     </p:output>
 
     <p:option name="html-report" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
@@ -57,6 +57,7 @@
     <p:import href="step/html-validate.step.xpl"/>
     <p:import href="step/html-store.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
+    <p:import href="step/fail-on-error-status.xpl"/>
     <!--<p:import href="upstream/fileset-utils/fileset-load.xpl"/>-->
     <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="upstream/fileset-utils/fileset-move.xpl"/>
@@ -87,6 +88,7 @@
 
     <px:message message="Converting from EPUB to HTML"/>
     <px:nordic-epub3-to-html.step name="epub3-to-html.epub3-to-html">
+        <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="epub3-to-html.epub3-validate"/>
         </p:input>
@@ -150,6 +152,15 @@
             <p:pipe port="result" step="epub3-to-html.store-report"/>
         </p:with-option>
     </pxi:set-doctype>
+    <p:sink/>
+    
+    <px:nordic-fail-on-error-status name="status">
+        <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="output-dir" select="$output-dir"/>
+        <p:input port="source">
+            <p:pipe port="status.out" step="epub3-to-html.html-validate"/>
+        </p:input>
+    </px:nordic-fail-on-error-status>
     <p:sink/>
 
 </p:declare-step>
