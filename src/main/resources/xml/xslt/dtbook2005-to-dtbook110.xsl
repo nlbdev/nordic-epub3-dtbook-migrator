@@ -3,7 +3,7 @@
   exclude-result-prefixes="x msxsl">
   <xsl:output method="xml" indent="yes" doctype-system="dtbook110.dtd" encoding="utf-8"/>
 
-  <!--Version 0.6 - 2015.03.03-->
+  <!--Version 0.7 - 2015.04.20-->
 
   <xsl:template match="/">
     <xsl:apply-templates/>
@@ -294,6 +294,7 @@
       <title>
         <xsl:value-of select="string(x:meta[@name='dc:Title']/@content)"/>
       </title>
+      <meta name="prod:AutoBrailleReady" content="yes"/>
       <xsl:apply-templates/>
     </head>
   </xsl:template>
