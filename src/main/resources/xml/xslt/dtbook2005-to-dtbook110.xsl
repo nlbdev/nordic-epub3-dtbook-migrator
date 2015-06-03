@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:x="http://www.daisy.org/z3986/2005/dtbook/"
-  exclude-result-prefixes="x msxsl">
-
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+    xmlns:x="http://www.daisy.org/z3986/2005/dtbook/"
+    exclude-result-prefixes="x msxsl" >
   <xsl:output method="xml" indent="yes" doctype-system="dtbook110.dtd" encoding="utf-8"/>
 
-  <!--Version 0.5 - 2014.12.05-->
-
+  <!--Version 0.7 - 2015.04.20-->
+  
   <xsl:template match="/">
     <xsl:apply-templates/>
   </xsl:template>
@@ -115,16 +116,15 @@
       <xsl:when test="parent::x:imggroup">
         <prodnote class="caption" render="required">
           <xsl:choose>
-            <xsl:when test="child::x:p|child::x:table|child::x:div">
-              <xsl:apply-templates/>
+            <xsl:when test="child::x:p|child::x:table|child::x:div">          
+                <xsl:apply-templates/>  
             </xsl:when>
             <xsl:otherwise>
               <p>
                 <xsl:apply-templates/>
-              </p>
+              </p>         
             </xsl:otherwise>
           </xsl:choose>
-
         </prodnote>
       </xsl:when>
       <xsl:otherwise>
@@ -293,9 +293,10 @@
   <xsl:template match="x:head">
     <head>
       <title>
-        <xsl:value-of select="string(x:meta[@name='dc:Title']/@content)"/>
+        <xsl:value-of select ="string(x:meta[@name='dc:Title']/@content)"/>
       </title>
-      <xsl:apply-templates/>
+      <meta name="prod:AutoBrailleReady" content="yes"/>
+      <xsl:apply-templates />
     </head>
   </xsl:template>
 
@@ -410,7 +411,7 @@
   </xsl:template>
 
   <xsl:template match="x:lic">
-    <lic>
+    <lic class="pageref">
       <xsl:for-each select="@*">
         <xsl:attribute name="{name()}">
           <xsl:value-of select="."/>
@@ -419,11 +420,10 @@
       <xsl:apply-templates/>
     </lic>
   </xsl:template>
-
+  
   <xsl:template match="x:list">
     <xsl:choose>
       <xsl:when test="string(@type)='pl'">
-
         <!--Check om første li har &#x25A0; eller &#x2022; som første karakter-->
 
         <xsl:choose>
@@ -445,9 +445,8 @@
             </list>
           </xsl:otherwise>
         </xsl:choose>
-
       </xsl:when>
-
+      
       <xsl:when test="string(@type)='ul'">
         <list type="ul">
           <xsl:apply-templates/>
@@ -468,13 +467,13 @@
   </xsl:template>
 
   <xsl:template match="x:line">
-    <p class="line">
+    <line>
       <xsl:apply-templates/>
-    </p>
+    </line>
   </xsl:template>
 
   <xsl:template match="x:meta">
-    <xsl:element name="meta">
+    <xsl:element name ="meta">
       <xsl:attribute name="name">
         <xsl:value-of select="string(@name)"/>
       </xsl:attribute>
@@ -488,7 +487,7 @@
     <noteref>
       <xsl:for-each select="@*">
         <xsl:attribute name="{name()}">
-          <xsl:value-of select="."/>
+          <xsl:value-of select="translate(.,'#','')"/>
         </xsl:attribute>
       </xsl:for-each>
       <xsl:apply-templates/>
@@ -520,71 +519,20 @@
   <!-- if pagenum is child of imggroup report-->
   <xsl:template match="x:pagenum">
     <xsl:choose>
-
+      
       <!--Parent er imggroup: indsæt kommentar-->
-      <xsl:when test="parent::x:imggroup">
+      <xsl:when test ="parent::x:imggroup">
         <xsl:comment>
           <xsl:text>Konverteringsproblem: pagenum kan ikke befinde sig på denne position: </xsl:text>
           <xsl:text>&lt;pagenum id='</xsl:text>
           <xsl:value-of select="@id"/>
           <xsl:text>'&gt;</xsl:text>
-          <xsl:variable name="nodeAsStr" select="string(.)"/>
+          <xsl:variable name="nodeAsStr" select="string(.)" />
           <xsl:copy-of select="$nodeAsStr"/>
           <xsl:text>&lt;/pagenum&gt;</xsl:text>
         </xsl:comment>
       </xsl:when>
-
-      <xsl:when test="preceding-sibling::x:tr">
-        <!-- Afslut den forrige-->
-        <xsl:text disable-output-escaping="yes">&lt;/table&gt;</xsl:text>
-
-        <!--Indsæt sidetallet-->
-        <pagenum>
-          <xsl:for-each select="@*">
-            <xsl:attribute name="{name()}">
-              <xsl:value-of select="."/>
-            </xsl:attribute>
-          </xsl:for-each>
-          <xsl:apply-templates/>
-        </pagenum>
-
-        <!-- Begynd en ny tabel-->
-        <xsl:text disable-output-escaping="yes">&lt;table&gt;</xsl:text>
-      </xsl:when>
-
-      <!--Parent er table: Indsæt ny table-->
-      <xsl:when test="parent::x:table">
-        <xsl:comment>
-          <xsl:text>Konverteringsproblem: pagenum kan ikke befinde sig på denne position: </xsl:text>
-          <xsl:text>&lt;pagenum id='</xsl:text>
-          <xsl:value-of select="@id"/>
-          <xsl:text>'&gt;</xsl:text>
-          <xsl:variable name="nodeAsStr" select="string(.)"/>
-          <xsl:copy-of select="$nodeAsStr"/>
-          <xsl:text>&lt;/pagenum&gt;</xsl:text>
-        </xsl:comment>
-
-      </xsl:when>
-
-      <!--Parent er tbody: indsæt nyt table/tbody-->
-      <xsl:when test="parent::x:tbody">
-        <!-- Afslut den forrige-->
-        <xsl:text disable-output-escaping="yes">&lt;/tbody&gt;&lt;/table&gt;</xsl:text>
-
-        <!--Indsæt sidetallet-->
-        <pagenum>
-          <xsl:for-each select="@*">
-            <xsl:attribute name="{name()}">
-              <xsl:value-of select="."/>
-            </xsl:attribute>
-          </xsl:for-each>
-          <xsl:apply-templates/>
-        </pagenum>
-
-        <!-- Begynd en ny tabel-->
-        <xsl:text disable-output-escaping="yes">&lt;table&gt;&lt;tbody&gt;</xsl:text>
-      </xsl:when>
-
+      
       <xsl:otherwise>
         <pagenum>
           <xsl:for-each select="@*">
@@ -655,26 +603,25 @@
   </xsl:template>
 
   <!--Attributten render er forbudt i 110-->
-
   <xsl:template match="x:sidebar">
     <sidebar>
 
-      <xsl:if test="@id">
-        <xsl:attribute name="id">
+      <xsl:if test ="@id">
+        <xsl:attribute name ="id">
           <xsl:value-of select="@id"/>
         </xsl:attribute>
       </xsl:if>
 
-      <xsl:if test="@class">
-        <xsl:attribute name="class">
+      <xsl:if test ="@class">
+        <xsl:attribute name ="class">
           <xsl:value-of select="@class"/>
         </xsl:attribute>
-      </xsl:if>
-
+      </xsl:if>      
+      
       <xsl:apply-templates/>
     </sidebar>
   </xsl:template>
-
+  
   <xsl:template match="x:span">
     <span>
       <xsl:for-each select="@*">
@@ -718,15 +665,16 @@
       <xsl:apply-templates/>
     </sup>
   </xsl:template>
-
+  
   <xsl:template match="x:table">
+    <xsl:apply-templates select="x:pagenum"/>
     <table>
       <xsl:for-each select="@*">
         <xsl:attribute name="{name()}">
           <xsl:value-of select="."/>
         </xsl:attribute>
       </xsl:for-each>
-      <xsl:apply-templates/>
+      <xsl:apply-templates select="node()[not(self::x:pagenum)]|@*"/>
     </table>
   </xsl:template>
 
