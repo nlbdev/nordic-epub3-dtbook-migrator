@@ -184,7 +184,7 @@
                                     <p:empty/>
                                 </p:input>
                                 <p:input port="schema">
-                                    <p:document href="../../schema/mtm2015-1.sch"/>
+                                    <p:document href="../../schema/mtm2015-1.nota.sch"/>
                                 </p:input>
                             </p:validate-with-schematron>
                             <p:sink/>
