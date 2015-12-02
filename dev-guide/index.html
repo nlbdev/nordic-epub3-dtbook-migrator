@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8"/>
-<title>Utviklingsmiljø for Nordic Migrator</title>
+<title>Developer guide for the Nordic EPUB3/DTBook Migrator</title>
 <!-- Bootstrap (CSS) -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
@@ -11,164 +11,224 @@
 <section class="container">
 <div id="markdown-no"><pre>
 
+Developer guide for the Nordic EPUB3/DTBook Migrator
+====================================================
 
-Hvordan sette opp utviklingsmiljø for Nordic EPUB3/DTBook Migrator
-==================================================================
-<br/>
-NOTE: this document will probably be translated to english once it's done.
-<br/>
+## 1. Download and compile the project
 
-
-Pipeline 2 er et rammeverk som består av mange komponenter. Man trenger ikke å laste ned alle disse
-komponentene for å utvikle opp mot Pipeline 2-rammeverket, men her er uansett et forsøk på en oversikt:
-<br/><br/>
-
-- For å sette sammen en ZIP, en Debian-pakke, og en Windows-installer
-  - [Assembly for the distribution](https://github.com/daisy/pipeline-assembly)
-<br/><br/>
-- Brukergrensesnitt (klienter)
-  - [Command-line interface](https://github.com/daisy/pipeline-cli-go)
-  - [Desktop GUI](https://github.com/daisy/pipeline-gui)
-  - [Web UI](https://github.com/daisy/pipeline-webui)
-<br/><br/>
-- Backend (server)
-  - [Core projects for the runtime framework](https://github.com/daisy/pipeline-framework)
-<br/><br/>
-- Skript ("script modules") og delte komponenter ("utility modules")
-  - [Script modules](https://github.com/daisy/pipeline-scripts)
-  - [Format-specific utility modules](https://github.com/daisy/pipeline-scripts-utils)
-  - [Generic utility modules](https://github.com/daisy/pipeline-modules-common)
-  - [TTS modules](https://github.com/daisy/pipeline-mod-tts)
-     - [NLP modules](https://github.com/daisy/pipeline-mod-nlp)
-     - [Audio-related modules](https://github.com/daisy/pipeline-mod-audio)
-  - [Braille modules](https://github.com/daisy/pipeline-mod-braille)
-     - [Java bindings for the libhyphen hyphenation library](https://github.com/daisy/jhyphen)
-     - [NLB specific modules](https://github.com/snaekobbi/pipeline-mod-nlb) (Braillle in DAISY Project)
-     - [SBS specific modules](https://github.com/snaekobbi/pipeline-mod-sbs) (Braillle in DAISY Project)
-     - [MTM specific modules](https://github.com/snaekobbi/pipeline-mod-mtm) (Braillle in DAISY Project)
-     - [Nota specific modules](https://github.com/snaekobbi/pipeline-mod-nota) (Braillle in DAISY Project)
-     - [Celia specific modules](https://github.com/snaekobbi/pipeline-mod-celia) (Braillle in DAISY Project)
-     - [Dedicon specific modules](https://github.com/snaekobbi/pipeline-mod-dedicon) (Braillle in DAISY Project)
-     - [Embossing and converting braille in PEF-format](https://github.com/snaekobbi/brailleutils) (Braille in DAISY Project)
-     - [Implementation of Braille CSS in Java/ANTLR](https://github.com/snaekobbi/braille-css) (Braille in DAISY Project)
-     - [Braille translator and back-translator](https://github.com/snaekobbi/liblouis) (Braille in DAISY Project)
-     - [Braille Production System](https://github.com/snaekobbi/dotify) (Braille in DAISY Project)
-  - [EPUB3/DTBook Migrator](https://github.com/nlbdev/nordic-epub3-dtbook-migrator) (Nordic project)
-<br/><br/>
-- Diverse
-  - [Java library for using the Web API](https://github.com/daisy/pipeline-clientlib-java)
-  - [Go library for using the Web API](https://github.com/daisy/pipeline-clientlib-go)
-  - [Utilities for the build system](https://github.com/daisy/pipeline-build-utils)
-  - [Integration tests](https://github.com/daisy/pipeline-it)
-  - [A Maven plugin for running XSLT unit tests with XSpec](https://github.com/daisy/xspec-maven-plugin)
-  - [A tool for testing XProc scripts](https://github.com/daisy/xprocspec)
-  - [DAISY Consortium Maven parent POMs](https://github.com/daisy/maven-parents)
-  - [Maven plugin for executing XProc pipelines.](https://github.com/daisy/xproc-maven-plugin)
-  - [Maven POMs to build OSGi-ready versions of various third-party libraries](https://github.com/daisy/osgi-libs)
-
-## 1. Laste ned og kompilere prosjektet
-
-Aller først trengs noen avhengigheter.
+First you'll need some dependencies
 
 ### 1.1. Java
 
-Praktisk talt alle Pipeline 2-komponenter
-krever Java for å kompileres. Det er også litt Java-kode i dette prosjektet,
-men vi prøver å holde Java-koden til et minimum i Pipeline 2-skriptene, om i det hele tatt.
+Practically all Pipeline 2 components require Java to be compiled.
+There's also a bit of Java-code in the Nordic EPUB3/DTBook Migrator,
+but we try to keep it to a minimum in all Pipeline 2-scripts.
+Many scripts do not contain any Java code at all.
 
-- Linux: `sudo apt-get install openjdk-8-jdk`
-- Windows: (peker til hvordan installere Java 8 SDK her)
+- **Ubuntu**: `sudo apt-get install openjdk-8-jdk`
+- **Windows**: Download and install [Java 8 SDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html).
+  Also make sure that the environment variable `JAVA_HOME` is set to `C:\Program Files\Java\jdk1.8.0_65`
+  (or the equivalent on your system), and that `%JAVA_HOME%\bin` is added to your `PATH` environment variable.
+  You can set environment variables in Windows 7 by opening the start menu,
+  right-clicking "Computer" and selecting "Properties",
+  choosing "Advanced system settings", then clicking "Environment Variables".
+
+Run `java -version` from the terminal (command line) to see that Java is installed correctly
+(in Windows you may have to re-open your terminal window for the changes to take effect).
 
 ### 1.2. Git
 
-Prosjektet bruker Git for revisjonskontroll:
+For revision control we use Git:
 
-- Linux: `sudo apt-get install git`
-- Windows: GitHub har en bra desktop-klient tilgjengelig for nedlasting her: https://desktop.github.com/
+- **Ubuntu**: `sudo apt-get install git`
+- **Windows**: Download and install [GitHub Desktop](https://desktop.github.com/).
 
 ### 1.3. Maven
 
-For å automatisk håndtere og laste ned avhengigheter, samt metadata for selve prosjektet, brukes Maven:
+To manage dependencies and build the project, we use Maven:
 
-- Linux: `sudo apt-get install maven`
-- Windows: (peker til hvordan installere Maven her)
+- **Ubuntu**: `sudo apt-get install maven`
+- **Windows**: Download [the binary zip archive of Maven](https://maven.apache.org/download.cgi) and unzip it to either `C:\` or wherever else you prefer. Then [add the Maven `bin` directory to your `PATH` environment variable](https://maven.apache.org/guides/getting-started/windows-prerequisites.html).
 
-### 1.4. Laste ned Nordic EPUB3/DTBook Migrator-prosjektet
+Run `mvn --version` from the terminal to see that Maven is installed correctly
+(in Windows you may have to re-open your terminal window for the changes to take effect).
 
-Det kan være greit å ha en egen mappe kalt for eksempel "daisy-pipeline" et sted på disken
-hvor alle Pipeline 2-relaterte prosjekter kan lagres. I utgangspunktet trenger man bare
-`nordic-epub3-dtbook-migrator`-repositoryet for å jobbe med dette prosjektet, men i denne
-guiden antar vi at alle prosjekter sjekkes ut under mappen `~/daisy-pipeline/` i Linux
-og `%HOMEPATH%\daisy-pipeline\` i Windows.
+### 1.4. Download the Nordic EPUB3/DTBook Migrator project
 
-Sjekk ut [GitHub-prosjektet](https://github.com/nlbdev/nordic-epub3-dtbook-migrator):
+At this point it might be a good idea to decide where to store your Pipeline 2-related projects.
+This guide will assume that you create a directory called `daisy-pipeline` in your home directory
+for this purpose (`~/daisy-pipeline/` in Ubuntu, `%HOMEPATH%\daisy-pipeline\` in Windows).
 
-- Linux: `cd ~/daisy-pipeline ; git clone https://github.com/nlbdev/nordic-epub3-dtbook-migrator.git`
-- Windows: (beskriv hvordan man sjekker ut repositoryet med GitHub Desktop her)
+Clone the [GitHub-project](https://github.com/nlbdev/nordic-epub3-dtbook-migrator):
 
-### 1.5. Kompilere prosjektet
+- **Ubuntu**: <code>cd ~/daisy-pipeline && git clone https://github.com/nlbdev/nordic-epub3-dtbook-migrator.git</code>
+- **Windows**: In GitHub Desktop, click the `+`-sign in the upper left corner and choose "Clone". If you are part of the `nlbdev` organization on GitHub, choose `nlbdev` in the left pane. Otherwise, you need to clone the `nlbdev/nordic-epub3-dtbook-migrator` project to your own user on GitHub and select yourself in the left pane instead. Then select `nordic-epub3-dtbook-migrator` in the right pane, and then click the "Clone" button at the bottom. Browse to and select the `daisy-pipeline` directory in your user home directory.
 
-Fra prosjektmappen (altså `~/daisy-pipeline/nordic-epub3-dtbook-migrator/` i Linux og
-`%HOMEPATH%\daisy-pipeline\nordic-epub3-dtbook-migrator\` i Windows), kjør:
+### 1.5. Building the project
 
-- Linux og Windows: `mvn clean package`
+Open a terminal window in the project folder (`~/daisy-pipeline/nordic-epub3-dtbook-migrator/` in Ubuntu, `%HOMEPATH%\daisy-pipeline\nordic-epub3-dtbook-migrator\` in Windows). The easiest way to open a terminal in Windows is to right click the project in GitHub Desktop and choose "Open in Git Shell".
 
-Dette er egentlig den eneste kommandoen du trenger hvis du bare jobber på dette prosjektet.
-Kommandoen sørger først for at det ikke henger igjen noe fra forrige kompilering (`clean`),
-og deretter kjører den alle testene og zipper opp den kompilerte versjonen klar for
-installering i Pipeline 2 (`package`).
+- In either Ubuntu or Windows, run this command from the terminal: `mvn clean install`
 
-## 2. Bruke oXygen til å validere enkelt-filer
+The terminal output should end with a "BUILD SUCCESS" message.
 
-Filen `src/main/resources/META-INF/catalog.xml` er en XML-katalog som deklarerer
-"offentlige" URLer for nyttige ressurser i prosjektet.
-Dette inkluderer RelaxNG og Schematron dokumenter for validering.
-Denne filen bør lenkes inn i oXygen sånn at oXygen forstår disse URLene.
+This is usually the only command you need to run from the terminal during development.
+`clean` and `install` are what Maven calls "goals".
+The `install` goal implicitly also runs the goals `test` and `package`.
+So there are four goals run in sequence, `clean -> test -> package -> install`.
+The `clean` goal simply cleans the build directory.
+The `test` goal runs all the tests (XSpec and in the future xprocspec).
+The `package` goal zips up all the XML files as well as the compiled Java classes into a JAR file.
+The `install` goal copies the packaged JAR to a Maven cache on your computer,
+so that it is available for use by any other projects you work on.
 
-Det kan hende det kan gjøres grafisk gjennom oXygen, men en annen måte å gjøre
-det på er å åpne `Oxygen XML Editor 17/frameworks/catalog.xml` (eller tilsvarende)
-og lenke inn vår XML-katalog med noe tilsvarende dette:
+### 1.6 Development workflow with Git and GitHub
 
-```
-<nextCatalog catalog="../../xmlcatalog/catalog.xml"/>
-```
-TODO: det skal stå nextCatalog, ikke nextcatalog (stor C); vet ikke hvorfor den rendrer som liten c.
+Before making any changes, make sure you are on the branch `master`, that you have the latest version of the repository, and then make a new branch.
 
-Etter dette trenger oXygen en omstart.
+**Change to master branch:**
 
-Deretter kan du åpne test-dokumentene under `src/test/xprocspec/`,
-for eksempel `src/test/xprocspec/single-html/C00000.xhtml`, og prøve å
-validere de i oXygen. Disse dokumentene deklarerer hvilke RelaxNG og Schematron
-de skal valideres med i `<?xml-model href="..."?>`-deklarasjoner øverst.
-Alternativt kan man også gi URLen til disse dokumentene til oXygen i
-for eksempel et validerings-scenario.
+- **Ubuntu**: `git checkout master`
+- **Windows**: Choose `master` from the branch dropdown list.
 
-De fleste valideringsregler kan testes på denne måten. Men dette validerer hvert
-enkelt dokument for seg selv, og validerer ikke samspillet mellom dem.
-Filene `nordic2015-1.opf-and-html.sch` og `nordic2015-1.nav-references.sch`
-kan derimot ikke brukes i seg selv uten videre.
-I validatoren brukes XProc/XSLT for å sammenstille dokumenter fra EPUBen
-for så å bruke disse to Schematron'ene.
+**Get the latest version:**
 
-I tillegg brukes epubcheck. Dette prosjektet bruker en egenkompilert versjon
-av epubcheck v4 siden v4 ikke hadde kommet ut når validatoren ble laget.
-Planen er å bytte til den lanserte versjonen av epubcheck v4. Epubcheck
-kan kjøres fra kommandolinja, både versjonen vi bruker samt den nye
-lanserte v4-versjonen. (Jeg tror kanskje den kan kjøres fra
-inni oXygen også?)
+- **Ubuntu**: `git pull`
+- **Windows**: Click "Sync" in the top right corner.
 
-## 3. Teste den kompilerte versjonen med Pipeline 2
+**Create a new branch:**
 
-TODO: Det er snakk om å kopiere target/*.jar-filen over i "modules"-mappen i Pipeline 2-installasjonen. Skriv mer om det her.
+Preferably the branch should have a fairly descriptive name. For instance, if you're working on fixing issue #42, the branch could be named for instance `issue-42`. If you're working on adding support for a new revision of the guidelines, the branch could be named `guidelines-revision-2016-1`.
 
-## 4. Gjøre endringer i koden
+- **Ubuntu**: `git checkout -b my-awesome-feature`
+- **Windows**: Click the "Create new branch" button (next to the branch dropdown list).
 
-TODO: Beskriv mappestruktur og hvilke filer som er relevante  
-TODO: Beskriv hvordan man skriver tester, samt at man bør gjøre noen manuelle tester i tillegg
+After making some changes, save them to git.
 
-## 5. Gjøre en release
+- **Ubuntu**: `git commit -a`. By default the terminal text editor "nano" will appear. The convention is to type a short summary (max 70 characters) on the first line, then add two linebreaks, then add more details if needed. To exit nano, click `CTRL+X`, then type `y` to save or `n` to abort the commit.
+- **Windows**: At the bottom there are fields for the commit summary and description. The summary should be no more than 70 characters. Click "Commit to [branch name]" to finish.
 
-TODO: Dette gjør jeg i min dropbox nå. En bedre metode må lages.
+You can make as many commits as you want on your branch. The project doesn't have to work on each commit.
+*When* you choose to commit is up to you; you can do it at the end of each day, or whenever you feel you've made a significant change to the code.
+Making regular commits will make it easier for you to go back in the git history to see what changes you made and if needed revert those changes.
+
+If you want, you can upload your commits to GitHub while working on the branch.
+
+- **Ubuntu**: `git push`. When you create a branch it will only be created locally on your computer. The first time you push to GitHub, you will get an error saying that the branch does not have a "upstream branch". "upstream" refers to the GitHub-version of the project, so the "upstream branch" is the GitHub branch that you want to push to. Git will give you a suggestion in the terminal which you can run to create the branch on GitHub. For instance `git push --set-upstream origin my-awesome-feature`. You will only have to do this once for each branch you create.
+- **Windows**: Click "Publish" or "Sync" in the top right corner. The button will say "Publish" when you are uploading a branch that is not already on GitHub and "Sync" when you are adding commits to a branch that is already on GitHub.
+
+When the bugfix or feature in your branch is complete, make sure that the branch is uploaded to GitHub and then create a pull request on GitHub. In the GitHub.com interface, click "branches", locate your branch in the list, and then click "New pull request". Fill out the fields for a summary and a description in the same way as you did for the commits, but this time summarize and describe the branch as a whole. Add any labels you think is appropriate, assign someone to review the branch, and click "Create pull request".
+
+## 2. Using oXygen to validate DTBook and (X)HTML5
+
+### 2.1 Adding the XML catalog
+
+The file `src/main/resources/META-INF/catalog.xml` is an XML-catalog which declares
+"public" URLs for useful reusable resources in this project.
+This includes RelaxNG and Schematron documents for validation.
+By adding this XML catalog into oXygen, we can use them to
+perform some of the validation directly inside oXygen.
+
+To add an XML catalog in oXygen, choose "Options" -> "Preferences" -> "XML" -> "XML Catalog".
+Then click "Add" and browse to the projects `catalog.xml` file.
+
+In the project folder for all Pipeline 2 modules, there is an XML catalog at this same location.
+The `nordic-epub3-dtbook-migrator` depends on modules from 14 other modules, stored in three
+different GitHub repositories. It can be useful to clone these repositories
+and add their catalogs as well.
+Instead of adding the catalogs from all these modules separately though,
+there is a `catalog.xml` file located in the top-level directory of each
+of these three repositories that can be used for convenience:
+
+- [pipeline-modules-common](https://github.com/daisy/pipeline-modules-common) for file manipulation
+- [pipeline-scripts-utils](https://github.com/daisy/pipeline-scripts-utils) for format-specific operations and epubcheck
+- [pipeline-scripts](https://github.com/daisy/pipeline-scripts) for dtbook validation
+
+### 2.2 Examples
+
+As examples, you can use the files under `src/test/xprocspec/`:
+
+- `src/test/xprocspec/DTBook/C00000.xml` - DTBook document
+- `src/test/xprocspec/single-html/C00000.xhtml` - Single (X)HTML5 documents
+
+In these files, there is a couple of <code>&lt;?xml-model href="..."?&gt;</code> processing instructions
+at the top of each file. Each href refers to one of the public URLs declared in the
+XML catalog. If you run a validation in oXygen, these files will be used for validation.
+
+### 2.3 EPUB Validation and further work
+
+EPUB validation is a bit more complex:
+- **single-document validation**: Most of the validation can be performed using the same method. Have a look at
+  the OPF and (X)HTML5 documents in `src/test/xprocspec/C00000/` for examples.
+- **multi-document validation**: The validation rules in `nordic2015-1.opf-and-html.sch` and `nordic2015-1.nav-references.sch`
+  requires multiple input documents and cannot be used directly using this method.
+- **epubcheck**: In oXygen 17.1, epubcheck v4 is included. This should be basically the same
+  version as is used for this project.
+- **other**: There shouldn't be other validation methods than those mentioned above,
+  however there might be something implemented in XProc or XSLT.
+
+See also [issue #340: Make all validation possible directly from oXygen](https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/340).
+
+## 3. Development workflow with Pipeline 2
+
+### Using the latest snapshot version of Pipeline 2 and automatic installation of the scripts
+
+For day-to-day development, this is the most efficient way to work,
+as the iteration time is shorter. Also, you get to try the latest
+version of Pipeline 2 which may contain improvements or features
+that you wish to try out.
+
+#### Initial setup
+
+1. Clone [the pipeline-scripts-utils repository](https://github.com/daisy/pipeline-scripts-utils) (if you haven't already)
+2. In the "pipeline-scripts-utils" repository, checkout the `epubcheck-adapter` branch
+   (dropdown list in GitHub Desktop or `git checkout epub3-validator` in terminal)
+3. Open a terminal in the "pipeline-scripts-utils" repository and run `mvn clean install`
+4. Clone [the pipeline-scripts repository](https://github.com/daisy/pipeline-scripts) (if you haven't already)
+5. In the "pipeline-scripts" repository, checkout the `epub3-validator` branch
+6. Open a terminal in the "pipeline-scripts" repository and run `mvn clean install`
+7. Clone [the pipeline-assembly repository](https://github.com/daisy/pipeline-assembly) and checkout the `nordic-epub3-dtbook-migrator` branch
+8. Open a terminal in the "pipeline-assembly" repository and run `mvn clean package -Pdev-launcher`
+
+#### Running
+
+1. Open a terminal in the "pipeline-assembly" repository, change directory to `target/dev-launcher/bin`, and run `./pipeline2`.
+2. Build the project with `mvn clean install`. Using `install` here will copy the JAR to a Maven cache on your computer,
+   and then the "dev-launcher" version of Pipeline 2 automatically picks that up and installs the new version.
+3. Test the scripts using a Pipeline 2 client. The CLI (`dp2`) is bundled with the release version of Pipeline 2.
+   The [Web UI](https://github.com/daisy/pipeline-webui) can be downloaded and installed separately.
+4. Make changes to the source code, then return to step 2.
+
+### Using the release version of Pipeline 2 and installing the scripts manually
+
+The script should be tested using the latest *release version* of Pipeline 2
+before making a release of the script.
+
+#### Initial setup
+
+1. [Install Pipeline 2](https://github.com/daisy/pipeline-assembly/releases/latest)
+2. Unzip [dependencies-1.8.1.zip](https://dl.dropboxusercontent.com/u/6370535/nordic-epub3-dtbook-migrator/epubcheck-adapter-with-dependencies/dependencies-1.8.1.zip) into where Pipeline 2 were installed; in Windows the default is `C:\Program Files\DAISY Pipeline 2\daisy-pipeline` or `C:\Program Files (x86)\DAISY Pipeline 2\daisy-pipeline` *(this step will be unneccessary as of early 2016)*
+
+#### Running
+
+1. Run `dp2 help` to start the Pipeline 2 engine and see what scripts are installed.
+   The Windows installer should have added the Pipeline 2 Command Line Interface (CLI) to your PATH.
+   If you did not use use the installer or are using Linux, either add that directory to your PATH,
+   or just navigate to the `.../daisy-pipeline/cli` directory before running the command.
+2. Build the project with `mvn clean package`
+3. Move the resulting JAR file from `target/` (for instance `nordic-epub3-dtbook-migrator-1.1.1-SNAPSHOT.jar`)
+   into the `C:\Program Files\DAISY Pipeline 2\daisy-pipeline\modules` directory (or equivalent for Linux).
+4. Use the `dp2` command to test the nordic scripts
+5. Make changes to the source code, then return to step 2.
+
+## 4. The source code
+
+**TODO**: Describe directory structure and what files are relevant  
+**TODO**: Describe how to write tests, as well as how to run the xprocspec tests since they currently need to be run manually
+
+## 5. Make a release
+
+**TODO**: I'm doing this in my Dropbox now. Must make a better routine for this. Probably Sonatype, maybe also GitHub Releases, etc.
 
 </pre></div>
 </section>
