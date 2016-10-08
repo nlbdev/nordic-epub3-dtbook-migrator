@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-html-to-dtbook.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
@@ -36,9 +36,7 @@
 
     <p:import href="validation-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
 
     <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
@@ -62,11 +60,11 @@
 
 
 
-            <pxi:fileset-load media-types="application/xhtml+xml" name="html-to-dtbook.step.load-xhtml">
+            <px:fileset-load media-types="application/xhtml+xml" name="html-to-dtbook.step.load-xhtml">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <px:assert test-count-max="1" message="There are multiple HTML files in the fileset; only the first one will be converted."/>
             <px:assert test-count-min="1" message="There must be a HTML file in the fileset." error-code="NORDICDTBOOKEPUB005"/>
             <p:split-sequence initial-only="true" test="position()=1" name="html-to-dtbook.step.split-sequence-only-first"/>
@@ -135,11 +133,11 @@
                 </p:input>
             </p:identity>
             <p:delete match="//d:file[@media-type=('application/xhtml+xml','text/css')]" name="html-to-dtbook.step.input-fileset-delete-xhtml-and-css"/>
-            <pxi:fileset-add-entry media-type="application/x-dtbook+xml" name="html-to-dtbook.step.add-dtbook-to-fileset">
+            <px:fileset-add-entry media-type="application/x-dtbook+xml" name="html-to-dtbook.step.add-dtbook-to-fileset">
                 <p:with-option name="href" select="(/*/d:file[@media-type='application/xhtml+xml'])[1]/replace(replace(@href,'.*/',''),'\.[^\.]*$','.xml')">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:with-option>
-            </pxi:fileset-add-entry>
+            </px:fileset-add-entry>
             <p:viewport match="//d:file[starts-with(@href,'images/')]" name="html-to-dtbook.step.move-images-in-fileset-to-images-directory">
                 <p:add-attribute match="/*" attribute-name="href" name="html-to-dtbook.step.move-images-in-fileset-to-images-directory.add-attribute">
                     <p:with-option name="attribute-value" select="replace(/*/@href,'^images/','')"/>

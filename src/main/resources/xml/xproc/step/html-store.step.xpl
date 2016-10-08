@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-html-store.step" name="main" version="1.0" xmlns:l="http://xproc.org/library" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
+    type="px:nordic-html-store.step" name="main" version="1.0" xmlns:l="http://xproc.org/library" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
@@ -34,9 +33,7 @@
     <p:option name="include-resources" select="'true'"/>
 
     <p:import href="validation-status.xpl"/>
-    <p:import href="../upstream/file-utils/xproc/set-doctype.xpl"/>
-    <p:import href="../upstream/file-utils/xproc/set-xml-declaration.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
 
@@ -95,10 +92,10 @@
             <p:viewport match="d:file[@media-type='application/xhtml+xml']" name="html-store.step.viewport-doctype">
                 <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
                 <p:variable name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
-                <pxi:set-doctype name="html-store.step.viewport-doctype.set-doctype">
+                <px:set-doctype name="html-store.step.viewport-doctype.set-doctype">
                     <p:with-option name="doctype" select="$doctype"/>
                     <p:with-option name="href" select="$href"/>
-                </pxi:set-doctype>
+                </px:set-doctype>
                 <p:add-attribute match="/*" attribute-name="doctype" name="html-store.step.viewport-doctype.add-doctype-attribute-to-fileset">
                     <p:input port="source">
                         <p:pipe port="current" step="html-store.step.viewport-doctype"/>

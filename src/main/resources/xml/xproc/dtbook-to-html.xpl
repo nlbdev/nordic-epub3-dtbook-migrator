@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-dtbook-to-html" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic DTBook to HTML5</h1>
@@ -65,10 +65,7 @@
     <p:import href="step/html-validate.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="step/fail-on-error-status.xpl"/>
-    <p:import href="upstream/file-utils/xproc/set-doctype.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
-    <!--<p:import href="upstream/fileset-utils/fileset-load.xpl"/>-->
-    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
@@ -83,9 +80,9 @@
     <px:fileset-create name="dtbook-to-html.create-dtbook-fileset">
         <p:with-option name="base" select="replace($dtbook-href,'[^/]+$','')"/>
     </px:fileset-create>
-    <pxi:fileset-add-entry media-type="application/x-dtbook+xml" name="dtbook-to-html.add-dtbook-to-fileset">
+    <px:fileset-add-entry media-type="application/x-dtbook+xml" name="dtbook-to-html.add-dtbook-to-fileset">
         <p:with-option name="href" select="replace($dtbook-href,'.*/','')"/>
-    </pxi:fileset-add-entry>
+    </px:fileset-add-entry>
     <px:nordic-dtbook-validate.step name="dtbook-to-html.dtbook-validate" cx:depends-on="dtbook-to-html.nordic-version-message">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
@@ -142,11 +139,11 @@
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="dtbook-to-html.store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="dtbook-to-html.set-report-doctype">
+    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="dtbook-to-html.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
             <p:pipe port="result" step="dtbook-to-html.store-report"/>
         </p:with-option>
-    </pxi:set-doctype>
+    </px:set-doctype>
     <p:sink/>
     
     <px:nordic-fail-on-error-status name="status">

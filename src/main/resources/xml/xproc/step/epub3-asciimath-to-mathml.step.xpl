@@ -4,7 +4,6 @@
     xmlns:d="http://www.daisy.org/ns/pipeline/data" type="px:nordic-epub3-asciimath-to-mathml.step"
     name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops"
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator"
     xmlns:mathml="http://www.w3.org/1998/Math/MathML">
 
     <p:input port="fileset.in" primary="true"/>
@@ -38,9 +37,7 @@
 
     <p:import href="validation-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
-    <!--<p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>-->
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/asciimath-utils/library.xpl"/>
 
     <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
@@ -67,14 +64,14 @@
 
 
 
-            <pxi:fileset-load media-types="application/xhtml+xml" name="epub3-asciimath-to-mathml.step.load-html-files">
+            <px:fileset-load media-types="application/xhtml+xml" name="epub3-asciimath-to-mathml.step.load-html-files">
                 <p:input port="fileset">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <p:for-each name="epub3-asciimath-to-mathml.step.iterate-html-files">
                 <px:message message="Checking for ASCIIMath in $1">
                     <p:with-option name="param1" select="base-uri(/*)"/>
@@ -140,14 +137,14 @@
             <p:identity name="epub3-asciimath-to-mathml.step.xhtml-documents-with-mathml"/>
             <p:sink/>
 
-            <pxi:fileset-load media-types="application/oebps-package+xml" method="xml" name="epub3-asciimath-to-mathml.step.load-opf">
+            <px:fileset-load media-types="application/oebps-package+xml" method="xml" name="epub3-asciimath-to-mathml.step.load-opf">
                 <p:input port="fileset">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
             <p:viewport match="/opf:package/opf:manifest/opf:item" name="epub3-asciimath-to-mathml.step.viewport-opf-items">
                 <p:variable name="item-uri" select="resolve-uri(@href,base-uri(/*))"/>

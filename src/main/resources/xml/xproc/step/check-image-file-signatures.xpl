@@ -10,8 +10,7 @@
         <p:documentation>Output report (&lt;d:document-validation-report/&gt;)</p:documentation>
     </p:output>
 
-    <p:import href="../upstream/file-utils/xproc/peek.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
     <p:for-each name="check-image-file-signatures.iterate-images">

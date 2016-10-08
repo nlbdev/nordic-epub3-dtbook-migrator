@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-html-to-epub3.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
 
 
     <p:input port="fileset.in" primary="true"/>
@@ -43,9 +42,6 @@
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -73,14 +69,14 @@
             <p:variable name="epub-dir" select="concat($temp-dir,'epub/')"/>
             <p:variable name="publication-dir" select="concat($epub-dir,'EPUB/')"/>
 
-            <pxi:fileset-load media-types="application/xhtml+xml" name="html-to-epub3.step.load-single-html">
+            <px:fileset-load media-types="application/xhtml+xml" name="html-to-epub3.step.load-single-html">
                 <p:input port="fileset">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one HTML file in the single-page HTML fileset." error-code="NORDICDTBOOKEPUB007"/>
             <p:identity name="html-to-epub3.step.single-html"/>
             <p:sink/>
@@ -93,22 +89,22 @@
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
             </px:nordic-html-split-perform>
-            <pxi:fileset-move name="html-to-epub3.step.html-split.moved">
+            <px:fileset-move name="html-to-epub3.step.html-split.moved">
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split"/>
                 </p:input>
                 <p:with-option name="new-base" select="$publication-dir"/>
-            </pxi:fileset-move>
+            </px:fileset-move>
 
             <!-- Create spine -->
             <px:fileset-filter media-types="application/xhtml+xml" name="html-to-epub3.step.filter-html-split-fileset-xhtml"/>
             <p:identity name="html-to-epub3.step.spine"/>
 
-            <pxi:fileset-load name="html-to-epub3.step.load-spine">
+            <px:fileset-load name="html-to-epub3.step.load-spine">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split.moved"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <p:for-each name="html-to-epub3.step.iterate-spine">
                 <p:viewport match="/html:html/html:head" name="html-to-epub3.step.iterate-spine.viewport-html-head">
                     <p:xslt name="html-to-epub3.step.iterate-spine.viewport-html-head.pretty-print">
@@ -273,9 +269,9 @@
                     <p:pipe port="ncx" step="html-to-epub3.step.nav"/>
                 </p:with-option>
             </px:message>
-            <pxi:fileset-add-entry media-type="application/x-dtbncx+xml" name="html-to-epub3.step.add-ncx-to-fileset">
+            <px:fileset-add-entry media-type="application/x-dtbncx+xml" name="html-to-epub3.step.add-ncx-to-fileset">
                 <p:with-option name="href" select="'nav.ncx'"/>
-            </pxi:fileset-add-entry>
+            </px:fileset-add-entry>
             <p:identity name="html-to-epub3.step.ncx-fileset"/>
             <px:fileset-join name="html-to-epub3.step.join-ncx-and-non-linear-content-filesets">
                 <p:input port="source">
@@ -355,14 +351,14 @@
                     <p:pipe port="result" step="html-to-epub3.step.resource-fileset"/>
                 </p:input>
             </p:identity>
-            <pxi:fileset-add-entry media-type="application/oebps-package+xml" name="html-to-epub3.step.add-opf-to-resource-fileset">
+            <px:fileset-add-entry media-type="application/oebps-package+xml" name="html-to-epub3.step.add-opf-to-resource-fileset">
                 <p:with-option name="href" select="base-uri(/*)">
                     <p:pipe port="result" step="html-to-epub3.step.package"/>
                 </p:with-option>
-            </pxi:fileset-add-entry>
-            <pxi:fileset-add-entry media-type="application/xhtml+xml" name="html-to-epub3.step.add-nav-to-resource-fileset">
+            </px:fileset-add-entry>
+            <px:fileset-add-entry media-type="application/xhtml+xml" name="html-to-epub3.step.add-nav-to-resource-fileset">
                 <p:with-option name="href" select="concat($publication-dir,'nav.xhtml')"/>
-            </pxi:fileset-add-entry>
+            </px:fileset-add-entry>
             <px:mediatype-detect name="html-to-epub3.step.mediatype-detect">
                 <p:input port="in-memory">
                     <p:pipe port="result" step="html-to-epub3.step.result.in-memory-without-ocf-files"/>

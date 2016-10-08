@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-html-validate.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:l="http://xproc.org/library">
+    xmlns:l="http://xproc.org/library">
 
     <p:serialization port="report.out" indent="true"/>
 
@@ -40,8 +40,6 @@
     <p:import href="validation-status.xpl"/>
     <p:import href="check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
-    <!--<p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
@@ -69,11 +67,11 @@
 
 
             <!-- either load from memory or using p:load; avoid using px:html-load as it will remove the nordic namespace -->
-            <pxi:fileset-load media-types="application/xhtml+xml" load-if-not-in-memory="false" name="html-validate.step.load-xhtml">
+            <px:fileset-load media-types="application/xhtml+xml" load-if-not-in-memory="false" name="html-validate.step.load-xhtml">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <p:identity name="html-validate.step.html.from-memory"/>
             <p:count name="html-validate.step.count-xhtml"/>
             <p:choose name="html-validate.step.choose-already-in-memory">

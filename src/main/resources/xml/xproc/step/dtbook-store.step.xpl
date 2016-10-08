@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-dtbook-store.step" name="main" version="1.0" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/" xmlns:cx="http://xmlcalabash.com/ns/extensions"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
+    type="px:nordic-dtbook-store.step" name="main" version="1.0" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/" xmlns:cx="http://xmlcalabash.com/ns/extensions">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
@@ -34,8 +33,7 @@
     <p:option name="include-resources" select="'true'"/>
 
     <p:import href="validation-status.xpl"/>
-    <p:import href="../upstream/file-utils/xproc/set-xml-declaration.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-epub3-store.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator"
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions"
     xmlns:dc="http://purl.org/dc/elements/1.1/">
 
     <p:input port="fileset.in" primary="true"/>
@@ -35,12 +35,8 @@
     <p:option name="output-dir" required="true"/>
 
     <p:import href="validation-status.xpl"/>
-    <p:import href="../upstream/file-utils/xproc/set-doctype.xpl"/>
-    <p:import href="../upstream/file-utils/xproc/set-xml-declaration.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
 
@@ -98,10 +94,10 @@
                 <p:viewport match="d:file[@media-type='application/xhtml+xml']" name="epub3-store.step.store-epub3.viewport-store-doctype">
                     <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
                     <p:variable name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
-                    <pxi:set-doctype name="epub3-store.step.store-epub3.viewport-store-doctype.set-doctype">
+                    <px:set-doctype name="epub3-store.step.store-epub3.viewport-store-doctype.set-doctype">
                         <p:with-option name="doctype" select="$doctype"/>
                         <p:with-option name="href" select="$href"/>
-                    </pxi:set-doctype>
+                    </px:set-doctype>
                     <p:add-attribute match="/*" attribute-name="doctype" name="epub3-store.step.store-epub3.viewport-store-doctype.set-doctype-attribute-in-fileset">
                         <p:input port="source">
                             <p:pipe port="current" step="epub3-store.step.store-epub3.viewport-store-doctype"/>
@@ -146,22 +142,22 @@
                     <p:pipe port="result" step="epub3-store.step.store-epub3"/>
                 </p:with-option>
             </px:fileset-create>
-            <pxi:fileset-add-entry media-type="application/epub+zip" name="epub3-store.step.add-epub-to-fileset">
+            <px:fileset-add-entry media-type="application/epub+zip" name="epub3-store.step.add-epub-to-fileset">
                 <p:with-option name="href" select="concat(/*/text(),'.epub')">
                     <p:pipe port="result" step="epub3-store.step.metadata.identifier"/>
                 </p:with-option>
-            </pxi:fileset-add-entry>
+            </px:fileset-add-entry>
             <p:identity name="epub3-store.step.result.fileset"/>
 
             <!-- get metadata -->
-            <pxi:fileset-load media-types="application/oebps-package+xml" name="epub3-store.step.metadata.load-opf">
+            <px:fileset-load media-types="application/oebps-package+xml" name="epub3-store.step.metadata.load-opf">
                 <p:input port="fileset">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
             <p:filter select="//dc:identifier[not(@refines)]" name="epub3-store.step.metadata.filter-dc-identifier"/>
             <px:assert message="The EPUB Package Document (the OPF file) must have a 'dc:identifier' element" test-count-min="1" error-code="NORDICDTBOOKEPUB012"/>

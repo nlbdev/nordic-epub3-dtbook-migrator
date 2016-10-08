@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-dtbook-validate.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:l="http://xproc.org/library">
+    xmlns:l="http://xproc.org/library">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
@@ -41,8 +41,6 @@
     <p:import href="validation-status.xpl"/>
     <p:import href="check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
-    <!--<p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl"/>
@@ -128,11 +126,11 @@
                         <p:with-option name="param1" select="count(/*/*)"/>
                     </px:assert>
                     <p:delete match="/*/*[position() &gt; 1]" name="dtbook-validate.step.delete-except-first-dtbook-in-fileset"/>
-                    <pxi:fileset-load media-types="application/x-dtbook+xml" name="dtbook-validate.step.load-dtbook">
+                    <px:fileset-load media-types="application/x-dtbook+xml" name="dtbook-validate.step.load-dtbook">
                         <p:input port="in-memory">
                             <p:pipe port="in-memory.in" step="main"/>
                         </p:input>
-                    </pxi:fileset-load>
+                    </px:fileset-load>
                     <p:choose name="dtbook-validate.step.choose-if-legacy">
                         <p:when test="$allow-legacy='true' and $dtbook2005='true'">
                             <px:upgrade-dtbook name="dtbook-validate.step.choose-if-legacy.upgrade-to-2005-3">

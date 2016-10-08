@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-html-split-perform" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
+    xmlns:html="http://www.w3.org/1999/xhtml">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
@@ -16,16 +16,14 @@
         <p:pipe port="result" step="html-split.in-memory.resources"/>
     </p:output>
 
-    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <pxi:fileset-load media-types="application/xhtml+xml" name="html-split.load-html">
+    <px:fileset-load media-types="application/xhtml+xml" name="html-split.load-html">
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </pxi:fileset-load>
+    </px:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one HTML file in the fileset." error-code="NORDICDTBOOKEPUB006"/>
     <p:identity name="html-split.html"/>
 
@@ -69,9 +67,9 @@
         <px:fileset-create name="html-split.for-each.create-fileset">
             <p:with-option name="base" select="replace($base,'[^/]+$','')"/>
         </px:fileset-create>
-        <pxi:fileset-add-entry media-type="application/xhtml+xml" name="html-split.for-each.add-html-to-fileset">
+        <px:fileset-add-entry media-type="application/xhtml+xml" name="html-split.for-each.add-html-to-fileset">
             <p:with-option name="href" select="replace($base,'^.*/([^/]+)$','$1')"/>
-        </pxi:fileset-add-entry>
+        </px:fileset-add-entry>
         <p:add-attribute match="//d:file" attribute-name="omit-xml-declaration" attribute-value="false" name="html-split.for-each.dont-omit-xml-declaration"/>
         <p:add-attribute match="//d:file" attribute-name="version" attribute-value="1.0" name="html-split.for-each.xml-version"/>
         <p:add-attribute match="//d:file" attribute-name="encoding" attribute-value="utf-8" name="html-split.for-each.xml-encoding"/>
@@ -82,14 +80,14 @@
     </p:for-each>
     <p:identity name="html-split.in-memory.html"/>
 
-    <pxi:fileset-load not-media-types="application/xhtml+xml" load-if-not-in-memory="false" name="html-split.load-resources">
+    <px:fileset-load not-media-types="application/xhtml+xml" load-if-not-in-memory="false" name="html-split.load-resources">
         <p:input port="fileset">
             <p:pipe port="fileset.in" step="main"/>
         </p:input>
         <p:input port="in-memory">
             <p:pipe port="in-memory.in" step="main"/>
         </p:input>
-    </pxi:fileset-load>
+    </px:fileset-load>
     <p:identity name="html-split.in-memory.resources"/>
 
     <px:fileset-filter not-media-types="application/xhtml+xml" name="html-split.filter-html">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-html-to-dtbook" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:pxp="http://exproc.org/proposed/steps" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:cx="http://xmlcalabash.com/ns/extensions">
+    xmlns:cx="http://xmlcalabash.com/ns/extensions">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic HTML5 to DTBook</h1>
@@ -74,13 +74,8 @@
     <p:import href="step/dtbook-store.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="step/fail-on-error-status.xpl"/>
-    <!--<p:import href="upstream/fileset-utils/fileset-load.xpl"/>-->
-    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
-    <p:import href="upstream/fileset-utils/fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="upstream/file-utils/xproc/set-doctype.xpl"/>
-    <p:import href="upstream/file-utils/xproc/set-xml-declaration.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -96,9 +91,9 @@
     <px:fileset-create name="html-to-dtbook.create-html-fileset">
         <p:with-option name="base" select="replace($html-href,'[^/]+$','')"/>
     </px:fileset-create>
-    <pxi:fileset-add-entry media-type="application/xhtml+xml" name="html-to-dtbook.add-html-to-fileset">
+    <px:fileset-add-entry media-type="application/xhtml+xml" name="html-to-dtbook.add-html-to-fileset">
         <p:with-option name="href" select="replace($html-href,'.*/','')"/>
-    </pxi:fileset-add-entry>
+    </px:fileset-add-entry>
     <p:identity name="html-to-dtbook.html-fileset.no-resources"/>
 
     <px:check-files-wellformed name="html-to-dtbook.check-html-wellformed"/>
@@ -183,12 +178,12 @@
     </px:nordic-html-to-dtbook.step>
     
     <px:message message="Storing DTBook"/>
-    <pxi:fileset-move name="html-to-dtbook.dtbook-move">
+    <px:fileset-move name="html-to-dtbook.dtbook-move">
         <p:with-option name="new-base" select="concat($output-dir,(//d:file[@media-type='application/x-dtbook+xml'])[1]/replace(replace(@href,'.*/',''),'^(.[^\.]*).*?$','$1/'))"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="html-to-dtbook.html-to-dtbook"/>
         </p:input>
-    </pxi:fileset-move>
+    </px:fileset-move>
     <px:nordic-dtbook-store.step name="html-to-dtbook.dtbook-store">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
@@ -228,11 +223,11 @@
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="html-to-dtbook.store-report" encoding="us-ascii">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="html-to-dtbook.set-report-doctype">
+    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="html-to-dtbook.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
             <p:pipe port="result" step="html-to-dtbook.store-report"/>
         </p:with-option>
-    </pxi:set-doctype>
+    </px:set-doctype>
     <p:sink/>
     
     <px:nordic-fail-on-error-status name="status">

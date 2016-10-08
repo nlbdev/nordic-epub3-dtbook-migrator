@@ -83,6 +83,67 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--
+            runtime dependencies
+        -->
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>epub3-ocf-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>epub3-pub-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>epub3-nav-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>html-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>dtbook-validator</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>dtbook-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>fileset-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>file-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>asciimath-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>epubcheck-adapter</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!--
+            runtime dependency for epub3-pub-utils
+        -->
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>mediaoverlay-utils</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -143,16 +204,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Import-Package>org.daisy.pipeline.script;version="[3.0,4)",com.google.common.io;version="[15.0,16)",com.xmlcalabash.core;version="[1.0,2)",com.xmlcalabash.io;version="[1.0,2)",com.xmlcalabash.library;version="[1.0,2)",com.xmlcalabash.model;version="[1.0,2)",com.xmlcalabash.runtime;version="[1.0,2)",com.xmlcalabash.util;version="[1.0,2)",net.sf.saxon.expr,net.sf.saxon.lib,net.sf.saxon.om,net.sf.saxon.s9api,net.sf.saxon.trans,net.sf.saxon.type,net.sf.saxon.value,org.daisy.common.xproc.calabash;version="[2.0,3)",org.slf4j;version="[1.7,2)",javax.xml.transform,javax.xml.transform.stream</Import-Package>
-                        <Service-Component>OSGI-INF/nordic-dtbook-to-epub3.xml,OSGI-INF/nordic-epub3-to-html.xml,OSGI-INF/nordic-dtbook-to-html.xml,OSGI-INF/nordic-epub3-validate.xml,OSGI-INF/nordic-dtbook-validate.xml,OSGI-INF/nordic-html-to-dtbook.xml,OSGI-INF/nordic-epub3-asciimath-to-mathml.xml,OSGI-INF/nordic-html-to-epub3.xml,OSGI-INF/nordic-epub3-to-dtbook.xml,OSGI-INF/nordic-html-validate.xml,OSGI-INF/peek-step.xml,OSGI-INF/xml-peek-step.xml,OSGI-INF/letex-unzip.xml,OSGI-INF/set-doctype-step.xml,OSGI-INF/set-xml-declaration-step.xml</Service-Component>
-                    </instructions>
-                </configuration>
             </plugin>
         </plugins>
     </build>

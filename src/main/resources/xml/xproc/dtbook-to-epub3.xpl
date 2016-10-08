@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-dtbook-to-epub3" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic DTBook to EPUB3</h1>
@@ -82,11 +82,7 @@
     <p:import href="step/epub3-validate.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="step/fail-on-error-status.xpl"/>
-    <p:import href="upstream/file-utils/xproc/set-doctype.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
-    <!--<p:import href="upstream/fileset-utils/fileset-load.xpl"/>-->
-    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
-    <p:import href="upstream/fileset-utils/fileset-move.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
@@ -101,9 +97,9 @@
     <px:fileset-create name="dtbook-to-epub3.create-dtbook-fileset">
         <p:with-option name="base" select="replace($dtbook-href,'[^/]+$','')"/>
     </px:fileset-create>
-    <pxi:fileset-add-entry name="dtbook-to-epub3.add-dtbook-to-fileset" media-type="application/x-dtbook+xml">
+    <px:fileset-add-entry name="dtbook-to-epub3.add-dtbook-to-fileset" media-type="application/x-dtbook+xml">
         <p:with-option name="href" select="replace($dtbook-href,'.*/','')"/>
-    </pxi:fileset-add-entry>
+    </px:fileset-add-entry>
     <px:nordic-dtbook-validate.step name="dtbook-to-epub3.dtbook-validate" check-images="true" cx:depends-on="nordic-version-message">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
@@ -146,13 +142,13 @@
             <px:message message="Storing intermediary HTML$1">
                 <p:with-option name="param1" select="if ($discard-intermediary-html) then '' else ' (contains errors)'"/>
             </px:message>
-            <pxi:fileset-move name="dtbook-to-epub3.choose-discard-intermediary.html-move">
+            <px:fileset-move name="dtbook-to-epub3.choose-discard-intermediary.html-move">
                 <p:with-option name="new-base"
                     select="concat(if (ends-with($output-dir,'/')) then $output-dir else concat($output-dir,'/'), substring-before(replace(/*/d:file[@media-type='application/xhtml+xml'][1]/@href,'^.*/',''),'.'), '/')"/>
                 <p:input port="in-memory.in">
                     <p:pipe port="in-memory.out" step="dtbook-to-epub3.html-validate"/>
                 </p:input>
-            </pxi:fileset-move>
+            </px:fileset-move>
             <px:nordic-html-store.step name="dtbook-to-epub3.choose-discard-intermediary.nordic-html-store">
                 <p:with-option name="fail-on-error" select="$fail-on-error"/>
                 <p:input port="in-memory.in">
@@ -218,11 +214,11 @@
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="dtbook-to-epub3.store-report">
         <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="dtbook-to-epub3.set-report-doctype">
+    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="dtbook-to-epub3.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
             <p:pipe port="result" step="dtbook-to-epub3.store-report"/>
         </p:with-option>
-    </pxi:set-doctype>
+    </px:set-doctype>
     <p:sink/>
     
     <px:nordic-fail-on-error-status name="status">

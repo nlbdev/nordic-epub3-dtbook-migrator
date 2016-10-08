@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-epub3-to-html.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator">
+    type="px:nordic-epub3-to-html.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
@@ -35,9 +34,7 @@
     <p:import href="validation-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
 
     <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
@@ -60,14 +57,14 @@
                 <p:empty/>
             </p:output>
 
-            <pxi:fileset-load media-types="application/oebps-package+xml" name="epub3-to-html.step.load-epub-opf">
+            <px:fileset-load media-types="application/oebps-package+xml" name="epub3-to-html.step.load-epub-opf">
                 <p:input port="fileset">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
             <p:identity name="epub3-to-html.step.package-doc"/>
             <p:sink/>
@@ -84,11 +81,11 @@
                 </p:input>
             </p:xslt>
             <px:message message="Loading spine..."/>
-            <pxi:fileset-load name="epub3-to-html.step.load-spine-xhtml">
+            <px:fileset-load name="epub3-to-html.step.load-spine-xhtml">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <p:for-each name="epub3-to-html.step.iterate-spine-xhtml">
                 <p:add-attribute match="/*" attribute-name="xml:base" name="epub3-to-html.step.iterate-spine-xhtml.add-xml-base">
                     <p:with-option name="attribute-value" select="base-uri(/*)"/>
@@ -110,7 +107,7 @@
                 <px:message message="Loading Navigation Document: $1">
                     <p:with-option name="param1" select="$nav-href"/>
                 </px:message>
-                <pxi:fileset-load name="epub3-to-html.step.nav-with-spine-bodies.load-nav">
+                <px:fileset-load name="epub3-to-html.step.nav-with-spine-bodies.load-nav">
                     <p:input port="fileset">
                         <p:pipe port="fileset.in" step="main"/>
                     </p:input>
@@ -118,7 +115,7 @@
                         <p:pipe port="in-memory.in" step="main"/>
                     </p:input>
                     <p:with-option name="href" select="$nav-href"/>
-                </pxi:fileset-load>
+                </px:fileset-load>
                 <px:assert test-count-min="1" test-count-max="1" message="The Navigation Document must exist: $1" error-code="NORDICDTBOOKEPUB013">
                     <p:with-option name="param1" select="$nav-href"/>
                 </px:assert>
@@ -275,11 +272,11 @@
                 </p:input>
             </px:html-to-fileset>
             <p:delete match="//d:file[preceding-sibling::d:file/resolve-uri(@href,base-uri(.))=resolve-uri(@href,base-uri(.))]" name="epub3-to-html.step.remove-duplicate-fileset-entries"/>
-            <pxi:fileset-add-entry media-type="application/xhtml+xml" name="epub3-to-html.step.add-single-html-to-fileset">
+            <px:fileset-add-entry media-type="application/xhtml+xml" name="epub3-to-html.step.add-single-html-to-fileset">
                 <p:with-option name="href" select="base-uri(/*)">
                     <p:pipe port="result" step="epub3-to-html.step.in-memory"/>
                 </p:with-option>
-            </pxi:fileset-add-entry>
+            </px:fileset-add-entry>
             <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="omit-xml-declaration" attribute-value="false"
                 name="epub3-to-html.step.single-html-omit-xml-declaration"/>
             <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="version" attribute-value="1.0" name="epub3-to-html.step.single-html-xml-version"/>
