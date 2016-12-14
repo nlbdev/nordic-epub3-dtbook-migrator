@@ -36,6 +36,7 @@
     <p:option name="fail-on-error" required="true"/>
     <p:option name="temp-dir" required="true"/>
     <p:option name="check-images" select="'true'"/>
+    <p:option name="organization-specific-validation" required="false" select="''"/>
 
     <p:import href="validation-status.xpl"/>
     <p:import href="html-validate.step.xpl"/>
@@ -333,6 +334,7 @@
                 </p:delete>
                 <px:nordic-html-validate.step name="epub3-validate.step.for-each-html-validate.validate.html" document-type="Nordic HTML (EPUB3 Content Document)" check-images="false">
                     <p:with-option name="fail-on-error" select="$fail-on-error"/>
+                    <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
                     <p:input port="in-memory.in">
                         <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                     </p:input>

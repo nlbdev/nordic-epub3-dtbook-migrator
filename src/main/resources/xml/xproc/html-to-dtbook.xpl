@@ -29,6 +29,13 @@
             <p px:role="desc">Whether or not to check that referenced images exist and has the right file signatures.</p>
         </p:documentation>
     </p:option>
+    
+    <p:option name="organization-specific-validation" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Organization-specific validation</h2>
+            <p px:role="desc">Leave blank for the default validation schemas. Use 'nota' to validate using Nota-specific validation rules.</p>
+        </p:documentation>
+    </p:option>
 
     <p:option name="html-report" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -147,6 +154,7 @@
     <px:nordic-html-validate.step name="html-to-dtbook.html-validate">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="check-images" select="$check-images"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
             <p:pipe step="html-to-dtbook.html-load" port="in-memory.out"/>
         </p:input>
@@ -199,6 +207,7 @@
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <!-- call with dtbook2005 option whether to validate a DTBook 2005 or DTBook 1.1.0 -->
         <p:with-option name="dtbook2005" select="$dtbook2005"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="report.in">
             <p:pipe port="report.out" step="html-to-dtbook.html-to-dtbook"/>
         </p:input>

@@ -33,6 +33,13 @@
             <p px:role="desc">DTBook marked up according to the nordic markup guidelines.</p>
         </p:documentation>
     </p:option>
+    
+    <p:option name="organization-specific-validation" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Organization-specific validation</h2>
+            <p px:role="desc">Leave blank for the default validation schemas. Use 'nota' to validate using Nota-specific validation rules.</p>
+        </p:documentation>
+    </p:option>
 
     <p:option name="check-images" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -81,6 +88,7 @@
     <px:nordic-dtbook-validate.step name="dtbook-validate.dtbook-validate" cx:depends-on="dtbook-validate.nordic-version-message" fail-on-error="true">
         <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
     </px:nordic-dtbook-validate.step>
     <p:sink/>
 

@@ -29,6 +29,13 @@
             <p px:role="desc">Input DTBook to be converted.</p>
         </p:documentation>
     </p:option>
+    
+    <p:option name="organization-specific-validation" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Organization-specific validation</h2>
+            <p px:role="desc">Leave blank for the default validation schemas. Use 'nota' to validate using Nota-specific validation rules.</p>
+        </p:documentation>
+    </p:option>
 
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -135,6 +142,7 @@
 
     <px:nordic-html-validate.step name="html-to-epub3.html-validate" check-images="true">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
             <p:pipe step="html-to-epub3.html-load" port="in-memory.out"/>
         </p:input>
@@ -177,6 +185,7 @@
     <px:nordic-epub3-validate.step name="html-to-epub3.epub3-validate" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="temp-dir" select="concat($temp-dir,'validate-epub/')"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="html-to-epub3.epub3-store"/>
         </p:input>

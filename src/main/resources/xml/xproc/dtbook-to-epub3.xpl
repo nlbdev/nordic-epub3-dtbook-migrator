@@ -29,6 +29,13 @@
             <p px:role="desc">Input DTBook to be converted.</p>
         </p:documentation>
     </p:option>
+    
+    <p:option name="organization-specific-validation" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Organization-specific validation</h2>
+            <p px:role="desc">Leave blank for the default validation schemas. Use 'nota' to validate using Nota-specific validation rules.</p>
+        </p:documentation>
+    </p:option>
 
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -100,6 +107,7 @@
     <px:nordic-dtbook-validate.step name="dtbook-to-epub3.dtbook-validate" check-images="true" cx:depends-on="nordic-version-message">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
     </px:nordic-dtbook-validate.step>
 
     <px:nordic-dtbook-to-html.step name="dtbook-to-epub3.dtbook-to-html">
@@ -118,6 +126,7 @@
 
     <px:nordic-html-validate.step name="dtbook-to-epub3.html-validate" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="dtbook-to-epub3.dtbook-to-html"/>
         </p:input>
@@ -187,6 +196,7 @@
 
     <px:nordic-epub3-validate.step name="dtbook-to-epub3.epub3-validate" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="dtbook-to-epub3.epub3-store"/>
         </p:input>

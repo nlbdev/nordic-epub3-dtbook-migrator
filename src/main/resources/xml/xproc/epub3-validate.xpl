@@ -14,6 +14,13 @@
             <p px:role="desc">EPUB3 Publication marked up according to the nordic markup guidelines.</p>
         </p:documentation>
     </p:option>
+    
+    <p:option name="organization-specific-validation" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Organization-specific validation</h2>
+            <p px:role="desc">Leave blank for the default validation schemas. Use 'nota' to validate using Nota-specific validation rules.</p>
+        </p:documentation>
+    </p:option>
 
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -62,6 +69,7 @@
 
     <px:nordic-epub3-validate.step name="epub3-validate.validate.nordic" fail-on-error="true">
         <p:with-option name="temp-dir" select="concat($temp-dir,'validate/')"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
     </px:nordic-epub3-validate.step>
     <pxi:fileset-load media-types="application/xhtml+xml" name="epub3-validate.load-epub-xhtml">
         <p:input port="in-memory">

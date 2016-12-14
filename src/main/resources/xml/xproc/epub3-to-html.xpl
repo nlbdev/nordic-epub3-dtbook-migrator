@@ -29,6 +29,13 @@
             <p px:role="desc">EPUB3 Publication marked up according to the nordic markup guidelines.</p>
         </p:documentation>
     </p:option>
+    
+    <p:option name="organization-specific-validation" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Organization-specific validation</h2>
+            <p px:role="desc">Leave blank for the default validation schemas. Use 'nota' to validate using Nota-specific validation rules.</p>
+        </p:documentation>
+    </p:option>
 
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -84,6 +91,7 @@
     <px:nordic-epub3-validate.step name="epub3-to-html.epub3-validate">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="temp-dir" select="concat($temp-dir,'validate/')"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
     </px:nordic-epub3-validate.step>
 
     <px:message message="Converting from EPUB to HTML"/>
@@ -124,6 +132,7 @@
     <px:message message="Validating HTML"/>
     <px:nordic-html-validate.step name="epub3-to-html.html-validate" document-type="Nordic HTML (single-document)" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="epub3-to-html.html-store"/>
         </p:input>

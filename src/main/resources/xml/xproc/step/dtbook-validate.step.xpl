@@ -32,6 +32,7 @@
 
     <p:option name="fail-on-error" required="true"/>
     <p:option name="check-images" required="false" select="'true'"/>
+    <p:option name="organization-specific-validation" required="false" select="''"/>
     <p:option name="allow-legacy" required="false" select="'true'"/>
 
     <!-- option supporting convert to DTBook 1.1.0 -->
@@ -176,29 +177,59 @@
                                     <p:pipe step="dtbook-validate.step.input-dtbook" port="result"/>
                                 </p:input>
                             </p:identity>
-                            <px:message severity="DEBUG" message="Validating against mtm2015-1.sch: $1">
-                                <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
-                            </px:message>
-                            <p:validate-with-schematron name="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.tpb.validation" assert-valid="false">
-                                <p:input port="parameters">
-                                    <p:empty/>
-                                </p:input>
-                                <p:input port="schema">
-                                    <p:document href="../../schema/mtm2015-1.nota.sch"/>
-                                </p:input>
-                            </p:validate-with-schematron>
+                            <p:choose>
+                                <p:when test="lower-case($organization-specific-validation) = 'nota'">
+                                    <px:message severity="DEBUG" message="Validating against mtm2015-1.nota.sch: $1">
+                                        <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
+                                    </px:message>
+                                    <p:validate-with-schematron name="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.mtm.validation.nota" assert-valid="false">
+                                        <p:input port="parameters">
+                                            <p:empty/>
+                                        </p:input>
+                                        <p:input port="schema">
+                                            <p:document href="../../schema/mtm2015-1.nota.sch"/>
+                                        </p:input>
+                                    </p:validate-with-schematron>
+                                    <p:sink/>
+                                    <p:identity>
+                                        <p:input port="source">
+                                            <p:pipe port="report" step="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.mtm.validation.nota"/>
+                                        </p:input>
+                                    </p:identity>
+                                </p:when>
+                                <p:otherwise>
+                                    <px:message severity="DEBUG" message="Validating against mtm2015-1.sch: $1">
+                                        <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
+                                    </px:message>
+                                    <p:validate-with-schematron name="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.mtm.validation.generic" assert-valid="false">
+                                        <p:input port="parameters">
+                                            <p:empty/>
+                                        </p:input>
+                                        <p:input port="schema">
+                                            <p:document href="../../schema/mtm2015-1.sch"/>
+                                        </p:input>
+                                    </p:validate-with-schematron>
+                                    <p:sink/>
+                                    <p:identity>
+                                        <p:input port="source">
+                                            <p:pipe port="report" step="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.mtm.validation.generic"/>
+                                        </p:input>
+                                    </p:identity>
+                                </p:otherwise>
+                            </p:choose>
+                            <p:identity name="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.mtm.validation"/>
                             <p:sink/>
 
                             <p:identity>
                                 <p:input port="source">
                                     <p:pipe port="report" step="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.nordic.validation"/>
-                                    <p:pipe port="report" step="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.tpb.validation"/>
+                                    <p:pipe port="result" step="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.mtm.validation"/>
                                 </p:input>
                             </p:identity>
                             <px:combine-validation-reports document-type="Nordic DTBook" name="dtbook-validate.step.choose-if-not-dtbook110.combine-validation-reports">
                                 <p:input port="source">
                                     <p:pipe port="report" step="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.nordic.validation"/>
-                                    <p:pipe port="report" step="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.tpb.validation"/>
+                                    <p:pipe port="result" step="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.mtm.validation"/>
                                 </p:input>
                                 <p:with-option name="document-name" select="replace((/*/*[@media-type='application/x-dtbook+xml']/@href)[1],'.*/','')">
                                     <p:pipe port="fileset.in" step="main"/>
