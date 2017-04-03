@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+<xsl:stylesheet xmlns:f="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/dtbook-to-epub3.xsl" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
     xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
     <!--<xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
+	<xsl:import href="epub3-vocab.xsl"/>
 
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
-
-    <xsl:variable name="vocab-default"
-        select="('cover','frontmatter','bodymatter','backmatter','volume','part','chapter','subchapter','division','abstract','foreword','preface','prologue','introduction','preamble','conclusion','epilogue','afterword','epigraph','toc','toc-brief','landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','index-headnotes','index-legend','index-group','index-entry-list','index-entry','index-term','index-editor-note','index-locator','index-locator-list','index-locator-range','index-xref-preferred','index-xref-related','index-term-category','index-term-categories','glossary','glossterm','glossdef','bibliography','biblioentry','titlepage','halftitlepage','copyright-page','seriespage ','acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','help','marginalia','notice','pullquote','sidebar','warning','halftitle','fulltitle','covertitle','title','subtitle','label','ordinal','bridgehead','learning-objective','learning-objectives','learning-outcome','learning-outcomes','learning-resource','learning-resources','learning-standard','learning-standards','answer','answers','assessment','assessments','feedback','fill-in-the-blank-problem','general-problem','qna','match-problem','multiple-choice-problem','practice','practices','question','true-false-problem','panel','panel-group','balloon','text-area','sound-area','annotation','note','footnote','rearnote','footnotes','rearnotes','annoref','biblioref','glossref','noteref','referrer','credit','keyword','topic-sentence','concluding-sentence','pagebreak','page-list','table','table-row','table-cell','list','list-item','figure')"/>
-    <xsl:variable name="vocab-z3998"
-        select="('abbreviations','acknowledgments','acronym','actor','afterword','alteration','annoref','annotation','appendix','article','aside','attribution','author','award','backmatter','bcc','bibliography','biographical-note','bodymatter','cardinal','catalogue','cc','chapter','citation','clarification','collection','colophon','commentary','commentator','compound','concluding-sentence','conclusion','continuation','continuation-of','contributors','coordinate','correction','covertitle','currency','decimal','decorative','dedication','diary','diary-entry','discography','division','drama','dramatis-personae','editor','editorial-note','email','email-message','epigraph','epilogue','errata','essay','event','example','family-name','fiction','figure','filmography','footnote','footnotes','foreword','fraction','from','frontispiece','frontmatter','ftp','fulltitle','gallery','general-editor','geographic','given-name','glossary','grant-acknowledgment','grapheme','halftitle','halftitle-page','help','homograph','http','hymn','illustration','image-placeholder','imprimatur','imprint','index','initialism','introduction','introductory-note','ip','isbn','keyword','letter','loi','lot','lyrics','marginalia','measure','mixed','morpheme','name-title','nationality','non-fiction','nonresolving-citation','nonresolving-reference','note','noteref','notice','orderedlist','ordinal','organization','other-credits','pagebreak','page-footer','page-header','part','percentage','persona','personal-name','pgroup','phone','phoneme','photograph','phrase','place','plate','poem','portmanteau','postal','postal-code','postscript','practice','preamble','preface','prefix','presentation','primary','product','production','prologue','promotional-copy','published-works','publisher-address','publisher-logo','range','ratio','rearnote','rearnotes','recipient','recto','reference','republisher','resolving-reference','result','role-description','roman','root','salutation','scene','secondary','section','sender','sentence','sidebar','signature','song','speech','stage-direction','stem','structure','subchapter','subject','subsection','subtitle','suffix','surname','taxonomy','tertiary','text','textbook','t-form','timeline','title','title-page','to','toc','topic-sentence','translator','translator-note','truncation','unorderedlist','valediction','verse','verso','v-form','volume','warning','weight','word')"/>
 
     <xsl:template match="comment()">
         <xsl:copy-of select="."/>
@@ -25,7 +21,7 @@
         <xsl:comment select="concat('No template for element: ',name())"/>
     </xsl:template>
 
-    <xsl:template name="coreattrs">
+    <xsl:template name="f:coreattrs">
         <xsl:param name="classes" select="()" tunnel="yes"/>
         <xsl:param name="except" select="()" tunnel="yes"/>
         <xsl:param name="all-ids" select="()" tunnel="yes"/>
@@ -45,12 +41,12 @@
             test="not(@id) and not(local-name()=('book','span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd','lic','thead','tfoot','tbody','colgroup','col') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/')">
             <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
-        <xsl:call-template name="classes-and-types">
+        <xsl:call-template name="f:classes-and-types">
             <xsl:with-param name="classes" select="(if ($is-first-level) then tokenize(parent::*/@class,'\s+') else (), $classes)" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template name="i18n">
+    <xsl:template name="f:i18n">
         <xsl:param name="except" select="()" tunnel="yes"/>
         <xsl:variable name="is-first-level" select="boolean((self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter))"/>
         <xsl:if test="$is-first-level">
@@ -71,7 +67,7 @@
         <xsl:copy-of select="@dir[not(name()=$except)]"/>
     </xsl:template>
 
-    <xsl:template name="classes-and-types">
+    <xsl:template name="f:classes-and-types">
         <xsl:param name="classes" select="()" tunnel="yes"/>
         <xsl:param name="types" select="()" tunnel="yes"/>
         <xsl:param name="except" select="()" tunnel="yes"/>
@@ -114,16 +110,16 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template name="attrs">
-        <xsl:call-template name="coreattrs"/>
-        <xsl:call-template name="i18n"/>
+    <xsl:template name="f:attrs">
+        <xsl:call-template name="f:coreattrs"/>
+        <xsl:call-template name="f:i18n"/>
         <!-- ignore @smilref -->
         <!-- @showin handled by coreattrs -->
     </xsl:template>
 
-    <xsl:template name="attrsrqd">
-        <xsl:call-template name="coreattrs"/>
-        <xsl:call-template name="i18n"/>
+    <xsl:template name="f:attrsrqd">
+        <xsl:call-template name="f:coreattrs"/>
+        <xsl:call-template name="f:i18n"/>
         <!-- ignore @smilref -->
         <!-- @showin handled by classes-and-types -->
     </xsl:template>
@@ -132,8 +128,8 @@
         <xsl:variable name="all-ids" select=".//@id"/>
         <html>
             <xsl:namespace name="nordic" select="'http://www.mtm.se/epub/'"/>
-            <xsl:attribute name="epub:prefix" select="'z3998: http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
-            <xsl:call-template name="attlist.dtbook">
+            <xsl:attribute name="epub:prefix" select="concat('z3998: ',$vocab-z3998-uri)"/>
+            <xsl:call-template name="f:attlist.dtbook">
                 <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
             </xsl:call-template>
             <xsl:apply-templates select="node()">
@@ -142,18 +138,18 @@
         </html>
     </xsl:template>
 
-    <xsl:template name="attlist.dtbook">
+    <xsl:template name="f:attlist.dtbook">
         <!-- ignore @version -->
-        <xsl:call-template name="i18n"/>
+        <xsl:call-template name="f:i18n"/>
     </xsl:template>
 
-    <xsl:template name="headmisc">
+    <xsl:template name="f:headmisc">
         <xsl:apply-templates select="node()"/>
     </xsl:template>
 
     <xsl:template match="dtbook:head">
         <head>
-            <xsl:call-template name="attlist.head"/>
+            <xsl:call-template name="f:attlist.head"/>
             <meta charset="UTF-8"/>
             <title>
                 <xsl:value-of select="string((dtbook:meta[matches(@name,'dc:title','i')])[1]/@content)"/>
@@ -168,7 +164,7 @@
                 <!-- Set ISBN to 0 to avoid validation errors -->
                 <meta name="dc:source" content="urn:isbn:0"/>
             </xsl:if>
-            <xsl:call-template name="headmisc"/>
+            <xsl:call-template name="f:headmisc"/>
             <style type="text/css" xml:space="preserve"><![CDATA[
                 .initialism{
                     -epub-speak-as:spell-out;
@@ -269,19 +265,19 @@
         </head>
     </xsl:template>
 
-    <xsl:template name="attlist.head">
-        <xsl:call-template name="i18n"/>
+    <xsl:template name="f:attlist.head">
+        <xsl:call-template name="f:i18n"/>
         <!-- @profile handled by main head element test -->
     </xsl:template>
 
     <xsl:template match="dtbook:link">
         <link>
-            <xsl:call-template name="attlist.link"/>
+            <xsl:call-template name="f:attlist.link"/>
         </link>
     </xsl:template>
 
-    <xsl:template name="attlist.link">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.link">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@href|@hreflang|@type|@rel|@media"/>
         <!-- @charset and @rev are dropped -->
     </xsl:template>
@@ -291,14 +287,14 @@
             <xsl:when test="matches(@name,'dc:title','i') or matches(@name,'dc:identifier','i') or matches(@name,'dc:format','i') or starts-with(@name,'track:')"/>
             <xsl:otherwise>
                 <meta>
-                    <xsl:call-template name="attlist.meta"/>
+                    <xsl:call-template name="f:attlist.meta"/>
                 </meta>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="attlist.meta">
-        <xsl:call-template name="i18n"/>
+    <xsl:template name="f:attlist.meta">
+        <xsl:call-template name="f:i18n"/>
         <xsl:copy-of select="@content|@http-equiv"/>
         <xsl:choose>
             <xsl:when test="matches(@name,'dc:.*','i')">
@@ -313,29 +309,29 @@
 
     <xsl:template match="dtbook:book">
         <body>
-            <xsl:call-template name="attlist.book"/>
+            <xsl:call-template name="f:attlist.book"/>
             <xsl:apply-templates select="node()"/>
         </body>
     </xsl:template>
 
-    <xsl:template name="attlist.book">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.book">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except" select="'id'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template name="cover">
+    <xsl:template name="f:cover">
         <section>
-            <xsl:call-template name="attrs">
+            <xsl:call-template name="f:attrs">
                 <xsl:with-param name="types" select="'cover'" tunnel="yes"/>
             </xsl:call-template>
             <xsl:apply-templates select="node()"/>
         </section>
     </xsl:template>
 
-    <xsl:template name="titlepage">
+    <xsl:template name="f:titlepage">
         <section>
-            <xsl:call-template name="attlist.frontmatter">
+            <xsl:call-template name="f:attlist.frontmatter">
                 <xsl:with-param name="types" select="'titlepage'" tunnel="yes"/>
             </xsl:call-template>
             <xsl:apply-templates select="node()"/>
@@ -358,7 +354,7 @@
                     <xsl:apply-templates
                         select="if (not(preceding-sibling::*)) then preceding-sibling::comment() else (preceding-sibling::comment() intersect preceding-sibling::*[1]/following-sibling::comment())"/>
 
-                    <xsl:call-template name="cover"/>
+                    <xsl:call-template name="f:cover"/>
                 </xsl:when>
 
                 <!-- title page -->
@@ -366,7 +362,7 @@
                     <xsl:apply-templates
                         select="if (not(preceding-sibling::*)) then preceding-sibling::comment() else (preceding-sibling::comment() intersect preceding-sibling::*[1]/following-sibling::comment())"/>
 
-                    <xsl:call-template name="titlepage"/>
+                    <xsl:call-template name="f:titlepage"/>
                 </xsl:when>
 
                 <!-- the rest of the frontmatter -->
@@ -383,9 +379,9 @@
 
     </xsl:template>
 
-    <xsl:template name="attlist.frontmatter">
+    <xsl:template name="f:attlist.frontmatter">
         <xsl:param name="types" tunnel="yes"/>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="('frontmatter',$types)" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -395,9 +391,9 @@
         <xsl:apply-templates select="node()"/>
     </xsl:template>
 
-    <xsl:template name="attlist.bodymatter">
+    <xsl:template name="f:attlist.bodymatter">
         <xsl:param name="types" tunnel="yes"/>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="('bodymatter',$types)" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -407,27 +403,27 @@
         <xsl:apply-templates select="node()"/>
     </xsl:template>
 
-    <xsl:template name="attlist.rearmatter">
+    <xsl:template name="f:attlist.rearmatter">
         <xsl:param name="types" tunnel="yes"/>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="('backmatter',$types)" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="dtbook:level | dtbook:level1 | dtbook:level2 | dtbook:level3 | dtbook:level4 | dtbook:level5 | dtbook:level6">
         <xsl:element name="{if (f:classes(.)='article') then 'article' else 'section'}">
-            <xsl:call-template name="attlist.level"/>
+            <xsl:call-template name="f:attlist.level"/>
             <xsl:apply-templates select="node()"/>
         </xsl:element>
     </xsl:template>
 
-    <xsl:template name="attlist.level">
+    <xsl:template name="f:attlist.level">
         <xsl:variable name="types"
             select="if (ancestor::*[self::dtbook:level or self::dtbook:level1 or self::dtbook:level2 or self::dtbook:level3 or self::dtbook:level4 or self::dtbook:level5 or self::dtbook:level6]) then () else if (ancestor::dtbook:frontmatter) then 'frontmatter' else if (ancestor::dtbook:bodymatter) then 'bodymatter' else 'backmatter'"/>
         <xsl:variable name="types"
             select="($types, if (dtbook:note[not(//dtbook:table//dtbook:noteref/substring-after(@idref,'#')=@id)]) then if (ancestor::dtbook:bodymatter) then 'rearnotes' else if (ancestor::dtbook:rearmatter) then 'footnotes' else () else ())"/>
         <xsl:variable name="types" select="($types, if (dtbook:list[f:classes(.)='toc']) then 'toc' else ())"/>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="$types" tunnel="yes"/>
         </xsl:call-template>
         <!-- @depth is removed, it is implicit anyway -->
@@ -435,71 +431,71 @@
 
     <xsl:template match="dtbook:br">
         <br>
-            <xsl:call-template name="attlist.br"/>
+            <xsl:call-template name="f:attlist.br"/>
         </br>
     </xsl:template>
 
-    <xsl:template name="attlist.br">
-        <xsl:call-template name="coreattrs"/>
+    <xsl:template name="f:attlist.br">
+        <xsl:call-template name="f:coreattrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:line">
         <p>
-            <xsl:call-template name="attlist.line"/>
+            <xsl:call-template name="f:attlist.line"/>
             <xsl:apply-templates select="node()"/>
         </p>
     </xsl:template>
 
-    <xsl:template name="attlist.line">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.line">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'line'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="dtbook:linenum">
         <span>
-            <xsl:call-template name="attlist.linenum"/>
+            <xsl:call-template name="f:attlist.linenum"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
-    <xsl:template name="attlist.linenum">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.linenum">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'linenum'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="dtbook:address">
         <address>
-            <xsl:call-template name="attlist.address"/>
+            <xsl:call-template name="f:attlist.address"/>
             <xsl:apply-templates select="node()"/>
         </address>
     </xsl:template>
 
-    <xsl:template name="attlist.address">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.address">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:div">
         <div>
-            <xsl:call-template name="attlist.div"/>
+            <xsl:call-template name="f:attlist.div"/>
             <xsl:apply-templates select="node()"/>
         </div>
     </xsl:template>
 
-    <xsl:template name="attlist.div">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.div">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:title">
         <strong>
-            <xsl:call-template name="attlist.title"/>
+            <xsl:call-template name="f:attlist.title"/>
             <xsl:apply-templates select="node()"/>
         </strong>
     </xsl:template>
 
-    <xsl:template name="attlist.title">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.title">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'title'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -508,21 +504,21 @@
         <xsl:choose>
             <xsl:when test="parent::dtbook:level1[tokenize(@class,'\s+')='titlepage']">
                 <p>
-                    <xsl:call-template name="attlist.author"/>
+                    <xsl:call-template name="f:attlist.author"/>
                     <xsl:apply-templates select="node()"/>
                 </p>
             </xsl:when>
             <xsl:otherwise>
                 <span>
-                    <xsl:call-template name="attlist.author"/>
+                    <xsl:call-template name="f:attlist.author"/>
                     <xsl:apply-templates select="node()"/>
                 </span>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="attlist.author">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.author">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'z3998:author'" tunnel="yes"/>
             <xsl:with-param name="classes" select="if (parent::dtbook:level1[tokenize(@class,'\s+')='titlepage']) then 'docauthor' else ()" tunnel="yes"/>
         </xsl:call-template>
@@ -532,22 +528,22 @@
         <xsl:choose>
             <xsl:when test="parent::*[tokenize(@class,'\s+')=('cover','jacketcopy')]">
                 <section>
-                    <xsl:call-template name="attlist.prodnote"/>
+                    <xsl:call-template name="f:attlist.prodnote"/>
                     <xsl:apply-templates select="node()"/>
                 </section>
             </xsl:when>
             <xsl:otherwise>
                 <aside>
-                    <xsl:call-template name="attlist.prodnote"/>
+                    <xsl:call-template name="f:attlist.prodnote"/>
                     <xsl:apply-templates select="node()"/>
                 </aside>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="attlist.prodnote">
+    <xsl:template name="f:attlist.prodnote">
         <xsl:param name="all-ids" select="()" tunnel="yes"/>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="if (not(parent::*[tokenize(@class,'\s+')=('cover','jacketcopy')])) then 'z3998:production' else ()" tunnel="yes"/>
             <xsl:with-param name="classes" select="(if (not(parent::*/tokenize(@class,'\s+')=('cover','jacketcopy'))) then 'prodnote' else (), if (@render) then concat('render-',@render) else ())"
                 tunnel="yes"/>
@@ -563,21 +559,21 @@
         <xsl:choose>
             <xsl:when test="@render='required'">
                 <figure>
-                    <xsl:call-template name="attlist.sidebar"/>
+                    <xsl:call-template name="f:attlist.sidebar"/>
                     <xsl:apply-templates select="node()"/>
                 </figure>
             </xsl:when>
             <xsl:otherwise>
                 <aside>
-                    <xsl:call-template name="attlist.sidebar"/>
+                    <xsl:call-template name="f:attlist.sidebar"/>
                     <xsl:apply-templates select="node()"/>
                 </aside>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="attlist.sidebar">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.sidebar">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'sidebar'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'sidebar'" tunnel="yes"/>
         </xsl:call-template>
@@ -589,7 +585,7 @@
         <xsl:choose>
             <xsl:when test="$type='note'">
                 <aside>
-                    <xsl:call-template name="attlist.note">
+                    <xsl:call-template name="f:attlist.note">
                         <xsl:with-param name="types" select="$type" tunnel="yes"/>
                     </xsl:call-template>
                     <xsl:apply-templates select="node()"/>
@@ -602,7 +598,7 @@
                         <xsl:for-each
                             select="(., if (not(count(following-sibling::*[not(self::dtbook:note) and not(self::dtbook:pagenum)]))) then following-sibling::dtbook:note else (following-sibling::*[not(self::dtbook:note) and not(self::dtbook:pagenum)][1]/preceding-sibling::dtbook:note intersect following-sibling::dtbook:note))">
                             <li>
-                                <xsl:call-template name="attlist.note">
+                                <xsl:call-template name="f:attlist.note">
                                     <xsl:with-param name="types" select="$type" tunnel="yes"/>
                                 </xsl:call-template>
                                 <xsl:apply-templates select="node()"/>
@@ -618,21 +614,21 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="attlist.note">
-        <xsl:call-template name="attrsrqd">
+    <xsl:template name="f:attlist.note">
+        <xsl:call-template name="f:attrsrqd">
             <xsl:with-param name="classes" select="'notebody'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="dtbook:annotation">
         <aside>
-            <xsl:call-template name="attlist.annotation"/>
+            <xsl:call-template name="f:attlist.annotation"/>
             <xsl:apply-templates select="node()"/>
         </aside>
     </xsl:template>
 
-    <xsl:template name="attlist.annotation">
-        <xsl:call-template name="attrsrqd">
+    <xsl:template name="f:attlist.annotation">
+        <xsl:call-template name="f:attrsrqd">
             <xsl:with-param name="types" select="'annotation'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'annotation'" tunnel="yes"/>
         </xsl:call-template>
@@ -640,13 +636,13 @@
 
     <xsl:template match="dtbook:epigraph">
         <p>
-            <xsl:call-template name="attlist.epigraph"/>
+            <xsl:call-template name="f:attlist.epigraph"/>
             <xsl:apply-templates select="node()"/>
         </p>
     </xsl:template>
 
-    <xsl:template name="attlist.epigraph">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.epigraph">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'epigraph'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'epigraph'" tunnel="yes"/>
         </xsl:call-template>
@@ -654,39 +650,39 @@
 
     <xsl:template match="dtbook:byline">
         <span>
-            <xsl:call-template name="attlist.byline"/>
+            <xsl:call-template name="f:attlist.byline"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
-    <xsl:template name="attlist.byline">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.byline">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'byline'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="dtbook:dateline">
         <span>
-            <xsl:call-template name="attlist.dateline"/>
+            <xsl:call-template name="f:attlist.dateline"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
-    <xsl:template name="attlist.dateline">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.dateline">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'dateline'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="dtbook:linegroup">
         <xsl:element name="{if (dtbook:hd) then 'section' else 'div'}">
-            <xsl:call-template name="attlist.linegroup"/>
+            <xsl:call-template name="f:attlist.linegroup"/>
             <xsl:apply-templates select="node()"/>
         </xsl:element>
     </xsl:template>
 
-    <xsl:template name="attlist.linegroup">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.linegroup">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="if (parent::dtbook:poem) then 'z3998:verse' else ()" tunnel="yes"/>
             <xsl:with-param name="classes" select="'linegroup'" tunnel="yes"/>
         </xsl:call-template>
@@ -694,13 +690,13 @@
 
     <xsl:template match="dtbook:poem">
         <section>
-            <xsl:call-template name="attlist.poem"/>
+            <xsl:call-template name="f:attlist.poem"/>
             <xsl:apply-templates select="node()"/>
         </section>
     </xsl:template>
 
-    <xsl:template name="attlist.poem">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.poem">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'z3998:poem'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'poem'" tunnel="yes"/>
         </xsl:call-template>
@@ -708,13 +704,13 @@
 
     <xsl:template match="dtbook:a">
         <a>
-            <xsl:call-template name="attlist.a"/>
+            <xsl:call-template name="f:attlist.a"/>
             <xsl:apply-templates select="node()"/>
         </a>
     </xsl:template>
 
-    <xsl:template name="attlist.a">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.a">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="(if (@external) then concat('external-',@external) else (), if (@rev) then concat('rev-',@rev) else ())" tunnel="yes"/>
             <xsl:with-param name="exclude-classes" select="for $target in (f:classes(.)[matches(.,'^target-')]) return $target" tunnel="yes"/>
         </xsl:call-template>
@@ -736,62 +732,62 @@
 
     <xsl:template match="dtbook:em">
         <em>
-            <xsl:call-template name="attlist.em"/>
+            <xsl:call-template name="f:attlist.em"/>
             <xsl:apply-templates select="node()"/>
         </em>
     </xsl:template>
 
-    <xsl:template name="attlist.em">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.em">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:strong">
         <strong>
-            <xsl:call-template name="attlist.strong"/>
+            <xsl:call-template name="f:attlist.strong"/>
             <xsl:apply-templates select="node()"/>
         </strong>
     </xsl:template>
 
-    <xsl:template name="attlist.strong">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.strong">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <!-- TODO: allow dtbook:span[f:classes(.)='definition'] -->
     <xsl:template match="dtbook:dfn">
         <dfn>
-            <xsl:call-template name="attlist.dfn"/>
+            <xsl:call-template name="f:attlist.dfn"/>
             <xsl:apply-templates select="node()"/>
         </dfn>
     </xsl:template>
 
-    <xsl:template name="attlist.dfn">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.dfn">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <!-- TODO: allow dtbook:span[f:classes(.)='keyboard'] -->
     <xsl:template match="dtbook:kbd">
         <kbd>
-            <xsl:call-template name="attlist.kbd"/>
+            <xsl:call-template name="f:attlist.kbd"/>
             <xsl:apply-templates select="node()"/>
         </kbd>
     </xsl:template>
 
-    <xsl:template name="attlist.kbd">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.kbd">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:code">
         <code>
-            <xsl:call-template name="attlist.code"/>
+            <xsl:call-template name="f:attlist.code"/>
             <xsl:apply-templates select="node()"/>
         </code>
     </xsl:template>
 
-    <xsl:template name="attlist.code">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.code">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except" select="'xml:space'" tunnel="yes"/>
         </xsl:call-template>
-        <xsl:call-template name="i18n"/>
+        <xsl:call-template name="f:i18n"/>
         <!-- ignore @smilref -->
         <!-- @showin handled by "attrs" -->
     </xsl:template>
@@ -799,14 +795,14 @@
     <!-- TODO: allow dtbook:span[f:classes(.)='example'] -->
     <xsl:template match="dtbook:samp">
         <samp>
-            <xsl:call-template name="attlist.samp"/>
+            <xsl:call-template name="f:attlist.samp"/>
             <xsl:apply-templates select="node()"/>
         </samp>
     </xsl:template>
 
-    <xsl:template name="attlist.samp">
-        <xsl:call-template name="attrs"/>
-        <xsl:call-template name="i18n"/>
+    <xsl:template name="f:attlist.samp">
+        <xsl:call-template name="f:attrs"/>
+        <xsl:call-template name="f:i18n"/>
         <!-- ignore @smilref -->
         <!-- @showin handled by "attrs" -->
     </xsl:template>
@@ -814,35 +810,35 @@
     <!-- TODO: allow dtbook:span[f:classes(.)='cite'] -->
     <xsl:template match="dtbook:cite">
         <cite>
-            <xsl:call-template name="attlist.cite"/>
+            <xsl:call-template name="f:attlist.cite"/>
             <xsl:apply-templates select="node()"/>
         </cite>
     </xsl:template>
 
-    <xsl:template name="attlist.cite">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.cite">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:abbr | dtbook:span[@class='truncation']">
         <abbr>
-            <xsl:call-template name="attlist.abbr"/>
+            <xsl:call-template name="f:attlist.abbr"/>
             <xsl:apply-templates select="node()"/>
         </abbr>
     </xsl:template>
 
-    <xsl:template name="attlist.abbr">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.abbr">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:acronym">
         <abbr>
-            <xsl:call-template name="attlist.acronym"/>
+            <xsl:call-template name="f:attlist.acronym"/>
             <xsl:apply-templates select="node()"/>
         </abbr>
     </xsl:template>
 
-    <xsl:template name="attlist.acronym">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.acronym">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="if (@pronounce='no') then 'z3998:initialism' else 'z3998:acronym'" tunnel="yes"/>
             <xsl:with-param name="classes" select="if (@pronounce='no') then 'initialism' else ()" tunnel="yes"/>
         </xsl:call-template>
@@ -850,60 +846,60 @@
 
     <xsl:template match="dtbook:sub">
         <sub>
-            <xsl:call-template name="attlist.sub"/>
+            <xsl:call-template name="f:attlist.sub"/>
             <xsl:apply-templates select="node()"/>
         </sub>
     </xsl:template>
 
-    <xsl:template name="attlist.sub">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.sub">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:sup">
         <sup>
-            <xsl:call-template name="attlist.sup"/>
+            <xsl:call-template name="f:attlist.sup"/>
             <xsl:apply-templates select="node()"/>
         </sup>
     </xsl:template>
 
-    <xsl:template name="attlist.sup">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.sup">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:span">
         <span>
-            <xsl:call-template name="attlist.span"/>
+            <xsl:call-template name="f:attlist.span"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
-    <xsl:template name="attlist.span">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.span">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:bdo">
         <bdo>
-            <xsl:call-template name="attlist.bdo"/>
+            <xsl:call-template name="f:attlist.bdo"/>
             <xsl:apply-templates select="node()"/>
         </bdo>
     </xsl:template>
 
-    <xsl:template name="attlist.bdo">
-        <xsl:call-template name="coreattrs"/>
-        <xsl:call-template name="i18n"/>
+    <xsl:template name="f:attlist.bdo">
+        <xsl:call-template name="f:coreattrs"/>
+        <xsl:call-template name="f:i18n"/>
         <!-- ignore @smilref -->
         <!-- @showin handled by "coreattrs" -->
     </xsl:template>
 
     <xsl:template match="dtbook:sent">
         <span>
-            <xsl:call-template name="attlist.sent"/>
+            <xsl:call-template name="f:attlist.sent"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
-    <xsl:template name="attlist.sent">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.sent">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'z3998:sentence'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'sentence'" tunnel="yes"/>
         </xsl:call-template>
@@ -911,13 +907,13 @@
 
     <xsl:template match="dtbook:w">
         <span>
-            <xsl:call-template name="attlist.w"/>
+            <xsl:call-template name="f:attlist.w"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
-    <xsl:template name="attlist.w">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.w">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'z3998:word'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'word'" tunnel="yes"/>
         </xsl:call-template>
@@ -932,7 +928,7 @@
             <!-- xsl:if avoids inserting pagenum betwen li elements when rearnotes or footnotes are made into lists. -->
 
             <xsl:element name="{if (f:is-inline($pagenum.parent) and not(parent::dtbook:imggroup)) then 'span' else 'div'}">
-                <xsl:call-template name="attlist.pagenum"/>
+                <xsl:call-template name="f:attlist.pagenum"/>
                 <xsl:if test="normalize-space(.)">
                     <xsl:attribute name="title" select="normalize-space(.)"/>
                     <!--
@@ -944,8 +940,8 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template name="attlist.pagenum">
-        <xsl:call-template name="attrsrqd">
+    <xsl:template name="f:attlist.pagenum">
+        <xsl:call-template name="f:attrsrqd">
             <xsl:with-param name="types" select="'pagebreak'" tunnel="yes"/>
             <xsl:with-param name="classes" select="concat('page-',(@page,if (normalize-space(.)='') then 'special' else 'normal')[1])" tunnel="yes"/>
         </xsl:call-template>
@@ -953,13 +949,13 @@
 
     <xsl:template match="dtbook:noteref">
         <a>
-            <xsl:call-template name="attlist.noteref"/>
+            <xsl:call-template name="f:attlist.noteref"/>
             <xsl:apply-templates select="node()"/>
         </a>
     </xsl:template>
 
-    <xsl:template name="attlist.noteref">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.noteref">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'noteref'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'noteref'" tunnel="yes"/>
         </xsl:call-template>
@@ -969,13 +965,13 @@
 
     <xsl:template match="dtbook:annoref">
         <a>
-            <xsl:call-template name="attlist.annoref"/>
+            <xsl:call-template name="f:attlist.annoref"/>
             <xsl:apply-templates select="node()"/>
         </a>
     </xsl:template>
 
-    <xsl:template name="attlist.annoref">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.annoref">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'annoref'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'annoref'" tunnel="yes"/>
         </xsl:call-template>
@@ -986,26 +982,26 @@
     <!-- TODO: allow dtbook:span[f:classes(.)='quote'] -->
     <xsl:template match="dtbook:q">
         <q>
-            <xsl:call-template name="attlist.q"/>
+            <xsl:call-template name="f:attlist.q"/>
             <xsl:apply-templates select="node()"/>
         </q>
     </xsl:template>
 
-    <xsl:template name="attlist.q">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.q">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@cite"/>
     </xsl:template>
 
     <xsl:template match="dtbook:img">
         <img>
-            <xsl:call-template name="attlist.img"/>
+            <xsl:call-template name="f:attlist.img"/>
             <xsl:apply-templates select="node()"/>
         </img>
     </xsl:template>
 
-    <xsl:template name="attlist.img">
+    <xsl:template name="f:attlist.img">
         <xsl:param name="all-ids" select="()" tunnel="yes"/>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
         <xsl:attribute name="src" select="concat('images/',@src)"/>
@@ -1023,13 +1019,13 @@
 
     <xsl:template match="dtbook:imggroup">
         <figure>
-            <xsl:call-template name="attlist.imggroup"/>
+            <xsl:call-template name="f:attlist.imggroup"/>
 
             <xsl:choose>
                 <xsl:when test="count(dtbook:img) = 1">
                     <!-- Single image -->
 
-                    <xsl:call-template name="imggroup.image">
+                    <xsl:call-template name="f:imggroup.image">
                         <xsl:with-param name="content" select="node()"/>
                     </xsl:call-template>
 
@@ -1042,7 +1038,7 @@
                         <xsl:when test="count($image-series-captions) = 1">
                             <figcaption>
                                 <xsl:for-each select="$image-series-captions">
-                                    <xsl:call-template name="attlist.caption"/>
+                                    <xsl:call-template name="f:attlist.caption"/>
                                     <xsl:apply-templates select="node()"/>
                                 </xsl:for-each>
                             </figcaption>
@@ -1051,7 +1047,7 @@
                             <figcaption>
                                 <xsl:for-each select="$image-series-captions">
                                     <div>
-                                        <xsl:call-template name="attlist.caption"/>
+                                        <xsl:call-template name="f:attlist.caption"/>
                                         <xsl:apply-templates select="node()"/>
                                     </div>
                                 </xsl:for-each>
@@ -1064,7 +1060,7 @@
                         <xsl:variable name="trailing-content"
                             select="if (following-sibling::dtbook:img) then following-sibling::node() intersect following-sibling::dtbook:img[1]/preceding-sibling::node() else following-sibling::node()"/>
                         <figure class="image">
-                            <xsl:call-template name="imggroup.image">
+                            <xsl:call-template name="f:imggroup.image">
                                 <xsl:with-param name="content" select=". | $trailing-content"/>
                             </xsl:call-template>
                         </figure>
@@ -1075,7 +1071,7 @@
         </figure>
     </xsl:template>
 
-    <xsl:template name="imggroup.image">
+    <xsl:template name="f:imggroup.image">
         <xsl:param name="content" required="yes"/>
 
         <xsl:apply-templates select="$content[self::dtbook:img]"/>
@@ -1086,7 +1082,7 @@
             <xsl:when test="count($image-captions) = 1">
                 <figcaption>
                     <xsl:for-each select="$image-captions">
-                        <xsl:call-template name="attlist.caption"/>
+                        <xsl:call-template name="f:attlist.caption"/>
                         <xsl:apply-templates select="node()"/>
                     </xsl:for-each>
                 </figcaption>
@@ -1095,7 +1091,7 @@
                 <figcaption>
                     <xsl:for-each select="$image-captions">
                         <div>
-                            <xsl:call-template name="attlist.caption"/>
+                            <xsl:call-template name="f:attlist.caption"/>
                             <xsl:apply-templates select="node()"/>
                         </div>
                     </xsl:for-each>
@@ -1104,8 +1100,8 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="attlist.imggroup">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.imggroup">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="if (count(dtbook:img) &gt; 1) then 'image-series' else 'image'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -1119,7 +1115,7 @@
         </xsl:if>
         <xsl:element name="{if ($has-block-elements) then 'div' else if ($contains-single-code-element) then 'pre' else 'p'}" namespace="http://www.w3.org/1999/xhtml">
             <!-- div allows the same attributes as p -->
-            <xsl:call-template name="attlist.p">
+            <xsl:call-template name="f:attlist.p">
                 <xsl:with-param name="except-classes" select="('precedingemptyline','precedingseparator')" tunnel="yes"/>
                 <xsl:with-param name="except" select="if (not($has-block-elements) and $contains-single-code-element) then 'xml:space' else ()" tunnel="yes"/>
             </xsl:call-template>
@@ -1146,19 +1142,19 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template name="attlist.p">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.p">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:doctitle">
         <xsl:element name="{if (parent::dtbook:frontmatter) then 'h1' else 'p'}">
-            <xsl:call-template name="attlist.doctitle"/>
+            <xsl:call-template name="f:attlist.doctitle"/>
             <xsl:apply-templates select="node()"/>
         </xsl:element>
     </xsl:template>
 
-    <xsl:template name="attlist.doctitle">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.doctitle">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'fulltitle'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'title'" tunnel="yes"/>
         </xsl:call-template>
@@ -1166,13 +1162,13 @@
 
     <xsl:template match="dtbook:docauthor">
         <p>
-            <xsl:call-template name="attlist.docauthor"/>
+            <xsl:call-template name="f:attlist.docauthor"/>
             <xsl:apply-templates select="node()"/>
         </p>
     </xsl:template>
 
-    <xsl:template name="attlist.docauthor">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.docauthor">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'z3998:author'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'docauthor'" tunnel="yes"/>
         </xsl:call-template>
@@ -1180,13 +1176,13 @@
 
     <xsl:template match="dtbook:covertitle">
         <p>
-            <xsl:call-template name="attlist.covertitle"/>
+            <xsl:call-template name="f:attlist.covertitle"/>
             <xsl:apply-templates select="node()"/>
         </p>
     </xsl:template>
 
-    <xsl:template name="attlist.covertitle">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.covertitle">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'covertitle'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'covertitle'" tunnel="yes"/>
         </xsl:call-template>
@@ -1194,13 +1190,13 @@
 
     <xsl:template match="dtbook:h1 | dtbook:h2 | dtbook:h3 | dtbook:h4 | dtbook:h5 | dtbook:h6 | dtbook:hd">
         <xsl:element name="h{f:level(.)}">
-            <xsl:call-template name="attlist.h"/>
+            <xsl:call-template name="f:attlist.h"/>
             <xsl:apply-templates select="node()"/>
         </xsl:element>
     </xsl:template>
 
-    <xsl:template name="attlist.h">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.h">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="if (parent::dtbook:level1[tokenize(@class,'\s+')='titlepage']) then 'fulltitle' else ()" tunnel="yes"/>
             <xsl:with-param name="classes" select="if (parent::dtbook:level1[tokenize(@class,'\s+')='titlepage']) then 'title' else ()" tunnel="yes"/>
         </xsl:call-template>
@@ -1208,13 +1204,13 @@
 
     <xsl:template match="dtbook:bridgehead">
         <p>
-            <xsl:call-template name="attlist.bridgehead"/>
+            <xsl:call-template name="f:attlist.bridgehead"/>
             <xsl:apply-templates select="node()"/>
         </p>
     </xsl:template>
 
-    <xsl:template name="attlist.bridgehead">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.bridgehead">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="types" select="'bridgehead'" tunnel="yes"/>
             <xsl:with-param name="classes" select="'bridgehead'" tunnel="yes"/>
         </xsl:call-template>
@@ -1222,13 +1218,13 @@
 
     <xsl:template match="dtbook:blockquote">
         <blockquote>
-            <xsl:call-template name="attlist.blockquote"/>
+            <xsl:call-template name="f:attlist.blockquote"/>
             <xsl:apply-templates select="node()"/>
         </blockquote>
     </xsl:template>
 
-    <xsl:template name="attlist.blockquote">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.blockquote">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@cite"/>
     </xsl:template>
 
@@ -1237,7 +1233,7 @@
             <xsl:with-param name="pagenum.parent" tunnel="yes" select="parent::*"/>
         </xsl:apply-templates>
         <dl>
-            <xsl:call-template name="attlist.dl"/>
+            <xsl:call-template name="f:attlist.dl"/>
             <xsl:apply-templates
                 select="dtbook:dt|dtbook:dd | (comment()|text())[preceding-sibling::*[self::dtbook:dt or self::dtbook:dd] and following-sibling::*[self::dtbook:dt or self::dtbook:dd]]"/>
             <xsl:if test="(dtbook:dt|dtbook:dd)[last()][self::dtbook:dt]">
@@ -1250,13 +1246,13 @@
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template name="attlist.dl">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.dl">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:dt">
         <dt>
-            <xsl:call-template name="attlist.dt"/>
+            <xsl:call-template name="f:attlist.dt"/>
             <xsl:apply-templates select="node()"/>
             <xsl:variable name="this" select="."/>
             <xsl:for-each
@@ -1271,13 +1267,13 @@
         </dt>
     </xsl:template>
 
-    <xsl:template name="attlist.dt">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.dt">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:dd">
         <dd>
-            <xsl:call-template name="attlist.dd"/>
+            <xsl:call-template name="f:attlist.dd"/>
             <xsl:apply-templates select="node()"/>
             <xsl:variable name="this" select="."/>
             <xsl:for-each
@@ -1292,8 +1288,8 @@
         </dd>
     </xsl:template>
 
-    <xsl:template name="attlist.dd">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.dd">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="dtbook:list">
@@ -1302,20 +1298,20 @@
             <xsl:when test="dtbook:hd">
                 <section>
                     <xsl:attribute name="id" select="f:generate-pseudorandom-id(concat(f:generate-pretty-id(.,$all-ids),'_section'),$all-ids)"/>
-                    <xsl:call-template name="list.content">
+                    <xsl:call-template name="f:list.content">
                         <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
                     </xsl:call-template>
                 </section>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="list.content">
+                <xsl:call-template name="f:list.content">
                     <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="list.content">
+    <xsl:template name="f:list.content">
         <xsl:apply-templates select="dtbook:pagenum[not(preceding-sibling::dtbook:li)]">
             <xsl:with-param name="pagenum.parent" tunnel="yes" select="parent::*"/>
         </xsl:apply-templates>
@@ -1325,7 +1321,7 @@
         <xsl:variable name="first-marker-type"
             select="if (not($first-marker)) then '' else if ($first-marker='•') then '•' else if (string(number($first-marker)) != 'NaN') then '1' else if ($first-marker='i') then 'i' else if ($first-marker='I') then 'I' else if ($first-marker=lower-case($first-marker)) then 'a' else 'A'"/>
         <xsl:element name="{if ($first-marker-type='•') then 'ul' else 'ol'}">
-            <xsl:call-template name="attlist.list">
+            <xsl:call-template name="f:attlist.list">
                 <xsl:with-param name="marker-type" select="$first-marker-type"/>
             </xsl:call-template>
             <xsl:apply-templates select="dtbook:li">
@@ -1337,9 +1333,9 @@
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template name="attlist.list">
+    <xsl:template name="f:attlist.list">
         <xsl:param name="marker-type" select="''"/>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="if ($marker-type='' and not(ancestor-or-self::dtbook:list[f:classes(.)='toc'])) then 'list-style-type-none' else ()" tunnel="yes"/>
             <xsl:with-param name="except-types" select="if (ancestor-or-self::dtbook:list[f:classes(.)='toc']) then 'toc' else ()" tunnel="yes"/>
         </xsl:call-template>
@@ -1366,7 +1362,7 @@
             <xsl:variable name="marker-value"
                 select="if ($marker-type=('a','A')) then f:numeric-alpha-to-decimal(lower-case($marker)) else if ($marker-type=('i','I')) then pf:numeric-roman-to-decimal(lower-case($marker)) else $marker"/>
 
-            <xsl:call-template name="attlist.li">
+            <xsl:call-template name="f:attlist.li">
                 <xsl:with-param name="li-value" select="$marker-value"/>
             </xsl:call-template>
 
@@ -1403,9 +1399,9 @@
         </li>
     </xsl:template>
 
-    <xsl:template name="attlist.li">
+    <xsl:template name="f:attlist.li">
         <xsl:param name="li-value" select="''"/>
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="f:attrs"/>
         <xsl:if test="string(number($li-value)) != 'NaN'">
             <xsl:attribute name="value" select="$li-value"/>
         </xsl:if>
@@ -1413,18 +1409,18 @@
 
     <xsl:template match="dtbook:lic">
         <span>
-            <xsl:call-template name="attlist.lic"/>
+            <xsl:call-template name="f:attlist.lic"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
-    <xsl:template name="attlist.lic">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.lic">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'lic'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template name="cellhalign">
+    <xsl:template name="f:cellhalign">
         <xsl:sequence select="if (@align and not(@align='char')) then concat('text-align: ',@align,';') else ()"/>
         <xsl:if test="@align='char'">
             <xsl:sequence select="'text-align: right;'"/>
@@ -1445,7 +1441,7 @@
         </xsl:if>-->
     </xsl:template>
 
-    <xsl:template name="cellvalign">
+    <xsl:template name="f:cellvalign">
         <xsl:sequence select="if (@valign) then concat('vertical-align: ',@valign,';') else ()"/>
     </xsl:template>
 
@@ -1455,7 +1451,7 @@
         </xsl:apply-templates>
 
         <table>
-            <xsl:call-template name="attlist.table"/>
+            <xsl:call-template name="f:attlist.table"/>
             <xsl:if test="@summary and not(dtbook:caption)">
                 <caption>
                     <p class="table-summary">
@@ -1489,8 +1485,8 @@
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template name="attlist.table">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.table">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes"
                 select="(
                 if (@rules) then concat('table-rules-',@rules) else (),
@@ -1526,7 +1522,7 @@
 
     <xsl:template match="dtbook:caption[parent::dtbook:table]">
         <caption>
-            <xsl:call-template name="attlist.caption"/>
+            <xsl:call-template name="f:attlist.caption"/>
             <xsl:if test="parent::dtbook:table[@summary]">
                 <p class="table-summary">
                     <xsl:value-of select="string(parent::dtbook:table/@summary)"/>
@@ -1539,14 +1535,14 @@
     <xsl:template match="dtbook:caption[parent::dtbook:imggroup]">
         <xsl:apply-templates select="node()"/>
         <!--<div>
-            <xsl:call-template name="attlist.caption"/>
+            <xsl:call-template name="f:attlist.caption"/>
             
         </div>-->
     </xsl:template>
 
-    <xsl:template name="attlist.caption">
+    <xsl:template name="f:attlist.caption">
         <xsl:param name="all-ids" select="()" tunnel="yes"/>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
         <!-- @imgref is dropped, the relationship is preserved in the corresponding img/@longdesc -->
@@ -1557,16 +1553,16 @@
 
     <xsl:template match="dtbook:thead">
         <thead>
-            <xsl:call-template name="attlist.thead"/>
+            <xsl:call-template name="f:attlist.thead"/>
             <xsl:apply-templates select="node()"/>
         </thead>
     </xsl:template>
 
-    <xsl:template name="attlist.thead">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.thead">
+        <xsl:call-template name="f:attrs"/>
         <xsl:variable name="style">
-            <xsl:call-template name="cellhalign"/>
-            <xsl:call-template name="cellvalign"/>
+            <xsl:call-template name="f:cellhalign"/>
+            <xsl:call-template name="f:cellvalign"/>
         </xsl:variable>
         <xsl:variable name="style" select="$style[not(.='')]"/>
         <xsl:if test="count($style)">
@@ -1576,16 +1572,16 @@
 
     <xsl:template match="dtbook:tfoot">
         <tfoot>
-            <xsl:call-template name="attlist.tfoot"/>
+            <xsl:call-template name="f:attlist.tfoot"/>
             <xsl:apply-templates select="node()"/>
         </tfoot>
     </xsl:template>
 
-    <xsl:template name="attlist.tfoot">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.tfoot">
+        <xsl:call-template name="f:attrs"/>
         <xsl:variable name="style">
-            <xsl:call-template name="cellhalign"/>
-            <xsl:call-template name="cellvalign"/>
+            <xsl:call-template name="f:cellhalign"/>
+            <xsl:call-template name="f:cellvalign"/>
         </xsl:variable>
         <xsl:variable name="style" select="$style[not(.='')]"/>
         <xsl:if test="count($style)">
@@ -1595,16 +1591,16 @@
 
     <xsl:template match="dtbook:tbody">
         <tbody>
-            <xsl:call-template name="attlist.tbody"/>
+            <xsl:call-template name="f:attlist.tbody"/>
             <xsl:apply-templates select="node()[not(self::dtbook:pagenum)]"/>
         </tbody>
     </xsl:template>
 
-    <xsl:template name="attlist.tbody">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.tbody">
+        <xsl:call-template name="f:attrs"/>
         <xsl:variable name="style">
-            <xsl:call-template name="cellhalign"/>
-            <xsl:call-template name="cellvalign"/>
+            <xsl:call-template name="f:cellhalign"/>
+            <xsl:call-template name="f:cellvalign"/>
         </xsl:variable>
         <xsl:variable name="style" select="$style[not(.='')]"/>
         <xsl:if test="count($style)">
@@ -1614,17 +1610,17 @@
 
     <xsl:template match="dtbook:colgroup">
         <colgroup>
-            <xsl:call-template name="attlist.colgroup"/>
+            <xsl:call-template name="f:attlist.colgroup"/>
             <xsl:apply-templates select="node()"/>
         </colgroup>
     </xsl:template>
 
-    <xsl:template name="attlist.colgroup">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.colgroup">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@span"/>
         <xsl:variable name="style">
-            <xsl:call-template name="cellhalign"/>
-            <xsl:call-template name="cellvalign"/>
+            <xsl:call-template name="f:cellhalign"/>
+            <xsl:call-template name="f:cellvalign"/>
             <xsl:sequence select="if (@width) then concat('width: ',@width, if (not(ends-with(@width,'%'))) then 'px;' else ';') else ()"/>
         </xsl:variable>
         <xsl:variable name="style" select="$style[not(.='')]"/>
@@ -1635,17 +1631,17 @@
 
     <xsl:template match="dtbook:col">
         <col>
-            <xsl:call-template name="attlist.col"/>
+            <xsl:call-template name="f:attlist.col"/>
             <xsl:apply-templates select="node()"/>
         </col>
     </xsl:template>
 
-    <xsl:template name="attlist.col">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.col">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@span"/>
         <xsl:variable name="style">
-            <xsl:call-template name="cellhalign"/>
-            <xsl:call-template name="cellvalign"/>
+            <xsl:call-template name="f:cellhalign"/>
+            <xsl:call-template name="f:cellvalign"/>
             <xsl:sequence select="if (@width) then concat('width: ',@width, if (not(ends-with(@width,'%'))) then 'px;' else ';') else ()"/>
         </xsl:variable>
         <xsl:variable name="style" select="$style[not(.='')]"/>
@@ -1656,16 +1652,16 @@
 
     <xsl:template match="dtbook:tr">
         <tr>
-            <xsl:call-template name="attlist.tr"/>
+            <xsl:call-template name="f:attlist.tr"/>
             <xsl:apply-templates select="node()"/>
         </tr>
     </xsl:template>
 
-    <xsl:template name="attlist.tr">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.tr">
+        <xsl:call-template name="f:attrs"/>
         <xsl:variable name="style">
-            <xsl:call-template name="cellhalign"/>
-            <xsl:call-template name="cellvalign"/>
+            <xsl:call-template name="f:cellhalign"/>
+            <xsl:call-template name="f:cellvalign"/>
         </xsl:variable>
         <xsl:variable name="style" select="$style[not(.='')]"/>
         <xsl:if test="count($style)">
@@ -1675,7 +1671,7 @@
 
     <xsl:template match="dtbook:th | dtbook:td">
         <xsl:element name="{local-name()}">
-            <xsl:call-template name="attlist.th.td"/>
+            <xsl:call-template name="f:attlist.th.td"/>
 
             <xsl:if test="not(preceding-sibling::dtbook:th or preceding-sibling::dtbook:td)">
                 <!-- If this is the first cell in the row -->
@@ -1694,13 +1690,13 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template name="attlist.th.td">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.th.td">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@headers|@scope|@rowspan|@colspan"/>
         <!-- @abbr and @axis are ignored as they have no good equivalent in HTML -->
         <xsl:variable name="style">
-            <xsl:call-template name="cellhalign"/>
-            <xsl:call-template name="cellvalign"/>
+            <xsl:call-template name="f:cellhalign"/>
+            <xsl:call-template name="f:cellvalign"/>
             <xsl:variable name="cellpadding" select="ancestor::dtbook:table[1][@cellpadding][1]/@cellpadding"/>
             <xsl:sequence select="if ($cellpadding) then concat('padding: ',$cellpadding,if (not(ends-with($cellpadding,'%'))) then 'px;' else ';') else ()"/>
         </xsl:variable>

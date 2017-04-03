@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/epub3-to-dtbook.xsl" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xslt-version="2.0" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions">
+    xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xslt-version="2.0" xmlns:f="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-dtbook.xsl">
 
     <!-- dtbookblocknoimggroup -->
     <!-- no point in testing -->
@@ -768,7 +768,7 @@
             <html:aside epub:type="note"/>
         </x:context>
         <x:expect label="the resulting element should be a note">
-            <dtbook:note class=""/>
+            <dtbook:note/>
         </x:expect>
     </x:scenario>
 
@@ -2793,14 +2793,14 @@
                 <dtbook:frontmatter>
                     <dtbook:level1 id="frontmatter-notes">
                         <dtbook:h1>notes</dtbook:h1>
-                        <dtbook:note id="fn_ch1_1" class="">
+                        <dtbook:note id="fn_ch1_1">
                             <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
                         </dtbook:note>
-                        <dtbook:note id="fn_ch1_2" class="">
+                        <dtbook:note id="fn_ch1_2">
                             <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
                         </dtbook:note>
                         <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
-                        <dtbook:note id="fn_ch1_3" class="">
+                        <dtbook:note id="fn_ch1_3">
                             <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
                         </dtbook:note>
                     </dtbook:level1>
@@ -2808,32 +2808,32 @@
                 <dtbook:bodymatter>
                     <dtbook:level1 id="rearnotes" class="rearnotes">
                         <dtbook:h1>notes</dtbook:h1>
-                        <dtbook:note id="fn_ch1_1" class="rearnote required">
+                        <dtbook:note id="fn_ch1_1">
                             <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
                         </dtbook:note>
-                        <dtbook:note id="fn_ch1_2" class="rearnote required">
+                        <dtbook:note id="fn_ch1_2">
                             <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
                             <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
                         </dtbook:note>
-                        <dtbook:note id="fn_ch1_3" class="rearnote required">
+                        <dtbook:note id="fn_ch1_3">
                             <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
                         </dtbook:note>
                         <dtbook:p>Paragraph</dtbook:p>
-                        <dtbook:note id="fn_ch1_3_2" class="rearnote required">
+                        <dtbook:note id="fn_ch1_3_2">
                             <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
                         </dtbook:note>
                     </dtbook:level1>
                     <dtbook:level1 id="bodymatter-notes" class="chapter">
                         <dtbook:h1>notes</dtbook:h1>
                         <dtbook:div>
-                            <dtbook:note id="fn_ch1_1" class="">
+                            <dtbook:note id="fn_ch1_1">
                                 <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
                             </dtbook:note>
-                            <dtbook:note id="fn_ch1_2" class="">
+                            <dtbook:note id="fn_ch1_2">
                                 <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
                             </dtbook:note>
                             <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
-                            <dtbook:note id="fn_ch1_3" class="">
+                            <dtbook:note id="fn_ch1_3">
                                 <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
                             </dtbook:note>
                         </dtbook:div>
@@ -2843,14 +2843,14 @@
                         <dtbook:p>Paragraph</dtbook:p>
                         <dtbook:level2 id="rearnotes" class="rearnotes">
                             <dtbook:h2>notes</dtbook:h2>
-                            <dtbook:note id="fn_ch1_1" class="rearnote required">
+                            <dtbook:note id="fn_ch1_1">
                                 <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
                             </dtbook:note>
-                            <dtbook:note id="fn_ch1_2" class="rearnote required">
+                            <dtbook:note id="fn_ch1_2">
                                 <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
                                 <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
                             </dtbook:note>
-                            <dtbook:note id="fn_ch1_3" class="rearnote required">
+                            <dtbook:note id="fn_ch1_3">
                                 <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
                             </dtbook:note>
                         </dtbook:level2>
@@ -2859,14 +2859,14 @@
                 <dtbook:rearmatter>
                     <dtbook:level1 id="footnotes" class="footnotes">
                         <dtbook:h1>notes</dtbook:h1>
-                        <dtbook:note id="fn_ch1_1" class="footnote required">
+                        <dtbook:note id="fn_ch1_1">
                             <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
                         </dtbook:note>
-                        <dtbook:note id="fn_ch1_2" class="footnote required">
+                        <dtbook:note id="fn_ch1_2">
                             <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
                             <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
                         </dtbook:note>
-                        <dtbook:note id="fn_ch1_3" class="footnote required">
+                        <dtbook:note id="fn_ch1_3">
                             <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
                         </dtbook:note>
                     </dtbook:level1>
@@ -2874,18 +2874,18 @@
                         <dtbook:h1>notes</dtbook:h1>
                         <dtbook:level2 class="footnotes">
                             <dtbook:h2>notes</dtbook:h2>
-                            <dtbook:note id="fn_ch1_1" class="footnote required">
+                            <dtbook:note id="fn_ch1_1">
                                 <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
                             </dtbook:note>
-                            <dtbook:note id="fn_ch1_2" class="footnote required">
+                            <dtbook:note id="fn_ch1_2">
                                 <dtbook:p>2. G. Woodcock, <dtbook:em>Anarchism</dtbook:em> (Harmondsworth: Penguin, 1979), 8&#x2013;9.</dtbook:p>
                                 <dtbook:pagenum page="normal" id="page-40">40</dtbook:pagenum>
                             </dtbook:note>
-                            <dtbook:note id="fn_ch1_3" class="footnote required">
+                            <dtbook:note id="fn_ch1_3">
                                 <dtbook:p>3. <dtbook:em>Dictionnaire de L Acad&#x00E9;mie Fran&#x00E7;aise</dtbook:em> at http://colet.uhicago.edu/cgi-bin</dtbook:p>
                             </dtbook:note>
                             <dtbook:div>
-                                <dtbook:note id="fn_ch1_1" class="">
+                                <dtbook:note id="fn_ch1_1">
                                     <dtbook:p>1. G.D.H. Cole in Horowitz, <dtbook:em>The Anarchists</dtbook:em> (New York: Dell Publishing, 1964).</dtbook:p>
                                 </dtbook:note>
                             </dtbook:div>
@@ -3096,14 +3096,14 @@
             </html:ol>
         </x:context>
         <x:expect label="the text node and the span element should be wrapped in a p, while the p should not be wrapped in another p">
-            <dtbook:note id="rn1" class="rearnote required"><dtbook:p>1 Rearnote</dtbook:p></dtbook:note>
-            <dtbook:note id="rn2" class="rearnote required"><dtbook:p><dtbook:span>2 Rearnote</dtbook:span></dtbook:p></dtbook:note>
-            <dtbook:note id="rn3" class="rearnote required"><dtbook:p>3 Rearnote</dtbook:p></dtbook:note>
-            <dtbook:note id="rn4" class="rearnote required">
+            <dtbook:note id="rn1"><dtbook:p>1 Rearnote</dtbook:p></dtbook:note>
+            <dtbook:note id="rn2"><dtbook:p><dtbook:span>2 Rearnote</dtbook:span></dtbook:p></dtbook:note>
+            <dtbook:note id="rn3"><dtbook:p>3 Rearnote</dtbook:p></dtbook:note>
+            <dtbook:note id="rn4">
                 <!-- comment -->
                 <dtbook:p>4 Rearnote</dtbook:p>
             </dtbook:note>
-            <dtbook:note id="fn_102" class="footnote required">
+            <dtbook:note id="fn_102">
                 <dtbook:p>
                     <dtbook:span id="dtb1121">Henri 1987</dtbook:span>
                 </dtbook:p>
@@ -3118,7 +3118,7 @@
             </html:ol>
         </x:context>
         <x:expect label="there should be no wrapping &lt;list&gt; element">
-            <dtbook:note id="n13-1" class="footnote required"><dtbook:p>...</dtbook:p></dtbook:note>
+            <dtbook:note id="n13-1"><dtbook:p>...</dtbook:p></dtbook:note>
         </x:expect>
     </x:scenario>
 
@@ -3219,7 +3219,7 @@
             </html:ol>
         </x:context>
         <x:expect label="the nested lists should adjust their depths as the nesting list item becomes a note">
-            <dtbook:note id="n13-1" class="footnote required">
+            <dtbook:note id="n13-1">
                 <dtbook:list depth="1" type="pl">
                     <dtbook:li>
                         <dtbook:p>original depth: 2, new depth: 1</dtbook:p>

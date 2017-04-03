@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+<xsl:stylesheet xmlns:f="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-dtbook.xsl" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
     xmlns="http://www.daisy.org/z3986/2005/dtbook/" xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/" exclude-result-prefixes="#all" xmlns:epub="http://www.idpf.org/2007/ops"
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
     <!--<xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
+	<xsl:import href="epub3-vocab.xsl"/>
 
     <xsl:param name="allow-links" select="false()"/>
 
     <xsl:output indent="yes" exclude-result-prefixes="#all" doctype-public="-//NISO//DTD dtbook 2005-3//EN" doctype-system="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
 
-    <xsl:variable name="vocab-default"
-        select="('cover','frontmatter','bodymatter','backmatter','volume','part','chapter','subchapter','division','abstract','foreword','preface','prologue','introduction','preamble','conclusion','epilogue','afterword','epigraph','toc','toc-brief','landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','index-headnotes','index-legend','index-group','index-entry-list','index-entry','index-term','index-editor-note','index-locator','index-locator-list','index-locator-range','index-xref-preferred','index-xref-related','index-term-category','index-term-categories','glossary','glossterm','glossdef','bibliography','biblioentry','titlepage','halftitlepage','copyright-page','seriespage ','acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','help','marginalia','notice','pullquote','sidebar','warning','halftitle','fulltitle','covertitle','title','subtitle','label','ordinal','bridgehead','learning-objective','learning-objectives','learning-outcome','learning-outcomes','learning-resource','learning-resources','learning-standard','learning-standards','answer','answers','assessment','assessments','feedback','fill-in-the-blank-problem','general-problem','qna','match-problem','multiple-choice-problem','practice','practices','question','true-false-problem','panel','panel-group','balloon','text-area','sound-area','annotation','note','footnote','rearnote','footnotes','rearnotes','annoref','biblioref','glossref','noteref','referrer','credit','keyword','topic-sentence','concluding-sentence','pagebreak','page-list','table','table-row','table-cell','list','list-item','figure')"/>
-    <xsl:variable name="vocab-z3998"
-        select="('abbreviations','acknowledgments','acronym','actor','afterword','alteration','annoref','annotation','appendix','article','aside','attribution','author','award','backmatter','bcc','bibliography','biographical-note','bodymatter','cardinal','catalogue','cc','chapter','citation','clarification','collection','colophon','commentary','commentator','compound','concluding-sentence','conclusion','continuation','continuation-of','contributors','coordinate','correction','covertitle','currency','decimal','decorative','dedication','diary','diary-entry','discography','division','drama','dramatis-personae','editor','editorial-note','email','email-message','epigraph','epilogue','errata','essay','event','example','family-name','fiction','figure','filmography','footnote','footnotes','foreword','fraction','from','frontispiece','frontmatter','ftp','fulltitle','gallery','general-editor','geographic','given-name','glossary','grant-acknowledgment','grapheme','halftitle','halftitle-page','help','homograph','http','hymn','illustration','image-placeholder','imprimatur','imprint','index','initialism','introduction','introductory-note','ip','isbn','keyword','letter','loi','lot','lyrics','marginalia','measure','mixed','morpheme','name-title','nationality','non-fiction','nonresolving-citation','nonresolving-reference','note','noteref','notice','orderedlist','ordinal','organization','other-credits','pagebreak','page-footer','page-header','part','percentage','persona','personal-name','pgroup','phone','phoneme','photograph','phrase','place','plate','poem','portmanteau','postal','postal-code','postscript','practice','preamble','preface','prefix','presentation','primary','product','production','prologue','promotional-copy','published-works','publisher-address','publisher-logo','range','ratio','rearnote','rearnotes','recipient','recto','reference','republisher','resolving-reference','result','role-description','roman','root','salutation','scene','secondary','section','sender','sentence','sidebar','signature','song','speech','stage-direction','stem','structure','subchapter','subject','subsection','subtitle','suffix','surname','taxonomy','tertiary','text','textbook','t-form','timeline','title','title-page','to','toc','topic-sentence','translator','translator-note','truncation','unorderedlist','valediction','verse','verso','v-form','volume','warning','weight','word')"/>
+    <!--
     <xsl:variable name="special-classes"
-        select="('part','cover','colophon','nonstandardpagination','jacketcopy','frontcover','rearcover','leftflap','rightflap','precedingemptyline','precedingseparator','indented','asciimath','byline','dateline','address','definition','keyboard','initialism','truncation','cite','bdo','quote','exercisenumber','exercisepart','answer','answer_1','box','note_identifier')"/>
+        select="('part','cover','colophon','nonstandardpagination','jacketcopy','frontcover','rearcover','leftflap','rightflap','precedingemptyline','precedingseparator','indented','asciimath','byline','dateline','address','definition','keyboard','initialism','truncation','cite','bdo','quote','exercisenumber','exercisepart','answer','answer_1','box')"/>
+    -->
 
     <xsl:template match="text()|comment()">
         <xsl:copy-of select="."/>
@@ -29,14 +28,14 @@
 
     <xsl:template match="html:script"/>
 
-    <xsl:template name="coreattrs">
+    <xsl:template name="f:coreattrs">
         <xsl:param name="except" tunnel="yes"/>
 
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
-        <xsl:call-template name="classes-and-types"/>
+        <xsl:call-template name="f:classes-and-types"/>
     </xsl:template>
 
-    <xsl:template name="i18n">
+    <xsl:template name="f:i18n">
         <xsl:param name="except" tunnel="yes"/>
 
         <xsl:copy-of select="(@dir)[not(name()=$except)]"/>
@@ -45,7 +44,7 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template name="classes-and-types">
+    <xsl:template name="f:classes-and-types">
         <xsl:param name="classes" select="()" tunnel="yes"/>
         <xsl:param name="except" tunnel="yes" select="()"/>
         <xsl:param name="except-classes" tunnel="yes" select="()"/>
@@ -92,35 +91,35 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template name="attrs">
-        <xsl:call-template name="coreattrs"/>
-        <xsl:call-template name="i18n"/>
+    <xsl:template name="f:attrs">
+        <xsl:call-template name="f:coreattrs"/>
+        <xsl:call-template name="f:i18n"/>
     </xsl:template>
 
-    <xsl:template name="attrsrqd">
+    <xsl:template name="f:attrsrqd">
         <xsl:param name="except" tunnel="yes"/>
 
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]"/>
-        <xsl:call-template name="classes-and-types"/>
-        <xsl:call-template name="i18n"/>
+        <xsl:call-template name="f:classes-and-types"/>
+        <xsl:call-template name="f:i18n"/>
     </xsl:template>
 
     <xsl:template match="html:html">
         <dtbook version="2005-3">
-            <xsl:call-template name="attlist.dtbook"/>
+            <xsl:call-template name="f:attlist.dtbook"/>
             <xsl:apply-templates select="node()">
                 <xsl:with-param name="all-ids" select=".//@id" tunnel="yes"/>
             </xsl:apply-templates>
         </dtbook>
     </xsl:template>
 
-    <xsl:template name="attlist.dtbook">
-        <xsl:call-template name="i18n"/>
+    <xsl:template name="f:attlist.dtbook">
+        <xsl:call-template name="f:i18n"/>
     </xsl:template>
 
     <xsl:template match="html:head">
         <head>
-            <xsl:call-template name="attlist.head"/>
+            <xsl:call-template name="f:attlist.head"/>
             <meta name="dtb:uid" content="{(html:meta[lower-case(@name)=('dtb:uid','dc:identifier')])[1]/@content}"/>
             <xsl:apply-templates select="node()"/>
         </head>
@@ -128,12 +127,12 @@
 
     <xsl:template match="html:title">
         <meta name="dc:Title" content="{normalize-space(.)}">
-            <xsl:call-template name="i18n"/>
+            <xsl:call-template name="f:i18n"/>
         </meta>
     </xsl:template>
 
-    <xsl:template name="attlist.head">
-        <xsl:call-template name="i18n"/>
+    <xsl:template name="f:attlist.head">
+        <xsl:call-template name="f:i18n"/>
         <xsl:if test="html:link[@rel='profile' and @href]">
             <xsl:attribute name="profile" select="(html:link[@rel='profile'][1])/@href"/>
         </xsl:if>
@@ -142,12 +141,12 @@
     <!-- link is disallowed in nordic DTBook -->
     <xsl:template match="html:link">
         <!--<link>
-            <xsl:call-template name="attlist.link"/>
+            <xsl:call-template name="f:attlist.link"/>
         </link>-->
     </xsl:template>
 
-    <xsl:template name="attlist.link">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.link">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@href|@hreflang|@type|@rel|@media"/>
         <!-- @sizes are dropped -->
     </xsl:template>
@@ -162,12 +161,12 @@
 
     <xsl:template match="html:meta[@name and @content and not(lower-case(@name)=('viewport','dc:title'))]">
         <meta>
-            <xsl:call-template name="attlist.meta"/>
+            <xsl:call-template name="f:attlist.meta"/>
         </meta>
     </xsl:template>
 
-    <xsl:template name="attlist.meta">
-        <xsl:call-template name="i18n"/>
+    <xsl:template name="f:attlist.meta">
+        <xsl:call-template name="f:i18n"/>
         <xsl:copy-of select="@http-equiv"/>
         <xsl:choose>
             <xsl:when test="@name='nordic:guidelines'">
@@ -193,46 +192,46 @@
     <xsl:template match="html:body">
         <book>
             <xsl:if test="(html:section | html:article)[f:types(.)=('cover','frontmatter')] or *[not(self::html:section)]">
-                <xsl:call-template name="frontmatter"/>
+                <xsl:call-template name="f:frontmatter"/>
             </xsl:if>
             <xsl:if test="(html:section | html:article)[f:types(.)=('bodymatter') or not(f:types(.)=('cover','frontmatter','bodymatter','backmatter'))]">
-                <xsl:call-template name="bodymatter"/>
+                <xsl:call-template name="f:bodymatter"/>
             </xsl:if>
             <xsl:if test="(html:section | html:article)[f:types(.)=('backmatter')]">
-                <xsl:call-template name="rearmatter"/>
+                <xsl:call-template name="f:rearmatter"/>
             </xsl:if>
             <xsl:apply-templates select="*[last()]/following-sibling::node()"/>
         </book>
     </xsl:template>
 
-    <xsl:template name="frontmatter">
-        <xsl:call-template name="copy-preceding-comments"/>
+    <xsl:template name="f:frontmatter">
+        <xsl:call-template name="f:copy-preceding-comments"/>
         <frontmatter>
             <xsl:for-each select="html:header">
-                <xsl:call-template name="copy-preceding-comments"/>
+                <xsl:call-template name="f:copy-preceding-comments"/>
                 <xsl:apply-templates select="node()"/>
             </xsl:for-each>
             <xsl:apply-templates select="(html:section | html:article)[f:types(.)=('cover','frontmatter')]"/>
         </frontmatter>
     </xsl:template>
 
-    <xsl:template name="bodymatter">
+    <xsl:template name="f:bodymatter">
         <bodymatter>
             <xsl:apply-templates select="(html:section | html:article)[not(f:types(.)=('cover','frontmatter','backmatter'))]"/>
         </bodymatter>
     </xsl:template>
 
-    <xsl:template name="rearmatter">
+    <xsl:template name="f:rearmatter">
         <rearmatter>
             <xsl:apply-templates select="(html:section | html:article)[f:types(.)=('backmatter')]"/>
         </rearmatter>
     </xsl:template>
 
     <xsl:template match="html:section | html:article">
-        <xsl:call-template name="copy-preceding-comments"/>
+        <xsl:call-template name="f:copy-preceding-comments"/>
         <xsl:variable name="level" select="f:level(.)"/>
         <xsl:element name="level{f:level(.)}">
-            <xsl:call-template name="attlist.level">
+            <xsl:call-template name="f:attlist.level">
                 <xsl:with-param name="classes" select="if (self::html:article) then 'article' else ()" tunnel="yes"/>
                 <!--<xsl:with-param name="level-classes"
                     select="if ($level &gt; 1) then () else (if (f:types(.)='cover') then 'jacketcopy' else (), for $class in (tokenize(@class,'\s')) return if ($class = ('part','jacketcopy','colophon','nonstandardpagination')) then $class else ())"
@@ -257,9 +256,9 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template name="attlist.level">
+    <xsl:template name="f:attlist.level">
         <!--        <xsl:param name="level-classes"/>-->
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <!--            <xsl:with-param name="except-classes" select="'*'" tunnel="yes"/>-->
         </xsl:call-template>
         <!--<xsl:if test="count($level-classes) &gt; 0">
@@ -269,36 +268,36 @@
 
     <xsl:template match="html:br">
         <br>
-            <xsl:call-template name="attlist.br"/>
+            <xsl:call-template name="f:attlist.br"/>
         </br>
     </xsl:template>
 
-    <xsl:template name="attlist.br">
-        <xsl:call-template name="coreattrs"/>
+    <xsl:template name="f:attlist.br">
+        <xsl:call-template name="f:coreattrs"/>
     </xsl:template>
 
     <xsl:template match="html:p[f:classes(.)='line']">
         <line>
-            <xsl:call-template name="attlist.line"/>
+            <xsl:call-template name="f:attlist.line"/>
             <xsl:apply-templates select="node()"/>
         </line>
     </xsl:template>
 
-    <xsl:template name="attlist.line">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.line">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="'line'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:span[f:classes(.)='linenum']">
         <linenum>
-            <xsl:call-template name="attlist.linenum"/>
+            <xsl:call-template name="f:attlist.linenum"/>
             <xsl:apply-templates select="node()"/>
         </linenum>
     </xsl:template>
 
-    <xsl:template name="attlist.linenum">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.linenum">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="'linenum'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -307,51 +306,51 @@
     <xsl:template match="html:address">
         <xsl:message select="'&lt;address&gt; is not allowed in nordic DTBook. Replacing with p and a &quot;address&quot; class.'"/>
         <p>
-            <xsl:call-template name="attlist.address"/>
+            <xsl:call-template name="f:attlist.address"/>
             <xsl:apply-templates select="node()"/>
         </p>
     </xsl:template>
 
     <!-- <address> is not allowed in nordic DTBook. Replacing with p and a "address" class. -->
-    <xsl:template name="attlist.address">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.address">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'address'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:div">
         <div>
-            <xsl:call-template name="attlist.div"/>
+            <xsl:call-template name="f:attlist.div"/>
             <xsl:apply-templates select="node()"/>
         </div>
     </xsl:template>
 
-    <xsl:template name="attlist.div">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.div">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="html:*[f:classes(.)='title' and not(parent::html:header[parent::html:body]) and ancestor::html:*/f:types(.)=('z3998:poem','z3998:verse')]">
         <title>
-            <xsl:call-template name="attlist.title"/>
+            <xsl:call-template name="f:attlist.title"/>
             <xsl:apply-templates select="node()"/>
         </title>
     </xsl:template>
 
-    <xsl:template name="attlist.title">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.title">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="'title'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:*[f:types(.)='z3998:author' and not(parent::html:header[parent::html:body]) and ancestor::html:*/f:types(.)=('z3998:poem','z3998:verse')]">
         <author>
-            <xsl:call-template name="attlist.author"/>
+            <xsl:call-template name="f:attlist.author"/>
             <xsl:apply-templates select="node()"/>
         </author>
     </xsl:template>
 
-    <xsl:template name="attlist.author">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.author">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="'author'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -360,7 +359,7 @@
         <xsl:choose>
             <xsl:when test="ancestor::html:section[f:classes(.)=('frontcover','rearcover','leftflap','rightflap') and parent::*/f:types(.)='cover']">
                 <div>
-                    <xsl:call-template name="attlist.div">
+                    <xsl:call-template name="f:attlist.div">
                         <xsl:with-param name="classes" select="if (f:classes(.) = ('render-required','render-optional')) then () else ('render-optional')" tunnel="yes"/>
                     </xsl:call-template>
                     <xsl:apply-templates select="node()"/>
@@ -368,16 +367,16 @@
             </xsl:when>
             <xsl:otherwise>
                 <prodnote>
-                    <xsl:call-template name="attlist.prodnote"/>
+                    <xsl:call-template name="f:attlist.prodnote"/>
                     <xsl:apply-templates select="node()"/>
                 </prodnote>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="attlist.prodnote">
+    <xsl:template name="f:attlist.prodnote">
         <xsl:param name="all-ids" tunnel="yes" select=".//@id"/>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="('production','render-required','render-optional')" tunnel="yes"/>
         </xsl:call-template>
         <xsl:choose>
@@ -403,13 +402,13 @@
 
     <xsl:template match="html:aside[f:types(.)='sidebar'] | html:figure[f:types(.)='sidebar']">
         <sidebar>
-            <xsl:call-template name="attlist.sidebar"/>
+            <xsl:call-template name="f:attlist.sidebar"/>
             <xsl:apply-templates select="node()"/>
         </sidebar>
     </xsl:template>
 
-    <xsl:template name="attlist.sidebar">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.sidebar">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="'sidebar'" tunnel="yes"/>
         </xsl:call-template>
         <xsl:choose>
@@ -424,7 +423,7 @@
 
     <xsl:template match="html:aside[f:types(.)='note'] | html:li[f:types(.)=('rearnote','footnote')]">
         <note>
-            <xsl:call-template name="attlist.note"/>
+            <xsl:call-template name="f:attlist.note"/>
             <xsl:choose>
                 <xsl:when test="(text()[normalize-space()] | *)/f:is-inline(.) = true()">
                     <p>
@@ -438,25 +437,24 @@
         </note>
     </xsl:template>
 
-    <xsl:template name="attlist.note">
-        <xsl:call-template name="attrsrqd">
+    <xsl:template name="f:attlist.note">
+        <xsl:call-template name="f:attrsrqd">
             <xsl:with-param name="except-classes" select="'*'" tunnel="yes"/>
         </xsl:call-template>
-        <xsl:attribute name="class" select="if (f:types(.)='footnote') then 'footnote required' else if (f:types(.)='rearnote') then 'rearnote required' else ('')"/>
     </xsl:template>
 
     <!-- <annotation> is not allowed in nordic DTBook. Replacing with p. -->
     <xsl:template match="html:aside[f:types(.)='annotation']">
         <xsl:message select="'&lt;annotation&gt; is not allowed in nordic DTBook. Replacing with p and a &quot;annotation&quot; class.'"/>
         <p>
-            <xsl:call-template name="attlist.annotation"/>
+            <xsl:call-template name="f:attlist.annotation"/>
             <xsl:apply-templates select="node()"/>
         </p>
     </xsl:template>
 
     <!-- <annotation> is not allowed in nordic DTBook. Replacing with p and a "annotation" class. -->
-    <xsl:template name="attlist.annotation">
-        <xsl:call-template name="attrsrqd">
+    <xsl:template name="f:attlist.annotation">
+        <xsl:call-template name="f:attrsrqd">
             <xsl:with-param name="classes" select="'annotation'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -465,14 +463,14 @@
     <xsl:template match="html:aside[f:types(.)='epigraph']">
         <xsl:message select="'&lt;epigraph&gt; is not allowed in nordic DTBook. Using p instead with a epigraph class.'"/>
         <p>
-            <xsl:call-template name="attlist.epigraph"/>
+            <xsl:call-template name="f:attlist.epigraph"/>
             <xsl:apply-templates select="node()"/>
         </p>
     </xsl:template>
 
     <!-- <epigraph> is not allowed in nordic DTBook. Using p instead with a epigraph class. -->
-    <xsl:template name="attlist.epigraph">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.epigraph">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'epigraph'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -481,14 +479,14 @@
     <xsl:template match="html:span[f:classes(.)='byline']">
         <xsl:message select="'&lt;byline&gt; is not allowed in nordic DTBook. Using span instead with a byline class.'"/>
         <span>
-            <xsl:call-template name="attlist.byline"/>
+            <xsl:call-template name="f:attlist.byline"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
     <!-- <byline> is not allowed in nordic DTBook. Using span instead with a byline class. -->
-    <xsl:template name="attlist.byline">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.byline">
+        <xsl:call-template name="f:attrs">
             <!--            <xsl:with-param name="except-classes" select="'byline'" tunnel="yes"/>-->
         </xsl:call-template>
     </xsl:template>
@@ -497,40 +495,40 @@
     <xsl:template match="html:span[f:classes(.)='dateline']">
         <xsl:message select="'&lt;dateline&gt; is not allowed in nordic DTBook. Using span instead with a dateline class.'"/>
         <span>
-            <xsl:call-template name="attlist.dateline"/>
+            <xsl:call-template name="f:attlist.dateline"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
     <!-- <dateline> is not allowed in nordic DTBook. Using span instead with a dateline class. -->
-    <xsl:template name="attlist.dateline">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.dateline">
+        <xsl:call-template name="f:attrs">
             <!--            <xsl:with-param name="except-classes" select="'dateline'" tunnel="yes"/>-->
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:*[f:classes(.)='linegroup']">
         <linegroup>
-            <xsl:call-template name="attlist.linegroup"/>
+            <xsl:call-template name="f:attlist.linegroup"/>
             <xsl:apply-templates select="node()"/>
         </linegroup>
     </xsl:template>
 
-    <xsl:template name="attlist.linegroup">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.linegroup">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="'linegroup'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:*[f:types(.)='z3998:poem'] | html:*[f:types(.)='z3998:verse' and not(ancestor::html:*/f:types(.)='z3998:poem')]">
         <poem>
-            <xsl:call-template name="attlist.poem"/>
+            <xsl:call-template name="f:attlist.poem"/>
             <xsl:apply-templates select="node()"/>
         </poem>
     </xsl:template>
 
-    <xsl:template name="attlist.poem">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.poem">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="('poem','verse')" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -542,23 +540,23 @@
                 <xsl:apply-templates select="node()"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="a"/>
+                <xsl:call-template name="f:a"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <xsl:template name="a">
+    <xsl:template name="f:a">
         <xsl:param name="children" select="node()"/>
         <xsl:choose>
             <xsl:when test="$allow-links">
                 <a>
-                    <xsl:call-template name="attlist.a"/>
+                    <xsl:call-template name="f:attlist.a"/>
                     <xsl:apply-templates select="$children"/>
                 </a>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message select="'&lt;a&gt; is not allowed in nordic DTBook. Replacing with span and a &quot;a&quot; class.'"/>
                 <span>
-                    <xsl:call-template name="attlist.a"/>
+                    <xsl:call-template name="f:attlist.a"/>
                     <xsl:apply-templates select="$children"/>
                 </span>
             </xsl:otherwise>
@@ -566,9 +564,9 @@
     </xsl:template>
 
     <!-- <a> is not allowed in nordic DTBook. Replacing with span and a "a" class. -->
-    <xsl:template name="attlist.a">
+    <xsl:template name="f:attlist.a">
 
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <!--<xsl:with-param name="classes" select="'a'" tunnel="yes"/>-->
 
             <!--
@@ -600,38 +598,38 @@
 
     <xsl:template match="html:em">
         <em>
-            <xsl:call-template name="attlist.em"/>
+            <xsl:call-template name="f:attlist.em"/>
             <xsl:apply-templates select="node()"/>
         </em>
     </xsl:template>
 
-    <xsl:template name="attlist.em">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.em">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="html:strong">
         <strong>
-            <xsl:call-template name="attlist.strong"/>
+            <xsl:call-template name="f:attlist.strong"/>
             <xsl:apply-templates select="node()"/>
         </strong>
     </xsl:template>
 
-    <xsl:template name="attlist.strong">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.strong">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <!-- <dfn> is not allowed in nordic DTBook. Replacing with span. -->
     <xsl:template match="html:dfn">
         <xsl:message select="'&lt;dfn&gt; is not allowed in nordic DTBook. Replacing with span and a &quot;definition&quot; class.'"/>
         <span>
-            <xsl:call-template name="attlist.dfn"/>
+            <xsl:call-template name="f:attlist.dfn"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
     <!-- <dfn> is not allowed in nordic DTBook. Replacing with span and a "definition" class. -->
-    <xsl:template name="attlist.dfn">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.dfn">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'definition'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -640,42 +638,42 @@
     <xsl:template match="html:kbd">
         <xsl:message select="'&lt;kbd&gt; is not allowed in Nordic DTBook. Replacing with &lt;code&gt; and a &quot;keyboard&quot; class.'"/>
         <code>
-            <xsl:call-template name="attlist.kbd"/>
+            <xsl:call-template name="f:attlist.kbd"/>
             <xsl:apply-templates select="node()"/>
         </code>
     </xsl:template>
 
     <!-- <kbd> is not allowed in nordic DTBook. Replacing with code and a "keyboard" class. -->
-    <xsl:template name="attlist.kbd">
+    <xsl:template name="f:attlist.kbd">
         <xsl:attribute name="xml:space" select="'preserve'"/>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'keyboard'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:code">
         <code>
-            <xsl:call-template name="attlist.code"/>
+            <xsl:call-template name="f:attlist.code"/>
             <xsl:apply-templates select="node()"/>
         </code>
     </xsl:template>
 
-    <xsl:template name="attlist.code">
+    <xsl:template name="f:attlist.code">
         <xsl:attribute name="xml:space" select="'preserve'"/>
-        <xsl:call-template name="attrs"/>
-        <xsl:call-template name="i18n"/>
+        <xsl:call-template name="f:attrs"/>
+        <xsl:call-template name="f:i18n"/>
     </xsl:template>
 
     <xsl:template match="html:pre">
         <p>
-            <xsl:call-template name="attlist.pre"/>
+            <xsl:call-template name="f:attlist.pre"/>
             <xsl:apply-templates select="node()"/>
         </p>
     </xsl:template>
 
-    <xsl:template name="attlist.pre">
-        <xsl:call-template name="attrs"/>
-        <xsl:call-template name="i18n"/>
+    <xsl:template name="f:attlist.pre">
+        <xsl:call-template name="f:attrs"/>
+        <xsl:call-template name="f:i18n"/>
         <xsl:attribute name="xml:space" select="'preserve'"/>
     </xsl:template>
 
@@ -683,32 +681,32 @@
     <xsl:template match="html:samp">
         <xsl:message select="'&lt;samp&gt; is not allowed in nordic DTBook. Replacing with code and a &quot;example&quot; class.'"/>
         <code>
-            <xsl:call-template name="attlist.samp"/>
+            <xsl:call-template name="f:attlist.samp"/>
             <xsl:apply-templates select="node()"/>
         </code>
     </xsl:template>
 
     <!-- <samp> is not allowed in nordic DTBook. Replacing with code and a "example" class. -->
-    <xsl:template name="attlist.samp">
+    <xsl:template name="f:attlist.samp">
         <xsl:attribute name="xml:space" select="'preserve'"/>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'example'" tunnel="yes"/>
         </xsl:call-template>
-        <xsl:call-template name="i18n"/>
+        <xsl:call-template name="f:i18n"/>
     </xsl:template>
 
     <!-- <cite> is not allowed in nordic DTBook. Using span instead. -->
     <xsl:template match="html:cite">
         <xsl:message select="'&lt;cite&gt; is not allowed in nordic DTBook. Using span instead with a cite class.'"/>
         <span>
-            <xsl:call-template name="attlist.cite"/>
+            <xsl:call-template name="f:attlist.cite"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
     <!-- <cite> is not allowed in nordic DTBook. Using span instead with a cite class. -->
-    <xsl:template name="attlist.cite">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.cite">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'cite'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -716,26 +714,26 @@
     <!-- abbr is disallowed in nordic dtbooks, using span instead -->
     <xsl:template match="html:abbr[f:types(.)='z3998:truncation']">
         <span>
-            <xsl:call-template name="attlist.abbr"/>
+            <xsl:call-template name="f:attlist.abbr"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
-    <xsl:template name="attlist.abbr">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.abbr">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <!-- acronym is disallowed in nordic dtbooks, using span instead -->
     <xsl:template match="html:abbr">
         <span>
-            <xsl:call-template name="attlist.acronym"/>
+            <xsl:call-template name="f:attlist.acronym"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
     <!-- acronym is disallowed in nordic dtbooks, using span instead and thus not setting the pronounce attribute -->
-    <xsl:template name="attlist.acronym">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.acronym">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="if (not(f:types(.)='z3998:initialism')) then 'acronym' else ()" tunnel="yes"/>
         </xsl:call-template>
         <!--<xsl:if test="">
@@ -745,80 +743,80 @@
 
     <xsl:template match="html:sub">
         <sub>
-            <xsl:call-template name="attlist.sub"/>
+            <xsl:call-template name="f:attlist.sub"/>
             <xsl:apply-templates select="node()"/>
         </sub>
     </xsl:template>
 
-    <xsl:template name="attlist.sub">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.sub">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="html:sup">
         <sup>
-            <xsl:call-template name="attlist.sup"/>
+            <xsl:call-template name="f:attlist.sup"/>
             <xsl:apply-templates select="node()"/>
         </sup>
     </xsl:template>
 
-    <xsl:template name="attlist.sup">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.sup">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="html:span">
         <span>
-            <xsl:call-template name="attlist.span"/>
+            <xsl:call-template name="f:attlist.span"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
-    <xsl:template name="attlist.span">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.span">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <!-- <bdo> is not allowed in nordic DTBook. Replacing with span. -->
     <xsl:template match="html:bdo">
         <xsl:message select="'&lt;bdo&gt; is not allowed in nordic DTBook. Replacing with span and a &quot;bdo-dir-{@dir}&quot; class.'"/>
         <span>
-            <xsl:call-template name="attlist.bdo"/>
+            <xsl:call-template name="f:attlist.bdo"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
     <!-- <bdo> is not allowed in nordic DTBook. Replacing with span and a "bdo-dir-{@dir}" class. -->
-    <xsl:template name="attlist.bdo">
-        <xsl:call-template name="coreattrs">
+    <xsl:template name="f:attlist.bdo">
+        <xsl:call-template name="f:coreattrs">
             <xsl:with-param name="classes" select="('bdo', if (@dir and not(@dir='')) then concat('bdo-dir-',@dir) else ())" tunnel="yes"/>
         </xsl:call-template>
-        <xsl:call-template name="i18n"/>
+        <xsl:call-template name="f:i18n"/>
     </xsl:template>
 
     <!-- <sent> not allowed in nordic guidelines, using <span> instead -->
     <xsl:template match="html:span[f:types(.)='z3998:sentence']">
         <span>
-            <xsl:call-template name="attlist.sent"/>
+            <xsl:call-template name="f:attlist.sent"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
     <!-- <sent> not allowed in nordic guidelines, using <span> instead and including the 'sentence' type as a class -->
     <!--            <xsl:with-param name="except-classes" select="'sentence'" tunnel="yes"/>-->
-    <xsl:template name="attlist.sent">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.sent">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <!-- <w> is not allowed in nordic DTBook. Using span instead. -->
     <xsl:template match="html:span[f:types(.)='z3998:word' and not(f:types(.)='z3998:sentence')]">
         <xsl:message select="'&lt;w&gt; is not allowed in nordic DTBook. Using span instead with a &quot;word&quot; class.'"/>
         <span>
-            <xsl:call-template name="attlist.w"/>
+            <xsl:call-template name="f:attlist.w"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
     <!-- <w> is not allowed in nordic DTBook. Using span instead with a "word" class. -->
-    <xsl:template name="attlist.w">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.w">
+        <xsl:call-template name="f:attrs">
             <!--            <xsl:with-param name="except-classes" select="'word'" tunnel="yes"/>-->
         </xsl:call-template>
     </xsl:template>
@@ -830,15 +828,15 @@
             </xsl:when>
             <xsl:otherwise>
                 <pagenum>
-                    <xsl:call-template name="attlist.pagenum"/>
+                    <xsl:call-template name="f:attlist.pagenum"/>
                     <xsl:value-of select="@title"/>
                 </pagenum>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="attlist.pagenum">
-        <xsl:call-template name="attrsrqd">
+    <xsl:template name="f:attlist.pagenum">
+        <xsl:call-template name="f:attrsrqd">
             <xsl:with-param name="except" select="'title'" tunnel="yes"/>
             <xsl:with-param name="except-classes" select="('page-front','page-normal','page-special','pagebreak')" tunnel="yes"/>
         </xsl:call-template>
@@ -847,16 +845,16 @@
 
     <xsl:template match="html:a[f:types(.)='noteref']">
         <noteref>
-            <xsl:call-template name="attlist.noteref"/>
+            <xsl:call-template name="f:attlist.noteref"/>
             <xsl:apply-templates select="node()"/>
         </noteref>
     </xsl:template>
 
-    <xsl:template name="attlist.noteref">
+    <xsl:template name="f:attlist.noteref">
         <xsl:if test="@class or f:types(.)[not(.='noteref')]">
             <xsl:message select="'the class attribute on a noteref was dropped since it is not allowed in Nordic DTBook.'"/>
         </xsl:if>
-        <xsl:call-template name="attrs">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="'*'" tunnel="yes"/>
         </xsl:call-template>
         <xsl:attribute name="idref" select="@href"/>
@@ -867,14 +865,14 @@
     <xsl:template match="html:a[f:types(.)='annoref']">
         <xsl:message select="'&lt;annoref&gt; is not allowed in nordic DTBook. Replacing with span and a &quot;annoref&quot; class.'"/>
         <span>
-            <xsl:call-template name="attlist.annoref"/>
+            <xsl:call-template name="f:attlist.annoref"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
     <!-- <annoref> is not allowed in nordic DTBook. Replacing with span and a "annoref" class. -->
-    <xsl:template name="attlist.annoref">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.annoref">
+        <xsl:call-template name="f:attrs">
             <!--            <xsl:with-param name="except-classes" select="'annoref'" tunnel="yes"/>-->
         </xsl:call-template>
         <!--<xsl:attribute name="idref" select="@href"/>
@@ -885,14 +883,14 @@
     <xsl:template match="html:q">
         <xsl:message select="'&lt;q&gt; is not allowed in nordic DTBook. Replacing with span and a &quot;quote&quot; class.'"/>
         <span>
-            <xsl:call-template name="attlist.q"/>
+            <xsl:call-template name="f:attlist.q"/>
             <xsl:apply-templates select="node()"/>
         </span>
     </xsl:template>
 
     <!-- <q> is not allowed in nordic DTBook. Replacing with span and a "quote" class. -->
-    <xsl:template name="attlist.q">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.q">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'quote'" tunnel="yes"/>
         </xsl:call-template>
         <!--        <xsl:copy-of select="@cite"/>-->
@@ -900,14 +898,14 @@
 
     <xsl:template match="html:img">
         <img>
-            <xsl:call-template name="attlist.img"/>
+            <xsl:call-template name="f:attlist.img"/>
             <xsl:apply-templates select="node()"/>
         </img>
     </xsl:template>
 
-    <xsl:template name="attlist.img">
+    <xsl:template name="f:attlist.img">
         <xsl:param name="all-ids" tunnel="yes" select=".//@id"/>
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="f:attrs"/>
         <xsl:attribute name="src" select="replace(@src,'^images/','')"/>
         <xsl:choose>
             <xsl:when test="@alt='image' and (ancestor-or-self::*/(@xml:lang|@lang))[last()]='sv'">
@@ -932,7 +930,7 @@
             </xsl:when>
             <xsl:otherwise>
                 <imggroup>
-                    <xsl:call-template name="attlist.imggroup"/>
+                    <xsl:call-template name="f:attlist.imggroup"/>
                     <xsl:apply-templates select="html:img"/>
                     <xsl:apply-templates select="html:figcaption"/>
                     <xsl:apply-templates select="node()[not(self::html:img or self::html:figcaption)]"/>
@@ -943,13 +941,13 @@
 
     <xsl:template match="html:figure[f:classes(.)='image-series']">
         <imggroup>
-            <xsl:call-template name="attlist.imggroup"/>
+            <xsl:call-template name="f:attlist.imggroup"/>
             <xsl:apply-templates select="node()"/>
         </imggroup>
     </xsl:template>
 
-    <xsl:template name="attlist.imggroup">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.imggroup">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="('image-series','image')" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -957,7 +955,7 @@
     <xsl:template match="html:p">
         <xsl:variable name="precedinghr" select="preceding-sibling::*[1] intersect preceding-sibling::html:hr[1]"/>
         <p>
-            <xsl:call-template name="attlist.p">
+            <xsl:call-template name="f:attlist.p">
                 <xsl:with-param name="classes" select="if ($precedinghr) then (if ($precedinghr/tokenize(@class,'\s')='separator') then 'precedingseparator' else 'precedingemptyline') else ()"
                     tunnel="yes"/>
             </xsl:call-template>
@@ -965,34 +963,34 @@
         </p>
     </xsl:template>
 
-    <xsl:template name="attlist.p">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.p">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="html:hr"/>
 
     <xsl:template match="html:h1[f:types(.)='fulltitle' and parent::html:header[parent::html:body]]">
         <doctitle>
-            <xsl:call-template name="attlist.doctitle"/>
+            <xsl:call-template name="f:attlist.doctitle"/>
             <xsl:apply-templates select="node()"/>
         </doctitle>
     </xsl:template>
 
-    <xsl:template name="attlist.doctitle">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.doctitle">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="('fulltitle','title')" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:*[f:types(.)='z3998:author' and parent::html:header[parent::html:body]]">
         <docauthor>
-            <xsl:call-template name="attlist.docauthor"/>
+            <xsl:call-template name="f:attlist.docauthor"/>
             <xsl:apply-templates select="node()"/>
         </docauthor>
     </xsl:template>
 
-    <xsl:template name="attlist.docauthor">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.docauthor">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="('author','docauthor')" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
@@ -1003,21 +1001,21 @@
     </xsl:template>
 
     <!-- <covertitle> is not allowed in nordic DTBook. Using p instead with a "covertitle" class. -->
-    <xsl:template name="attlist.covertitle">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.covertitle">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'covertitle'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
         <xsl:element name="h{if (parent::*/f:types(.)=('sidebar','z3998:poem','z3998:verse') or parent::*/f:classes(.)='linegroup') then 'd' else f:level(.)}">
-            <xsl:call-template name="attlist.h"/>
+            <xsl:call-template name="f:attlist.h"/>
             <xsl:apply-templates select="node()"/>
         </xsl:element>
     </xsl:template>
 
-    <xsl:template name="attlist.h">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.h">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="text()[ancestor::html:h1 | ancestor::html:h2 | ancestor::html:h3 | ancestor::html:h4 | ancestor::html:h5 | ancestor::html:h6]">
@@ -1037,68 +1035,68 @@
     <xsl:template match="html:p[f:types(.)='bridgehead']">
         <xsl:message select="'&lt;bridgehead&gt; is not allowed in nordic DTBook. Using p instead with a bridgehead class.'"/>
         <p>
-            <xsl:call-template name="attlist.bridgehead"/>
+            <xsl:call-template name="f:attlist.bridgehead"/>
             <xsl:apply-templates select="node()"/>
         </p>
     </xsl:template>
 
     <!-- <bridgehead> is not allowed in nordic DTBook. Using p instead with a bridgehead class. -->
-    <xsl:template name="attlist.bridgehead">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.bridgehead">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="'bridgehead'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="html:blockquote">
         <blockquote>
-            <xsl:call-template name="attlist.blockquote"/>
+            <xsl:call-template name="f:attlist.blockquote"/>
             <xsl:apply-templates select="node()"/>
         </blockquote>
     </xsl:template>
 
-    <xsl:template name="attlist.blockquote">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.blockquote">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@cite"/>
     </xsl:template>
 
     <xsl:template match="html:dl">
         <dl>
-            <xsl:call-template name="attlist.dl"/>
+            <xsl:call-template name="f:attlist.dl"/>
             <xsl:apply-templates select="node()"/>
         </dl>
     </xsl:template>
 
-    <xsl:template name="attlist.dl">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.dl">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="html:dt">
         <dt>
-            <xsl:call-template name="attlist.dt"/>
+            <xsl:call-template name="f:attlist.dt"/>
             <xsl:apply-templates select="node()"/>
         </dt>
     </xsl:template>
 
-    <xsl:template name="attlist.dt">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.dt">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="html:dd">
         <dd>
-            <xsl:call-template name="attlist.dd"/>
+            <xsl:call-template name="f:attlist.dd"/>
             <xsl:apply-templates select="node()"/>
         </dd>
     </xsl:template>
 
-    <xsl:template name="attlist.dd">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.dd">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="html:ol | html:ul">
         <xsl:choose>
             <xsl:when test="parent::html:section[f:types(.)='toc' and not(ancestor::html:section | ancestor::html:article)]">
                 <list>
-                    <xsl:call-template name="attlist.list">
+                    <xsl:call-template name="f:attlist.list">
                         <xsl:with-param name="classes" select="'toc'" tunnel="yes"/>
                     </xsl:call-template>
                     <xsl:apply-templates select="node()"/>
@@ -1109,17 +1107,17 @@
             </xsl:when>
             <xsl:otherwise>
                 <list>
-                    <xsl:call-template name="attlist.list"/>
+                    <xsl:call-template name="f:attlist.list"/>
                     <xsl:apply-templates select="node()"/>
                 </list>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="attlist.list">
+    <xsl:template name="f:attlist.list">
         <!-- Only 'pl' is allowed in nordic DTBook, markers will be inlined. A generic script would set type to ul or ol (i.e. select="local-name()"). -->
         <xsl:attribute name="type" select="'pl'"/>
-        <xsl:call-template name="attrs"/>
+        <xsl:call-template name="f:attrs"/>
         <!--
         list is always preformatted so enum and start is not included in the result
         <xsl:copy-of select="@start"/>
@@ -1133,7 +1131,7 @@
     <!-- Only 'pl' is allowed in nordic DTBook; prepend markers ("• " for ul, "1. " for numbered, etc) to all list items. -->
     <xsl:template match="html:li">
         <li>
-            <xsl:call-template name="attlist.li"/>
+            <xsl:call-template name="f:attlist.li"/>
 
             <xsl:variable name="is-block-except-list" select="if ((html:p | html:dl | html:div | html:blockquote | html:table | html:address | html:section | html:aside)) then true() else false()"/>
 
@@ -1167,7 +1165,7 @@
                         <xsl:when test="*[1] intersect html:p">
                             <xsl:for-each select="*[1]">
                                 <p>
-                                    <xsl:call-template name="attlist.p"/>
+                                    <xsl:call-template name="f:attlist.p"/>
                                     <xsl:value-of select="$marker"/>
                                     <xsl:apply-templates select="node()"/>
                                 </p>
@@ -1216,20 +1214,20 @@
         </li>
     </xsl:template>
 
-    <xsl:template name="attlist.li">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.li">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="html:span[f:classes(.)='lic']">
         <xsl:variable name="position" select="count(preceding-sibling::*) + 1"/>
         <xsl:variable name="children" select="node()"/>
         <lic>
-            <xsl:call-template name="attlist.lic"/>
+            <xsl:call-template name="f:attlist.lic"/>
             <xsl:choose>
                 <xsl:when test="parent::html:a">
                     <xsl:variable name="a">
                         <xsl:for-each select="parent::*">
-                            <xsl:call-template name="a">
+                            <xsl:call-template name="f:a">
                                 <xsl:with-param name="children" select="$children"/>
                             </xsl:call-template>
                         </xsl:for-each>
@@ -1258,13 +1256,13 @@
         </lic>
     </xsl:template>
 
-    <xsl:template name="attlist.lic">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.lic">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="'lic'" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template name="cellhvalign">
+    <xsl:template name="f:cellhvalign">
         <!--
             the @cellhalign and @cellvalign attributes could potentially be inferred from the CSS here,
             but it's probably not worth it so they are ignored for now.
@@ -1273,9 +1271,9 @@
 
     <xsl:template match="html:table">
         <table>
-            <xsl:call-template name="attlist.table"/>
+            <xsl:call-template name="f:attlist.table"/>
             <xsl:for-each select="html:caption">
-                <xsl:call-template name="caption.table"/>
+                <xsl:call-template name="f:caption.table"/>
             </xsl:for-each>
             <xsl:apply-templates select="html:colgroup"/>
 
@@ -1289,8 +1287,8 @@
         </table>
     </xsl:template>
 
-    <xsl:template name="attlist.table">
-        <xsl:call-template name="attrs">
+    <xsl:template name="f:attlist.table">
+        <xsl:call-template name="f:attrs">
             <xsl:with-param name="except-classes" select="for $class in (f:classes(.)) return if (starts-with($class,'table-rules') or starts-with($class,'table-frame-')) then $class else ()"
                 tunnel="yes"/>
         </xsl:call-template>
@@ -1309,11 +1307,11 @@
         -->
     </xsl:template>
 
-    <xsl:template name="caption.table">
+    <xsl:template name="f:caption.table">
         <xsl:variable name="content" select="node()[not(self::html:p[f:classes(.)='table-summary'])]"/>
         <xsl:if test="$content">
             <caption>
-                <xsl:call-template name="attlist.caption"/>
+                <xsl:call-template name="f:attlist.caption"/>
                 <xsl:apply-templates select="$content"/>
             </caption>
         </xsl:if>
@@ -1321,64 +1319,64 @@
 
     <xsl:template match="html:figcaption">
         <caption>
-            <xsl:call-template name="attlist.caption"/>
+            <xsl:call-template name="f:attlist.caption"/>
             <xsl:apply-templates select="node()"/>
         </caption>
     </xsl:template>
 
-    <xsl:template name="attlist.caption">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.caption">
+        <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
     <xsl:template match="html:thead">
         <thead>
-            <xsl:call-template name="attlist.thead"/>
+            <xsl:call-template name="f:attlist.thead"/>
             <xsl:apply-templates select="node()"/>
         </thead>
     </xsl:template>
 
-    <xsl:template name="attlist.thead">
-        <xsl:call-template name="attrs"/>
-        <xsl:call-template name="cellhvalign"/>
+    <xsl:template name="f:attlist.thead">
+        <xsl:call-template name="f:attrs"/>
+        <xsl:call-template name="f:cellhvalign"/>
     </xsl:template>
 
     <xsl:template match="html:tfoot">
         <tfoot>
-            <xsl:call-template name="attlist.tfoot"/>
+            <xsl:call-template name="f:attlist.tfoot"/>
             <xsl:apply-templates select="node()"/>
         </tfoot>
     </xsl:template>
 
-    <xsl:template name="attlist.tfoot">
-        <xsl:call-template name="attrs"/>
-        <xsl:call-template name="cellhvalign"/>
+    <xsl:template name="f:attlist.tfoot">
+        <xsl:call-template name="f:attrs"/>
+        <xsl:call-template name="f:cellhvalign"/>
     </xsl:template>
 
     <xsl:template match="html:tbody">
         <tbody>
-            <xsl:call-template name="attlist.tbody"/>
+            <xsl:call-template name="f:attlist.tbody"/>
             <xsl:apply-templates select="node()"/>
         </tbody>
     </xsl:template>
 
-    <xsl:template name="attlist.tbody">
-        <xsl:call-template name="attrs"/>
-        <xsl:call-template name="cellhvalign"/>
+    <xsl:template name="f:attlist.tbody">
+        <xsl:call-template name="f:attrs"/>
+        <xsl:call-template name="f:cellhvalign"/>
     </xsl:template>
 
     <!-- <colgroup> is not allowed in nordic DTBook. -->
     <xsl:template match="html:colgroup">
         <xsl:message select="'&lt;colgroup&gt; is not allowed in nordic DTBook.'"/>
         <!--<colgroup>
-            <xsl:call-template name="attlist.colgroup"/>
+            <xsl:call-template name="f:attlist.colgroup"/>
             <xsl:apply-templates select="node()"/>
         </colgroup>-->
     </xsl:template>
 
-    <xsl:template name="attlist.colgroup">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.colgroup">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@span"/>
-        <xsl:call-template name="cellhvalign"/>
+        <xsl:call-template name="f:cellhvalign"/>
         <!--
             @width could potentially be inferred from the CSS,
             but it's probably not worth it so they are ignored for now
@@ -1389,15 +1387,15 @@
     <xsl:template match="html:col">
         <xsl:message select="'&lt;col&gt; is not allowed in nordic DTBook.'"/>
         <!--<col>
-            <xsl:call-template name="attlist.col"/>
+            <xsl:call-template name="f:attlist.col"/>
             <xsl:apply-templates select="node()"/>
         </col>-->
     </xsl:template>
 
-    <xsl:template name="attlist.col">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.col">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@span"/>
-        <xsl:call-template name="cellhvalign"/>
+        <xsl:call-template name="f:cellhvalign"/>
         <!--
             @width could potentially be inferred from the CSS,
             but it's probably not worth it so they are ignored for now
@@ -1408,7 +1406,7 @@
         <xsl:choose>
             <xsl:when test="not(html:td//*[self::html:span[f:types(.)='pagebreak']])">
                 <tr>
-                    <xsl:call-template name="attlist.tr"/>
+                    <xsl:call-template name="f:attlist.tr"/>
                     <xsl:apply-templates select="node()"/>
                 </tr>
             </xsl:when>
@@ -1416,21 +1414,21 @@
                 <xsl:variable name="content" select="html:td//*[self::html:span[f:types(.)='pagebreak']]"/>
                 <xsl:for-each select="$content">
                     <pagenum>
-                        <xsl:call-template name="attlist.pagenum"/>
+                        <xsl:call-template name="f:attlist.pagenum"/>
                         <xsl:value-of select="@title"/>
                     </pagenum>
                 </xsl:for-each>
                 <tr>
-                    <xsl:call-template name="attlist.tr"/>
+                    <xsl:call-template name="f:attlist.tr"/>
                     <xsl:apply-templates select="node()"/>
                 </tr>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="attlist.tr">
-        <xsl:call-template name="attrs"/>
-        <xsl:call-template name="cellhvalign"/>
+    <xsl:template name="f:attlist.tr">
+        <xsl:call-template name="f:attrs"/>
+        <xsl:call-template name="f:cellhvalign"/>
         <!--
             @width could potentially be inferred from the CSS,
             but it's probably not worth it so they are ignored for now
@@ -1439,31 +1437,31 @@
 
     <xsl:template match="html:th">
         <th>
-            <xsl:call-template name="attlist.th"/>
+            <xsl:call-template name="f:attlist.th"/>
             <xsl:apply-templates select="node()"/>
         </th>
     </xsl:template>
 
-    <xsl:template name="attlist.th">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.th">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@headers|@scope|@rowspan|@colspan"/>
-        <xsl:call-template name="cellhvalign"/>
+        <xsl:call-template name="f:cellhvalign"/>
     </xsl:template>
 
     <xsl:template match="html:td">
         <td>
-            <xsl:call-template name="attlist.td"/>
+            <xsl:call-template name="f:attlist.td"/>
             <xsl:apply-templates select="node()"/>
         </td>
     </xsl:template>
 
-    <xsl:template name="attlist.td">
-        <xsl:call-template name="attrs"/>
+    <xsl:template name="f:attlist.td">
+        <xsl:call-template name="f:attrs"/>
         <xsl:copy-of select="@headers|@scope|@rowspan|@colspan"/>
-        <xsl:call-template name="cellhvalign"/>
+        <xsl:call-template name="f:cellhvalign"/>
     </xsl:template>
 
-    <xsl:template name="copy-preceding-comments">
+    <xsl:template name="f:copy-preceding-comments">
         <xsl:variable name="this" select="."/>
         <xsl:apply-templates select="preceding-sibling::comment()[not($this/preceding-sibling::*) or preceding-sibling::*[1] is $this/preceding-sibling::*[1]]"/>
     </xsl:template>
