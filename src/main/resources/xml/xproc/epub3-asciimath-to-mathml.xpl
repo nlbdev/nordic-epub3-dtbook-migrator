@@ -29,7 +29,7 @@
     </p:option>
 
     <p:import href="step/epub3-asciimath-to-mathml.step.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -43,10 +43,10 @@
     </px:message>
 
     <px:message message="Unzipping EPUB" cx:depends-on="epub3-asciimath-to-mathml.nordic-version-message" name="epub3-asciimath-to-mathml.message.epub-unzipped"/>
-    <px:unzip-fileset name="epub3-asciimath-to-mathml.unzip" cx:depends-on="epub3-asciimath-to-mathml.message.epub-unzipped" load-to-memory="false" store-to-disk="true">
+    <px:fileset-unzip name="epub3-asciimath-to-mathml.unzip" cx:depends-on="epub3-asciimath-to-mathml.message.epub-unzipped" load-to-memory="false" store-to-disk="true">
         <p:with-option name="href" select="$epub-href"/>
         <p:with-option name="unzipped-basedir" select="concat($temp-dir,'epub/')"/>
-    </px:unzip-fileset>
+    </px:fileset-unzip>
     <p:sink/>
     <px:mediatype-detect name="epub3-asciimath-to-mathml.mediatype-detect">
         <p:input port="source">

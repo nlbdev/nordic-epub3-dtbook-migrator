@@ -43,7 +43,6 @@
     <p:import href="read-xml-declaration.xpl"/>
     <p:import href="read-doctype-declaration.xpl"/>
     <p:import href="check-image-file-signatures.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -139,10 +138,10 @@
                         <p:with-option name="test" select="count(/*/d:file) = 1"/>
                         <p:with-option name="param1" select="count(/*/d:file)"/>
                     </px:assert>
-                    <px:unzip-fileset name="epub3-validate.step.unzip.unzip" load-to-memory="false" store-to-disk="true">
+                    <px:fileset-unzip name="epub3-validate.step.unzip.unzip" load-to-memory="false" store-to-disk="true">
                         <p:with-option name="href" select="resolve-uri(/*/*/(@original-href,@href)[1],/*/*/base-uri(.))"/>
                         <p:with-option name="unzipped-basedir" select="$temp-dir"/>
-                    </px:unzip-fileset>
+                    </px:fileset-unzip>
                     <p:sink/>
 
                     <px:mediatype-detect name="epub3-validate.step.unzip.fileset">
