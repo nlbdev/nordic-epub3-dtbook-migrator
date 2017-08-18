@@ -4,7 +4,7 @@
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
     xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/">
 
-    <x:scenario label="px:nordic-html-to-dtbook" focus="">
+    <x:scenario label="px:nordic-html-to-dtbook">
         <x:call step="px:nordic-html-to-dtbook">
             <x:option name="html" select="resolve-uri('single-html/C00000.xhtml')"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
