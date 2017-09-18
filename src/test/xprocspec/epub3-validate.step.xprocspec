@@ -86,7 +86,36 @@
         </x:context>
         <x:expect label="there should be no errors under d:reports" type="xpath" test="count(/*/d:reports/d:report/d:error)" equals="0"/>
         <x:expect label="the error count should be 0" type="xpath" test="if (/d:errors) then count(/*/*) else if (/*/d:document-info) then /*/d:document-info/d:error-count/number(.) else 0" equals="0"/>
-
+        
+    </x:scenario>
+    
+    <x:scenario label="px:nordic-epub3-validate.step - regression for error: java.util.MissingFormatArgumentException: Format specifier '%3$s'">
+        <x:call step="px:nordic-epub3-validate.step">
+            <x:input port="fileset.in">
+                <x:document type="inline" xml:base="regression-MissingFormatArgumentException/">
+                    <d:fileset>
+                        <d:file href="mimetype" media-type="text/plain"/>
+                        <d:file href="META-INF/container.xml"/>
+                        <d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>
+                        <d:file href="EPUB/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-04-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory.in">
+                <x:document href="C00000/EPUB/package.opf" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/nav.xhtml" type="file" method="xml"/>
+                <x:document href="C00000/EPUB/C00000-04-chapter.xhtml" type="file" method="xml"/>
+            </x:input>
+            <x:input port="report.in"/>
+            <x:option name="temp-dir" select="$temp-dir"/>
+            <x:option name="fail-on-error" select="'true'"/>
+        </x:call>
+        
+        <x:context label="errors">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect type="xpath" label="the validator should complain about a missing nav.xhtml" test="/*/*/@code" equals="'NORDICDTBOOKEPUB014'"/>
     </x:scenario>
 
 </x:description>
