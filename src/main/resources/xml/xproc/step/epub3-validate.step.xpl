@@ -127,7 +127,7 @@
             </p:identity>
             <p:choose name="epub3-validate.step.unzip">
                 <p:when test="/*/d:file[@media-type='application/epub+zip']">
-                    <p:output port="fileset">
+                    <p:output port="fileset" primary="true">
                         <p:pipe port="result" step="epub3-validate.step.unzip.fileset"/>
                     </p:output>
                     <p:output port="in-memory" sequence="true">
@@ -152,7 +152,7 @@
 
                 </p:when>
                 <p:otherwise>
-                    <p:output port="fileset">
+                    <p:output port="fileset" primary="true">
                         <p:pipe port="fileset.in" step="main"/>
                     </p:output>
                     <p:output port="in-memory" sequence="true">
@@ -167,9 +167,6 @@
             </p:choose>
 
             <px:fileset-load media-types="application/oebps-package+xml" method="xml" name="epub3-validate.step.load-unzipped-fileset">
-                <p:input port="fileset">
-                    <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
-                </p:input>
                 <p:input port="in-memory">
                     <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                 </p:input>
@@ -198,11 +195,13 @@
             <px:assert test-count-min="1" message="There must be a HTML file in the spine." error-code="NORDICDTBOOKEPUB005"/>
             <p:identity name="epub3-validate.step.html"/>
             <p:sink/>
-
-            <px:fileset-filter media-types="application/xhtml+xml" name="epub3-validate.step.filter-unzipped-html">
+            
+            <p:identity>
                 <p:input port="source">
                     <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
                 </p:input>
+            </p:identity>
+            <px:fileset-filter media-types="application/xhtml+xml" name="epub3-validate.step.filter-unzipped-html">
             </px:fileset-filter>
             <p:delete match="/*/*[not(ends-with(@href,'nav.xhtml'))]" name="epub3-validate.step.delete-nav-from-fileset"/>
             <px:fileset-load name="epub3-validate.step.load-unzipped-content-except-nav">
@@ -213,11 +212,13 @@
             <px:assert test-count-min="1" test-count-max="1" message="There is no navigation document with the filename 'nav.xhtml' in the EPUB" error-code="NORDICDTBOOKEPUB013"/>
             <p:identity name="epub3-validate.step.nav"/>
             <p:sink/>
-
-            <px:fileset-filter media-types="application/x-dtbncx+xml" name="epub3-validate.step.filter-unzipped-ncx">
+            
+            <p:identity>
                 <p:input port="source">
                     <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
                 </p:input>
+            </p:identity>
+            <px:fileset-filter media-types="application/x-dtbncx+xml" name="epub3-validate.step.filter-unzipped-ncx">
             </px:fileset-filter>
             <p:delete match="/*/*[not(ends-with(@href,'nav.ncx'))]" name="epub3-validate.step.delete-non-ncx"/>
             <px:fileset-load name="epub3-validate.step.load-ncx">
@@ -246,10 +247,12 @@
                 </p:input>
             </p:validate-with-schematron>
             <p:sink/>
-            <px:combine-validation-reports document-type="Nordic EPUB3 Package Document" name="epub3-validate.step.combine-validation-reports">
+            <p:identity>
                 <p:input port="source">
                     <p:pipe port="report" step="epub3-validate.step.opf.validate.schematron"/>
                 </p:input>
+            </p:identity>
+            <px:combine-validation-reports document-type="Nordic EPUB3 Package Document" name="epub3-validate.step.combine-validation-reports">
                 <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
                     <p:pipe port="result" step="epub3-validate.step.opf"/>
                 </p:with-option>

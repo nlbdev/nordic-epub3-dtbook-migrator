@@ -173,6 +173,12 @@
             <p:identity name="html-validate.step.validate.sch"/>
             <p:sink/>
 
+            <p:identity>
+                <p:input port="source">
+                    <!-- not completely sure why, but a XD0005 error is thrown without this p:identity. -->
+                    <p:empty/>
+                </p:input>
+            </p:identity>
             <px:combine-validation-reports name="html-validate.step.combine-validation-reports">
                 <p:with-option name="document-type" select="$document-type"/>
                 <p:input port="source">
