@@ -39,6 +39,26 @@
         -->
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>asciimath-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>common-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>dtbook-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>dtbook-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>epub3-nav-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>epub3-ocf-utils</artifactId>
         </dependency>
         <dependency>
@@ -47,23 +67,7 @@
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
-            <artifactId>epub3-nav-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.daisy.pipeline.modules</groupId>
-            <artifactId>html-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.daisy.pipeline.modules</groupId>
-            <artifactId>dtbook-validator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.daisy.pipeline.modules</groupId>
-            <artifactId>dtbook-utils</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.daisy.pipeline.modules</groupId>
-            <artifactId>fileset-utils</artifactId>
+            <artifactId>epubcheck-adapter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
@@ -71,46 +75,29 @@
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
-            <artifactId>asciimath-utils</artifactId>
+            <artifactId>fileset-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
-            <artifactId>epubcheck-adapter</artifactId>
+            <artifactId>html-utils</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>mediatype-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>validation-utils</artifactId>
+        </dependency>
+        
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-        </dependency>
-        <!--
-            runtime dependency for epub3-pub-utils
-        -->
-        <dependency>
-            <groupId>org.daisy.pipeline.modules</groupId>
-            <artifactId>mediaoverlay-utils</artifactId>
+            <!--<scope>test</scope>-->
         </dependency>
         <!--
             test dependencies
         -->
-        <dependency>
-            <groupId>org.daisy.pipeline</groupId>
-            <artifactId>framework-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.daisy.pipeline</groupId>
-            <artifactId>calabash-adapter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.daisy.pipeline</groupId>
-            <artifactId>logging-activator</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.build</groupId>
             <artifactId>modules-test-helper</artifactId>
