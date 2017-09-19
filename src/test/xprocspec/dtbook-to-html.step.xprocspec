@@ -34,7 +34,7 @@
             <x:document type="port" port="fileset.out"/>
         </x:context>
         <x:expect type="count" label="There should be exactly one fileset document" min="1" max="1"/>
-        <x:expect type="xpath" label="The fileset should have a xml:base attribute pointing to the temp-dir" test="/*/@xml:base" equals="concat($temp-dir,'temp-dir/')"/>
+        <x:expect type="xpath" label="The fileset should have a xml:base attribute pointing to the temp-dir" test="/*/@xml:base" equals="concat(replace($temp-dir,'//tmp','/tmp'),'temp-dir/')"/>
         <x:expect type="xpath" label="There should be a file with href='images/valentin.jpg'" test="//d:file[@href='images/valentin.jpg']"/>
         <x:expect type="xpath" label="There should be a file with href='css/accessibility.css'" test="//d:file[@href='css/accessibility.css']"/>
         <x:expect type="xpath" label="There should be a file with href='css/fonts/opendyslexic/OpenDyslexic-Regular.otf'" test="//d:file[@href='css/fonts/opendyslexic/OpenDyslexic-Regular.otf']"/>

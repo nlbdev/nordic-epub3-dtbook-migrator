@@ -25,8 +25,7 @@
             <x:document type="port" port="fileset.out"/>
         </x:context>
         <x:expect type="count" label="There should be exactly one fileset" min="1" max="1"/>
-        <x:expect type="xpath" label="The fileset should have a xml:base attribute pointing to the 'epub' subdirectory of the temporary directory" test="/*/@xml:base"
-            equals="concat($temp-dir,'epub/')"/>
+        <x:expect type="xpath" label="The fileset should have a xml:base attribute pointing to the 'epub' subdirectory of the temporary directory" test="/*/@xml:base" equals="concat(replace($temp-dir,'//tmp','/tmp'),'epub/')"/>
 
         <x:context label="all files in the fileset that does not exist on disk">
             <x:document type="port" port="fileset.out" select="//d:file[not(@original-href)]"/>
