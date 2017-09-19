@@ -65,6 +65,16 @@
 
 
 
+            <px:normalize-document-base name="html-store.step.normalize-base">
+                <p:input port="source">
+                    <p:pipe port="in-memory.in" step="main"/>
+                </p:input>
+            </px:normalize-document-base>
+            <px:fileset-join>
+                <p:input port="source">
+                    <p:pipe port="fileset.in" step="main"/>
+                </p:input>
+            </px:fileset-join>
             <p:choose name="html-store.step.choose-include-resources">
                 <p:when test="$include-resources = 'false'">
                     <p:delete match="/*/d:file[@media-type != 'application/xhtml+xml']" name="html-store.step.choose-include-resources.delete-auxiliary-resources-from-fileset"/>
@@ -81,7 +91,7 @@
             <p:add-attribute match="/*/d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" attribute-name="encoding" attribute-value="us-ascii" name="html-store.step.set-encoding-to-ascii"/>
             <px:fileset-store name="html-store.step.html-store">
                 <p:input port="in-memory.in">
-                    <p:pipe port="in-memory.in" step="main"/>
+                    <p:pipe port="result" step="html-store.step.normalize-base"/>
                 </p:input>
             </px:fileset-store>
             <p:identity>

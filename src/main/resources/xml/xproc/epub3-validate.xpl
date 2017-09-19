@@ -51,21 +51,39 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <px:message message="$1" name="epub3-validate.nordic-version-message">
+    <px:message message="$1">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
+    
+    <px:normalize-uri name="epub">
+        <p:with-option name="href" select="resolve-uri($epub,static-base-uri())"/>
+    </px:normalize-uri>
+    <px:normalize-uri name="temp-dir">
+        <p:with-option name="href" select="resolve-uri($temp-dir,static-base-uri())"/>
+    </px:normalize-uri>
+    <px:normalize-uri name="html-report">
+        <p:with-option name="href" select="resolve-uri($html-report,static-base-uri())"/>
+    </px:normalize-uri>
+    <p:identity name="epub3-validate.nordic-version-message-and-variables"/>
+    <p:sink/>
 
-    <px:fileset-create cx:depends-on="epub3-validate.nordic-version-message" name="epub3-validate.create-epub-fileset">
-        <p:with-option name="base" select="replace($epub,'[^/]+$','')"/>
+    <px:fileset-create cx:depends-on="epub3-validate.nordic-version-message-and-variables" name="epub3-validate.create-epub-fileset">
+        <p:with-option name="base" select="replace(/*/text(),'[^/]+$','')">
+            <p:pipe port="normalized" step="epub"/>
+        </p:with-option>
     </px:fileset-create>
     <px:fileset-add-entry media-type="application/epub+zip" name="epub3-validate.add-epub-to-fileset">
-        <p:with-option name="href" select="replace($epub,'^.*/([^/]*)$','$1')"/>
+        <p:with-option name="href" select="replace(/*/text(),'^.*/([^/]*)$','$1')">
+            <p:pipe port="normalized" step="epub"/>
+        </p:with-option>
     </px:fileset-add-entry>
 
     <px:nordic-epub3-validate.step name="epub3-validate.validate.nordic" fail-on-error="true">
-        <p:with-option name="temp-dir" select="concat($temp-dir,'validate/')"/>
+        <p:with-option name="temp-dir" select="concat(/*/text(),'validate/')">
+            <p:pipe port="normalized" step="temp-dir"/>
+        </p:with-option>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
     </px:nordic-epub3-validate.step>
     <px:fileset-load media-types="application/xhtml+xml" name="epub3-validate.load-epub-xhtml">
@@ -91,7 +109,9 @@
         </p:input>
     </px:nordic-format-html-report>
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="epub3-validate.store-report">
-        <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
+        <p:with-option name="href" select="concat(/*/text(),if (ends-with(/*/text(),'/')) then '' else '/','report.xhtml')">
+            <p:pipe port="normalized" step="html-report"/>
+        </p:with-option>
     </p:store>
     <px:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="epub3-validate.set-report-doctype">
         <p:with-option name="href" select="/*/text()">

@@ -69,24 +69,43 @@
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <p:variable name="epub-href" select="resolve-uri($epub,static-base-uri())"/>
-
-    <px:message message="$1" name="epub3-to-html.nordic-version-message">
+    <px:message message="$1">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
+    
+    <px:normalize-uri name="epub">
+        <p:with-option name="href" select="resolve-uri($epub,static-base-uri())"/>
+    </px:normalize-uri>
+    <px:normalize-uri name="html-report">
+        <p:with-option name="href" select="resolve-uri($html-report,static-base-uri())"/>
+    </px:normalize-uri>
+    <px:normalize-uri name="temp-dir">
+        <p:with-option name="href" select="resolve-uri($temp-dir,static-base-uri())"/>
+    </px:normalize-uri>
+    <px:normalize-uri name="output-dir">
+        <p:with-option name="href" select="resolve-uri($output-dir,static-base-uri())"/>
+    </px:normalize-uri>
+    <p:identity name="epub3-to-html.nordic-version-message-and-variables"/>
+    <p:sink/>
 
-    <px:fileset-create cx:depends-on="epub3-to-html.nordic-version-message" name="epub3-to-html.create-epub-fileset">
-        <p:with-option name="base" select="replace($epub-href,'[^/]+$','')"/>
+    <px:fileset-create cx:depends-on="epub3-to-html.nordic-version-message-and-variables" name="epub3-to-html.create-epub-fileset">
+        <p:with-option name="base" select="replace(/*/text(),'[^/]+$','')">
+            <p:pipe port="normalized" step="epub"/>
+        </p:with-option>
     </px:fileset-create>
     <px:fileset-add-entry media-type="application/epub+zip" name="epub3-to-html.add-epub-to-fileset">
-        <p:with-option name="href" select="replace($epub-href,'^.*/([^/]*)$','$1')"/>
+        <p:with-option name="href" select="replace(/*/text(),'^.*/([^/]*)$','$1')">
+            <p:pipe port="normalized" step="epub"/>
+        </p:with-option>
     </px:fileset-add-entry>
     <px:message message="Validating EPUB"/>
     <px:nordic-epub3-validate.step name="epub3-to-html.epub3-validate">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
-        <p:with-option name="temp-dir" select="concat($temp-dir,'validate/')"/>
+        <p:with-option name="temp-dir" select="concat(/*/text(),'validate/')">
+            <p:pipe port="normalized" step="temp-dir"/>
+        </p:with-option>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
     </px:nordic-epub3-validate.step>
 
@@ -106,8 +125,9 @@
 
     <px:message message="Storing HTML"/>
     <px:fileset-move name="epub3-to-html.html-move">
-        <p:with-option name="new-base"
-            select="concat(if (ends-with($output-dir,'/')) then $output-dir else concat($output-dir,'/'), substring-before(replace(/*/d:file[@media-type='application/xhtml+xml'][1]/@href,'^.*/',''),'.'), '/')"/>
+        <p:with-option name="new-base" select="concat(if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/'), substring-before(replace(/*/d:file[@media-type='application/xhtml+xml'][1]/@href,'^.*/',''),'.'), '/')">
+            <p:pipe port="normalized" step="output-dir"/>
+        </p:with-option>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="epub3-to-html.epub3-to-html"/>
         </p:input>
@@ -150,7 +170,9 @@
     <px:nordic-format-html-report name="epub3-to-html.nordic-format-html-report"/>
 
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="epub3-to-html.store-report">
-        <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
+        <p:with-option name="href" select="concat(/*/text(),if (ends-with(/*/text(),'/')) then '' else '/','report.xhtml')">
+            <p:pipe port="normalized" step="html-report"/>
+        </p:with-option>
     </p:store>
     <px:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="epub3-to-html.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
@@ -161,7 +183,9 @@
     
     <px:nordic-fail-on-error-status name="status">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
-        <p:with-option name="output-dir" select="$output-dir"/>
+        <p:with-option name="output-dir" select="/*/text()">
+            <p:pipe port="normalized" step="output-dir"/>
+        </p:with-option>
         <p:input port="source">
             <p:pipe port="status.out" step="epub3-to-html.html-validate"/>
         </p:input>

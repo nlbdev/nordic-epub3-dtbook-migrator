@@ -53,19 +53,30 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
 
-    <p:variable name="html-href" select="resolve-uri($html,static-base-uri())"/>
-
-    <px:message message="$1" name="nordic-version-message">
+    <px:message message="$1">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
+    
+    <px:normalize-uri name="html">
+        <p:with-option name="href" select="resolve-uri($html,static-base-uri())"/>
+    </px:normalize-uri>
+    <px:normalize-uri name="html-report">
+        <p:with-option name="href" select="resolve-uri($html-report,static-base-uri())"/>
+    </px:normalize-uri>
+    <p:identity name="nordic-version-message-and-variables"/>
+    <p:sink/>
 
     <px:fileset-create name="html-validate.create-html-fileset">
-        <p:with-option name="base" select="replace($html-href,'[^/]+$','')"/>
+        <p:with-option name="base" select="replace(/*/text(),'[^/]+$','')">
+            <p:pipe port="normalized" step="html"/>
+        </p:with-option>
     </px:fileset-create>
     <px:fileset-add-entry media-type="application/xhtml+xml" name="html-validate.add-html-to-fileset">
-        <p:with-option name="href" select="replace($html-href,'.*/','')"/>
+        <p:with-option name="href" select="replace(/*/text(),'.*/','')">
+            <p:pipe port="normalized" step="html"/>
+        </p:with-option>
     </px:fileset-add-entry>
     <p:identity name="html-validate.html-fileset.no-resources"/>
 
@@ -87,7 +98,9 @@
             </p:output>
 
             <p:load name="html-validate.html-load.load">
-                <p:with-option name="href" select="$html-href"/>
+                <p:with-option name="href" select="/*/text()">
+                    <p:pipe port="normalized" step="html"/>
+                </p:with-option>
             </p:load>
 
             <px:html-to-fileset name="html-validate.html-load.resource-fileset"/>
@@ -154,7 +167,9 @@
         </p:input>
     </px:nordic-format-html-report>
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="html-validate.store-report">
-        <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
+        <p:with-option name="href" select="concat(/*/text(),if (ends-with(/*/text(),'/')) then '' else '/','report.xhtml')">
+            <p:pipe port="normalized" step="html-report"/>
+        </p:with-option>
     </p:store>
     <px:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="html-validate.set-report-doctype">
         <p:with-option name="href" select="/*/text()">

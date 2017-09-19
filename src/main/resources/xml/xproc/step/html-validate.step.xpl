@@ -40,6 +40,7 @@
     <p:import href="validation-status.xpl"/>
     <p:import href="check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
@@ -67,9 +68,20 @@
 
 
             <!-- either load from memory or using p:load; avoid using px:html-load as it will remove the nordic namespace -->
-            <px:fileset-load media-types="application/xhtml+xml" load-if-not-in-memory="false" name="html-validate.step.load-xhtml">
-                <p:input port="in-memory">
+            <p:identity>
+                <p:input port="source">
                     <p:pipe port="in-memory.in" step="main"/>
+                </p:input>
+            </p:identity>
+            <px:normalize-document-base>
+            </px:normalize-document-base>
+            <p:identity name="html-validate.step.in-memory-normalized-base"/>
+            <px:fileset-load media-types="application/xhtml+xml" load-if-not-in-memory="false" name="html-validate.step.load-xhtml">
+                <p:input port="fileset">
+                    <p:pipe port="fileset.in" step="main"/>
+                </p:input>
+                <p:input port="in-memory">
+                    <p:pipe port="result" step="html-validate.step.in-memory-normalized-base"/>
                 </p:input>
             </px:fileset-load>
             <p:identity name="html-validate.step.html.from-memory"/>

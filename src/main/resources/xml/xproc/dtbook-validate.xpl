@@ -67,21 +67,32 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
 
-    <p:variable name="dtbook-href" select="resolve-uri($dtbook,static-base-uri())"/>
-
-    <px:message message="$1" name="dtbook-validate.nordic-version-message">
+    <px:message message="$1">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
+    
+    <px:normalize-uri name="dtbook">
+        <p:with-option name="href" select="resolve-uri($dtbook,static-base-uri())"/>
+    </px:normalize-uri>
+    <px:normalize-uri name="html-report">
+        <p:with-option name="href" select="resolve-uri($html-report,static-base-uri())"/>
+    </px:normalize-uri>
+    <p:identity name="dtbook-validate.nordic-version-message-and-variables"/>
+    <p:sink/>
 
     <px:fileset-create name="dtbook-validate.create-dtbook-fileset">
-        <p:with-option name="base" select="replace($dtbook-href,'[^/]+$','')"/>
+        <p:with-option name="base" select="replace(/*/text(),'[^/]+$','')">
+            <p:pipe port="normalized" step="dtbook"/>
+        </p:with-option>
     </px:fileset-create>
     <px:fileset-add-entry media-type="application/x-dtbook+xml" name="dtbook-validate.add-dtbook-to-fileset">
-        <p:with-option name="href" select="replace($dtbook-href,'.*/','')"/>
+        <p:with-option name="href" select="replace(/*/text(),'.*/','')">
+            <p:pipe port="normalized" step="dtbook"/>
+        </p:with-option>
     </px:fileset-add-entry>
-    <px:nordic-dtbook-validate.step name="dtbook-validate.dtbook-validate" cx:depends-on="dtbook-validate.nordic-version-message" fail-on-error="true">
+    <px:nordic-dtbook-validate.step name="dtbook-validate.dtbook-validate" cx:depends-on="dtbook-validate.nordic-version-message-and-variables" fail-on-error="true">
         <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
@@ -114,7 +125,9 @@
         </p:input>
     </px:nordic-format-html-report>
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="dtbook-validate.store-report">
-        <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
+        <p:with-option name="href" select="concat(/*/text(),if (ends-with(/*/text(),'/')) then '' else '/','report.xhtml')">
+            <p:pipe port="normalized" step="html-report"/>
+        </p:with-option>
     </p:store>
     <px:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="dtbook-validate.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
