@@ -7,7 +7,7 @@
     <x:scenario label="px:nordic-dtbook-to-html.step">
         <x:call step="px:nordic-dtbook-to-html.step">
             <x:input port="fileset.in">
-                <x:document type="inline" xml:base="DTBook/">
+                <x:document type="inline" xml:base="../resources/DTBook/">
                     <d:fileset>
                         <d:file href="C00000.xml" media-type="application/x-dtbook+xml"/>
                         <d:file href="valentin.jpg" media-type="image/jpeg"/>
@@ -15,7 +15,7 @@
                 </x:document>
             </x:input>
             <x:input port="in-memory.in">
-                <x:document type="file" href="DTBook/C00000.xml"/>
+                <x:document type="file" href="../resources/DTBook/C00000.xml"/>
             </x:input>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
             <x:option name="fail-on-error" select="'true'"/>

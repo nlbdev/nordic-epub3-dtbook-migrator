@@ -8,7 +8,7 @@
         <x:call step="px:nordic-epub3-asciimath-to-mathml.step">
             <x:option name="fail-on-error" select="'true'"/>
             <x:input port="fileset.in">
-                <x:document type="inline" xml:base="C00000/">
+                <x:document type="inline" xml:base="../resources/C00000/">
                     <d:fileset>
                         <d:file href="mimetype" media-type="text/plain"/>
                         <d:file href="META-INF/container.xml"/>
@@ -45,7 +45,7 @@
         </x:context>
         <x:expect label="The fileset should consist of the same files as the input" type="compare">
             <x:document type="inline" select="/*/*">
-                <d:fileset>
+                <d:fileset xml:base="../resources/">
                     <d:file href="mimetype" media-type="text/plain"/>
                     <d:file href="META-INF/container.xml"/>
                     <d:file href="EPUB/package.opf" media-type="application/oebps-package+xml"/>

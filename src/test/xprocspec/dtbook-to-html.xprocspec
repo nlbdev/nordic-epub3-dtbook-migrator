@@ -6,7 +6,7 @@
 
     <x:scenario label="px:nordic-dtbook-to-html">
         <x:call step="px:nordic-dtbook-to-html">
-            <x:option name="dtbook" select="resolve-uri('DTBook/C00000.xml')"/>
+            <x:option name="dtbook" select="resolve-uri('../resources/DTBook/C00000.xml')"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
             <x:option name="fail-on-error" select="'true'"/>

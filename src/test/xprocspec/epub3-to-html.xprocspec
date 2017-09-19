@@ -6,7 +6,7 @@
 
     <x:scenario label="px:nordic-epub3-to-html">
         <x:call step="px:nordic-epub3-to-html">
-            <x:option name="epub" select="resolve-uri('C00000.epub',base-uri())"/>
+            <x:option name="epub" select="resolve-uri('../resources/C00000.epub',base-uri())"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>

@@ -6,7 +6,7 @@
 
     <x:scenario label="px:nordic-dtbook-to-html - with an invalid DTBook and fail-on-error set to 'true'">
         <x:call step="px:nordic-dtbook-to-html">
-            <x:option name="dtbook" select="resolve-uri('DTBook.invalid/C00000.invalid.xml',base-uri())"/>
+            <x:option name="dtbook" select="resolve-uri('../resources/DTBook.invalid/C00000.invalid.xml',base-uri())"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir-3/')"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report-3/')"/>
             <x:option name="no-legacy" select="'false'"/>

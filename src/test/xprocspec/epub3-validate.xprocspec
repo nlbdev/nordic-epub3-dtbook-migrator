@@ -6,7 +6,7 @@
 
     <x:scenario label="px:nordic-epub3-validate">
         <x:call step="px:nordic-epub3-validate">
-            <x:option name="epub" select="resolve-uri('C00000.epub',base-uri())"/>
+            <x:option name="epub" select="resolve-uri('../resources/C00000.epub',base-uri())"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
         </x:call>
@@ -30,7 +30,7 @@
     
     <x:scenario label="px:nordic-epub3-validate - validating an invalid epub">
         <x:call step="px:nordic-epub3-validate">
-            <x:option name="epub" select="resolve-uri('C00000.invalid.epub',base-uri())"/>
+            <x:option name="epub" select="resolve-uri('../resources/C00000.invalid.epub',base-uri())"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
         </x:call>

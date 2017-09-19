@@ -7,7 +7,7 @@
     <x:scenario label="px:nordic-html-to-epub3.step">
         <x:call step="px:nordic-html-to-epub3.step">
             <x:input port="fileset.in">
-                <x:document type="inline" xml:base="single-html/">
+                <x:document type="inline" xml:base="../resources/single-html/">
                     <d:fileset>
                         <d:file href="images/valentin.jpg" media-type="image/jpeg" original-href="images/valentin.jpg"/>
                         <d:file href="C00000.xhtml" media-type="application/xhtml+xml" original-href="C00000.xhtml" doctype="&lt;!DOCTYPE html&gt;"/>
@@ -15,7 +15,7 @@
                 </x:document>
             </x:input>
             <x:input port="in-memory.in">
-                <x:document href="single-html/C00000.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/single-html/C00000.xhtml" type="file" method="xml"/>
             </x:input>
             <x:option name="temp-dir" select="$temp-dir"/>
             <x:option name="fail-on-error" select="'true'"/>

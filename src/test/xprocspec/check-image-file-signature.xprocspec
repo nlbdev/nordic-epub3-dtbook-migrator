@@ -7,7 +7,7 @@
         <x:call step="px:nordic-check-image-file-signatures">
             <x:input port="source">
                 <x:document type="inline">
-                    <d:fileset xml:base="sample-images/">
+                    <d:fileset xml:base="../resources/sample-images/">
                         <d:file href="this-is-not-a-image-and-should-not-be-checked.xhtml" media-type="application/xhtml+xml"/>
                         <d:file href="jpeg-valid.jpg" media-type="image/jpeg"/>
                         <d:file href="jpeg-invalid.jpg" media-type="image/jpeg"/>

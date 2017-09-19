@@ -6,7 +6,7 @@
 
     <x:scenario label="px:nordic-html-to-dtbook">
         <x:call step="px:nordic-html-to-dtbook">
-            <x:option name="html" select="resolve-uri('single-html/C00000.xhtml')"/>
+            <x:option name="html" select="resolve-uri('../resources/single-html/C00000.xhtml')"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
         </x:call>
@@ -46,7 +46,7 @@
     
     <x:scenario label="px:nordic-html-to-dtbook - with an invalid HTML and fail-on-error set to 'false'">
         <x:call step="px:nordic-html-to-dtbook">
-            <x:option name="html" select="resolve-uri('single-html.invalid/C00000.invalid.xhtml')"/>
+            <x:option name="html" select="resolve-uri('../resources/single-html.invalid/C00000.invalid.xhtml')"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir-2/')"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report-2/')"/>
             <x:option name="fail-on-error" select="'false'"/>
@@ -64,7 +64,7 @@
     
     <x:scenario label="px:nordic-html-to-dtbook - with an invalid HTML and fail-on-error set to 'true'">
         <x:call step="px:nordic-html-to-dtbook">
-            <x:option name="html" select="resolve-uri('single-html.invalid/C00000.invalid.xhtml')"/>
+            <x:option name="html" select="resolve-uri('../resources/single-html.invalid/C00000.invalid.xhtml')"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir-3/')"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report-3/')"/>
             <x:option name="fail-on-error" select="'true'"/>

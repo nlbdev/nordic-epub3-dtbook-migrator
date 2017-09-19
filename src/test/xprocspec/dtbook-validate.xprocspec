@@ -6,7 +6,7 @@
 
     <x:scenario label="px:nordic-dtbook-validate">
         <x:call step="px:nordic-dtbook-validate">
-            <x:option name="dtbook" select="resolve-uri('DTBook/C00000.xml',base-uri())"/>
+            <x:option name="dtbook" select="resolve-uri('../resources/DTBook/C00000.xml',base-uri())"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
         </x:call>
 
@@ -29,7 +29,7 @@
     
     <x:scenario label="px:nordic-dtbook-validate - validating an invalid DTBook">
         <x:call step="px:nordic-dtbook-validate">
-            <x:option name="dtbook" select="resolve-uri('DTBook.invalid/C00000.invalid.xml',base-uri())"/>
+            <x:option name="dtbook" select="resolve-uri('../resources/DTBook.invalid/C00000.invalid.xml',base-uri())"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
         </x:call>
         
