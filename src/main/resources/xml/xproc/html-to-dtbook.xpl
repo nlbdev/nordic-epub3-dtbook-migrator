@@ -229,10 +229,10 @@
         <p:with-option name="dtbook2005" select="$dtbook2005"/>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="report.in">
-            <p:pipe port="report.out" step="html-to-dtbook.html-to-dtbook"/>
+            <p:pipe port="report.out" step="html-to-dtbook.dtbook-store"/>
         </p:input>
         <p:input port="status.in">
-            <p:pipe port="status.out" step="html-to-dtbook.html-to-dtbook"/>
+            <p:pipe port="status.out" step="html-to-dtbook.dtbook-store"/>
         </p:input>
     </px:nordic-dtbook-validate.step>
     <p:sink/>
@@ -263,7 +263,7 @@
             <p:pipe port="normalized" step="output-dir"/>
         </p:with-option>
         <p:input port="source">
-            <p:pipe port="status.out" step="html-to-dtbook.html-validate"/>
+            <p:pipe port="status.out" step="html-to-dtbook.dtbook-validate"/>
         </p:input>
     </px:nordic-fail-on-error-status>
     <p:sink/>
