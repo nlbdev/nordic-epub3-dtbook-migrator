@@ -194,12 +194,21 @@
     </px:nordic-html-to-dtbook.step>
     
     <px:message message="Storing DTBook"/>
-    <px:fileset-move name="html-to-dtbook.dtbook-move">
-        <p:with-option name="new-base" select="concat($output-dir,(//d:file[@media-type='application/x-dtbook+xml'])[1]/replace(replace(@href,'.*/',''),'^(.[^\.]*).*?$','$1/'))"/>
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="html-to-dtbook.html-to-dtbook"/>
-        </p:input>
-    </px:fileset-move>
+    <p:group name="html-to-dtbook.dtbook-move">
+        <p:output port="fileset.out" primary="true"/>
+        <p:output port="in-memory.out" sequence="true">
+            <p:pipe port="in-memory.out" step="html-to-dtbook.dtbook-move.inner"/>
+        </p:output>
+        <p:variable name="dirname" select="(//d:file[@media-type='application/x-dtbook+xml'], //d:file[@media-type='application/xhtml+xml'])[1]/replace(replace(@href,'.*/',''),'^(.+)\..*?$','$1')"/>
+        <px:fileset-move name="html-to-dtbook.dtbook-move.inner">
+            <p:with-option name="new-base" select="concat(if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/'), $dirname, '/')">
+                <p:pipe port="normalized" step="output-dir"/>
+            </p:with-option>
+            <p:input port="in-memory.in">
+                <p:pipe port="in-memory.out" step="html-to-dtbook.html-to-dtbook"/>
+            </p:input>
+        </px:fileset-move>
+    </p:group>
     <px:nordic-dtbook-store.step name="html-to-dtbook.dtbook-store">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">

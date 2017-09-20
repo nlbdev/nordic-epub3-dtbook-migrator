@@ -124,14 +124,21 @@
     </px:nordic-epub3-to-html.step>
 
     <px:message message="Storing HTML"/>
-    <px:fileset-move name="epub3-to-html.html-move">
-        <p:with-option name="new-base" select="concat(if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/'), substring-before(replace(/*/d:file[@media-type='application/xhtml+xml'][1]/@href,'^.*/',''),'.'), '/')">
-            <p:pipe port="normalized" step="output-dir"/>
-        </p:with-option>
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="epub3-to-html.epub3-to-html"/>
-        </p:input>
-    </px:fileset-move>
+    <p:group name="epub3-to-html.html-move">
+        <p:output port="fileset.out" primary="true"/>
+        <p:output port="in-memory.out" sequence="true">
+            <p:pipe port="in-memory.out" step="epub3-to-html.html-move.inner"/>
+        </p:output>
+        <p:variable name="dirname" select="replace(replace(/*/d:file[@media-type='application/xhtml+xml'][1]/@href,'^.*/',''),'^(.+)\..*?$','$1')"/>
+        <px:fileset-move name="epub3-to-html.html-move.inner">
+            <p:with-option name="new-base" select="concat(if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/'), $dirname, '/')">
+                <p:pipe port="normalized" step="output-dir"/>
+            </p:with-option>
+            <p:input port="in-memory.in">
+                <p:pipe port="in-memory.out" step="epub3-to-html.epub3-to-html"/>
+            </p:input>
+        </px:fileset-move>
+    </p:group>
     <px:nordic-html-store.step name="epub3-to-html.html-store">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
