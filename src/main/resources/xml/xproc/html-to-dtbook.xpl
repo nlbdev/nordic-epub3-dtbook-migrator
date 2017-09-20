@@ -259,7 +259,9 @@
     
     <px:nordic-fail-on-error-status name="status">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
-        <p:with-option name="output-dir" select="$output-dir"/>
+        <p:with-option name="output-dir" select="if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/')">
+            <p:pipe port="normalized" step="output-dir"/>
+        </p:with-option>
         <p:input port="source">
             <p:pipe port="status.out" step="html-to-dtbook.html-validate"/>
         </p:input>
