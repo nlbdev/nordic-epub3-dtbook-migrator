@@ -77,6 +77,7 @@
                 with id="<value-of select="$preceding-refs-which-is-following-in-content[1]/substring-after(@href,'#')"/>" in the document "<value-of
                     select="$preceding-refs-which-is-following-in-content[1]/substring-before(@href,'#')"/>", but in the content document it occurs before it.</report>-->
 
+            <let name="result-ref" value="$result-ref[1]"/>
             <let name="document-in-nav" value="((preceding::html:a | self::*) intersect ancestor::html:nav//html:a)[substring-before(@href,'#') = $href][1]"/>
             <let name="document-in-nav-depth" value="count($document-in-nav/ancestor::html:li)"/>
             <let name="depth-in-nav" value="count(ancestor::html:li)"/>
