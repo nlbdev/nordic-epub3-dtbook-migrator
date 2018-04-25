@@ -4,7 +4,7 @@
     xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf">
 
-    <x:scenario label="px:nordic-epub3-validate.step">
+    <x:scenario label="px:nordic-epub3-validate.step" pending="https://github.com/daisy/pipeline-scripts-utils/pull/92">
         <x:call step="px:nordic-epub3-validate.step">
             <x:input port="fileset.in">
                 <x:document type="inline" xml:base="../resources/C00000/">
@@ -89,7 +89,7 @@
         
     </x:scenario>
     
-    <x:scenario label="px:nordic-epub3-validate.step - regression for error: java.util.MissingFormatArgumentException: Format specifier '%3$s'">
+    <x:scenario label="px:nordic-epub3-validate.step - regression for error: java.util.MissingFormatArgumentException: Format specifier '%3$s'" pending="https://github.com/daisy/pipeline-scripts-utils/pull/92">
         <x:call step="px:nordic-epub3-validate.step">
             <x:input port="fileset.in">
                 <x:document type="inline" xml:base="../resources/regression-MissingFormatArgumentException/">
