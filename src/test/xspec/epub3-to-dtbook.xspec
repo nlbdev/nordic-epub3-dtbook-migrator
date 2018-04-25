@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/epub3-to-dtbook.xsl" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xslt-version="2.0" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions">
+    xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xslt-version="2.0" xmlns:f="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-dtbook.xsl">
 
     <!-- dtbookblocknoimggroup -->
     <!-- no point in testing -->

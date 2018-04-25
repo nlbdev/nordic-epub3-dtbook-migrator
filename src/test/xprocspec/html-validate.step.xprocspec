@@ -8,14 +8,14 @@
         <x:call step="px:nordic-html-validate.step">
             <x:input port="fileset.in">
                 <x:document type="inline">
-                    <d:fileset>
+                    <d:fileset xml:base="../resources/">
                         <d:file media-type="image/jpeg" href="single-html/images/valentin.jpg"/>
                         <d:file media-type="application/xhtml+xml" href="single-html/C00000.xhtml" doctype="&lt;!DOCTYPE html&gt;"/>
                     </d:fileset>
                 </x:document>
             </x:input>
             <x:input port="in-memory.in">
-                <x:document href="single-html/C00000.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/single-html/C00000.xhtml" type="file" method="xml"/>
             </x:input>
             <x:input port="report.in"/>
             <x:option name="fail-on-error" select="'true'"/>
@@ -32,7 +32,7 @@
             <x:document type="port" port="in-memory.out"/>
         </x:context>
         <x:expect type="compare" label="the in-memory.out port should contain the same documents as was received on the in-memory.in port">
-            <x:document href="single-html/C00000.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/single-html/C00000.xhtml" type="file" method="xml"/>
         </x:expect>
 
         <x:context label="report.out">

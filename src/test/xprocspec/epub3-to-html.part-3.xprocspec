@@ -6,7 +6,7 @@
 
     <x:scenario label="px:nordic-epub3-to-html - with an invalid EPUB and fail-on-error set to 'true'">
         <x:call step="px:nordic-epub3-to-html">
-            <x:option name="epub" select="resolve-uri('C00000.invalid.epub',base-uri())"/>
+            <x:option name="epub" select="resolve-uri('../resources/C00000.invalid.epub',base-uri())"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir-3/')"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report-3/')"/>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir-3/')"/>

@@ -7,7 +7,7 @@
     <x:scenario label="px:nordic-html-split-perform">
         <x:call step="px:nordic-html-split-perform">
             <x:input port="fileset.in">
-                <x:document type="inline" xml:base="single-html/">
+                <x:document type="inline" xml:base="../resources/single-html/">
                     <d:fileset>
                         <d:file href="images/valentin.jpg" media-type="image/jpeg" original-href="images/valentin.jpg"/>
                         <d:file href="C00000.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
@@ -15,7 +15,7 @@
                 </x:document>
             </x:input>
             <x:input port="in-memory.in">
-                <x:document href="single-html/C00000.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/single-html/C00000.xhtml" type="file" method="xml"/>
             </x:input>
         </x:call>
 
@@ -29,43 +29,43 @@
             <x:document type="port" port="fileset.out" select="//d:file[not(@original-href)]"/>
         </x:context>
         <x:expect type="compare" label="all files should have their appropriate attributes set">
-            <x:document type="inline" xml:base="single-html/">
+            <x:document type="inline" xml:base="../resources/single-html/">
                 <d:file href="C00000-01-cover.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
-            <x:document type="inline" xml:base="single-html/">
+            <x:document type="inline" xml:base="../resources/single-html/">
                 <d:file href="C00000-02-toc.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
-            <x:document type="inline" xml:base="single-html/">
+            <x:document type="inline" xml:base="../resources/single-html/">
                 <d:file href="C00000-03-frontmatter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
-            <x:document type="inline" xml:base="single-html/">
+            <x:document type="inline" xml:base="../resources/single-html/">
                 <d:file href="C00000-04-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
-            <x:document type="inline" xml:base="single-html/">
+            <x:document type="inline" xml:base="../resources/single-html/">
                 <d:file href="C00000-05-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
-            <x:document type="inline" xml:base="single-html/">
+            <x:document type="inline" xml:base="../resources/single-html/">
                 <d:file href="C00000-06-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
-            <x:document type="inline" xml:base="single-html/">
+            <x:document type="inline" xml:base="../resources/single-html/">
                 <d:file href="C00000-07-rearnotes.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
-            <x:document type="inline" xml:base="single-html/">
+            <x:document type="inline" xml:base="../resources/single-html/">
                 <d:file href="C00000-08-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
-            <x:document type="inline" xml:base="single-html/">
+            <x:document type="inline" xml:base="../resources/single-html/">
                 <d:file href="C00000-09-conclusion.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
-            <x:document type="inline" xml:base="single-html/">
+            <x:document type="inline" xml:base="../resources/single-html/">
                 <d:file href="C00000-10-footnotes.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>

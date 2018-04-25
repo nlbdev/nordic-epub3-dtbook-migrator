@@ -6,7 +6,7 @@
 
     <x:scenario label="px:nordic-dtbook-to-epub3">
         <x:call step="px:nordic-dtbook-to-epub3">
-            <x:option name="dtbook" select="resolve-uri('DTBook/C00000.xml',base-uri())"/>
+            <x:option name="dtbook" select="resolve-uri('../resources/DTBook/C00000.xml',base-uri())"/>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
             <x:option name="html-report" select="concat($temp-dir,'html-report/')"/>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>

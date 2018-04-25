@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-epub3-validate.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" xmlns:jhove="http://hul.harvard.edu/ois/xml/ns/jhove">
 
     <p:serialization port="report.out" indent="true"/>
@@ -36,16 +36,13 @@
     <p:option name="fail-on-error" required="true"/>
     <p:option name="temp-dir" required="true"/>
     <p:option name="check-images" select="'true'"/>
+    <p:option name="organization-specific-validation" required="false" select="''"/>
 
     <p:import href="validation-status.xpl"/>
     <p:import href="html-validate.step.xpl"/>
     <p:import href="read-xml-declaration.xpl"/>
     <p:import href="read-doctype-declaration.xpl"/>
     <p:import href="check-image-file-signatures.xpl"/>
-    <p:import href="../upstream/zip-utils/unzip-fileset.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
-    <!--<p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>-->
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -130,7 +127,7 @@
             </p:identity>
             <p:choose name="epub3-validate.step.unzip">
                 <p:when test="/*/d:file[@media-type='application/epub+zip']">
-                    <p:output port="fileset">
+                    <p:output port="fileset" primary="true">
                         <p:pipe port="result" step="epub3-validate.step.unzip.fileset"/>
                     </p:output>
                     <p:output port="in-memory" sequence="true">
@@ -141,10 +138,10 @@
                         <p:with-option name="test" select="count(/*/d:file) = 1"/>
                         <p:with-option name="param1" select="count(/*/d:file)"/>
                     </px:assert>
-                    <pxi:unzip-fileset name="epub3-validate.step.unzip.unzip" load-to-memory="false" store-to-disk="true">
+                    <px:fileset-unzip name="epub3-validate.step.unzip.unzip" load-to-memory="false" store-to-disk="true">
                         <p:with-option name="href" select="resolve-uri(/*/*/(@original-href,@href)[1],/*/*/base-uri(.))"/>
                         <p:with-option name="unzipped-basedir" select="$temp-dir"/>
-                    </pxi:unzip-fileset>
+                    </px:fileset-unzip>
                     <p:sink/>
 
                     <px:mediatype-detect name="epub3-validate.step.unzip.fileset">
@@ -155,7 +152,7 @@
 
                 </p:when>
                 <p:otherwise>
-                    <p:output port="fileset">
+                    <p:output port="fileset" primary="true">
                         <p:pipe port="fileset.in" step="main"/>
                     </p:output>
                     <p:output port="in-memory" sequence="true">
@@ -169,14 +166,11 @@
                 </p:otherwise>
             </p:choose>
 
-            <pxi:fileset-load media-types="application/oebps-package+xml" method="xml" name="epub3-validate.step.load-unzipped-fileset">
-                <p:input port="fileset">
-                    <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
-                </p:input>
+            <px:fileset-load media-types="application/oebps-package+xml" method="xml" name="epub3-validate.step.load-unzipped-fileset">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
             <p:identity name="epub3-validate.step.opf"/>
             <p:sink/>
@@ -193,41 +187,45 @@
                     <p:document href="../../xslt/opf-to-spine-fileset.xsl"/>
                 </p:input>
             </p:xslt>
-            <pxi:fileset-load media-types="application/xhtml+xml" name="epub3-validate.step.load-unzipped-spine">
+            <px:fileset-load media-types="application/xhtml+xml" name="epub3-validate.step.load-unzipped-spine">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <px:assert test-count-min="1" message="There must be a HTML file in the spine." error-code="NORDICDTBOOKEPUB005"/>
             <p:identity name="epub3-validate.step.html"/>
             <p:sink/>
-
-            <px:fileset-filter media-types="application/xhtml+xml" name="epub3-validate.step.filter-unzipped-html">
+            
+            <p:identity>
                 <p:input port="source">
                     <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
                 </p:input>
+            </p:identity>
+            <px:fileset-filter media-types="application/xhtml+xml" name="epub3-validate.step.filter-unzipped-html">
             </px:fileset-filter>
             <p:delete match="/*/*[not(ends-with(@href,'nav.xhtml'))]" name="epub3-validate.step.delete-nav-from-fileset"/>
-            <pxi:fileset-load name="epub3-validate.step.load-unzipped-content-except-nav">
+            <px:fileset-load name="epub3-validate.step.load-unzipped-content-except-nav">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There is no navigation document with the filename 'nav.xhtml' in the EPUB" error-code="NORDICDTBOOKEPUB013"/>
             <p:identity name="epub3-validate.step.nav"/>
             <p:sink/>
-
-            <px:fileset-filter media-types="application/x-dtbncx+xml" name="epub3-validate.step.filter-unzipped-ncx">
+            
+            <p:identity>
                 <p:input port="source">
                     <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
                 </p:input>
+            </p:identity>
+            <px:fileset-filter media-types="application/x-dtbncx+xml" name="epub3-validate.step.filter-unzipped-ncx">
             </px:fileset-filter>
             <p:delete match="/*/*[not(ends-with(@href,'nav.ncx'))]" name="epub3-validate.step.delete-non-ncx"/>
-            <pxi:fileset-load name="epub3-validate.step.load-ncx">
+            <px:fileset-load name="epub3-validate.step.load-ncx">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                 </p:input>
-            </pxi:fileset-load>
+            </px:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There is no NCX with the filename 'nav.ncx' in the EPUB" error-code="NORDICDTBOOKEPUB014"/>
             <p:identity name="epub3-validate.step.ncx"/>
             <p:sink/>
@@ -249,10 +247,12 @@
                 </p:input>
             </p:validate-with-schematron>
             <p:sink/>
-            <px:combine-validation-reports document-type="Nordic EPUB3 Package Document" name="epub3-validate.step.combine-validation-reports">
+            <p:identity>
                 <p:input port="source">
                     <p:pipe port="report" step="epub3-validate.step.opf.validate.schematron"/>
                 </p:input>
+            </p:identity>
+            <px:combine-validation-reports document-type="Nordic EPUB3 Package Document" name="epub3-validate.step.combine-validation-reports">
                 <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
                     <p:pipe port="result" step="epub3-validate.step.opf"/>
                 </p:with-option>
@@ -333,6 +333,7 @@
                 </p:delete>
                 <px:nordic-html-validate.step name="epub3-validate.step.for-each-html-validate.validate.html" document-type="Nordic HTML (EPUB3 Content Document)" check-images="false">
                     <p:with-option name="fail-on-error" select="$fail-on-error"/>
+                    <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
                     <p:input port="in-memory.in">
                         <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                     </p:input>
@@ -676,11 +677,11 @@
                     </p:input>
                 </px:fileset-filter>
                 <p:delete match="/*/*[ends-with(@href,'nav.xhtml')]" name="epub3-validate.step.category-report.delete-nav-from-fileset"/>
-                <pxi:fileset-load name="epub3-validate.step.category-report.load-html">
+                <px:fileset-load name="epub3-validate.step.category-report.load-html">
                     <p:input port="in-memory">
                         <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                     </p:input>
-                </pxi:fileset-load>
+                </px:fileset-load>
                 <p:wrap-sequence wrapper="wrapper" name="epub3-validate.step.category-report.wrap-wrapper"/>
                 <p:xslt name="epub3-validate.step.category-report.determine-complexity">
                     <p:input port="parameters">
@@ -712,7 +713,7 @@
         <p:xpath-context>
             <p:pipe port="status.in" step="main"/>
         </p:xpath-context>
-        <p:when test="/*/@result='ok'">
+        <p:when test="/*/@result='ok' and $fail-on-error='true'">
             <p:output port="result"/>
             <px:nordic-validation-status>
                 <p:input port="source">

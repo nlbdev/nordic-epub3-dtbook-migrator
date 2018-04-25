@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-html-to-dtbook" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:pxp="http://exproc.org/proposed/steps" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:cx="http://xmlcalabash.com/ns/extensions">
+    xmlns:cx="http://xmlcalabash.com/ns/extensions">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic HTML5 to DTBook</h1>
@@ -27,6 +27,13 @@
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Validate images</h2>
             <p px:role="desc">Whether or not to check that referenced images exist and has the right file signatures.</p>
+        </p:documentation>
+    </p:option>
+    
+    <p:option name="organization-specific-validation" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Organization-specific validation</h2>
+            <p px:role="desc">Leave blank for the default validation schemas. Use 'nota' to validate using Nota-specific validation rules.</p>
         </p:documentation>
     </p:option>
 
@@ -67,31 +74,40 @@
     <p:import href="step/dtbook-store.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="step/fail-on-error-status.xpl"/>
-    <!--<p:import href="upstream/fileset-utils/fileset-load.xpl"/>-->
-    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
-    <p:import href="upstream/fileset-utils/fileset-move.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="upstream/file-utils/xproc/set-doctype.xpl"/>
-    <p:import href="upstream/file-utils/xproc/set-xml-declaration.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <p:variable name="html-href" select="resolve-uri($html,static-base-uri())"/>
-
-    <px:message message="$1" name="nordic-version-message">
+    <px:message message="$1">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
+    
+    <px:normalize-uri name="html">
+        <p:with-option name="href" select="resolve-uri($html,static-base-uri())"/>
+    </px:normalize-uri>
+    <px:normalize-uri name="html-report">
+        <p:with-option name="href" select="resolve-uri($html-report,static-base-uri())"/>
+    </px:normalize-uri>
+    <px:normalize-uri name="output-dir">
+        <p:with-option name="href" select="resolve-uri($output-dir,static-base-uri())"/>
+    </px:normalize-uri>
+    <p:identity name="nordic-version-message-and-variables"/>
+    <p:sink/>
 
     <px:fileset-create name="html-to-dtbook.create-html-fileset">
-        <p:with-option name="base" select="replace($html-href,'[^/]+$','')"/>
+        <p:with-option name="base" select="replace(/*/text(),'[^/]+$','')">
+            <p:pipe port="normalized" step="html"/>
+        </p:with-option>
     </px:fileset-create>
-    <pxi:fileset-add-entry media-type="application/xhtml+xml" name="html-to-dtbook.add-html-to-fileset">
-        <p:with-option name="href" select="replace($html-href,'.*/','')"/>
-    </pxi:fileset-add-entry>
+    <px:fileset-add-entry media-type="application/xhtml+xml" name="html-to-dtbook.add-html-to-fileset">
+        <p:with-option name="href" select="replace(/*/text(),'.*/','')">
+            <p:pipe port="normalized" step="html"/>
+        </p:with-option>
+    </px:fileset-add-entry>
     <p:identity name="html-to-dtbook.html-fileset.no-resources"/>
 
     <px:check-files-wellformed name="html-to-dtbook.check-html-wellformed"/>
@@ -112,7 +128,9 @@
             </p:output>
 
             <p:load name="html-to-dtbook.html-load.load">
-                <p:with-option name="href" select="$html-href"/>
+                <p:with-option name="href" select="/*/text()">
+                    <p:pipe port="normalized" step="html"/>
+                </p:with-option>
             </p:load>
 
             <px:html-to-fileset name="html-to-dtbook.html-load.resource-fileset"/>
@@ -147,6 +165,7 @@
     <px:nordic-html-validate.step name="html-to-dtbook.html-validate">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="check-images" select="$check-images"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
             <p:pipe step="html-to-dtbook.html-load" port="in-memory.out"/>
         </p:input>
@@ -175,12 +194,21 @@
     </px:nordic-html-to-dtbook.step>
     
     <px:message message="Storing DTBook"/>
-    <pxi:fileset-move name="html-to-dtbook.dtbook-move">
-        <p:with-option name="new-base" select="concat($output-dir,(//d:file[@media-type='application/x-dtbook+xml'])[1]/replace(replace(@href,'.*/',''),'^(.[^\.]*).*?$','$1/'))"/>
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="html-to-dtbook.html-to-dtbook"/>
-        </p:input>
-    </pxi:fileset-move>
+    <p:group name="html-to-dtbook.dtbook-move">
+        <p:output port="fileset.out" primary="true"/>
+        <p:output port="in-memory.out" sequence="true">
+            <p:pipe port="in-memory.out" step="html-to-dtbook.dtbook-move.inner"/>
+        </p:output>
+        <p:variable name="dirname" select="(//d:file[@media-type='application/x-dtbook+xml'], //d:file[@media-type='application/xhtml+xml'])[1]/replace(replace(@href,'.*/',''),'^(.+)\..*?$','$1')"/>
+        <px:fileset-move name="html-to-dtbook.dtbook-move.inner">
+            <p:with-option name="new-base" select="concat(if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/'), $dirname, '/')">
+                <p:pipe port="normalized" step="output-dir"/>
+            </p:with-option>
+            <p:input port="in-memory.in">
+                <p:pipe port="in-memory.out" step="html-to-dtbook.html-to-dtbook"/>
+            </p:input>
+        </px:fileset-move>
+    </p:group>
     <px:nordic-dtbook-store.step name="html-to-dtbook.dtbook-store">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">
@@ -199,11 +227,12 @@
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <!-- call with dtbook2005 option whether to validate a DTBook 2005 or DTBook 1.1.0 -->
         <p:with-option name="dtbook2005" select="$dtbook2005"/>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="report.in">
-            <p:pipe port="report.out" step="html-to-dtbook.html-to-dtbook"/>
+            <p:pipe port="report.out" step="html-to-dtbook.dtbook-store"/>
         </p:input>
         <p:input port="status.in">
-            <p:pipe port="status.out" step="html-to-dtbook.html-to-dtbook"/>
+            <p:pipe port="status.out" step="html-to-dtbook.dtbook-store"/>
         </p:input>
     </px:nordic-dtbook-validate.step>
     <p:sink/>
@@ -217,20 +246,24 @@
     <px:nordic-format-html-report name="html-to-dtbook.nordic-format-html-report"/>
 
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="html-to-dtbook.store-report" encoding="us-ascii">
-        <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
+        <p:with-option name="href" select="concat(/*/text(),if (ends-with(/*/text(),'/')) then '' else '/','report.xhtml')">
+            <p:pipe port="normalized" step="html-report"/>
+        </p:with-option>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="html-to-dtbook.set-report-doctype">
+    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="html-to-dtbook.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
             <p:pipe port="result" step="html-to-dtbook.store-report"/>
         </p:with-option>
-    </pxi:set-doctype>
+    </px:set-doctype>
     <p:sink/>
     
     <px:nordic-fail-on-error-status name="status">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
-        <p:with-option name="output-dir" select="$output-dir"/>
+        <p:with-option name="output-dir" select="if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/')">
+            <p:pipe port="normalized" step="output-dir"/>
+        </p:with-option>
         <p:input port="source">
-            <p:pipe port="status.out" step="html-to-dtbook.html-validate"/>
+            <p:pipe port="status.out" step="html-to-dtbook.dtbook-validate"/>
         </p:input>
     </px:nordic-fail-on-error-status>
     <p:sink/>

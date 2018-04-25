@@ -14,7 +14,7 @@
         -->
         <xsl:analyze-string select="concat('X',$uri)" regex="^X(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?">
             <xsl:matching-substring>
-                <xsl:sequence select="(regex-group(2),regex-group(4),regex-group(5),regex-group(7),regex-group(9))"/>
+                <xsl:sequence select="(substring-before(regex-group(1),':'),regex-group(4),regex-group(5),regex-group(7),regex-group(9))"/>
             </xsl:matching-substring>
         </xsl:analyze-string>
     </xsl:function>
@@ -24,7 +24,7 @@
         <xsl:sequence
             select="string-join((
             if($tokens[1]) then ($tokens[1],':') else (),
-            if($tokens[2]) then ('//',$tokens[2]) else (),
+            if($tokens[2]) then ('//',$tokens[2]) else if($tokens[1] and not($tokens[1]=('mailto','file'))) then '/' else (),
             $tokens[3],
             if($tokens[4]) then ('?',$tokens[4]) else (),
             if($tokens[5]) then ('#',$tokens[5]) else ()
@@ -71,6 +71,12 @@
 
     <xsl:function name="pf:normalize-uri" as="xs:string">
         <xsl:param name="uri" as="xs:string?"/>
+        <xsl:sequence select="pf:normalize-uri($uri,true())"/>
+    </xsl:function>
+    
+    <xsl:function name="pf:normalize-uri" as="xs:string">
+        <xsl:param name="uri" as="xs:string?"/>
+        <xsl:param name="fragment" as="xs:boolean?"/>
         <!--
             http://en.wikipedia.org/wiki/URL_normalization
             - path segment normalization
@@ -128,8 +134,8 @@
         <xsl:variable name="authority" select="$tokens[2]"/>
         <xsl:variable name="path" select="$tokens[3]"/>
         <xsl:variable name="query" select="$tokens[4]"/>
-        <xsl:variable name="fragment" select="$tokens[5]"/>
-
+        <xsl:variable name="fragment" select="if ($fragment) then $tokens[5] else ()"/>
+        
         <!-- lower case scheme and authority components -->
         <xsl:variable name="scheme" select="lower-case($scheme)"/>
         <xsl:variable name="authority" select="lower-case($authority)"/>
@@ -139,8 +145,11 @@
 
         <!-- normalize path -->
         <xsl:variable name="path" select="pf:normalize-path($path)"/>
-
-        <xsl:sequence select="iri-to-uri(pf:recompose-uri(($scheme,$authority,$path,$query,$fragment)))"/>
+        
+        <xsl:variable name="uri" select="pf:recompose-uri(($scheme,$authority,$path,$query,$fragment))"/>
+        <xsl:variable name="uri" select="pf:file-expand83($uri)" use-when="function-available('pf:file-expand83')"/>
+        
+        <xsl:sequence select="iri-to-uri($uri)"/>
     </xsl:function>
 
     <xsl:function name="pf:relativize-uri" as="xs:string">
@@ -174,8 +183,8 @@
             ,'^/(\.\./)+','/')
             "/>
         <xsl:sequence select="
-            if (matches($normalized,'([^/]|\.[^/]|[^/]\.|[^/]{3,})/\.\./')) then
-            pf:normalize-path(replace($normalized,'([^/]|\.[^/]|[^/]\.|[^/]{3,})/\.\./',''))
+            if (matches($normalized,'([^/\.]|\.[^/\.]|[^/\.]\.|[^/]{3,})/\.\./')) then
+            pf:normalize-path(replace($normalized,'([^/\.]|\.[^/\.]|[^/\.]\.|[^/]{3,})/\.\./',''))
             else 
             $normalized"/>
     </xsl:function>
@@ -210,18 +219,27 @@
     </xsl:function>
 
     <xsl:function name="pf:longest-common-uri" as="xs:string">
-        <xsl:param name="uris"/>
+        <xsl:param name="uris" as="xs:string*"/>
         <xsl:choose>
             <xsl:when test="count($uris)=1">
                 <xsl:value-of select="$uris"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:variable name="a" select="for $part in tokenize(pf:normalize-uri(replace($uris[1],'/+','SLASH|/')),'/') return replace($part,'SLASH%7C$','/')"/>
-                <xsl:variable name="b" select="for $part in tokenize(pf:normalize-uri(replace($uris[2],'/+','SLASH|/')),'/') return replace($part,'SLASH%7C$','/')"/>
-                <xsl:variable name="longest-common" select="for $i in 1 to count($a) return if ($a[$i]=$b[$i]) then $a[$i] else '	'"/>
-                <xsl:variable name="longest-common" select="for $i in 1 to count($a) return if ($longest-common[position()&lt;=$i]='	') then () else $longest-common[$i]"/>
-                <xsl:variable name="longest-common" select="concat($longest-common[1],if (matches($longest-common[1],'^\w+:/$') and not(matches($longest-common[1],'^file:/'))) then '/' else '',string-join($longest-common[position()&gt;1],''))"/>
-                <xsl:value-of select="string-join($longest-common,' | ')"/>
+                <xsl:variable name="tokens" select="pf:tokenize-uri(normalize-space($uris[1]))" as="xs:string*"/>
+                <xsl:variable name="uri-filter" select="if (not($tokens[1])) then '' else if ($tokens[2]) then concat($tokens[1],'://',$tokens[2]) else $tokens[1]"/>
+                <xsl:variable name="uris" select="$uris[starts-with(.,$uri-filter)]"/>
+                <xsl:variable name="main-uri" select="for $part in tokenize(replace(pf:normalize-uri(replace($uris[1],'[#\?].*$','')),'/+','SLASH|/'),'/') return replace($part,'SLASH\|$','/')"/>
+                <xsl:variable name="count-common" as="xs:integer*">
+                    <xsl:for-each select="$uris[position() &gt; 1]">
+                        <xsl:variable name="compare-uri" select="for $part in tokenize(replace(pf:normalize-uri($uris[2]),'/+','SLASH|/'),'/') return replace($part,'SLASH\|$','/')"/>
+                        <xsl:sequence select="min(for $i in 1 to count($main-uri) return if ($main-uri[$i]=$compare-uri[$i]) then () else $i)"/>
+                    </xsl:for-each>
+                </xsl:variable>
+                <xsl:variable name="count-common" select="min(($count-common, count($main-uri)))"/>
+                <xsl:variable name="longest-common" select="$main-uri[position() &lt; $count-common]"/>
+                <xsl:variable name="longest-common" select="concat($longest-common[1],if (matches($longest-common[1],'^\w+:/$') and (not($tokens[1]='file') or $tokens[2])) then '/' else '',string-join($longest-common[position()&gt;1],''))"/>
+                <xsl:variable name="longest-common" select="replace($longest-common, '[^/]+$', '')"/>
+                <xsl:value-of select="$longest-common"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>

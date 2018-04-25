@@ -16,7 +16,7 @@
     <p:input port="parameters" kind="parameter" primary="true"/>
     <p:output port="result" primary="true"/>
 
-    <p:import href="read-xml-declaration.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
 
     <p:split-sequence initial-only="true" test="position()=1">
         <p:input port="source">
@@ -47,14 +47,20 @@
                 <p:pipe port="context" step="main"/>
             </p:iteration-source>
             <p:variable name="base-uri" select="base-uri(/*)"/>
-            <px:read-xml-declaration name="xml-declaration">
+            <px:file-xml-peek name="xml-peek">
                 <p:with-option name="href" select="base-uri(/*)"/>
-            </px:read-xml-declaration>
+            </px:file-xml-peek>
+            <p:sink/>
+            <p:identity name="xml-prolog">
+                <p:input port="source">
+                    <p:pipe step="xml-peek" port="prolog"/>
+                </p:input>
+            </p:identity>
             <p:group>
-                <p:variable name="version" select="/*/@version"/>
-                <p:variable name="encoding" select="/*/@encoding"/>
-                <p:variable name="standalone" select="/*/@standalone"/>
-                <p:variable name="xml-declaration" select="/*/@xml-declaration"/>
+                <p:variable name="version" select="/*/c:xml/@version"/>
+                <p:variable name="encoding" select="/*/c:xml/@encoding"/>
+                <p:variable name="standalone" select="/*/c:xml/@standalone"/>
+                <p:variable name="xml-declaration" select="/*/c:xml/text()"/>
                 
                 <p:in-scope-names name="xml-declaration-vars"/>
                 <p:template>

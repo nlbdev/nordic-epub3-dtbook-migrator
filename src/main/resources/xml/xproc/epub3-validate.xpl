@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-epub3-validate" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:pxp="http://exproc.org/proposed/steps" xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:cx="http://xmlcalabash.com/ns/extensions">
+    xmlns:cx="http://xmlcalabash.com/ns/extensions">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic EPUB3 Validator</h1>
@@ -12,6 +12,13 @@
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">EPUB3 Publication</h2>
             <p px:role="desc">EPUB3 Publication marked up according to the nordic markup guidelines.</p>
+        </p:documentation>
+    </p:option>
+    
+    <p:option name="organization-specific-validation" required="false" px:type="string" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Organization-specific validation</h2>
+            <p px:role="desc">Leave blank for the default validation schemas. Use 'nota' to validate using Nota-specific validation rules.</p>
         </p:documentation>
     </p:option>
 
@@ -40,34 +47,50 @@
     <p:import href="step/epub3-validate.step.xpl"/>
     <p:import href="step/validation-status.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
-    <p:import href="upstream/file-utils/xproc/set-doctype.xpl"/>
-    <!--<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>-->
-    <p:import href="upstream/fileset-utils/fileset-load.xpl"/>
-    <p:import href="upstream/fileset-utils/fileset-add-entry.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
-    <px:message message="$1" name="epub3-validate.nordic-version-message">
+    <px:message message="$1">
         <p:with-option name="param1" select="/*">
             <p:document href="../version-description.xml"/>
         </p:with-option>
     </px:message>
+    
+    <px:normalize-uri name="epub">
+        <p:with-option name="href" select="resolve-uri($epub,static-base-uri())"/>
+    </px:normalize-uri>
+    <px:normalize-uri name="temp-dir">
+        <p:with-option name="href" select="resolve-uri($temp-dir,static-base-uri())"/>
+    </px:normalize-uri>
+    <px:normalize-uri name="html-report">
+        <p:with-option name="href" select="resolve-uri($html-report,static-base-uri())"/>
+    </px:normalize-uri>
+    <p:identity name="epub3-validate.nordic-version-message-and-variables"/>
+    <p:sink/>
 
-    <px:fileset-create cx:depends-on="epub3-validate.nordic-version-message" name="epub3-validate.create-epub-fileset">
-        <p:with-option name="base" select="replace($epub,'[^/]+$','')"/>
+    <px:fileset-create cx:depends-on="epub3-validate.nordic-version-message-and-variables" name="epub3-validate.create-epub-fileset">
+        <p:with-option name="base" select="replace(/*/text(),'[^/]+$','')">
+            <p:pipe port="normalized" step="epub"/>
+        </p:with-option>
     </px:fileset-create>
-    <pxi:fileset-add-entry media-type="application/epub+zip" name="epub3-validate.add-epub-to-fileset">
-        <p:with-option name="href" select="replace($epub,'^.*/([^/]*)$','$1')"/>
-    </pxi:fileset-add-entry>
+    <px:fileset-add-entry media-type="application/epub+zip" name="epub3-validate.add-epub-to-fileset">
+        <p:with-option name="href" select="replace(/*/text(),'^.*/([^/]*)$','$1')">
+            <p:pipe port="normalized" step="epub"/>
+        </p:with-option>
+    </px:fileset-add-entry>
 
     <px:nordic-epub3-validate.step name="epub3-validate.validate.nordic" fail-on-error="true">
-        <p:with-option name="temp-dir" select="concat($temp-dir,'validate/')"/>
+        <p:with-option name="temp-dir" select="concat(/*/text(),'validate/')">
+            <p:pipe port="normalized" step="temp-dir"/>
+        </p:with-option>
+        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
     </px:nordic-epub3-validate.step>
-    <pxi:fileset-load media-types="application/xhtml+xml" name="epub3-validate.load-epub-xhtml">
+    <px:fileset-load media-types="application/xhtml+xml" name="epub3-validate.load-epub-xhtml">
         <p:input port="in-memory">
             <p:pipe port="in-memory.out" step="epub3-validate.validate.nordic"/>
         </p:input>
-    </pxi:fileset-load>
+    </px:fileset-load>
     <p:xslt name="epub3-validate.info-report">
         <p:input port="parameters">
             <p:empty/>
@@ -86,13 +109,15 @@
         </p:input>
     </px:nordic-format-html-report>
     <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="epub3-validate.store-report">
-        <p:with-option name="href" select="concat($html-report,if (ends-with($html-report,'/')) then '' else '/','report.xhtml')"/>
+        <p:with-option name="href" select="concat(/*/text(),if (ends-with(/*/text(),'/')) then '' else '/','report.xhtml')">
+            <p:pipe port="normalized" step="html-report"/>
+        </p:with-option>
     </p:store>
-    <pxi:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="epub3-validate.set-report-doctype">
+    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="epub3-validate.set-report-doctype">
         <p:with-option name="href" select="/*/text()">
             <p:pipe port="result" step="epub3-validate.store-report"/>
         </p:with-option>
-    </pxi:set-doctype>
+    </px:set-doctype>
     <p:sink/>
 
     <px:nordic-validation-status name="epub3-validate.status">

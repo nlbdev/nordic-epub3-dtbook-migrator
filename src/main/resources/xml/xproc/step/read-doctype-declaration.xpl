@@ -21,64 +21,40 @@
     
     <p:output port="result"/>
     
-    <p:identity>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    
+    <px:file-xml-peek name="xml-peek">
+        <p:with-option name="href" select="$href"/>
+    </px:file-xml-peek>
+    <p:sink/>
+    <p:identity name="xml-prolog">
         <p:input port="source">
-            <p:inline exclude-inline-prefixes="#all">
-                <c:request method="GET" override-content-type="text/plain; charset=UTF-8"/>
-            </p:inline>
+            <p:pipe step="xml-peek" port="prolog"/>
         </p:input>
     </p:identity>
-    <p:add-attribute match="/*" attribute-name="href">
-        <p:with-option name="attribute-value" select="$href"/>
-    </p:add-attribute>
-    <p:http-request/>
     
-    <p:group>
-        <p:variable name="content" select="/*/text()"/>
-        <p:choose>
-            <p:when test="matches($content,'^(&lt;\?[^&lt;]*\?&gt;|\s)*&lt;!DOCTYPE','si')">
-                <p:variable name="doctype-declaration" select="replace(/*/text(),'^(&lt;\?[^&lt;]*\?&gt;|\s)*(&lt;!DOCTYPE[^&gt;]*&gt;).*$','$2','si')"/>
-                <p:variable name="parsed-doctype-declaration" select="replace(replace($doctype-declaration,'SYSTEM','PUBLIC &quot;&quot;','s'),'^&lt;!DOCTYPE\s+([^\s&gt;]+)(\s+PUBLIC\s+([&quot;''][^&quot;'']*[&quot;''])\s+([&quot;''][^&quot;'']*[&quot;'']))?.*?&gt;.*$','$1&#10;$3&#10;$4','si')"/>
-                <p:add-attribute match="/*" attribute-name="doctype-declaration">
-                    <p:with-option name="attribute-value" select="$doctype-declaration"/>
-                    <p:input port="source">
-                        <p:inline exclude-inline-prefixes="#all">
-                            <c:result has-doctype-declaration="true"/>
-                        </p:inline>
-                    </p:input>
-                </p:add-attribute>
-                <p:add-attribute match="/*" attribute-name="name">
-                    <p:with-option name="attribute-value" select="tokenize($parsed-doctype-declaration,'&#10;','s')[1]"/>
-                </p:add-attribute>
-                <p:choose>
-                    <p:when test="matches($doctype-declaration,'^&lt;!DOCTYPE\s+[^\s]+\s+PUBLIC.*')">
-                        <p:add-attribute match="/*" attribute-name="doctype-public">
-                            <p:with-option name="attribute-value" select="replace(tokenize($parsed-doctype-declaration,'&#10;','s')[2],'^.(.*).$','$1','s')"/>
-                        </p:add-attribute>
-                        <p:add-attribute match="/*" attribute-name="doctype-system">
-                            <p:with-option name="attribute-value" select="replace(tokenize($parsed-doctype-declaration,'&#10;','s')[3],'^.(.*).$','$1','s')"/>
-                        </p:add-attribute>
-                    </p:when>
-                    <p:when test="matches($doctype-declaration,'^&lt;!DOCTYPE\s+[^\s]+\s+SYSTEM.*')">
-                        <p:add-attribute match="/*" attribute-name="doctype-system">
-                            <p:with-option name="attribute-value" select="replace(tokenize($parsed-doctype-declaration,'&#10;','s')[3],'^.(.*).$','$1','s')"/>
-                        </p:add-attribute>
-                    </p:when>
-                    <p:otherwise>
-                        <p:identity/>
-                    </p:otherwise>
-                </p:choose>
-            </p:when>
-            <p:otherwise>
-                <p:identity>
-                    <p:input port="source">
-                        <p:inline exclude-inline-prefixes="#all">
-                            <c:result has-doctype-declaration="false"/>
-                        </p:inline>
-                    </p:input>
-                </p:identity>
-            </p:otherwise>
-        </p:choose>
-    </p:group>
+    <p:choose>
+        <p:when test="/*/c:doctype">
+            <p:filter select="/*/c:doctype[1]"/>
+            
+            <p:rename match="/*" new-name="c:result"/>
+            <p:rename match="/*/@public" new-name="doctype-public"/>
+            <p:rename match="/*/@system" new-name="doctype-system"/>
+            
+            <p:add-attribute match="/*" attribute-name="doctype-declaration">
+                <p:with-option name="attribute-value" select="/*/text()"/>
+            </p:add-attribute>
+            <p:add-attribute match="/*" attribute-name="has-doctype-declaration" attribute-value="true"/>
+        </p:when>
+        <p:otherwise>
+            <p:identity>
+                <p:input port="source">
+                    <p:inline exclude-inline-prefixes="#all">
+                        <c:result has-doctype-declaration="false"/>
+                    </p:inline>
+                </p:input>
+            </p:identity>
+        </p:otherwise>
+    </p:choose>
     
 </p:declare-step>

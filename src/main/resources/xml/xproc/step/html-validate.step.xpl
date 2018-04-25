@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-html-validate.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/nordic-epub3-dtbook-migrator" xmlns:l="http://xproc.org/library">
+    xmlns:l="http://xproc.org/library">
 
     <p:serialization port="report.out" indent="true"/>
 
@@ -34,13 +34,13 @@
 
     <p:option name="fail-on-error" required="true"/>
     <p:option name="check-images" required="false" select="'true'"/>
+    <p:option name="organization-specific-validation" required="false" select="''"/>
     <p:option name="document-type" required="false" select="'Nordic HTML'"/>
 
     <p:import href="validation-status.xpl"/>
     <p:import href="check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="../upstream/fileset-utils/fileset-load.xpl"/>
-    <!--<p:import href="../upstream/fileset-utils/fileset-add-entry.xpl"/>-->
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
@@ -68,11 +68,22 @@
 
 
             <!-- either load from memory or using p:load; avoid using px:html-load as it will remove the nordic namespace -->
-            <pxi:fileset-load media-types="application/xhtml+xml" load-if-not-in-memory="false" name="html-validate.step.load-xhtml">
-                <p:input port="in-memory">
+            <p:identity>
+                <p:input port="source">
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
-            </pxi:fileset-load>
+            </p:identity>
+            <px:normalize-document-base>
+            </px:normalize-document-base>
+            <p:identity name="html-validate.step.in-memory-normalized-base"/>
+            <px:fileset-load media-types="application/xhtml+xml" load-if-not-in-memory="false" name="html-validate.step.load-xhtml">
+                <p:input port="fileset">
+                    <p:pipe port="fileset.in" step="main"/>
+                </p:input>
+                <p:input port="in-memory">
+                    <p:pipe port="result" step="html-validate.step.in-memory-normalized-base"/>
+                </p:input>
+            </px:fileset-load>
             <p:identity name="html-validate.step.html.from-memory"/>
             <p:count name="html-validate.step.count-xhtml"/>
             <p:choose name="html-validate.step.choose-already-in-memory">
@@ -119,24 +130,60 @@
                     <p:pipe step="html-validate.step.html" port="result"/>
                 </p:input>
             </p:identity>
-            <px:message severity="DEBUG" message="Validating against nordic2015-1.sch: $1">
-                <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
-            </px:message>
-            <p:validate-with-schematron name="html-validate.step.validate.sch" assert-valid="false">
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="schema">
-                    <p:document href="../../schema/nordic2015-1.sch"/>
-                </p:input>
-            </p:validate-with-schematron>
+            <p:choose>
+                <p:when test="lower-case($organization-specific-validation) = 'nota'">
+                    <px:message severity="DEBUG" message="Validating against nordic2015-1.nota.sch: $1">
+                        <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
+                    </px:message>
+                    <p:validate-with-schematron name="html-validate.step.validate.sch.nota" assert-valid="false">
+                        <p:input port="parameters">
+                            <p:empty/>
+                        </p:input>
+                        <p:input port="schema">
+                            <p:document href="../../schema/nordic2015-1.nota.sch"/>
+                        </p:input>
+                    </p:validate-with-schematron>
+                    <p:sink/>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:pipe port="report" step="html-validate.step.validate.sch.nota"/>
+                        </p:input>
+                    </p:identity>
+                </p:when>
+                <p:otherwise>
+                    <px:message severity="DEBUG" message="Validating against nordic2015-1.sch: $1">
+                        <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
+                    </px:message>
+                    <p:validate-with-schematron name="html-validate.step.validate.sch.generic" assert-valid="false">
+                        <p:input port="parameters">
+                            <p:empty/>
+                        </p:input>
+                        <p:input port="schema">
+                            <p:document href="../../schema/nordic2015-1.sch"/>
+                        </p:input>
+                    </p:validate-with-schematron>
+                    <p:sink/>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:pipe port="report" step="html-validate.step.validate.sch.generic"/>
+                        </p:input>
+                    </p:identity>
+                </p:otherwise>
+            </p:choose>
+            <p:identity name="html-validate.step.validate.sch"/>
             <p:sink/>
 
+            <p:identity>
+                <p:input port="source">
+                    <!-- not completely sure why, but a XD0005 error is thrown without this p:identity. -->
+                    <p:empty/>
+                </p:input>
+            </p:identity>
             <px:combine-validation-reports name="html-validate.step.combine-validation-reports">
                 <p:with-option name="document-type" select="$document-type"/>
                 <p:input port="source">
                     <p:pipe port="report" step="html-validate.step.validate.rng"/>
-                    <p:pipe port="report" step="html-validate.step.validate.sch"/>
+                    <p:pipe port="result" step="html-validate.step.validate.sch"/>
                 </p:input>
                 <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
                     <p:pipe port="result" step="html-validate.step.html"/>
@@ -192,7 +239,7 @@
         <p:xpath-context>
             <p:pipe port="status.in" step="main"/>
         </p:xpath-context>
-        <p:when test="/*/@result='ok'">
+        <p:when test="/*/@result='ok' and $fail-on-error='true'">
             <p:output port="result"/>
             <px:nordic-validation-status>
                 <p:input port="source">
