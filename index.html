@@ -26,28 +26,37 @@
       <h1 class="title">Nordic EPUB3/DTBook Migrator</h1>
     </header>
     <div id="container">
-      <p class="tagline">Tools for converting between a strict subset of DTBook and EPUB3.</p>
+      <p class="tagline">A tool for converting between a strict subset of DTBook and EPUB3.</p>
       <div id="main" role="main">
         <div class="download-bar">
         <div class="inner">
-          <!--<a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/tarball/master" class="download-button tar"><span>Download</span></a>-->
-          <!--<a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/zipball/master" class="download-button zip"><span>Download</span></a>-->
-          <a href="mapping.html" class="download-button"><span>XSLT documentation</span></a>
           <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator" class="code">View Nordic EPUB3/DTBook Migrator on GitHub</a>
         </div>
         <span class="blc"></span><span class="trc"></span>
         </div>
         <article class="markdown-body">
-          <h1>
-<a name="nordic-epub3dtbook-migrator" class="anchor" href="#nordic-epub3dtbook-migrator"><span class="octicon octicon-link"></span></a>Nordic EPUB3/DTBook Migrator</h1>
+          <h1><a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
+          <p>The easiest way to install the Nordic EPUB3/DTBook Migrator is by using the Pipeline 2 Updater.</p>
+          <ol>
+            <li>Download and install Pipeline 2 v1.11 by following the <a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Installation/">DAISY Pipeline 2 installation guide</a>.</li>
+            <li>Use the <a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Installation/#updater">updater mechanism as described in the installation guide</a>,
+              but using the following URL as the <code>"service"</code>:<br/>
+            <code>"http://nlbdev.github.com/nordic-epub3-dtbook-migrator/releases/"</code></li>
+          </ol>
+          <p>If you want to install the tool manually, or using some other mechanism, then the JAR file can be downloaded from
+            <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.daisy.pipeline.modules%22%20AND%20a%3A%22nordic-epub3-dtbook-migrator%22">Maven Central</a>,
+            or from the <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/releases">GitHub Release page</a>.
+            The GitHub Release page also contains a description of changes for each release.</p>
+          
+          <h1><a name="nordic-epub3dtbook-migrator" class="anchor" href="#nordic-epub3dtbook-migrator"><span class="octicon octicon-link"></span></a>About the tool</h1>
 
-<p>The main goal of this project is to provide a EPUB3 to DTBook conversion tool
+<p>The main goal of the Nordic EPUB3/DTBook Migrator is to provide a EPUB3 to DTBook conversion tool
 for the libraries in the Nordic countries providing accessible litterature to
 visually impaired readers (<a href="http://www.nlb.no/">NLB</a>, <a href="http://mtm.se/">MTM</a>,
 <a href="http://www.spsm.se/">SPSM</a>,
 <a href="http://www.celia.fi/">Celia</a>, <a href="http://www.nota.nu/">Nota</a> and <a href="http://sbs.ch/">SBS</a>).
 The conversion will be implemented in XProc and XSLT and provided as a
-<a href="http://www.daisy.org/pipeline2">DAISY Pipeline 2</a> script.
+<a href="http://daisy.github.io/pipeline">DAISY Pipeline 2</a> script.
 This conversion will allow the organizations to continue to use their respective
 DTBook-based tools for production of Braille and Synthetic Speech,
 as long as those are necessary.</p>
@@ -100,15 +109,15 @@ Most notably, multimedia such as audio and video are currently not allowed in th
 <h2>Resources</h2>
 <ul>
   <li><a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/">Issue tracker (GitHub; report issues here)</a></li>
-  <li><a href="https://huboard.com/nlbdev/nordic-epub3-dtbook-migrator#/">Issue overview (HuBoard)</a></li>
-  <li><a href="v1.9-builds/index.html">Builds for Pipeline 2 v1.9</a> (the scripts have not yet been updated for v1.10)</li>
+  <li><del><a href="v1.9-builds/index.html">Old builds for Pipeline 2 v1.9</a></del> (outdated)</li>
   <li><a href="resources/2014-31_-_EPUB_3_Requirements_2015-1_rev-01.pdf">Requirements for Quality Content Production in EPUB 3.0/XHTML (Version: 2015-1)</a></li>
   <li><a href="resources/dtbook_markup_requirements_2011-2_v_1.docx">Requirements for Text and Image Quality and Markup with DTBook XML (Version: 2011-2)</a></li>
-  <li><a href="mapping.html">Documentation for the mapping between HTML and DTBook</a></li>
-  <li><a href="classes.html">Documentation for the classes used in the Nordic EPUB3 profile</a></li>
+  <li><a href="mapping.html">Documentation for the mapping between HTML and DTBook</a> (not normative)</li>
+  <li><a href="classes.html">Documentation for the classes used in the Nordic EPUB3 profile</a> (not normative)</li>
   <li><a href="schemadoc/index.html">List of validation rules</a></li>
-  <li><a href="https://docs.google.com/document/d/1nA2puTEJTK0xmqDvEfTteltggRs8Z5xTefUAZ511n_k/edit?usp=sharing">Draft document describing differences with EDUPUB</a></li>
+  <li><del><a href="https://docs.google.com/document/d/1nA2puTEJTK0xmqDvEfTteltggRs8Z5xTefUAZ511n_k/edit?usp=sharing">Draft document describing differences with EDUPUB</a></del> (outdated)</li>
   <li><a href="guide/index.html">Nordic EPUB3/DTBook Migrator User Guide</a></li>
+  <li><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/">DAISY Pipeline 2 User Guide</a></li>
 </ul>
 
         </article>

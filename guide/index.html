@@ -30,18 +30,6 @@
     <!--[if lt IE 9]>
     <script src="lib/js/html5shiv.js"></script>
     <![endif]-->
-    <!--<style>
-    .page-normal:not(#page1), .page-front:not(#page1), .page-special:not(#page1) {
-        page-break-before: always;
-    }
-    @media screen {
-        .page-normal:not(#page1), .page-front:not(#page1), .page-special:not(#page1) {
-            height: 200px;
-            width: 100%;
-            background-color: lightGray;
-        }
-    }
-    </style>-->
 </head>
 <body>
 <div class="reveal">
@@ -49,64 +37,14 @@
 
 <section>
     <h1>User Guide<br><small>Nordic EPUB3/DTBook Migrator</small></h1>
-    <p>This is a basic introduction to installing and using the Nordic EPUB3/DTBook Migrator
-    for validating EPUB3 and converting EPUB3 to DTBook according to the nordic guidelines.</p>
-    <p>Feedback to what should be changed, clarified or added to this guide can be sent to
-    <a href="mailto:josteinaj@gmail.com">Jostein Austvik Jacobsen</a>.</p>
+    <p>For installation instructions, please refer to:<br/> <a href="http://nlbdev.github.io/nordic-epub3-dtbook-migrator/">http://nlbdev.github.io/nordic-epub3-dtbook-migrator/</a></p>
+    <p>Before continuing, read the Pipeline 2 User Guide:<br/> <a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/">http://daisy.github.io/pipeline/Get-Help/User-Guide/</a></p>
+    <p>Feedback can be sent to:<br/> <a href="mailto:josteinaj@gmail.com">Jostein Austvik Jacobsen</a></p>
 </section>
 
 <section>
-    <p>These instructions are for Windows. OSX or Linux users should use the ZIP distribution.</p>
-    <ol>
-    <li>Download and run the <a href="https://github.com/daisy/pipeline-assembly/releases/download/v1.9/pipeline2-1.9-webui_windows.exe">Pipeline 2 v1.9 Windows installer</a></li>
-    <li>Download and unzip the <a href="https://dl.dropboxusercontent.com/u/6370535/nordic-epub3-dtbook-migrator/epubcheck-adapter-with-dependencies/dependencies-1.8.1.zip">third-party dependencies</a> for the Nordic Migrator into <code>C:\Program Files (x86)\DAISY Pipeline 2\daisy-pipeline\modules</code>.</li>
-    <li>Download and put the <a href="https://dl.dropboxusercontent.com/u/6370535/nordic-epub3-dtbook-migrator/builds/nordic-epub3-dtbook-migrator-1.0.0-build_252-commit_bc07e49.jar">Nordic Migrator</a> into the same folder as above.</li>
-    </ol>
-    <p><small>Note that the links above are relevant for build 252 which is the most recent as of time of writing. Newer versions for testing will be available from the <a href="https://dl.dropboxusercontent.com/u/6370535/nordic-epub3-dtbook-migrator/index.html">Nordic Migrator SNAPSHOTs page</a>.</small></p>
-</section>
-
-<section>
-    <div style="width: 50%; float: left;">
-        <figure class="image">
-            <img src="20141104091516.png" alt="image">
-        </figure>
-    </div>
-    <div style="width: 50%; float: right;">
-        <p>
-            </p><p>When you start Pipeline 2 (for instance from the start menu), a browser window will open saying
-            "Starting the Pipeline 2 Web UI".</p>
-            <p><small>(Pipeline 2 consists of the engine itself running in the background
-            and user interfaces to interact with the engine. First, the Web UI is started.)</small></p>
-        <p></p>
-    </div>
-</section>
-
-<section>
-<div style="width: 50%; float: left;">
-<figure class="image">
-    <img src="20141104091725.png" alt="image">
-</figure>
-</div>
-    <div style="width: 50%; float: right;">
-    <div>
-        <p>After the Web UI is started, the engine will be started. The Web UI will display a page
-        saying "Starting the Pipeline 2 engine".</p>
-    </div>
-    </div>
-</section>
-
-<section>
-<div style="width: 50%; float: left;">
-<figure class="image">
-    <img src="20141104091956.png" alt="image">
-</figure>
-</div>
-    <div style="width: 50%; float: right;">
-    <div>
-        <p>When the engine is started, you will arrive at the "Welcome!"-page. You are now ready to use
-        Pipeline 2.</p>
-    </div>
-    </div>
+    <p>Pipeline 2 has two graphical user interfaces; one desktop application, and one web application. This guide assumes you are using the web application, but the tool can be used with the desktop application as well.</p>
+    <p>This guide is a basic introduction to using the Nordic EPUB3/DTBook Migrator for validating EPUB3 and converting EPUB3 to DTBook according to the nordic guidelines.</p>
 </section>
 
 <section>
@@ -156,8 +94,7 @@
 </div>
     <div style="width: 50%; float: right;">
     <p>Clicking the "Nordic EPUB3 Validator" script will take you to the options panel.
-    This script does not have any extra parameters, so all you need to do now is click "Start job" to start the job.</p>
-    <p><small>(The "Nordic EPUB3 to DTBook" script has parameters, but you should not need to use them)</small></p>
+    All you need to do now is click "Start job" to start the job.</p>
     </div>
 </section>
 
@@ -191,8 +128,7 @@
 </figure>
 </div>
     <div style="width: 50%; float: right;">
-    <p>A custom build of <a href="https://github.com/IDPF/epubcheck">epubcheck</a> (the yet unreleased epubcheck v4)
-    is run as part of the validation. Its validation report will be near the top of the page.</p>
+    <p><a href="https://github.com/IDPF/epubcheck">Epubcheck</a> is part of the validation. The epubcheck validation report will be near the top of the page.</p>
     </div>
 </section>
 
@@ -227,46 +163,6 @@
 </div>
     <div style="width: 50%; float: right;">
         <p>The last part of the report calculates a suggested nordic "category" for the book.</p>
-    </div>
-</section>
-
-<section class="present" style="top: 102.5px; display: block;">
-<div style="width: 50%; float: left;">
-<figure class="image">
-    <img src="20141104092717.png" alt="image">
-</figure>
-</div>
-    <div style="width: 50%; float: right;">
-        <p>After the report you have a section with the option to download the output (i.e. the HTML report).</p>
-        <p>The execution log contains more details about what happened during validation.
-        Severe errors will be reported here, such as if a document in the EPUB is not well-formed XML.</p>
-    </div>
-</section>
-
-<section class="future" style="top: 102.5px; display: block;">
-<div style="width: 50%; float: left;">
-<figure class="image">
-    <img src="20141104092808.png" alt="image">
-</figure>
-</div>
-    <div style="width: 50%; float: right;">
-        <p>If you click "Jobs" at the top of the page, you will find a list of jobs and their status.</p>
-        <p>You can access jobs that you have run earlier from this page. It might be a good idea to go
-        through and delete old jobs once in a while to save some disk space.</p>
-    </div>
-</section>
-
-<section class="future" style="top: 102.5px; display: block;">
-<div style="width: 50%; float: left;">
-<figure class="image">
-    <img src="20141104092820.png" alt="image">
-</figure>
-</div>
-    <div style="width: 50%; float: right;">
-        <p>If you click "About" at the top of the page, you will find a short description of Pipeline 2 with
-        some links to the project.</p>
-        <p>At the bottom of this page you can see which version of Pipeline 2 you are using. As of writing,
-        the newest engine version is 1.9 and the newest Web UI version is 1.8.1.</p>
     </div>
 </section>
 
