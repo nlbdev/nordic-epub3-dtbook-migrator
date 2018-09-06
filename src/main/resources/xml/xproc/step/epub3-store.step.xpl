@@ -98,7 +98,7 @@
                         <p:with-option name="doctype" select="$doctype"/>
                         <p:with-option name="href" select="$href"/>
                     </px:set-doctype>
-                    <p:add-attribute match="/*" attribute-name="doctype" name="epub3-store.step.store-epub3.viewport-store-doctype.set-doctype-attribute-in-fileset">
+                    <p:add-attribute match="/*" attribute-name="doctype" name="epub3-store.step.store-epub3.viewport-store-doctype.set-doctype-attribute-in-fileset" cx:depends-on="epub3-store.step.store-epub3.viewport-store-doctype.set-doctype">
                         <p:input port="source">
                             <p:pipe port="current" step="epub3-store.step.store-epub3.viewport-store-doctype"/>
                         </p:input>
