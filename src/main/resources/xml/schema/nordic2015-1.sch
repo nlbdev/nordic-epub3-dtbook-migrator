@@ -1106,42 +1106,4 @@
         </rule>
     </pattern>
 
-    <!-- 
-        The math element has optional attributes alttext and altimg. To be valid with the MathML in DAISY spec, 
-        the alttext and altimg attributes must be part of the math element.
-    -->
-    <pattern id="epub_nordic_283">
-        <rule context="mathml:math">
-            <assert test="@alttext">[nordic283] alttext attribute must be present: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <assert test="not(empty(@alttext))">[nordic283] alttext attribute must be non-empty: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-
-            <assert test="@altimg">[nordic283] altimg attribute must be present: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <assert test="not(empty(@altimg))">[nordic283] altimg attribute must be non-empty: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>
-
-    <!-- TODO: if we allow MathML in EPUB; look at whether or not we can import more of the rules declared in and referenced from dtbook.mathml.sch in the dtbook-validator script from the main DP2 distribution -->
-
-    <!--<pattern id="epub_nordic_284">
-        <rule context="html:p[tokenize(@class,'\s+') = ('isbn', 'issn')]">
-            <let name="source-element" value="ancestor::html:html/html:head/html:meta[@name='dc:source' and matches(@content,'urn:is[bs]n:[\d-]+X?')]/@content"/>
-            <let name="source-type" value="substring-before(substring-after($source-element,':'),':')"/>
-            <assert test="matches(string-join(.//text(),''), '^IS[SB]N:?\s*[\d –-]+X?')">[nordic284] Paragraphs with the class "<value-of
-                    select="string-join(tokenize(@class,'\s+')[.=('isbn','issn')],' ')"/>" must start with "<value-of select="upper-case(string-join(tokenize(@class,'\s+')[.=('isbn','issn')][1],' '))"
-                />", followed by an optional colon (:), then any number of spaces, then a ISBN value containing only digits (0-9), dashes (-) and spaces, and optionally ending with a "X" as some ISBNs
-                do. An example is <![CDATA["ISBN: 0-8044-2957-X"]]>. The value in the paragraph was "<value-of select="string-join(.//text(),'')"/>": <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <assert test="not($source-element) or replace($source-element,'[^\dX]','') = replace(replace(string-join(.//text(),''),'^IS[SB]N:?\s*([\d –-]+X?).*?$','$1'),'[^\dX]','')">[nordic284] The
-                    <value-of select="upper-case($source-type)"/><![CDATA[ ]]> in a paragraph with the class "<value-of select="string-join(tokenize(@class,'\s+')[.=('isbn','issn')],' ')"/>" must be
-                the same as the one in the HTML metadata. The HTML head contains a <value-of select="upper-case($source-type)"/> in a &lt;meta name="dc:source"&gt; element with the content attribute
-                    "<value-of select="$source-element"/>", so the paragraph should have a value of for instance "<![CDATA[ISBN: ]]><value-of
-                    select="substring-after(substring-after($source-element,':'),':')"/>": <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>-->
-
 </schema>

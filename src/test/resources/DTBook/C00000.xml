@@ -535,6 +535,31 @@
                     </li>
                     <li id="d910e762">• <span id="dtb139">What happened during his stay in Russia - did he in fact found an institute for the blind in St Petersburg?</span></li>
                 </list>
+                <!-- MathML example from https://developer.mozilla.org/en-US/docs/Web/MathML/Examples/MathML_Pythagorean_Theorem -->
+                <p>We will now prove the Pythogorian theorem:</p>
+                <p><strong>Statement</strong>: In a right angled triangle, the square of the hypotenuse is equal to the sum of the squares of the other two sides.</p>
+                <p>i.e, If a and b are the legs and c is the hypotenuse then<math xmlns="http://www.w3.org/1998/Math/MathML" alttext="math" altimg="valentin.jpg"><mrow><msup><mi>  a </mi><mn>2</mn></msup> <mo> + </mo> <msup><mi> b </mi><mn>2</mn></msup> <mo> = </mo> <msup><mi> c </mi><mn>2</mn></msup> </mrow> </math>.</p>
+                <p>Here is the same expression in HTML block context:</p>
+                <math xmlns="http://www.w3.org/1998/Math/MathML" alttext="math" altimg="valentin.jpg">
+                    <mrow>
+                        <mrow>
+                            <msup>
+                                <mi>a</mi>
+                                <mn>2</mn>
+                            </msup>
+                            <mo>+</mo>
+                            <msup>
+                                <mi>b</mi>
+                                <mn>2</mn>
+                            </msup>
+                        </mrow>
+                        <mo>=</mo>
+                        <msup>
+                            <mi>c</mi>
+                            <mn>2</mn>
+                        </msup>
+                    </mrow>
+                </math>
             </level1>
             <level1 id="d910e770" class="chapter" xml:lang="sv">
                 <h1 id="d910e772">2. Purpose, method and sources</h1>

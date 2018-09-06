@@ -2,6 +2,10 @@
 <grammar ns="http://www.w3.org/1999/xhtml" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
     xmlns:epub="http://www.idpf.org/2007/ops" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
     
+    <include href="mathml3/mathml3.rng">
+        <a:documentation>MathML 3.0</a:documentation>
+    </include>
+    
     <start>
         <ref name="html"/> <!-- html -->
     </start>
@@ -93,6 +97,7 @@
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
             <ref name="htmlblocknoimggroup"/> <!-- span, aside, section -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     
@@ -113,6 +118,7 @@
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
             <ref name="htmlblocknoimggroup"/> <!-- span, aside, section -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     
@@ -132,6 +138,7 @@
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
             <ref name="htmlblocknoimggroup"/> <!-- span, aside, section -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
 
@@ -1177,6 +1184,7 @@
             <ref name="cite"/> <!-- span -->
             <ref name="abbr"/> <!-- abbr -->
             <ref name="acronym"/> <!-- abbr -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <define name="phrasenodfn">
@@ -1189,6 +1197,7 @@
             <ref name="cite"/> <!-- span -->
             <ref name="abbr"/> <!-- abbr -->
             <ref name="acronym"/> <!-- abbr -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!-- inline text elements -->
@@ -1204,6 +1213,7 @@
             <ref name="sup"/> <!-- sup -->
             <ref name="span"/> <!-- span -->
             <ref name="bdo"/> <!-- bdo -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!-- special inline text elements -->
@@ -1218,6 +1228,7 @@
             <ref name="sup"/> <!-- sup -->
             <ref name="span"/> <!-- span -->
             <ref name="bdo"/> <!-- bdo -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!-- specialnoa inline text elements for anchor <a> -->
@@ -1883,6 +1894,7 @@
                 <ref name="blockquote"/> <!-- blockquote -->
                 <ref name="img"/> <!-- img -->
                 <ref name="figure.imggroup"/> <!-- figure -->
+                <ref name="math"/> <!-- MathML -->
             </choice>
         </zeroOrMore>
     </define>

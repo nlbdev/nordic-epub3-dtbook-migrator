@@ -776,6 +776,11 @@
 <!-- jpritchett@rfbd.org:  2006-07-06.  Removed definition of %StyleSheet, since it is no longer needed -->
 <grammar ns="http://www.daisy.org/z3986/2005/dtbook/" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0"
     datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    
+    <include href="mathml3/mathml3.rng">
+        <a:documentation>MathML 3.0</a:documentation>
+    </include>
+    
     <start>
         <ref name="dtbook"/>
     </start>
@@ -906,6 +911,7 @@
             <ref name="line"/>
             <ref name="dtbookblocknoimggroup"/>
             <ref name="externalFlow"/>
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!--
@@ -937,6 +943,7 @@
             <ref name="address"/>
             <ref name="line"/>
             <ref name="dtbookblocknoimggroup"/>
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!--
@@ -1921,6 +1928,7 @@
             <ref name="cite"/>
             <ref name="abbr"/>
             <ref name="acronym"/>
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!-- inline text elements -->
@@ -1939,6 +1947,7 @@
             <ref name="sup"/>
             <ref name="span"/>
             <ref name="bdo"/>
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!-- special inline text elements -->
@@ -1956,6 +1965,7 @@
             <ref name="sup"/>
             <ref name="span"/>
             <ref name="bdo"/>
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!-- specialnoa inline text elements for anchor <a> -->
@@ -1971,6 +1981,7 @@
             <ref name="noteref"/>
             <ref name="externalinline"/>
             <ref name="externalFlow"/>
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!-- dtbook added inline text elements -->
@@ -2412,6 +2423,7 @@
                     <ref name="blockquote"/>
                     <ref name="img"/>
                     <ref name="imggroup"/>
+                    <ref name="math"/> <!-- MathML -->
                 </choice>
             </zeroOrMore>
         </element>
