@@ -69,14 +69,6 @@
                         </dc:contributor>
                         <meta refines="#{$id}" property="role" scheme="marc:relators">pro</meta>
                     </xsl:when>
-                    <xsl:when test="tokenize($lcname,':')[1]=('dc','dcterms','dtb')">
-                        <!-- NOTE: we could potentially add more namespace prefixes to the metadata element and allow more prefixes here -->
-                        <meta property="{@name}">
-                            <xsl:attribute name="id" select="$id"/>
-                            <xsl:copy-of select="@scheme"/>
-                            <xsl:value-of select="@content"/>
-                        </meta>
-                    </xsl:when>
                     <xsl:when test="@name='track:Guidelines'">
                         <meta property="nordic:guidelines">2015-1</meta>
                     </xsl:when>
@@ -85,14 +77,12 @@
                             <xsl:value-of select="@content"/>
                         </meta>
                     </xsl:when>
-                    <xsl:when test="starts-with(@name,'nordic:')">
+                    <xsl:otherwise>
                         <meta property="{@name}">
+                            <xsl:attribute name="id" select="$id"/>
                             <xsl:copy-of select="@scheme"/>
                             <xsl:value-of select="@content"/>
                         </meta>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:message select="concat('Discarding meta element: ',@name)"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
