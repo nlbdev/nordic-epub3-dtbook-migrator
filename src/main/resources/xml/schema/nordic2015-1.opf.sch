@@ -92,17 +92,6 @@
         </rule>
     </pattern>
 
-    <pattern id="opf_nordic_4">
-        <rule context="opf:meta[@property and not(@refines)]">
-            <assert test="parent::*/opf:meta/@name = @property">[opf4] all EPUB3 meta elements <value-of
-                    select="if (parent::*/opf:meta[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must have an equivalent OPF2 meta element (&lt;meta name="<value-of
-                    select="@property"/>" content="<value-of select="text()"/>"/&gt;)</assert>
-            <assert test="parent::*/opf:meta[@name = current()/@property]/string(@content) = string(.)">[opf4] the value of the EPUB3 meta elements must equal their equivalent OPF2 meta elements. The
-                EPUB3 meta element is <value-of select="concat('&lt;',name(),' property=&quot;',@property,'&quot;&gt;',text(),'&lt;/',name(),'&gt;')"/> while the OPF2 element is <value-of
-                    select="(parent::*/opf:meta[@name = current()/@property])[1]/concat('&lt;',name(),' name=&quot;',@name,'&quot; content=&quot;',@content,'&quot;/&gt;')"/></assert>
-        </rule>
-    </pattern>
-
     <pattern id="opf_nordic_5_a">
         <rule context="opf:manifest">
             <assert test="opf:item[@media-type='application/x-dtbncx+xml']">[opf5a] a NCX must be present in the manifest (media-type="application/x-dtbncx+xml")</assert>
