@@ -16,6 +16,8 @@
         <meta name="dc:Format" content="DTBook"/>
         <meta name="dc:Publisher" content="MTM"/>
         <meta name="dc:Date" content="2006-03-23"/>
+        <meta name="a11y:certifiedBy" content="Certifying Organization"/>
+        <meta name="schema:audience" content="Adult"/>
         <meta name="dcterms:modified" content="2014-01-27T13:13:47Z"/>
     </head>
     <book>

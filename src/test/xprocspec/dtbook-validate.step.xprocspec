@@ -29,6 +29,12 @@
         <x:expect type="compare" label="the in-memory.out port should contain the DTBook">
             <x:document href="../resources/DTBook/C00000.xml" type="file" method="xml" select="/dtbook:dtbook/dtbook:book/*/*[not(@id='level1_1')]"/>
         </x:expect>
+        
+        <x:context label="in-memory.out">
+            <x:document type="port" port="in-memory.out"/>
+        </x:context>
+        <x:expect type="xpath" label="The output should preserve metadata with the a11y prefix in the DTBook file" test="/dtbook:dtbook/dtbook:head/dtbook:meta[@name='a11y:certifiedBy']/@content" equals="'Certifying Organization'"/>
+        <x:expect type="xpath" label="The output should preserve metadata using unknown prefixes in the DTBook file" test="/dtbook:dtbook/dtbook:head/dtbook:meta[@name='schema:audience']/@content" equals="'Adult'"/>
 
         <x:context label="report.out">
             <x:document type="port" port="report.out"/>
