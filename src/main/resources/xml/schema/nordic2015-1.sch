@@ -700,7 +700,7 @@
     <!-- Rule 224: linenum - span -->
     <pattern id="epub_nordic_224">
         <rule context="html:span[tokenize(@class,' ')='linenum']">
-            <assert test="ancestor::html:p[tokenize(@class,' ')='line']">[nordic224] linenums (span class="linenum") must be part of a line (p class="line"): <value-of
+            <assert test="parent::html:p[tokenize(@class,' ')='line']">[nordic224] linenums (span class="linenum") must be the child element of a line (p class="line"): <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;',string-join(.//text()[normalize-space()],' '),'&lt;/',name(),'&gt;')"
                 /></assert>
         </rule>
