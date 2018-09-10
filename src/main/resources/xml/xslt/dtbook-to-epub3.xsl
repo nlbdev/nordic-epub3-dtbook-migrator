@@ -98,7 +98,7 @@
         <xsl:variable name="epub-types" select="($types, $epub-types)[not(.='') and not(.=$except-types)]"/>
         <xsl:variable name="epub-types" select="($epub-types, if ($epub-types='bodymatter' and count($epub-types)=1) then 'chapter' else ())"/>
         <xsl:variable name="epub-types"
-            select="($epub-types, if ((self::dtbook:level2 or self::dtbook:level[count(ancestor::level)=1]) and (ancestor::dtbook:level1|ancestor::dtbook:level[not(ancestor::dtbook:level)])/tokenize(@class,'\s+')='part' and count($epub-types)=1) then 'chapter' else ())"/>
+            select="($epub-types, if ((self::dtbook:level2 or self::dtbook:level[count(ancestor::level)=1]) and (ancestor::dtbook:level1|ancestor::dtbook:level[not(ancestor::dtbook:level)])/tokenize(@class,'\s+')='part' and count($epub-types)=0) then 'chapter' else ())"/>
 
         <xsl:variable name="classes" select="($classes, $old-classes[not(.=($vocab-default,$vocab-z3998,'jacketcopy','endnote'))], $showin)[not(.='') and not(.=$except-classes)]"/>
 
