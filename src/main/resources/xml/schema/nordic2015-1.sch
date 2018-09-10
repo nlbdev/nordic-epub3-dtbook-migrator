@@ -666,7 +666,14 @@
                 'errata','z3998:filmography','footnotes','foreword','glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
                 'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',
                 'z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
-            <let name="allowed-types" value="($always-allowed-types)"/>
+            <let name="document-components" value="('z3998:pgroup','z3998:example','z3998:epigraph','z3998:annotation','z3998:introductory-note','z3998:commentary','z3998:clarification','z3998:correction','z3998:alteration','z3998:presentation',
+                'z3998:production','z3998:attribution','z3998:author','z3998:editor','z3998:general-editor','z3998:commentator','z3998:translator','z3998:republisher','z3998:structure','z3998:geographic',
+                'z3998:postal','z3998:email','z3998:ftp','z3998:http','z3998:ip','z3998:aside','z3998:sidebar','z3998:practice','z3998:notice','z3998:warning','z3998:marginalia','z3998:help','z3998:drama',
+                'z3998:scene','z3998:stage-direction','z3998:dramatis-personae','z3998:persona','z3998:actor','z3998:role-description','z3998:speech','z3998:diary','z3998:diary-entry','z3998:figure','z3998:plate',
+                'z3998:gallery','z3998:letter','z3998:sender','z3998:recipient','z3998:salutation','z3998:valediction','z3998:postscript','z3998:email-message','z3998:to','z3998:from','z3998:cc','z3998:bcc',
+                'z3998:subject','z3998:collection','z3998:orderedlist','z3998:unorderedlist','z3998:abbreviations','z3998:timeline','z3998:note','z3998:footnotes','z3998:footnote','z3998:rearnote','z3998:rearnotes',
+                'z3998:verse','z3998:poem','z3998:song','z3998:hymn','z3998:lyrics')"/>
+            <let name="allowed-types" value="($always-allowed-types, $document-components)"/>
             <assert test="tokenize(@epub:type,'\s+')=$allowed-types">[nordic211] '<value-of select="(tokenize(@epub:type,'\s+')[not(.=('part','volume'))],'(missing type)')[1]"/>' is not an allowed
                 type in a part. Sections inside a part must also have one of the types <value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<value-of
                     select="$allowed-types[last()]"/>'.</assert>

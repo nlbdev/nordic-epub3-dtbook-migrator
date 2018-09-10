@@ -168,18 +168,35 @@
                         </a>
                     </li>
                     <li>
-                        <a href="C00000-09-conclusion.xhtml#d910e4160">
+                        <a href="C00000-09-part.xhtml#poem-part">
+                            <span>Poem test</span>
+                        </a>
+                        <ol>
+                            <li>
+                                <a href="C00000-09-part.xhtml#poem1">
+                                    <span>Poem headline</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="C00000-10-chapter.xhtml#poem-part-chapter">
+                                    <span>Chapter in poem part</span>
+                                </a>
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <a href="C00000-11-conclusion.xhtml#d910e4160">
                             <span>5. </span>
                             <span>Discussion and conclusions</span>
                         </a>
                     </li>
                     <li>
-                        <a href="C00000-10-footnotes.xhtml#d910e4513">
+                        <a href="C00000-12-footnotes.xhtml#d910e4513">
                             <span>Footnotes</span>
                         </a>
                         <ol>
                             <li>
-                                <a href="C00000-10-footnotes.xhtml#footnotes_level2">Footnotes level2</a>
+                                <a href="C00000-12-footnotes.xhtml#footnotes_level2">Footnotes level2</a>
                             </li>
                         </ol>
                     </li>
@@ -276,16 +293,16 @@
                         <a href="C00000-08-chapter.xhtml#page_26">26</a>
                     </li>
                     <li>
-                        <a href="C00000-09-conclusion.xhtml#page_27">27</a>
+                        <a href="C00000-11-conclusion.xhtml#page_27">27</a>
                     </li>
                     <li>
-                        <a href="C00000-09-conclusion.xhtml#page_28">28</a>
+                        <a href="C00000-11-conclusion.xhtml#page_28">28</a>
                     </li>
                     <li>
-                        <a href="C00000-10-footnotes.xhtml#page_29">29</a>
+                        <a href="C00000-12-footnotes.xhtml#page_29">29</a>
                     </li>
                     <li>
-                        <a href="C00000-10-footnotes.xhtml#page_30_does_not_exist_in_ncx">30</a>
+                        <a href="C00000-12-footnotes.xhtml#page_30_does_not_exist_in_ncx">30</a>
                     </li>
                 </ol>
             </nav>
@@ -478,24 +495,24 @@
                 <navLabel>
                     <text>5. Discussion and conclusions</text>
                 </navLabel>
-                <content src="C00000-09-conclusion.xhtml#d910e4160"/>
+                <content src="C00000-11-conclusion.xhtml#d910e4160"/>
             </navPoint>
             <navPoint id="navPoint-29" playOrder="29">
                 <navLabel>
                     <text>Footnotes</text>
                 </navLabel>
-                <content src="C00000-10-footnotes.xhtml#d910e4513"/>
+                <content src="C00000-12-footnotes.xhtml#d910e4513"/>
                 <navPoint id="navPoint-30" playOrder="30">
                     <navLabel>
                         <text>Footnotes level2</text>
                     </navLabel>
-                    <content src="C00000-10-footnotes.xhtml#footnotes_level2"/>
+                    <content src="C00000-12-footnotes.xhtml#footnotes_level2"/>
                 </navPoint>
                 <navPoint id="navPoint-30-duplicate" playOrder="31">
                     <navLabel>
                         <text>Footnotes level2 (duplicate)</text>
                     </navLabel>
-                    <content src="C00000-10-footnotes.xhtml#footnotes_level2"/>
+                    <content src="C00000-12-footnotes.xhtml#footnotes_level2"/>
                 </navPoint>
             </navPoint>
         </navMap>
@@ -681,25 +698,25 @@
                 <navLabel>
                     <text>27</text>
                 </navLabel>
-                <content src="C00000-09-conclusion.xhtml#page_27"/>
+                <content src="C00000-11-conclusion.xhtml#page_27"/>
             </pageTarget>
             <pageTarget id="pageTarget-61" playOrder="61" type="normal">
                 <navLabel>
                     <text>28</text>
                 </navLabel>
-                <content src="C00000-09-conclusion.xhtml#page_28"/>
+                <content src="C00000-11-conclusion.xhtml#page_28"/>
             </pageTarget>
             <pageTarget id="pageTarget-62" playOrder="62" type="normal">
                 <navLabel>
                     <text>29</text>
                 </navLabel>
-                <content src="C00000-10-footnotes.xhtml#page_29"/>
+                <content src="C00000-12-footnotes.xhtml#page_29"/>
             </pageTarget>
             <pageTarget id="pageTarget-63" playOrder="63" type="normal">
                 <navLabel>
                     <text>30</text>
                 </navLabel>
-                <content src="C00000-10-footnotes.xhtml#page_30_does_not_exist_in_nav"/>
+                <content src="C00000-12-footnotes.xhtml#page_30_does_not_exist_in_nav"/>
             </pageTarget>
         </pageList>
     </ncx>

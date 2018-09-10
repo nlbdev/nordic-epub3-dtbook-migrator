@@ -21,8 +21,10 @@
                         <d:file href="EPUB/C00000-06-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/C00000-07-rearnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/C00000-08-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-                        <d:file href="EPUB/C00000-09-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-                        <d:file href="EPUB/C00000-10-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-09-part.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-10-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-11-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-12-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/nav.ncx" media-type="application/x-dtbncx+xml"/>
                         <d:file href="EPUB/images/valentin.jpg" media-type="image/jpeg"/>
                         <d:file href="EPUB/css/accessibility.css" media-type="text/css"/>
@@ -46,8 +48,10 @@
                 <x:document href="../resources/C00000/EPUB/C00000-06-chapter.xhtml" type="file" method="xml"/>
                 <x:document href="../resources/C00000/EPUB/C00000-07-rearnotes.xhtml" type="file" method="xml"/>
                 <x:document href="../resources/C00000/EPUB/C00000-08-chapter.xhtml" type="file" method="xml"/>
-                <x:document href="../resources/C00000/EPUB/C00000-09-conclusion.xhtml" type="file" method="xml"/>
-                <x:document href="../resources/C00000/EPUB/C00000-10-footnotes.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-09-part.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-10-chapter.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-11-conclusion.xhtml" type="file" method="xml"/>
+                <x:document href="../resources/C00000/EPUB/C00000-12-footnotes.xhtml" type="file" method="xml"/>
                 <x:document href="../resources/C00000/EPUB/nav.ncx" type="file" method="xml"/>
             </x:input>
             <x:input port="report.in"/>
@@ -76,8 +80,10 @@
             <x:document href="../resources/C00000/EPUB/C00000-06-chapter.xhtml" type="file" method="xml"/>
             <x:document href="../resources/C00000/EPUB/C00000-07-rearnotes.xhtml" type="file" method="xml"/>
             <x:document href="../resources/C00000/EPUB/C00000-08-chapter.xhtml" type="file" method="xml"/>
-            <x:document href="../resources/C00000/EPUB/C00000-09-conclusion.xhtml" type="file" method="xml"/>
-            <x:document href="../resources/C00000/EPUB/C00000-10-footnotes.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-09-part.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-10-chapter.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-11-conclusion.xhtml" type="file" method="xml"/>
+            <x:document href="../resources/C00000/EPUB/C00000-12-footnotes.xhtml" type="file" method="xml"/>
             <x:document href="../resources/C00000/EPUB/nav.ncx" type="file" method="xml"/>
         </x:expect>
 

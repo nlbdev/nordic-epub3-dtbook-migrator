@@ -2147,6 +2147,24 @@
                     <p><span class="asciimath">`sqrt (43 * 4)`</span></p>
                 </div>
             </level1>
+            <level1 class="part" id="poem-part">
+                <h1>Poem test</h1>
+                <poem id="poem1">
+                    <hd>Poem headline</hd>
+                    <linegroup>
+                        <line>...verse line...</line>
+                        <line>...verse line...</line>
+                    </linegroup>
+                    <linegroup>
+                        <line>...verse line...</line>
+                        <line>...verse line...</line>
+                    </linegroup>
+                </poem>
+                <level2 class="chapter" id="poem-part-chapter">
+                    <h2>Chapter in poem part</h2>
+                    <p>Should be a separate file in EPUB.</p>
+                </level2>
+            </level1>
             <level1 id="d910e4160" class="conclusion">
                 <h1 id="d910e4162">5. Discussion and conclusions</h1>
                 <p>
