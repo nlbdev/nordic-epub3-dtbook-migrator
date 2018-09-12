@@ -22,8 +22,10 @@
                         <d:file href="EPUB/C00000-06-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/C00000-07-rearnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/C00000-08-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-                        <d:file href="EPUB/C00000-09-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-                        <d:file href="EPUB/C00000-10-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-09-part.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-10-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-11-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/C00000-12-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/toc.ncx" media-type="application/x-dtbncx+xml"/>
                         <d:file href="EPUB/images/valentin.jpg" media-type="image/jpeg"/>
                         <d:file href="EPUB/css/accessibility.css" media-type="text/css"/>
@@ -58,8 +60,10 @@
                     <d:file href="EPUB/C00000-06-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                     <d:file href="EPUB/C00000-07-rearnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                     <d:file href="EPUB/C00000-08-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-                    <d:file href="EPUB/C00000-09-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-                    <d:file href="EPUB/C00000-10-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                    <d:file href="EPUB/C00000-09-part.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                    <d:file href="EPUB/C00000-10-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                    <d:file href="EPUB/C00000-11-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                    <d:file href="EPUB/C00000-12-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                     <d:file href="EPUB/toc.ncx" media-type="application/x-dtbncx+xml"/>
                     <d:file href="EPUB/images/valentin.jpg" media-type="image/jpeg"/>
                     <d:file href="EPUB/css/accessibility.css" media-type="text/css"/>

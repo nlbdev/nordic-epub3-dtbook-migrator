@@ -12,7 +12,7 @@
     <xsl:variable name="translations" select="document('../i18n/translations.xml')/*"/>
 
     <xsl:template match="@*|node()">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
@@ -75,7 +75,7 @@
         <xsl:message select="$title"/>
         <xsl:message select="('en',ancestor-or-self::*[@xml:lang|@lang]/(@xml:lang|@lang)[1])[last()]"/>
         <xsl:variable name="translated-title" select="pf:i18n-translate($title,('en',ancestor-or-self::*[@xml:lang|@lang]/(@xml:lang|@lang)[1])[last()],$translations)"/>
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*"/>
             <xsl:if test="not(h1 | h2 | h3 | h4 | h5 | h6)">
                 <!-- sectioning element is missing headline; let's generate one! -->

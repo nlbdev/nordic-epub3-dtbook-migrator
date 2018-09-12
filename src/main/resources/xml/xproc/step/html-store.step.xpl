@@ -106,7 +106,7 @@
                     <p:with-option name="doctype" select="$doctype"/>
                     <p:with-option name="href" select="$href"/>
                 </px:set-doctype>
-                <p:add-attribute match="/*" attribute-name="doctype" name="html-store.step.viewport-doctype.add-doctype-attribute-to-fileset">
+                <p:add-attribute match="/*" attribute-name="doctype" name="html-store.step.viewport-doctype.add-doctype-attribute-to-fileset" cx:depends-on="html-store.step.viewport-doctype.set-doctype">
                     <p:input port="source">
                         <p:pipe port="current" step="html-store.step.viewport-doctype"/>
                     </p:input>

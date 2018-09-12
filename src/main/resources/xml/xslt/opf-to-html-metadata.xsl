@@ -11,15 +11,18 @@
     <xsl:template match="opf:metadata">
         <xsl:text>
 </xsl:text>
-        <head xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:nordic="http://www.mtm.se/epub/">
-            <xsl:copy-of select="namespace::*[not(.=('http://www.w3.org/1999/xhtml','http://www.idpf.org/2007/opf'))]"/>
+        <head xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:nordic="http://www.mtm.se/epub/" xmlns:epub="http://www.idpf.org/2007/ops">
+            <xsl:copy-of select="namespace::*[not(.=('http://www.w3.org/1999/xhtml','http://www.idpf.org/2007/opf'))]" exclude-result-prefixes="#all"/>
+            <xsl:if test="count(ancestor-or-self::*/@prefix)">
+                <xsl:attribute name="epub:prefix" select="string-join(ancestor-or-self::*/@prefix, ' ')"/>
+            </xsl:if>
             <xsl:text>
     </xsl:text>
             <meta charset="UTF-8"/>
             <xsl:text>
     </xsl:text>
             <title>
-                <xsl:copy-of select="dc:title[1]/(@scheme|@http-equiv|@xml:lang|@dir|namespace::*[not(.=('http://www.w3.org/1999/xhtml','http://www.idpf.org/2007/opf'))]|node())"/>
+                <xsl:copy-of select="dc:title[1]/(@scheme|@http-equiv|@xml:lang|@dir|namespace::*[not(.=('http://www.w3.org/1999/xhtml','http://www.idpf.org/2007/opf'))]|node())" exclude-result-prefixes="#all"/>
             </title>
             <xsl:text>
     </xsl:text>
@@ -37,7 +40,7 @@
                 <xsl:text>
     </xsl:text>
                 <meta name="{name()}" content="{normalize-space(.)}">
-                    <xsl:copy-of select="@scheme|@http-equiv|@xml:lang|@dir|namespace::*[not(.=('http://www.w3.org/1999/xhtml','http://www.idpf.org/2007/opf'))]"/>
+                    <xsl:copy-of select="@scheme|@http-equiv|@xml:lang|@dir|namespace::*[not(.=('http://www.w3.org/1999/xhtml','http://www.idpf.org/2007/opf'))]" exclude-result-prefixes="#all"/>
                 </meta>
             </xsl:for-each>
             <xsl:for-each select="opf:meta[@property and not(@refines) and not(@property=('dcterms:modified','nordic:guidelines','nordic:supplier'))]">
@@ -46,7 +49,7 @@
                 <xsl:text>
     </xsl:text>
                 <meta name="{@property}" content="{normalize-space(.)}">
-                    <xsl:copy-of select="@scheme|@http-equiv|@xml:lang|@dir|namespace::*[not(.=('http://www.w3.org/1999/xhtml','http://www.idpf.org/2007/opf'))]"/>
+                    <xsl:copy-of select="@scheme|@http-equiv|@xml:lang|@dir|namespace::*[not(.=('http://www.w3.org/1999/xhtml','http://www.idpf.org/2007/opf'))]" exclude-result-prefixes="#all"/>
                 </meta>
             </xsl:for-each>
 

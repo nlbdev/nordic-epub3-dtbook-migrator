@@ -7,7 +7,7 @@
 
             <xsl:variable name="identifier" select="//html:head/html:meta[lower-case(@name)=('dc:identifier','dct:identifier','dcterms:identifier','dtb:uid')][1]"/>
             <dc:identifier id="pub-id">
-                <xsl:copy-of select="$identifier/@scheme"/>
+                <xsl:copy-of select="$identifier/@scheme" exclude-result-prefixes="#all"/>
                 <xsl:value-of select="($identifier/@content,replace(replace(string(current-dateTime()),'\+.*',''),'[^\d]',''))[1]"/>
             </dc:identifier>
 
@@ -37,7 +37,7 @@
                     <xsl:when test="matches($lcname,'^dc:')">
                         <xsl:element name="{$lcname}">
                             <xsl:attribute name="id" select="$id"/>
-                            <xsl:copy-of select="@scheme"/>
+                            <xsl:copy-of select="@scheme" exclude-result-prefixes="#all"/>
                             <xsl:value-of select="@content"/>
                         </xsl:element>
                         <xsl:if test="@role">
@@ -49,14 +49,14 @@
                     <xsl:when test="matches($lcname,'^dct:') or matches($lcname,'^dcterms:')">
                         <meta property="{replace($lcname,'^dct:','dcterms:')}">
                             <xsl:attribute name="id" select="$id"/>
-                            <xsl:copy-of select="@scheme"/>
+                            <xsl:copy-of select="@scheme" exclude-result-prefixes="#all"/>
                             <xsl:value-of select="@content"/>
                         </meta>
                     </xsl:when>
                     <xsl:when test="@name='dtb:narrator'">
                         <dc:contributor id="{$id}">
                             <xsl:attribute name="id" select="$id"/>
-                            <xsl:copy-of select="@scheme"/>
+                            <xsl:copy-of select="@scheme" exclude-result-prefixes="#all"/>
                             <xsl:value-of select="@content"/>
                         </dc:contributor>
                         <meta refines="#{$id}" property="role" scheme="marc:relators">nrt</meta>
@@ -64,18 +64,10 @@
                     <xsl:when test="@name='dtb:producer'">
                         <dc:contributor id="{$id}">
                             <xsl:attribute name="id" select="$id"/>
-                            <xsl:copy-of select="@scheme"/>
+                            <xsl:copy-of select="@scheme" exclude-result-prefixes="#all"/>
                             <xsl:value-of select="@content"/>
                         </dc:contributor>
                         <meta refines="#{$id}" property="role" scheme="marc:relators">pro</meta>
-                    </xsl:when>
-                    <xsl:when test="tokenize($lcname,':')[1]=('dc','dcterms','dtb')">
-                        <!-- NOTE: we could potentially add more namespace prefixes to the metadata element and allow more prefixes here -->
-                        <meta property="{@name}">
-                            <xsl:attribute name="id" select="$id"/>
-                            <xsl:copy-of select="@scheme"/>
-                            <xsl:value-of select="@content"/>
-                        </meta>
                     </xsl:when>
                     <xsl:when test="@name='track:Guidelines'">
                         <meta property="nordic:guidelines">2015-1</meta>
@@ -85,14 +77,12 @@
                             <xsl:value-of select="@content"/>
                         </meta>
                     </xsl:when>
-                    <xsl:when test="starts-with(@name,'nordic:')">
+                    <xsl:otherwise>
                         <meta property="{@name}">
-                            <xsl:copy-of select="@scheme"/>
+                            <xsl:attribute name="id" select="$id"/>
+                            <xsl:copy-of select="@scheme" exclude-result-prefixes="#all"/>
                             <xsl:value-of select="@content"/>
                         </meta>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:message select="concat('Discarding meta element: ',@name)"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>

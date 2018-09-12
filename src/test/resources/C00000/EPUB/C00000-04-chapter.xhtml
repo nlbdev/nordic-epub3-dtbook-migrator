@@ -2,13 +2,15 @@
 <?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng"?>
 <?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en" epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en" lang="en" epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/# a11y: http://www.idpf.org/epub/vocab/package/a11y/# schema: http://schema.org/"
     xmlns:nordic="http://www.mtm.se/epub/">
     <head>
         <meta charset="UTF-8" />
         <title>Valentin Haüy - the father of the education for the blind</title>
         <meta content="C00000" name="dc:identifier" />
         <meta name="viewport" content="width=device-width" />
+        <meta name="a11y:certifiedBy" content="Certifying Organization"/>
+        <meta name="schema:audience" content="Adult"/>
         <style type="text/css" xml:space="preserve">
             .initialism{
                 -epub-speak-as:spell-out;
@@ -146,5 +148,30 @@
                 <span id="dtb139">What happened during his stay in Russia - did he in fact found an institute for the blind in St Petersburg?</span>
             </li>
         </ul>
+        <!-- MathML example from https://developer.mozilla.org/en-US/docs/Web/MathML/Examples/MathML_Pythagorean_Theorem -->
+        <p>We will now prove the Pythogorian theorem:</p>
+        <p><strong>Statement</strong>: In a right angled triangle, the square of the hypotenuse is equal to the sum of the squares of the other two sides.</p>
+        <p>i.e, If a and b are the legs and c is the hypotenuse then<math xmlns="http://www.w3.org/1998/Math/MathML" alttext="math" altimg="images/valentin.jpg"><mrow><msup><mi>  a </mi><mn>2</mn></msup> <mo> + </mo> <msup><mi> b </mi><mn>2</mn></msup> <mo> = </mo> <msup><mi> c </mi><mn>2</mn></msup> </mrow> </math>.</p>
+        <p>Here is the same expression in HTML block context:</p>
+        <math xmlns="http://www.w3.org/1998/Math/MathML" alttext="math" altimg="images/valentin.jpg">
+            <mrow>
+                <mrow>
+                    <msup>
+                        <mi>a</mi>
+                        <mn>2</mn>
+                    </msup>
+                    <mo>+</mo>
+                    <msup>
+                        <mi>b</mi>
+                        <mn>2</mn>
+                    </msup>
+                </mrow>
+                <mo>=</mo>
+                <msup>
+                    <mi>c</mi>
+                    <mn>2</mn>
+                </msup>
+            </mrow>
+        </math>
     </body>
 </html>

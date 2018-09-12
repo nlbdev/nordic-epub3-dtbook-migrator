@@ -2,7 +2,7 @@
 <?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng"?>
 <?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:lang="en" lang="en"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" epub:prefix="nordic: http://www.mtm.se/epub/ z3998: http://www.daisy.org/z3998/2012/vocab/structure/# a11y: http://www.idpf.org/epub/vocab/package/a11y/# schema: http://schema.org/" xml:lang="en" lang="en"
     xmlns:nordic="http://www.mtm.se/epub/">
     <head xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
         <meta charset="UTF-8" />
@@ -17,6 +17,8 @@
         <meta name="dc:format" content="EPUB3" />
         <meta name="dc:publisher" content="MTM" />
         <meta name="dc:date" content="2006-03-23" />
+        <meta name="a11y:certifiedBy" content="Certifying Organization"/>
+        <meta name="schema:audience" content="Adult"/>
         <meta name="dcterms:modified" content="2014-02-03T12:29:53+00:00" />
     </head>
     <body>
@@ -557,6 +559,31 @@
                     <span id="dtb139">What happened during his stay in Russia - did he in fact found an institute for the blind in St Petersburg?</span>
                 </li>
             </ul>
+            <!-- MathML example from https://developer.mozilla.org/en-US/docs/Web/MathML/Examples/MathML_Pythagorean_Theorem -->
+            <p>We will now prove the Pythogorian theorem:</p>
+            <p><strong>Statement</strong>: In a right angled triangle, the square of the hypotenuse is equal to the sum of the squares of the other two sides.</p>
+            <p>i.e, If a and b are the legs and c is the hypotenuse then<math xmlns="http://www.w3.org/1998/Math/MathML" alttext="math" altimg="images/valentin.jpg"><mrow><msup><mi>  a </mi><mn>2</mn></msup> <mo> + </mo> <msup><mi> b </mi><mn>2</mn></msup> <mo> = </mo> <msup><mi> c </mi><mn>2</mn></msup> </mrow> </math>.</p>
+            <p>Here is the same expression in HTML block context:</p>
+            <math xmlns="http://www.w3.org/1998/Math/MathML" alttext="math" altimg="images/valentin.jpg">
+                <mrow>
+                    <mrow>
+                        <msup>
+                            <mi>a</mi>
+                            <mn>2</mn>
+                        </msup>
+                        <mo>+</mo>
+                        <msup>
+                            <mi>b</mi>
+                            <mn>2</mn>
+                        </msup>
+                    </mrow>
+                    <mo>=</mo>
+                    <msup>
+                        <mi>c</mi>
+                        <mn>2</mn>
+                    </msup>
+                </mrow>
+            </math>
         </section>
         <section epub:type="bodymatter chapter" id="d910e770" xml:lang="sv" lang="sv">
             <h1 id="d910e772">2. Purpose, method and sources</h1>
@@ -2109,6 +2136,24 @@
                 <p><span class="asciimath">`sqrt 43`</span></p>
                 <p><span class="asciimath">`sqrt (43 * 4)`</span></p>
             </div>
+        </section>
+        <section epub:type="bodymatter part" id="poem-part">
+            <h1>Poem test</h1>
+            <section epub:type="z3998:poem" class="poem" id="poem1">
+                <h2>Poem headline</h2>
+                <div class="linegroup">
+                    <p class="line">...verse line...</p>
+                    <p class="line">...verse line...</p>
+                </div>
+                <div class="linegroup">
+                    <p class="line">...verse line...</p>
+                    <p class="line">...verse line...</p>
+                </div>
+            </section>
+            <section epub:type="chapter" id="poem-part-chapter">
+                <h2>Chapter in poem part</h2>
+                <p>Should be a separate file in EPUB.</p>
+            </section>
         </section>
         <section epub:type="bodymatter conclusion" id="d910e4160">
             <h1 id="d910e4162">5. Discussion and conclusions</h1>

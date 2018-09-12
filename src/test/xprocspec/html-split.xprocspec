@@ -23,7 +23,7 @@
             <x:document type="port" port="fileset.out"/>
         </x:context>
         <x:expect type="count" label="There should be exactly one fileset" min="1" max="1"/>
-        <x:expect type="xpath" label="There should be 10 XHTML files in the fileset" test="count(//d:file[@media-type='application/xhtml+xml'])" equals="10"/>
+        <x:expect type="xpath" label="There should be 12 XHTML files in the fileset" test="count(//d:file[@media-type='application/xhtml+xml'])" equals="12"/>
 
         <x:context label="all files in the fileset that does not exist on disk">
             <x:document type="port" port="fileset.out" select="//d:file[not(@original-href)]"/>
@@ -62,11 +62,19 @@
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" xml:base="../resources/single-html/">
-                <d:file href="C00000-09-conclusion.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
+                <d:file href="C00000-09-part.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" xml:base="../resources/single-html/">
-                <d:file href="C00000-10-footnotes.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
+                <d:file href="C00000-10-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
+                    doctype="&lt;!DOCTYPE html&gt;"/>
+            </x:document>
+            <x:document type="inline" xml:base="../resources/single-html/">
+                <d:file href="C00000-11-conclusion.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
+                    doctype="&lt;!DOCTYPE html&gt;"/>
+            </x:document>
+            <x:document type="inline" xml:base="../resources/single-html/">
+                <d:file href="C00000-12-footnotes.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false"
                     doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
         </x:expect>
@@ -80,7 +88,7 @@
         <x:context label="the in-memory.out port">
             <x:document type="port" port="in-memory.out"/>
         </x:context>
-        <x:expect type="count" label="There should be exactly 10 in-memory documents" min="10" max="10"/>
+        <x:expect type="count" label="There should be exactly 12 in-memory documents" min="12" max="12"/>
 
         <x:context label="the 1st document on the in-memory.out port">
             <x:document type="port" port="in-memory.out" position="1"/>
@@ -125,12 +133,22 @@
         <x:context label="the 9th document on the in-memory.out port">
             <x:document type="port" port="in-memory.out" position="9"/>
         </x:context>
-        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-09-conclusion.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-09-conclusion.xhtml')"/>
-
-        <x:context label="the 10th document on the in-memory.out port">
+        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-09-part.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-09-part.xhtml')"/>
+        
+        <x:context label="the 9th document on the in-memory.out port">
             <x:document type="port" port="in-memory.out" position="10"/>
         </x:context>
-        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-10-footnotes.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-10-footnotes.xhtml')"/>
+        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-10-chapter.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-10-chapter.xhtml')"/>
+        
+        <x:context label="the 9th document on the in-memory.out port">
+            <x:document type="port" port="in-memory.out" position="11"/>
+        </x:context>
+        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-11-conclusion.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-11-conclusion.xhtml')"/>
+        
+        <x:context label="the 10th document on the in-memory.out port">
+            <x:document type="port" port="in-memory.out" position="12"/>
+        </x:context>
+        <x:expect type="xpath" label="There should be a in-memory document with base single-html/C00000-12-footnotes.xhtml" test="ends-with(base-uri(/*),'single-html/C00000-12-footnotes.xhtml')"/>
     </x:scenario>
 
 </x:description>

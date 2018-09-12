@@ -56,10 +56,16 @@
                 <d:file href="EPUB/C00000-08-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-09-conclusion.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
+                <d:file href="EPUB/C00000-09-part.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/C00000-10-footnotes.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
+                <d:file href="EPUB/C00000-10-chapter.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
+            </x:document>
+            <x:document type="inline" base-uri="temp-dir">
+                <d:file href="EPUB/C00000-11-conclusion.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
+            </x:document>
+            <x:document type="inline" base-uri="temp-dir">
+                <d:file href="EPUB/C00000-12-footnotes.xhtml" method="xhtml" indent="true" encoding="utf-8" version="1.0" media-type="application/xhtml+xml" omit-xml-declaration="false" doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
                 <d:file href="EPUB/nav.ncx" method="xml" indent="true" omit-xml-declaration="false" media-type="application/x-dtbncx+xml"/>
@@ -84,7 +90,7 @@
         <x:context label="the in-memory.out port">
             <x:document type="port" port="in-memory.out"/>
         </x:context>
-        <x:expect label="there should be 14 documents on the in-memory.out port" type="count" min="14" max="14"/>
+        <x:expect label="there should be 16 documents on the in-memory.out port" type="count" min="16" max="16"/>
         
         <x:context label="the OPF">
             <x:document type="port" port="in-memory.out" select="/opf:package"/>

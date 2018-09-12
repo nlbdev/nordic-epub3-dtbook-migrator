@@ -2,6 +2,10 @@
 <grammar ns="http://www.w3.org/1999/xhtml" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
     xmlns:epub="http://www.idpf.org/2007/ops" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
     
+    <include href="mathml3/mathml3.rng">
+        <a:documentation>MathML 3.0</a:documentation>
+    </include>
+    
     <start>
         <ref name="html"/> <!-- html -->
     </start>
@@ -93,6 +97,7 @@
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
             <ref name="htmlblocknoimggroup"/> <!-- span, aside, section -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     
@@ -113,6 +118,7 @@
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
             <ref name="htmlblocknoimggroup"/> <!-- span, aside, section -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     
@@ -132,6 +138,7 @@
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
             <ref name="htmlblocknoimggroup"/> <!-- span, aside, section -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
 
@@ -358,9 +365,12 @@
             <a:documentation>The HTML root element (&lt;html&gt;) represents the root of an HTML document. All other elements must be descendants of this element.</a:documentation>
             <!-- HTML content model: head body -->
             <!-- Strict content model: head body -->
-            <attribute name="epub:prefix">
-                <value>z3998: http://www.daisy.org/z3998/2012/vocab/structure/#</value>
-            </attribute>
+            <optional>
+                <attribute name="epub:prefix">
+                    <!-- content validated in schematron -->
+                    <text/>
+                </attribute>
+            </optional>
             <ref name="attlist.html"/>
             <ref name="htmlcontent"/> <!-- head, body -->
         </element>
@@ -602,6 +612,7 @@
                 </choice>
                 <group>
                     <!-- single-page HTML -->
+                    <ref name="attrs"/>
                     <element name="header">
                         <ref name="doctitle.headline"/> <!-- h1 -->
                         <optional>
@@ -632,6 +643,7 @@
                 </group>
                 <group>
                     <!-- navigation document -->
+                    <ref name="attrs"/>
                     <oneOrMore>
                         <element name="nav">
                             <attribute name="epub:type"/>
@@ -1177,6 +1189,7 @@
             <ref name="cite"/> <!-- span -->
             <ref name="abbr"/> <!-- abbr -->
             <ref name="acronym"/> <!-- abbr -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <define name="phrasenodfn">
@@ -1189,6 +1202,7 @@
             <ref name="cite"/> <!-- span -->
             <ref name="abbr"/> <!-- abbr -->
             <ref name="acronym"/> <!-- abbr -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!-- inline text elements -->
@@ -1204,6 +1218,7 @@
             <ref name="sup"/> <!-- sup -->
             <ref name="span"/> <!-- span -->
             <ref name="bdo"/> <!-- bdo -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!-- special inline text elements -->
@@ -1218,6 +1233,7 @@
             <ref name="sup"/> <!-- sup -->
             <ref name="span"/> <!-- span -->
             <ref name="bdo"/> <!-- bdo -->
+            <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
     <!-- specialnoa inline text elements for anchor <a> -->
@@ -1883,6 +1899,7 @@
                 <ref name="blockquote"/> <!-- blockquote -->
                 <ref name="img"/> <!-- img -->
                 <ref name="figure.imggroup"/> <!-- figure -->
+                <ref name="math"/> <!-- MathML -->
             </choice>
         </zeroOrMore>
     </define>
@@ -3154,6 +3171,7 @@
                     <optional>
                         <choice>
                             <value>rearnotes</value>
+                            <value>endnotes</value>
                             <value>footnotes</value>
                         </choice>
                     </optional>
@@ -3621,6 +3639,7 @@
             <value>index-legend</value>
             <value>index-group</value>
             <value>glossary</value>
+            <value>dictionary</value>
             <value>bibliography</value>
             <!--<value>titlepage</value>-->
             <value>halftitlepage</value>
@@ -3643,6 +3662,7 @@
             <value>practices</value>
             <value>footnotes</value>
             <value>rearnotes</value>
+            <value>endnotes</value>
             <value>page-list</value>
             <value>z3998:section</value>
             <value>z3998:subsection</value>
@@ -3691,6 +3711,7 @@
                 <!--<value>frontmatter</value>-->
                 <value>fulltitle</value>
                 <!--<value>glossary</value>-->
+                <!--<value>dictionary</value>-->
                 <value>glossdef</value>
                 <value>glossterm</value>
                 <value>halftitle</value>
@@ -3719,7 +3740,9 @@
                 <!--<value>preface</value>-->
                 <!--<value>prologue</value>-->
                 <value>rearnote</value>
+                <value>endnote</value>
                 <!--<value>rearnotes</value>-->
+                <!--<value>endnotes</value>-->
                 <!--<value>sidebar</value>-->
                 <!--<value>subchapter</value>-->
                 <value>subtitle</value>
@@ -3934,6 +3957,80 @@
                 <!--<value>z3998:warning</value>-->
                 <value>z3998:weight</value>
                 <!--<value>z3998:word</value>-->
+                
+                <!-- dictionaries vocabulary -->
+                <value>antonym-group</value>
+                <value>condensed-entry</value>
+                <value>def</value>
+                <value>dictentry</value>
+                <value>etymology</value>
+                <value>example</value>
+                <value>gram-info</value>
+                <value>idiom</value>
+                <value>part-of-speech</value>
+                <value>part-of-speech-group</value>
+                <value>part-of-speech-list</value>
+                <value>phonetic-transcription</value>
+                <value>phrase-group</value>
+                <value>phrase-list</value>
+                <value>sense-group</value>
+                <value>sense-list</value>
+                <value>synonym-group</value>
+                <value>tran</value>
+                <value>tran-info</value>
+                
+                <!-- indexes vocabulary -->
+                <value>index-editor-note</value>
+                <value>index-entry</value>
+                <value>index-entry-list</value>
+                <value>index-locator</value>
+                <value>index-locator-list</value>
+                <value>index-locator-range</value>
+                <value>index-term</value>
+                <value>index-term-categories</value>
+                <value>index-term-category</value>
+                <value>index-xref-preferred</value>
+                
+                <!-- magazine vocabulary -->
+                <!-- msv: http://www.idpf.org/epub/vocab/structure/magazine/# -->
+                <!-- prism: http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm# -->
+                <value>prism:title</value>
+                <value>prism:deck</value>
+                <value>prism:subtitle</value>
+                <value>prism:byline</value>
+                <value>prism:contributors</value>
+                <value>prism:caption</value>
+                <value>prism:credit</value>
+                <value>prism:box</value>
+                <value>prism:advertisement</value>
+                <value>prism:pullQuote</value>
+                <value>msv:article-region</value>
+                <value>msv:article-text</value>
+                <value>msv:media</value>
+                
+                <!-- educational vocabulary (EDUPUB) -->
+                <value>biblioref</value>
+                <value>credit</value>
+                <value>feedback</value>
+                <value>fill-in-the-blank-problem</value>
+                <value>general-problem</value>
+                <value>glossref</value>
+                <value>label</value>
+                <value>learning-objective</value>
+                <value>learning-objectives</value>
+                <value>learning-outcome</value>
+                <value>learning-outcomes</value>
+                <value>learning-resource</value>
+                <value>learning-resources</value>
+                <value>learning-standard</value>
+                <value>learning-standards</value>
+                <value>match-problem</value>
+                <value>multiple-choice-problem</value>
+                <value>ordinal</value>
+                <value>pullquote</value>
+                <value>question</value>
+                <value>referrer</value>
+                <value>true-false-problem</value>
             </choice>
         </zeroOrMore>
     </define>

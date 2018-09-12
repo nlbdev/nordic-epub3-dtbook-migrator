@@ -34,6 +34,8 @@
         <x:expect type="compare" label="the in-memory.out port should contain the same documents as was received on the in-memory.in port">
             <x:document href="../resources/single-html/C00000.xhtml" type="file" method="xml"/>
         </x:expect>
+        <x:expect type="xpath" label="The output should preserve metadata with the a11y prefix" test="/html:html/html:head/html:meta[@name='a11y:certifiedBy']/@content" equals="'Certifying Organization'"/>
+        <x:expect type="xpath" label="The output should preserve metadata using unknown prefixes" test="/html:html/html:head/html:meta[@name='schema:audience']/@content" equals="'Adult'"/>
 
         <x:context label="report.out">
             <x:document type="port" port="report.out"/>

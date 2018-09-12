@@ -57,6 +57,8 @@
         <x:expect label="there must be a DTBook head element" type="count" min="1"/>
         <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
         <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
+        <x:expect label="The output should preserve metadata with the a11y prefix in the DTBook file" type="xpath" test="//dtbook:meta[@name='a11y:certifiedBy']/@content" equals="'Certifying Organization'"/>
+        <x:expect label="The output should preserve metadata using unknown prefixes in the DTBook file" type="xpath" test="//dtbook:meta[@name='schema:audience']/@content" equals="'Adult'"/>
         
     </x:scenario>
     

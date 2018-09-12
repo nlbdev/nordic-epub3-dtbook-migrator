@@ -5,7 +5,7 @@
     <xsl:param name="body-is-section" required="yes"/>
 
     <xsl:template match="@*|node()">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>

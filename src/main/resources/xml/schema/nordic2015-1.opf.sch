@@ -7,6 +7,7 @@
     <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
     <ns prefix="epub" uri="http://www.idpf.org/2007/ops"/>
     <ns prefix="nordic" uri="http://www.mtm.se/epub/"/>
+    <ns prefix="a11y" uri="http://www.idpf.org/epub/vocab/package/a11y/#"/>
 
     <pattern id="opf_nordic_1">
         <rule context="/*">
@@ -22,8 +23,14 @@
             <assert test="@unique-identifier = 'pub-identifier'">[opf2] on the package element; the unique-identifier-attribute must be present and equal 'pub-identifier'</assert>
             <assert test="namespace-uri-for-prefix('dc',.) = 'http://purl.org/dc/elements/1.1/'">[opf2] on the package element; the dublin core namespace (xmlns:dc="http://purl.org/dc/elements/1.1/")
                 must be declared on the package element</assert>
-            <assert test="@prefix = 'nordic: http://www.mtm.se/epub/'">[opf2] on the package element; the prefix attribute must declare the nordic metadata namespace (prefix="nordic:
+            <assert test="matches(@prefix, '(^|\s)nordic:\s+http://www.mtm.se/epub/(\s|$)') or not(opf:meta[starts-with(@property, 'nordic:')])">[opf2] on the package element; the prefix attribute must declare the nordic metadata namespace using the correct namespace URI (prefix="nordic:
                 http://www.mtm.se/epub/")</assert>
+            <assert test="matches(@prefix, '(^|\s)a11y:\s+http://www.idpf.org/epub/vocab/package/a11y/#(\s|$)') or not(opf:meta[starts-with(@property, 'a11y:')])">[opf2] on the package element; the prefix attribute must declare the a11y metadata namespace using the correct URI (prefix="a11y:
+                http://www.idpf.org/epub/vocab/package/a11y/#")</assert>
+        </rule>
+        <rule context="opf:meta[boolean(@property) and contains(@property, ':') and not(substring-before(@property, ':') = ('dc', 'dcterms'))]">
+            <let name="prefix" value="substring-before(@property, ':')"/>
+            <assert test="matches(string(ancestor::opf:package[1]/@prefix[1]), concat('(^|\s)', $prefix, ':(\s|$)'))">[opf2] on the package element; the prefix attribute must declare the '<value-of select="$prefix"/>' prefix</assert>
         </rule>
     </pattern>
 
@@ -89,17 +96,6 @@
 
             <assert test="count(opf:meta[@property='nordic:supplier' and not(@refines)]) = 1">[opf3j] there must be exactly one meta element with the property "nordic:supplier" <value-of
                     select="if (opf:meta[@property='nordic:supplier' and @refines]) then '(without a &quot;refines&quot; attribute)' else ''"/></assert>
-        </rule>
-    </pattern>
-
-    <pattern id="opf_nordic_4">
-        <rule context="opf:meta[@property and not(@refines)]">
-            <assert test="parent::*/opf:meta/@name = @property">[opf4] all EPUB3 meta elements <value-of
-                    select="if (parent::*/opf:meta[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must have an equivalent OPF2 meta element (&lt;meta name="<value-of
-                    select="@property"/>" content="<value-of select="text()"/>"/&gt;)</assert>
-            <assert test="parent::*/opf:meta[@name = current()/@property]/string(@content) = string(.)">[opf4] the value of the EPUB3 meta elements must equal their equivalent OPF2 meta elements. The
-                EPUB3 meta element is <value-of select="concat('&lt;',name(),' property=&quot;',@property,'&quot;&gt;',text(),'&lt;/',name(),'&gt;')"/> while the OPF2 element is <value-of
-                    select="(parent::*/opf:meta[@name = current()/@property])[1]/concat('&lt;',name(),' name=&quot;',@name,'&quot; content=&quot;',@content,'&quot;/&gt;')"/></assert>
         </rule>
     </pattern>
 

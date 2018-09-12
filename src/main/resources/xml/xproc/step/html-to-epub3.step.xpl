@@ -285,7 +285,7 @@
             <px:epub3-pub-create-package-doc name="html-to-epub3.step.create-package-doc">
                 <p:with-option name="result-uri" select="concat($publication-dir,'package.opf')"/>
                 <p:with-option name="compatibility-mode" select="$compatibility-mode"/>
-                <p:with-option name="detect-properties" select="'false'"/>
+                <p:with-option name="detect-properties" select="'true'"/>
                 <p:input port="spine-filesets">
                     <p:pipe port="result" step="html-to-epub3.step.spine"/>
                 </p:input>

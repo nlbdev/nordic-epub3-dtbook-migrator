@@ -3,7 +3,7 @@
 <?xml-model href="http://www.daisy.org/pipeline/modules/nordic/mtm2015-1.sch"?>
 <!DOCTYPE dtbook
   PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
-<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en" xmlns:schema="http://schema.org/">
     <head>
         <meta name="dtb:uid" content="C00000"/>
         <meta name="dc:Title" content="Valentin Haüy - the father of the education for the blind"/>
@@ -16,6 +16,8 @@
         <meta name="dc:Format" content="DTBook"/>
         <meta name="dc:Publisher" content="MTM"/>
         <meta name="dc:Date" content="2006-03-23"/>
+        <meta name="a11y:certifiedBy" content="Certifying Organization"/>
+        <meta name="schema:audience" content="Adult"/>
         <meta name="dcterms:modified" content="2014-01-27T13:13:47Z"/>
     </head>
     <book>
@@ -533,6 +535,31 @@
                     </li>
                     <li id="d910e762">• <span id="dtb139">What happened during his stay in Russia - did he in fact found an institute for the blind in St Petersburg?</span></li>
                 </list>
+                <!-- MathML example from https://developer.mozilla.org/en-US/docs/Web/MathML/Examples/MathML_Pythagorean_Theorem -->
+                <p>We will now prove the Pythogorian theorem:</p>
+                <p><strong>Statement</strong>: In a right angled triangle, the square of the hypotenuse is equal to the sum of the squares of the other two sides.</p>
+                <p>i.e, If a and b are the legs and c is the hypotenuse then<math xmlns="http://www.w3.org/1998/Math/MathML" alttext="math" altimg="valentin.jpg"><mrow><msup><mi>  a </mi><mn>2</mn></msup> <mo> + </mo> <msup><mi> b </mi><mn>2</mn></msup> <mo> = </mo> <msup><mi> c </mi><mn>2</mn></msup> </mrow> </math>.</p>
+                <p>Here is the same expression in HTML block context:</p>
+                <math xmlns="http://www.w3.org/1998/Math/MathML" alttext="math" altimg="valentin.jpg">
+                    <mrow>
+                        <mrow>
+                            <msup>
+                                <mi>a</mi>
+                                <mn>2</mn>
+                            </msup>
+                            <mo>+</mo>
+                            <msup>
+                                <mi>b</mi>
+                                <mn>2</mn>
+                            </msup>
+                        </mrow>
+                        <mo>=</mo>
+                        <msup>
+                            <mi>c</mi>
+                            <mn>2</mn>
+                        </msup>
+                    </mrow>
+                </math>
             </level1>
             <level1 id="d910e770" class="chapter" xml:lang="sv">
                 <h1 id="d910e772">2. Purpose, method and sources</h1>
@@ -2119,6 +2146,24 @@
                     <p><span class="asciimath">`sqrt 43`</span></p>
                     <p><span class="asciimath">`sqrt (43 * 4)`</span></p>
                 </div>
+            </level1>
+            <level1 class="part" id="poem-part">
+                <h1>Poem test</h1>
+                <poem id="poem1">
+                    <hd>Poem headline</hd>
+                    <linegroup>
+                        <line>...verse line...</line>
+                        <line>...verse line...</line>
+                    </linegroup>
+                    <linegroup>
+                        <line>...verse line...</line>
+                        <line>...verse line...</line>
+                    </linegroup>
+                </poem>
+                <level2 class="chapter" id="poem-part-chapter">
+                    <h2>Chapter in poem part</h2>
+                    <p>Should be a separate file in EPUB.</p>
+                </level2>
             </level1>
             <level1 id="d910e4160" class="conclusion">
                 <h1 id="d910e4162">5. Discussion and conclusions</h1>

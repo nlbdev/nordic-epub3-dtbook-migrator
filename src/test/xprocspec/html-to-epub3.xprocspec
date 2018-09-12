@@ -50,8 +50,10 @@
             <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-06-chapter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
             <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-07-rearnotes.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
             <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-08-chapter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-09-conclusion.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
-            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-10-footnotes.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-09-part.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-10-chapter.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-11-conclusion.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/C00000-12-footnotes.xhtml" base-uri="temp-dir" select="/html:html/html:head"/>
         </x:context>
         <x:expect label="there must be HTML head elements" type="count" min="1"/>
         <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>

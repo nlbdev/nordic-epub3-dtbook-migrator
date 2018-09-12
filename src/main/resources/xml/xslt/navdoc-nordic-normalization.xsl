@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all" version="2.0" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:epub="http://www.idpf.org/2007/ops"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xpath-default-namespace="http://www.w3.org/1999/xhtml"
+                exclude-result-prefixes="#all"
+                version="2.0">
 
     <xsl:param name="identifier" required="yes"/>
     <xsl:param name="title" required="yes"/>
     <xsl:param name="supplier" select="''"/>
     <xsl:param name="publisher" required="yes"/>
     <xsl:variable name="lang" select="string((/html/head/meta[@name='dc:language']/@content, /*/@xml:lang, /*/@lang)[1])"/>
+    
+    <xsl:include href="update-epub-prefixes.xsl"/>
 
     <xsl:template match="@*|node()">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*[not(name()=('lang','xml:lang'))] | node()"/>
         </xsl:copy>
     </xsl:template>
 
     <xsl:template match="/*">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:namespace name="epub" select="'http://www.idpf.org/2007/ops'"/>
-            <xsl:namespace name="nordic" select="'http://www.mtm.se/epub/'"/>
             <xsl:apply-templates select="@*[not(name()=('lang','xml:lang'))]"/>
             <xsl:attribute name="xml:lang" select="$lang"/>
             <xsl:attribute name="lang" select="$lang"/>
-            <xsl:attribute name="epub:prefix" select="'z3998: http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
+            <xsl:variable name="prefixes" select="f:prefixes(/*/head, /*/body, 'nordic')"/>
+            <xsl:attribute name="epub:prefix" select="string-join($prefixes, ' ')"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
     </xsl:template>

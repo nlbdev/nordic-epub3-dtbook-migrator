@@ -14,23 +14,23 @@
     -->
 
     <xsl:template match="@* | node()">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
     </xsl:template>
 
     <xsl:template match="@class[tokenize(.,'\s+')=('error','fatal','exception','message-error','message-fatal','message-exception')]">
-        <xsl:copy-of select="."/>
+        <xsl:copy-of select="." exclude-result-prefixes="#all"/>
         <xsl:attribute name="style" select="concat(parent::*/@style, 'background-color: #f2dede; ')"/>
     </xsl:template>
 
     <xsl:template match="@class[tokenize(.,'\s+')=('warn','warning','message-warn','message-warning')]">
-        <xsl:copy-of select="."/>
+        <xsl:copy-of select="." exclude-result-prefixes="#all"/>
         <xsl:attribute name="style" select="concat(parent::*/@style, 'background-color: #fcf8e3; ')"/>
     </xsl:template>
 
     <xsl:template match="li[.//pre[starts-with(text(),'/*')]]">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*"/>
             <xsl:attribute name="title" select="replace(replace((.//pre[starts-with(text(),'/*')]/text())[1],'\*:',''),'\[namespace[^\]]*\]','')"/>
             <xsl:apply-templates select="node()"/>
@@ -40,7 +40,7 @@
     <xsl:template match="pre[starts-with(text(),'/*')]"/>
 
     <xsl:template match="h2[ancestor::div[@class='document-validation-report']]">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*"/>
             <xsl:attribute name="style" select="string-join((@style,'font-size: 24px;'),' ')"/>
             <xsl:apply-templates select="node()"/>
@@ -56,7 +56,7 @@
 
     <xsl:template match="h3[text()='Location (XPath)']" priority="2"/>
     <xsl:template match="h3[ancestor::div[@class='document-validation-report']]">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*"/>
             <xsl:attribute name="style" select="string-join((@style,'font-size: 18px;'),' ')"/>
             <xsl:apply-templates select="node()"/>
@@ -64,7 +64,7 @@
     </xsl:template>
 
     <xsl:template match="p[text()='0 issues found.']">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*"/>
             <xsl:attribute name="style" select="string-join((@style, 'background-color: #AAFFAA;'),' ')"/>
             <xsl:apply-templates select="node()"/>
@@ -78,7 +78,7 @@
         <xsl:variable name="columnNumber" select="replace($parts[starts-with(.,'columnNumber:')][1],'[^\d]','')"/>
         <xsl:variable name="message"
             select="string-join($parts[not(starts-with(.,'org.xml.sax.SAXParseException') or starts-with(.,'systemId:') or starts-with(.,'lineNumber:') or starts-with(.,'columnNumber:'))],'; ')"/>
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*"/>
             <xsl:value-of select="$filename"/>
             <xsl:if test="$lineNumber or $columnNumber">
@@ -96,14 +96,14 @@
 
     <xsl:template match="ul[.//text()[contains(., 'lineNumber')]]">
         <p>Note that line numbers tend to be offset by a couple of lines because the doctype and xml declarations are not counted as lines.</p>
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
     </xsl:template>
 
     <xsl:template match="div[@class='document-validation-report' and count(*)=0]" priority="2"/>
     <xsl:template match="div[@class='document-validation-report']">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@* | node()"/>
             <hr/>
         </xsl:copy>

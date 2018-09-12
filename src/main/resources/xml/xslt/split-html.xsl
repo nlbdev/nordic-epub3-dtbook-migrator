@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/split-html/internal-functions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Math/MathML">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:epub="http://www.idpf.org/2007/ops"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:m="http://www.w3.org/1998/Math/MathML"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:svg="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xpath-default-namespace="http://www.w3.org/1999/xhtml"
+                exclude-result-prefixes="#all"
+                version="2.0">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
     <!--    <xsl:import href="../../../../test/xspec/mock/uri-functions.xsl"/>-->
+    <xsl:import href="update-epub-prefixes.xsl"/>
 
     <xsl:template match="@*|node()">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
@@ -17,23 +27,28 @@
             <xsl:attribute name="xml:base" select="base-uri(/*)"/>
 
             <xsl:variable name="base" select="base-uri(/*)"/>
+            <xsl:variable name="head" select="/html/head"/>
             <xsl:for-each select="/html/body/*">
                 <xsl:variable name="body" select="."/>
 
                 <html>
-                    <xsl:namespace name="nordic" select="'http://www.mtm.se/epub/'"/>
-                    <xsl:copy-of select="/*/@* | @xml:base"/>
+                    <xsl:copy-of select="/*/@* | @xml:base" exclude-result-prefixes="#all"/>
+                    <xsl:namespace name="epub" select="'http://www.idpf.org/2007/ops'"/>
+                    <xsl:variable name="prefixes" select="f:prefixes($head, $body, ())"/>
+                    <xsl:if test="count($prefixes)">
+                        <xsl:attribute name="epub:prefix" select="string-join($prefixes, ' ')"/>
+                    </xsl:if>
                     <xsl:text>
 </xsl:text>
                     <head>
                         <xsl:namespace name="dc" select="'http://purl.org/dc/elements/1.1/'"/>
                         <xsl:namespace name="dcterms" select="'http://purl.org/dc/terms/'"/>
-                        <xsl:copy-of select="/html/head/@*"/>
+                        <xsl:copy-of select="/html/head/@*" exclude-result-prefixes="#all"/>
                         <xsl:for-each select="/html/head/*">
                             <xsl:choose>
                                 <xsl:when test="self::link[@rel=('prev','next')]"/>
                                 <xsl:otherwise>
-                                    <xsl:copy-of select="."/>
+                                    <xsl:copy-of select="." exclude-result-prefixes="#all"/>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:for-each>
@@ -84,7 +99,7 @@
                 </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:copy-of select="."/>
+                <xsl:copy-of select="." exclude-result-prefixes="#all"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

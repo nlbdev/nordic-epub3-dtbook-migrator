@@ -13,5 +13,6 @@
   </root>
 
   <logger name="org.daisy" level="DEBUG"/>
+  <logger name="com.xmlcalabash" level="DEBUG"/>
 
 </configuration>

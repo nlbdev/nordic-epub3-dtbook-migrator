@@ -10,11 +10,13 @@
     </xsl:template>
 
     <xsl:template match="/*">
-        <xsl:copy>
-            <xsl:attribute name="xml:base" select="base-uri(/*)"/>
-            <xsl:attribute name="epub:prefix" select="'z3998: http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
-            <xsl:namespace name="nordic" select="'http://www.mtm.se/epub/'"/>
+        <xsl:copy exclude-result-prefixes="#all">
+            <xsl:copy-of select="(/* | opf:*)/namespace::*[not(.=('http://www.idpf.org/2007/opf','http://purl.org/dc/elements/1.1/','http://purl.org/dc/terms/'))]"/>
             <xsl:namespace name="epub" select="'http://www.idpf.org/2007/ops'"/>
+            <xsl:attribute name="xml:base" select="base-uri(/*)"/>
+            <xsl:if test="@prefix">
+                <xsl:attribute name="epub:prefix" select="string-join((/* | opf:*)/@prefix, ' ')"/>
+            </xsl:if>
 
             <head/>
             <body>
@@ -23,8 +25,8 @@
                 <xsl:variable name="basedir" select="replace(base-uri(),'[^/]+$','')"/>
                 <xsl:variable name="spine-annotated">
                     <xsl:for-each select="$spine">
-                        <xsl:copy>
-                            <xsl:copy-of select="@*"/>
+                        <xsl:copy exclude-result-prefixes="#all">
+                            <xsl:copy-of select="@*" exclude-result-prefixes="#all"/>
                             <xsl:attribute name="level" select="pf:outline-level($spine, $toc, position())"/>
                         </xsl:copy>
                     </xsl:for-each>
@@ -95,7 +97,7 @@
 
     <xsl:template match="span">
         <xsl:element name="{concat('h',min((count(ancestor::li),6)))}">
-            <xsl:copy-of select="(@*|node())"/>
+            <xsl:copy-of select="(@*|node())" exclude-result-prefixes="#all"/>
         </xsl:element>
     </xsl:template>
 

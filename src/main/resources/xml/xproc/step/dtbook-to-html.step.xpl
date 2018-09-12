@@ -92,6 +92,14 @@
                     <p:document href="../../xslt/dtbook-to-epub3.xsl"/>
                 </p:input>
             </p:xslt>
+            <p:xslt>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/update-epub-prefixes.xsl"/>
+                </p:input>
+            </p:xslt>
 
             <p:insert match="/html:html/html:head" position="last-child" name="dtbook-to-html.step.insert-accessibility-css-link">
                 <p:input port="insertion">
