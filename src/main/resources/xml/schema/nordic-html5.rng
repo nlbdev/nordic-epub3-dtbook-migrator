@@ -612,6 +612,7 @@
                 </choice>
                 <group>
                     <!-- single-page HTML -->
+                    <ref name="attrs"/>
                     <element name="header">
                         <ref name="doctitle.headline"/> <!-- h1 -->
                         <optional>
@@ -642,6 +643,7 @@
                 </group>
                 <group>
                     <!-- navigation document -->
+                    <ref name="attrs"/>
                     <oneOrMore>
                         <element name="nav">
                             <attribute name="epub:type"/>
