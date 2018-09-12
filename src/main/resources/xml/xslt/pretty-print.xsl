@@ -22,7 +22,7 @@
     <xsl:template match="@*|node()">
         <xsl:choose>
             <xsl:when test="ancestor::*[matches(local-name(),'^h[d\d]$')]">
-                <xsl:copy>
+                <xsl:copy exclude-result-prefixes="#all">
                     <xsl:apply-templates select="@*|node()"/>
                 </xsl:copy>
             </xsl:when>
@@ -34,7 +34,7 @@
                         <xsl:text>    </xsl:text>
                     </xsl:for-each>
                 </xsl:if>
-                <xsl:copy>
+                <xsl:copy exclude-result-prefixes="#all">
                     <xsl:apply-templates select="@*|node()"/>
                     <xsl:if test="not(self::*[matches(local-name(),'^h[d\d]$')]) and self::* and * and (text() or $preserve-empty-whitespace='false') and normalize-space(string-join(text(),''))=''">
                         <xsl:text>
@@ -49,7 +49,7 @@
     </xsl:template>
 
     <xsl:template match="/*">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*|node()"/>
             <xsl:if test="normalize-space(string-join(text(),''))=''">
                 <xsl:text>

@@ -139,7 +139,7 @@
                     <xsl:for-each select="distinct-values($messages/*/local-name())">
                         <xsl:variable name="name" select="."/>
                         <xsl:element name="d:{if ($name='exception') then 'exceptions' else if ($name='error') then 'errors' else if ($name='warn') then 'warnings' else 'hints'}">
-                            <xsl:copy-of select="$messages/*[local-name()=$name]"/>
+                            <xsl:copy-of select="$messages/*[local-name()=$name]" exclude-result-prefixes="#all"/>
                         </xsl:element>
                     </xsl:for-each>
                 </d:report>

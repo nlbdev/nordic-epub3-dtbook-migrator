@@ -6,7 +6,10 @@
     <ns prefix="html" uri="http://www.w3.org/1999/xhtml"/>
     <ns prefix="epub" uri="http://www.idpf.org/2007/ops"/>
     <ns prefix="nordic" uri="http://www.mtm.se/epub/"/>
-    <ns prefix="mathml" uri="http://www.w3.org/1998/Math/MathML"/>
+    <ns prefix="a11y" uri="http://www.idpf.org/epub/vocab/package/a11y/#"/>
+    <ns prefix="m" uri="http://www.w3.org/1998/Math/MathML"/>
+    <ns prefix="msv" uri="http://www.idpf.org/epub/vocab/structure/magazine/#"/>
+    <ns prefix="prism" uri="http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm#"/>
 
     <!-- Rule 7: No <ul>, <ol> or <dl> inside <p> -->
     <pattern id="epub_nordic_7">
@@ -169,7 +172,7 @@
 
     <!-- Rule 26a: Each note must have a noteref -->
     <pattern id="epub_nordic_26_a">
-        <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')=('note','rearnote','footnote')]">
+        <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')=('note','rearnote','endnote','footnote')]">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
             <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref'][substring-after(@href, '#')=current()/@id])&gt;=1">[nordic26a] Each note must have at least one &lt;a epub:type="noteref"
                 ...&gt; referencing it: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
@@ -180,8 +183,8 @@
     <pattern id="epub_nordic_26_b">
         <rule context="html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='noteref']">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
-            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic26b] The note reference with the
-                href "<value-of select="@href"/>" attribute must resolve to a note, rearnote or footnote in the publication: <value-of
+            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('note','rearnote','endnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic26b] The note reference with the
+                href "<value-of select="@href"/>" attribute must resolve to a note, rearnote, endnote or footnote in the publication: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
@@ -254,7 +257,7 @@
                                            self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author']  or self::html:h1[tokenize(@epub:type,' ')='fulltitle']   or
                                            self::html:aside[tokenize(@epub:type,' ')='epigraph']   or self::html:p[tokenize(@class,' ')='line']     or
   	                                       self::html:*[tokenize(@class,' ')='linegroup']  or
-  	                                       self::html:*[self::html:ul or self::html:ol]       or self::html:a[tokenize(@epub:type,' ')=('note','rearnote','footnote')]       or self::html:p        or
+  	                                       self::html:*[self::html:ul or self::html:ol]       or self::html:a[tokenize(@epub:type,' ')=('note','rearnote','endnote','footnote')]       or self::html:p        or
                                            self::html:*[tokenize(@epub:type,' ')='z3998:poem']       or self::html:*[(self::figure or self::aside) and tokenize(@epub:type,'s')='sidebar']    or self::html:table    or
                                            self::html:*[matches(local-name(),'^h\d$') and tokenize(@class,' ')='title']]"
                 >[nordic29] Prodnote in inline context used as block element: <value-of
@@ -468,8 +471,30 @@
 
     <!-- Rule 128: tracking metadata must exist (nordic:guidelines) -->
     <pattern id="epub_nordic_128_a">
-        <rule context="html:html[//html:body/html:header]">
-            <assert test="namespace-uri-for-prefix('nordic',.)='http://www.mtm.se/epub/'">[nordic128a] xmlns:nordic="http://www.mtm.se/epub/" must be defined on the root html element.</assert>
+        <rule context="html:meta[boolean(@name) and contains(@name, ':') and not(substring-before(@name, ':') = ('epub', 'dc', 'dcterms', 'marc', 'media', 'onix', 'xsd'))]">
+            <let name="prefix" value="substring-before(@name, ':')"/>
+            <let name="namespace" value="if ($prefix = 'nordic') then 'http://www.mtm.se/epub/' else
+                                         if ($prefix = 'z3998') then 'http://www.daisy.org/z3998/2012/vocab/structure/#' else
+                                         if ($prefix = 'a11y') then 'http://www.idpf.org/epub/vocab/package/a11y/#' else
+                                         if ($prefix = 'msv') then 'http://www.idpf.org/epub/vocab/structure/magazine/#' else
+                                         if ($prefix = 'prism') then 'http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm#' else
+                                         ''"/>
+            <assert test="matches(string(ancestor::html:html[1]/@epub:prefix[1]), concat('(^|\s)', $prefix, ': *[^\s]+(\s|$)'))">[nordic128a] on the html element: the epub:prefix attribute must declare the '<value-of select="$prefix"/>' prefix</assert>
+            <assert test="not($namespace) or matches(string(ancestor::html:html[1]/@epub:prefix[1]), concat('(^|\s)', $prefix, ':\s+', $namespace , '(\s|$)'))">[nordic128e] in the epub:prefix attribute on the html element: the namespace for the '<value-of select="$prefix"/>' prefix must be '<value-of select="$namespace"/>'</assert>
+        </rule>
+        <rule context="*[@epub:type]">
+            <let name="prefixes" value="distinct-values(for $t in (tokenize(@epub:type,'\s+')) return if (contains($t,':') and not(substring-before($t, ':') = ('epub', 'dc', 'dcterms', 'marc', 'media', 'onix', 'xsd'))) then substring-before($t, ':') else ())"/>
+            <let name="prefixes-with-namespace" value="for $prefix in $prefixes return (
+                                                            if ($prefix = 'nordic') then concat($prefix, ': ', 'http://www.mtm.se/epub/') else
+                                                            if ($prefix = 'z3998') then concat($prefix, ': ', 'http://www.daisy.org/z3998/2012/vocab/structure/#') else
+                                                            if ($prefix = 'a11y') then concat($prefix, ': ', 'http://www.idpf.org/epub/vocab/package/a11y/#') else
+                                                            if ($prefix = 'msv') then concat($prefix, ': ', 'http://www.idpf.org/epub/vocab/structure/magazine/#') else
+                                                            if ($prefix = 'prism') then concat($prefix, ': ', 'http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm#') else
+                                                            ())"/>
+            <report test="parent::*/@class='myclass' and count($prefixes) = 0">prefixes: <value-of select="$prefixes"/></report>
+            <assert test="count($prefixes) = 0 or not(false() = (for $prefix in $prefixes return matches(string(ancestor::html:html[1]/@epub:prefix[1]), concat('(^|\s)', $prefix, ': *[^\s]+(\s|$)'))))">[nordic128e] all of the prefixes in use (<value-of select="concat('''', string-join($prefixes,''','''), '''')"/>) on the element (<value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>) must be declared in the epub:prefix attribute on the html element: '&lt;html epub:prefix="<value-of select="ancestor-or-self::html:html/@prefix"/>"&gt;...&lt;/html&gt;</assert>
+            <assert test="count($prefixes-with-namespace) = 0 or not(false() = (for $prefix-with-namespace in ($prefixes-with-namespace) return matches(string(ancestor::html:html[1]/@epub:prefix[1]), concat('(^|\s)', substring-before($prefix-with-namespace, ': '), ':\s+', substring-after($prefix-with-namespace, ': '), '(\s|$)'))))">[nordic128e] in the epub:prefix attribute on the html element: the namespaces for the prefixes must be correct. <value-of select="string-join(for $prefix-with-namespace in ($prefixes-with-namespace) return concat('The prefix ''', substring-before($prefix-with-namespace, ': '), ''' must be associated with the namespace ''', substring-after($prefix-with-namespace, ': '), '''.'), ' ')"/></assert>
         </rule>
     </pattern>
 
@@ -490,7 +515,7 @@
             <assert test="count(html:meta[@name='nordic:supplier'])=1">[nordic128d] nordic:supplier metadata must occur once.</assert>
         </rule>
     </pattern>
-
+    
     <!-- Rule 130 (44): dc:language must equal root element xml:lang -->
     <pattern id="epub_nordic_130">
         <rule context="html:meta[@name='dc:language']">
@@ -576,9 +601,9 @@
             <let name="always-allowed-types"
                 value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
                 'z3998:biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue',
-                'errata','z3998:filmography','footnotes','foreword','glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
+                'errata','z3998:filmography','footnotes','foreword','glossary','dictionary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
                 'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',
-                'z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
+                'z3998:publisher-address','qna','rearnotes','endnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
             <let name="allowed-types" value="($always-allowed-types, 'titlepage')"/>
             <assert test="count(tokenize(@epub:type,'\s+')) = 1 or tokenize(@epub:type,'\s+')=$allowed-types">[nordic202] '<value-of
                     select="(tokenize(@epub:type,'\s+')[not(.='frontmatter')],'(missing type)')[1]"/>' is not an allowed type in frontmatter. On elements with the epub:type "frontmatter", you can
@@ -587,11 +612,16 @@
         </rule>
     </pattern>
 
-    <!-- Rule 203: Check that both the epub:types "rearnote" and "rearnotes" are used in rearnotes -->
+    <!-- Rule 203: Check that both the epub:types "rearnote"/"endnote" and "rearnotes"/"endnotes" are used in rearnotes/endnotes -->
     <pattern id="epub_nordic_203_a">
         <rule context="html:*[tokenize(@epub:type,'\s+')='rearnote']">
             <assert test="(ancestor::html:section | ancestor::html:body)[tokenize(@epub:type,'\s+')='rearnotes']">[nordic203a] 'rearnote' must have a section<value-of
                     select="if (ancestor::html:body[html:section]) then '' else ' or body'"/> ancestor with 'rearnotes': <value-of
+                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+        <rule context="html:*[tokenize(@epub:type,'\s+')='endnote']">
+            <assert test="(ancestor::html:section | ancestor::html:body)[tokenize(@epub:type,'\s+')='endnotes']">[nordic203a] 'endnote' must have a section<value-of
+                select="if (ancestor::html:body[html:section]) then '' else ' or body'"/> ancestor with 'endnotes': <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
@@ -603,6 +633,12 @@
             <assert test=".//html:ol">[nordic204c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'rearnotes' must have &lt;ol&gt; descendant
                 elements.</assert>
         </rule>
+        <rule context="html:body[tokenize(@epub:type,'\s+')='endnotes'] | html:section[tokenize(@epub:type,'\s+')='endnotes']">
+            <assert test="descendant::html:*[tokenize(@epub:type,'\s+')='endnote']">[nordic203c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type
+                'endnotes' must have descendants with 'endnote'.</assert>
+            <assert test=".//html:ol">[nordic204c] <value-of select="if (self::html:body) then 'documents' else 'sections'"/> with the epub:type 'endnotes' must have &lt;ol&gt; descendant
+                elements.</assert>
+        </rule>
     </pattern>
 
     <pattern id="epub_nordic_203_d">
@@ -612,9 +648,15 @@
             <assert test="tokenize(@class,'\s+')='notebody'">[nordic203d] The 'notebody' class must be applied to all rearnotes: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
+        <rule context="html:*[tokenize(@epub:type,'\s+')='endnote']">
+            <assert test="self::html:li">[nordic203d] 'endnote' can only be applied to &lt;li&gt; elements: <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <assert test="tokenize(@class,'\s+')='notebody'">[nordic203d] The 'notebody' class must be applied to all endnotes: <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
     </pattern>
 
-    <!-- Rule 204: Check that both the epub:types "footnote" and "footnotes" are used in rearnotes -->
+    <!-- Rule 204: Check that both the epub:types "footnote" and "footnotes" are used in footnotes -->
     <pattern id="epub_nordic_204_a">
         <rule context="html:*[tokenize(@epub:type,'\s+')='footnote']">
             <assert test="(ancestor::html:section | ancestor::html:body)[tokenize(@epub:type,'\s+')='footnotes']">[nordic204a] 'footnote' must have a section<value-of
@@ -647,9 +689,9 @@
             <let name="always-allowed-types"
                 value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
                 'z3998:biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue',
-                'errata','z3998:filmography','footnotes','foreword','glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
+                'errata','z3998:filmography','footnotes','foreword','glossary','dictionary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
                 'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',
-                'z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
+                'z3998:publisher-address','qna','rearnotes','endnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
             <let name="allowed-types" value="($always-allowed-types, 'part')"/>
             <assert test="tokenize(@epub:type,'\s+')=$allowed-types">[nordic208] '<value-of select="(tokenize(@epub:type,'\s+')[not(.='bodymatter')],'(missing type)')[1]"/>' is not an allowed type in
                 bodymatter. Elements with the type "bodymatter" must also have one of the types <value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<value-of
@@ -663,9 +705,9 @@
             <let name="always-allowed-types"
                 value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
                 'z3998:biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue',
-                'errata','z3998:filmography','footnotes','foreword','glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
+                'errata','z3998:filmography','footnotes','foreword','glossary','dictionary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
                 'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',
-                'z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
+                'z3998:publisher-address','qna','rearnotes','endnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
             <let name="document-components" value="('z3998:pgroup','z3998:example','z3998:epigraph','z3998:annotation','z3998:introductory-note','z3998:commentary','z3998:clarification','z3998:correction','z3998:alteration','z3998:presentation',
                 'z3998:production','z3998:attribution','z3998:author','z3998:editor','z3998:general-editor','z3998:commentator','z3998:translator','z3998:republisher','z3998:structure','z3998:geographic',
                 'z3998:postal','z3998:email','z3998:ftp','z3998:http','z3998:ip','z3998:aside','z3998:sidebar','z3998:practice','z3998:notice','z3998:warning','z3998:marginalia','z3998:help','z3998:drama',
@@ -686,9 +728,9 @@
             <let name="always-allowed-types"
                 value="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',
                 'z3998:biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue',
-                'errata','z3998:filmography','footnotes','foreword','glossary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
+                'errata','z3998:filmography','footnotes','foreword','glossary','dictionary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',
                 'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',
-                'z3998:publisher-address','qna','rearnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
+                'z3998:publisher-address','qna','rearnotes','endnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
             <let name="allowed-types" value="($always-allowed-types)"/>
             <assert test="count(tokenize(@epub:type,'\s+')) = 1 or tokenize(@epub:type,'\s+')=$allowed-types">[nordic215] '<value-of
                     select="(tokenize(@epub:type,'\s+')[not(.='backmatter')],'(missing type)')[1]"/>' is not an allowed type in backmatter. On elements with the epub:type "backmatter", you can either
@@ -891,12 +933,20 @@
             <assert test="self::html:ol">[nordic267a] Rearnotes must be wrapped in a "ol" element, but is currently wrapped in a <name/>: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
+        <rule context="html:*[*[tokenize(@epub:type,'\s+')='endnote']]">
+            <assert test="self::html:ol">[nordic267a] Endnotes must be wrapped in a "ol" element, but is currently wrapped in a <name/>: <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
     </pattern>
 
     <pattern id="epub_nordic_267_b">
         <rule context="html:section[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li">
             <assert test="tokenize(@epub:type,'\s+')='rearnote'">[nordic267b] List items inside a rearnotes list must use epub:type="rearnote": <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+        <rule context="html:section[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li">
+            <assert test="tokenize(@epub:type,'\s+')='endnote'">[nordic267b] List items inside a endnotes list must use epub:type="endnote": <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
 
@@ -936,18 +986,6 @@
             <assert test="parent::html:body | parent::html:section | parent::html:article | parent::html:div">[nordic270] Bridgehead is only allowed as a child of <value-of
                     select="if (ancestor::html:body[not(html:header)]) then 'body, ' else ' '"/>section, article and div: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-        </rule>
-    </pattern>
-
-
-    <!-- Imported from Pipeline 1 DTBook validator and adapted to EPUB3 -->
-    <pattern id="epub_nordic_272">
-        <rule context="html:a[tokenize(@epub:type,'\s+')='annoref']">
-            <assert test="contains(@href, '#')">[nordic272a] Note reference href attribute does not contain a fragment identifier: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <report test="ancestor::html:body[html:header] and contains(@href, '#') and substring-after(@href, '#')=//html:*[tokenize(@epub:type,'\s+')=('annotation')]/@id">[nordic272b] Annotation
-                reference href attribute does not resolve to a note, rearnote or footnote in the publication: <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
     </pattern>
 
@@ -1110,6 +1148,12 @@
             <report test="@rowspan and number(@rowspan) &gt; count(parent::html:tr/following-sibling::html:tr | parent::html:tr/parent::html:*/following-sibling::html:*/html:tr)+1">[nordic282] The
                 rowspan attribute value is larger than the number of rows left in the table: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
+        </rule>
+    </pattern>
+    
+    <pattern id="epub_nordic_283">
+        <rule context="m:*[contains(name(), ':')]">
+            <assert test="substring-before(name(), ':') = 'm'">[nordic283] When using MathML with a namespace prefix, that prefix must be 'm'. Not <value-of select="substring-before(name(), ':')"/></assert>
         </rule>
     </pattern>
 

@@ -13,39 +13,39 @@
         <xsl:variable name="padding-size"
             select="string-length(string(count(/*/body/( section | article | section[f:types(.)='part']/(section|article)[f:types(.)=$division-types] | (section|article)[f:types(.)='bodymatter']/section[f:types(.)='rearnotes'] ))))"/>
 
-        <xsl:copy>
-            <xsl:copy-of select="@*"/>
+        <xsl:copy exclude-result-prefixes="#all">
+            <xsl:copy-of select="@*" exclude-result-prefixes="#all"/>
             <xsl:attribute name="xml:base" select="base-uri(/*)"/>
-            <xsl:copy-of select="head"/>
+            <xsl:copy-of select="head" exclude-result-prefixes="#all"/>
             <xsl:for-each select="body">
-                <xsl:copy>
-                    <xsl:copy-of select="@*"/>
+                <xsl:copy exclude-result-prefixes="#all">
+                    <xsl:copy-of select="@*" exclude-result-prefixes="#all"/>
                     <xsl:variable name="top-level-sections" select="section | article"/>
                     <xsl:variable name="part-sections" select="$top-level-sections[f:types(.)='part']/(section | article)[f:types(.)=$division-types]"/>
                     <xsl:variable name="bodymatter-rearnotes" select="($top-level-sections, $part-sections)[not(f:types(.)=('cover','frontmatter','backmatter'))]/section[f:types(.)='rearnotes']"/>
                     <xsl:for-each select="$top-level-sections | $part-sections | $bodymatter-rearnotes">
-                        <xsl:copy>
+                        <xsl:copy exclude-result-prefixes="#all">
                             <xsl:variable name="types" select="f:types(.)"/>
                             <xsl:variable name="partition" select="((ancestor-or-self::*/f:types(.)[.=$partition-types]), 'bodymatter')[1]"/>
                             <xsl:variable name="division" select="if (count($types[.=$division-types])) then ($types[.=$division-types])[1] else if ($partition='bodymatter') then 'chapter' else ()"/>
                             <xsl:variable name="filename"
                                 select="concat($identifier,'-',f:zero-pad(string(position()),$padding-size),'-',if ($division) then tokenize($division,':')[last()] else $partition)"/>
 
-                            <xsl:copy-of select="@*"/>
+                            <xsl:copy-of select="@*" exclude-result-prefixes="#all"/>
                             <xsl:attribute name="xml:base" select="concat($output-dir,$filename,'.xhtml')"/>
                             <xsl:attribute name="epub:type" select="string-join(($partition, $division, $types[not(.=($partition-types,$division-types))]),' ')"/>
 
                             <xsl:choose>
                                 <xsl:when test="$division='part'">
-                                    <xsl:copy-of select="node()[not((self::section | self::article)[f:types(.)=$division-types])]"/>
+                                    <xsl:copy-of select="node()[not((self::section | self::article)[f:types(.)=$division-types])]" exclude-result-prefixes="#all"/>
 
                                 </xsl:when>
                                 <xsl:when test="$partition='bodymatter'">
-                                    <xsl:copy-of select="node()[not(self::section[f:types(.)='rearnotes'])]"/>
+                                    <xsl:copy-of select="node()[not(self::section[f:types(.)='rearnotes'])]" exclude-result-prefixes="#all"/>
 
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:copy-of select="node()"/>
+                                    <xsl:copy-of select="node()" exclude-result-prefixes="#all"/>
 
                                 </xsl:otherwise>
                             </xsl:choose>

@@ -3,7 +3,7 @@
 <?xml-model href="http://www.daisy.org/pipeline/modules/nordic/mtm2015-1.sch"?>
 <!DOCTYPE dtbook
   PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
-<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en" xmlns:schema="http://schema.org/">
     <head>
         <meta name="dtb:uid" content="C00000"/>
         <meta name="dc:Title" content="Valentin Haüy - the father of the education for the blind"/>

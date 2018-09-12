@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all" version="2.0" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns:html="http://www.w3.org/1999/xhtml">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:epub="http://www.idpf.org/2007/ops"
+                xmlns:html="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                exclude-result-prefixes="#all"
+                version="2.0">
     
     <xsl:output indent="no"/>
+    
+    <xsl:include href="update-epub-prefixes.xsl"/>
     
     <xsl:template match="/*">
         <xsl:choose>
@@ -24,6 +31,19 @@
 
     <xsl:template match="@* | node()">
         <xsl:copy exclude-result-prefixes="#all">
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="html:html">
+        <xsl:param name="collection" tunnel="yes" as="element()*"/>
+        <xsl:variable name="prefixes" select="distinct-values(for $document in ($collection) return f:prefixes($document/html:head, $document/html:body, ()))"/>
+        
+        <xsl:copy exclude-result-prefixes="#all">
+            <xsl:copy-of select="(. | $collection | $collection/*)/namespace::*" exclude-result-prefixes="#all"/>
+            <xsl:if test="count($prefixes)">
+                <xsl:attribute name="epub:prefix" select="string-join($prefixes, ' ')"/>
+            </xsl:if>
             <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
     </xsl:template>

@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:f="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/dtbook-to-epub3.xsl" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml" xpath-default-namespace="http://www.w3.org/1999/xhtml" exclude-result-prefixes="#all"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:math="http://www.w3.org/1998/Math/MathML">
+<xsl:stylesheet xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:epub="http://www.idpf.org/2007/ops"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:math="http://www.w3.org/1998/Math/MathML"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xpath-default-namespace="http://www.w3.org/1999/xhtml"
+                exclude-result-prefixes="#all"
+                version="2.0">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
     <!--<xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
@@ -127,8 +135,8 @@
     <xsl:template match="dtbook:dtbook">
         <xsl:variable name="all-ids" select=".//@id"/>
         <html>
-            <xsl:namespace name="nordic" select="'http://www.mtm.se/epub/'"/>
-            <xsl:attribute name="epub:prefix" select="concat('z3998: ',$vocab-z3998-uri)"/>
+            <xsl:namespace name="epub" select="'http://www.idpf.org/2007/ops'"/>
+            <xsl:copy-of select="namespace::*[not(.='http://www.daisy.org/z3986/2005/dtbook/')]" exclude-result-prefixes="#all"/>
             <xsl:call-template name="f:attlist.dtbook">
                 <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
             </xsl:call-template>
@@ -144,11 +152,12 @@
     </xsl:template>
 
     <xsl:template name="f:headmisc">
-        <xsl:apply-templates select="node()"/>
+        <xsl:apply-templates select="node()[not((self::*, following-sibling::*[1])[1][self::dtbook:meta[starts-with(@name,'dtb:')]])]"/>
     </xsl:template>
 
     <xsl:template match="dtbook:head">
         <head>
+            <xsl:copy-of select="namespace::*[not(.='http://www.daisy.org/z3986/2005/dtbook/')]" exclude-result-prefixes="#all"/>
             <xsl:call-template name="f:attlist.head"/>
             <meta charset="UTF-8"/>
             <title>
@@ -284,6 +293,7 @@
 
     <xsl:template match="dtbook:meta">
         <xsl:choose>
+            <xsl:when test="starts-with(@name,'dtb:')"/>
             <xsl:when test="matches(@name,'dc:title','i') or matches(@name,'dc:identifier','i') or matches(@name,'dc:format','i') or starts-with(@name,'track:')"/>
             <xsl:otherwise>
                 <meta>
@@ -309,6 +319,7 @@
 
     <xsl:template match="dtbook:book">
         <body>
+            <xsl:copy-of select="namespace::*[not(.='http://www.daisy.org/z3986/2005/dtbook/')]" exclude-result-prefixes="#all"/>
             <xsl:call-template name="f:attlist.book"/>
             <xsl:apply-templates select="node()"/>
         </body>

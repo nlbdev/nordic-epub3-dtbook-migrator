@@ -29,15 +29,15 @@
                     </xsl:variable>
                     <xsl:for-each select="$types/*">
                         <xsl:sort select="xs:integer(@content)"/>
-                        <xsl:copy-of select="."/>
+                        <xsl:copy-of select="." exclude-result-prefixes="#all"/>
                     </xsl:for-each>
                     <xsl:for-each select="$classes/*">
                         <xsl:sort select="xs:integer(@content)"/>
-                        <xsl:copy-of select="."/>
+                        <xsl:copy-of select="." exclude-result-prefixes="#all"/>
                     </xsl:for-each>
                     <xsl:for-each select="$elements/*">
                         <xsl:sort select="xs:integer(@content)"/>
-                        <xsl:copy-of select="."/>
+                        <xsl:copy-of select="." exclude-result-prefixes="#all"/>
                     </xsl:for-each>
                 </d:properties>
             </d:document-info>

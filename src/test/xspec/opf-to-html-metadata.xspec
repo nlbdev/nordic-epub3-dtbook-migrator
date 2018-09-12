@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/opf-to-html-metadata.xsl">
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               stylesheet="../../main/resources/xml/xslt/opf-to-html-metadata.xsl">
 
     <x:param name="modified" select="'2013-11-13T14:16:00Z'"/>
 
     <x:scenario label="A full package document">
         <x:context href="context/package.opf"/>
         <x:expect label="HTML head element with metadata" xml:space="preserve">
-<head xmlns="http://www.w3.org/1999/xhtml" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+<head xmlns="http://www.w3.org/1999/xhtml" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" epub:prefix="nordic: http://www.mtm.se/epub/">
     <meta charset="UTF-8"/>
     <title>Valentin Haüy - the father of the education for the blind</title>
     <meta name="dc:identifier" content="C00000"/>

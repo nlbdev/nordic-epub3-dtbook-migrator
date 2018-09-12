@@ -24,7 +24,7 @@
     </xsl:function>
 
     <xsl:template match="@*|node()">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
@@ -42,7 +42,7 @@
     <xsl:template match="meta/@scheme"/>
 
     <xsl:template match="head">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*|node()"/>
             <meta name="track:Guidelines" content="2015-1"/>
             <xsl:if test="not(meta/@name='dc:Source')">
@@ -83,7 +83,7 @@
         <xsl:if test="normalize-space(string-join((ancestor::li[parent::list/@type='ul'])[1]//text() intersect preceding::text(),''))=''">
             <xsl:text>• </xsl:text>
         </xsl:if>
-        <xsl:copy-of select="."/>
+        <xsl:copy-of select="." exclude-result-prefixes="#all"/>
     </xsl:template>
 
     <xsl:template match="list[@type='ol']/li//text()[normalize-space(.)!='']">
@@ -109,7 +109,7 @@
                 </xsl:when>
             </xsl:choose>
         </xsl:if>
-        <xsl:copy-of select="."/>
+        <xsl:copy-of select="." exclude-result-prefixes="#all"/>
     </xsl:template>
 
     <xsl:variable name="partition-type-classes" select="('cover','frontmatter','bodymatter','backmatter')"/>

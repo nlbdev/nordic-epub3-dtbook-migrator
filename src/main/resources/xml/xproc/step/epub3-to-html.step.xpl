@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-epub3-to-html.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf">
-
+    
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
         <p:empty/>
@@ -244,6 +244,9 @@
                     <p:pipe port="result" step="epub3-to-html.step.single-html.metadata"/>
                 </p:input>
             </p:replace>
+            <p:add-attribute match="/html:html" attribute-name="epub:prefix">
+                <p:with-option name="attribute-value" select="string-join(//@epub:prefix,' ')"/>
+            </p:add-attribute>
             <p:insert match="/*/html:body" position="first-child" name="epub3-to-html.step.insert-header-element-into-single-html">
                 <p:input port="insertion">
                     <p:pipe port="result" step="epub3-to-html.step.single-html.header-element"/>
@@ -252,7 +255,7 @@
             <p:add-attribute match="/*" attribute-name="xml:lang" name="epub3-to-html.step.add-xml-lang-to-single-html">
                 <p:with-option name="attribute-value" select="/*/html:head/html:meta[@name='dc:language']/@content"/>
             </p:add-attribute>
-            <p:add-attribute attribute-name="xml:base" match="/*" name="epub3-to-html.step.add-xml-base-to-single-html">
+            <p:add-attribute match="/*" attribute-name="xml:base" name="epub3-to-html.step.add-xml-base-to-single-html">
                 <p:with-option name="attribute-value"
                     select="replace(base-uri(/*),'[^/]+$',concat((/*/html:head/html:meta[lower-case(@name)=('dc:identifier','dct:identifier','dtb:uid','dc:title')]/string(@content), /*/html:head/html:title/normalize-space(.))[1],'.xhtml'))"
                 />
@@ -264,6 +267,14 @@
             </p:viewport>
             <p:delete match="//*[@xml:lang = ancestor::*[@xml:lang][1]/@xml:lang]/@xml:lang | //*[@lang = ancestor::*[@lang][1]/@lang]/@lang"
                 name="epub3-to-html.step.delete-unneccessary-xml-lang-and-lang"/>
+            <p:xslt>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/update-epub-prefixes.xsl"/>
+                </p:input>
+            </p:xslt>
             <p:identity name="epub3-to-html.step.in-memory"/>
 
             <px:html-to-fileset name="epub3-to-html.step.single-html-to-fileset">

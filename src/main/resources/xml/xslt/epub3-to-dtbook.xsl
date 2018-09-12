@@ -851,7 +851,7 @@
     </xsl:template>
 
     <xsl:template name="f:attlist.noteref">
-        <xsl:if test="@class or f:types(.)[not(.='noteref')]">
+        <xsl:if test="f:classes(.)[not(.='noteref')] or f:types(.)[not(.='noteref')]">
             <xsl:message select="'the class attribute on a noteref was dropped since it is not allowed in Nordic DTBook.'"/>
         </xsl:if>
         <xsl:call-template name="f:attrs">

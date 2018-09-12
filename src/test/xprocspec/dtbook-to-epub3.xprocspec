@@ -41,8 +41,6 @@
             label="There should be exactly four namespaces declared on the root element (the default namespace, nordic, epub and the implicit xml namespace)"/>
         <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xhtml',$temp-dir))/*/namespace::*[name()='']" equals="'http://www.w3.org/1999/xhtml'"
             label="The HTML namespace should be the default namespace on the root element"/>
-        <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xhtml',$temp-dir))/*/namespace::*[name()='nordic']" equals="'http://www.mtm.se/epub/'"
-            label="The Nordic EPUB namespace should be declared with prefix nordic on the root element"/>
         <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xhtml',$temp-dir))/*/namespace::*[name()='epub']" equals="'http://www.idpf.org/2007/ops'"
             label="The EPUB namespace should be declared with the prefix epub on the root element"/>
         <x:expect type="xpath" test="document(resolve-uri('output-dir/C00000/C00000.xhtml',$temp-dir))/*//*/count(namespace::*[not(.=../../namespace::*)])" equals="0"

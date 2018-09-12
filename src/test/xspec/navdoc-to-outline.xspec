@@ -4,8 +4,7 @@
     <x:scenario label="A full navigation document">
         <x:context href="context/navdoc-to-outline.navdoc.xhtml"/>
         <x:expect label="An outline of the single-page HTML document">
-            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/tmp/" xmlns:epub="http://www.idpf.org/2007/ops" epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#"
-                xmlns:nordic="http://www.mtm.se/epub/">
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/tmp/" xmlns:epub="http://www.idpf.org/2007/ops">
                 <head/>
                 <body>
                     <section xml:base="chapter1.xhtml"/>
@@ -23,8 +22,7 @@
     <x:scenario label="A navigation document where not all spine documents are referenced from the toc">
         <x:context href="context/navdoc-to-outline.navdoc-with-opf.xhtml"/>
         <x:expect label="An outline of the single-page HTML document">
-            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/tmp/" xmlns:epub="http://www.idpf.org/2007/ops" epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#"
-                xmlns:nordic="http://www.mtm.se/epub/">
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/tmp/" xmlns:epub="http://www.idpf.org/2007/ops">
                 <head/>
                 <body>
                     <section xml:base="C00000-01-cover.xhtml"/>

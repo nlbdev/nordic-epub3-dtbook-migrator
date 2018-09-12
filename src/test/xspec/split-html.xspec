@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/split-html.xsl" xmlns:epub="http://www.idpf.org/2007/ops" xmlns="http://www.w3.org/1999/xhtml"
-    xslt-version="2.0">
-
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns="http://www.w3.org/1999/xhtml"
+               stylesheet="../../main/resources/xml/xslt/split-html.xsl"
+               xslt-version="2.0">
+    
     <x:scenario label="when processing a HTML document with all kinds of sections">
         <x:context>
-            <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/content.xhtml">
+            <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/content.xhtml">
                 <head>
                     <title>Single-page title</title>
+                    <meta name="nordic:guidelines" value="2015-1"/>
                 </head>
                 <body>
                     <section epub:type="cover" xml:base="file:/tmp/cover.xhtml">
@@ -16,6 +20,7 @@
                     <section epub:type="titlepage" xml:base="file:/tmp/titlepage.xhtml">
                         <h1>titlepage</h1>
                         <p>titlepagetitlepagetitlepage</p>
+                        <p epub:type="z3998:author">author</p>
                     </section>
                     <section epub:type="colophon" xml:base="file:/tmp/colophon.xhtml">
                         <h1>colophon</h1>
@@ -78,9 +83,10 @@
         </x:context>
         <x:expect label="each section should be split into its own HTML document, with a filename reflecting the type of its contents">
             <wrapper xml:base="file:/tmp/content.xhtml">
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/cover.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/cover.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="next" href="titlepage.xhtml"/>
                     </head>
                     <body epub:type="cover">
@@ -88,20 +94,23 @@
                         <p>covercovercover</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/titlepage.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/ z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/titlepage.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="cover.xhtml"/>
                         <link rel="next" href="colophon.xhtml"/>
                     </head>
                     <body epub:type="titlepage">
                         <h1>titlepage</h1>
                         <p>titlepagetitlepagetitlepage</p>
+                        <p epub:type="z3998:author">author</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/colophon.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/colophon.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="titlepage.xhtml"/>
                         <link rel="next" href="toc.xhtml"/>
                     </head>
@@ -110,9 +119,10 @@
                         <p>colophoncolophoncolophon</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/toc.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/toc.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="colophon.xhtml"/>
                         <link rel="next" href="part1.xhtml"/>
                     </head>
@@ -121,9 +131,10 @@
                         <p>toctoctoc</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/part1.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/part1.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="toc.xhtml"/>
                         <link rel="next" href="chapter1.xhtml"/>
                     </head>
@@ -132,9 +143,10 @@
                         <p>partpartpart</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter1.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter1.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="part1.xhtml"/>
                         <link rel="next" href="chapter2.xhtml"/>
                     </head>
@@ -143,9 +155,10 @@
                         <p>chapterchapterchapter</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter2.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter2.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="chapter1.xhtml"/>
                         <link rel="next" href="part2.xhtml"/>
                     </head>
@@ -154,9 +167,10 @@
                         <p>chapterchapterchapter</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/part2.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/part2.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="chapter2.xhtml"/>
                         <link rel="next" href="chapter3.xhtml"/>
                     </head>
@@ -165,9 +179,10 @@
                         <p>partpartpart</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter3.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter3.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="part2.xhtml"/>
                         <link rel="next" href="chapter4.xhtml"/>
                     </head>
@@ -176,9 +191,10 @@
                         <p>chapterchapterchapter</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter4.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter4.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="chapter3.xhtml"/>
                         <link rel="next" href="index.xhtml"/>
                     </head>
@@ -187,9 +203,10 @@
                         <p>chapterchapterchapter</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/index.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/index.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="chapter4.xhtml"/>
                         <link rel="next" href="appendix1.xhtml"/>
                     </head>
@@ -198,9 +215,10 @@
                         <p>indexindexindex</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/appendix1.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/appendix1.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="index.xhtml"/>
                         <link rel="next" href="appendix2.xhtml"/>
                     </head>
@@ -209,9 +227,10 @@
                         <p>appendixappendixappendix</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/appendix2.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/appendix2.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="appendix1.xhtml"/>
                         <link rel="next" href="glossary.xhtml"/>
                     </head>
@@ -220,9 +239,10 @@
                         <p>appendixappendixappendix</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/glossary.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/glossary.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="appendix2.xhtml"/>
                         <link rel="next" href="footnotes.xhtml"/>
                     </head>
@@ -231,9 +251,10 @@
                         <p>glossaryglossaryglossary</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/footnotes.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/footnotes.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="glossary.xhtml"/>
                         <link rel="next" href="rearnotes.xhtml"/>
                     </head>
@@ -242,9 +263,10 @@
                         <p>footnotesfootnotesfootnotes</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/rearnotes.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/rearnotes.xhtml">
                     <head>
                         <title>Single-page title</title>
+                        <meta name="nordic:guidelines" value="2015-1"/>
                         <link rel="prev" href="footnotes.xhtml"/>
                     </head>
                     <body epub:type="rearnotes">
@@ -258,7 +280,7 @@
 
     <x:scenario label="when processing a HTML document with all kinds of sections">
         <x:context>
-            <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/content.xhtml">
+            <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/content.xhtml">
                 <head>
                     <title>Single-page title</title>
                 </head>
@@ -283,7 +305,7 @@
         </x:context>
         <x:expect label="each section should be split into its own HTML document, with a filename reflecting the type of its contents">
             <wrapper xml:base="file:/tmp/content.xhtml">
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter1.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter1.xhtml">
                     <head>
                         <title>Single-page title</title>
                         <link rel="next" href="chapter2.xhtml"/>
@@ -300,7 +322,7 @@
                         </ul>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/chapter2.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/chapter2.xhtml">
                     <head>
                         <title>Single-page title</title>
                         <link rel="prev" href="chapter1.xhtml"/>

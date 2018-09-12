@@ -63,7 +63,7 @@
         <!-- deep-levels can be resource intensive for big documents; so only call the deep-levels template if necessary -->
         <xsl:choose>
             <xsl:when test="$level &lt; $max-depth-int">
-                <xsl:copy>
+                <xsl:copy exclude-result-prefixes="#all">
                     <xsl:apply-templates select="@*|node()"/>
                 </xsl:copy>
             </xsl:when>
@@ -157,11 +157,11 @@
         <xsl:param name="root-level" as="node()"/>
         <xsl:variable name="common-ancestor" select="if (xs:string($copy-wrapping-elements-into-result)='true') then $root-level else ($content[1]/ancestor::*[not($content except .//node())])[last()]"/>
         <xsl:element name="{local-name($root-level)}" namespace="{namespace-uri($root-level)}">
-            <xsl:copy-of select="$content[1]/ancestor-or-self::*[f:is-level(.)]/@*"/>
+            <xsl:copy-of select="$content[1]/ancestor-or-self::*[f:is-level(.)]/@*" exclude-result-prefixes="#all"/>
             <xsl:for-each select="$common-ancestor/node()">
                 <xsl:choose>
                     <xsl:when test=". = $content">
-                        <xsl:copy-of select="."/>
+                        <xsl:copy-of select="." exclude-result-prefixes="#all"/>
                     </xsl:when>
                     <xsl:when test=".//node() intersect $content">
                         <xsl:choose>
@@ -172,8 +172,8 @@
                                 </xsl:call-template>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:copy>
-                                    <xsl:copy-of select="@*"/>
+                                <xsl:copy exclude-result-prefixes="#all">
+                                    <xsl:copy-of select="@*" exclude-result-prefixes="#all"/>
                                     <xsl:call-template name="make-level-content">
                                         <xsl:with-param name="this" select="."/>
                                         <xsl:with-param name="content" select="$content"/>
@@ -193,7 +193,7 @@
         <xsl:for-each select="$this/node()">
             <xsl:choose>
                 <xsl:when test=". = $content">
-                    <xsl:copy-of select="."/>
+                    <xsl:copy-of select="." exclude-result-prefixes="#all"/>
                 </xsl:when>
                 <xsl:when test=".//node() intersect $content">
                     <xsl:choose>
@@ -204,8 +204,8 @@
                             </xsl:call-template>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:copy>
-                                <xsl:copy-of select="@*"/>
+                            <xsl:copy exclude-result-prefixes="#all">
+                                <xsl:copy-of select="@*" exclude-result-prefixes="#all"/>
                                 <xsl:call-template name="make-level-content">
                                     <xsl:with-param name="this" select="."/>
                                     <xsl:with-param name="content" select="$content"/>
@@ -224,7 +224,7 @@
     </xsl:function>
 
     <xsl:template match="@*|node()">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>

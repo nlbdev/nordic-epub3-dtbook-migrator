@@ -9,7 +9,7 @@
     <xsl:variable name="base-dir" select="replace(base-uri(collection()[1]/*),'[^/]+$','')"/>
 
     <xsl:template match="@*|node()">
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
@@ -19,7 +19,7 @@
         <xsl:variable name="target-base" select="$html//*[@id=$id]/base-uri(.)"/>
         <xsl:variable name="href" select="substring-after($target-base,$base-dir)"/>
         
-        <xsl:copy>
+        <xsl:copy exclude-result-prefixes="#all">
             <xsl:attribute name="href" select="concat($href,'#',$id)"/>
             <xsl:apply-templates select="@* except @href | node()"/>
         </xsl:copy>

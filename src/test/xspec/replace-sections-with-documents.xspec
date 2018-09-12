@@ -5,8 +5,7 @@
     <x:scenario label="when processing a HTML fileset with all kinds of document types and hierarchies">
         <x:context>
             <wrapper>
-                <html xml:base="file:/tmp/C00000.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
-                    epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xmlns:nordic="http://www.mtm.se/epub/">
+                <html xml:base="file:/tmp/C00000.xhtml" xmlns="http://www.w3.org/1999/xhtml">
                     <head/>
                     <body>
                         <section xml:base="file:/tmp/C00000-01-cover.xhtml"/>
@@ -45,7 +44,7 @@
                         <section xml:base="file:/tmp/C00000-25-footnotes.xhtml"/>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-01-cover.xhtml">
+                <html xml:base="file:/tmp/C00000-01-cover.xhtml">
                     <head>
                         <title>cover</title>
                         <link rel="next" href="C00000-01-cover.xhtml"/>
@@ -55,7 +54,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-02-introduction.xhtml">
+                <html xml:base="file:/tmp/C00000-02-introduction.xhtml">
                     <head>
                         <title>introduction</title>
                         <link rel="next" href="C00000-02-introduction.xhtml"/>
@@ -65,7 +64,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-03-rearnotes.xhtml">
+                <html xml:base="file:/tmp/C00000-03-rearnotes.xhtml">
                     <head>
                         <title>rearnotes</title>
                         <link rel="next" href="C00000-03-rearnotes.xhtml"/>
@@ -75,7 +74,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-04-chapter.xhtml">
+                <html xml:base="file:/tmp/C00000-04-chapter.xhtml">
                     <head>
                         <title>chapter</title>
                         <link rel="next" href="C00000-04-chapter.xhtml"/>
@@ -85,7 +84,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-05-part.xhtml">
+                <html xml:base="file:/tmp/C00000-05-part.xhtml">
                     <head>
                         <title>part</title>
                         <link rel="next" href="C00000-05-part.xhtml"/>
@@ -95,7 +94,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-06-rearnotes.xhtml">
+                <html xml:base="file:/tmp/C00000-06-rearnotes.xhtml">
                     <head>
                         <title>rearnotes</title>
                         <link rel="next" href="C00000-06-rearnotes.xhtml"/>
@@ -105,7 +104,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-07-introduction.xhtml">
+                <html xml:base="file:/tmp/C00000-07-introduction.xhtml">
                     <head>
                         <title>introduction</title>
                         <link rel="next" href="C00000-07-introduction.xhtml"/>
@@ -115,7 +114,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-08-rearnotes.xhtml">
+                <html xml:base="file:/tmp/C00000-08-rearnotes.xhtml">
                     <head>
                         <title>rearnotes</title>
                         <link rel="next" href="C00000-08-rearnotes.xhtml"/>
@@ -125,7 +124,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-09-chapter.xhtml">
+                <html xml:base="file:/tmp/C00000-09-chapter.xhtml">
                     <head>
                         <title>chapter</title>
                         <link rel="next" href="C00000-09-chapter.xhtml"/>
@@ -135,9 +134,10 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-10-rearnotes.xhtml">
+                <html xml:base="file:/tmp/C00000-10-rearnotes.xhtml">
                     <head>
                         <title>rearnotes</title>
+                        <meta name="nordic:foo"/>
                         <link rel="next" href="C00000-10-rearnotes.xhtml"/>
                     </head>
                     <body epub:type="bodymatter rearnotes">
@@ -145,7 +145,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-11-part.xhtml">
+                <html xml:base="file:/tmp/C00000-11-part.xhtml">
                     <head>
                         <title>part</title>
                         <link rel="next" href="C00000-11-part.xhtml"/>
@@ -155,7 +155,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-12-chapter.xhtml">
+                <html xml:base="file:/tmp/C00000-12-chapter.xhtml">
                     <head>
                         <title>chapter</title>
                         <link rel="next" href="C00000-12-chapter.xhtml"/>
@@ -165,7 +165,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-13-part.xhtml">
+                <html xml:base="file:/tmp/C00000-13-part.xhtml">
                     <head>
                         <title>part</title>
                         <link rel="next" href="C00000-13-part.xhtml"/>
@@ -175,7 +175,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-14-chapter.xhtml">
+                <html xml:base="file:/tmp/C00000-14-chapter.xhtml">
                     <head>
                         <title>chapter</title>
                         <link rel="next" href="C00000-14-chapter.xhtml"/>
@@ -185,7 +185,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-15-chapter.xhtml">
+                <html xml:base="file:/tmp/C00000-15-chapter.xhtml">
                     <head>
                         <title>chapter</title>
                         <link rel="next" href="C00000-15-chapter.xhtml"/>
@@ -195,7 +195,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-16-rearnotes.xhtml">
+                <html xml:base="file:/tmp/C00000-16-rearnotes.xhtml">
                     <head>
                         <title>rearnotes</title>
                         <link rel="next" href="C00000-16-rearnotes.xhtml"/>
@@ -205,7 +205,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-17-chapter.xhtml">
+                <html xml:base="file:/tmp/C00000-17-chapter.xhtml">
                     <head>
                         <title>chapter</title>
                         <link rel="next" href="C00000-17-chapter.xhtml"/>
@@ -215,7 +215,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-18-part.xhtml">
+                <html xml:base="file:/tmp/C00000-18-part.xhtml">
                     <head>
                         <title>part</title>
                         <link rel="next" href="C00000-18-part.xhtml"/>
@@ -225,7 +225,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-19-part.xhtml">
+                <html xml:base="file:/tmp/C00000-19-part.xhtml">
                     <head>
                         <title>part</title>
                         <link rel="next" href="C00000-19-part.xhtml"/>
@@ -235,7 +235,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-20-chapter.xhtml">
+                <html xml:base="file:/tmp/C00000-20-chapter.xhtml">
                     <head>
                         <title>chapter</title>
                         <link rel="next" href="C00000-20-chapter.xhtml"/>
@@ -245,7 +245,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-21-rearnotes.xhtml">
+                <html xml:base="file:/tmp/C00000-21-rearnotes.xhtml">
                     <head>
                         <title>rearnotes</title>
                         <link rel="next" href="C00000-21-rearnotes.xhtml"/>
@@ -255,7 +255,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-22-chapter.xhtml">
+                <html xml:base="file:/tmp/C00000-22-chapter.xhtml">
                     <head>
                         <title>chapter</title>
                         <link rel="next" href="C00000-22-chapter.xhtml"/>
@@ -265,7 +265,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-23-index.xhtml">
+                <html xml:base="file:/tmp/C00000-23-index.xhtml">
                     <head>
                         <title>index</title>
                         <link rel="next" href="C00000-23-index.xhtml"/>
@@ -275,7 +275,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-24-rearnotes.xhtml">
+                <html xml:base="file:/tmp/C00000-24-rearnotes.xhtml">
                     <head>
                         <title>rearnotes</title>
                         <link rel="next" href="C00000-24-rearnotes.xhtml"/>
@@ -285,7 +285,7 @@
                         <p>lorem ipsum</p>
                     </body>
                 </html>
-                <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/C00000-25-footnotes.xhtml">
+                <html xml:base="file:/tmp/C00000-25-footnotes.xhtml">
                     <head>
                         <title>footnotes</title>
                         <link rel="next" href="C00000-25-footnotes.xhtml"/>
@@ -298,8 +298,7 @@
             </wrapper>
         </x:context>
         <x:expect label="each section should be split into its own HTML document, with a filename reflecting the type of its contents">
-            <html xml:base="file:/tmp/C00000.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
-                epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xmlns:nordic="http://www.mtm.se/epub/">
+            <html xmlns="http://www.w3.org/1999/xhtml" epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/C00000.xhtml">
                 <head/>
                 <body>
                     <section epub:type="cover" xml:base="file:/tmp/C00000-01-cover.xhtml">

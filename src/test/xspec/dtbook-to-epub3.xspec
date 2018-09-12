@@ -80,7 +80,7 @@
             </dtbook:dtbook>
         </x:context>
         <x:expect label="should be allowed inside the dtbook element">
-            <html:html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#">
+            <html:html>
                 <html:head>...</html:head>
                 <html:body>...</html:body>
             </html:html>
@@ -92,8 +92,8 @@
         <x:context>
             <dtbook:dtbook version="2005-3"/>
         </x:context>
-        <x:expect label="the dtbook element should be converted into a html element, and the only attribute should be the default epub:prefix attribute">
-            <html:html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#">...</html:html>
+        <x:expect label="the dtbook element should be converted into a html element">
+            <html:html>...</html:html>
         </x:expect>
     </x:scenario>
 
@@ -4273,6 +4273,13 @@
                 <html:dd/>
             </html:dl>
         </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="discard dtb:*-metadata">
+        <x:context>
+            <dtbook:meta name="dtb:uid"/>
+        </x:context>
+        <x:expect label="inserting a dd will avoid epubcheck error RSC-005"/>
     </x:scenario>
 
 </x:description>

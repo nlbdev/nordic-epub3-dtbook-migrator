@@ -529,7 +529,7 @@
           <xsl:value-of select="@id"/>
           <xsl:text>'&gt;</xsl:text>
           <xsl:variable name="nodeAsStr" select="string(.)"/>
-          <xsl:copy-of select="$nodeAsStr"/>
+          <xsl:copy-of select="$nodeAsStr" exclude-result-prefixes="#all"/>
           <xsl:text>&lt;/pagenum&gt;</xsl:text>
         </xsl:comment>
       </xsl:when>
