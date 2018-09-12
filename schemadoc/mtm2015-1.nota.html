@@ -143,8 +143,16 @@
                <tr>
                   <td><code>tpb43</code></td>
                   <td> Meta dc:Publisher must exist and have value 'TPB', 'MTM', 'SPSM', 'Nota', 'NLB',
-                     'Celia', 'SBS' or 'Dedicon'.
+                     'Celia' or 'SBS'.
                   </td>
+               </tr>
+               <tr>
+                  <td><code>tpb50</code></td>
+                  <td> an image in swedish language context must have attribute alt="illustration"</td>
+               </tr>
+               <tr>
+                  <td><code>tpb50</code></td>
+                  <td> an image in english language context must have attribute alt="image"</td>
                </tr>
                <tr>
                   <td><code>tpb52</code></td>
@@ -215,6 +223,10 @@
                   <td> There must be an img element in every imggroup</td>
                </tr>
                <tr>
+                  <td><code>tpb103</code></td>
+                  <td> There must be an imggroup element wrapping every img</td>
+               </tr>
+               <tr>
                   <td><code>tpb104</code></td>
                   <td> Heading ... may not be empty</td>
                </tr>
@@ -276,7 +288,7 @@
                </tr>
                <tr>
                   <td><code>tpb127</code></td>
-                  <td> Nested lists in table of contents must not have a 'toc' class</td>
+                  <td> Nested lists in table of contents must not have a 'toc' attribute</td>
                </tr>
                <tr>
                   <td><code>tpb128</code></td>
@@ -285,6 +297,12 @@
                <tr>
                   <td><code>tpb128</code></td>
                   <td> track:Guidelines metadata value must be 2011-1, 2011-2 or 2015-1.</td>
+               </tr>
+               <tr>
+                  <td><code>tpb129</code></td>
+                  <td> Class attribute of &lt;p&gt; must be one (or more) of
+                     'precedingemptyline', 'precedingseparator', 'indented' or 'asciimath'
+                  </td>
                </tr>
                <tr>
                   <td><code>tpb130</code></td>
@@ -297,6 +315,10 @@
                <tr>
                   <td><code>tpb133</code></td>
                   <td> Element ... is disallowed</td>
+               </tr>
+               <tr>
+                  <td><code>tpb134b</code></td>
+                  <td> Attribute 'class' is not allowed on the ... element</td>
                </tr>
                <tr>
                   <td><code>tpb134c</code></td>
@@ -369,6 +391,6 @@
                   <td> pagenum is not allowed last in a list</td>
                </tr>
             </tbody>
-         </table><br /><footer><em>Last updated: 2018-09-12 18:33:32</em></footer><br /><br /><br /></div>
+         </table><br /><footer><em>Last updated: 2018-09-12 18:33:30</em></footer><br /><br /><br /></div>
    </body>
 </html>

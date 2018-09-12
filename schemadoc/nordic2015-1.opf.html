@@ -86,6 +86,10 @@
                   </td>
                </tr>
                <tr>
+                  <td><code>opf3b</code></td>
+                  <td> the dc:title ... must not be empty.</td>
+               </tr>
+               <tr>
                   <td><code>opf3c</code></td>
                   <td> exactly one dc:language ... must be present in the package document.</td>
                </tr>
@@ -137,14 +141,15 @@
                </tr>
                <tr>
                   <td><code>opf3h</code></td>
-                  <td> the dc:source ("...") must
-                     start with 'urn:isbn:'
+                  <td> the dc:source
+                     ("...") must start with 'urn:isbn:' or 'urn:issn'
                   </td>
                </tr>
                <tr>
                   <td><code>opf3h</code></td>
-                  <td> the ISBN in dc:source ("...")
-                     can only contain numbers and hyphens (except for the 'urn:isbn:' prefix)
+                  <td> the ISBN or ISSN in dc:source ("...") can only contain numbers and hyphens, in addition to the 'urn:isbn:' or 'urn:issn:'
+                     prefix. The last digit can also be a 'X' in some
+                     ISBNs.
                   </td>
                </tr>
                <tr>
@@ -246,7 +251,7 @@
                   <td> "..." is not a valid type. ... The filename of content documents must end with a epub:type defined in either the
                      EPUB3 Structural Semantics Vocabulary (http://www.idpf.org/epub/vocab/structure/#)
                      or the
-                     Z39.39-2012 Structural Semantics Vocabulary (http://www.daisy.org/z3998/2012/vocab/structure/).
+                     Z39.98-2012 Structural Semantics Vocabulary (http://www.daisy.org/z3998/2012/vocab/structure/).
                   </td>
                </tr>
                <tr>
@@ -282,7 +287,17 @@
                      (itemref with idref="...").
                   </td>
                </tr>
+               <tr>
+                  <td><code>opf15a</code></td>
+                  <td> The cover image must have a properties attribute containing the value 'cover-image':
+                     ...
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>opf15b</code></td>
+                  <td> The image with property value 'cover-image' must have the filename 'cover.jpg': ...</td>
+               </tr>
             </tbody>
-         </table><br /><footer><em>Last updated: 2015-02-11 15:44:19</em></footer><br /><br /><br /></div>
+         </table><br /><footer><em>Last updated: 2018-09-12 18:33:30</em></footer><br /><br /><br /></div>
    </body>
 </html>

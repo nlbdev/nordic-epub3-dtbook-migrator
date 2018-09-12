@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta charset="utf-8" />
+      <title>Nordic EPUB3 Navigation Document and NCX rules</title>
+      <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet" />
+   </head>
+   <body>
+      <div class="container">
+         <h1>Nordic EPUB3 Navigation Document and NCX rules</h1>
+         <table class="table">
+            <thead>
+               <tr>
+                  <th>Rule ID</th>
+                  <th>Rule description</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td><code>nordic_nav_ncx_1_a</code></td>
+                  <td> toc items in the navigation document must also occur in the NCX. ...</td>
+               </tr>
+               <tr>
+                  <td><code>nordic_nav_ncx_2_a</code></td>
+                  <td> page references in the navigation document must also occur as pageTarget items in
+                     the NCX. ...
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_nav_ncx_3_a</code></td>
+                  <td> toc items in the NCX must also occur in the navigation document....</td>
+               </tr>
+               <tr>
+                  <td>Missing rule ID</td>
+                  <td>
+                     [nordic_nav_ncx_3_b] The navPoint in the NCX (
+                     ...
+                     ) has 
+                     ...
+                     ancestors 
+                     ...
+                     , while the corresponding item in the navigation document (
+                     ...
+                     ) has 
+                     ...
+                     ancestors 
+                     ...
+                     . The item in the navigation document and the navPoint in the NCX must have the same
+                     number of ancestors. Maybe the item are placed on the wrong nesting level or under
+                     the wrong headline.
+                     
+                  </td>
+               </tr>
+               <tr>
+                  <td>Missing rule ID</td>
+                  <td>
+                     [nordic_nav_ncx_3_c] The navPoint in the NCX (
+                     ...
+                     ) has 
+                     ...
+                     preceding siblings 
+                     ...
+                     ...
+                     ...
+                     , while the corresponding item in the navigation document (
+                     ...
+                     ) has 
+                     ...
+                     preceding siblings 
+                     ...
+                     ...
+                     ...
+                     . The item in the navigation document and the navPoint in the NCX must have the same
+                     number of preceding siblings. Maybe the items are not placed in the correct order
+                     or maybe some of the preceding items are missing.
+                     
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_nav_ncx_4_a</code></td>
+                  <td> pageTarget items in the NCX must also occur as page references in the navigation
+                     document. ...
+                  </td>
+               </tr>
+               <tr>
+                  <td>Missing rule ID</td>
+                  <td>
+                     [nordic_nav_ncx_4_b] The pageTarget in the NCX (
+                     ...
+                     ) has 
+                     ...
+                     preceding siblings 
+                     ...
+                     ...
+                     ...
+                     , while the page reference in the navigation document (
+                     ...
+                     ) has 
+                     ...
+                     preceding siblings 
+                     ...
+                     ...
+                     ...
+                     . The page reference in the navigation document and the pageTarget in the NCX must
+                     have the same number of preceding siblings. Maybe the items are not placed in the
+                     correct order or maybe some of the preceding items are missing.
+                     
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_nav_ncx_5</code></td>
+                  <td> Two references in the navigation document can not point to the same location in the
+                     content. ...
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_nav_ncx_6</code></td>
+                  <td> Two references in the NCX (navPoint or pageTarget) can not point to the same
+                     location in the content. ...
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_nav_ncx_7</code></td>
+                  <td> The navLabel in the NCX navMap must correspond to the h1 in the toc in the navigation
+                     document. The NCX navLabel has the value "...", while the page-list h1 in the navigation document ....
+                  </td>
+               </tr>
+               <tr>
+                  <td><code>nordic_nav_ncx_8</code></td>
+                  <td> The navLabel in the NCX pageList must correspond to the h1 in the page-list in the
+                     navigation document. The NCX navLabel has the value "...", while the page-list h1 in the navigation document ....
+                  </td>
+               </tr>
+            </tbody>
+         </table><br /><footer><em>Last updated: 2018-09-12 18:33:31</em></footer><br /><br /><br /></div>
+   </body>
+</html>
