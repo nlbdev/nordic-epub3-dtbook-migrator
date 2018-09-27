@@ -63,7 +63,7 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="*[f:types(.)='pagebreak' and ancestor::section/f:types(.) = 'rearnotes']"/>
+    <xsl:template match="*[f:types(.)='pagebreak' and exists(ancestor::section[1][f:types(.) = 'rearnotes' and exists(following-sibling::section[not(f:types(.) = 'rearnotes')])])]"/>
     
     <xsl:template match="section">
         <xsl:copy exclude-result-prefixes="#all">
