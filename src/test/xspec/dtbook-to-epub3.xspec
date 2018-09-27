@@ -837,8 +837,8 @@
         <x:context>
             <dtbook:byline/>
         </x:context>
-        <x:expect label="the resulting element should be a span with an added class of byline">
-            <html:span id="..." class="byline"/>
+        <x:expect label="the resulting element should be a p with an added class of byline">
+            <html:p id="..." class="byline"/>
         </x:expect>
     </x:scenario>
 

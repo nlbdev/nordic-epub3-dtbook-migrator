@@ -660,10 +660,10 @@
     </xsl:template>
 
     <xsl:template match="dtbook:byline">
-        <span>
+        <p>
             <xsl:call-template name="f:attlist.byline"/>
             <xsl:apply-templates select="node()"/>
-        </span>
+        </p>
     </xsl:template>
 
     <xsl:template name="f:attlist.byline">
