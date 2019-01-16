@@ -1119,7 +1119,7 @@
 
     <xsl:template match="dtbook:p">
         <xsl:variable name="element" select="."/>
-        <xsl:variable name="has-block-elements" select="if (dtbook:list or dtbook:dl or dtbook:imggroup) then true() else false()"/>
+        <xsl:variable name="has-block-elements" select="if (dtbook:list or dtbook:dl or dtbook:imggroup or dtbook:epigraph) then true() else false()"/>
         <xsl:variable name="contains-single-code-element" select="count(dtbook:code) = 1 and count(* | text()[normalize-space()]) = 1"/>
         <xsl:if test="f:classes($element)=('precedingemptyline','precedingseparator')">
             <hr class="{if (f:classes($element)='precedingseparator') then 'separator' else 'emptyline'}"/>
@@ -1130,7 +1130,7 @@
                 <xsl:with-param name="except-classes" select="('precedingemptyline','precedingseparator')" tunnel="yes"/>
                 <xsl:with-param name="except" select="if (not($has-block-elements) and $contains-single-code-element) then 'xml:space' else ()" tunnel="yes"/>
             </xsl:call-template>
-            <xsl:for-each-group select="node()" group-adjacent="not(self::dtbook:list or self::dtbook:dl or self::dtbook:imggroup)">
+            <xsl:for-each-group select="node()" group-adjacent="not(self::dtbook:list or self::dtbook:dl or self::dtbook:imggroup or self::dtbook:epigraph)">
                 <xsl:choose>
                     <xsl:when test="current-grouping-key()">
                         <xsl:choose>

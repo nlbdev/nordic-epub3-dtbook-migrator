@@ -821,12 +821,26 @@
 
     <!-- epigraph -->
     <x:scenario label="when processing a epigraph element">
-        <x:context>
-            <dtbook:epigraph/>
-        </x:context>
-        <x:expect label="the resulting element should be a p with an added epub:type of epigraph">
-            <html:p id="..." epub:type="epigraph" class="epigraph"/>
-        </x:expect>
+	<x:scenario label="on its own">
+            <x:context>
+		<dtbook:epigraph/>
+            </x:context>
+            <x:expect label="the resulting element should be a p with an added epub:type of epigraph">
+		<html:p id="..." epub:type="epigraph" class="epigraph"/>
+            </x:expect>
+	</x:scenario>
+	<x:scenario label="which is inside a p">
+            <x:context>
+		<dtbook:p>foo<dtbook:epigraph/>bar</dtbook:p>
+            </x:context>
+            <x:expect label="the resulting element should be a div with multiple parallel paragraphs inside">
+		<html:div>
+		    <html:p>foo</html:p>
+		    <html:p id="..." epub:type="epigraph" class="epigraph"/>
+		    <html:p>bar</html:p>
+		</html:div>
+            </x:expect>
+	</x:scenario>
     </x:scenario>
 
     <!-- attlist.epigraph -->
