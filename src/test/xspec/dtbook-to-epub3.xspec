@@ -832,14 +832,6 @@
 		<html:blockquote id="..." epub:type="epigraph" class="epigraph"/>
             </x:expect>
 	</x:scenario>
-	<x:scenario label="which is inside a p">
-            <x:context>
-		<dtbook:p>foo<dtbook:epigraph/>bar</dtbook:p>
-            </x:context>
-            <x:expect label="the resulting element should be a p with a blockquote inside">
-	        <html:p>foo<html:blockquote id="..." epub:type="epigraph" class="epigraph"/>bar</html:p>
-            </x:expect>
-	</x:scenario>
 	<x:scenario label="which contains a p">
             <x:context>
 		<dtbook:epigraph><dtbook:p>foo</dtbook:p></dtbook:epigraph>
