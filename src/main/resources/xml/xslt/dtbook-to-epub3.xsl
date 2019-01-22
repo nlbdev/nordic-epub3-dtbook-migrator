@@ -646,10 +646,10 @@
     </xsl:template>
 
     <xsl:template match="dtbook:epigraph">
-        <p>
+        <blockquote>
             <xsl:call-template name="f:attlist.epigraph"/>
             <xsl:apply-templates select="node()"/>
-        </p>
+        </blockquote>
     </xsl:template>
 
     <xsl:template name="f:attlist.epigraph">
