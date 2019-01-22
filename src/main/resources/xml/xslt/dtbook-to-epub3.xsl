@@ -1308,6 +1308,7 @@
             <xsl:when test="dtbook:hd">
                 <section>
                     <xsl:attribute name="id" select="f:generate-pseudorandom-id(concat(f:generate-pretty-id(.,$all-ids),'_section'),$all-ids)"/>
+                    <xsl:apply-templates select="dtbook:hd"/>
                     <xsl:call-template name="f:list.content">
                         <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
                     </xsl:call-template>

@@ -2347,8 +2347,11 @@
                     <dtbook:hd>TEXT</dtbook:hd>
                 </dtbook:list>
             </x:context>
-            <x:expect label="the resulting list should be wrapped in a section element">
-                <html:section id="...">...</html:section>
+            <x:expect label="the resulting list should be wrapped in a section element containing the hd">
+                <html:section id="...">
+		    <html:h1 id="...">TEXT</html:h1>
+		    <html:ol id="..." class="list-style-type-none">...</html:ol>
+	        </html:section>
             </x:expect>
         </x:scenario>
         <x:scenario label="which is ordered">
