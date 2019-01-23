@@ -1783,7 +1783,7 @@
     <!-- ====================== Byline, Epigraph, Dateline ===================== -->
     
     <!--
-    Use: epigraph marks a quotation placed at the beginnihg of a work
+    Use: epigraph marks a quotation placed at the beginning of a work
     or a division of a work.
   -->
     <define name="epigraph">
