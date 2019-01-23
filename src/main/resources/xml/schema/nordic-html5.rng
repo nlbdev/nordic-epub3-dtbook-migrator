@@ -92,7 +92,7 @@
             <ref name="linegroup"/> <!-- section, div -->
             <ref name="byline"/> <!-- span -->
             <ref name="dateline"/> <!-- span -->
-            <ref name="epigraph"/> <!-- p -->
+            <ref name="epigraph"/> <!-- blockquote -->
             <ref name="table"/> <!-- table -->
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
@@ -113,7 +113,7 @@
             <ref name="linegroup"/> <!-- section, div -->
             <ref name="byline"/> <!-- span -->
             <ref name="dateline"/> <!-- span -->
-            <ref name="epigraph"/> <!-- p -->
+            <ref name="epigraph"/> <!-- blockquote -->
             <ref name="table"/> <!-- table -->
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
@@ -134,7 +134,7 @@
             <ref name="linegroup"/> <!-- section, div -->
             <ref name="byline"/> <!-- span -->
             <ref name="dateline"/> <!-- span -->
-            <ref name="epigraph"/> <!-- p -->
+            <ref name="epigraph"/> <!-- blockquote -->
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
             <ref name="htmlblocknoimggroup"/> <!-- span, aside, section -->
@@ -1884,7 +1884,7 @@
         <zeroOrMore>
             <choice>
                 <ref name="dateline"/> <!-- span -->
-                <ref name="epigraph"/> <!-- p -->
+                <ref name="epigraph"/> <!-- blockquote -->
                 <ref name="byline"/> <!-- span -->
                 <ref name="linegroup"/> <!-- section, div -->
                 <ref name="line"/> <!-- p -->
@@ -1936,7 +1936,7 @@
                     <ref name="author.block"/> <!-- p -->
                     <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
                     <ref name="dateline"/> <!-- span -->
-                    <ref name="epigraph"/> <!-- p -->
+                    <ref name="epigraph"/> <!-- blockquote -->
                     <ref name="byline"/> <!-- span -->
                     <ref name="linegroup"/> <!-- section, div -->
                     <ref name="line"/> <!-- p -->
