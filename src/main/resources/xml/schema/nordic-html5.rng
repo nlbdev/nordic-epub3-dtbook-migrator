@@ -1787,14 +1787,22 @@
     or a division of a work.
   -->
     <define name="epigraph">
-        <element name="blockquote">
-            <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
-            <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
-            <ref name="attlist.epigraph"/>
-            <zeroOrMore>
-                <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
-            </zeroOrMore>
-        </element>
+        <choice>
+            <element name="blockquote">
+                <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
+                <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
+                <ref name="attlist.epigraph"/>
+                <zeroOrMore>
+                    <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
+                </zeroOrMore>
+            </element>
+            <element name="p"> <!-- for backwards compatibility we still allow p -->
+                <ref name="attlist.epigraph"/>
+                <zeroOrMore>
+                   <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
+                </zeroOrMore>
+            </element>
+        </choice>
     </define>
     <define name="attlist.epigraph" combine="interleave">
         <attribute name="epub:type">
