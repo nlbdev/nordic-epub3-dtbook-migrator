@@ -895,9 +895,9 @@
                 </dtbook:poem>
             </x:context>
             <x:expect label="the resulting element should be given an added epub:type of z3998:verse">
-                <html:section id="..." epub:type="z3998:poem" class="poem">
+                <html:div id="..." epub:type="z3998:poem" class="poem">
                     <html:div id="..." class="linegroup" epub:type="z3998:verse"/>
-                </html:section>
+                </html:div>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -931,8 +931,8 @@
             <x:context>
                 <dtbook:poem/>
             </x:context>
-            <x:expect label="the resulting element should also be a section with an added epub:type of z3998:poem">
-                <html:section id="..." epub:type="z3998:poem" class="poem"/>
+            <x:expect label="the resulting element should also be a div with an added epub:type of z3998:poem">
+                <html:div id="..." epub:type="z3998:poem" class="poem"/>
             </x:expect>
         </x:scenario>
     </x:scenario>
