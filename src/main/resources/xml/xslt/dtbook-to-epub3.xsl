@@ -699,10 +699,10 @@
     </xsl:template>
 
     <xsl:template match="dtbook:poem">
-        <section>
+        <xsl:element name="{if (dtbook:hd) then 'section' else 'div'}">
             <xsl:call-template name="f:attlist.poem"/>
             <xsl:apply-templates select="node()"/>
-        </section>
+	</xsl:element>
     </xsl:template>
 
     <xsl:template name="f:attlist.poem">
