@@ -22,7 +22,7 @@
    mod_new:
 
    narr:
-	done: 97, 98
+    done: 97, 98
 
    ?: 100
 
@@ -31,9 +31,9 @@
     <!-- Rule 7: No <list> or <dl> inside <p> -->
     <sch:pattern id="dtbook_TPB_7">
         <!--
-	p should only allow inline elements. The lists and definition lists inside p
-	will be converted to span elements in Daisy 2.02
-	-->
+        p should only allow inline elements. The lists and definition lists inside p
+        will be converted to span elements in Daisy 2.02
+        -->
         <sch:rule context="dtbk:p">
             <sch:report test="dtbk:list">[tpb07] Lists are not allowed inside paragraphs.</sch:report>
             <sch:report test="dtbk:dl">[tpb07] Definition lists are not allowed inside paragraphs.</sch:report>
@@ -176,7 +176,7 @@
     <!-- Rule 24: Values of pagenum[@page='front'] must be unique -->
     <sch:pattern id="dtbook_TPB_24">
         <sch:rule context="dtbk:pagenum[@page='front']">
-            <!--  		<sch:assert test="count(key('pageFrontValues', .))=1">[tpb24] pagenum[@page='front'] values must be unique</sch:assert>-->
+            <!--          <sch:assert test="count(key('pageFrontValues', .))=1">[tpb24] pagenum[@page='front'] values must be unique</sch:assert>-->
             <sch:assert test="count(//dtbk:pagenum[@page='front' and string(.)=string(current())])=1">[tpb24] pagenum[@page='front'] values must be unique</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -184,7 +184,7 @@
     <!-- Rule 26: Each note must have a noteref -->
     <sch:pattern id="dtbook_TPB_26">
         <sch:rule context="dtbk:note">
-            <!--  		<sch:assert test="count(key('noterefs', @id))>=1">[tpb26] Each note must have at least one noteref</sch:assert>-->
+            <!--          <sch:assert test="count(key('noterefs', @id))>=1">[tpb26] Each note must have at least one noteref</sch:assert>-->
             <sch:assert test="count(//dtbk:noteref[translate(@idref, '#', '')=current()/@id])>=1">[tpb26] Each note must have at least one noteref</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -192,7 +192,7 @@
     <!-- Rule 27: Each annotation must have an annoref -->
     <sch:pattern id="dtbook_TPB_27">
         <sch:rule context="dtbk:annotation">
-            <!--  		<sch:assert test="count(key('annorefs', @id))>=1">[tpb27] Each annotation must have at least one annoref</sch:assert>-->
+            <!--          <sch:assert test="count(key('annorefs', @id))>=1">[tpb27] Each annotation must have at least one annoref</sch:assert>-->
             <sch:assert test="count(//dtbk:annoref[translate(@idref, '#', '')=current()/@id])>=1">[tpb27] Each annotation must have at least one annoref</sch:assert>
         </sch:rule>
     </sch:pattern>
@@ -201,20 +201,20 @@
     <sch:pattern id="dtbook_TPB_29a">
         <sch:rule
             context="dtbk:*[self::dtbk:address    or self::dtbk:annotation or self::dtbk:author   or
-  	                          self::dtbk:blockquote or self::dtbk:bridgehead or self::dtbk:caption  or
-  	                          self::dtbk:dateline   or self::dtbk:div        or self::dtbk:dl       or
-  	                          self::dtbk:docauthor  or self::dtbk:doctitle   or
-  	                          self::dtbk:epigraph   or self::dtbk:hd         or self::dtbk:line     or
-  	                          self::dtbk:linegroup  or
-  	                          self::dtbk:list       or self::dtbk:note       or self::dtbk:p        or
-  	                          self::dtbk:poem       or self::dtbk:sidebar    or self::dtbk:table    or
-  	                          self::dtbk:title]">
+                                self::dtbk:blockquote or self::dtbk:bridgehead or self::dtbk:caption  or
+                                self::dtbk:dateline   or self::dtbk:div        or self::dtbk:dl       or
+                                self::dtbk:docauthor  or self::dtbk:doctitle   or
+                                self::dtbk:epigraph   or self::dtbk:hd         or self::dtbk:line     or
+                                self::dtbk:linegroup  or
+                                self::dtbk:list       or self::dtbk:note       or self::dtbk:p        or
+                                self::dtbk:poem       or self::dtbk:sidebar    or self::dtbk:table    or
+                                self::dtbk:title]">
             <sch:report
                 test="ancestor::dtbk:a      or ancestor::dtbk:abbr or ancestor::dtbk:acronym or ancestor::dtbk:annoref or
-  	                    ancestor::dtbk:bdo    or ancestor::dtbk:code or ancestor::dtbk:dfn     or ancestor::dtbk:em      or
-  	                    ancestor::dtbk:kbd or ancestor::dtbk:linenum or ancestor::dtbk:noteref or
-  	                    ancestor::dtbk:q      or ancestor::dtbk:samp or ancestor::dtbk:sent    or ancestor::dtbk:span    or
-  	                    ancestor::dtbk:strong or ancestor::dtbk:sub  or ancestor::dtbk:sup     or ancestor::dtbk:w"
+                          ancestor::dtbk:bdo    or ancestor::dtbk:code or ancestor::dtbk:dfn     or ancestor::dtbk:em      or
+                          ancestor::dtbk:kbd or ancestor::dtbk:linenum or ancestor::dtbk:noteref or
+                          ancestor::dtbk:q      or ancestor::dtbk:samp or ancestor::dtbk:sent    or ancestor::dtbk:span    or
+                          ancestor::dtbk:strong or ancestor::dtbk:sub  or ancestor::dtbk:sup     or ancestor::dtbk:w"
                 >[tpb29] Block element <sch:name/> used in inline context</sch:report>
         </sch:rule>
     </sch:pattern>
@@ -223,29 +223,29 @@
     <sch:pattern id="dtbook_TPB_29b">
         <sch:rule
             context="dtbk:*[self::dtbk:address    or self::dtbk:annotation or self::dtbk:author   or
-  	                          self::dtbk:blockquote or self::dtbk:bridgehead or self::dtbk:caption  or
-  	                          self::dtbk:dateline   or self::dtbk:div        or self::dtbk:dl       or
-  	                          self::dtbk:epigraph   or self::dtbk:hd         or self::dtbk:linegoup or
-  	                          self::dtbk:list       or self::dtbk:note       or self::dtbk:p        or
-  	                          self::dtbk:poem       or self::dtbk:sidebar    or self::dtbk:table    or
-  	                          self::dtbk:title      or self::dtbk:level      or self::dtbk:level1   or
-  	                          self::dtbk:level2     or self::dtbk:level3     or self::dtbk:level4    or
-  	                          self::dtbk:level5     or self::dtbk:level6]">
+                                self::dtbk:blockquote or self::dtbk:bridgehead or self::dtbk:caption  or
+                                self::dtbk:dateline   or self::dtbk:div        or self::dtbk:dl       or
+                                self::dtbk:epigraph   or self::dtbk:hd         or self::dtbk:linegoup or
+                                self::dtbk:list       or self::dtbk:note       or self::dtbk:p        or
+                                self::dtbk:poem       or self::dtbk:sidebar    or self::dtbk:table    or
+                                self::dtbk:title      or self::dtbk:level      or self::dtbk:level1   or
+                                self::dtbk:level2     or self::dtbk:level3     or self::dtbk:level4    or
+                                self::dtbk:level5     or self::dtbk:level6]">
             <sch:report
                 test="following-sibling::dtbk:a      or following-sibling::dtbk:abbr or following-sibling::dtbk:acronym or following-sibling::dtbk:annoref or
-  	                    following-sibling::dtbk:bdo    or following-sibling::dtbk:code or following-sibling::dtbk:dfn     or following-sibling::dtbk:em      or
-  	                    following-sibling::dtbk:kbd or following-sibling::dtbk:linenum or following-sibling::dtbk:noteref or
-  	                    following-sibling::dtbk:q      or following-sibling::dtbk:samp or following-sibling::dtbk:sent    or following-sibling::dtbk:span    or
-  	                    following-sibling::dtbk:strong or following-sibling::dtbk:sub  or following-sibling::dtbk:sup     or following-sibling::dtbk:w       or
-  	                    normalize-space(string-join(following-sibling::text(),''))!=''"
+                          following-sibling::dtbk:bdo    or following-sibling::dtbk:code or following-sibling::dtbk:dfn     or following-sibling::dtbk:em      or
+                          following-sibling::dtbk:kbd or following-sibling::dtbk:linenum or following-sibling::dtbk:noteref or
+                          following-sibling::dtbk:q      or following-sibling::dtbk:samp or following-sibling::dtbk:sent    or following-sibling::dtbk:span    or
+                          following-sibling::dtbk:strong or following-sibling::dtbk:sub  or following-sibling::dtbk:sup     or following-sibling::dtbk:w       or
+                          normalize-space(string-join(following-sibling::text(),''))!=''"
                 >[tpb29] Block element as sibling to inline element</sch:report>
             <sch:report
                 test="preceding-sibling::dtbk:a      or preceding-sibling::dtbk:abbr or preceding-sibling::dtbk:acronym or preceding-sibling::dtbk:annoref or
-  	                    preceding-sibling::dtbk:bdo    or preceding-sibling::dtbk:code or preceding-sibling::dtbk:dfn     or preceding-sibling::dtbk:em      or
-  	                    preceding-sibling::dtbk:kbd or preceding-sibling::dtbk:linenum or preceding-sibling::dtbk:noteref or
-  	                    preceding-sibling::dtbk:q      or preceding-sibling::dtbk:samp or preceding-sibling::dtbk:sent    or preceding-sibling::dtbk:span    or
-  	                    preceding-sibling::dtbk:strong or preceding-sibling::dtbk:sub  or preceding-sibling::dtbk:sup     or preceding-sibling::dtbk:w       or
-  	                    normalize-space(string-join(preceding-sibling::text(),''))!=''"
+                          preceding-sibling::dtbk:bdo    or preceding-sibling::dtbk:code or preceding-sibling::dtbk:dfn     or preceding-sibling::dtbk:em      or
+                          preceding-sibling::dtbk:kbd or preceding-sibling::dtbk:linenum or preceding-sibling::dtbk:noteref or
+                          preceding-sibling::dtbk:q      or preceding-sibling::dtbk:samp or preceding-sibling::dtbk:sent    or preceding-sibling::dtbk:span    or
+                          preceding-sibling::dtbk:strong or preceding-sibling::dtbk:sub  or preceding-sibling::dtbk:sup     or preceding-sibling::dtbk:w       or
+                          normalize-space(string-join(preceding-sibling::text(),''))!=''"
                 >[tpb29] Block element <sch:name/> as sibling to inline element</sch:report>
         </sch:rule>
     </sch:pattern>
@@ -265,11 +265,11 @@
                                      ancestor::dtbk:hd       or ancestor::dtbk:line       or ancestor::dtbk:p]">
             <sch:report
                 test="descendant::dtbk:*[self::dtbk:address    or self::dtbk:annotation or self::dtbk:author   or
-  	                                       self::dtbk:blockquote or self::dtbk:bridgehead or self::dtbk:caption  or
+                                             self::dtbk:blockquote or self::dtbk:bridgehead or self::dtbk:caption  or
                                            self::dtbk:dateline   or self::dtbk:div        or self::dtbk:dl       or
                                            self::dtbk:docauthor  or self::dtbk:doctitle   or
                                            self::dtbk:epigraph   or self::dtbk:hd         or self::dtbk:line     or
-  	                                       self::dtbk:linegroup  or
+                                             self::dtbk:linegroup  or
                                            self::dtbk:list       or self::dtbk:note       or self::dtbk:p        or
                                            self::dtbk:poem       or self::dtbk:sidebar    or self::dtbk:table    or
                                            self::dtbk:title]"
@@ -356,7 +356,7 @@
     <!-- Rule 71: Nested toc if there are several levels
   <sch:pattern  id="dtbook_TPB_71">
     <sch:rule context="dtbk:level1/dtbk:list[@class='toc']">
-    	<sch:report test="//dtbk:level2 and not(descendant::dtbk:list)">[tpb71] The table of contents must be nested if the documents contains multiple levels</sch:report>
+        <sch:report test="//dtbk:level2 and not(descendant::dtbk:list)">[tpb71] The table of contents must be nested if the documents contains multiple levels</sch:report>
     </sch:rule>
   </sch:pattern>
   -->
@@ -467,8 +467,8 @@
             <sch:report test="@class='colophon' and parent::dtbk:bodymatter">[tpb123] Colophon is not allowed in bodymatter</sch:report>
         </sch:rule>
         <!--<sch:rule context="dtbk:*[self::dtbk:level2 or self::dtbk:level3 or self::dtbk:level4 or self::dtbk:level5 or self::dtbk:level6]">
-  		<sch:assert test="not(@class)">[tpb123] No class attributes are allowed on level2 to level6</sch:assert>
-  	</sch:rule>-->
+          <sch:assert test="not(@class)">[tpb123] No class attributes are allowed on level2 to level6</sch:assert>
+      </sch:rule>-->
     </sch:pattern>
 
     <!-- Rule 124 (106): All documents must have at least one pagenum -->
@@ -491,7 +491,7 @@
         <sch:rule context="dtbk:pagenum">
             <sch:report
                 test="preceding-sibling::*[1][self::dtbk:h1 or self::dtbk:h2 or self::dtbk:h3 or self::dtbk:h4 or self::dtbk:h5 or self::dtbk:h6] and
-  		                  not(preceding-sibling::*[2][self::dtbk:pagenum])"
+                            not(preceding-sibling::*[2][self::dtbk:pagenum])"
                 >[tpb126] pagenum must not occur directly after hx unless the hx is preceded by a pagenum</sch:report>
         </sch:rule>
     </sch:pattern>
@@ -544,12 +544,12 @@
     <sch:pattern id="dtbook_TPB_133">
         <sch:rule
             context="dtbk:*[self::dtbk:link or self::dtbk:level or self::dtbk:epigraph or self::dtbk:byline or
-  	                          self::dtbk:dateline or self::dtbk:cite or self::dtbk:sent or self::dtbk:w or
-  	                          self::dtbk:covertitle or self::dtbk:bridgehead or self::dtbk:thead or
-  	                          self::dtbk:tfoot or self::dtbk:tbody or self::dtbk:colgroup or self::dtbk:col or
-  	                          self::dtbk:address or self::dtbk:annotation or self::dtbk:a or self::dtbk:dfn or
-  	                          self::dtbk:kbd or self::dtbk:samp or self::dtbk:abbr or self::dtbk:acronym or
-  	                          self::dtbk:q or self::dtbk:bdo or self::dtbk:bdo or self::dtbk:annoref]">
+                                self::dtbk:dateline or self::dtbk:cite or self::dtbk:sent or self::dtbk:w or
+                                self::dtbk:covertitle or self::dtbk:bridgehead or self::dtbk:thead or
+                                self::dtbk:tfoot or self::dtbk:tbody or self::dtbk:colgroup or self::dtbk:col or
+                                self::dtbk:address or self::dtbk:annotation or self::dtbk:a or self::dtbk:dfn or
+                                self::dtbk:kbd or self::dtbk:samp or self::dtbk:abbr or self::dtbk:acronym or
+                                self::dtbk:q or self::dtbk:bdo or self::dtbk:bdo or self::dtbk:annoref]">
             <sch:assert test="false()">[tpb133] Element <sch:name/> is disallowed</sch:assert>
         </sch:rule>
     </sch:pattern>

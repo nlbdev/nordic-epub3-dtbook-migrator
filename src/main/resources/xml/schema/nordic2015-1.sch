@@ -252,12 +252,12 @@
                                      ancestor::html:p[tokenize(@class,' ')='line']       or ancestor::html:p]">
             <report
                 test="descendant::html:*[self::html:address    or self::html:aside[tokenize(@epub:type,' ')='annotation'] or self::html:*[tokenize(@epub:type,' ')='z3998:author' and not(parent::html:header[parent::html:body])]   or
-  	                                       self::html:blockquote or self::html:p[tokenize(@epub:type,' ')='bridgehead'] or self::html:caption  or
+                                             self::html:blockquote or self::html:p[tokenize(@epub:type,' ')='bridgehead'] or self::html:caption  or
                                            self::html:*[tokenize(@class,' ')='dateline']   or self::html:div        or self::html:dl       or
                                            self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author']  or self::html:h1[tokenize(@epub:type,' ')='fulltitle']   or
                                            self::html:aside[tokenize(@epub:type,' ')='epigraph']   or self::html:p[tokenize(@class,' ')='line']     or
-  	                                       self::html:*[tokenize(@class,' ')='linegroup']  or
-  	                                       self::html:*[self::html:ul or self::html:ol]       or self::html:a[tokenize(@epub:type,' ')=('note','rearnote','endnote','footnote')]       or self::html:p        or
+                                             self::html:*[tokenize(@class,' ')='linegroup']  or
+                                             self::html:*[self::html:ul or self::html:ol]       or self::html:a[tokenize(@epub:type,' ')=('note','rearnote','endnote','footnote')]       or self::html:p        or
                                            self::html:*[tokenize(@epub:type,' ')='z3998:poem']       or self::html:*[(self::figure or self::aside) and tokenize(@epub:type,'s')='sidebar']    or self::html:table    or
                                            self::html:*[matches(local-name(),'^h\d$') and tokenize(@class,' ')='title']]"
                 >[nordic29] Prodnote in inline context used as block element: <value-of
@@ -453,7 +453,7 @@
         <rule context="html:*[tokenize(@epub:type,' ')='pagebreak']">
             <report
                 test="preceding-sibling::*[1][self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6] and
-  		                  not(preceding-sibling::*[2][self::html:*[tokenize(@epub:type,' ')='pagebreak']])"
+                            not(preceding-sibling::*[2][self::html:*[tokenize(@epub:type,' ')='pagebreak']])"
                 >[nordic126] pagebreak must not occur directly after hx unless the hx is preceded by a pagebreak: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>

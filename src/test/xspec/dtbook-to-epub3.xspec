@@ -728,11 +728,11 @@
         </x:scenario>
         <x:scenario label="which is inside a paragraph">
             <x:context>
-		<dtbook:p>
-                <dtbook:prodnote render="optional">This is a prodnote</dtbook:prodnote>I wish I was a little test</dtbook:p>
+                <dtbook:p>
+                    <dtbook:prodnote render="optional">This is a prodnote</dtbook:prodnote>I wish I was a little test</dtbook:p>
             </x:context>
             <x:expect label="the resulting element should be a span">
-		<html:p><html:span epub:type="z3998:production" class="prodnote render-optional" id="...">This is a prodnote</html:span>I wish I was a little test</html:p>
+                <html:p><html:span epub:type="z3998:production" class="prodnote render-optional" id="...">This is a prodnote</html:span>I wish I was a little test</html:p>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -2359,9 +2359,9 @@
             </x:context>
             <x:expect label="the resulting list should be wrapped in a section element containing the hd">
                 <html:section id="...">
-		    <html:h1 id="...">TEXT</html:h1>
-		    <html:ol id="..." class="list-style-type-none">...</html:ol>
-	        </html:section>
+                    <html:h1 id="...">TEXT</html:h1>
+                    <html:ol id="..." class="list-style-type-none">...</html:ol>
+                </html:section>
             </x:expect>
         </x:scenario>
         <x:scenario label="which is ordered">

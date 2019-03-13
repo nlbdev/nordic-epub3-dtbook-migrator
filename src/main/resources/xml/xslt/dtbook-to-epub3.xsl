@@ -13,7 +13,7 @@
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
     <!--<xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
-	<xsl:import href="epub3-vocab.xsl"/>
+    <xsl:import href="epub3-vocab.xsl"/>
 
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
 
@@ -537,7 +537,7 @@
 
     <xsl:template match="dtbook:prodnote | dtbook:div[f:classes(.) = ('prodnote','production')]">
       <xsl:element name="{if (parent::*[tokenize(@class,'\s+')=('cover','jacketcopy')]) then 'section'
-			  else 'aside'}">
+                          else 'aside'}">
         <xsl:call-template name="f:attlist.prodnote"/>
         <xsl:apply-templates select="node() | text()"/>
       </xsl:element>
@@ -702,7 +702,7 @@
         <xsl:element name="{if (dtbook:hd) then 'section' else 'div'}">
             <xsl:call-template name="f:attlist.poem"/>
             <xsl:apply-templates select="node()"/>
-	</xsl:element>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template name="f:attlist.poem">

@@ -232,7 +232,7 @@
     id       document-wide unique id
     class    space separated list of classes used for rendering
     title    advisory title/amplification
-    xml:space	whitespace handling (see http://www.w3.org/TR/xml11/#sec-white-space)
+    xml:space    whitespace handling (see http://www.w3.org/TR/xml11/#sec-white-space)
     epub:type
   -->
     
