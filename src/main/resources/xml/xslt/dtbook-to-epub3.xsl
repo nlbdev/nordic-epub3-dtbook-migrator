@@ -31,6 +31,7 @@
 
     <xsl:template name="f:coreattrs">
         <xsl:param name="classes" select="()" tunnel="yes"/>
+        <xsl:param name="types" select="()" tunnel="yes"/>
         <xsl:param name="except" select="()" tunnel="yes"/>
         <xsl:param name="all-ids" select="()" tunnel="yes"/>
         <xsl:variable name="is-first-level" select="boolean((self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter))"/>
@@ -46,11 +47,12 @@
         </xsl:if>
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]" exclude-result-prefixes="#all"/>
         <xsl:if
-            test="not(@id) and not(local-name()=('book','span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd','lic','thead','tfoot','tbody','colgroup','col') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/')">
+            test="not(@id) and ($types[.='epigraph'] or not(local-name()=('book','span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd','lic','thead','tfoot','tbody','colgroup','col') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/'))">
             <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
         <xsl:call-template name="f:classes-and-types">
             <xsl:with-param name="classes" select="(if ($is-first-level) then tokenize(parent::*/@class,'\s+') else (), $classes)" tunnel="yes"/>
+            <xsl:with-param name="types" select="$types" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -591,7 +593,7 @@
 
     <xsl:template match="dtbook:note">
         <xsl:variable name="type"
-            select="if (count(parent::*[matches(local-name(),'^level\d?$')]) and not(//dtbook:table//dtbook:noteref/substring-after(@idref,'#')=@id)) then if (count(ancestor::dtbook:bodymatter)) then 'rearnote' else if (count(ancestor::dtbook:rearmatter)) then 'footnote' else 'note' else 'note'"/>
+            select="if (count(parent::*[matches(local-name(),'^level\d?$')])) then if (count(ancestor::dtbook:bodymatter)) then 'rearnote' else if (count(ancestor::dtbook:rearmatter)) then 'footnote' else 'note' else 'note'"/>
         <xsl:choose>
             <xsl:when test="$type='note'">
                 <aside>
@@ -644,11 +646,27 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="dtbook:epigraph">
-        <p>
-            <xsl:call-template name="f:attlist.epigraph"/>
-            <xsl:apply-templates select="node()"/>
-        </p>
+    <xsl:template match="dtbook:epigraph | dtbook:p[tokenize(@class,'\s+') = 'epigraph']">
+        <xsl:choose>
+            <xsl:when test="exists(.//dtbook:h1 | .//dtbook:h2 | .//dtbook:h3 | .//dtbook:h4 | .//dtbook:h5 | .//dtbook:h6)">
+                <aside>
+                    <xsl:call-template name="f:attlist.epigraph"/>
+                    <xsl:apply-templates select="node()"/>
+                </aside>
+            </xsl:when>
+            <xsl:when test="exists(ancestor::dtbook:epigraph | ancestor::dtbook:p[tokenize(@class,'\s+') = 'epigraph'])">
+                <p>
+                    <xsl:call-template name="f:attlist.epigraph"/>
+                    <xsl:apply-templates select="node()"/>
+                </p>
+            </xsl:when>
+            <xsl:otherwise>
+                <blockquote>
+                    <xsl:call-template name="f:attlist.epigraph"/>
+                    <xsl:apply-templates select="node()"/>
+                </blockquote>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="f:attlist.epigraph">

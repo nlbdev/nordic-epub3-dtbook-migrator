@@ -789,13 +789,110 @@
     <!-- test not needed (attrsrqd) -->
 
     <!-- epigraph -->
-    <x:scenario label="when processing a aside element with an epub:type of epigraph">
-        <x:context>
-            <html:aside epub:type="epigraph"/>
-        </x:context>
-        <x:expect label="the resulting element should be a epigraph">
-            <dtbook:p class="epigraph"/>
-        </x:expect>
+    <x:scenario label="when processing epigraphs">
+        <x:scenario label="when processing a aside element with an epub:type of epigraph, containing no headline or subchapters">
+            <x:context>
+                <html:aside epub:type="epigraph"/>
+            </x:context>
+            <x:expect label="the resulting element should be a p element">
+                <dtbook:p class="epigraph"/>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="when processing a blockquote with epub:type=epigraph on its own">
+            <x:context>
+                <html:blockquote epub:type="epigraph" class="epigraph other-class"/>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <dtbook:p class="epigraph other-class"/>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which contains a p">
+            <x:context>
+                <html:blockquote epub:type="epigraph" class="epigraph"><html:p>foo</html:p></html:blockquote>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <dtbook:epigraph class="epigraph"><dtbook:p>foo</dtbook:p></dtbook:epigraph>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which contains a p with epub:type=epigraph">
+            <x:context>
+                <html:blockquote epub:type="epigraph" class="epigraph"><html:p epub:type="epigraph" class="epigraph other-class">foo</html:p></html:blockquote>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <dtbook:epigraph class="epigraph"><dtbook:p class="epigraph other-class">foo</dtbook:p></dtbook:epigraph>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which is a p with epub:type=epigraph">
+            <x:context>
+                <html:p epub:type="epigraph" class="epigraph"/>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <dtbook:p class="epigraph"/>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which is a p with epub:type=epigraph and contains a p with epub:type=epigraph">
+            <x:context>
+                <html:p epub:type="epigraph" class="epigraph"><html:p epub:type="epigraph" class="epigraph">foo</html:p></html:p>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <dtbook:epigraph class="epigraph"><dtbook:p class="epigraph">foo</dtbook:p></dtbook:epigraph>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which is a section">
+            <x:context label="the result should be a section">
+                <html:section epub:type="bodymatter chapter">
+                    <html:h1>Headline</html:h1>
+                    <html:section epub:type="epigraph">
+                        <html:p>Epigraph.</html:p>
+                        <html:section>
+                            <html:p>Subsection.</html:p>
+                        </html:section>
+                    </html:section>
+                    <html:p>Content</html:p>
+                </html:section>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <dtbook:level1 class="chapter">
+                    <dtbook:h1>Headline</dtbook:h1>
+                    <dtbook:level2 class="epigraph">
+                        <dtbook:p>Epigraph.</dtbook:p>
+                        <dtbook:level3>
+                            <dtbook:p>Subsection.</dtbook:p>
+                        </dtbook:level3>
+                    </dtbook:level2>
+                    <dtbook:p>Content</dtbook:p>
+                </dtbook:level1>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which is a aside">
+            <x:context label="the result should be a section">
+                <html:section epub:type="bodymatter chapter">
+                    <html:h1>Headline</html:h1>
+                    <html:aside epub:type="epigraph">
+                        <html:h2>Epigraph headline.</html:h2>
+                        <html:p>Epigraph.</html:p>
+                    </html:aside>
+                    <html:p>Content</html:p>
+                </html:section>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <dtbook:level1 class="chapter">
+                    <dtbook:h1>Headline</dtbook:h1>
+                    <dtbook:level2 class="epigraph">
+                        <dtbook:h2>Epigraph headline.</dtbook:h2>
+                        <dtbook:p>Epigraph.</dtbook:p>
+                    </dtbook:level2>
+                    <dtbook:p>Content</dtbook:p>
+                </dtbook:level1>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.epigraph -->
