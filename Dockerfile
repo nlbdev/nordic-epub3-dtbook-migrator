@@ -13,7 +13,7 @@ FROM daisyorg/pipeline-assembly:v1.12.0
 LABEL maintainer="Norwegian library of talking books and braille (http://www.nlb.no/)"
 COPY --from=builder /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*.jar /opt/daisy-pipeline2/modules/
 ENV PIPELINE2_WS_LOCALFS=false \
-    PIPELINE2_WS_AUTHENTICATION=true \
+    PIPELINE2_WS_AUTHENTICATION=false \
     PIPELINE2_WS_AUTHENTICATION_KEY=clientid \
     PIPELINE2_WS_AUTHENTICATION_SECRET=sekret
 EXPOSE 8181
