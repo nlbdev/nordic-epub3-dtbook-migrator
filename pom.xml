@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-parent</artifactId>
-        <version>1.11.0</version>
+        <version>1.12.0</version>
         <!--<relativePath>../../scripts/parent/</relativePath>-->
     </parent>
     
@@ -97,6 +97,11 @@
         <dependency>
             <groupId>org.daisy.pipeline.build</groupId>
             <artifactId>modules-test-helper</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>framework-volatile</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

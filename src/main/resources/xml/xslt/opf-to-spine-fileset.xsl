@@ -5,7 +5,8 @@
     <xsl:output indent="yes"/>
 
     <xsl:template match="/opf:package">
-        <d:fileset xml:base="{replace(base-uri(.),'^(.*/).*$','$1')}">
+        <d:fileset>
+            <xsl:attribute name="xml:base" select="replace(base-uri(.),'^(.*/).*$','$1')"/>
             <xsl:for-each select="opf:spine/opf:itemref">
                 <xsl:variable name="idref" select="@idref"/>
                 <xsl:for-each select="/*/opf:manifest/opf:item[@id=$idref]">
