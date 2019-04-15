@@ -3,13 +3,13 @@
 # starts the pipeline.
 
 # Build the pipeline first
-FROM maven:3.5-jdk-8 as builder
+FROM maven:3.6-jdk-11 as builder
 ADD . /usr/src/nordic-epub3-dtbook-migrator
 WORKDIR /usr/src/nordic-epub3-dtbook-migrator
 RUN mvn clean package
 
 # then use the build artifacts to create an image where the pipeline is installed
-FROM daisyorg/pipeline-assembly
+FROM daisyorg/pipeline-assembly:v1.12.0
 LABEL maintainer="Norwegian library of talking books and braille (http://www.nlb.no/)"
 COPY --from=builder /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*.jar /opt/daisy-pipeline2/modules/
 ENV PIPELINE2_WS_LOCALFS=false \
