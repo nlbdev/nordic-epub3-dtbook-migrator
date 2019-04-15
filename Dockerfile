@@ -7,11 +7,13 @@ FROM maven:3.6-jdk-11 as builder
 ADD . /usr/src/nordic-epub3-dtbook-migrator
 WORKDIR /usr/src/nordic-epub3-dtbook-migrator
 RUN mvn clean package
+RUN rm /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-doc.jar
+RUN rm /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-xprocdoc.jar
 
 # then use the build artifacts to create an image where the pipeline is installed
 FROM daisyorg/pipeline-assembly:v1.12.0
 LABEL maintainer="Norwegian library of talking books and braille (http://www.nlb.no/)"
-COPY --from=builder /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*.jar /opt/daisy-pipeline2/modules/
+COPY --from=builder /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*.jar /opt/daisy-pipeline2/system/felix/
 ENV PIPELINE2_WS_LOCALFS=false \
     PIPELINE2_WS_AUTHENTICATION=false \
     PIPELINE2_WS_AUTHENTICATION_KEY=clientid \
