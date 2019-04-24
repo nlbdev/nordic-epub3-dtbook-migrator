@@ -2656,6 +2656,20 @@
                 </html:ol>
             </x:expect>
         </x:scenario>
+        <x:scenario label="inside a preformatted list containing a very long text">
+            <x:context>
+                <dtbook:list type="pl" depth="1">
+		  <dtbook:li>2. Halten Sie
+		  Sie es tunlichst, der Öffentlichkeit jene Hautfladen auch bekannt als Bingofladen, die unter den Oberarmen hängen, zuzumuten. Dasselbe gilt für die Röllchen unter der Achsel, zwischen Oberarm und Oberkörper.</dtbook:li>
+                </dtbook:list>
+            </x:context>
+            <x:expect label="the type of list should be detected, the list markers removed and the value should be correct">
+                <html:ol id="...">
+                    <html:li id="..." value="2">Halten Sie
+		  Sie es tunlichst, der Öffentlichkeit jene Hautfladen auch bekannt als Bingofladen, die unter den Oberarmen hängen, zuzumuten. Dasselbe gilt für die Röllchen unter der Achsel, zwischen Oberarm und Oberkörper.</html:li>
+                </html:ol>
+            </x:expect>
+        </x:scenario>
         <x:scenario label="with ol and reversed order">
             <x:context>
                 <dtbook:list type="pl" depth="1">
