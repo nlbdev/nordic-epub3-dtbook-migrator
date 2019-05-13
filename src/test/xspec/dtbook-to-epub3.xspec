@@ -4370,5 +4370,49 @@
             </html>
         </x:expect>
     </x:scenario>
-
+    
+    <x:scenario label="regression for #364: handling of pagebreaks between table rows">
+        <x:context>
+            <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en">
+                <book>
+                    <bodymatter>
+                        <level1 class="chapter">
+                            <table>
+                                <tr>
+                                    <td><p>…</p></td>
+                                    <td><p>…</p></td>
+                                </tr>
+                                <pagenum id="page-133" page="normal">133</pagenum>
+                                <tr>
+                                    <td><p>…</p></td>
+                                    <td><p>…</p></td>
+                                </tr>
+                            </table>
+                        </level1>
+                    </bodymatter>
+                </book>
+            </dtbook>
+        </x:context>
+        <x:expect label="the result should be as expected">
+            <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
+                <body>
+                    <section id="level1_1" epub:type="bodymatter chapter">
+                        <table id="table_1">
+                            <tbody>
+                                <tr>
+                                    <td><p>…</p></td>
+                                    <td><p>…</p></td>
+                                </tr>
+                                <tr>
+                                    <td><div id="page-133" class="page-normal" epub:type="pagebreak" title="133"></div><p>…</p></td>
+                                    <td><p>…</p></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>
