@@ -12,6 +12,10 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
     @Override 
     protected String[] testDependencies() { 
         return new String[] { 
+            // explicitly including epubcheck 4.2.0 here for v1.12.1 of the framework
+            // because 1.12.1 of scripts-parent is not released.
+            "org.w3c:epubcheck:4.2.0",
+            
             pipelineModule("asciimath-utils"),
             pipelineModule("common-utils"),
             pipelineModule("dtbook-utils"),
