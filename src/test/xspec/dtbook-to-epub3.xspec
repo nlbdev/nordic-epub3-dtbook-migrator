@@ -2768,16 +2768,16 @@
                 <html:table id="...">
                     <html:tbody>
                         <html:tr>
-                            <html:td>td #1</html:td>
+                            <html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td>
                         </html:tr>
                         <html:tr>
-                            <html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td>
+                            <html:td>td #2<html:span epub:type="pagebreak" title="5" class="page-normal"/><html:span epub:type="pagebreak" title="6" class="page-normal"/></html:td>
                         </html:tr>
                         <html:tr>
-                            <html:td><html:span epub:type="pagebreak" title="5" class="page-normal"/><html:span epub:type="pagebreak" title="6" class="page-normal"/>td #3</html:td>
+                            <html:td>td #3<html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/></html:td>
                         </html:tr>
                         <html:tr>
-                            <html:td><html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/>td #4</html:td>
+                            <html:td>td #4</html:td>
                         </html:tr>
                     </html:tbody>
                 </html:table>
@@ -2823,8 +2823,8 @@
                         </html:tr>
                     </html:thead>
                     <html:tbody>
-                        <html:tr><html:td>td #1</html:td></html:tr>
-                        <html:tr><html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td></html:tr>
+                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #2</html:td></html:tr>
                     </html:tbody>
                 </html:table>
                 <html:div epub:type="pagebreak" title="5" class="page-normal"/>
@@ -2869,8 +2869,8 @@
                         </html:tr>
                     </html:tfoot>
                     <html:tbody>
-                        <html:tr><html:td>td #1</html:td></html:tr>
-                        <html:tr><html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td></html:tr>
+                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #2</html:td></html:tr>
                     </html:tbody>
                 </html:table>
                 <html:div epub:type="pagebreak" title="5" class="page-normal"/>
@@ -2937,8 +2937,8 @@
                         </html:tr>
                     </html:tfoot>
                     <html:tbody>
-                        <html:tr><html:td>td #1</html:td></html:tr>
-                        <html:tr><html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td></html:tr>
+                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #2</html:td></html:tr>
                     </html:tbody>
                 </html:table>
                 <html:div epub:type="pagebreak" title="5" class="page-normal"/>
@@ -3586,7 +3586,7 @@
         </x:expect>
     </x:scenario>
 
-    <x:scenario label="Move table pagebreak to first cell in following row. #113">
+    <x:scenario label="Move table pagebreak to last cell in preceding row. (see #113 and #364)">
         <x:context>
             <dtbook:table>
                 <dtbook:pagenum page="normal">1</dtbook:pagenum>
@@ -3622,23 +3622,23 @@
                     <html:tr>
                         <html:td><html:span>cell 11</html:span></html:td>
                         <html:td><html:span>cell 12</html:span></html:td>
-                        <html:td><html:span>cell 13</html:span></html:td>
-                    </html:tr>
-                    <html:tr>
                         <html:td>
+                            <html:span>cell 13</html:span>
                             <html:span epub:type="pagebreak" title="3" class="page-normal"/>
                             <html:span epub:type="pagebreak" title="4" class="page-normal"/>
-                            <html:span>cell 21</html:span>
                         </html:td>
-                        <html:td><html:span>cell 22</html:span></html:td>
-                        <html:td><html:span>cell 23</html:span></html:td>
                     </html:tr>
                     <html:tr>
+                        <html:td><html:span>cell 21</html:span></html:td>
+                        <html:td><html:span>cell 22</html:span></html:td>
                         <html:td>
+                            <html:span>cell 23</html:span>
                             <html:span epub:type="pagebreak" title="5" class="page-normal"/>
                             <html:span epub:type="pagebreak" title="6" class="page-normal"/>
-                            <html:span>cell 31</html:span>
                         </html:td>
+                    </html:tr>
+                    <html:tr>
+                        <html:td><html:span>cell 31</html:span></html:td>
                         <html:td><html:span>cell 32</html:span></html:td>
                         <html:td><html:span>cell 33</html:span></html:td>
                     </html:tr>
@@ -4365,50 +4365,6 @@
                                 <p>1 Als vorausweisendes Demonstrativpronomen in der Form <em>derer.</em> Wir gedenken <em>derer,</em> die durch die Flut umgekommen sind.</p>
                             </li>
                         </ol>
-                    </section>
-                </body>
-            </html>
-        </x:expect>
-    </x:scenario>
-    
-    <x:scenario label="regression for #364: handling of pagebreaks between table rows">
-        <x:context>
-            <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en">
-                <book>
-                    <bodymatter>
-                        <level1 class="chapter">
-                            <table>
-                                <tr>
-                                    <td><p>…</p></td>
-                                    <td><p>…</p></td>
-                                </tr>
-                                <pagenum id="page-133" page="normal">133</pagenum>
-                                <tr>
-                                    <td><p>…</p></td>
-                                    <td><p>…</p></td>
-                                </tr>
-                            </table>
-                        </level1>
-                    </bodymatter>
-                </book>
-            </dtbook>
-        </x:context>
-        <x:expect label="the result should be as expected">
-            <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
-                <body>
-                    <section id="level1_1" epub:type="bodymatter chapter">
-                        <table id="table_1">
-                            <tbody>
-                                <tr>
-                                    <td><p>…</p></td>
-                                    <td><p>…</p></td>
-                                </tr>
-                                <tr>
-                                    <td><div id="page-133" class="page-normal" epub:type="pagebreak" title="133"></div><p>…</p></td>
-                                    <td><p>…</p></td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </section>
                 </body>
             </html>

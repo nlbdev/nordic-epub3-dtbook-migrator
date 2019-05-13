@@ -1701,21 +1701,21 @@
     <xsl:template match="dtbook:th | dtbook:td">
         <xsl:element name="{local-name()}">
             <xsl:call-template name="f:attlist.th.td"/>
+            
+            <xsl:apply-templates select="node()"/>
 
-            <xsl:if test="not(preceding-sibling::dtbook:th or preceding-sibling::dtbook:td)">
-                <!-- If this is the first cell in the row -->
+            <xsl:if test="not(following-sibling::dtbook:th or following-sibling::dtbook:td)">
+                <!-- If this is the last cell in the row -->
 
-                <xsl:if test="../preceding-sibling::dtbook:tr">
-                    <!-- If there is a row before this row -->
+                <xsl:if test="../following-sibling::dtbook:tr">
+                    <!-- If there is a row after this row -->
 
-                    <!-- Then move pagenums from between this and the previous row into the start of this cell -->
-                    <xsl:apply-templates select="../(preceding-sibling::dtbook:pagenum intersect preceding-sibling::dtbook:tr[1]/following-sibling::dtbook:pagenum)">
+                    <!-- Then move pagenums from between this and the following row into the start of this cell -->
+                    <xsl:apply-templates select="../(following-sibling::dtbook:pagenum intersect following-sibling::dtbook:tr[1]/preceding-sibling::dtbook:pagenum)">
                         <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
                     </xsl:apply-templates>
                 </xsl:if>
             </xsl:if>
-
-            <xsl:apply-templates select="node()"/>
         </xsl:element>
     </xsl:template>
 
