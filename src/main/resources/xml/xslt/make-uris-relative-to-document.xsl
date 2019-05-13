@@ -14,8 +14,18 @@
 
     <xsl:template match="@href|@src|@xlink:href|@altimg|@data[parent::object]">
         <xsl:choose>
-            <xsl:when test="matches(.,'^[^/]+\.xhtml(#.*)?$')">
+            <xsl:when test="matches(.,'^[^/]+\.x?html#.+$')">
                 <xsl:attribute name="{name()}" select="concat('#',substring-after(.,'#'))"/>
+            </xsl:when>
+            <xsl:when test="matches(.,'^[^/]+\.x?html#?$')">
+                <xsl:variable name="target-href" select="string(resolve-uri(replace(., '#', ''), base-uri(.)))" as="xs:string"/>
+                <xsl:variable name="target-id" select="(//*[@xml:base=$target-href]//@id)[1]" as="xs:string?"/>
+                
+                <xsl:if test="not($target-id)">
+                    <xsl:message select="concat('Warning: could not infer fragment identifier for internal link: ', .)"/>
+                </xsl:if>
+                
+                <xsl:attribute name="{name()}" select="concat('#', $target-id)"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:copy-of select="." exclude-result-prefixes="#all"/>

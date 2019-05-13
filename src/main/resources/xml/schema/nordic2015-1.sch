@@ -996,6 +996,14 @@
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
+    
+    <!-- Disallow internal links without fragment identifiers (see https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/372) -->
+    <pattern id="epub_nordic_273b">
+        <rule context="html:a[not(matches(@href, '^[a-z]+:/+'))]">
+            <assert test="matches(@href, '.+#.+')">[nordic273b] Internal links must contain a non-empty fragment identifier: <value-of
+                select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+        </rule>
+    </pattern>
 
     <!--
         MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
