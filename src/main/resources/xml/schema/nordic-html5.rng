@@ -92,7 +92,7 @@
             <ref name="linegroup"/> <!-- section, div -->
             <ref name="byline"/> <!-- span -->
             <ref name="dateline"/> <!-- span -->
-            <ref name="epigraph"/> <!-- p -->
+            <ref name="epigraph"/> <!-- blockquote -->
             <ref name="table"/> <!-- table -->
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
@@ -113,7 +113,7 @@
             <ref name="linegroup"/> <!-- section, div -->
             <ref name="byline"/> <!-- span -->
             <ref name="dateline"/> <!-- span -->
-            <ref name="epigraph"/> <!-- p -->
+            <ref name="epigraph"/> <!-- blockquote -->
             <ref name="table"/> <!-- table -->
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
@@ -134,7 +134,7 @@
             <ref name="linegroup"/> <!-- section, div -->
             <ref name="byline"/> <!-- span -->
             <ref name="dateline"/> <!-- span -->
-            <ref name="epigraph"/> <!-- p -->
+            <ref name="epigraph"/> <!-- blockquote -->
             <ref name="address"/> <!-- address -->
             <ref name="line"/> <!-- p -->
             <ref name="htmlblocknoimggroup"/> <!-- span, aside, section -->
@@ -232,7 +232,7 @@
     id       document-wide unique id
     class    space separated list of classes used for rendering
     title    advisory title/amplification
-    xml:space	whitespace handling (see http://www.w3.org/TR/xml11/#sec-white-space)
+    xml:space    whitespace handling (see http://www.w3.org/TR/xml11/#sec-white-space)
     epub:type
   -->
     
@@ -1783,18 +1783,26 @@
     <!-- ====================== Byline, Epigraph, Dateline ===================== -->
     
     <!--
-    Use: epigraph marks a quotation placed at the beginnihg of a work
+    Use: epigraph marks a quotation placed at the beginning of a work
     or a division of a work.
   -->
     <define name="epigraph">
-        <element name="p">
-            <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
-            <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
-            <ref name="attlist.epigraph"/>
-            <zeroOrMore>
-                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
-            </zeroOrMore>
-        </element>
+        <choice>
+            <element name="blockquote">
+                <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
+                <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
+                <ref name="attlist.epigraph"/>
+                <zeroOrMore>
+                    <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
+                </zeroOrMore>
+            </element>
+            <element name="p"> <!-- for backwards compatibility we still allow p -->
+                <ref name="attlist.epigraph"/>
+                <zeroOrMore>
+                   <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
+                </zeroOrMore>
+            </element>
+        </choice>
     </define>
     <define name="attlist.epigraph" combine="interleave">
         <attribute name="epub:type">
@@ -1884,7 +1892,7 @@
         <zeroOrMore>
             <choice>
                 <ref name="dateline"/> <!-- span -->
-                <ref name="epigraph"/> <!-- p -->
+                <ref name="epigraph"/> <!-- blockquote -->
                 <ref name="byline"/> <!-- span -->
                 <ref name="linegroup"/> <!-- section, div -->
                 <ref name="line"/> <!-- p -->
@@ -1936,7 +1944,7 @@
                     <ref name="author.block"/> <!-- p -->
                     <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
                     <ref name="dateline"/> <!-- span -->
-                    <ref name="epigraph"/> <!-- p -->
+                    <ref name="epigraph"/> <!-- blockquote -->
                     <ref name="byline"/> <!-- span -->
                     <ref name="linegroup"/> <!-- section, div -->
                     <ref name="line"/> <!-- p -->

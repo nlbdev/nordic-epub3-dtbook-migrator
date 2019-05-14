@@ -76,10 +76,10 @@
             </p:output>
 
             <px:message severity="DEBUG" message="Validating DTBook according to DTBook specification..."/>
-            <px:dtbook-validator name="dtbook-validate.step.validate.input-dtbook.generic">
+            <px:dtbook-validator.script name="dtbook-validate.step.validate.input-dtbook.generic">
                 <p:with-option name="input-dtbook" select="(/*/*[@media-type='application/x-dtbook+xml']/resolve-uri(@href,base-uri(.)))[1]"/>
                 <p:with-option name="check-images" select="$check-images"/>
-            </px:dtbook-validator>
+            </px:dtbook-validator.script>
 
             <p:choose name="choose.inner">
                 <p:xpath-context>

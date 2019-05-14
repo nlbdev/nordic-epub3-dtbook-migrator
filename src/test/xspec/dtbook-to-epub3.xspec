@@ -726,6 +726,15 @@
                 </html:section>
             </x:expect>
         </x:scenario>
+        <x:scenario label="which is inside a paragraph">
+            <x:context>
+                <dtbook:p>
+                    <dtbook:prodnote render="optional">This is a prodnote</dtbook:prodnote>I wish I was a little test</dtbook:p>
+            </x:context>
+            <x:expect label="the resulting element should be a span">
+                <html:p><html:span epub:type="z3998:production" class="prodnote render-optional" id="...">This is a prodnote</html:span>I wish I was a little test</html:p>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.prodnote -->
@@ -821,12 +830,82 @@
 
     <!-- epigraph -->
     <x:scenario label="when processing a epigraph element">
-        <x:context>
-            <dtbook:epigraph/>
-        </x:context>
-        <x:expect label="the resulting element should be a p with an added epub:type of epigraph">
-            <html:p id="..." epub:type="epigraph" class="epigraph"/>
-        </x:expect>
+        <x:scenario label="on its own">
+            <x:context>
+                <dtbook:epigraph class="other-class"/>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <html:blockquote id="..." epub:type="epigraph" class="epigraph other-class"/>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which contains a p">
+            <x:context>
+                <dtbook:epigraph><dtbook:p>foo</dtbook:p></dtbook:epigraph>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <html:blockquote id="..." epub:type="epigraph" class="epigraph"><html:p>foo</html:p></html:blockquote>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which contains a p with class=epigraph">
+            <x:context>
+                <dtbook:epigraph><dtbook:p class="epigraph other-class">foo</dtbook:p></dtbook:epigraph>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <html:blockquote id="..." epub:type="epigraph" class="epigraph"><html:p id="..." epub:type="epigraph" class="epigraph other-class">foo</html:p></html:blockquote>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which contains a epigraph">
+            <x:context>
+                <dtbook:epigraph><dtbook:epigraph class="other-class">foo</dtbook:epigraph></dtbook:epigraph>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <html:blockquote id="..." epub:type="epigraph" class="epigraph"><html:p id="..." epub:type="epigraph" class="epigraph other-class">foo</html:p></html:blockquote>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which is a p with class=epigraph">
+            <x:context>
+                <dtbook:p class="epigraph"/>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <html:blockquote id="..." epub:type="epigraph" class="epigraph"/>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which is a p with class=epigraph and contains a p with class=epigraph">
+            <x:context>
+                <dtbook:p class="epigraph"><dtbook:p class="epigraph">foo</dtbook:p></dtbook:p>
+            </x:context>
+            <x:expect label="the result should be as expected">
+                <html:blockquote id="..." epub:type="epigraph" class="epigraph"><html:p id="..." epub:type="epigraph" class="epigraph">foo</html:p></html:blockquote>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="which is a level">
+            <x:context>
+                <dtbook:bodymatter>
+                    <dtbook:level1 class="chapter">
+                        <dtbook:h1>Headline</dtbook:h1>
+                        <dtbook:level2 class="epigraph">
+                            <dtbook:p>Epigraph.</dtbook:p>
+                        </dtbook:level2>
+                        <dtbook:p>Content</dtbook:p>
+                    </dtbook:level1>
+                </dtbook:bodymatter>
+            </x:context>
+            <x:expect label="the result should be a section">
+                <html:section id="..." epub:type="bodymatter chapter">
+                    <html:h1 id="...">Headline</html:h1>
+                    <html:section id="..." epub:type="epigraph">
+                        <html:p>Epigraph.</html:p>
+                    </html:section>
+                    <html:p>Content</html:p>
+                </html:section>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
     <!-- attlist.epigraph -->
@@ -837,8 +916,8 @@
         <x:context>
             <dtbook:byline/>
         </x:context>
-        <x:expect label="the resulting element should be a span with an added class of byline">
-            <html:span id="..." class="byline"/>
+        <x:expect label="the resulting element should be a p with an added class of byline">
+            <html:p id="..." class="byline"/>
         </x:expect>
     </x:scenario>
 
@@ -895,9 +974,9 @@
                 </dtbook:poem>
             </x:context>
             <x:expect label="the resulting element should be given an added epub:type of z3998:verse">
-                <html:section id="..." epub:type="z3998:poem" class="poem">
+                <html:div id="..." epub:type="z3998:poem" class="poem">
                     <html:div id="..." class="linegroup" epub:type="z3998:verse"/>
-                </html:section>
+                </html:div>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -931,8 +1010,8 @@
             <x:context>
                 <dtbook:poem/>
             </x:context>
-            <x:expect label="the resulting element should also be a section with an added epub:type of z3998:poem">
-                <html:section id="..." epub:type="z3998:poem" class="poem"/>
+            <x:expect label="the resulting element should also be a div with an added epub:type of z3998:poem">
+                <html:div id="..." epub:type="z3998:poem" class="poem"/>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -2338,8 +2417,11 @@
                     <dtbook:hd>TEXT</dtbook:hd>
                 </dtbook:list>
             </x:context>
-            <x:expect label="the resulting list should be wrapped in a section element">
-                <html:section id="...">...</html:section>
+            <x:expect label="the resulting list should be wrapped in a section element containing the hd">
+                <html:section id="...">
+                    <html:h1 id="...">TEXT</html:h1>
+                    <html:ol id="..." class="list-style-type-none">...</html:ol>
+                </html:section>
             </x:expect>
         </x:scenario>
         <x:scenario label="which is ordered">
@@ -2574,6 +2656,20 @@
                 </html:ol>
             </x:expect>
         </x:scenario>
+        <x:scenario label="inside a preformatted list containing a very long text">
+            <x:context>
+                <dtbook:list type="pl" depth="1">
+		  <dtbook:li>2. Halten Sie
+		  Sie es tunlichst, der Öffentlichkeit jene Hautfladen auch bekannt als Bingofladen, die unter den Oberarmen hängen, zuzumuten. Dasselbe gilt für die Röllchen unter der Achsel, zwischen Oberarm und Oberkörper.</dtbook:li>
+                </dtbook:list>
+            </x:context>
+            <x:expect label="the type of list should be detected, the list markers removed and the value should be correct">
+                <html:ol id="...">
+                    <html:li id="..." value="2">Halten Sie
+		  Sie es tunlichst, der Öffentlichkeit jene Hautfladen auch bekannt als Bingofladen, die unter den Oberarmen hängen, zuzumuten. Dasselbe gilt für die Röllchen unter der Achsel, zwischen Oberarm und Oberkörper.</html:li>
+                </html:ol>
+            </x:expect>
+        </x:scenario>
         <x:scenario label="with ol and reversed order">
             <x:context>
                 <dtbook:list type="pl" depth="1">
@@ -2672,16 +2768,16 @@
                 <html:table id="...">
                     <html:tbody>
                         <html:tr>
-                            <html:td>td #1</html:td>
+                            <html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td>
                         </html:tr>
                         <html:tr>
-                            <html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td>
+                            <html:td>td #2<html:span epub:type="pagebreak" title="5" class="page-normal"/><html:span epub:type="pagebreak" title="6" class="page-normal"/></html:td>
                         </html:tr>
                         <html:tr>
-                            <html:td><html:span epub:type="pagebreak" title="5" class="page-normal"/><html:span epub:type="pagebreak" title="6" class="page-normal"/>td #3</html:td>
+                            <html:td>td #3<html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/></html:td>
                         </html:tr>
                         <html:tr>
-                            <html:td><html:span epub:type="pagebreak" title="7" class="page-normal"/><html:span epub:type="pagebreak" title="8" class="page-normal"/>td #4</html:td>
+                            <html:td>td #4</html:td>
                         </html:tr>
                     </html:tbody>
                 </html:table>
@@ -2727,8 +2823,8 @@
                         </html:tr>
                     </html:thead>
                     <html:tbody>
-                        <html:tr><html:td>td #1</html:td></html:tr>
-                        <html:tr><html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td></html:tr>
+                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #2</html:td></html:tr>
                     </html:tbody>
                 </html:table>
                 <html:div epub:type="pagebreak" title="5" class="page-normal"/>
@@ -2773,8 +2869,8 @@
                         </html:tr>
                     </html:tfoot>
                     <html:tbody>
-                        <html:tr><html:td>td #1</html:td></html:tr>
-                        <html:tr><html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td></html:tr>
+                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #2</html:td></html:tr>
                     </html:tbody>
                 </html:table>
                 <html:div epub:type="pagebreak" title="5" class="page-normal"/>
@@ -2841,8 +2937,8 @@
                         </html:tr>
                     </html:tfoot>
                     <html:tbody>
-                        <html:tr><html:td>td #1</html:td></html:tr>
-                        <html:tr><html:td><html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/>td #2</html:td></html:tr>
+                        <html:tr><html:td>td #1<html:span epub:type="pagebreak" title="3" class="page-normal"/><html:span epub:type="pagebreak" title="4" class="page-normal"/></html:td></html:tr>
+                        <html:tr><html:td>td #2</html:td></html:tr>
                     </html:tbody>
                 </html:table>
                 <html:div epub:type="pagebreak" title="5" class="page-normal"/>
@@ -3490,7 +3586,7 @@
         </x:expect>
     </x:scenario>
 
-    <x:scenario label="Move table pagebreak to first cell in following row. #113">
+    <x:scenario label="Move table pagebreak to last cell in preceding row. (see #113 and #364)">
         <x:context>
             <dtbook:table>
                 <dtbook:pagenum page="normal">1</dtbook:pagenum>
@@ -3526,23 +3622,23 @@
                     <html:tr>
                         <html:td><html:span>cell 11</html:span></html:td>
                         <html:td><html:span>cell 12</html:span></html:td>
-                        <html:td><html:span>cell 13</html:span></html:td>
-                    </html:tr>
-                    <html:tr>
                         <html:td>
+                            <html:span>cell 13</html:span>
                             <html:span epub:type="pagebreak" title="3" class="page-normal"/>
                             <html:span epub:type="pagebreak" title="4" class="page-normal"/>
-                            <html:span>cell 21</html:span>
                         </html:td>
-                        <html:td><html:span>cell 22</html:span></html:td>
-                        <html:td><html:span>cell 23</html:span></html:td>
                     </html:tr>
                     <html:tr>
+                        <html:td><html:span>cell 21</html:span></html:td>
+                        <html:td><html:span>cell 22</html:span></html:td>
                         <html:td>
+                            <html:span>cell 23</html:span>
                             <html:span epub:type="pagebreak" title="5" class="page-normal"/>
                             <html:span epub:type="pagebreak" title="6" class="page-normal"/>
-                            <html:span>cell 31</html:span>
                         </html:td>
+                    </html:tr>
+                    <html:tr>
+                        <html:td><html:span>cell 31</html:span></html:td>
                         <html:td><html:span>cell 32</html:span></html:td>
                         <html:td><html:span>cell 33</html:span></html:td>
                     </html:tr>
@@ -4040,66 +4136,6 @@
         </x:expect>
     </x:scenario>
 
-    <x:scenario label="notes linked to from a table are table notes and should not be treated as rearnotes">
-        <x:context>
-            <dtbook:book>
-                <dtbook:bodymatter>
-                    <dtbook:level1>
-                        <dtbook:h1>Food</dtbook:h1>
-                        <dtbook:p>Let's discuss food.</dtbook:p>
-                        <dtbook:level2>
-                            <dtbook:h2>Carrots and potatoes</dtbook:h2>
-                            <dtbook:p>The table below discusses tastefulness of potatoes and carrots.</dtbook:p>
-                            <dtbook:table>
-                                <dtbook:tr>
-                                    <dtbook:th>Carrots</dtbook:th>
-                                    <dtbook:th>Potatoes</dtbook:th>
-                                </dtbook:tr>
-                                <dtbook:tr>
-                                    <dtbook:td colspan="2">Carrots taste better than potatoes depending on the meal it's part of.<dtbook:noteref idref="#tablenote">*</dtbook:noteref></dtbook:td>
-                                </dtbook:tr>
-                            </dtbook:table>
-                            <dtbook:note id="tablenote">
-                                <!-- table note -->
-                                <dtbook:p>* Carrot vs Potato study, 2014</dtbook:p>
-                            </dtbook:note>
-                            <dtbook:p>Observations were recorded. Conclusions were made.</dtbook:p>
-                        </dtbook:level2>
-                    </dtbook:level1>
-                </dtbook:bodymatter>
-            </dtbook:book>
-        </x:context>
-        <x:expect label="table notes should remain in place, rearnotes should be moved to new top-level section (i.e. new document)">
-            <html:body>
-                <html:section epub:type="bodymatter chapter" id="...">
-                    <html:h1 id="...">Food</html:h1>
-                    <html:p>Let's discuss food.</html:p>
-                    <html:section id="...">
-                        <html:h2 id="...">Carrots and potatoes</html:h2>
-                        <html:p>The table below discusses tastefulness of potatoes and carrots.</html:p>
-                        <html:table id="...">
-                            <html:tbody>
-                                <html:tr>
-                                    <html:th>Carrots</html:th>
-                                    <html:th>Potatoes</html:th>
-                                </html:tr>
-                                <html:tr>
-                                    <html:td colspan="2">Carrots taste better than potatoes depending on the meal it's part of.<html:a id="..." epub:type="noteref" class="noteref" href="#tablenote"
-                                            >*</html:a></html:td>
-                                </html:tr>
-                            </html:tbody>
-                        </html:table>
-                        <html:aside id="tablenote" class="notebody" epub:type="note">
-                            <!-- table note -->
-                            <html:p>* Carrot vs Potato study, 2014</html:p>
-                        </html:aside>
-                        <html:p>Observations were recorded. Conclusions were made.</html:p>
-                    </html:section>
-                </html:section>
-            </html:body>
-        </x:expect>
-    </x:scenario>
-
     <x:scenario label="allowing inline images and custom alt attributes - issue 313">
         <x:context>
             <dtbook:div id="image-tests">
@@ -4281,5 +4317,58 @@
         </x:context>
         <x:expect label="inserting a dd will avoid epubcheck error RSC-005"/>
     </x:scenario>
-
+    
+    <x:scenario label="regression for NLB book 501444">
+        <x:context>
+            <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="de">
+                <book>
+                    <bodymatter>
+                        <level1 class="chapter">
+                            <table>
+                                <tr>
+                                    <td rowspan="1" colspan="1"><strong><em>deren</em><noteref idref="#fn_113_1">1</noteref></strong></td>
+                                </tr>
+                            </table>
+                        </level1>
+                    </bodymatter>
+                    <rearmatter>
+                        <level1>
+                            <note id="fn_109_1">
+                                <p>1 Das betrifft nicht die <em>substantivierten Adjektive,</em> d. h. die mithilfe von Wortbildungsmitteln von Adjektiven abgeleiteten Substantive wie <em>die Größe, die Schönheit, das Gut, der Stoz.</em> Diese folgen der Deklination der Substantive.</p>
+                            </note>
+                            <note id="fn_113_1">
+                                <p>1 Als vorausweisendes Demonstrativpronomen in der Form <em>derer.</em> Wir gedenken <em>derer,</em> die durch die Flut umgekommen sind.</p>
+                            </note>
+                        </level1>
+                    </rearmatter>
+                </book>
+            </dtbook>
+        </x:context>
+        <x:expect label="the result should be as expected">
+            <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="de" xml:lang="de">
+                <body>
+                    <section id="level1_1" epub:type="bodymatter chapter">
+                        <table id="table_1">
+                            <tbody>
+                                <tr>
+                                    <td rowspan="1" colspan="1"><strong><em>deren</em><a id="noteref_1" class="noteref" epub:type="noteref" href="#fn_113_1">1</a></strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <section id="level1_2" epub:type="backmatter footnotes">
+                        <ol epub:type="footnotes">
+                            <li id="fn_109_1" class="notebody" epub:type="footnote">
+                                <p>1 Das betrifft nicht die <em>substantivierten Adjektive,</em> d. h. die mithilfe von Wortbildungsmitteln von Adjektiven abgeleiteten Substantive wie <em>die Größe, die Schönheit, das Gut, der Stoz.</em> Diese folgen der Deklination der Substantive.</p>
+                            </li>
+                            <li id="fn_113_1" class="notebody" epub:type="footnote">
+                                <p>1 Als vorausweisendes Demonstrativpronomen in der Form <em>derer.</em> Wir gedenken <em>derer,</em> die durch die Flut umgekommen sind.</p>
+                            </li>
+                        </ol>
+                    </section>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
 </x:description>

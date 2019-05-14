@@ -64,5 +64,69 @@
             </html>
         </x:expect>
     </x:scenario>
-
+    
+    <x:scenario label="Handle links without a fragment identifier">
+        <x:scenario label="across documents">
+            <x:context>
+                <html xml:base="file:/tmp/dir/file.xhtml">
+                    <head/>
+                    <body id="outlineid">
+                        <section xml:base="file:/tmp/dir/a.xhtml" id="id1">
+                            <a href="b.xhtml"/>
+                        </section>
+                        <section xml:base="file:/tmp/dir/b.xhtml">
+                            <h2 id="id2">Headline</h2>
+                            <a href="a.xhtml"/>
+                        </section>
+                    </body>
+                </html>
+            </x:context>
+            <x:expect label="Internal links should be used (starting with '#')">
+                <html xml:base="file:/tmp/dir/file.xhtml">
+                    <head/>
+                    <body id="outlineid">
+                        <section id="id1">
+                            <a href="#id2"/>
+                        </section>
+                        <section>
+                            <h2 id="id2">Headline</h2>
+                            <a href="#id1"/>
+                        </section>
+                    </body>
+                </html>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="in the same document">
+            <x:context>
+                <html xml:base="file:/tmp/dir/file.xhtml">
+                    <head/>
+                    <body id="outlineid">
+                        <section xml:base="file:/tmp/dir/a.xhtml" id="id1">
+                            <a href="a.xhtml"/>
+                        </section>
+                        <section xml:base="file:/tmp/dir/b.xhtml">
+                            <h2 id="id2">Headline</h2>
+                            <a href="b.xhtml"/>
+                        </section>
+                    </body>
+                </html>
+            </x:context>
+            <x:expect label="Internal links should be used (starting with '#')">
+                <html xml:base="file:/tmp/dir/file.xhtml">
+                    <head/>
+                    <body id="outlineid">
+                        <section id="id1">
+                            <a href="#id1"/>
+                        </section>
+                        <section>
+                            <h2 id="id2">Headline</h2>
+                            <a href="#id2"/>
+                        </section>
+                    </body>
+                </html>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    
 </x:description>

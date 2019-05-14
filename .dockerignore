@@ -1,3 +1,9 @@
+.git
+.gitignore
+
+.dockerignore
+Dockerfile
+
 target/
 src/test/xspec/*.html
 src/test/xspec/xspec/*
@@ -13,3 +19,4 @@ pom.xml.next
 dependency-reduced-pom.xml
 buildNumber.properties
 *~
+

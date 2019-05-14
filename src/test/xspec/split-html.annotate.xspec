@@ -164,7 +164,7 @@
                             <p>...</p>
                         </section>
                         <section id="level3_12">
-                            <div epub:type="pagebreak" class="page-normal" title="79" id="page-79"/>
+                            <div epub:type="pagebreak" class="page-normal" title="78" id="page-78"/>
                             <h3 id="h3_12">Preface to Phenomenology of Perception</h3>
                             <blockquote id="quote_8">
                                 <p>From <em>Phenomenology of Perception,</em> London: Routledge &amp; Kegan Paul, 1962.</p>
@@ -174,18 +174,25 @@
                                 >2</a><![CDATA[ One may try to do away with these contradictions by ...]]></p>
                         </section>
                         <section epub:type="rearnotes" id="level3_13">
+                            <div epub:type="pagebreak" class="page-normal" title="79" id="page-79"/>
                             <h3 id="h3_13">NOTES</h3>
+                            <div epub:type="pagebreak" class="page-normal" title="80" id="page-80"/>
                             <ol class="list-style-type-none" style="list-style-type: none;">
                                 <li class="notebody" epub:type="rearnote" id="c05001"><![CDATA[1 ]]><em><![CDATA[Méditations cartésiennes,]]></em><![CDATA[ pp. 120ff.]]></li>
                                 <li class="notebody" epub:type="rearnote" id="c05002"
                                     ><![CDATA[2 See the unpublished ]]><em><![CDATA[6th Méditation cartésienne,]]></em><![CDATA[ edited by Eugen Fink, to which G. Berger has kindly referred us.]]></li>
                             </ol>
                         </section>
+                        <section id="level3_12">
+                            <div epub:type="pagebreak" class="page-normal" title="81" id="page-81"/>
+                            <h3 id="h3_12">More stuff</h3>
+                            <p>Content about more stuff</p>
+                        </section>
                     </section>
                 </body>
             </html>
         </x:context>
-        <x:expect label="the rearnotes should be split into its own document">
+        <x:expect label="the rearnotes should be split into its own document, preserving page numbering order">
             <html epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/content.xhtml">
                 <head>
                     <title>Single-page title</title>
@@ -201,7 +208,7 @@
                             <p>...</p>
                         </section>
                         <section id="level3_12">
-                            <div epub:type="pagebreak" class="page-normal" title="79" id="page-79"/>
+                            <div epub:type="pagebreak" class="page-normal" title="78" id="page-78"/>
                             <h3 id="h3_12">Preface to Phenomenology of Perception</h3>
                             <blockquote id="quote_8">
                                 <p>From <em>Phenomenology of Perception,</em> London: Routledge &amp; Kegan Paul, 1962.</p>
@@ -209,6 +216,13 @@
                             <p><![CDATA[WHAT IS PHENOMENOLOGY? It may seem ... to provide. Yet Husserl in his last works mentions a 'genetic phenomenology',]]><a class="noteref" epub:type="noteref"
                                     href="#c05001">1</a><![CDATA[ and even a 'constructive phenomenology'.]]><a class="noteref" epub:type="noteref" href="#c05002"
                                 >2</a><![CDATA[ One may try to do away with these contradictions by ...]]></p>
+                            <div epub:type="pagebreak" class="page-normal" title="79" id="page-79"/>
+                            <div epub:type="pagebreak" class="page-normal" title="80" id="page-80"/>
+                        </section>
+                        <section id="level3_12">
+                            <div epub:type="pagebreak" class="page-normal" title="81" id="page-81"/>
+                            <h3 id="h3_12">More stuff</h3>
+                            <p>Content about more stuff</p>
                         </section>
                     </section>
                     <section epub:type="bodymatter rearnotes" id="level3_13" xml:base="file:/tmp/UID-2-rearnotes.xhtml">

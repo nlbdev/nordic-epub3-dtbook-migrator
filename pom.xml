@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-parent</artifactId>
-        <version>1.11.0</version>
+        <version>1.12.0</version>
         <!--<relativePath>../../scripts/parent/</relativePath>-->
     </parent>
     
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>nordic-epub3-dtbook-migrator</artifactId>
-    <version>1.3.1-SNAPSHOT</version>
+    <version>1.4.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>DAISY Pipeline 2 module :: Nordic EPUB3/DTBook Migrator</name>
@@ -69,6 +69,17 @@
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
             <artifactId>epubcheck-adapter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.idpf</groupId>
+                    <artifactId>epubcheck</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.w3c</groupId>
+            <artifactId>epubcheck</artifactId>
+            <version>4.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline.modules</groupId>
@@ -97,6 +108,11 @@
         <dependency>
             <groupId>org.daisy.pipeline.build</groupId>
             <artifactId>modules-test-helper</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>framework-volatile</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

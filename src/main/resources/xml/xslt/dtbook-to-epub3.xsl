@@ -13,7 +13,7 @@
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
     <!--<xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
-	<xsl:import href="epub3-vocab.xsl"/>
+    <xsl:import href="epub3-vocab.xsl"/>
 
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
 
@@ -31,6 +31,7 @@
 
     <xsl:template name="f:coreattrs">
         <xsl:param name="classes" select="()" tunnel="yes"/>
+        <xsl:param name="types" select="()" tunnel="yes"/>
         <xsl:param name="except" select="()" tunnel="yes"/>
         <xsl:param name="all-ids" select="()" tunnel="yes"/>
         <xsl:variable name="is-first-level" select="boolean((self::dtbook:level or self::dtbook:level1) and (parent::dtbook:frontmatter or parent::dtbook:bodymatter or parent::dtbook:rearmatter))"/>
@@ -46,11 +47,12 @@
         </xsl:if>
         <xsl:copy-of select="(@id|@title|@xml:space)[not(name()=$except)]" exclude-result-prefixes="#all"/>
         <xsl:if
-            test="not(@id) and not(local-name()=('book','span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd','lic','thead','tfoot','tbody','colgroup','col') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/')">
+            test="not(@id) and ($types[.='epigraph'] or not(local-name()=('book','span','p','div','tr','th','td','link','br','line','linenum','title','author','em','strong','dfn','kbd','code','samp','cite','abbr','acronym','sub','sup','bdo','sent','w','pagenum','docauthor','bridgehead','dd','lic','thead','tfoot','tbody','colgroup','col') and namespace-uri()='http://www.daisy.org/z3986/2005/dtbook/'))">
             <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
         <xsl:call-template name="f:classes-and-types">
             <xsl:with-param name="classes" select="(if ($is-first-level) then tokenize(parent::*/@class,'\s+') else (), $classes)" tunnel="yes"/>
+            <xsl:with-param name="types" select="$types" tunnel="yes"/>
         </xsl:call-template>
     </xsl:template>
 
@@ -536,20 +538,19 @@
     </xsl:template>
 
     <xsl:template match="dtbook:prodnote | dtbook:div[f:classes(.) = ('prodnote','production')]">
-        <xsl:choose>
-            <xsl:when test="parent::*[tokenize(@class,'\s+')=('cover','jacketcopy')]">
-                <section>
-                    <xsl:call-template name="f:attlist.prodnote"/>
-                    <xsl:apply-templates select="node()"/>
-                </section>
-            </xsl:when>
-            <xsl:otherwise>
-                <aside>
-                    <xsl:call-template name="f:attlist.prodnote"/>
-                    <xsl:apply-templates select="node()"/>
-                </aside>
-            </xsl:otherwise>
-        </xsl:choose>
+      <xsl:element name="{if (parent::*[tokenize(@class,'\s+')=('cover','jacketcopy')]) then 'section'
+                          else 'aside'}">
+        <xsl:call-template name="f:attlist.prodnote"/>
+        <xsl:apply-templates select="node() | text()"/>
+      </xsl:element>
+    </xsl:template>
+
+    <!-- Render inline prodnotes as spans -->
+    <xsl:template match="dtbook:prodnote[f:is-inline(./parent::dtbook:*) and not(./parent::dtbook:imggroup)]">
+      <span>
+        <xsl:call-template name="f:attlist.prodnote"/>
+        <xsl:apply-templates select="node() | text()"/>
+      </span>
     </xsl:template>
 
     <xsl:template name="f:attlist.prodnote">
@@ -592,7 +593,7 @@
 
     <xsl:template match="dtbook:note">
         <xsl:variable name="type"
-            select="if (count(parent::*[matches(local-name(),'^level\d?$')]) and not(//dtbook:table//dtbook:noteref/substring-after(@idref,'#')=@id)) then if (count(ancestor::dtbook:bodymatter)) then 'rearnote' else if (count(ancestor::dtbook:rearmatter)) then 'footnote' else 'note' else 'note'"/>
+            select="if (count(parent::*[matches(local-name(),'^level\d?$')])) then if (count(ancestor::dtbook:bodymatter)) then 'rearnote' else if (count(ancestor::dtbook:rearmatter)) then 'footnote' else 'note' else 'note'"/>
         <xsl:choose>
             <xsl:when test="$type='note'">
                 <aside>
@@ -645,11 +646,27 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="dtbook:epigraph">
-        <p>
-            <xsl:call-template name="f:attlist.epigraph"/>
-            <xsl:apply-templates select="node()"/>
-        </p>
+    <xsl:template match="dtbook:epigraph | dtbook:p[tokenize(@class,'\s+') = 'epigraph']">
+        <xsl:choose>
+            <xsl:when test="exists(.//dtbook:h1 | .//dtbook:h2 | .//dtbook:h3 | .//dtbook:h4 | .//dtbook:h5 | .//dtbook:h6)">
+                <aside>
+                    <xsl:call-template name="f:attlist.epigraph"/>
+                    <xsl:apply-templates select="node()"/>
+                </aside>
+            </xsl:when>
+            <xsl:when test="exists(ancestor::dtbook:epigraph | ancestor::dtbook:p[tokenize(@class,'\s+') = 'epigraph'])">
+                <p>
+                    <xsl:call-template name="f:attlist.epigraph"/>
+                    <xsl:apply-templates select="node()"/>
+                </p>
+            </xsl:when>
+            <xsl:otherwise>
+                <blockquote>
+                    <xsl:call-template name="f:attlist.epigraph"/>
+                    <xsl:apply-templates select="node()"/>
+                </blockquote>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="f:attlist.epigraph">
@@ -660,10 +677,10 @@
     </xsl:template>
 
     <xsl:template match="dtbook:byline">
-        <span>
+        <p>
             <xsl:call-template name="f:attlist.byline"/>
             <xsl:apply-templates select="node()"/>
-        </span>
+        </p>
     </xsl:template>
 
     <xsl:template name="f:attlist.byline">
@@ -700,10 +717,10 @@
     </xsl:template>
 
     <xsl:template match="dtbook:poem">
-        <section>
+        <xsl:element name="{if (dtbook:hd) then 'section' else 'div'}">
             <xsl:call-template name="f:attlist.poem"/>
             <xsl:apply-templates select="node()"/>
-        </section>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template name="f:attlist.poem">
@@ -1309,6 +1326,7 @@
             <xsl:when test="dtbook:hd">
                 <section>
                     <xsl:attribute name="id" select="f:generate-pseudorandom-id(concat(f:generate-pretty-id(.,$all-ids),'_section'),$all-ids)"/>
+                    <xsl:apply-templates select="dtbook:hd"/>
                     <xsl:call-template name="f:list.content">
                         <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
                     </xsl:call-template>
@@ -1328,7 +1346,7 @@
         </xsl:apply-templates>
         <xsl:variable name="first-marker-text" select="dtbook:li[1]/(text()[1] | dtbook:p/text()[1])[normalize-space()][1]"/>
         <xsl:variable name="first-marker"
-            select="if (starts-with($first-marker-text,'•')) then '•' else if (matches($first-marker-text,'^[0-9a-zA-Z]+\.')) then replace($first-marker-text,'^([0-9a-zA-Z]+)\..*','$1') else ''"/>
+            select="if (starts-with($first-marker-text,'•')) then '•' else if (matches($first-marker-text,'^[0-9a-zA-Z]+\.')) then substring-before($first-marker-text,'.') else ''"/>
         <xsl:variable name="first-marker-type"
             select="if (not($first-marker)) then '' else if ($first-marker='•') then '•' else if (string(number($first-marker)) != 'NaN') then '1' else if ($first-marker='i') then 'i' else if ($first-marker='I') then 'I' else if ($first-marker=lower-case($first-marker)) then 'a' else 'A'"/>
         <xsl:element name="{if ($first-marker-type='•') then 'ul' else 'ol'}">
@@ -1366,7 +1384,7 @@
         <li>
             <xsl:variable name="marker-text" select="(text() | dtbook:p/text())[normalize-space()][1]"/>
             <xsl:variable name="marker"
-                select="if (starts-with($marker-text,'•')) then '•' else if (matches($marker-text,'^[0-9a-zA-Z]+\.')) then replace($marker-text,'^([0-9a-zA-Z]+)\..*','$1') else ()"/>
+                select="if (starts-with($marker-text,'•')) then '•' else if (matches($marker-text,'^[0-9a-zA-Z]+\.')) then substring-before($marker-text,'.') else ()"/>
             <xsl:variable name="marker-type"
                 select="if (not($marker)) then '' else if ($marker='•') then '•' else if (string(number($marker)) != 'NaN') then '1' else parent::*/dtbook:li[1]/(text()[normalize-space()]|dtbook:p/text()[normalize-space()])[1]/(if (starts-with(.,'i.')) then 'i' else if (starts-with(.,'I.')) then 'I' else if (substring(.,1,1)=lower-case(substring(.,1,1))) then 'a' else 'A')"/>
             <!-- NOTE: list is assumed to be preformatted; a generic script would calculate implicit value based on start attribute etc. -->
@@ -1683,21 +1701,21 @@
     <xsl:template match="dtbook:th | dtbook:td">
         <xsl:element name="{local-name()}">
             <xsl:call-template name="f:attlist.th.td"/>
+            
+            <xsl:apply-templates select="node()"/>
 
-            <xsl:if test="not(preceding-sibling::dtbook:th or preceding-sibling::dtbook:td)">
-                <!-- If this is the first cell in the row -->
+            <xsl:if test="not(following-sibling::dtbook:th or following-sibling::dtbook:td)">
+                <!-- If this is the last cell in the row -->
 
-                <xsl:if test="../preceding-sibling::dtbook:tr">
-                    <!-- If there is a row before this row -->
+                <xsl:if test="../following-sibling::dtbook:tr">
+                    <!-- If there is a row after this row -->
 
-                    <!-- Then move pagenums from between this and the previous row into the start of this cell -->
-                    <xsl:apply-templates select="../(preceding-sibling::dtbook:pagenum intersect preceding-sibling::dtbook:tr[1]/following-sibling::dtbook:pagenum)">
+                    <!-- Then move pagenums from between this and the following row into the start of this cell -->
+                    <xsl:apply-templates select="../(following-sibling::dtbook:pagenum intersect following-sibling::dtbook:tr[1]/preceding-sibling::dtbook:pagenum)">
                         <xsl:with-param name="pagenum.parent" tunnel="yes" select="."/>
                     </xsl:apply-templates>
                 </xsl:if>
             </xsl:if>
-
-            <xsl:apply-templates select="node()"/>
         </xsl:element>
     </xsl:template>
 
