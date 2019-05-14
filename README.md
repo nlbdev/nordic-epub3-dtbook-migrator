@@ -63,17 +63,9 @@ Most notably, multimedia such as audio and video are currently not allowed in th
 Building
 --------
 
-To create a docker image type
-
-```shell
-docker build -t nlbdev/epub3-dtbook-migrator .
-```
-
-To run the docker image type
-
-```shell
-docker run --rm -e PIPELINE2_WS_HOST=0.0.0.0 -p 8181:8181 nlbdev/nordic-epub3-dtbook-migrator
-```
+The nordic migrator can be built with Maven,
+either directly (with for instance `mvn clean package`),
+or indirectly with Docker (with for instance `docker build .`).
 
 References
 ----------
