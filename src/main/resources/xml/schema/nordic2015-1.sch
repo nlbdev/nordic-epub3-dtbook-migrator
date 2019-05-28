@@ -515,7 +515,7 @@
             <assert test="count(html:meta[@name='nordic:supplier'])=1">[nordic128d] nordic:supplier metadata must occur once.</assert>
         </rule>
     </pattern>
-    
+
     <!-- Rule 130 (44): dc:language must equal root element xml:lang -->
     <pattern id="epub_nordic_130">
         <rule context="html:meta[@name='dc:language']">
@@ -996,10 +996,10 @@
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
-    
+
     <!-- Disallow internal links without fragment identifiers (see https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/372) -->
     <pattern id="epub_nordic_273b">
-        <rule context="html:a[not(matches(@href, '^[a-z]+:/+'))]">
+        <rule context="html:a[not(matches(@href, '^([a-z]+:/+)|mailto:|tel:'))]">
             <assert test="matches(@href, '.*#.+')">[nordic273b] Internal links must contain a non-empty fragment identifier: <value-of
                 select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
@@ -1014,7 +1014,7 @@
             <assert
                 test="count(
                 ancestor::html:table//html:th/@id[contains( concat(' ',current()/@headers,' '), concat(' ',normalize-space(),' ') )]
-                ) = 
+                ) =
                 string-length(normalize-space(@headers)) - string-length(translate(normalize-space(@headers), ' ','')) + 1
                 "
                 >[nordic274] Not all the tokens in the headers attribute match the id attributes of 'th' elements in this or a parent table: <value-of
@@ -1054,13 +1054,13 @@
     <pattern id="epub_nordic_277">
         <rule context="html:img">
             <assert
-                test="not(@width) or 
+                test="not(@width) or
                 string-length(translate(@width,'0123456789',''))=0 or
                 (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)&gt;=2)"
                 >[nordic277] The image width is not expressed in pixels or percentage: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert
-                test="not(@height) or 
+                test="not(@height) or
                 string-length(translate(@height,'0123456789',''))=0 or
                 (contains(@height,'%') and substring-after(@height,'%')='' and translate(@height,'%0123456789','')='' and string-length(@height)&gt;=2)"
                 >[nordic277] The image height is not expressed in pixels or percentage: <value-of
@@ -1075,19 +1075,19 @@
     <pattern id="epub_nordic_278">
         <rule context="html:table">
             <assert
-                test="not(@width) or 
+                test="not(@width) or
                 string-length(translate(@width,'0123456789',''))=0 or
                 (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)&gt;=2)"
                 >[nordic278] Table width is not expressed in pixels or percentage: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert
-                test="not(@cellspacing) or 
+                test="not(@cellspacing) or
                 string-length(translate(@cellspacing,'0123456789',''))=0 or
                 (contains(@cellspacing,'%') and substring-after(@cellspacing,'%')='' and translate(@cellspacing,'%0123456789','')='' and string-length(@cellspacing)&gt;=2)"
                 >[nordic278] Table cellspacing is not expressed in pixels or percentage: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
             <assert
-                test="not(@cellpadding) or 
+                test="not(@cellpadding) or
                 string-length(translate(@cellpadding,'0123456789',''))=0 or
                 (contains(@cellpadding,'%') and substring-after(@cellpadding,'%')='' and translate(@cellpadding,'%0123456789','')='' and string-length(@cellpadding)&gt;=2)"
                 >[nordic278] Table cellpadding is not expressed in pixels or percentage: <value-of
@@ -1121,9 +1121,9 @@
         <rule context="html:meta">
             <report
                 test="starts-with(@name, 'dc:') and not(@name='dc:title' or @name='dc:subject' or @name='dc:description' or
-                @name='dc:type' or @name='dc:source' or @name='dc:relation' or 
-                @name='dc:coverage' or @name='dc:creator' or @name='dc:publisher' or 
-                @name='dc:contributor' or @name='dc:rights' or @name='dc:date' or 
+                @name='dc:type' or @name='dc:source' or @name='dc:relation' or
+                @name='dc:coverage' or @name='dc:creator' or @name='dc:publisher' or
+                @name='dc:contributor' or @name='dc:rights' or @name='dc:date' or
                 @name='dc:format' or @name='dc:identifier' or @name='dc:language')"
                 >[nordic280] Unrecognized Dublin Core metadata name: <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"
                 /></report>
@@ -1158,7 +1158,7 @@
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
     </pattern>
-    
+
     <pattern id="epub_nordic_283">
         <rule context="m:*[contains(name(), ':')]">
             <assert test="substring-before(name(), ':') = 'm'">[nordic283] When using MathML with a namespace prefix, that prefix must be 'm'. Not <value-of select="substring-before(name(), ':')"/></assert>
