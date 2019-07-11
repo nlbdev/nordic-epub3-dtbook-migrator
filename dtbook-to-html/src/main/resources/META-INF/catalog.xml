@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+    
+    <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-html/dtbook-to-epub3.xsl" uri="../xml/xslt/dtbook-to-epub3.xsl"/>
+    
+    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+    
+</catalog>

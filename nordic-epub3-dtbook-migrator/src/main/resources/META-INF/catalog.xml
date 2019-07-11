@@ -31,7 +31,6 @@
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/library.xpl" uri="../xml/xproc/library.xpl"/>
     
     <!-- XSLT reusable stylesheets -->
-    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/dtbook-to-epub3.xsl" uri="../xml/xslt/dtbook-to-epub3.xsl"/>
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-dtbook.xsl" uri="../xml/xslt/epub3-to-dtbook.xsl"/>
     
     <!-- RelaxNG and Schematron schemas -->
@@ -46,6 +45,7 @@
     <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.nav-references.sch" uri="../xml/schema/nordic2015-1.nav-references.sch"/>
     
     <!-- Pipeline 2 module dependencies -->
+    <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-to-html"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:asciimath-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
