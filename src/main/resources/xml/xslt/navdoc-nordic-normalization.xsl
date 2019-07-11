@@ -149,7 +149,7 @@
         </head>
     </xsl:template>
 
-    <!-- delete empty ol elements (this probably stems from a bug in epub3-nav-utils) -->
+    <!-- delete empty ol elements (this probably stems from a bug in epub3-utils) -->
     <xsl:template match="ol[not(*)]"/>
 
 </xsl:stylesheet>
