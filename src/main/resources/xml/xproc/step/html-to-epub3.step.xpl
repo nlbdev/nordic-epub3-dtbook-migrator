@@ -39,7 +39,14 @@
 
     <p:import href="html-split.xpl"/>
     <p:import href="validation-status.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl">
+        <p:documentation>
+            px:epub3-nav-create-toc
+            px:epub3-nav-create-page-list
+            px:epub3-nav-aggregate
+            px:epub3-nav-to-ncx
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -234,14 +241,7 @@
                 </p:viewport>
                 <p:identity name="html-to-epub3.step.nav.html"/>
 
-                <p:xslt name="html-to-epub3.step.nav-to-ncx">
-                    <p:input port="parameters">
-                        <p:empty/>
-                    </p:input>
-                    <p:input port="stylesheet">
-                        <p:document href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/nav-to-ncx.xsl"/>
-                    </p:input>
-                </p:xslt>
+                <px:epub3-nav-to-ncx name="html-to-epub3.step.nav-to-ncx"/>
                 <p:xslt name="html-to-epub3.step.ncx-pretty-print">
                     <!-- TODO: remove pretty printing to improve performance -->
                     <p:with-param name="preserve-empty-whitespace" select="'false'"/>
