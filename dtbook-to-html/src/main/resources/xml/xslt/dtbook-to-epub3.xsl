@@ -12,7 +12,7 @@
                 version="2.0">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
-    <xsl:import href="epub3-vocab.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/epub3-utils/epub3-vocab.xsl"/>
 
     <xsl:output indent="yes" exclude-result-prefixes="#all"/>
 

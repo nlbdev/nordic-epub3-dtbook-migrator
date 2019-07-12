@@ -4,5 +4,6 @@
     <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-html/dtbook-to-epub3.xsl" uri="../xml/xslt/dtbook-to-epub3.xsl"/>
     
     <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:epub3-utils"/>
     
 </catalog>

@@ -5,7 +5,7 @@
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
     <!--<xsl:import href="../../../../test/xspec/mock/numeral-conversion.xsl"/>-->
-    <xsl:import href="epub3-vocab.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/epub3-utils/epub3-vocab.xsl"/>
 
     <xsl:param name="allow-links" select="false()"/>
 
