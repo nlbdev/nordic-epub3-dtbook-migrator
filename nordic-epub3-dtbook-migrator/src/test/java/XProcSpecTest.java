@@ -27,7 +27,8 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
             pipelineModule("fileset-utils"),
             pipelineModule("html-utils"),
             pipelineModule("mediatype-utils"),
-            pipelineModule("validation-utils")
+            pipelineModule("validation-utils"),
+            pipelineModule("mathml-utils"),
         }; 
     } 
      

@@ -57,5 +57,6 @@
     <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:mathml-utils"/>
     
 </catalog>
