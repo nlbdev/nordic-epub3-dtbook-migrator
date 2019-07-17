@@ -120,9 +120,9 @@
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>
             </px:fileset-filter>
-            <px:fileset-move name="dtbook-to-html.step.move-resources">
-                <p:with-option name="new-base" select="$temp-dir"/>
-            </px:fileset-move>
+            <px:fileset-copy name="dtbook-to-html.step.move-resources">
+                <p:with-option name="target" select="$temp-dir"/>
+            </px:fileset-copy>
             <p:viewport match="/*/*[starts-with(@media-type,'image/')]" name="dtbook-to-html.step.viewport-images">
                 <p:add-attribute match="/*" attribute-name="href" name="dtbook-to-html.step.viewport-images.change-href">
                     <p:with-option name="attribute-value" select="concat('images/',/*/@href)"/>

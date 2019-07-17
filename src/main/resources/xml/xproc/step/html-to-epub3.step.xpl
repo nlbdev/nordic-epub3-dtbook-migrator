@@ -49,7 +49,17 @@
             px:epub3-ocf-finalize
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-load
+            px:fileset-copy
+            px:fileset-filter
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-join
+            px:fileset-rebase
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
 
@@ -96,12 +106,12 @@
                     <p:pipe port="in-memory.in" step="main"/>
                 </p:input>
             </px:nordic-html-split-perform>
-            <px:fileset-move name="html-to-epub3.step.html-split.moved">
-                <p:input port="in-memory.in">
+            <px:fileset-copy name="html-to-epub3.step.html-split.moved">
+                <p:input port="source.in-memory">
                     <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split"/>
                 </p:input>
-                <p:with-option name="new-base" select="$publication-dir"/>
-            </px:fileset-move>
+                <p:with-option name="target" select="$publication-dir"/>
+            </px:fileset-copy>
 
             <!-- Create spine -->
             <px:fileset-filter media-types="application/xhtml+xml" name="html-to-epub3.step.filter-html-split-fileset-xhtml"/>
@@ -109,7 +119,7 @@
 
             <px:fileset-load name="html-to-epub3.step.load-spine">
                 <p:input port="in-memory">
-                    <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split.moved"/>
+                    <p:pipe step="html-to-epub3.step.html-split.moved" port="result.in-memory"/>
                 </p:input>
             </px:fileset-load>
             <p:for-each name="html-to-epub3.step.iterate-spine">
@@ -198,7 +208,7 @@
                 <px:epub3-nav-create-page-list name="html-to-epub3.step.nav.page-list">
                     <p:with-option name="output-base-uri" select="concat($publication-dir,'nav.xhtml')"/>
                     <p:input port="source">
-                        <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split.moved"/>
+                        <p:pipe step="html-to-epub3.step.html-split.moved" port="result.in-memory"/>
                     </p:input>
                 </px:epub3-nav-create-page-list>
                 <p:sink/>
@@ -406,7 +416,7 @@
             <!-- List auxiliary resources (i.e. all non-content files: images, CSS, NCX, etc. as well as content files that are non-primary) -->
             <px:fileset-filter name="html-to-epub3.step.filter-non-linear-content">
                 <p:input port="source">
-                    <p:pipe port="fileset.out" step="html-to-epub3.step.html-split.moved"/>
+                    <p:pipe step="html-to-epub3.step.html-split.moved" port="result.fileset"/>
                 </p:input>
             </px:fileset-filter>
             <p:delete match="//d:file[@media-type='application/xhtml+xml' and not(matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml'))]"
