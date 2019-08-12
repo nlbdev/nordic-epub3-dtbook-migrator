@@ -288,22 +288,31 @@
             <px:mediatype-detect name="html-to-epub3.step.resource-fileset"/>
             <p:sink/>
 
+            <px:fileset-join>
+                <p:input port="source">
+                    <p:pipe step="html-to-epub3.step.html-split.moved" port="result.fileset"/>
+                    <p:pipe step="html-to-epub3.step.ncx-fileset" port="result"/>
+                </p:input>
+            </px:fileset-join>
+            <px:fileset-add-entry>
+                <p:input port="entry">
+                    <p:pipe step="html-to-epub3.step.nav" port="html"/>
+                </p:input>
+            </px:fileset-add-entry>
+
             <px:epub3-pub-create-package-doc name="html-to-epub3.step.create-package-doc">
-                <p:with-option name="result-uri" select="concat($publication-dir,'package.opf')"/>
+                <p:with-option name="output-base-uri" select="concat($publication-dir,'package.opf')"/>
                 <p:with-option name="compatibility-mode" select="$compatibility-mode"/>
                 <p:with-option name="detect-properties" select="'true'"/>
-                <p:input port="spine-filesets">
-                    <p:pipe port="result" step="html-to-epub3.step.spine"/>
+                <p:input port="source.in-memory">
+                    <p:pipe step="html-to-epub3.step.nav" port="html"/>
+                    <p:pipe step="html-to-epub3.step.spine-html" port="result"/>
+                </p:input>
+                <p:input port="spine">
+                    <p:pipe step="html-to-epub3.step.spine" port="result"/>
                 </p:input>
                 <p:input port="metadata">
-                    <p:pipe port="result" step="html-to-epub3.step.opf-metadata"/>
-                </p:input>
-                <p:input port="content-docs">
-                    <p:pipe port="html" step="html-to-epub3.step.nav"/>
-                    <p:pipe port="result" step="html-to-epub3.step.spine-html"/>
-                </p:input>
-                <p:input port="publication-resources">
-                    <p:pipe port="result" step="html-to-epub3.step.resource-fileset"/>
+                    <p:pipe step="html-to-epub3.step.opf-metadata" port="result"/>
                 </p:input>
             </px:epub3-pub-create-package-doc>
             <p:add-attribute match="/*" attribute-name="unique-identifier" attribute-value="pub-identifier" name="html-to-epub3.step.add-opf-attribute.unique-identifier"/>
@@ -330,9 +339,6 @@
                     </p:inline>
                 </p:input>
             </p:xslt>
-            <p:add-attribute match="/*" attribute-name="xml:base" name="html-to-epub3.step.set-opf-xml-base">
-                <p:with-option name="attribute-value" select="concat($publication-dir,'package.opf')"/>
-            </p:add-attribute>
             <p:xslt name="html-to-epub3.step.pretty-print-opf">
                 <!-- TODO: consider removing this XSLT invocation to improve performance -->
                 <p:with-param name="preserve-empty-whitespace" select="'false'"/>
