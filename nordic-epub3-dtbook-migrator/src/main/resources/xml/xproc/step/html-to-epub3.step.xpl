@@ -62,6 +62,11 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-to-epub3/library.xpl">
+        <p:documentation>
+            px:html-to-opf-metadata
+        </p:documentation>
+    </p:import>
 
     <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
@@ -137,17 +142,23 @@
             <p:sink/>
 
             <!-- Create OPF metadata -->
-            <p:xslt name="html-to-epub3.step.opf-metadata">
-                <p:input port="source">
-                    <p:pipe port="result" step="html-to-epub3.step.single-html"/>
-                </p:input>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/html-to-opf-metadata.xsl"/>
-                </p:input>
-            </p:xslt>
+            <p:group name="html-to-epub3.step.opf-metadata">
+                <p:output port="result"/>
+                <px:html-to-opf-metadata>
+                    <p:input port="source">
+                        <p:pipe step="html-to-epub3.step.single-html" port="result"/>
+                    </p:input>
+                </px:html-to-opf-metadata>
+                <!-- post-process -->
+                <p:xslt>
+                    <p:input port="stylesheet">
+                        <p:document href="../../xslt/process-opf-metadata.xsl"/>
+                    </p:input>
+                    <p:input port="parameters">
+                        <p:empty/>
+                    </p:input>
+                </p:xslt>
+            </p:group>
             <p:sink/>
 
             <!-- Create Navigation Document -->
