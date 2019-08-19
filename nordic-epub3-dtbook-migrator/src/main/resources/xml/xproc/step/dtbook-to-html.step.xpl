@@ -35,7 +35,11 @@
 
     <p:import href="validation-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
     <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
@@ -107,11 +111,11 @@
             </p:viewport>
             <!-- TODO: add ASCIIMathML.js if there are asciimath elements -->
 
-            <p:add-attribute match="/*" attribute-name="xml:base" name="dtbook-to-html.step.set-xml-base">
-                <p:with-option name="attribute-value" select="concat($temp-dir,(//dtbook:meta[@name='dtb:uid']/@content,'missing-uid')[1],'.xhtml')">
+            <px:set-base-uri>
+                <p:with-option name="base-uri" select="concat($temp-dir,(//dtbook:meta[@name='dtb:uid']/@content,'missing-uid')[1],'.xhtml')">
                     <p:pipe port="result" step="dtbook-to-html.step.dtbook"/>
                 </p:with-option>
-            </p:add-attribute>
+            </px:set-base-uri>
             <p:identity name="dtbook-to-html.step.result.in-memory"/>
             <p:sink/>
 

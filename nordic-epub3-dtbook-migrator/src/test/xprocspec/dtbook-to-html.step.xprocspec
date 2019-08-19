@@ -54,9 +54,9 @@
             <x:document type="port" port="in-memory.out"/>
         </x:context>
         <x:expect type="count" label="There should be exactly one output document" min="1" max="1"/>
-        <x:expect type="xpath" label="The output document (the intermediary HTML) should have an xml:base attribute with filename C00000.xhtml" test="tokenize(/*/@xml:base,'/')[last()]"
+        <x:expect type="xpath" label="The output document (the intermediary HTML) should have a base URI with filename C00000.xhtml" test="tokenize(/*/base-uri(.),'/')[last()]"
             equals="'C00000.xhtml'"/>
-        <x:expect type="xpath" label="The output document (the intermediary HTML) should have an xml:base attribute pointing to the temp-dir directory" test="/*/@xml:base"
+        <x:expect type="xpath" label="The output document (the intermediary HTML) should have a base URI pointing to the temp-dir directory" test="/*/base-uri(.)"
             equals="concat($temp-dir,'temp-dir/C00000.xhtml')"/>
 
         <x:context label="the fileset">

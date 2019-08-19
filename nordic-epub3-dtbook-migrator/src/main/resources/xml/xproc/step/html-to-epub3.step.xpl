@@ -67,6 +67,11 @@
             px:html-to-opf-metadata
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
+        </p:documentation>
+    </p:import>
 
     <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
@@ -191,12 +196,6 @@
                             <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                         </p:with-option>
                     </px:epub3-nav-create-toc>
-                    <p:add-attribute match="/*" attribute-name="xml:base" name="html-to-epub3.step.nav.toc.add-xml-base">
-                        <p:with-option name="attribute-value" select="base-uri(/*)">
-                            <p:pipe port="result" step="html-to-epub3.step.single-html"/>
-                        </p:with-option>
-                    </p:add-attribute>
-                    <p:delete match="/*/@xml:base" name="html-to-epub3.step.nav.toc.delete-xml-base"/>
                     <p:delete match="/html:nav/html:ol/html:li/html:a" name="html-to-epub3.step.nav.toc.delete-nav-ol-li-a"/>
                     <p:unwrap match="/html:nav/html:ol/html:li" name="html-to-epub3.step.nav.toc.unwrap-nav-ol-li"/>
                     <p:unwrap match="/html:nav/html:ol" name="html-to-epub3.step.nav.toc.unwrap-nav-ol"/>
@@ -270,9 +269,9 @@
                         <p:document href="../../xslt/pretty-print.xsl"/>
                     </p:input>
                 </p:xslt>
-                <p:add-attribute match="/*" attribute-name="xml:base" name="html-to-epub3.step.ncx-add-xml-base">
-                    <p:with-option name="attribute-value" select="concat($publication-dir,'nav.ncx')"/>
-                </p:add-attribute>
+                <px:set-base-uri name="html-to-epub3.step.ncx-add-xml-base">
+                    <p:with-option name="base-uri" select="concat($publication-dir,'nav.ncx')"/>
+                </px:set-base-uri>
                 <p:identity name="html-to-epub3.step.nav.ncx"/>
             </p:group>
 
