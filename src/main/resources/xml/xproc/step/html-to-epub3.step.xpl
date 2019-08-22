@@ -300,7 +300,8 @@
                 </p:input>
             </px:fileset-add-entry>
 
-            <px:epub3-pub-create-package-doc name="html-to-epub3.step.create-package-doc">
+            <px:epub3-pub-create-package-doc name="html-to-epub3.step.create-package-doc"
+                                             reserved-prefixes="dcterms: http://purl.org/dc/terms/">
                 <p:with-option name="output-base-uri" select="concat($publication-dir,'package.opf')"/>
                 <p:with-option name="compatibility-mode" select="$compatibility-mode"/>
                 <p:with-option name="detect-properties" select="'true'"/>

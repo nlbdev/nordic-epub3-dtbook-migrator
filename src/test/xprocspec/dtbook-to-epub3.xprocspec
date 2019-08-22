@@ -75,9 +75,15 @@
                     <meta name="nordic:guidelines" content="2015-1"/>
                     <meta property="nordic:supplier" id="meta_5">MTM</meta>
                     <meta name="nordic:supplier" content="MTM"/>
+                    <meta property="a11y:certifiedBy" id="meta_11">Certifying Organization</meta>
+                    <meta name="a11y:certifiedBy" content="Certifying Organization"/>
+                    <meta property="schema:audience" id="meta_12">Adult</meta>
+                    <meta name="schema:audience" content="Adult"/>
                 </metadata>
             </x:document>
         </x:expect>
+        <x:expect label="the prefix attribute must be as expected" type="xpath" test="string(/*/@prefix)"
+                  equals="'nordic: http://www.mtm.se/epub/ a11y: http://www.idpf.org/epub/vocab/package/a11y/# schema: http://schema.org/'"/>
         
         <x:context label="the NCX metadata">
             <x:document type="file" href="temp-dir/validate-epub/EPUB/nav.ncx" base-uri="temp-dir" select="/ncx:ncx/ncx:head"/>
