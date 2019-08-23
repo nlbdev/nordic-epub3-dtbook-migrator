@@ -318,11 +318,9 @@
             </px:epub3-pub-create-package-doc>
             <p:add-attribute match="/*" attribute-name="unique-identifier" attribute-value="pub-identifier" name="html-to-epub3.step.add-opf-attribute.unique-identifier"/>
             <p:add-attribute match="//dc:identifier[not(preceding::dc:identifier)]" attribute-name="id" attribute-value="pub-identifier" name="html-to-epub3.step.add-opf-attribute.dc-identifier-id"/>
-            <p:add-attribute match="/*" attribute-name="prefix" attribute-value="nordic: http://www.mtm.se/epub/" name="html-to-epub3.step.add-opf-attribute.nordic-prefix"/>
             <p:add-attribute match="/*/opf:spine/opf:itemref[/*/opf:manifest/opf:item[matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml')]/@id = @idref]" attribute-name="linear" attribute-value="no"
                 name="html-to-epub3.step.add-opf-attribute.non-linear-spine-items"/>
             <p:add-attribute match="opf:item[matches(@href,'(^|/)cover.jpg')]" attribute-name="properties" attribute-value="cover-image"/>
-            <p:delete match="/*//*/@prefix" name="html-to-epub3.step.delete-non-root-opf-prefix-attributes"/>
             <p:xslt name="html-to-epub3.step.add-dc-namespace">
                 <p:input port="parameters">
                     <p:empty/>
