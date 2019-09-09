@@ -51,6 +51,11 @@
             px:nordic-validation-status
         </p:documentation>
     </p:import>
+    <p:import href="pretty-print.xpl">
+        <p:documentation>
+            px:nordic-pretty-print
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-utils/library.xpl">
         <p:documentation>
             px:epub3-nav-create-toc
@@ -166,13 +171,8 @@
                 </px:fileset-load>
                 <p:for-each name="html-to-epub3.step.iterate-spine">
                     <p:viewport match="/html:html/html:head" name="html-to-epub3.step.iterate-spine.viewport-html-head">
-                        <p:xslt name="html-to-epub3.step.iterate-spine.viewport-html-head.pretty-print">
-                            <!-- TODO: remove as many pretty printing steps as possible to improve performance -->
-                            <p:with-param name="preserve-empty-whitespace" select="'false'"/>
-                            <p:input port="stylesheet">
-                                <p:document href="../../xslt/pretty-print.xsl"/>
-                            </p:input>
-                        </p:xslt>
+                        <!-- TODO: remove as many pretty printing steps as possible to improve performance -->
+                        <px:nordic-pretty-print preserve-empty-whitespace="false"/>
                     </p:viewport>
                 </p:for-each>
                 <p:identity name="html-to-epub3.step.spine-html"/>
@@ -328,13 +328,8 @@
                         </p:input>
                     </p:xslt>
                     <p:viewport match="/html:html/html:head" name="html-to-epub3.step.viewport-html-head">
-                        <p:xslt name="html-to-epub3.step.viewport-html-head.pretty-print">
-                            <!-- TODO: consider which pretty-print.xsl invocations can be removed to improve performance -->
-                            <p:with-param name="preserve-empty-whitespace" select="'false'"/>
-                            <p:input port="stylesheet">
-                                <p:document href="../../xslt/pretty-print.xsl"/>
-                            </p:input>
-                        </p:xslt>
+                        <!-- TODO: consider which pretty-print.xsl invocations can be removed to improve performance -->
+                        <px:nordic-pretty-print preserve-empty-whitespace="false"/>
                     </p:viewport>
                     <p:identity name="html-to-epub3.step.nav.html"/>
 
@@ -342,13 +337,9 @@
                         Create ncx document
                     -->
                     <px:epub3-nav-to-ncx name="html-to-epub3.step.nav-to-ncx"/>
-                    <p:xslt name="html-to-epub3.step.ncx-pretty-print">
-                        <!-- TODO: remove pretty printing to improve performance -->
-                        <p:with-param name="preserve-empty-whitespace" select="'false'"/>
-                        <p:input port="stylesheet">
-                            <p:document href="../../xslt/pretty-print.xsl"/>
-                        </p:input>
-                    </p:xslt>
+                    <!-- TODO: remove pretty printing to improve performance -->
+                    <px:nordic-pretty-print preserve-empty-whitespace="false"
+                                            name="html-to-epub3.step.ncx-pretty-print"/>
                     <px:set-base-uri name="html-to-epub3.step.ncx-add-xml-base">
                         <p:with-option name="base-uri" select="concat($publication-dir,'nav.ncx')"/>
                     </px:set-base-uri>
@@ -528,13 +519,8 @@
                 <!--
                     Pretty-print
                 -->
-                <p:xslt name="html-to-epub3.step.pretty-print-opf">
-                    <!-- TODO: consider removing this XSLT invocation to improve performance -->
-                    <p:with-param name="preserve-empty-whitespace" select="'false'"/>
-                    <p:input port="stylesheet">
-                        <p:document href="../../xslt/pretty-print.xsl"/>
-                    </p:input>
-                </p:xslt>
+                <!-- TODO: consider removing this to improve performance -->
+                <px:nordic-pretty-print preserve-empty-whitespace="false"/>
                 <p:identity name="html-to-epub3.step.package-doc.processed"/>
 
                 <px:fileset-update name="update">

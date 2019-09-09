@@ -35,6 +35,7 @@
     <p:option name="fail-on-error" required="true"/>
 
     <p:import href="validation-status.xpl"/>
+    <p:import href="pretty-print.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
 
@@ -115,15 +116,8 @@
                     <p:pipe port="result" step="html-to-dtbook.step.input-html"/>
                 </p:with-option>
             </p:add-attribute>
-            <p:xslt name="html-to-dtbook.step.pretty-print-dtbook">
-                <!-- TODO: remove all pretty-printing to improve performance -->
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/pretty-print.xsl"/>
-                </p:input>
-            </p:xslt>
+            <!-- TODO: remove all pretty-printing to improve performance -->
+            <px:nordic-pretty-print name="html-to-dtbook.step.pretty-print-dtbook"/>
             <p:identity name="html-to-dtbook.step.result.in-memory"/>
             <p:sink/>
 
@@ -157,13 +151,9 @@
                     <p:add-attribute match="//d:file[@media-type='application/x-dtbook+xml']" attribute-name="standalone" attribute-value="true" name="html-to-dtbook.step.choose-dtbook2005-or-dtbook110-doctype.1.1.0.standalone"/>
                 </p:otherwise>
             </p:choose>
-            <p:xslt name="html-to-dtbook.step.pretty-print-fileset">
-                <!-- TODO: remove all pretty-printing to improve performance -->
-                <p:with-param name="preserve-empty-whitespace" select="'false'"/>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/pretty-print.xsl"/>
-                </p:input>
-            </p:xslt>
+            <!-- TODO: remove all pretty-printing to improve performance -->
+            <px:nordic-pretty-print preserve-empty-whitespace="false"
+                                    name="html-to-dtbook.step.pretty-print-fileset"/>
             <p:identity name="html-to-dtbook.step.result.fileset"/>
 
 

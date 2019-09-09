@@ -33,6 +33,11 @@
     <p:option name="fail-on-error" required="true"/>
     <p:option name="temp-dir" required="true"/>
 
+    <p:import href="pretty-print.xpl">
+        <p:documentation>
+            px:nordic-pretty-print
+        </p:documentation>
+    </p:import>
     <p:import href="validation-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
@@ -101,13 +106,8 @@
             </p:xslt>
 
             <p:viewport match="/html:html/html:head" name="dtbook-to-html.step.viewport-html-head">
-                <p:xslt name="dtbook-to-html.step.viewport-html-head.pretty-print">
-                    <!-- TODO: consider dropping this if it causes performance issues -->
-                    <p:with-param name="preserve-empty-whitespace" select="'false'"/>
-                    <p:input port="stylesheet">
-                        <p:document href="../../xslt/pretty-print.xsl"/>
-                    </p:input>
-                </p:xslt>
+                <!-- TODO: consider dropping this if it causes performance issues -->
+                <px:nordic-pretty-print preserve-empty-whitespace="false"/>
             </p:viewport>
             <!-- TODO: add ASCIIMathML.js if there are asciimath elements -->
 
