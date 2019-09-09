@@ -75,10 +75,10 @@
                 <d:file href="EPUB/nav.ncx" method="xml" indent="true" omit-xml-declaration="false" media-type="application/x-dtbncx+xml"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/package.opf" method="xml" indent="true" omit-xml-declaration="false" media-type="application/oebps-package+xml"/>
+                <d:file href="EPUB/nav.xhtml" method="xhtml" indent="true" omit-xml-declaration="false" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/nav.xhtml" method="xhtml" indent="true" omit-xml-declaration="false" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                <d:file href="EPUB/package.opf" method="xml" indent="true" omit-xml-declaration="false" media-type="application/oebps-package+xml"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
                 <d:file href="META-INF/container.xml" method="xml" indent="true" omit-xml-declaration="false" media-type="application/xml"/>
