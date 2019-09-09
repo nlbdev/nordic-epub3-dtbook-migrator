@@ -458,8 +458,6 @@
             <!--
                 Omit XML declarations, indent XML, add DOCTYPE to xhtml files
             -->
-            <p:add-attribute match="d:file[@href='META-INF/container.xml']" attribute-name="media-type" attribute-value="application/xml"
-                             name="html-to-epub3.step.result-fileset.add-container-media-type"/>
             <p:add-attribute match="d:file[matches(@media-type,'[/+]xml$')]" attribute-name="omit-xml-declaration" attribute-value="false"
                              name="html-to-epub3.step.result-fileset.dont-omit-xml-declarations"/>
             <p:add-attribute match="d:file[matches(@media-type,'[/+]xml$')]" attribute-name="indent" attribute-value="true"
