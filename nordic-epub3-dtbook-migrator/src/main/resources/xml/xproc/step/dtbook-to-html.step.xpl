@@ -39,6 +39,11 @@
         </p:documentation>
     </p:import>
     <p:import href="validation-status.xpl"/>
+    <p:import href="update-epub-prefixes.xpl">
+        <p:documentation>
+            px:nordic-update-epub-prefixes
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
@@ -96,14 +101,7 @@
                     <p:document href="http://www.daisy.org/pipeline/modules/dtbook-to-html/dtbook-to-epub3.xsl"/>
                 </p:input>
             </p:xslt>
-            <p:xslt>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/update-epub-prefixes.xsl"/>
-                </p:input>
-            </p:xslt>
+            <px:nordic-update-epub-prefixes/>
 
             <p:viewport match="/html:html/html:head" name="dtbook-to-html.step.viewport-html-head">
                 <!-- TODO: consider dropping this if it causes performance issues -->

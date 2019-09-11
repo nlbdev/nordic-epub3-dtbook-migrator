@@ -32,6 +32,11 @@
     <p:option name="fail-on-error" required="true"/>
 
     <p:import href="validation-status.xpl"/>
+    <p:import href="update-epub-prefixes.xpl">
+        <p:documentation>
+            px:nordic-update-epub-prefixes
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -267,14 +272,7 @@
             </p:viewport>
             <p:delete match="//*[@xml:lang = ancestor::*[@xml:lang][1]/@xml:lang]/@xml:lang | //*[@lang = ancestor::*[@lang][1]/@lang]/@lang"
                 name="epub3-to-html.step.delete-unneccessary-xml-lang-and-lang"/>
-            <p:xslt>
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/update-epub-prefixes.xsl"/>
-                </p:input>
-            </p:xslt>
+            <px:nordic-update-epub-prefixes/>
             <p:identity name="epub3-to-html.step.in-memory"/>
 
             <px:html-to-fileset name="epub3-to-html.step.single-html-to-fileset">
