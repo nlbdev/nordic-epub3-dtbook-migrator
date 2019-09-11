@@ -1031,9 +1031,8 @@
         <xsl:call-template name="f:attrs">
             <xsl:with-param name="all-ids" select="$all-ids" tunnel="yes"/>
         </xsl:call-template>
-        <xsl:attribute name="src" select="concat('images/',@src)"/>
         <xsl:attribute name="alt" select="if (@alt and @alt='') then '' else if (not(@alt)) then 'image' else @alt"/>
-        <xsl:copy-of select="@longdesc|@height|@width" exclude-result-prefixes="#all"/>
+        <xsl:copy-of select="@src|@longdesc|@height|@width" exclude-result-prefixes="#all"/>
         <xsl:if test="not(@longdesc) and @id">
             <xsl:variable name="id" select="@id"/>
             <xsl:variable name="longdesc" select="(//dtbook:prodnote|//dtbook:caption)[tokenize(@imgref,'\s+')=$id]"/>
@@ -1741,14 +1740,7 @@
     </xsl:template>
     
     <xsl:template match="math:*/@*">
-        <xsl:choose>
-            <xsl:when test="local-name() = 'altimg'">
-                <xsl:attribute name="altimg" select="concat('images/',.)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:copy-of select="." exclude-result-prefixes="#all"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:copy-of select="." exclude-result-prefixes="#all"/>
     </xsl:template>
 
     <xsl:function name="f:classes" as="xs:string*">

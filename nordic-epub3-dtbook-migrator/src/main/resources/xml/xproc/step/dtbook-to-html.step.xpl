@@ -63,6 +63,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:set-base-uri
+            px:add-xml-base
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
@@ -101,12 +102,34 @@
             <p:split-sequence initial-only="true" test="position()=1" name="dtbook-to-html.step.only-use-first-dtbook"/>
             <p:identity name="dtbook-to-html.step.dtbook"/>
 
-            <p:xslt name="dtbook-to-html.step.dtbook-to-epub3">
+            <p:xslt>
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
                 <p:input port="stylesheet">
                     <p:document href="http://www.daisy.org/pipeline/modules/dtbook-to-html/dtbook-to-epub3.xsl"/>
+                </p:input>
+            </p:xslt>
+            <px:set-base-uri>
+                <p:with-option name="base-uri" select="concat($temp-dir,(//dtbook:meta[@name='dtb:uid']/@content,'missing-uid')[1],'.xhtml')">
+                    <p:pipe port="result" step="dtbook-to-html.step.dtbook"/>
+                </p:with-option>
+            </px:set-base-uri>
+            <px:add-xml-base root="false"/>
+            <p:identity name="dtbook-to-html.step.dtbook-to-epub3"/>
+            <!--
+                Update relative links to images
+            -->
+            <p:xslt>
+                <p:input port="source">
+                    <p:pipe step="dtbook-to-html.step.dtbook-to-epub3" port="result"/>
+                    <p:pipe step="dtbook-to-html.step.move-images" port="mapping"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/update-links.xsl"/>
                 </p:input>
             </p:xslt>
 
@@ -124,11 +147,6 @@
             </p:viewport>
             <!-- TODO: add ASCIIMathML.js if there are asciimath elements -->
 
-            <px:set-base-uri>
-                <p:with-option name="base-uri" select="concat($temp-dir,(//dtbook:meta[@name='dtb:uid']/@content,'missing-uid')[1],'.xhtml')">
-                    <p:pipe port="result" step="dtbook-to-html.step.dtbook"/>
-                </p:with-option>
-            </px:set-base-uri>
             <p:identity name="dtbook-to-html.step.html.in-memory"/>
             <p:sink/>
 
