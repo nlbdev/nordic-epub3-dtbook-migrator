@@ -13,10 +13,7 @@
     <p:output port="fileset.out" primary="true"/>
 
     <p:output port="in-memory.out" sequence="true">
-      <!--
-          FIXME: don't ignore possible non-HTML documents from in-memory.in port
-      -->
-      <p:pipe step="insert-css-link" port="result"/>
+      <p:pipe step="choose" port="in-memory"/>
     </p:output>
 
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -55,8 +52,12 @@
     </p:for-each>
 
     <p:count/>
-    <p:choose>
+    <p:choose name="choose">
       <p:when test=".='0'">
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+          <p:pipe step="main" port="in-memory.in"/>
+        </p:output>
         <p:identity>
           <p:input port="source">
             <p:pipe step="main" port="fileset.in"/>
@@ -64,6 +65,10 @@
         </p:identity>
       </p:when>
       <p:otherwise>
+        <p:output port="fileset" primary="true"/>
+        <p:output port="in-memory" sequence="true">
+          <p:pipe step="update" port="result.in-memory"/>
+        </p:output>
 
         <p:variable name="html-base" select="base-uri(/)">
           <p:pipe step="insert-css-link" port="result"/>
@@ -164,6 +169,18 @@
         </px:fileset-add-entry>
 
         <p:identity cx:depends-on="store-resources"/>
+        
+        <px:fileset-update name="update">
+          <p:input port="source.in-memory">
+            <p:pipe step="main" port="in-memory.in"/>
+          </p:input>
+          <p:input port="update.fileset">
+            <p:pipe step="load-html" port="result.fileset"/>
+          </p:input>
+          <p:input port="update.in-memory">
+            <p:pipe step="insert-css-link" port="result"/>
+          </p:input>
+        </px:fileset-update>
       </p:otherwise>
     </p:choose>
 

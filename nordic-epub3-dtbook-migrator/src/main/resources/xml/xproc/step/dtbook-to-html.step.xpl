@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-dtbook-to-html.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:html="http://www.w3.org/1999/xhtml"
+                type="px:nordic-dtbook-to-html.step" name="main">
 
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true">
@@ -38,19 +41,35 @@
             px:nordic-pretty-print
         </p:documentation>
     </p:import>
-    <p:import href="validation-status.xpl"/>
+    <p:import href="validation-status.xpl">
+        <p:documentation>
+            px:nordic-validation-status
+        </p:documentation>
+    </p:import>
     <p:import href="update-epub-prefixes.xpl">
         <p:documentation>
             px:nordic-update-epub-prefixes
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-load
+            px:fileset-filter
+            px:fileset-copy
+            px:fileset-add-entry
+            px:fileset-join
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:set-base-uri
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:assert
+        </p:documentation>
+    </p:import>
 
     <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
@@ -63,25 +82,14 @@
         </p:xpath-context>
         <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
             <p:output port="fileset.out" primary="true">
-                <p:pipe port="result" step="dtbook-to-html.step.result.fileset"/>
+                <p:pipe step="dtbook-to-html.step.add-html-to-fileset" port="result"/>
             </p:output>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="result" step="dtbook-to-html.step.result.in-memory"/>
+                <p:pipe step="dtbook-to-html.step.add-html-to-fileset" port="result.in-memory"/>
             </p:output>
             <p:output port="report.out" sequence="true">
                 <p:empty/>
             </p:output>
-
-
-
-
-
-
-
-
-
-
-            <p:variable name="href" select="resolve-uri((//d:file[@media-type='application/x-dtbook+xml'])[1]/@href,base-uri(/))"/>
 
             <px:fileset-load media-types="application/x-dtbook+xml" name="dtbook-to-html.step.load-dtbook">
                 <p:input port="in-memory">
@@ -101,8 +109,15 @@
                     <p:document href="http://www.daisy.org/pipeline/modules/dtbook-to-html/dtbook-to-epub3.xsl"/>
                 </p:input>
             </p:xslt>
+
+            <!--
+                Merge all epub:prefix attributes into a single one and declare missing prefixes
+            -->
             <px:nordic-update-epub-prefixes/>
 
+            <!--
+                Pretty-print head
+            -->
             <p:viewport match="/html:html/html:head" name="dtbook-to-html.step.viewport-html-head">
                 <!-- TODO: consider dropping this if it causes performance issues -->
                 <px:nordic-pretty-print preserve-empty-whitespace="false"/>
@@ -114,9 +129,12 @@
                     <p:pipe port="result" step="dtbook-to-html.step.dtbook"/>
                 </p:with-option>
             </px:set-base-uri>
-            <p:identity name="dtbook-to-html.step.result.in-memory"/>
+            <p:identity name="dtbook-to-html.step.html.in-memory"/>
             <p:sink/>
 
+            <!--
+                Move resources to $temp-dir
+            -->
             <px:fileset-filter not-media-types="application/x-dtbook+xml text/css" name="dtbook-to-html.step.filter-resources">
                 <p:input port="source">
                     <p:pipe port="fileset.in" step="main"/>
@@ -124,48 +142,47 @@
             </px:fileset-filter>
             <px:fileset-copy name="dtbook-to-html.step.move-resources">
                 <p:with-option name="target" select="$temp-dir"/>
+                <p:input port="source.in-memory">
+                    <p:pipe step="main" port="in-memory.in"/>
+                </p:input>
             </px:fileset-copy>
-            <p:viewport match="/*/*[starts-with(@media-type,'image/')]" name="dtbook-to-html.step.viewport-images">
-                <p:add-attribute match="/*" attribute-name="href" name="dtbook-to-html.step.viewport-images.change-href">
-                    <p:with-option name="attribute-value" select="concat('images/',/*/@href)"/>
-                </p:add-attribute>
-            </p:viewport>
-            <p:identity name="dtbook-to-html.step.fileset.existing-resources"/>
-
-            <px:fileset-create name="dtbook-to-html.step.create-temp-dir-fileset">
-                <p:with-option name="base" select="$temp-dir"/>
-            </px:fileset-create>
-            <px:fileset-add-entry media-type="application/xhtml+xml" name="dtbook-to-html.step.add-html-to-fileset">
-                <p:with-option name="href" select="base-uri(/*)">
-                    <p:pipe port="result" step="dtbook-to-html.step.result.in-memory"/>
-                </p:with-option>
-            </px:fileset-add-entry>
-            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="omit-xml-declaration" attribute-value="false" name="dtbook-to-html.step.dont-omit-xml-declaration"/>
-            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="version" attribute-value="1.0" name="dtbook-to-html.step.set-xml-version"/>
-            <p:add-attribute match="//d:file[@media-type='application/xhtml+xml']" attribute-name="encoding" attribute-value="utf-8" name="dtbook-to-html.step.set-xml-encoding"/>
-            <p:identity name="dtbook-to-html.step.fileset.new-resources"/>
-            <px:fileset-join name="dtbook-to-html.step.fileset.join-old-and-new-resources">
+            <!--
+                Move images to 'images/' subdirectory
+            -->
+            <px:fileset-filter media-types="image/*" name="dtbook-to-html.step.filter-images"/>
+            <px:fileset-copy name="dtbook-to-html.step.move-images">
+                <p:with-option name="target" select="concat($temp-dir,'images/')"/>
+                <p:input port="source.in-memory">
+                    <p:pipe step="dtbook-to-html.step.move-resources" port="result.in-memory"/>
+                </p:input>
+            </px:fileset-copy>
+            <p:sink/>
+            <!--
+                Combine HTML with resources
+            -->
+            <px:fileset-join>
                 <p:input port="source">
-                    <p:pipe port="result" step="dtbook-to-html.step.fileset.existing-resources"/>
-                    <p:pipe port="result" step="dtbook-to-html.step.fileset.new-resources"/>
+                    <p:pipe step="dtbook-to-html.step.filter-images" port="not-matched"/>
+                    <p:pipe step="dtbook-to-html.step.move-images" port="result.fileset"/>
                 </p:input>
             </px:fileset-join>
-            <p:identity name="dtbook-to-html.step.result.fileset"/>
-
-
-
-
-
-
-
-
-
-
+            <px:fileset-add-entry media-type="application/xhtml+xml" name="dtbook-to-html.step.add-html-to-fileset">
+                <p:input port="entry">
+                    <p:pipe step="dtbook-to-html.step.html.in-memory" port="result"/>
+                </p:input>
+                <p:input port="source.in-memory">
+                    <p:pipe step="dtbook-to-html.step.move-resources" port="result.in-memory"/>
+                    <p:pipe step="dtbook-to-html.step.move-images" port="result.in-memory"/>
+                </p:input>
+                <p:with-param port="file-attributes" name="omit-xml-declaration" select="'false'"/>
+                <p:with-param port="file-attributes" name="version" select="'1.0'"/>
+                <p:with-param port="file-attributes" name="encoding" select="'utf-8'"/>
+            </px:fileset-add-entry>
         </p:when>
         <p:otherwise>
             <p:output port="fileset.out" primary="true"/>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="fileset.in" step="main"/>
+                <p:pipe port="in-memory.in" step="main"/>
             </p:output>
             <p:output port="report.out" sequence="true">
                 <p:empty/>
