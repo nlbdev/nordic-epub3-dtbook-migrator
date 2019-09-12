@@ -206,6 +206,10 @@
             <p:group name="html-to-epub3.step.opf-metadata">
                 <p:output port="result"/>
                 <px:html-to-opf-metadata>
+                    <!--
+                        This will become the unique-identifier attribute of the package document
+                    -->
+                    <p:with-option name="identifier-id" select="'pub-identifier'"/>
                 </px:html-to-opf-metadata>
                 <!-- post-process -->
                 <p:xslt>
@@ -492,10 +496,6 @@
                     </p:input>
                 </px:fileset-load>
 
-                <p:add-attribute match="/*" attribute-name="unique-identifier" attribute-value="pub-identifier"
-                                 name="html-to-epub3.step.add-opf-attribute.unique-identifier"/>
-                <p:add-attribute match="//dc:identifier[not(preceding::dc:identifier)]" attribute-name="id" attribute-value="pub-identifier"
-                                 name="html-to-epub3.step.add-opf-attribute.dc-identifier-id"/>
                 <!--
                     Don't include "cover" and "rearnotes" in primary spine
                 -->
