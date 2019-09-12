@@ -375,6 +375,11 @@
             </p:group>
 
             <!--
+                Mark cover.jpg as cover-image
+            -->
+            <p:add-attribute match="d:file[matches(@href,'(^|/)cover.jpg')]" attribute-name="cover-image" attribute-value="true"/>
+
+            <!--
                 Create and add package document
             -->
             <p:group name="html-to-epub3.step.add-package-doc">
@@ -496,7 +501,6 @@
                 -->
                 <p:add-attribute match="/*/opf:spine/opf:itemref[/*/opf:manifest/opf:item[matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml')]/@id = @idref]"
                                  attribute-name="linear" attribute-value="no"/>
-                <p:add-attribute match="opf:item[matches(@href,'(^|/)cover.jpg')]" attribute-name="properties" attribute-value="cover-image"/>
                 <p:xslt name="html-to-epub3.step.add-dc-namespace">
                     <p:input port="parameters">
                         <p:empty/>
