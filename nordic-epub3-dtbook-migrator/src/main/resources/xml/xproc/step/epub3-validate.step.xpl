@@ -166,7 +166,7 @@
                 </p:otherwise>
             </p:choose>
 
-            <px:fileset-load media-types="application/oebps-package+xml" method="xml" name="epub3-validate.step.load-unzipped-fileset">
+            <px:fileset-load media-types="application/oebps-package+xml" name="epub3-validate.step.load-unzipped-fileset">
                 <p:input port="in-memory">
                     <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                 </p:input>

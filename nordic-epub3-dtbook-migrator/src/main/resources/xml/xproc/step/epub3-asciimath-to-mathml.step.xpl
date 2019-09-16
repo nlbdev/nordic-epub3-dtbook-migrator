@@ -137,7 +137,7 @@
             <p:identity name="epub3-asciimath-to-mathml.step.xhtml-documents-with-mathml"/>
             <p:sink/>
 
-            <px:fileset-load media-types="application/oebps-package+xml" method="xml" name="epub3-asciimath-to-mathml.step.load-opf">
+            <px:fileset-load media-types="application/oebps-package+xml" name="epub3-asciimath-to-mathml.step.load-opf">
                 <p:input port="fileset">
                     <p:pipe port="fileset.in" step="main"/>
                 </p:input>

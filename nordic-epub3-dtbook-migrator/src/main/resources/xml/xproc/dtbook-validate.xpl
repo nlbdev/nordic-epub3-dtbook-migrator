@@ -99,7 +99,7 @@
     </px:nordic-dtbook-validate.step>
     <p:sink/>
 
-    <px:fileset-load media-types="application/x-dtbook+xml" method="xml" name="dtbook-validate.load-dtbook">
+    <px:fileset-load media-types="application/x-dtbook+xml" name="dtbook-validate.load-dtbook">
         <p:input port="fileset">
             <p:pipe port="fileset.out" step="dtbook-validate.dtbook-validate"/>
         </p:input>
