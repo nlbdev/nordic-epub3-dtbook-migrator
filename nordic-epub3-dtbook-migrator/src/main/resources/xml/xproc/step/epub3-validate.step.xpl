@@ -40,9 +40,13 @@
 
     <p:import href="validation-status.xpl"/>
     <p:import href="html-validate.step.xpl"/>
-    <p:import href="read-xml-declaration.xpl"/>
-    <p:import href="read-doctype-declaration.xpl"/>
     <p:import href="check-image-file-signatures.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:read-xml-declaration
+            px:read-doctype
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -452,9 +456,9 @@
                                     <px:message message="trying to read doctype declaration from $1">
                                         <p:with-option name="param1" select="replace($href,'.*/','')"/>
                                     </px:message>
-                                    <px:read-doctype-declaration name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try.group.read-doctype-declaration">
+                                    <px:read-doctype name="epub3-validate.step.group-xml-declaration.iterate-files.choose-if-html.try.group.read-doctype-declaration">
                                         <p:with-option name="href" select="$href"/>
-                                    </px:read-doctype-declaration>
+                                    </px:read-doctype>
                                     <px:message message="doctype declaration from $1 is: $2">
                                         <p:with-option name="param1" select="replace($href,'.*/','')"/>
                                         <p:with-option name="param2" select="/*/replace(string(@doctype-declaration),'[&lt;&gt;]','')"/>
