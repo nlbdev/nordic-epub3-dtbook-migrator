@@ -51,6 +51,11 @@
             px:nordic-update-epub-prefixes
         </p:documentation>
     </p:import>
+    <p:import href="html-add-accessibility.step.xpl">
+        <p:documentation>
+            px:nordic-html-add-accessibility-css.step
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
             px:fileset-load
@@ -88,7 +93,7 @@
         <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
             <p:output port="fileset.out" primary="true"/>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe step="dtbook-to-html.step.post-process-html" port="in-memory"/>
+                <p:pipe step="dtbook-to-html.step.add-css" port="in-memory.out"/>
             </p:output>
             <p:output port="report.out" sequence="true">
                 <p:empty/>
@@ -190,6 +195,15 @@
                     </p:input>
                 </px:fileset-update>
             </p:group>
+
+            <!--
+                Add CSS
+            -->
+            <px:nordic-html-add-accessibility-css.step name="dtbook-to-html.step.add-css">
+                <p:input port="in-memory.in">
+                    <p:pipe step="dtbook-to-html.step.post-process-html" port="in-memory"/>
+                </p:input>
+            </px:nordic-html-add-accessibility-css.step>
 
         </p:when>
         <p:otherwise>
