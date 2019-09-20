@@ -501,6 +501,9 @@
                 -->
                 <p:add-attribute match="/*/opf:spine/opf:itemref[/*/opf:manifest/opf:item[matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml')]/@id = @idref]"
                                  attribute-name="linear" attribute-value="no"/>
+                <!--
+                    Add dc namespace to root element (note that it is already present on metadata element)
+                -->
                 <p:xslt name="html-to-epub3.step.add-dc-namespace">
                     <p:input port="parameters">
                         <p:empty/>
