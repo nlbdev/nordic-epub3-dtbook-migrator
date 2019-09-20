@@ -154,6 +154,12 @@
             <p:identity name="html-to-epub3.step.spine"/>
 
             <!--
+                Don't include "cover" and "rearnotes" in primary spine
+            -->
+            <p:delete match="//d:file[matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml')]" name="html-to-epub3.step.spine.primary"/>
+            <p:sink/>
+
+            <!--
                 Load spine items and pretty-print HTML
             -->
             <p:group name="html-to-epub3.step.pretty-print-html">
@@ -165,6 +171,9 @@
                 </p:output>
 
                 <px:fileset-load name="html-to-epub3.step.load-spine">
+                    <p:input port="fileset">
+                        <p:pipe step="html-to-epub3.step.filter-html-split-fileset-xhtml" port="result"/>
+                    </p:input>
                     <p:input port="in-memory">
                         <p:pipe step="html-to-epub3.step.filter-html-split-fileset-xhtml" port="result.in-memory"/>
                     </p:input>
@@ -404,7 +413,7 @@
                         <p:pipe step="html-to-epub3.step.add-nav" port="in-memory"/>
                     </p:input>
                     <p:input port="spine">
-                        <p:pipe step="html-to-epub3.step.spine" port="result"/>
+                        <p:pipe step="html-to-epub3.step.spine.primary" port="result"/>
                     </p:input>
                     <p:input port="metadata">
                         <p:pipe step="html-to-epub3.step.opf-metadata" port="result"/>
@@ -496,11 +505,6 @@
                     </p:input>
                 </px:fileset-load>
 
-                <!--
-                    Don't include "cover" and "rearnotes" in primary spine
-                -->
-                <p:add-attribute match="/*/opf:spine/opf:itemref[/*/opf:manifest/opf:item[matches(@href,'-(cover|rearnotes)(-\d+)?.xhtml')]/@id = @idref]"
-                                 attribute-name="linear" attribute-value="no"/>
                 <!--
                     Add dc namespace to root element (note that it is already present on metadata element)
                 -->
