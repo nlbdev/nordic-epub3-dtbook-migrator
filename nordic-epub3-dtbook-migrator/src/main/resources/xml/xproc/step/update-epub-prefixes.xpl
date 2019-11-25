@@ -15,14 +15,33 @@
 	</p:input>
 	<p:output port="result"/>
 
-	<p:xslt>
-		<p:input port="stylesheet">
-			<p:document href="../../xslt/update-epub-prefixes.xsl"/>
-		</p:input>
-		<p:input port="parameters">
-			<p:empty/>
-		</p:input>
-	</p:xslt>
+	<p:import href="http://www.daisy.org/pipeline/modules/epub3-utils/pub/library.xpl">
+		<p:documentation>
+			px:epub3-pub-merge-prefix
+			px:epub3-pub-add-prefix
+		</p:documentation>
+	</p:import>
+
+	<px:epub3-pub-merge-prefix>
+		<p:with-option name="implicit-input-prefixes"  select="'a11y:      http://www.idpf.org/epub/vocab/package/a11y/#
+		                                                        dc:        http://purl.org/dc/elements/1.1/
+		                                                        dcterms:   http://purl.org/dc/terms/
+		                                                        epubsc:    http://idpf.org/epub/vocab/sc/#
+		                                                        marc:      http://id.loc.gov/vocabulary/
+		                                                        media:     http://www.idpf.org/epub/vocab/overlays/#
+		                                                        msv:       http://www.idpf.org/epub/vocab/structure/magazine/#
+		                                                        nordic:    http://www.mtm.se/epub/
+		                                                        onix:      http://www.editeur.org/ONIX/book/codelists/current.html#
+		                                                        prism:     http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm#
+		                                                        rendition: http://www.idpf.org/vocab/rendition/#
+		                                                        schema:    http://schema.org/
+		                                                        xsd:       http://www.w3.org/2001/XMLSchema#
+		                                                        z3998:     http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
+		<p:with-option name="implicit-output-prefixes" select="'dc:        http://purl.org/dc/elements/1.1/
+		                                                        dcterms:   http://purl.org/dc/terms/'"/>
+	</px:epub3-pub-merge-prefix>
+
+	<px:epub3-pub-add-prefix prefixes="nordic: http://www.mtm.se/epub/"/>
 
 </p:declare-step>
 

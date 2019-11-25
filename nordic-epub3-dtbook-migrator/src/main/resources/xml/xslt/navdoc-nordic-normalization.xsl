@@ -14,8 +14,6 @@
     <xsl:param name="publisher" required="yes"/>
     <xsl:variable name="lang" select="string((/html/head/meta[@name='dc:language']/@content, /*/@xml:lang, /*/@lang)[1])"/>
     
-    <xsl:include href="update-epub-prefixes.xsl"/>
-
     <xsl:template match="@*|node()">
         <xsl:copy exclude-result-prefixes="#all">
             <xsl:apply-templates select="@*[not(name()=('lang','xml:lang'))] | node()"/>
@@ -28,8 +26,6 @@
             <xsl:apply-templates select="@*[not(name()=('lang','xml:lang'))]"/>
             <xsl:attribute name="xml:lang" select="$lang"/>
             <xsl:attribute name="lang" select="$lang"/>
-            <xsl:variable name="prefixes" select="f:prefixes(/*/head, /*/body, 'nordic')"/>
-            <xsl:attribute name="epub:prefix" select="string-join($prefixes, ' ')"/>
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
     </xsl:template>

@@ -56,6 +56,11 @@
             px:nordic-pretty-print
         </p:documentation>
     </p:import>
+    <p:import href="update-epub-prefixes.xpl">
+        <p:documentation>
+            px:nordic-update-epub-prefixes
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-utils/library.xpl">
         <p:documentation>
             px:epub3-nav-create-toc
@@ -340,6 +345,7 @@
                             <p:document href="../../xslt/navdoc-nordic-normalization.xsl"/>
                         </p:input>
                     </p:xslt>
+                    <px:nordic-update-epub-prefixes/>
                     <p:viewport match="/html:html/html:head" name="html-to-epub3.step.viewport-html-head">
                         <!-- TODO: consider which pretty-print.xsl invocations can be removed to improve performance -->
                         <px:nordic-pretty-print preserve-empty-whitespace="false"/>

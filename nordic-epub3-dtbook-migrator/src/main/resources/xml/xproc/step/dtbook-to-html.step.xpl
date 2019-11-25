@@ -160,7 +160,8 @@
                     </p:input>
                 </p:xslt>
                 <!--
-                    Merge all epub:prefix attributes into a single one and declare missing prefixes
+                    Declare missing prefixes (note that this does not merge any epub:prefix
+                    attributes because no epub:prefix attributes are created in px:dtbook-to-html)
                 -->
                 <px:nordic-update-epub-prefixes/>
                 <!--

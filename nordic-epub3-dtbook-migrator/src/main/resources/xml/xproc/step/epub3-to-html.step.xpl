@@ -249,9 +249,6 @@
                     <p:pipe port="result" step="epub3-to-html.step.single-html.metadata"/>
                 </p:input>
             </p:replace>
-            <p:add-attribute match="/html:html" attribute-name="epub:prefix">
-                <p:with-option name="attribute-value" select="string-join(//@epub:prefix,' ')"/>
-            </p:add-attribute>
             <p:insert match="/*/html:body" position="first-child" name="epub3-to-html.step.insert-header-element-into-single-html">
                 <p:input port="insertion">
                     <p:pipe port="result" step="epub3-to-html.step.single-html.header-element"/>
