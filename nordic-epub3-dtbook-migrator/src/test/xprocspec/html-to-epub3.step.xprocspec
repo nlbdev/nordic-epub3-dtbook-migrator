@@ -127,6 +127,8 @@
                 </metadata>
             </x:document>
         </x:expect>
+        <x:expect label="the navigation document should be marked as such" type="xpath"
+                  test="//opf:item[@href='nav.xhtml']/@properties" equals="'nav'"/>
         <x:expect label="the prefix attribute must be as expected" type="xpath" test="string(/*/@prefix)"
                   equals="'nordic: http://www.mtm.se/epub/ a11y: http://www.idpf.org/epub/vocab/package/a11y/# schema: http://schema.org/'"/>
         
