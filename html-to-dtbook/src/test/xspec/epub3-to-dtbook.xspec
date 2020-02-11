@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/epub3-to-dtbook.xsl" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xslt-version="2.0" xmlns:f="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-dtbook.xsl">
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:f="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-dtbook.xsl"
+               xslt-version="2.0"
+               stylesheet="../../main/resources/xml/xslt/epub3-to-dtbook.xsl">
 
     <!-- dtbookblocknoimggroup -->
     <!-- no point in testing -->
@@ -711,8 +716,8 @@
         <x:expect label="any render-* class should become a 'render' attribute and any images that reference the prodnote should be referenced by id in the prodnotes imgref attribute">
             <dtbook:div>
                 <dtbook:prodnote render="optional" id="prodnote" imgref="img1 img2"/>
-                <dtbook:img longdesc="#prodnote" src="img.jpg#" id="img1"/>
-                <dtbook:img longdesc="#prodnote" src="img.jpg#" id="img2"/>
+                <dtbook:img longdesc="#prodnote" src="images/img.jpg#" id="img1"/>
+                <dtbook:img longdesc="#prodnote" src="images/img.jpg#" id="img2"/>
             </dtbook:div>
         </x:expect>
     </x:scenario>
@@ -1333,7 +1338,7 @@
             <html:img src="images/img.jpg"/>
         </x:context>
         <x:expect label="the resulting element should be a img">
-            <dtbook:img src="img.jpg" id="..."/>
+            <dtbook:img src="images/img.jpg" id="..."/>
         </x:expect>
     </x:scenario>
 
@@ -1343,7 +1348,7 @@
             <html:img src="images/img.jpg#target" alt="alt text" longdesc="#image-description" height="100" width="100"/>
         </x:context>
         <x:expect label="the resulting element should be a img">
-            <dtbook:img src="img.jpg#target" alt="alt text" longdesc="#image-description" height="100" width="100" id="..."/>
+            <dtbook:img src="images/img.jpg#target" alt="alt text" longdesc="#image-description" height="100" width="100" id="..."/>
         </x:expect>
     </x:scenario>
 
@@ -1365,7 +1370,7 @@
             </x:context>
             <x:expect label="the resulting element should be a imggroup">
                 <dtbook:imggroup>
-                    <dtbook:img src="image.jpg" id="..."/>
+                    <dtbook:img src="images/image.jpg" id="..."/>
                 </dtbook:imggroup>
             </x:expect>
         </x:scenario>
@@ -1379,7 +1384,7 @@
             </x:context>
             <x:expect label="the image figure should be unwrapped">
                 <dtbook:imggroup>
-                    <dtbook:img src="image.jpg" id="..."/>
+                    <dtbook:img src="images/image.jpg" id="..."/>
                 </dtbook:imggroup>
             </x:expect>
         </x:scenario>
@@ -1399,7 +1404,7 @@
             <x:expect label="the resulting element should be a figure">
                 <dtbook:imggroup>
                     <dtbook:prodnote render="optional" id="prodnote1" imgref="img1"/>
-                    <dtbook:img src="img.jpg" id="img1" longdesc="#prodnote1"/>
+                    <dtbook:img src="images/img.jpg" id="img1" longdesc="#prodnote1"/>
                     <dtbook:caption>
                         <dtbook:p/>
                     </dtbook:caption>
@@ -1440,22 +1445,22 @@
             </x:context>
             <x:expect label="the resulting element should be a figure">
                 <dtbook:imggroup>
-                    <dtbook:img src="img.jpg" id="img1" longdesc="#prodnote1"/>
+                    <dtbook:img src="images/img.jpg" id="img1" longdesc="#prodnote1"/>
                     <dtbook:caption id="caption1">
                         <dtbook:p/>
                     </dtbook:caption>
                     <dtbook:prodnote render="optional" id="prodnote1" imgref="img1"/>
-                    <dtbook:img src="img.jpg" id="img2"/>
+                    <dtbook:img src="images/img.jpg" id="img2"/>
                     <dtbook:caption id="caption2">
                         <dtbook:p/>
                         <dtbook:p/>
                     </dtbook:caption>
-                    <dtbook:img src="img.jpg" id="img3"/>
-                    <dtbook:img src="img.jpg" id="img4"/>
+                    <dtbook:img src="images/img.jpg" id="img3"/>
+                    <dtbook:img src="images/img.jpg" id="img4"/>
                     <dtbook:caption id="caption4">
                         <dtbook:p/>
                     </dtbook:caption>
-                    <dtbook:img src="img.jpg" id="img5"/>
+                    <dtbook:img src="images/img.jpg" id="img5"/>
                 </dtbook:imggroup>
             </x:expect>
         </x:scenario>
@@ -1498,14 +1503,14 @@
             </x:context>
             <x:expect label="the nested figures should be unwrapped properly">
                 <dtbook:imggroup>
-                    <dtbook:img src="img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
+                    <dtbook:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
                     <dtbook:caption>
                         <dtbook:prodnote id="prodnote1" imgref="img1" render="optional"/>
                         <dtbook:div id="caption1">
                             <dtbook:p/>
                         </dtbook:div>
                     </dtbook:caption>
-                    <dtbook:img src="img.jpg" id="img2" alt="image"/>
+                    <dtbook:img src="images/img.jpg" id="img2" alt="image"/>
                     <dtbook:caption>
                         <dtbook:div id="caption2">
                             <dtbook:p/>
@@ -1514,12 +1519,12 @@
                             <dtbook:p/>
                         </dtbook:div>
                     </dtbook:caption>
-                    <dtbook:img src="img.jpg" id="img3" alt="image"/>
-                    <dtbook:img src="img.jpg" id="img4" alt="image"/>
+                    <dtbook:img src="images/img.jpg" id="img3" alt="image"/>
+                    <dtbook:img src="images/img.jpg" id="img4" alt="image"/>
                     <dtbook:caption id="caption4">
                         <dtbook:p/>
                     </dtbook:caption>
-                    <dtbook:img src="img.jpg" id="img5" alt="image"/>
+                    <dtbook:img src="images/img.jpg" id="img5" alt="image"/>
                 </dtbook:imggroup>
             </x:expect>
         </x:scenario>
@@ -2634,15 +2639,15 @@
                 <dtbook:li><dtbook:strong>Procentandel minskande arter</dtbook:strong> 46%</dtbook:li>
                 <dtbook:li><dtbook:strong>Sommarhalvåret</dtbook:strong>
                     <dtbook:imggroup>
-                        <dtbook:img src="img01.jpg" alt="image" id="..."/>
+                        <dtbook:img src="images/img01.jpg" alt="image" id="..."/>
                     </dtbook:imggroup> (vissa arter kan sällsynt övervintra)</dtbook:li>
                 <dtbook:li><dtbook:strong>Hela året</dtbook:strong>
                     <dtbook:imggroup>
-                        <dtbook:img src="img02.jpg" alt="image" id="..."/>
+                        <dtbook:img src="images/img02.jpg" alt="image" id="..."/>
                     </dtbook:imggroup></dtbook:li>
                 <dtbook:li><dtbook:strong>Vinterhalvåret</dtbook:strong>
                     <dtbook:imggroup>
-                        <dtbook:img src="img03.jpg" alt="image" id="..."/>
+                        <dtbook:img src="images/img03.jpg" alt="image" id="..."/>
                     </dtbook:imggroup></dtbook:li>
                 <dtbook:li><dtbook:strong>ökande bestånd</dtbook:strong> ↗</dtbook:li>
                 <dtbook:li><dtbook:strong>minskande bestånd</dtbook:strong> ↘</dtbook:li>
@@ -3419,71 +3424,71 @@
             <dtbook:div id="image-tests">
                 <dtbook:div>
                     <!-- image in block context - with placeholder alt text: -->
-                    <dtbook:img id="image-tests-img-1" src="valentin.jpg" alt="image"/>
+                    <dtbook:img id="image-tests-img-1" src="images/valentin.jpg" alt="image"/>
                 </dtbook:div>
                 <dtbook:div>
                     <!-- image in inline context - with placeholder alt text: -->
                     <dtbook:p>
-                        <dtbook:img id="image-tests-img-2" src="valentin.jpg" alt="image"/>
+                        <dtbook:img id="image-tests-img-2" src="images/valentin.jpg" alt="image"/>
                     </dtbook:p>
                 </dtbook:div>
                 <dtbook:div>
                     <!-- image in figure - with placeholder alt text: -->
                     <dtbook:imggroup id="image-tests-figure-1">
-                        <dtbook:img id="image-tests-img-3" src="valentin.jpg" alt="image"/>
+                        <dtbook:img id="image-tests-img-3" src="images/valentin.jpg" alt="image"/>
                     </dtbook:imggroup>
                 </dtbook:div>
                 <dtbook:div>
                     <!-- image in image series figure - with placeholder alt text: -->
                     <dtbook:imggroup id="image-tests-figure-2">
-                        <dtbook:img id="image-tests-img-4" src="valentin.jpg" alt="image"/>
-                        <dtbook:img id="image-tests-img-5" src="valentin.jpg" alt="image"/>
+                        <dtbook:img id="image-tests-img-4" src="images/valentin.jpg" alt="image"/>
+                        <dtbook:img id="image-tests-img-5" src="images/valentin.jpg" alt="image"/>
                     </dtbook:imggroup>
                 </dtbook:div>
                 <dtbook:div>
                     <!-- image in block context - decorative: -->
-                    <dtbook:img id="image-tests-img-6" src="valentin.jpg" alt=""/>
+                    <dtbook:img id="image-tests-img-6" src="images/valentin.jpg" alt=""/>
                 </dtbook:div>
                 <dtbook:div>
                     <!-- image in inline context - decorative: -->
                     <dtbook:p>
-                        <dtbook:img id="image-tests-img-7" src="valentin.jpg" alt=""/>
+                        <dtbook:img id="image-tests-img-7" src="images/valentin.jpg" alt=""/>
                     </dtbook:p>
                 </dtbook:div>
                 <dtbook:div>
                     <!-- image in figure - decorative (should not be allowed/valid): -->
                     <dtbook:imggroup id="image-tests-figure-5">
-                        <dtbook:img id="image-tests-img-8" src="valentin.jpg" alt=""/>
+                        <dtbook:img id="image-tests-img-8" src="images/valentin.jpg" alt=""/>
                     </dtbook:imggroup>
                 </dtbook:div>
                 <dtbook:div>
                     <!-- image in image series figure - decorative (should not be allowed/valid): -->
                     <dtbook:imggroup id="image-tests-figure-6">
-                        <dtbook:img id="image-tests-img-9" src="valentin.jpg" alt=""/>
-                        <dtbook:img id="image-tests-img-10" src="valentin.jpg" alt=""/>
+                        <dtbook:img id="image-tests-img-9" src="images/valentin.jpg" alt=""/>
+                        <dtbook:img id="image-tests-img-10" src="images/valentin.jpg" alt=""/>
                     </dtbook:imggroup>
                 </dtbook:div>
                 <dtbook:div>
                     <!-- image in block context - with custom alt text: -->
-                    <dtbook:img id="image-tests-img-11" src="valentin.jpg" alt="中国文字"/>
+                    <dtbook:img id="image-tests-img-11" src="images/valentin.jpg" alt="中国文字"/>
                 </dtbook:div>
                 <dtbook:div>
                     <!-- image in inline context - with custom alt text: -->
                     <dtbook:p>
-                        <dtbook:img id="image-tests-img-12" src="valentin.jpg" alt="中国文字"/>
+                        <dtbook:img id="image-tests-img-12" src="images/valentin.jpg" alt="中国文字"/>
                     </dtbook:p>
                 </dtbook:div>
                 <dtbook:div>
                     <!-- image in figure - with custom alt text: -->
                     <dtbook:imggroup id="image-tests-figure-8">
-                        <dtbook:img id="image-tests-img-13" src="valentin.jpg" alt="中国文字"/>
+                        <dtbook:img id="image-tests-img-13" src="images/valentin.jpg" alt="中国文字"/>
                     </dtbook:imggroup>
                 </dtbook:div>
                 <dtbook:div>
                     <!-- image in image series figure - with custom alt text: -->
                     <dtbook:imggroup id="image-tests-figure-9">
-                        <dtbook:img id="image-tests-img-14" src="valentin.jpg" alt="中国文字"/>
-                        <dtbook:img id="image-tests-img-15" src="valentin.jpg" alt="中国文字"/>
+                        <dtbook:img id="image-tests-img-14" src="images/valentin.jpg" alt="中国文字"/>
+                        <dtbook:img id="image-tests-img-15" src="images/valentin.jpg" alt="中国文字"/>
                     </dtbook:imggroup>
                 </dtbook:div>
             </dtbook:div>

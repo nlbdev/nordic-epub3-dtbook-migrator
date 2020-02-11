@@ -17,6 +17,7 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
             "org.w3c:epubcheck:4.2.0",
             
             pipelineModule("dtbook-to-html"),
+            pipelineModule("html-to-dtbook"),
             pipelineModule("asciimath-utils"),
             pipelineModule("common-utils"),
             pipelineModule("dtbook-utils"),

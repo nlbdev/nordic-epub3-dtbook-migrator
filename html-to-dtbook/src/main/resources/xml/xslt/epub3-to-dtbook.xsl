@@ -922,7 +922,6 @@
     <xsl:template name="f:attlist.img">
         <xsl:param name="all-ids" tunnel="yes" select=".//@id"/>
         <xsl:call-template name="f:attrs"/>
-        <xsl:attribute name="src" select="replace(@src,'^images/','')"/>
         <xsl:choose>
             <xsl:when test="@alt='image' and (ancestor-or-self::*/(@xml:lang|@lang))[last()]='sv'">
                 <xsl:attribute name="alt" select="'illustration'"/>
@@ -931,7 +930,7 @@
                 <xsl:copy-of select="@alt" exclude-result-prefixes="#all"/>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:copy-of select="@longdesc|@height|@width" exclude-result-prefixes="#all"/>
+        <xsl:copy-of select="@src|@longdesc|@height|@width" exclude-result-prefixes="#all"/>
         <xsl:if test="not(@id)">
             <xsl:attribute name="id" select="f:generate-pretty-id(.,$all-ids)"/>
         </xsl:if>
@@ -1484,14 +1483,7 @@
     </xsl:template>
     
     <xsl:template match="math:*/@*">
-        <xsl:choose>
-            <xsl:when test="local-name() = 'altimg'">
-                <xsl:attribute name="altimg" select="replace(.,'^images/','')"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:copy-of select="." exclude-result-prefixes="#all"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:copy-of select="." exclude-result-prefixes="#all"/>
     </xsl:template>
 
     <xsl:template name="f:copy-preceding-comments">
