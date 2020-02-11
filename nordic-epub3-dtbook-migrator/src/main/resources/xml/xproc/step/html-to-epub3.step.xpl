@@ -386,7 +386,7 @@
                     <p:input port="entry">
                         <p:pipe step="html-to-epub3.step.nav" port="html"/>
                     </p:input>
-                    <p:with-param port="file-attributes" name="nav" select="'true'"/>
+                    <p:with-param port="file-attributes" name="role" select="'nav'"/>
                     <p:input port="source.in-memory">
                         <p:pipe step="html-to-epub3.step.add-ncx-entry" port="result.in-memory"/>
                     </p:input>
@@ -396,7 +396,7 @@
             <!--
                 Mark cover.jpg as cover-image
             -->
-            <p:add-attribute match="d:file[matches(@href,'(^|/)cover.jpg')]" attribute-name="cover-image" attribute-value="true"/>
+            <p:add-attribute match="d:file[matches(@href,'(^|/)cover.jpg')]" attribute-name="role" attribute-value="cover-image"/>
 
             <!--
                 Create and add package document
@@ -409,7 +409,7 @@
                     <p:pipe step="in-memory" port="result"/>
                 </p:output>
 
-                <p:identity name="html-to-epub3.step.fileset-with-nav-attr"/>
+                <p:identity name="html-to-epub3.step.fileset-with-role"/>
                 <px:epub3-pub-create-package-doc name="html-to-epub3.step.create-package-doc"
                                                  reserved-prefixes="dcterms: http://purl.org/dc/terms/">
                     <p:with-option name="output-base-uri" select="concat($publication-dir,'package.opf')"/>
@@ -433,10 +433,10 @@
                 <p:sink/>
                 <p:identity>
                     <p:input port="source">
-                        <p:pipe step="html-to-epub3.step.fileset-with-nav-attr" port="result"/>
+                        <p:pipe step="html-to-epub3.step.fileset-with-role" port="result"/>
                     </p:input>
                 </p:identity>
-                <p:delete match="d:file/@nav"/>
+                <p:delete match="d:file/@role"/>
                 <px:fileset-add-entry media-type="application/oebps-package+xml">
                     <p:input port="entry">
                         <p:pipe step="html-to-epub3.step.package" port="result"/>
