@@ -70,6 +70,11 @@
             px:add-xml-base
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
+        <p:documentation>
+            px:html-update-links
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
             px:assert
@@ -143,22 +148,14 @@
                     </p:input>
                 </px:fileset-load>
                 <px:add-xml-base root="false"/>
-                <p:identity name="dtbook-to-html.step.generic.html"/>
                 <!--
                     Update relative links to images
                 -->
-                <p:xslt>
-                    <p:input port="source">
-                        <p:pipe step="dtbook-to-html.step.generic.html" port="result"/>
+                <px:html-update-links>
+                    <p:input port="mapping">
                         <p:pipe step="dtbook-to-html.step.move-images" port="mapping"/>
                     </p:input>
-                    <p:input port="parameters">
-                        <p:empty/>
-                    </p:input>
-                    <p:input port="stylesheet">
-                        <p:document href="../../xslt/update-links.xsl"/>
-                    </p:input>
-                </p:xslt>
+                </px:html-update-links>
                 <!--
                     Declare missing prefixes (note that this does not merge any epub:prefix
                     attributes because no epub:prefix attributes are created in px:dtbook-to-html)
