@@ -3,7 +3,7 @@
                xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
                xmlns:epub="http://www.idpf.org/2007/ops"
                xmlns:html="http://www.w3.org/1999/xhtml"
-               xmlns:f="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-dtbook.xsl"
+               xmlns:f="http://www.daisy.org/pipeline/modules/html-to-dtbook/epub3-to-dtbook.xsl"
                xslt-version="2.0"
                stylesheet="../../main/resources/xml/xslt/epub3-to-dtbook.xsl">
 
@@ -154,8 +154,11 @@
                     <html:link rel="profile" href="http://www.nlb.no/metadata-profile"/>
                 </html:head>
             </x:context>
-            <x:expect label="the profile attribute should be converted to a link element">
-                <dtbook:head profile="http://www.nlb.no/metadata-profile">...</dtbook:head>
+            <x:expect label="the link element should be converted to a profile attribute">
+                <dtbook:head profile="http://www.nlb.no/metadata-profile">
+                    <dtbook:meta name="dtb:uid" content=""/>
+                    <dtbook:link rel="profile" href="http://www.nlb.no/metadata-profile"/>
+                </dtbook:head>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -165,18 +168,20 @@
         <x:context>
             <html:link/>
         </x:context>
-        <x:expect label="the resulting element should be removed"/>
+        <x:expect label="the html element should be converted into a dtbook element">
+            <dtbook:link/>
+        </x:expect>
     </x:scenario>
 
     <!-- attlist.link -->
-    <!--<x:scenario label="when processing the link element attributes">
+    <x:scenario label="when processing the link element attributes">
         <x:context>
             <html:link href="#href" hreflang="en" type="text/css" rel="stylesheet" media="print" sizes="16x16"/>
         </x:context>
-        <x:expect label="the sizes attribue should be removed and the other attributes should be copied over">
+        <x:expect label="the sizes attribute should be removed and the other attributes should be copied over">
             <dtbook:link href="#href" hreflang="en" type="text/css" rel="stylesheet" media="print"/>
         </x:expect>
-    </x:scenario>-->
+    </x:scenario>
 
     <!-- meta -->
     <x:scenario label="when processing a meta element">
@@ -573,8 +578,8 @@
         <x:context>
             <html:address/>
         </x:context>
-        <x:expect label="the resulting element should be a p with a address class">
-            <dtbook:p class="address"/>
+        <x:expect label="the resulting element should be a address">
+            <dtbook:address/>
         </x:expect>
     </x:scenario>
 
@@ -786,7 +791,7 @@
             <html:aside epub:type="annotation"/>
         </x:context>
         <x:expect label="the resulting element should be a annotation">
-            <dtbook:p class="annotation"/>
+            <dtbook:annotation/>
         </x:expect>
     </x:scenario>
 
@@ -799,8 +804,8 @@
             <x:context>
                 <html:aside epub:type="epigraph"/>
             </x:context>
-            <x:expect label="the resulting element should be a p element">
-                <dtbook:p class="epigraph"/>
+            <x:expect label="the resulting element should be a epigraph">
+                <dtbook:epigraph/>
             </x:expect>
         </x:scenario>
         
@@ -809,7 +814,7 @@
                 <html:blockquote epub:type="epigraph" class="epigraph other-class"/>
             </x:context>
             <x:expect label="the result should be as expected">
-                <dtbook:p class="epigraph other-class"/>
+                <dtbook:epigraph class="other-class"/>
             </x:expect>
         </x:scenario>
         
@@ -818,7 +823,7 @@
                 <html:blockquote epub:type="epigraph" class="epigraph"><html:p>foo</html:p></html:blockquote>
             </x:context>
             <x:expect label="the result should be as expected">
-                <dtbook:epigraph class="epigraph"><dtbook:p>foo</dtbook:p></dtbook:epigraph>
+                <dtbook:epigraph><dtbook:p>foo</dtbook:p></dtbook:epigraph>
             </x:expect>
         </x:scenario>
         
@@ -827,7 +832,7 @@
                 <html:blockquote epub:type="epigraph" class="epigraph"><html:p epub:type="epigraph" class="epigraph other-class">foo</html:p></html:blockquote>
             </x:context>
             <x:expect label="the result should be as expected">
-                <dtbook:epigraph class="epigraph"><dtbook:p class="epigraph other-class">foo</dtbook:p></dtbook:epigraph>
+                <dtbook:epigraph><dtbook:epigraph class="other-class">foo</dtbook:epigraph></dtbook:epigraph>
             </x:expect>
         </x:scenario>
         
@@ -836,7 +841,7 @@
                 <html:p epub:type="epigraph" class="epigraph"/>
             </x:context>
             <x:expect label="the result should be as expected">
-                <dtbook:p class="epigraph"/>
+                <dtbook:epigraph/>
             </x:expect>
         </x:scenario>
         
@@ -845,7 +850,7 @@
                 <html:p epub:type="epigraph" class="epigraph"><html:p epub:type="epigraph" class="epigraph">foo</html:p></html:p>
             </x:context>
             <x:expect label="the result should be as expected">
-                <dtbook:epigraph class="epigraph"><dtbook:p class="epigraph">foo</dtbook:p></dtbook:epigraph>
+                <dtbook:epigraph><dtbook:epigraph>foo</dtbook:epigraph></dtbook:epigraph>
             </x:expect>
         </x:scenario>
         
@@ -909,7 +914,7 @@
             <html:span class="byline"/>
         </x:context>
         <x:expect label="the resulting element should be a byline and the byline class should be removed">
-            <dtbook:span class="byline"/>
+            <dtbook:byline/>
         </x:expect>
     </x:scenario>
 
@@ -922,7 +927,7 @@
             <html:span class="dateline"/>
         </x:context>
         <x:expect label="the resulting element should be a dateline and the dateline class should be removed">
-            <dtbook:span class="dateline"/>
+            <dtbook:dateline/>
         </x:expect>
     </x:scenario>
 
@@ -1006,8 +1011,8 @@
         <x:context>
             <html:a id="id"/>
         </x:context>
-        <x:expect label="the resulting element should be a span by default">
-            <dtbook:span id="id"/>
+        <x:expect label="the resulting element should be a a">
+            <dtbook:a id="id"/>
         </x:expect>
     </x:scenario>
 
@@ -1017,8 +1022,8 @@
             <html:a id="a-id" class="external-true rev-chapter myclass" target="_blank" type="text/plain" href="http://example.net/LICENSE.txt" hreflang="en" rel="license" accesskey="x" tabindex="-1"
                 >TEXT</html:a>
         </x:context>
-        <x:expect label="the id are preserved but the rest of the attributes are dropped">
-            <dtbook:span id="a-id" class="external-true rev-chapter myclass">TEXT</dtbook:span>
+        <x:expect label="all attributes except download and media are preserved, and a external attribute is added">
+            <dtbook:a id="a-id" class="rev-chapter myclass" type="text/plain" href="http://example.net/LICENSE.txt" hreflang="en" rel="license" accesskey="x" tabindex="-1" external="true">TEXT</dtbook:a>
         </x:expect>
         <!--<x:expect
             label="any external-* and rev-* classes are converted to attributes, the target attribute are converted to a class, the download and media attributes are dropped, and the rest of the attributes are copied over as is">
@@ -1059,7 +1064,7 @@
             <html:dfn/>
         </x:context>
         <x:expect label="the resulting element should be a dfn">
-            <dtbook:span class="definition"/>
+            <dtbook:dfn/>
         </x:expect>
     </x:scenario>
 
@@ -1071,8 +1076,8 @@
         <x:context>
             <html:kbd/>
         </x:context>
-        <x:expect label="the resulting element should be a code">
-            <dtbook:code xml:space="preserve" class="keyboard"/>
+        <x:expect label="the resulting element should be a kbd">
+            <dtbook:kbd/>
         </x:expect>
     </x:scenario>
 
@@ -1085,7 +1090,7 @@
             <html:code/>
         </x:context>
         <x:expect label="the resulting element should be a code">
-            <dtbook:code xml:space="preserve"/>
+            <dtbook:code/>
         </x:expect>
     </x:scenario>
 
@@ -1098,7 +1103,7 @@
             <html:samp/>
         </x:context>
         <x:expect label="the resulting element should be a samp">
-            <dtbook:code xml:space="preserve" class="example"/>
+            <dtbook:samp/>
         </x:expect>
     </x:scenario>
 
@@ -1111,7 +1116,7 @@
             <html:cite/>
         </x:context>
         <x:expect label="the resulting element should be a cite">
-            <dtbook:span class="cite"/>
+            <dtbook:cite/>
         </x:expect>
     </x:scenario>
 
@@ -1123,8 +1128,8 @@
         <x:context>
             <html:abbr/>
         </x:context>
-        <x:expect label="the resulting element should be a abbr">
-            <dtbook:span class="acronym"/>
+        <x:expect label="the resulting element should be a acronym with pronounce attribute 'yes'">
+            <dtbook:acronym pronounce="yes"/>
         </x:expect>
     </x:scenario>
 
@@ -1134,24 +1139,24 @@
             <x:context>
                 <html:abbr epub:type="z3998:acronym"/>
             </x:context>
-            <x:expect label="the resulting element should be a span with class 'acronym'">
-                <dtbook:span class="acronym"/>
+            <x:expect label="the resulting element should be a acronym with pronounce attribute 'yes'">
+                <dtbook:acronym pronounce="yes"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="when the epub:type is 'z3998:initialism'">
             <x:context>
                 <html:abbr epub:type="z3998:initialism"/>
             </x:context>
-            <x:expect label="the resulting element should be a span with class 'initialism'">
-                <dtbook:span class="initialism"/>
+            <x:expect label="the resulting element should be a acronym with pronounce attribute 'no'">
+                <dtbook:acronym pronounce="no"/>
             </x:expect>
         </x:scenario>
         <x:scenario label="when the epub:type is 'z3998:truncation'">
             <x:context>
                 <html:abbr epub:type="z3998:truncation"/>
             </x:context>
-            <x:expect label="the resulting element should be a span with class 'truncation'">
-                <dtbook:span class="truncation"/>
+            <x:expect label="the resulting element should be a abbr">
+                <dtbook:abbr/>
             </x:expect>
         </x:scenario>
     </x:scenario>
@@ -1161,8 +1166,8 @@
         <x:context>
             <html:abbr epub:type="z3998:acronym"/>
         </x:context>
-        <x:expect label="the resulting element should be a acronym">
-            <dtbook:span class="acronym"/>
+        <x:expect label="the resulting element should be a acronym with pronounce attribute 'yes'">
+            <dtbook:acronym pronounce="yes"/>
         </x:expect>
     </x:scenario>
 
@@ -1214,7 +1219,7 @@
             <html:bdo/>
         </x:context>
         <x:expect label="the resulting element should be a bdo">
-            <dtbook:span class="bdo"/>
+            <dtbook:bdo/>
         </x:expect>
     </x:scenario>
 
@@ -1227,7 +1232,7 @@
             <html:span epub:type="z3998:sentence"/>
         </x:context>
         <x:expect label="the resulting element should be a sent">
-            <dtbook:span class="sentence"/>
+            <dtbook:sent/>
         </x:expect>
     </x:scenario>
 
@@ -1239,8 +1244,8 @@
         <x:context>
             <html:span epub:type="z3998:word"/>
         </x:context>
-        <x:expect label="the resulting element should be a sent">
-            <dtbook:span class="word"/>
+        <x:expect label="the resulting element should be a w">
+            <dtbook:w/>
         </x:expect>
     </x:scenario>
 
@@ -1305,12 +1310,9 @@
         <x:context>
             <html:a epub:type="annoref" type="application/x-dtbook+xml" href="appendix.xml#noteid"/>
         </x:context>
-        <x:expect label="the resulting element should be a span and the href and type attributes should be dropped; a class attribute with 'annoref' should be added">
-            <dtbook:span class="annoref"/>
-        </x:expect>
-        <!--<x:expect label="the resulting element should be a annoref and the href attribute should be renamed to idref">
+        <x:expect label="the resulting element should be a annoref and the href attribute should be renamed to idref">
             <dtbook:annoref type="application/x-dtbook+xml" idref="appendix.xml#noteid"/>
-        </x:expect>-->
+        </x:expect>
     </x:scenario>
 
     <!-- attlist.annoref -->
@@ -1321,12 +1323,9 @@
         <x:context>
             <html:q cite="#"/>
         </x:context>
-        <x:expect label="the resulting element should be a span with a class of 'quote'; the cite attribute is dropped">
-            <dtbook:span class="quote"/>
-        </x:expect>
-        <!--<x:expect label="the resulting element should be a q">
+        <x:expect label="the resulting element should be a q">
             <dtbook:q cite="#"/>
-        </x:expect>-->
+        </x:expect>
     </x:scenario>
 
     <!-- attlist.q -->
@@ -1706,9 +1705,11 @@
                     </html:header>
                 </html:body>
             </x:context>
-            <x:expect label="the resulting covertitle should be dropped (covertitle is not allowed in nordic dtbook)">
+            <x:expect label="the resulting element should be a covertitle">
                 <dtbook:book>
-                    <dtbook:frontmatter/>
+                    <dtbook:frontmatter>
+                        <dtbook:covertitle>COVERTITLE</dtbook:covertitle>
+                    </dtbook:frontmatter>
                 </dtbook:book>
             </x:expect>
         </x:scenario>
@@ -1833,8 +1834,8 @@
         <x:context>
             <html:p epub:type="bridgehead"/>
         </x:context>
-        <x:expect label="the resulting element should be a p">
-            <dtbook:p class="bridgehead"/>
+        <x:expect label="the resulting element should be a bridgehead">
+            <dtbook:bridgehead/>
         </x:expect>
     </x:scenario>
 
@@ -1911,8 +1912,8 @@
         <x:context>
             <html:ul/>
         </x:context>
-        <x:expect label="the resulting element should be a preordered list (only preformatted lists are allowed in nordic dtbook)">
-            <dtbook:list type="pl" depth="1"/>
+        <x:expect label="the resulting element should be a list of type 'ul'">
+            <dtbook:list type="ul" depth="1"/>
         </x:expect>
     </x:scenario>
 
@@ -1921,8 +1922,8 @@
         <x:context>
             <html:ol/>
         </x:context>
-        <x:expect label="the resulting element should be a preordered list (only preformatted lists are allowed in nordic dtbook)">
-            <dtbook:list type="pl" depth="1"/>
+        <x:expect label="the resulting element should be a list of type 'ol'">
+            <dtbook:list type="ol" depth="1"/>
         </x:expect>
     </x:scenario>
 
@@ -1939,14 +1940,13 @@
                 </html:li>
             </html:ol>
         </x:context>
-        <x:expect label="the start and type attributes should be dropped, a depth attribute should be added and the type attribute should be set to 'pl'">
-            <dtbook:list depth="1" type="pl">
+        <x:expect label="start attributes should be preserved, type attributes become enum,
+                         a depth attribute should be added and the type attribute should be set to 'ol'/'ul'">
+            <dtbook:list start="3" enum="1" depth="1" type="ol">
                 <dtbook:li>
-                    <dtbook:lic>3. </dtbook:lic>
-                    <dtbook:list depth="2" type="pl">
+                    <dtbook:list depth="2" type="ul">
                         <dtbook:li>
-                            <dtbook:lic>• </dtbook:lic>
-                            <dtbook:list depth="3" type="pl"/>
+                            <dtbook:list start="7" enum="i" depth="3" type="ul"/>
                         </dtbook:li>
                     </dtbook:list>
                 </dtbook:li>
@@ -1974,11 +1974,11 @@
                     </html:li>
                 </html:ul>
             </x:context>
-            <x:expect label="the ul should become list, bullets should be added to text or block content as necessary">
-                <dtbook:list type="pl" depth="1">
-                    <dtbook:li id="li_814"><dtbook:p>• TEXT1 <dtbook:em>TEXT2</dtbook:em> TEXT3</dtbook:p>
-                        <dtbook:list type="pl" id="list_213" depth="2">
-                            <dtbook:li id="li_815">• TEXT4 <dtbook:em>TEXT5 </dtbook:em> TEXT6</dtbook:li>
+            <x:expect label="the ul should become list">
+                <dtbook:list type="ul" depth="1">
+                    <dtbook:li id="li_814"><dtbook:p>TEXT1 <dtbook:em>TEXT2</dtbook:em> TEXT3</dtbook:p>
+                        <dtbook:list type="ul" id="list_213" depth="2">
+                            <dtbook:li id="li_815">TEXT4 <dtbook:em>TEXT5 </dtbook:em> TEXT6</dtbook:li>
                         </dtbook:list>
                     </dtbook:li>
                 </dtbook:list>
@@ -2064,26 +2064,26 @@
                     <html:li>TWO</html:li>
                 </html:ol>
             </x:context>
-            <x:expect label="the list items should be prefixed with the right type of marker">
-                <dtbook:list type="pl" depth="1">
-                    <dtbook:li>1. ONE</dtbook:li>
-                    <dtbook:li>2. TWO</dtbook:li>
+            <x:expect label="the list items should not be prefixed">
+                <dtbook:list type="ol" enum="1" depth="1">
+                    <dtbook:li>ONE</dtbook:li>
+                    <dtbook:li>TWO</dtbook:li>
                 </dtbook:list>
-                <dtbook:list type="pl" depth="1">
-                    <dtbook:li>a. ONE</dtbook:li>
-                    <dtbook:li>b. TWO</dtbook:li>
+                <dtbook:list type="ol" enum="a" depth="1">
+                    <dtbook:li>ONE</dtbook:li>
+                    <dtbook:li>TWO</dtbook:li>
                 </dtbook:list>
-                <dtbook:list type="pl" depth="1">
-                    <dtbook:li>A. ONE</dtbook:li>
-                    <dtbook:li>B. TWO</dtbook:li>
+                <dtbook:list type="ol" enum="A" depth="1">
+                    <dtbook:li>ONE</dtbook:li>
+                    <dtbook:li>TWO</dtbook:li>
                 </dtbook:list>
-                <dtbook:list type="pl" depth="1">
-                    <dtbook:li>i. ONE</dtbook:li>
-                    <dtbook:li>ii. TWO</dtbook:li>
+                <dtbook:list type="ol" enum="i" depth="1">
+                    <dtbook:li>ONE</dtbook:li>
+                    <dtbook:li>TWO</dtbook:li>
                 </dtbook:list>
-                <dtbook:list type="pl" depth="1">
-                    <dtbook:li>I. ONE</dtbook:li>
-                    <dtbook:li>II. TWO</dtbook:li>
+                <dtbook:list type="ol" enum="I" depth="1">
+                    <dtbook:li>ONE</dtbook:li>
+                    <dtbook:li>TWO</dtbook:li>
                 </dtbook:list>
             </x:expect>
         </x:scenario>
@@ -2239,18 +2239,22 @@
         <x:context>
             <html:colgroup/>
         </x:context>
-        <x:expect label="the result should be nothing; the colgroup element is removed according to nordic guidelines"/>
+        <x:expect label="the resulting element should be a colgroup">
+            <dtbook:colgroup/>
+        </x:expect>
     </x:scenario>
 
     <!-- attlist.colgroup -->
     <!-- test not needed (colgroups are removed) -->
 
     <!-- col -->
-    <x:scenario label="when processing the colgroup element">
+    <x:scenario label="when processing the col element">
         <x:context>
-            <html:colgroup/>
+            <html:col/>
         </x:context>
-        <x:expect label="the result should be nothing; the colgroup element is removed according to nordic guidelines"/>
+        <x:expect label="the resulting element should be a col">
+            <dtbook:col/>
+        </x:expect>
     </x:scenario>
 
     <!-- attlist.col -->
@@ -2501,13 +2505,15 @@
         </x:context>
         <x:expect label="all the pagebreaks should become pagenums and be placed in front of the table row">
             <dtbook:table>
-                <dtbook:tr><dtbook:td>CONTENT</dtbook:td></dtbook:tr>
-                <dtbook:pagenum page="normal" id="page-26">26</dtbook:pagenum>
-                <dtbook:pagenum page="normal" id="page-27">27</dtbook:pagenum>
-                <dtbook:tr>
-                    <dtbook:td>CONTENT 1CONTENT 2</dtbook:td>
-                    <dtbook:td>CONTENT 3</dtbook:td>
-                </dtbook:tr>
+                <dtbook:tbody>
+                    <dtbook:tr><dtbook:td>CONTENT</dtbook:td></dtbook:tr>
+                    <dtbook:pagenum page="normal" id="page-26">26</dtbook:pagenum>
+                    <dtbook:pagenum page="normal" id="page-27">27</dtbook:pagenum>
+                    <dtbook:tr>
+                        <dtbook:td>CONTENT 1CONTENT 2</dtbook:td>
+                        <dtbook:td>CONTENT 3</dtbook:td>
+                    </dtbook:tr>
+                </dtbook:tbody>
             </dtbook:table>
             <dtbook:table>
                 <dtbook:tr><dtbook:td>CONTENT</dtbook:td></dtbook:tr>
@@ -2725,15 +2731,19 @@
             <dtbook:list type="pl" depth="1">
                 <dtbook:li>
                     <dtbook:lic>
-                        <dtbook:span id="id1">Chapter 1</dtbook:span>
+                        <dtbook:a id="id1" href="mtm06350-1.xhtml#d130172e14">Chapter 1</dtbook:a>
                     </dtbook:lic>
-                    <dtbook:lic>1</dtbook:lic>
+                    <dtbook:lic>
+                        <dtbook:a href="mtm06350-1.xhtml#d130172e14">1</dtbook:a>
+                    </dtbook:lic>
                 </dtbook:li>
                 <dtbook:li>
                     <dtbook:lic>
-                        <dtbook:span id="id2">Chapter 2</dtbook:span>
+                        <dtbook:a id="id2" href="mtm06350-1.xhtml#d130172e14">Chapter 2</dtbook:a>
                     </dtbook:lic>
-                    <dtbook:lic>2</dtbook:lic>
+                    <dtbook:lic>
+                        <dtbook:a href="mtm06350-1.xhtml#d130172e14">2</dtbook:a>
+                    </dtbook:lic>
                     <dtbook:list type="pl" depth="2">
                         <dtbook:li>
                             <dtbook:lic>Chapter 2.1</dtbook:lic>
@@ -2743,14 +2753,14 @@
                 </dtbook:li>
                 <dtbook:li>
                     <dtbook:lic>
-                        <dtbook:span id="id3">Chapter 3</dtbook:span>
+                        <dtbook:a id="id3" href="mtm06350-1.xhtml#d130172e14">Chapter 3</dtbook:a>
                     </dtbook:lic>
                     <dtbook:span>non-lic</dtbook:span>
                     <dtbook:span>span with no block sibling (except lic)</dtbook:span>
                 </dtbook:li>
                 <dtbook:li>
                     <dtbook:lic>
-                        <dtbook:span id="id4">Chapter 4</dtbook:span>
+                        <dtbook:a id="id4" href="mtm06350-1.xhtml#d130172e14">Chapter 4</dtbook:a>
                     </dtbook:lic>
                     <dtbook:span>non-lic</dtbook:span>
                     <dtbook:lic>
@@ -2766,7 +2776,7 @@
                 </dtbook:li>
                 <dtbook:li>
                     <dtbook:lic>
-                        <dtbook:span id="id5">lic in a</dtbook:span>
+                        <dtbook:a id="id5" href="#">lic in a</dtbook:a>
                     </dtbook:lic>
                     <dtbook:lic>lic outside a</dtbook:lic>
                     <dtbook:lic>
@@ -3085,14 +3095,22 @@
             <dtbook:level1 class="toc">
                 <dtbook:pagenum page="normal">3</dtbook:pagenum>
                 <dtbook:h1>Table of Contents</dtbook:h1>
-                <dtbook:list type="pl" depth="1" class="toc">
+                <dtbook:list type="ol" depth="1" class="toc">
                     <dtbook:li>
-                        <dtbook:lic>Chapter 1</dtbook:lic>
-                        <dtbook:lic>5</dtbook:lic>
+                        <dtbook:lic>
+                            <dtbook:a href="#">Chapter 1</dtbook:a>
+                        </dtbook:lic>
+                        <dtbook:lic>
+                            <dtbook:a href="#">5</dtbook:a>
+                        </dtbook:lic>
                     </dtbook:li>
                     <dtbook:li>
-                        <dtbook:lic>Chapter 2</dtbook:lic>
-                        <dtbook:lic>42</dtbook:lic>
+                        <dtbook:lic>
+                            <dtbook:a href="#">Chapter 2</dtbook:a>
+                        </dtbook:lic>
+                        <dtbook:lic>
+                            <dtbook:a href="#">42</dtbook:a>
+                        </dtbook:lic>
                     </dtbook:li>
                 </dtbook:list>
             </dtbook:level1>
@@ -3101,7 +3119,7 @@
 
     <x:scenario label="the pre element">
         <x:context xml:space="preserve"><html:pre><html:code>  1  2  </html:code></html:pre></x:context>
-        <x:expect label="should map to a p element and whitespace should be preserved"><dtbook:p xml:space="preserve"><dtbook:code xml:space="preserve">  1  2  </dtbook:code></dtbook:p></x:expect>
+        <x:expect label="should map to a p element and whitespace should be preserved"><dtbook:p xml:space="preserve"><dtbook:code>  1  2  </dtbook:code></dtbook:p></x:expect>
     </x:scenario>
 
     <x:scenario label="lists with list item components (class='lic')">
@@ -3142,33 +3160,43 @@
         </x:context>
         <x:expect label="should not use bullets or numbering">
             <dtbook:level1 class="toc">
-                <dtbook:list type="pl" depth="1" class="toc tocList">
+                <dtbook:list type="ol" depth="1" class="toc tocList">
                     <dtbook:li>
-                        <dtbook:span><dtbook:span>Span without lic class</dtbook:span></dtbook:span>
-                    </dtbook:li>
-                    <dtbook:li>
-                        <dtbook:lic>spans with</dtbook:lic>
-                        <dtbook:lic>lic class</dtbook:lic>
+                        <dtbook:a href="#"><dtbook:span>Span without lic class</dtbook:span></dtbook:a>
                     </dtbook:li>
                     <dtbook:li>
                         <dtbook:lic>
-                            <dtbook:span>
-                                <dtbook:span>Span without lic class</dtbook:span>
-                            </dtbook:span>
+                            <dtbook:a href="#">spans with</dtbook:a>
                         </dtbook:lic>
-                        <dtbook:list class="tocList" type="pl" depth="2">
+                        <dtbook:lic>
+                            <dtbook:a href="#">lic class</dtbook:a>
+                        </dtbook:lic>
+                    </dtbook:li>
+                    <dtbook:li>
+                        <dtbook:lic>
+                            <dtbook:a href="#">
+                                <dtbook:span>Span without lic class</dtbook:span>
+                            </dtbook:a>
+                        </dtbook:lic>
+                        <dtbook:list class="tocList" type="ol" depth="2">
                             <dtbook:li>FOO</dtbook:li>
                         </dtbook:list>
                     </dtbook:li>
                     <dtbook:li>
-                        <dtbook:lic><dtbook:strong>1 Funktionen</dtbook:strong></dtbook:lic>
-                        <dtbook:list class="tocList" type="pl" depth="2">
+                        <dtbook:lic>
+                            <dtbook:a href="ET10581-05-chapter-1.xhtml#chap1-1"><dtbook:strong>1 Funktionen</dtbook:strong></dtbook:a>
+                        </dtbook:lic>
+                        <dtbook:list class="tocList" type="ol" depth="2">
                             <dtbook:li>
-                                <dtbook:lic><dtbook:strong>1a</dtbook:strong> Geraden</dtbook:lic>
-                                <dtbook:lic><dtbook:strong>4</dtbook:strong></dtbook:lic>
+                                <dtbook:lic>
+                                    <dtbook:a href="ET10581-05-chapter-1.xhtml#chap1-2"><dtbook:strong>1a</dtbook:strong> Geraden</dtbook:a>
+                                </dtbook:lic>
+                                <dtbook:lic>
+                                    <dtbook:a href="ET10581-05-chapter-1.xhtml#chap1-2"><dtbook:strong>4</dtbook:strong></dtbook:a>
+                                </dtbook:lic>
                             </dtbook:li>
                             <dtbook:li>
-                                <dtbook:span><dtbook:strong>1b</dtbook:strong> Lineare und nicht lineare Funktionen <dtbook:strong>8</dtbook:strong></dtbook:span>
+                                <dtbook:a href="ET10581-05-chapter-1.xhtml#chap1-4"><dtbook:strong>1b</dtbook:strong> Lineare und nicht lineare Funktionen <dtbook:strong>8</dtbook:strong></dtbook:a>
                             </dtbook:li>
                         </dtbook:list>
                     </dtbook:li>
@@ -3270,18 +3298,30 @@
         </x:context>
         <x:expect label="the pagebreaks should become pagenums">
             <dtbook:li>
-                <dtbook:lic>Järnvägen krymper tid och rum</dtbook:lic>
-                <dtbook:lic>45</dtbook:lic>
+                <dtbook:lic>
+                    <dtbook:a href="DTB17055-008-chapter.xhtml#h2_0083">Järnvägen krymper tid och rum</dtbook:a>
+                </dtbook:lic>
+                <dtbook:lic>
+                    <dtbook:a href="DTB17055-008-chapter.xhtml#h2_0083">45</dtbook:a>
+                </dtbook:lic>
                 <dtbook:pagenum id="page-6" page="normal">6</dtbook:pagenum>
             </dtbook:li>
             <dtbook:li>
-                <dtbook:lic>Järnvägen krymper tid och rum</dtbook:lic>
-                <dtbook:lic>45</dtbook:lic>
+                <dtbook:lic>
+                    <dtbook:a href="DTB17055-008-chapter.xhtml#h2_0083">Järnvägen krymper tid och rum</dtbook:a>
+                </dtbook:lic>
+                <dtbook:lic>
+                    <dtbook:a href="DTB17055-008-chapter.xhtml#h2_0083">45</dtbook:a>
+                </dtbook:lic>
                 <dtbook:pagenum id="page-6" page="normal">6</dtbook:pagenum>
             </dtbook:li>
             <dtbook:li>
-                <dtbook:lic>Järnvägen krymper tid och rum</dtbook:lic>
-                <dtbook:lic>45</dtbook:lic>
+                <dtbook:lic>
+                    <dtbook:a href="DTB17055-008-chapter.xhtml#h2_0083">Järnvägen krymper tid och rum</dtbook:a>
+                </dtbook:lic>
+                <dtbook:lic>
+                    <dtbook:a href="DTB17055-008-chapter.xhtml#h2_0083">45</dtbook:a>
+                </dtbook:lic>
                 <dtbook:lic>
                     <dtbook:pagenum id="page-6" page="normal">6</dtbook:pagenum>
                 </dtbook:lic>
@@ -3290,13 +3330,21 @@
                 </dtbook:list>
             </dtbook:li>
             <dtbook:li>
-                <dtbook:lic>Järnvägen krymper tid och rum</dtbook:lic>
-                <dtbook:lic>45</dtbook:lic>
+                <dtbook:lic>
+                    <dtbook:a href="DTB17055-008-chapter.xhtml#h2_0083">Järnvägen krymper tid och rum</dtbook:a>
+                </dtbook:lic>
+                <dtbook:lic>
+                    <dtbook:a href="DTB17055-008-chapter.xhtml#h2_0083">45</dtbook:a>
+                </dtbook:lic>
                 <dtbook:pagenum id="page-6" page="normal">6</dtbook:pagenum>
             </dtbook:li>
             <dtbook:li>
-                <dtbook:lic>Järnvägen krymper tid och rum</dtbook:lic>
-                <dtbook:lic>45</dtbook:lic>
+                <dtbook:lic>
+                    <dtbook:a href="DTB17055-008-chapter.xhtml#h2_0083">Järnvägen krymper tid och rum</dtbook:a>
+                </dtbook:lic>
+                <dtbook:lic>
+                    <dtbook:a href="DTB17055-008-chapter.xhtml#h2_0083">45</dtbook:a>
+                </dtbook:lic>
                 <dtbook:pagenum id="page-6" page="normal">6</dtbook:pagenum>
                 <dtbook:list type="pl" depth="2">
                     <dtbook:li/>
@@ -3535,7 +3583,7 @@
             <html:p epub:type="bridgehead" class="bridgehead">test bridgehead 1</html:p>
         </x:context>
         <x:expect label="the heading should become a hd">
-            <dtbook:p class="bridgehead">test bridgehead 1</dtbook:p>
+            <dtbook:bridgehead>test bridgehead 1</dtbook:bridgehead>
         </x:expect>
     </x:scenario>
 

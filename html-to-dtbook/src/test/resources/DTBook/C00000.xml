@@ -40,77 +40,97 @@
             <level1 id="toc-body" class="toc">
                 <pagenum id="page_3" page="front">iii</pagenum>
                 <h1 id="toc-h1">Table of contents</h1>
-                <list type="pl" class="toc" depth="1">
+                <list type="ol" class="toc" depth="1">
                     <li>
                         <lic>
-                            <span>
+                            <a href="#level1_1">
                                 <span>Cover</span>
-                            </span>
+                            </a>
                         </lic>
-                        <list type="pl" depth="2">
+                        <list type="ol" depth="2">
                             <li>
-                                <span>
+                                <a href="#prodnote_1">
                                     <span>Rear cover</span>
-                                </span>
+                                </a>
                             </li>
                         </list>
                     </li>
                     <li>
-                        <span>
+                        <a href="#toc-h1">
                             <span>Table of contents</span>
-                        </span>
+                        </a>
                     </li>
                     <li>
                         <lic>
-                            <span>
+                            <a href="#d910e43">
                                 <span>Valentin Haüy - the father of the education for the blind</span>
-                            </span>
+                            </a>
                         </lic>
-                        <list type="pl" depth="2">
+                        <list type="ol" depth="2">
                             <li>
-                                <span>
+                                <a href="#d910e124">
                                     <span>List of contents</span>
-                                </span>
+                                </a>
                             </li>
                             <li>
-                                <span>
+                                <a href="#d910e617">
                                     <span>Preface</span>
-                                </span>
+                                </a>
                             </li>
                         </list>
                     </li>
                     <li>
-                        <lic>1. </lic>
-                        <lic>Research questions</lic>
+                        <lic>
+                            <a href="#d910e694">1. </a>
+                        </lic>
+                        <lic>
+                            <a href="#d910e694">Research questions</a>
+                        </lic>
                     </li>
                     <li>
-                        <lic>2. </lic>
-                        <lic>Purpose, method and sources</lic>
+                        <lic>
+                            <a href="#d910e770">2. </a>
+                        </lic>
+                        <lic>
+                            <a href="#d910e770">Purpose, method and sources</a>
+                        </lic>
                     </li>
                     <li>
-                        <lic>3. </lic>
-                        <lic>Valentin Haüy</lic>
+                        <lic>
+                            <a href="#d910e1012">3. </a>
+                        </lic>
+                        <lic>
+                            <a href="#d910e1012">Valentin Haüy</a>
+                        </lic>
                     </li>
                     <li>
-                        <lic>4. </lic>
-                        <lic>The importance of Haüy in the education of the blind in Sweden and elsewhere extra long title extra long title extra long title extra long title</lic>
+                        <lic>
+                            <a href="#d910e3694">4. </a>
+                        </lic>
+                        <lic>
+                            <a href="#d910e3694">The importance of Haüy in the education of the blind in Sweden and elsewhere extra long title extra long title extra long title extra long title</a>
+                        </lic>
                     </li>
                     <li>
-                        <lic>5. </lic>
-                        <lic>Discussion and conclusions</lic>
+                        <lic>
+                            <a href="#d910e4160">5. </a>
+                        </lic>
+                        <lic>
+                            <a href="#d910e4160">Discussion and conclusions</a>
+                        </lic>
                     </li>
                     <li>
-                        <span>
+                        <a href="#d910e4513">
                             <span>Footnotes</span>
-                        </span>
+                        </a>
                     </li>
                 </list>
             </level1>
             <level1 id="d910e43">
                 <h1>Valentin Haüy - the father of the education for the blind</h1>
                 <p>
-                    <span id="dtb4">Published by the Swedish Library of Talking Books and Braille (<span title="The Swedish Library of Talking Books and Braille" id="d910e49" class="initialism"
-                            >MTM</span>).</span>
+                    <span id="dtb4">Published by the Swedish Library of Talking Books and Braille (<acronym title="The Swedish Library of Talking Books and Braille" id="d910e49" pronounce="no"
+                            >MTM</acronym>).</span>
                 </p>
                 <imggroup id="d910e54">
                     <img id="d910e56" src="images/valentin.jpg" alt="image"/>
@@ -212,6 +232,7 @@
                 <level2 id="d910e124">
                     <h2 id="d910e126">List of contents</h2>
                     <table id="dtb21">
+                        <tbody>
                         <tr id="dtb22">
                             <td rowspan="1" colspan="1">
                                 <span id="dtb23">Preface</span>
@@ -461,14 +482,15 @@
                                 <span id="dtb111">29</span>
                             </td>
                         </tr>
+                        </tbody>
                     </table>
                     <pagenum id="page_4" page="front">iv</pagenum>
                 </level2>
                 <level2 id="d910e617">
                     <h2 id="d910e619">Preface</h2>
                     <p>
-                        <span id="dtb113">During my 19 years at the Swedish Library of Talking Books and Braille (<span title="The Swedish Library of Talking Books and Braille" id="d910e629"
-                                class="initialism">MTM</span>), I have frequently been asked about the history of the Braille system and these questions were really what motivated my research into the
+                        <span id="dtb113">During my 19 years at the Swedish Library of Talking Books and Braille (<acronym title="The Swedish Library of Talking Books and Braille" id="d910e629" pronounce="no"
+                                >MTM</acronym>), I have frequently been asked about the history of the Braille system and these questions were really what motivated my research into the
                             life of Louis Braille, the inventor of the system of writing for the blind which was named after him. </span>
                         <span id="dtb114">My investigations revealed that Louis Braille himself would have had almost no schooling at all if it had not been for Valentin Haüy, the father of education
                             for the blind.</span>
@@ -506,14 +528,14 @@
             <level1 id="d910e694" class="chapter">
                 <pagenum id="page_5" page="normal">5</pagenum>
                 <h1 id="d910e696">1. Research questions</h1>
-                <p xml:space="preserve"><code xml:space="preserve">
+                <p xml:space="preserve"><code>
     public static void main(String[] args) {
         ...
     }
 </code></p>
                 <p>
-                    <span id="dtb128">My interest in Valentin Haüy, the father of education for the blind in Europe, was aroused while working at <span
-                            title="The Swedish Library of Talking Books and Braille" id="d910e709" class="initialism">MTM</span> on a book about Louis Braille, the creator of the Braille system. </span>
+                    <span id="dtb128">My interest in Valentin Haüy, the father of education for the blind in Europe, was aroused while working at <acronym pronounce="no"
+                            title="The Swedish Library of Talking Books and Braille" id="d910e709">MTM</acronym> on a book about Louis Braille, the creator of the Braille system. </span>
                     <span id="dtb129">I discovered that there was a dearth of literature on Haüy in Swedish, and that in the limited literature I was able to consult, information about him was often
                         contradictory. </span>
                     <span id="dtb130">In particular, I noticed that there were no references to the period of the more than ten years which Haüy spent in Russia.</span>
@@ -521,19 +543,26 @@
                 <p>
                     <span id="dtb131">In this paper I have proposed a number of research questions:</span>
                 </p>
-                <list type="pl" id="dtb132" depth="1">
-                    <li id="d910e728">• <span id="dtb133">Who was Valentin Haüy? </span>
+                <list type="ul" id="dtb132" depth="1">
+                    <li id="d910e728">
+                        <span id="dtb133">Who was Valentin Haüy? </span>
                         <span id="dtb134">What do we know about his life?</span>
                     </li>
-                    <li id="d910e737">• <span id="dtb135">What role did he play in the creation of special education for the blind?</span>
+                    <li id="d910e737">
+                        <span id="dtb135">What role did he play in the creation of special education for the blind?</span>
                     </li>
-                    <li id="d910e743">• <span id="dtb136">Was he really "the father of education for the blind" or were there others who merit that distinction?</span>
+                    <li id="d910e743">
+                        <span id="dtb136">Was he really "the father of education for the blind" or were there others who merit that distinction?</span>
                     </li>
-                    <li id="d910e749">• <span id="dtb137">How great was his influence on the introduction of education for the blind in Sweden and other countries?</span>
+                    <li id="d910e749">
+                        <span id="dtb137">How great was his influence on the introduction of education for the blind in Sweden and other countries?</span>
                     </li>
-                    <li id="d910e755">• <span id="dtb138">What were his teaching methods?</span>
+                    <li id="d910e755">
+                        <span id="dtb138">What were his teaching methods?</span>
                     </li>
-                    <li id="d910e762">• <span id="dtb139">What happened during his stay in Russia - did he in fact found an institute for the blind in St Petersburg?</span></li>
+                    <li id="d910e762">
+                        <span id="dtb139">What happened during his stay in Russia - did he in fact found an institute for the blind in St Petersburg?</span>
+                    </li>
                 </list>
                 <!-- MathML example from https://developer.mozilla.org/en-US/docs/Web/MathML/Examples/MathML_Pythagorean_Theorem -->
                 <p>We will now prove the Pythogorian theorem:</p>
@@ -2210,8 +2239,8 @@
                 <p>
                     <span id="dtb958">Haüy was also a utilitarian (a term coined by Jeremy Bentham). </span>
                     <span id="dtb959">He believed wholeheartedly that the blind should taught to be self-sufficient. </span>
-                    <span id="dtb960">This utilitarian view characterised teaching of the blind for a long time and is still the basis of education for the blind in the <span
-                            title="United States of America" id="d910e4274" class="initialism">USA</span>, Canada and several Asian countries where the aim of the education for the blind is that they
+                    <span id="dtb960">This utilitarian view characterised teaching of the blind for a long time and is still the basis of education for the blind in the <acronym pronounce="no"
+                            title="United States of America" id="d910e4274">USA</acronym>, Canada and several Asian countries where the aim of the education for the blind is that they
                         should eventually be able to fend for themselves in life. </span>
                     <span id="d910e4278">
                         <span id="dtb961">Haüy does not stand alone amongst his contemporaries in taking this utilitarian view of education for the visually impaired: it was characteristic of all
@@ -2321,7 +2350,7 @@
                     <span id="dtb1012">Underlying this policy is a belief in equality and fraternity, two of the fundamental values of the Enlightenment. </span>
                     <span id="dtb1013">The Swedish government recently presented the draft of a proposed law (pro. 1999/2000:79) to the Riksdag: Från patient till medborgare - en nationell
                         handlingsplan för handikappolitiken (From patient to citizen - a national policy for the handicapped). </span>
-                    <span id="dtb1014">This was a consequence of Sweden's adoption of the <span title="United Nations" id="d910e4503" class="initialism">UN</span> standard legislation on the right of
+                    <span id="dtb1014">This was a consequence of Sweden's adoption of the <acronym title="United Nations" id="d910e4503" pronounce="no">UN</acronym> standard legislation on the right of
                         the handicapped to participation and equality and other amendments to the Declaration of Human Rights. </span>
                     <span id="dtb1015">Haüy's ideas on integration and participation in society were thus strikingly modern.</span>
                 </p>
