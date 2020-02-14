@@ -104,7 +104,6 @@
             <px:assert message="The HTML file must have a file extension." error-code="NORDICDTBOOKEPUB006">
                 <p:with-option name="test" select="matches(base-uri(/*),'.*[^\.]\.[^\.]*$')"/>
             </px:assert>
-
             <!-- Make sure only sections corresponding to html:h[1-6] are used. -->
             <p:xslt name="html-to-dtbook.step.deep-level-grouping">
                 <p:with-param name="name" select="'section article'"/>
@@ -113,6 +112,15 @@
                 <p:with-param name="copy-wrapping-elements-into-result" select="true()"/>
                 <p:input port="stylesheet">
                     <p:document href="../../xslt/deep-level-grouping.xsl"/>
+                </p:input>
+            </p:xslt>
+            <!-- Nordic HTML to generic HTML -->
+            <p:xslt name="html-to-dtbook.step.nordic-to-generic-epub3">
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/nordic-to-generic-epub3.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
                 </p:input>
             </p:xslt>
             <px:fileset-update name="html-to-dtbook.step.html.processed">
@@ -126,7 +134,7 @@
                     <p:pipe step="html-to-dtbook.step.load-xhtml" port="result.fileset"/>
                 </p:input>
                 <p:input port="update.in-memory">
-                    <p:pipe step="html-to-dtbook.step.deep-level-grouping" port="result"/>
+                    <p:pipe step="html-to-dtbook.step.nordic-to-generic-epub3" port="result"/>
                 </p:input>
             </px:fileset-update>
 
@@ -152,6 +160,17 @@
                     <p:pipe step="html-to-dtbook.step.generic" port="result.in-memory"/>
                 </p:input>
             </px:fileset-load>
+            <!--
+                generic DTBook to Nordic DTBook
+            -->
+            <p:xslt>
+                <p:input port="stylesheet">
+                    <p:document href="../../xslt/generic-to-nordic-dtbook.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
             <!--
                 update relative links to images
             -->
