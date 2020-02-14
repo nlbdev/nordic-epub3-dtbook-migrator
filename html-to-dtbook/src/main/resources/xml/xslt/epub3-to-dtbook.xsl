@@ -1163,7 +1163,7 @@
                     </xsl:when>
                     <xsl:when test="parent::html:ol[@type=('a','A')]">
                         <xsl:variable name="value" select="f:li-value(.)"/>
-                        <xsl:variable name="alpha" select="f:numeric-decimal-to-alpha($value)"/>
+                        <xsl:variable name="alpha" select="pf:numeric-decimal-to-alpha($value)"/>
                         <xsl:value-of select="concat(if (parent::html:ol/@type='a') then lower-case($alpha) else upper-case($alpha),'. ')"/>
                     </xsl:when>
                     <xsl:when test="parent::html:ol[@type=('i','I')]">
@@ -1578,25 +1578,6 @@
                 <xsl:value-of
                     select="if ($li/preceding-sibling::*[@value]) then f:li-value(($li/preceding-sibling::*[@value])[last()]) + 1 + count($li/preceding-sibling::* intersect ($li/preceding-sibling::*[@value])[last()]/following-sibling::*) else ($li/parent::*/@start/number(.), 1)[1] + count($li/preceding-sibling::*)"
                 />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function>
-
-    <xsl:function name="f:numeric-decimal-to-alpha">
-        <!-- TODO: move this to numeral-conversion.xsl in DP2 common-utils -->
-        <xsl:param name="decimal" as="xs:integer"/>
-        <xsl:value-of select="string-join(f:numeric-decimal-to-alpha-part($decimal,()),'')"/>
-    </xsl:function>
-
-    <xsl:function name="f:numeric-decimal-to-alpha-part">
-        <xsl:param name="remainder" as="xs:integer"/>
-        <xsl:param name="result" as="xs:string*"/>
-        <xsl:choose>
-            <xsl:when test="$remainder &lt;= 0">
-                <xsl:sequence select="$result"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="f:numeric-decimal-to-alpha-part(xs:integer(floor($remainder div 26)), (codepoints-to-string(($remainder mod 26) + 96), $result))"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
