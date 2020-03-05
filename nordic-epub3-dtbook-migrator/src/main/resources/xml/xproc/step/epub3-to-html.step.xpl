@@ -37,6 +37,11 @@
             px:nordic-update-epub-prefixes
         </p:documentation>
     </p:import>
+    <p:import href="opf-to-html-metadata.xpl">
+        <p:documentation>
+            px:nordic-opf-to-html-metadata
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -184,18 +189,11 @@
             <p:identity name="epub3-to-html.step.single-html.body"/>
             <p:sink/>
 
-            <p:xslt name="epub3-to-html.step.opf-to-html-metadata">
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
+            <px:nordic-opf-to-html-metadata name="epub3-to-html.step.single-html.metadata">
                 <p:input port="source">
                     <p:pipe step="epub3-to-html.step.package-doc" port="result"/>
                 </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/opf-to-html-metadata.xsl"/>
-                </p:input>
-            </p:xslt>
-            <p:identity name="epub3-to-html.step.single-html.metadata"/>
+            </px:nordic-opf-to-html-metadata>
             <p:sink/>
 
             <p:group name="epub3-to-html.step.header-element">

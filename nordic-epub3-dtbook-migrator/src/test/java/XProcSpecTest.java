@@ -31,6 +31,7 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
             pipelineModule("validation-utils"),
             pipelineModule("mathml-utils"),
             pipelineModule("html-to-epub3"),
+            pipelineModule("epub3-to-html"),
         }; 
     } 
      
