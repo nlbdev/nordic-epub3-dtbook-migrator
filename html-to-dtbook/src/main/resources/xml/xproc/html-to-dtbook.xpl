@@ -14,6 +14,12 @@
         <p:pipe step="add-dtbook" port="result.in-memory"/>
     </p:output>
 
+    <p:option name="dtbook-file-name" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Defaults to the name of the HTML file with file extension ".xml"</p>
+        </p:documentation>
+    </p:option>
+
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
             px:fileset-load
@@ -47,7 +53,7 @@
     </px:fileset-load>
     <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one HTML file in the fileset." error-code="XXXXX"/>
     <px:assert message="The HTML file must have a file extension." error-code="XXXXX">
-        <p:with-option name="test" select="matches(base-uri(/*),'.*[^\.]\.[^\.]*$')"/>
+        <p:with-option name="test" select="$dtbook-file-name!='' or matches(base-uri(/*),'.*[^\.]\.[^\.]*$')"/>
     </px:assert>
     <p:identity name="html"/>
 
@@ -63,7 +69,10 @@
         </p:input>
     </p:xslt>
     <px:set-base-uri>
-        <p:with-option name="base-uri" select="concat(replace(base-uri(/*),'^(.*)\.[^/\.]*$','$1'),'.xml')"/>
+        <p:with-option name="base-uri"
+                       select="resolve-uri(($dtbook-file-name[.!=''],
+                                            concat(replace(base-uri(/*),'^(.*)\.[^/\.]*$','$1'),'.xml'))[1],
+                                           base-uri(/*))"/>
     </px:set-base-uri>
     <p:identity name="dtbook"/>
     <p:sink/>
