@@ -9,7 +9,7 @@
                 xpath-default-namespace="http://www.daisy.org/z3986/2005/dtbook/"
                 exclude-result-prefixes="#all">
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/epub3-utils/library.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xsl"/>
     <xsl:import href="format-list.xsl"/>
 
     <xsl:output indent="yes" exclude-result-prefixes="#all" doctype-public="-//NISO//DTD dtbook 2005-3//EN" doctype-system="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>

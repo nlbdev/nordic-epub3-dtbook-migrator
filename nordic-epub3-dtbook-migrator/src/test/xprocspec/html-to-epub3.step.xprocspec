@@ -103,7 +103,7 @@
         <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
         <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
         <x:expect label="the metadata must be as expected" type="custom"
-                  href="http://www.daisy.org/pipeline/modules/epub3-utils/library.xpl" step="x:epub3-compare-package-doc">
+                  href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
             <x:document type="inline">
                 <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
                     <dc:title>Valentin Haüy - the father of the education for the blind</dc:title>

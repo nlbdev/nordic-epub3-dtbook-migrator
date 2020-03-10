@@ -61,7 +61,7 @@
             px:nordic-update-epub-prefixes
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-utils/library.xpl">
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
         <p:documentation>
             px:epub3-create-toc
             px:epub3-create-page-list

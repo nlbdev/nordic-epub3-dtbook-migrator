@@ -32,7 +32,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/epub3-utils/library.xpl">
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
         <p:documentation>
             px:epub3-store
         </p:documentation>

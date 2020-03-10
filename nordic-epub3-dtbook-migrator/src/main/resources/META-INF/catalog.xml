@@ -50,7 +50,7 @@
     <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-validator"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:epub3-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:epubcheck-adapter"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>

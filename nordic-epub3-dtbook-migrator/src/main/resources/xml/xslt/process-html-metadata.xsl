@@ -4,7 +4,7 @@
                 xpath-default-namespace="http://www.w3.org/1999/xhtml"
                 exclude-result-prefixes="#all">
 
-	<xsl:import href="http://www.daisy.org/pipeline/modules/epub3-utils/epub3-vocab.xsl"/>
+	<xsl:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xsl"/>
 
 	<xsl:template match="@*|node()">
 		<xsl:copy>

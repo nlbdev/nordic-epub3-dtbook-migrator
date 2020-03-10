@@ -5,7 +5,7 @@
                 xpath-default-namespace="http://www.idpf.org/2007/opf"
                 exclude-result-prefixes="#all">
 
-	<xsl:import href="http://www.daisy.org/pipeline/modules/epub3-utils/epub3-vocab.xsl"/>
+	<xsl:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xsl"/>
 
 	<xsl:template match="@*|node()">
 		<xsl:copy>

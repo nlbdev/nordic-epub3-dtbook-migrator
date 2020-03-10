@@ -22,7 +22,7 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
             pipelineModule("common-utils"),
             pipelineModule("dtbook-utils"),
             pipelineModule("dtbook-validator"),
-            pipelineModule("epub3-utils"),
+            pipelineModule("epub-utils"),
             pipelineModule("epubcheck-adapter"),
             pipelineModule("file-utils"),
             pipelineModule("fileset-utils"),
