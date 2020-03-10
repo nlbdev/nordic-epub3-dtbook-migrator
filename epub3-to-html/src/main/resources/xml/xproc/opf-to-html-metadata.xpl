@@ -25,9 +25,9 @@
 	<!-- for testing purposes -->
 	<p:input port="parameters" kind="parameter" primary="false"/>
 
-	<p:import href="http://www.daisy.org/pipeline/modules/epub3-utils/pub/library.xpl">
+	<p:import href="http://www.daisy.org/pipeline/modules/epub3-utils/library.xpl">
 		<p:documentation>
-			px:epub3-pub-merge-prefix
+			px:epub3-merge-prefix
 		</p:documentation>
 	</p:import>
 
@@ -41,6 +41,6 @@
 	</p:xslt>
 
 	<!-- normalize epub:prefix attribute -->
-	<px:epub3-pub-merge-prefix implicit-output-prefixes="dc: http://purl.org/dc/elements/1.1/"/>
+	<px:epub3-merge-prefix implicit-output-prefixes="dc: http://purl.org/dc/elements/1.1/"/>
 
 </p:declare-step>

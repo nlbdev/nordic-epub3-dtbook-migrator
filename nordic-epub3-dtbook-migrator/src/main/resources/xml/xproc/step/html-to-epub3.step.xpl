@@ -63,11 +63,11 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-utils/library.xpl">
         <p:documentation>
-            px:epub3-nav-create-toc
-            px:epub3-nav-create-page-list
+            px:epub3-create-toc
+            px:epub3-create-page-list
             px:epub3-nav-aggregate
             px:epub3-nav-to-ncx
-            px:epub3-pub-create-package-doc
+            px:epub3-create-package-doc
             px:epub3-ocf-finalize
         </p:documentation>
     </p:import>
@@ -282,9 +282,9 @@
                         </p:xslt>
                         <p:delete match="html:a[tokenize(@epub:type,'\s+')='noteref']" name="html-to-epub3.step.nav.toc.delete-noterefs"/>
 
-                        <px:epub3-nav-create-toc name="html-to-epub3.step.nav.toc.nav-create-toc">
+                        <px:epub3-create-toc name="html-to-epub3.step.nav.toc.nav-create-toc">
                             <p:with-option name="output-base-uri" select="concat($publication-dir,'nav.xhtml')"/>
-                        </px:epub3-nav-create-toc>
+                        </px:epub3-create-toc>
                         <!--
                             Process the TOC: the hrefs need to be fixed because TOC is generated
                             from the single HTML but the links should point to the split HTML.
@@ -310,12 +310,12 @@
                     </p:group>
                     <p:sink/>
 
-                    <px:epub3-nav-create-page-list name="html-to-epub3.step.nav.page-list">
+                    <px:epub3-create-page-list name="html-to-epub3.step.nav.page-list">
                         <p:with-option name="output-base-uri" select="concat($publication-dir,'nav.xhtml')"/>
                         <p:input port="source">
                             <p:pipe step="html-to-epub3.step.html-split" port="in-memory.out"/>
                         </p:input>
-                    </px:epub3-nav-create-page-list>
+                    </px:epub3-create-page-list>
                     <p:sink/>
 
                     <px:epub3-nav-aggregate name="html-to-epub3.step.nav-aggregate">
@@ -410,7 +410,7 @@
                 </p:output>
 
                 <p:identity name="html-to-epub3.step.fileset-with-role"/>
-                <px:epub3-pub-create-package-doc name="html-to-epub3.step.create-package-doc"
+                <px:epub3-create-package-doc name="html-to-epub3.step.create-package-doc"
                                                  reserved-prefixes="dcterms: http://purl.org/dc/terms/">
                     <p:with-option name="output-base-uri" select="concat($publication-dir,'package.opf')"/>
                     <p:with-option name="compatibility-mode" select="$compatibility-mode"/>
@@ -424,7 +424,7 @@
                     <p:input port="metadata">
                         <p:pipe step="html-to-epub3.step.opf-metadata" port="result"/>
                     </p:input>
-                </px:epub3-pub-create-package-doc>
+                </px:epub3-create-package-doc>
 
                 <!--
                     Add to fileset

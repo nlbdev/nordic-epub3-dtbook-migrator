@@ -15,14 +15,14 @@
 	</p:input>
 	<p:output port="result"/>
 
-	<p:import href="http://www.daisy.org/pipeline/modules/epub3-utils/pub/library.xpl">
+	<p:import href="http://www.daisy.org/pipeline/modules/epub3-utils/library.xpl">
 		<p:documentation>
-			px:epub3-pub-merge-prefix
-			px:epub3-pub-add-prefix
+			px:epub3-merge-prefix
+			px:epub3-add-prefix
 		</p:documentation>
 	</p:import>
 
-	<px:epub3-pub-merge-prefix>
+	<px:epub3-merge-prefix>
 		<p:with-option name="implicit-input-prefixes"  select="'a11y:      http://www.idpf.org/epub/vocab/package/a11y/#
 		                                                        dc:        http://purl.org/dc/elements/1.1/
 		                                                        dcterms:   http://purl.org/dc/terms/
@@ -39,9 +39,9 @@
 		                                                        z3998:     http://www.daisy.org/z3998/2012/vocab/structure/#'"/>
 		<p:with-option name="implicit-output-prefixes" select="'dc:        http://purl.org/dc/elements/1.1/
 		                                                        dcterms:   http://purl.org/dc/terms/'"/>
-	</px:epub3-pub-merge-prefix>
+	</px:epub3-merge-prefix>
 
-	<px:epub3-pub-add-prefix prefixes="nordic: http://www.mtm.se/epub/"/>
+	<px:epub3-add-prefix prefixes="nordic: http://www.mtm.se/epub/"/>
 
 </p:declare-step>
 
