@@ -230,9 +230,12 @@
     </xsl:template>
 
     <xsl:template match="html:section | html:article">
+        <xsl:param name="level" tunnel="yes" as="xs:integer" select="0"/>
+        <xsl:if test="$level &gt;= 6">
+            <xsl:message terminate="yes">DTBook can not have more than 6 levels</xsl:message>
+        </xsl:if>
         <xsl:call-template name="f:copy-preceding-comments"/>
-        <xsl:variable name="level" select="f:level(.)"/>
-        <xsl:element name="level{f:level(.)}">
+        <xsl:element name="level{$level + 1}">
             <xsl:call-template name="f:attlist.level">
                 <xsl:with-param name="classes" select="if (self::html:article) then 'article' else ()" tunnel="yes"/>
                 <!--<xsl:with-param name="level-classes"
@@ -246,12 +249,20 @@
                 <xsl:when test="not($headline/preceding-sibling::*[1][f:types(.)='pagebreak']) and $headline/following-sibling::*[1][f:types(.)='pagebreak']">
                     <!-- [tpb126] pagenum must not occur directly after hx unless the hx is preceded by a pagenum -->
                     <xsl:variable name="initial-pagebreak" select="$headline/following-sibling::*[1][f:types(.)='pagebreak']"/>
-                    <xsl:apply-templates select="$initial-pagebreak"/>
-                    <xsl:apply-templates select="$headline"/>
-                    <xsl:apply-templates select="node()[not(. intersect $initial-pagebreak) and not(. intersect $headline)]"/>
+                    <xsl:apply-templates select="$initial-pagebreak">
+                        <xsl:with-param name="level" tunnel="yes" as="xs:integer" select="$level + 1"/>
+                    </xsl:apply-templates>
+                    <xsl:apply-templates select="$headline">
+                        <xsl:with-param name="level" tunnel="yes" as="xs:integer" select="$level + 1"/>
+                    </xsl:apply-templates>
+                    <xsl:apply-templates select="node()[not(. intersect $initial-pagebreak) and not(. intersect $headline)]">
+                        <xsl:with-param name="level" tunnel="yes" as="xs:integer" select="$level + 1"/>
+                    </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select="node()"/>
+                    <xsl:apply-templates select="node()">
+                        <xsl:with-param name="level" tunnel="yes" as="xs:integer" select="$level + 1"/>
+                    </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
 
@@ -454,11 +465,17 @@
     </xsl:template>
 
     <xsl:template match="html:*[f:types(.)='epigraph']">
+        <xsl:param name="level" tunnel="yes" as="xs:integer" select="0"/>
         <xsl:choose>
             <xsl:when test="exists(self::html:aside | self::html:section) and exists(html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:aside | html:section)">
-                <xsl:element name="level{f:level(.)}">
+                <xsl:if test="$level &gt;= 6">
+                    <xsl:message terminate="yes">DTBook can not have more than 6 levels</xsl:message>
+                </xsl:if>
+                <xsl:element name="level{$level + 1}">
                     <xsl:call-template name="f:attlist.epigraph"/>
-                    <xsl:apply-templates select="node()"/>
+                    <xsl:apply-templates select="node()">
+                        <xsl:with-param name="level" tunnel="yes" select="$level + 1"/>
+                    </xsl:apply-templates>
                 </xsl:element>
             </xsl:when>
             <xsl:otherwise>
@@ -958,7 +975,10 @@
     </xsl:template>
 
     <xsl:template match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
-        <xsl:element name="h{if (parent::*/f:types(.)=('sidebar','z3998:poem','z3998:verse') or parent::*/f:classes(.)='linegroup') then 'd' else f:level(.)}">
+        <xsl:param name="level" tunnel="yes" as="xs:integer" required="yes"/>
+        <xsl:element name="h{if (parent::*/f:types(.)=('sidebar','z3998:poem','z3998:verse') or parent::*/f:classes(.)='linegroup')
+                             then 'd'
+                             else $level}">
             <xsl:call-template name="f:attlist.h"/>
             <xsl:apply-templates select="node()"/>
         </xsl:element>
@@ -1432,45 +1452,6 @@
     <xsl:function name="f:classes" as="xs:string*">
         <xsl:param name="element" as="element()"/>
         <xsl:sequence select="tokenize($element/@class,'\s+')"/>
-    </xsl:function>
-
-    <xsl:function name="f:level" as="xs:integer">
-        <xsl:param name="element" as="element()"/>
-        <xsl:variable name="level" select="($element/ancestor-or-self::html:*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body])[last()]"/>
-        <xsl:variable name="level-nodes" select="f:level-nodes($level)"/>
-        <xsl:variable name="h-in-section" select="$level-nodes[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]"/>
-        <xsl:variable name="h" select="$h-in-section[1]"/>
-        <xsl:variable name="sections" select="$level/ancestor-or-self::*[self::html:section or self::html:article or self::html:aside or self::html:nav]"/>
-        <xsl:variable name="explicit-level" select="count($sections)-1"/>
-        <xsl:variable name="h-in-level-numbers" select="if ($h-in-section) then reverse($h-in-section/xs:integer(number(replace(local-name(),'^h','')))) else 1"/>
-        <xsl:variable name="implicit-level" select="if ($h-in-level-numbers[1] = 6) then 6 else ()"/>
-        <xsl:variable name="h-in-level-numbers" select="$h-in-level-numbers[not(.=6)]"/>
-        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-level-numbers[1] = 5) then 5 else ())"/>
-        <xsl:variable name="h-in-level-numbers" select="$h-in-level-numbers[not(.=5)]"/>
-        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-level-numbers[1] = 4) then 4 else ())"/>
-        <xsl:variable name="h-in-level-numbers" select="$h-in-level-numbers[not(.=4)]"/>
-        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-level-numbers[1] = 3) then 3 else ())"/>
-        <xsl:variable name="h-in-level-numbers" select="$h-in-level-numbers[not(.=3)]"/>
-        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-level-numbers[1] = 2) then 2 else ())"/>
-        <xsl:variable name="implicit-level" select="($implicit-level, if ($h-in-level-numbers = 1) then 1 else ())"/>
-        <xsl:variable name="implicit-level" select="count($implicit-level)"/>
-
-        <xsl:variable name="level" select="$explicit-level + $implicit-level"/>
-        <xsl:sequence select="max((1,min(($level, 6))))"/>
-        <!--
-            NOTE: DTBook only supports 6 levels when using the explicit level1-level6 / h1-h6 elements,
-            so min(($level, 6)) is used to flatten deeper structures.
-            The implicit level / hd elements could be used in cases where the structures are deeper.
-            However, our tools would have to support those elements.
-        -->
-    </xsl:function>
-
-    <xsl:function name="f:level-nodes" as="node()*">
-        <xsl:param name="level" as="element()"/>
-        <xsl:variable name="level-levels"
-            select="$level//html:*[(self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body) and ((ancestor::html:*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body])[last()] intersect $level)]"/>
-        <xsl:variable name="level-nodes" select="$level//node()[not(ancestor-or-self::* intersect $level-levels)]"/>
-        <xsl:sequence select="$level-nodes"/>
     </xsl:function>
 
     <xsl:function name="f:generate-pretty-id" as="xs:string">

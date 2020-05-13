@@ -3,7 +3,6 @@
                xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
                xmlns:epub="http://www.idpf.org/2007/ops"
                xmlns:html="http://www.w3.org/1999/xhtml"
-               xmlns:f="http://www.daisy.org/pipeline/modules/html-to-dtbook/epub3-to-dtbook.xsl"
                xslt-version="2.0"
                stylesheet="../../main/resources/xml/xslt/epub3-to-dtbook.xsl">
 
@@ -2312,127 +2311,6 @@
             <dtbook:td headers="headers" scope="scope" rowspan="rowspan" colspan="colspan"/>
         </x:expect>
     </x:scenario>
-
-    <!-- ########## XSLT functions ########## -->
-
-    <x:scenario label="f:level">
-        <x:scenario label="when providing a full three-level structure, with the second section as context">
-            <x:call function="f:level">
-                <x:param name="element" as="element()" select="(.//html:section)[2]">
-                    <html:body>
-                        <html:section>
-                            <html:h1>TEXT</html:h1>
-                            <html:section>
-                                <html:h2>TEXT</html:h2>
-                                <html:section>
-                                    <html:h3>TEXT</html:h3>
-                                </html:section>
-                            </html:section>
-                        </html:section>
-                    </html:body>
-                </x:param>
-            </x:call>
-            <x:expect label="section #2 should be level 2" select="2"/>
-        </x:scenario>
-        <x:scenario label="when providing a three-level structure with a missing h1 in the first section, with the first section as context">
-            <x:call function="f:level">
-                <x:param name="element" as="element()" select="(.//html:section)[1]">
-                    <html:body>
-                        <html:section>
-                            <html:section>
-                                <html:h2>TEXT</html:h2>
-                                <html:section>
-                                    <html:h3>TEXT</html:h3>
-                                </html:section>
-                            </html:section>
-                        </html:section>
-                    </html:body>
-                </x:param>
-            </x:call>
-            <x:expect label="section #1 should be level 1" select="1"/>
-        </x:scenario>
-        <x:scenario label="when providing a three-level structure with a missing h1 in the first section, with a p in the first section as context">
-            <x:call function="f:level">
-                <x:param name="element" as="element()" select="(.//html:p)[1]">
-                    <html:body>
-                        <html:section>
-                            <html:p/>
-                            <html:section>
-                                <html:h2>TEXT</html:h2>
-                                <html:section>
-                                    <html:h3>TEXT</html:h3>
-                                </html:section>
-                            </html:section>
-                        </html:section>
-                    </html:body>
-                </x:param>
-            </x:call>
-            <x:expect label="section #1 should be level 1" select="1"/>
-        </x:scenario>
-    </x:scenario>
-
-    <x:scenario label="f:level-nodes">
-        <x:call function="f:level-nodes"/>
-        <x:scenario label="when providing a full three-level structure, with the second section as context">
-            <x:call>
-                <x:param name="element" as="element()" select="(.//html:section)[2]">
-                    <html:body>
-                        <html:section>
-                            <html:h1>TEXT</html:h1>
-                            <html:section>
-                                <html:h2>TEXT</html:h2>
-                                <html:section>
-                                    <html:h3>TEXT</html:h3>
-                                </html:section>
-                            </html:section>
-                        </html:section>
-                    </html:body>
-                </x:param>
-            </x:call>
-            <x:expect label="the h2 in section #2 should be returned">
-                <html:h2>TEXT</html:h2><![CDATA[TEXT]]></x:expect>
-        </x:scenario>
-        <x:scenario label="when providing a three-level structure with a missing h1 in the first section, with the first section as context">
-            <x:call>
-                <x:param name="element" as="element()" select="(.//html:section)[1]">
-                    <html:body>
-                        <html:section>
-                            <html:section>
-                                <html:h2>TEXT</html:h2>
-                                <html:section>
-                                    <html:h3>TEXT</html:h3>
-                                </html:section>
-                            </html:section>
-                        </html:section>
-                    </html:body>
-                </x:param>
-            </x:call>
-            <x:expect label="an empty sequence should be returned" select="()"/>
-        </x:scenario>
-        <x:scenario label="when providing a three-level structure with a missing h1 in the first section, with a p in the first section as context">
-            <x:call>
-                <x:param name="element" as="element()" select="(.//html:section)[1]">
-                    <html:body>
-                        <html:section>
-                            <html:p>P</html:p>
-                            <html:section>
-                                <html:h2>TEXT1</html:h2>
-                                <html:section>
-                                    <html:h3>TEXT2</html:h3>
-                                </html:section>
-                            </html:section>
-                            <html:section>
-                                <html:h2>TEXT3</html:h2>
-                            </html:section>
-                        </html:section>
-                    </html:body>
-                </x:param>
-            </x:call>
-            <x:expect label="the p should be returned">
-                <html:p>P</html:p><![CDATA[P]]></x:expect>
-        </x:scenario>
-    </x:scenario>
-
 
     <!-- ########## Regression tests ########## -->
 
