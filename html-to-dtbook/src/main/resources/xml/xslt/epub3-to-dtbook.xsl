@@ -935,7 +935,10 @@
 
     <xsl:template match="html:hr"/>
 
-    <xsl:template match="html:h1[f:types(.)='fulltitle' and parent::html:header[parent::html:body]]">
+    <xsl:template match="html:body/html:header/html:h1[f:types(.)='fulltitle']|
+                         html:body/html:header/html:h1[
+                           not(f:types(.)=('fulltitle','z3998:author','covertitle'))
+                           and count(parent::*/html:h1[not(f:types(.)=('fulltitle','z3998:author','covertitle'))])=1]">
         <doctitle>
             <xsl:call-template name="f:attlist.doctitle"/>
             <xsl:apply-templates select="node()"/>
@@ -948,7 +951,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="html:*[f:types(.)='z3998:author' and parent::html:header[parent::html:body]]">
+    <xsl:template match="html:body/html:header/html:*[f:types(.)='z3998:author']">
         <docauthor>
             <xsl:call-template name="f:attlist.docauthor"/>
             <xsl:apply-templates select="node()"/>
@@ -961,7 +964,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="html:*[f:types(.)='covertitle' and parent::html:header[parent::html:body]]">
+    <xsl:template match="html:body/html:header/html:*[f:types(.)='covertitle']">
         <covertitle>
             <xsl:call-template name="f:attlist.covertitle"/>
             <xsl:apply-templates select="node()"/>

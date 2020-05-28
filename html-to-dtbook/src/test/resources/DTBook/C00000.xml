@@ -22,7 +22,7 @@
     </head>
     <book>
         <frontmatter>
-            <doctitle>Valentin Haüy - the father of the education for the blind</doctitle>
+            <doctitle id="id_2">Valentin Haüy - the father of the education for the blind</doctitle>
             <docauthor>Beatrice Christensen Sköld</docauthor>
             <level1 id="level1_1" class="jacketcopy">
                 <prodnote id="prodnote_1" class="rearcover" render="optional">
@@ -127,7 +127,7 @@
                 </list>
             </level1>
             <level1 id="d910e43">
-                <h1>Valentin Haüy - the father of the education for the blind</h1>
+                <h1 id="id_3">Valentin Haüy - the father of the education for the blind</h1>
                 <p>
                     <span id="dtb4">Published by the Swedish Library of Talking Books and Braille (<acronym title="The Swedish Library of Talking Books and Braille" id="d910e49" pronounce="no"
                             >MTM</acronym>).</span>
@@ -2177,9 +2177,9 @@
                 </div>
             </level1>
             <level1 class="part" id="poem-part">
-                <h1>Poem test</h1>
+                <h1 id="id_4">Poem test</h1>
                 <poem id="poem1">
-                    <hd>Poem headline</hd>
+                    <hd id="id_5">Poem headline</hd>
                     <linegroup>
                         <line>...verse line...</line>
                         <line>...verse line...</line>
@@ -2190,7 +2190,7 @@
                     </linegroup>
                 </poem>
                 <level2 class="chapter" id="poem-part-chapter">
-                    <h2>Chapter in poem part</h2>
+                    <h2 id="id_6">Chapter in poem part</h2>
                     <p>Should be a separate file in EPUB.</p>
                 </level2>
             </level1>
@@ -2878,7 +2878,7 @@
                     </p>
                 </note>
                 <level2 id="footnotes_level2">
-                    <h2>Footnotes level2</h2>
+                    <h2 id="id_7">Footnotes level2</h2>
                     <p><noteref idref="#footnote_level2">Noteref to footnote level2.</noteref></p>
                     <note id="footnote_level2">
                         <p>Footnote level2</p>

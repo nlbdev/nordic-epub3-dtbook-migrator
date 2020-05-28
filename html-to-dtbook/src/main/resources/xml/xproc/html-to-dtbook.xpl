@@ -27,6 +27,11 @@
             px:fileset-add-entry
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
+        <p:documentation>
+            px:html-outline
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
             px:assert
@@ -56,6 +61,67 @@
         <p:with-option name="test" select="$dtbook-file-name!='' or matches(base-uri(/*),'.*[^\.]\.[^\.]*$')"/>
     </px:assert>
     <p:identity name="html"/>
+
+    <!--
+        epub3-to-dtbook.xsl makes certain assumptions about the input structure
+        - sectioning content elements have sectioning (root/content) element as parent
+        - heading elements have sectioning element as parent
+        - body becomes book
+        - child 'header' element of body becomes doctitle/covertitle/docauthor
+        - child sectionining elements of body become frontmatter/bodymatter/rearmatter
+    -->
+    <p:group>
+        <!--
+            Add missing sectioning elements so that there are no implied sections
+        -->
+        <px:html-outline fix-sectioning="no-implied" name="outline"
+                         output-base-uri="file:/tmp/irrelevant.html"/>
+        <p:sink/>
+        <!--
+            Move everything one level down if step above results in multiple body elements
+        -->
+        <p:wrap match="/*/html:body[preceding-sibling::html:body|following-sibling::html:body]"
+                group-adjacent="true()" wrapper="html:body">
+            <p:input port="source">
+                <p:pipe step="outline" port="content-doc"/>
+            </p:input>
+        </p:wrap>
+        <p:rename match="/*/html:body/html:body" new-name="html:section"/>
+        <!--
+            Move body one level down if it contains content beside sectioning and heading elements
+        -->
+        <p:wrap match="/*/html:body[text()[normalize-space()]
+                                   |*[not(self::html:section  |self::html:h1
+                                         |self::html:article  |self::html:h2
+                                         |self::html:aside    |self::html:h3
+                                         |self::html:nav      |self::html:h4
+                                         |self::html:header   |self::html:h5
+                                         |self::html:hgroup   |self::html:h6
+                                         )]]"
+                wrapper="html:body"/>
+        <p:rename match="/*/html:body/html:body" new-name="html:section"/>
+        <!--
+            Wrap body's heading element inside header
+        -->
+        <p:wrap match="/*/html:body/*[self::html:h1
+                                     |self::html:h2
+                                     |self::html:h3
+                                     |self::html:h4
+                                     |self::html:h5
+                                     |self::html:hgroup]"
+                group-adjacent="true()" wrapper="html:header"/>
+        <!--
+            Move sectioning and heading elements up
+        -->
+        <p:xslt>
+            <p:input port="stylesheet">
+                <p:document href="../xslt/prepare-html.xsl"/>
+            </p:input>
+            <p:input port="parameters">
+                <p:empty/>
+            </p:input>
+        </p:xslt>
+    </p:group>
 
     <!--
         Convert HTML to DTBook
