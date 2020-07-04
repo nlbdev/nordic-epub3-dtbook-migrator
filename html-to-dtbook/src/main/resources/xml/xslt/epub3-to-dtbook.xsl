@@ -995,11 +995,23 @@
         <!-- normalize space in headlines -->
         <xsl:choose>
             <xsl:when
-                test="normalize-space()='' and count((ancestor::*[matches(name(),'h\d')][1]//text() intersect preceding::text())[normalize-space()]) and count((ancestor::*[matches(name(),'h\d')][1]//text() intersect following::text())[normalize-space()])">
+                test="normalize-space()=''
+                      and count((ancestor::*[matches(name(),'h\d')][1]//text() intersect preceding::text())[normalize-space()])
+                      and count((ancestor::*[matches(name(),'h\d')][1]//text() intersect following::text())[normalize-space()])">
                 <xsl:text> </xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="normalize-space(.)"/>
+                <xsl:value-of
+                    select="concat(
+                              if (matches(.,'\s$')
+                                  and count((ancestor::*[matches(name(),'h\d')][1]//text() intersect preceding::text())[normalize-space()]))
+                                then ' '
+                                else '',
+                              normalize-space(.),
+                              if (matches(.,'^\s')
+                                  and count((ancestor::*[matches(name(),'h\d')][1]//text() intersect following::text())[normalize-space()]))
+                                then ' '
+                                else '')"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
