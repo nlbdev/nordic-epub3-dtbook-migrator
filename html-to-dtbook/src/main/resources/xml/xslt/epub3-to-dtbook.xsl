@@ -193,13 +193,13 @@
 
     <xsl:template match="html:body">
         <book>
-            <xsl:if test="(html:section | html:article)[f:types(.)=('cover','frontmatter')] or *[not(self::html:section)]">
+            <xsl:if test="(html:section | html:article | html:nav)[f:types(.)=('cover','frontmatter')] or *[not(self::html:section)]">
                 <xsl:call-template name="f:frontmatter"/>
             </xsl:if>
-            <xsl:if test="(html:section | html:article)[f:types(.)=('bodymatter') or not(f:types(.)=('cover','frontmatter','bodymatter','backmatter'))]">
+            <xsl:if test="(html:section | html:article | html:nav)[f:types(.)=('bodymatter') or not(f:types(.)=('cover','frontmatter','bodymatter','backmatter'))]">
                 <xsl:call-template name="f:bodymatter"/>
             </xsl:if>
-            <xsl:if test="(html:section | html:article)[f:types(.)=('backmatter')]">
+            <xsl:if test="(html:section | html:article | html:nav)[f:types(.)=('backmatter')]">
                 <xsl:call-template name="f:rearmatter"/>
             </xsl:if>
             <xsl:apply-templates select="*[last()]/following-sibling::node()"/>
@@ -213,23 +213,23 @@
                 <xsl:call-template name="f:copy-preceding-comments"/>
                 <xsl:apply-templates select="node()"/>
             </xsl:for-each>
-            <xsl:apply-templates select="(html:section | html:article)[f:types(.)=('cover','frontmatter')]"/>
+            <xsl:apply-templates select="(html:section | html:article | html:nav)[f:types(.)=('cover','frontmatter')]"/>
         </frontmatter>
     </xsl:template>
 
     <xsl:template name="f:bodymatter">
         <bodymatter>
-            <xsl:apply-templates select="(html:section | html:article)[not(f:types(.)=('cover','frontmatter','backmatter'))]"/>
+            <xsl:apply-templates select="(html:section | html:article | html:nav)[not(f:types(.)=('cover','frontmatter','backmatter'))]"/>
         </bodymatter>
     </xsl:template>
 
     <xsl:template name="f:rearmatter">
         <rearmatter>
-            <xsl:apply-templates select="(html:section | html:article)[f:types(.)=('backmatter')]"/>
+            <xsl:apply-templates select="(html:section | html:article | html:nav)[f:types(.)=('backmatter')]"/>
         </rearmatter>
     </xsl:template>
 
-    <xsl:template match="html:section | html:article">
+    <xsl:template match="html:section | html:article | html:nav">
         <xsl:param name="level" tunnel="yes" as="xs:integer" select="0"/>
         <xsl:if test="$level &gt;= 6">
             <xsl:message terminate="yes">DTBook can not have more than 6 levels</xsl:message>
@@ -237,7 +237,9 @@
         <xsl:call-template name="f:copy-preceding-comments"/>
         <xsl:element name="level{$level + 1}">
             <xsl:call-template name="f:attlist.level">
-                <xsl:with-param name="classes" select="if (self::html:article) then 'article' else ()" tunnel="yes"/>
+                <xsl:with-param name="classes" tunnel="yes" select="if (self::html:article) then 'article'
+                                                                    else if (self::html:nav) then 'navigation'
+                                                                    else ()"/>
                 <!--<xsl:with-param name="level-classes"
                     select="if ($level &gt; 1) then () else (if (f:types(.)='cover') then 'jacketcopy' else (), for $class in (tokenize(@class,'\s')) return if ($class = ('part','jacketcopy','colophon','nonstandardpagination')) then $class else ())"
                 />-->
@@ -1097,7 +1099,8 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:choose>
-            <xsl:when test="parent::html:section[f:types(.)='toc' and not(ancestor::html:section | ancestor::html:article)]">
+            <xsl:when test="parent::html:section[f:types(.)='toc'
+                            and not(ancestor::html:section | ancestor::html:article | ancestor::html:nav)]">
                 <xsl:for-each select="$maybe-format-list">
                     <list>
                         <xsl:call-template name="f:attlist.list">
