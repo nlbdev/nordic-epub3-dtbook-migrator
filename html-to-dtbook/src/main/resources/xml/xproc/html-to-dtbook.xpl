@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 type="px:html-to-dtbook" name="main">
 
@@ -47,6 +48,11 @@
             px:set-base-uri
         </p:documentation>
     </p:import>
+    <p:import href="extract-svg.xpl">
+        <p:documentation>
+            pxi:html-extract-svg
+        </p:documentation>
+    </p:import>
 
     <!--
         Load HTML
@@ -75,7 +81,8 @@
         - child 'header' element of body becomes doctitle/covertitle/docauthor
         - child sectionining elements of body become frontmatter/bodymatter/rearmatter
     -->
-    <p:group>
+    <p:group name="prepare-html">
+        <p:output port="result"/>
         <!--
             Add missing sectioning elements so that there are no implied sections
         -->
@@ -145,11 +152,34 @@
             </p:input>
         </p:xslt>
     </p:group>
+    <p:sink/>
+
+    <!--
+        Extract SVG images into their own files and link to with img element
+    -->
+    <pxi:html-extract-svg name="extract-svg">
+        <p:input port="source.fileset">
+            <p:pipe step="main" port="source.fileset"/>
+        </p:input>
+        <p:input port="source.in-memory">
+            <p:pipe step="prepare-html" port="result"/>
+            <p:pipe step="filter-html" port="not-matched.in-memory"/>
+        </p:input>
+    </pxi:html-extract-svg>
 
     <!--
         Convert HTML to DTBook
     -->
+    <px:fileset-filter media-types="application/xhtml+xml" name="filter-html-2">
+        <p:input port="source.in-memory">
+            <p:pipe step="extract-svg" port="result.in-memory"/>
+        </p:input>
+    </px:fileset-filter>
+    <p:sink/>
     <p:xslt>
+        <p:input port="source">
+            <p:pipe step="filter-html-2" port="result.in-memory"/>
+        </p:input>
         <p:input port="stylesheet">
             <p:document href="../xslt/epub3-to-dtbook.xsl"/>
         </p:input>
@@ -171,10 +201,10 @@
     -->
     <px:fileset-filter not-media-types="text/css" name="filter-resources">
         <p:input port="source">
-            <p:pipe step="filter-html" port="not-matched"/>
+            <p:pipe step="filter-html-2" port="not-matched"/>
         </p:input>
         <p:input port="source.in-memory">
-            <p:pipe step="filter-html" port="not-matched.in-memory"/>
+            <p:pipe step="filter-html-2" port="not-matched.in-memory"/>
         </p:input>
     </px:fileset-filter>
     <px:fileset-add-entry media-type="application/x-dtbook+xml" name="add-dtbook">
