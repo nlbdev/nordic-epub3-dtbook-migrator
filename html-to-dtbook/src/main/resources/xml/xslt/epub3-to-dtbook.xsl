@@ -750,6 +750,17 @@
         <xsl:call-template name="f:attrs"/>
     </xsl:template>
 
+    <xsl:template match="html:small">
+        <span class="small">
+            <xsl:call-template name="f:attlist.small"/>
+            <xsl:apply-templates select="node()"/>
+        </span>
+    </xsl:template>
+
+    <xsl:template name="f:attlist.small">
+        <xsl:call-template name="f:attrs"/>
+    </xsl:template>
+
     <xsl:template match="html:span">
         <span>
             <xsl:call-template name="f:attlist.span"/>
