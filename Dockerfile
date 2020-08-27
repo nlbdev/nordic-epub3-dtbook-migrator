@@ -24,5 +24,9 @@ ENV PIPELINE2_WS_LOCALFS=false \
 EXPOSE 8181
 
 # for the healthcheck use PIPELINE2_HOST if defined. Otherwise use localhost
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
 HEALTHCHECK --interval=30s --timeout=10s --start-period=1m CMD curl --fail http://${PIPELINE2_WS_HOST-localhost}:${PIPELINE2_WS_PORT:-8181}/${PIPELINE2_WS_PATH:-ws}/alive || exit 1
+
 ENTRYPOINT ["/opt/daisy-pipeline2/bin/pipeline2"]
