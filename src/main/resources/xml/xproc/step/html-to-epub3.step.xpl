@@ -42,7 +42,6 @@
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -190,11 +189,9 @@
                 <p:sink/>
 
                 <px:epub3-nav-create-page-list name="html-to-epub3.step.nav.page-list">
-                    <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
-                        <p:pipe port="result" step="html-to-epub3.step.single-html"/>
-                    </p:with-option>
+                    <p:with-option name="output-base-uri" select="concat($publication-dir,'nav.xhtml')"/>
                     <p:input port="source">
-                        <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split"/>
+                        <p:pipe port="in-memory.out" step="html-to-epub3.step.html-split.moved"/>
                     </p:input>
                 </px:epub3-nav-create-page-list>
                 <p:sink/>
@@ -207,11 +204,8 @@
                     <p:with-option name="language" select="/*/(@xml:lang,@lang)[1]">
                         <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                     </p:with-option>
+                    <p:with-option name="output-base-uri" select="concat($publication-dir,'nav.xhtml')"/>
                 </px:epub3-nav-aggregate>
-                <p:delete match="@xml:base"/>
-                <px:set-base-uri>
-                    <p:with-option name="base-uri" select="concat($publication-dir,'nav.xhtml')"/>
-                </px:set-base-uri>
                 <p:xslt name="html-to-epub3.step.navdoc-nordic-normalization">
                     <p:with-param name="identifier" select="/*/html:head/html:meta[@name='dc:identifier']/@content">
                         <p:pipe port="result" step="html-to-epub3.step.single-html"/>
