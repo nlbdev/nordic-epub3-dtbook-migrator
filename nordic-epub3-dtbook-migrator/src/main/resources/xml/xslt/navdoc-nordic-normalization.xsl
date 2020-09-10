@@ -9,9 +9,9 @@
                 version="2.0">
 
     <xsl:param name="identifier" required="yes"/>
-    <xsl:param name="title" required="yes"/>
     <xsl:param name="supplier" select="''"/>
     <xsl:param name="publisher" required="yes"/>
+    <xsl:variable name="title" select="string(/html/head/title)"/>
     <xsl:variable name="lang" select="string((/html/head/meta[@name='dc:language']/@content, /*/@xml:lang, /*/@lang)[1])"/>
     
     <xsl:template match="@*|node()">

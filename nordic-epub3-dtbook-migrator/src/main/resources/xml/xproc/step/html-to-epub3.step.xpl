@@ -65,7 +65,7 @@
         <p:documentation>
             px:epub3-create-toc
             px:epub3-create-page-list
-            px:epub3-nav-aggregate
+            px:epub3-add-navigation-doc
             px:epub3-nav-to-ncx
             px:epub3-create-package-doc
             px:epub3-ocf-finalize
@@ -318,21 +318,29 @@
                     </px:epub3-create-page-list>
                     <p:sink/>
 
-                    <px:epub3-nav-aggregate name="html-to-epub3.step.nav-aggregate">
-                        <p:input port="source">
+                    <px:epub3-add-navigation-doc name="navdoc">
+                        <p:input port="toc">
                             <p:pipe step="html-to-epub3.step.nav.toc" port="result"/>
+                        </p:input>
+                        <p:input port="page-list">
                             <p:pipe step="html-to-epub3.step.nav.page-list" port="result"/>
                         </p:input>
+                        <p:with-option name="title" select="/*/html:head/html:title/text()">
+                            <p:pipe port="result" step="html-to-epub3.step.single-html"/>
+                        </p:with-option>
                         <p:with-option name="language" select="/*/(@xml:lang,@lang)[1]">
                             <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                         </p:with-option>
                         <p:with-option name="output-base-uri" select="concat($publication-dir,'nav.xhtml')"/>
-                    </px:epub3-nav-aggregate>
+                    </px:epub3-add-navigation-doc>
+                    <p:sink/>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:pipe step="navdoc" port="nav"/>
+                        </p:input>
+                    </p:identity>
                     <p:xslt name="html-to-epub3.step.navdoc-nordic-normalization">
                         <p:with-param name="identifier" select="/*/html:head/html:meta[@name='dc:identifier']/@content">
-                            <p:pipe port="result" step="html-to-epub3.step.single-html"/>
-                        </p:with-param>
-                        <p:with-param name="title" select="/*/html:head/html:title/text()">
                             <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                         </p:with-param>
                         <p:with-param name="supplier" select="/*/html:head/html:meta[@name='nordic:supplier']/@content">
