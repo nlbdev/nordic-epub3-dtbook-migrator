@@ -57,7 +57,7 @@
     <!--
         Load HTML
     -->
-    <px:fileset-filter media-types="application/xhtml+xml" name="filter-html">
+    <px:fileset-filter media-types="application/xhtml+xml" name="filter-html" px:progress="1/20">
         <p:input port="source.in-memory">
             <p:pipe step="main" port="source.in-memory"/>
         </p:input>
@@ -81,13 +81,14 @@
         - child 'header' element of body becomes doctitle/covertitle/docauthor
         - child sectionining elements of body become frontmatter/bodymatter/rearmatter
     -->
-    <p:group name="prepare-html">
+    <p:group px:progress="4/10" name="prepare-html">
         <p:output port="result"/>
         <!--
             Add missing sectioning elements so that there are no implied sections
         -->
         <px:html-outline fix-sectioning="no-implied" name="fix-sectioning"
-                         output-base-uri="file:/tmp/irrelevant.html"/>
+                         output-base-uri="file:/tmp/irrelevant.html"
+                         px:progress="1/4"/>
         <p:sink/>
         <!--
             Move everything one level down if step above resulted in multiple body elements
@@ -115,7 +116,7 @@
         <!--
             Add missing headings
         -->
-        <p:choose>
+        <p:choose px:progress="1/4">
             <p:when test="$imply-headings='true'">
                 <px:html-outline fix-untitled-sections="imply-heading" name="fix-untitled-sections"
                                  output-base-uri="file:/tmp/irrelevant.html"/>
@@ -143,7 +144,7 @@
         <!--
             Move sectioning and heading elements up
         -->
-        <p:xslt>
+        <p:xslt px:progress="1/2">
             <p:input port="stylesheet">
                 <p:document href="../xslt/prepare-html.xsl"/>
             </p:input>
@@ -157,7 +158,7 @@
     <!--
         Extract SVG images into their own files and link to with img element
     -->
-    <pxi:html-extract-svg name="extract-svg">
+    <pxi:html-extract-svg name="extract-svg" px:progress="1/10">
         <p:input port="source.fileset">
             <p:pipe step="main" port="source.fileset"/>
         </p:input>
@@ -176,7 +177,7 @@
         </p:input>
     </px:fileset-filter>
     <p:sink/>
-    <p:xslt>
+    <p:xslt px:progress="4/10">
         <p:input port="source">
             <p:pipe step="filter-html-2" port="result.in-memory"/>
         </p:input>
@@ -207,7 +208,7 @@
             <p:pipe step="filter-html-2" port="not-matched.in-memory"/>
         </p:input>
     </px:fileset-filter>
-    <px:fileset-add-entry media-type="application/x-dtbook+xml" name="add-dtbook">
+    <px:fileset-add-entry media-type="application/x-dtbook+xml" name="add-dtbook" px:progress="1/20">
         <p:input port="source.in-memory">
             <p:pipe step="filter-resources" port="result.in-memory"/>
         </p:input>
