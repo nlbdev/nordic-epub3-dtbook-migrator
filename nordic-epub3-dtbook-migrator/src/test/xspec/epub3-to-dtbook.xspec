@@ -3865,7 +3865,9 @@
                     <dtbook:lic>
                         <dtbook:span id="id4">Chapter 4</dtbook:span>
                     </dtbook:lic>
-                    <dtbook:span>non-lic</dtbook:span>
+                    <dtbook:lic>
+                        <dtbook:span>non-lic</dtbook:span>
+                    </dtbook:lic>
                     <dtbook:lic>
                         <dtbook:span>span 1</dtbook:span>
                         <dtbook:span>span 2</dtbook:span>
@@ -4371,11 +4373,7 @@
                         <dtbook:lic>lic class</dtbook:lic>
                     </dtbook:li>
                     <dtbook:li>
-                        <dtbook:lic>
-                            <dtbook:span>
-                                <dtbook:span>Span without lic class</dtbook:span>
-                            </dtbook:span>
-                        </dtbook:lic>
+                        <dtbook:lic><dtbook:span>Span without lic class</dtbook:span></dtbook:lic>
                         <dtbook:list class="tocList" type="pl" depth="2">
                             <dtbook:li>FOO</dtbook:li>
                         </dtbook:list>
