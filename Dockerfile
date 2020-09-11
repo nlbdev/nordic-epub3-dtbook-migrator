@@ -7,8 +7,7 @@ FROM maven:3.6-jdk-11 as builder
 ADD . /usr/src/nordic-epub3-dtbook-migrator
 WORKDIR /usr/src/nordic-epub3-dtbook-migrator
 
-# we skip tests because they don't work anymore, which is because of https://issues.apache.org/jira/browse/MNG-5672
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 RUN rm /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-doc.jar
 RUN rm /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-xprocdoc.jar
