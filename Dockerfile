@@ -29,4 +29,5 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 HEALTHCHECK --interval=30s --timeout=10s --start-period=1m CMD http_proxy="" https_proxy="" HTTP_PROXY="" HTTPS_PROXY="" curl --fail http://${PIPELINE2_WS_HOST-localhost}:${PIPELINE2_WS_PORT:-8181}/${PIPELINE2_WS_PATH:-ws}/alive || exit 1
 
-ENTRYPOINT ["/opt/daisy-pipeline2/bin/pipeline2"]
+ADD docker-entrypoint.sh /opt/daisy-pipeline2/docker-entrypoint.sh
+ENTRYPOINT ["/opt/daisy-pipeline2/docker-entrypoint.sh"]
