@@ -163,7 +163,7 @@
                             <px:message severity="DEBUG" message="Validating against nordic-dtbook-2005-3.rng"/>
                             <l:relax-ng-report name="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.nordic.validation">
                                 <p:input port="schema">
-                                    <p:document href="../../schema/nordic-dtbook-2005-3.rng"/>
+                                    <p:document href="../../schema/2015-1/nordic-dtbook-2005-3.rng"/>
                                 </p:input>
                                 <p:with-option name="dtd-attribute-values" select="'false'"/>
                                 <p:with-option name="dtd-id-idref-warnings" select="'false'"/>
@@ -185,7 +185,7 @@
                                             <p:empty/>
                                         </p:input>
                                         <p:input port="schema">
-                                            <p:document href="../../schema/mtm2015-1.nota.sch"/>
+                                            <p:document href="../../schema/2015-1/mtm2015-1.nota.sch"/>
                                         </p:input>
                                     </p:validate-with-schematron>
                                     <p:sink/>
@@ -204,7 +204,7 @@
                                             <p:empty/>
                                         </p:input>
                                         <p:input port="schema">
-                                            <p:document href="../../schema/mtm2015-1.sch"/>
+                                            <p:document href="../../schema/2015-1/mtm2015-1.sch"/>
                                         </p:input>
                                     </p:validate-with-schematron>
                                     <p:sink/>

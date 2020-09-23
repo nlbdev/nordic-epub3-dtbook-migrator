@@ -243,7 +243,7 @@
                     <p:empty/>
                 </p:input>
                 <p:input port="schema">
-                    <p:document href="../../schema/nordic2015-1.opf.sch"/>
+                    <p:document href="../../schema/2015-1/nordic2015-1.opf.sch"/>
                 </p:input>
             </p:validate-with-schematron>
             <p:sink/>
@@ -545,7 +545,7 @@
                         <p:empty/>
                     </p:input>
                     <p:input port="schema">
-                        <p:document href="../../schema/nordic2015-1.opf-and-html.sch"/>
+                        <p:document href="../../schema/2015-1/nordic2015-1.opf-and-html.sch"/>
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>
@@ -619,7 +619,7 @@
                         <p:empty/>
                     </p:input>
                     <p:input port="schema">
-                        <p:document href="../../schema/nordic2015-1.nav-references.sch"/>
+                        <p:document href="../../schema/2015-1/nordic2015-1.nav-references.sch"/>
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>
@@ -651,7 +651,7 @@
                         <p:empty/>
                     </p:input>
                     <p:input port="schema">
-                        <p:document href="../../schema/nordic2015-1.nav-ncx.sch"/>
+                        <p:document href="../../schema/2015-1/nordic2015-1.nav-ncx.sch"/>
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>

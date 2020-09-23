@@ -34,16 +34,27 @@
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/dtbook-to-epub3.xsl" uri="../xml/xslt/dtbook-to-epub3.xsl"/>
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-dtbook.xsl" uri="../xml/xslt/epub3-to-dtbook.xsl"/>
     
-    <!-- RelaxNG and Schematron schemas -->
-    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic-dtbook-2005-3.rng" uri="../xml/schema/nordic-dtbook-2005-3.rng"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng" uri="../xml/schema/nordic-html5.rng"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic/mtm2015-1.sch" uri="../xml/schema/mtm2015-1.sch"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic/mtm2015-1.nota.sch" uri="../xml/schema/mtm2015-1.nota.sch"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch" uri="../xml/schema/nordic2015-1.sch"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.nota.sch" uri="../xml/schema/nordic2015-1.nota.sch"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.opf.sch" uri="../xml/schema/nordic2015-1.opf.sch"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.opf-and-html.sch" uri="../xml/schema/nordic2015-1.opf-and-html.sch"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.nav-references.sch" uri="../xml/schema/nordic2015-1.nav-references.sch"/>
+    <!-- RelaxNG and Schematron schemas: 2015-1 -->
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic-dtbook-2005-3.rng" uri="../xml/schema/2015-1/nordic-dtbook-2005-3.rng"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng" uri="../xml/schema/2015-1/nordic-html5.rng"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/mtm2015-1.sch" uri="../xml/schema/2015-1/mtm2015-1.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/mtm2015-1.nota.sch" uri="../xml/schema/2015-1/mtm2015-1.nota.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch" uri="../xml/schema/2015-1/nordic2015-1.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.nota.sch" uri="../xml/schema/2015-1/nordic2015-1.nota.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.opf.sch" uri="../xml/schema/2015-1/nordic2015-1.opf.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.opf-and-html.sch" uri="../xml/schema/2015-1/nordic2015-1.opf-and-html.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.nav-references.sch" uri="../xml/schema/2015-1/nordic2015-1.nav-references.sch"/>
+
+    <!-- RelaxNG and Schematron schemas: 2020-1 -->
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic-dtbook-2005-3.rng" uri="../xml/schema/2020-1/nordic-dtbook-2005-3.rng"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng" uri="../xml/schema/2020-1/nordic-html5.rng"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/mtm2015-1.sch" uri="../xml/schema/2020-1/mtm2015-1.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/mtm2015-1.nota.sch" uri="../xml/schema/2020-1/mtm2015-1.nota.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch" uri="../xml/schema/2020-1/nordic2015-1.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.nota.sch" uri="../xml/schema/2020-1/nordic2015-1.nota.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.opf.sch" uri="../xml/schema/2020-1/nordic2015-1.opf.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.opf-and-html.sch" uri="../xml/schema/2020-1/nordic2015-1.opf-and-html.sch"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.nav-references.sch" uri="../xml/schema/2020-1/nordic2015-1.nav-references.sch"/>
     
     <!-- Pipeline 2 module dependencies -->
     <nextCatalog catalog="org:daisy:pipeline:modules:asciimath-utils"/>

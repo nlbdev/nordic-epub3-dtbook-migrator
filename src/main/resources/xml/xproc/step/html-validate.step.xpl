@@ -119,7 +119,7 @@
                     <p:pipe step="html-validate.step.html" port="result"/>
                 </p:input>
                 <p:input port="schema">
-                    <p:document href="../../schema/nordic-html5.rng"/>
+                    <p:document href="../../schema/2015-1/nordic-html5.rng"/>
                 </p:input>
                 <p:with-option name="dtd-attribute-values" select="'false'"/>
                 <p:with-option name="dtd-id-idref-warnings" select="'false'"/>
@@ -141,7 +141,7 @@
                             <p:empty/>
                         </p:input>
                         <p:input port="schema">
-                            <p:document href="../../schema/nordic2015-1.nota.sch"/>
+                            <p:document href="../../schema/2015-1/nordic2015-1.nota.sch"/>
                         </p:input>
                     </p:validate-with-schematron>
                     <p:sink/>
@@ -160,7 +160,7 @@
                             <p:empty/>
                         </p:input>
                         <p:input port="schema">
-                            <p:document href="../../schema/nordic2015-1.sch"/>
+                            <p:document href="../../schema/2015-1/nordic2015-1.sch"/>
                         </p:input>
                     </p:validate-with-schematron>
                     <p:sink/>
