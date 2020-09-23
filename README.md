@@ -67,8 +67,23 @@ The nordic migrator can be built with Maven,
 either directly (with for instance `mvn clean package`),
 or indirectly with Docker (with for instance `docker build .`).
 
+Releasing
+---------
+
+A brief overview.
+
+### As a maven artifact:
+
+- `mvn release:prepare`
+- `mvn release:perform`
+- Release artifacts from https://oss.sonatype.org/index.html
+
+### As a docker image:
+
+- commits tagged with a version are built and tagged automatically
+- the tip of the master branch is built as `:latest`
+
 References
 ----------
 
 See [the project homepage](http://nlbdev.github.io/nordic-epub3-dtbook-migrator/) for more information.
-
