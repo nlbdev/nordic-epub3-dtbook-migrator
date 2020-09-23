@@ -42,6 +42,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-nav-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub3-ocf-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -159,7 +160,7 @@
                     </p:xslt>
                     <p:delete match="html:a[tokenize(@epub:type,'\s+')='noteref']" name="html-to-epub3.step.nav.toc.delete-noterefs"/>
                     <px:epub3-nav-create-toc name="html-to-epub3.step.nav.toc.nav-create-toc">
-                        <p:with-option name="base-dir" select="replace(base-uri(/*),'[^/]+$','')">
+                        <p:with-option name="output-base-uri" select="base-uri(/*)">
                             <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                         </p:with-option>
                     </px:epub3-nav-create-toc>
@@ -207,9 +208,10 @@
                         <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                     </p:with-option>
                 </px:epub3-nav-aggregate>
-                <p:add-attribute match="/*" attribute-name="xml:base" name="html-to-epub3.step.add-nav-xml-base">
-                    <p:with-option name="attribute-value" select="concat($publication-dir,'nav.xhtml')"/>
-                </p:add-attribute>
+                <p:delete match="@xml:base"/>
+                <px:set-base-uri>
+                    <p:with-option name="base-uri" select="concat($publication-dir,'nav.xhtml')"/>
+                </px:set-base-uri>
                 <p:xslt name="html-to-epub3.step.navdoc-nordic-normalization">
                     <p:with-param name="identifier" select="/*/html:head/html:meta[@name='dc:identifier']/@content">
                         <p:pipe port="result" step="html-to-epub3.step.single-html"/>

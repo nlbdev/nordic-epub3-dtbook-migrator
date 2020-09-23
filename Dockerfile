@@ -6,9 +6,9 @@
 FROM maven:3.6-jdk-11 as builder
 ADD . /usr/src/nordic-epub3-dtbook-migrator
 WORKDIR /usr/src/nordic-epub3-dtbook-migrator
+RUN mv .mvn ~/.m2  # configure global maven settings.xml
 
-# we skip tests because they don't work anymore, which is because of https://issues.apache.org/jira/browse/MNG-5672
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 RUN rm /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-doc.jar
 RUN rm /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-xprocdoc.jar
@@ -27,6 +27,7 @@ EXPOSE 8181
 RUN apt-get update && \
     apt-get install -y curl && \
     rm -rf /var/lib/apt/lists/*
-HEALTHCHECK --interval=30s --timeout=10s --start-period=1m CMD curl --fail http://${PIPELINE2_WS_HOST-localhost}:${PIPELINE2_WS_PORT:-8181}/${PIPELINE2_WS_PATH:-ws}/alive || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=1m CMD http_proxy="" https_proxy="" HTTP_PROXY="" HTTPS_PROXY="" curl --fail http://${PIPELINE2_WS_HOST-localhost}:${PIPELINE2_WS_PORT:-8181}/${PIPELINE2_WS_PATH:-ws}/alive || exit 1
 
-ENTRYPOINT ["/opt/daisy-pipeline2/bin/pipeline2"]
+ADD docker-entrypoint.sh /opt/daisy-pipeline2/docker-entrypoint.sh
+ENTRYPOINT ["/opt/daisy-pipeline2/docker-entrypoint.sh"]
