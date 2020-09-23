@@ -28,7 +28,7 @@
         <x:expect type="xpath" label="The output document (the intermediary HTML) should have an xml:base attribute with filename C00000.xhtml" test="tokenize(/*/@xml:base,'/')[last()]"
             equals="'C00000.xhtml'"/>
         <x:expect type="xpath" label="The output document (the intermediary HTML) should have an xml:base attribute pointing to the temp-dir directory" test="/*/@xml:base"
-            equals="concat($temp-dir,'temp-dir/C00000.xhtml')" pending="the base URI is normalized"/>
+            equals="concat($temp-dir,'temp-dir/C00000.xhtml')"/>
 
         <x:context label="the fileset">
             <x:document type="port" port="fileset.out"/>
