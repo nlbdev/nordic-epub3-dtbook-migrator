@@ -3,6 +3,7 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:html="http://www.w3.org/1999/xhtml"
+                xmlns:epub="http://www.idpf.org/2007/ops"
                 type="px:html-to-dtbook" name="main">
 
     <p:input port="source.fileset" primary="true"/>
@@ -177,10 +178,16 @@
         </p:input>
     </px:fileset-filter>
     <p:sink/>
-    <p:xslt px:progress="4/10">
+    <p:label-elements match="*[@role='doc-pagebreak']" attribute="epub:type" replace="true"
+                      label="string-join(distinct-values((@epub:type/tokenize(.,'\s+')[not(.='')],'pagebreak')),' ')">
+        <!--
+            Convert DPUB-ARIA roles to epub:type
+        -->
         <p:input port="source">
             <p:pipe step="filter-html-2" port="result.in-memory"/>
         </p:input>
+    </p:label-elements>
+    <p:xslt px:progress="4/10">
         <p:input port="stylesheet">
             <p:document href="../xslt/epub3-to-dtbook.xsl"/>
         </p:input>
