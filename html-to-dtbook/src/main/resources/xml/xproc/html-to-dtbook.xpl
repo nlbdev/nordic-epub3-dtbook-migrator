@@ -4,6 +4,7 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:epub="http://www.idpf.org/2007/ops"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:html-to-dtbook" name="main">
 
     <p:input port="source.fileset" primary="true"/>
@@ -26,6 +27,14 @@
             <p>Whether to generate headings for untitled levels.</p>
         </p:documentation>
     </p:option>
+
+    <p:output port="mapping">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p><code>d:fileset</code> document containing the mapping from input to output file
+            name.</p>
+        </p:documentation>
+        <p:pipe step="mapping" port="result"/>
+    </p:output>
 
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
@@ -202,6 +211,22 @@
                                            base-uri(/*))"/>
     </px:set-base-uri>
     <p:identity name="dtbook"/>
+
+    <!--
+        Mapping from input to output file name
+    -->
+    <p:template name="mapping">
+        <p:input port="template">
+            <p:inline>
+                <d:fileset>
+                    <d:file href="{base-uri(/*)}" original-href="{$html-base-uri}"/>
+                </d:fileset>
+            </p:inline>
+        </p:input>
+        <p:with-param name="html-base-uri" select="base-uri(/*)">
+            <p:pipe step="html" port="result"/>
+        </p:with-param>
+    </p:template>
     <p:sink/>
 
     <!--
