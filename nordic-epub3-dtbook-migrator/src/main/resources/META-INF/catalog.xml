@@ -45,7 +45,6 @@
     <uri name="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.nav-references.sch" uri="../xml/schema/nordic2015-1.nav-references.sch"/>
     
     <!-- Pipeline 2 module dependencies -->
-    <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-to-html"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:asciimath-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>

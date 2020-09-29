@@ -6,12 +6,12 @@
                xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                xmlns:html="http://www.w3.org/1999/xhtml"
-               script="../../main/resources/xml/xproc/dtbook-to-html.xpl">
+               script="../../../main/resources/xml/xproc/step/dtbook-to-html/dtbook-to-html.xpl">
     
     <x:scenario label="px:dtbook-to-html">
         <x:call step="px:dtbook-to-html">
             <x:input port="source.fileset">
-                <x:document type="inline" xml:base="../resources/DTBook/">
+                <x:document type="inline" xml:base="resources/DTBook/">
                     <d:fileset>
                         <d:file href="C00000.xml" media-type="application/x-dtbook+xml"/>
                         <d:file href="valentin.jpg" media-type="image/jpeg"/>
@@ -19,7 +19,7 @@
                 </x:document>
             </x:input>
             <x:input port="source.in-memory">
-                <x:document type="file" href="../resources/DTBook/C00000.xml"/>
+                <x:document type="file" href="resources/DTBook/C00000.xml"/>
             </x:input>
             <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
         </x:call>

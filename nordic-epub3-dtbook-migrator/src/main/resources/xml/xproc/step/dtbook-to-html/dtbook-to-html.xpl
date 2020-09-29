@@ -62,7 +62,7 @@
             <p:empty/>
         </p:input>
         <p:input port="stylesheet">
-            <p:document href="../xslt/dtbook-to-epub3.xsl"/>
+            <p:document href="../../../xslt/dtbook-to-html/dtbook-to-epub3.xsl"/>
         </p:input>
     </p:xslt>
     <!--

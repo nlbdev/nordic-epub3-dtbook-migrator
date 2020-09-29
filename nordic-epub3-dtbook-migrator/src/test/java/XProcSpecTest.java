@@ -16,7 +16,6 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
             // because 1.12.1 of scripts-parent is not released.
             "org.w3c:epubcheck:4.2.0",
             
-            pipelineModule("dtbook-to-html"),
             pipelineModule("html-to-dtbook"),
             pipelineModule("asciimath-utils"),
             pipelineModule("common-utils"),

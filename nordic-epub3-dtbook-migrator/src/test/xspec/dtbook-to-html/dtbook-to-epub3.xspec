@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/dtbook-to-epub3.xsl" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../main/resources/xml/xslt/dtbook-to-html/dtbook-to-epub3.xsl" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
     xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xslt-version="2.0">
 
     <!-- dtbookblocknoimggroup -->

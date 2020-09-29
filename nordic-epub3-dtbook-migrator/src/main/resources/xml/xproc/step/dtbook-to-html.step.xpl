@@ -80,7 +80,7 @@
             px:assert
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-to-html/library.xpl">
+    <p:import href="dtbook-to-html/library.xpl">
         <p:documentation>
             px:dtbook-to-html
         </p:documentation>
