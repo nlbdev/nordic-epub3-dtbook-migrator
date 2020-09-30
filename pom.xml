@@ -16,8 +16,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>epub3-to-html</module>
-        <module>html-to-dtbook</module>
         <module>nordic-epub3-dtbook-migrator</module>
     </modules>
 
