@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schematron rules for Nordic EPUB 2020-1</title><style>
+                    body{
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 12px;
+                        max-width: 95%;
+                        margin: auto;
+                    }
+                    h1{
+                        text-align: center;
+                        font-size: 1.5rem;
+                        margin-top: 1rem;
+                        margin-bottom: 2rem;
+                    }
+                    table,
+                    th,
+                    td{
+                        border: 0.1rem solid #ddd;
+                        border-collapse: collapse;
+                        padding: 0.5rem;
+                    }
+                    table{
+                        margin-bottom: 2rem
+                    }
+                    tr:nth-child(even){
+                        background-color: #f2f2f2;
+                    }
+                    tbody tr:hover{
+                        background-color: #ddd;
+                    }
+                    thead{
+                        background-color: #1D393C;
+                        color: white;
+                    }
+                    td:first-child{
+                        white-space: nowrap;
+                    }
+                    footer{
+                        margin-top: 1rem;
+                        margin-bottom: 1rem;
+                        text-align: center;
+                        font-size: 0.8rem;
+                    }</style></head>
+   <body>
+      <h1>Schematron rules for Nordic EPUB 2020-1</h1>
+      <table>
+         <thead>
+            <tr>
+               <th>Rule</th>
+               <th>Global description</th>
+               <th>Detailed description</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td>7</td>
+               <td>No &lt;ul&gt;, &lt;ol&gt; or &lt;dl&gt; inside &lt;p&gt;</td>
+               <td>[nordic07] Lists () are not allowed inside paragraphs.<br />[nordic07] Definition lists () are not allowed inside paragraphs.<br /></td>
+            </tr>
+            <tr>
+               <td>8</td>
+               <td>Only allow pagebreak w/page-front in frontmatter</td>
+               <td>[nordic08] &lt;span epub:type="pagebreak"
+                  class="page-front"/&gt; may only occur in frontmatter and cover. <br /></td>
+            </tr>
+            <tr>
+               <td>9</td>
+               <td>Disallow empty elements (with a few exceptions)</td>
+               <td>[nordic09] Element may not be empty: <br /></td>
+            </tr>
+            <tr>
+               <td>10</td>
+               <td>Metadata for dc:language, dc:date and dc:publisher must exist in the single-HTML representation</td>
+               <td>[nordic10] Meta dc:language must occur at least once in HTML head<br />[nordic10] Meta dc:date=YYYY-MM-DD must occur exactly once in HTML head<br />[nordic10] Meta dc:date ("") must have format YYYY-MM-DD<br />[nordic10] Meta dc:publisher must occur exactly once<br /></td>
+            </tr>
+            <tr>
+               <td>11</td>
+               <td>Root element must have @xml:lang</td>
+               <td>[nordic11] &lt;html&gt; element must have an xml:lang attribute<br /></td>
+            </tr>
+            <tr>
+               <td>12</td>
+               <td>Frontmatter starts with doctitle and docauthor</td>
+               <td>[nordic12] Single-HTML document must begin with a fulltitle headline in its header
+                  element (xpath:
+                  /html/body/header/h1).<br /></td>
+            </tr>
+            <tr>
+               <td>13</td>
+               <td>All books must have frontmatter and bodymatter</td>
+               <td>[nordic13a] A single-HTML document must have at least one frontmatter or cover section<br />[nordic13a] A single-HTML document must have at least one bodymatter section<br />[nordic13a] The single-HTML document must not have cover, frontmatter, bodymatter
+                  or backmatter as epub:type on its body element<br /></td>
+            </tr>
+            <tr>
+               <td>13b</td>
+               <td></td>
+               <td>[nordic13b] The single-HTML document must not have cover, frontmatter, bodymatter
+                  or backmatter on any of its sectioning elements other than the top-level elements
+                  that has body as its parent<br /></td>
+            </tr>
+            <tr>
+               <td>13c</td>
+               <td></td>
+               <td>[nordic13c] The document must have either cover, frontmatter, bodymatter or backmatter
+                  as epub:type on its body element.<br /></td>
+            </tr>
+            <tr>
+               <td>13d</td>
+               <td></td>
+               <td>[nordic13d] The document must not have cover, frontmatter, bodymatter or backmatter
+                  on any of its sectioning elements (they are only allowed on the body element).<br /></td>
+            </tr>
+            <tr>
+               <td>14</td>
+               <td>Don't allow &lt;h x+1&gt; in section w/depth x+1 unless &lt;h x&gt; in section w/depth x is present</td>
+               <td>[nordic14] sectioning element with no headline (h1-h6) when sub-section is present
+                  (is only allowed for sectioning element with epub:type="cover" or when sub-section
+                  is a poem): <br /></td>
+            </tr>
+            <tr>
+               <td>15</td>
+               <td></td>
+               <td>[nordic15] Cover must not be preceded by any other top-level sections ()<br />[nordic15] Frontmatter must not be preceded by bodymatter or rearmatter ()<br />[nordic15]
+                  Bodymatter must not be preceded by backmatter ()<br /></td>
+            </tr>
+            <tr>
+               <td>20</td>
+               <td>No image series in inline context</td>
+               <td>[nordic20] Image series are not allowed in inline context ()<br /></td>
+            </tr>
+            <tr>
+               <td>21</td>
+               <td>No nested tables</td>
+               <td>[nordic21] Nested tables are not allowed ()<br /></td>
+            </tr>
+            <tr>
+               <td>23</td>
+               <td>Increasing pagebreak values for page-normal</td>
+               <td>[nordic23] pagebreak values must increase for pagebreaks with class="page-normal"
+                  (see pagebreak with title="" and compare with pagebreak with title="")<br /></td>
+            </tr>
+            <tr>
+               <td>24</td>
+               <td>Values of pagebreak must be unique for page-front</td>
+               <td>[nordic24] pagebreak values must be unique for pagebreaks with class="page-front"
+                  (see pagebreak with title="")<br /></td>
+            </tr>
+            <tr>
+               <td>26a</td>
+               <td>Each note must have a noteref</td>
+               <td>[nordic26a] Each note must have at least one &lt;a epub:type="noteref"
+                  ...&gt; referencing it: <br /></td>
+            </tr>
+            <tr>
+               <td>26b</td>
+               <td>Each noteref must reference a note</td>
+               <td>[nordic26b] The note reference with the href "" attribute must resolve to a note,
+                  rearnote, endnote or footnote in the publication: <br /></td>
+            </tr>
+            <tr>
+               <td>27a</td>
+               <td>Each annotation must have an annoref</td>
+               <td>[nordic27a] Each annotation must have at least one &lt;a epub:type="annoref" ...&gt; referencing
+                  it: <br /></td>
+            </tr>
+            <tr>
+               <td>27b</td>
+               <td>Each annoref must reference a annotation</td>
+               <td>[nordic26b] The annotation with the href "" must resolve to a annotation in the publication:
+                  <br /></td>
+            </tr>
+            <tr>
+               <td>29a</td>
+               <td>No block elements in inline context</td>
+               <td>[nordic29] Block element  used in inline context (inside the inline element
+                  )<br /></td>
+            </tr>
+            <tr>
+               <td>29b</td>
+               <td>No block elements in inline context - continued</td>
+               <td>[nordic29] Block element  as sibling to inline element <br />[nordic29] Block element  as sibling to text content ()<br /></td>
+            </tr>
+            <tr>
+               <td>29c</td>
+               <td>No block elements in inline context - continued</td>
+               <td>[nordic29] Prodnote in inline context used as block element: <br /></td>
+            </tr>
+            <tr>
+               <td>40</td>
+               <td>No page numbering gaps for pagebreak w/page-normal</td>
+               <td>[nordic40a] No gaps may occur in page numbering (see pagebreak with title="" and compare
+                  with pagebreak with title="")<br /></td>
+            </tr>
+            <tr>
+               <td>50a</td>
+               <td>image alt attribute</td>
+               <td>[nordic50a] an image inside a figure with class='image' must have a non-empty alt
+                  attribute: <br /></td>
+            </tr>
+            <tr>
+               <td>51 &amp; 52</td>
+               <td></td>
+               <td>[nordic52] Images must have the .jpg file extension: <br />[nordic52] Images must have a base name, not just an extension: <br />[nordic51] Images must be in the "images" folder (relative to the HTML file).<br />[nordic52] Image file name contains an illegal character (must be -_a-zA-Z0-9): <br /></td>
+            </tr>
+            <tr>
+               <td>59</td>
+               <td>No pagegnum between a term and a definition in definition lists</td>
+               <td>[nordic59] pagebreak in definition list must not occur as siblings to dd or dt: <br /></td>
+            </tr>
+            <tr>
+               <td>63</td>
+               <td>Only note references within the same document</td>
+               <td>[nordic63] Only note references within the same publication are allowed: <br /></td>
+            </tr>
+            <tr>
+               <td>64</td>
+               <td>Only annotation references within the same document</td>
+               <td>[nordic64] Only annotation references within the same publication are allowed<br /></td>
+            </tr>
+            <tr>
+               <td>93</td>
+               <td>Some elements may not start of end with whitespace</td>
+               <td>[nordic93] element  may not have leading whitespace<br />[nordic93] element  may not have trailing whitespace<br /></td>
+            </tr>
+            <tr>
+               <td>96a</td>
+               <td>no nested prodnotes or image groups</td>
+               <td>[nordic96a] nested production notes are not allowed: <br />[nordic96a] production notes are not allowed inside figures in the cover
+                  : <br /></td>
+            </tr>
+            <tr>
+               <td>96b</td>
+               <td></td>
+               <td>[nordic96b] nested image series are not allowed (). Remember that image figures use
+                  the class "image", while image series figures use the class "image-series". Maybe
+                  this inner figure should be using the "image" class?<br /></td>
+            </tr>
+            <tr>
+               <td>101</td>
+               <td>All image series must have at least one image figure</td>
+               <td>[nordic101] There must be at least one figure with class="image" in a image series
+                  figure: <br /></td>
+            </tr>
+            <tr>
+               <td>102</td>
+               <td>All image figures must have a image</td>
+               <td>[nordic102] There must be an img element in every figure with class="image": <br />[nordic102] Wrapping &lt;figure class="image"&gt; inside another &lt;figure class="image"&gt;
+                  is not allowed. Did you mean to use "image-series" as a class on the outer figure?
+                  <br /></td>
+            </tr>
+            <tr>
+               <td>104</td>
+               <td>Headings may not be empty elements</td>
+               <td>[nordic104] Heading 
+                  may not be empty<br /></td>
+            </tr>
+            <tr>
+               <td>105</td>
+               <td>Pagebreaks must have a page-* class and must not contain anything</td>
+               <td>[nordic105] Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special'
+                  class:
+                  <br />[nordic105] Pagebreaks must not contain anything: <br /></td>
+            </tr>
+            <tr>
+               <td>110</td>
+               <td>pagebreak in headings</td>
+               <td>[nordic110] pagebreak elements are not allowed in headings:
+                  <br /></td>
+            </tr>
+            <tr>
+               <td>116</td>
+               <td>Don't allow arabic numbers in pagebreak w/page-front</td>
+               <td>[nordic116] Hindu-Arabic numbers when @class="page-front" are not allowed: <br /></td>
+            </tr>
+            <tr>
+               <td>120</td>
+               <td>Allow only pagebreak before hx in section/article</td>
+               <td>[nordic120] Only pagebreaks are allowed before the heading .<br /></td>
+            </tr>
+            <tr>
+               <td>121</td>
+               <td>pagebreaks in tables must not occur between table rows</td>
+               <td>[nordic121] Page numbers in tables must not be placed between table rows: <br /></td>
+            </tr>
+            <tr>
+               <td>123 (39)</td>
+               <td>Cover is not part of frontmatter, bodymatter or backmatter</td>
+               <td>[nordic123] Cover (Jacket copy) is a document partition and can not be part the other
+                  document partitions frontmatter, bodymatter and rearmatter: <br /></td>
+            </tr>
+            <tr>
+               <td>124 (106)</td>
+               <td>The publication must contain pagebreaks</td>
+               <td>[nordic124] The publication must contain pagebreaks, and they must be referenced from
+                  a &lt;nav epub:type="page-list"&gt; in the navigation document. There is no such &lt;nav&gt; element
+                  in the navigation document.<br />[nordic124] The publication must contain pagebreaks, and they must be referenced from
+                  the &lt;nav epub:type="page-list"&gt; in the navigation document. No pagebreaks are referenced
+                  from within this &lt;nav&gt; page list.<br /></td>
+            </tr>
+            <tr>
+               <td>125 (109)</td>
+               <td>Only allow images in JPG format</td>
+               <td>[nordic125] Invalid image filename: <br />[nordic125] Images must be in JPG (*.jpg) format: <br /></td>
+            </tr>
+            <tr>
+               <td>126</td>
+               <td>pagebreak must not occur directly after hx unless the hx is preceded by a pagebreak</td>
+               <td>[nordic126] pagebreak must not occur directly after hx unless the hx is preceded by
+                  a pagebreak: <br /></td>
+            </tr>
+            <tr>
+               <td>127</td>
+               <td>Table of contents list must be child of the toc sectioning element</td>
+               <td>[nordic127a] The table of contents must contain a "ol" element as a direct child of
+                  the parent 
+                  element.<br />[nordic127b] The table of contents must be in either frontmatter or backmatter; it
+                  is not allowed in bodymatter or cover.<br /></td>
+            </tr>
+            <tr>
+               <td>128a</td>
+               <td>tracking metadata must exist (nordic:guidelines)</td>
+               <td>[nordic128a] on the html element: the epub:prefix attribute must declare the '' prefix<br />[nordic128e] in the epub:prefix attribute on the html element: the namespace for the
+                  '' prefix must be ''prefixes: <br />[nordic128e] all of the prefixes in use () on the element () must be declared in the
+                  epub:prefix attribute on the html element: '&lt;html epub:prefix=""&gt;...&lt;/html&gt;<br />[nordic128e] in the epub:prefix attribute on the html element: the namespaces for
+                  the prefixes must be correct. <br /></td>
+            </tr>
+            <tr>
+               <td>128b</td>
+               <td></td>
+               <td>[nordic128b] nordic:guidelines metadata must occur once.<br /></td>
+            </tr>
+            <tr>
+               <td>128c</td>
+               <td></td>
+               <td>[nordic128c] nordic:guidelines metadata value must be 2015-1.<br /></td>
+            </tr>
+            <tr>
+               <td>128d</td>
+               <td></td>
+               <td>[nordic128d] nordic:supplier metadata must occur once.<br /></td>
+            </tr>
+            <tr>
+               <td>130 (44)</td>
+               <td>dc:language must equal root element xml:lang</td>
+               <td>[nordic130] dc:language metadata must equal the root element xml:lang<br /></td>
+            </tr>
+            <tr>
+               <td>131</td>
+               <td></td>
+               <td>[nordic131] xml:lang must match '^[a-z]+(-[A-Z][A-Z]+)?$' ()<br /></td>
+            </tr>
+            <tr>
+               <td>135a</td>
+               <td>Poem contents</td>
+               <td>[nordic135] Every poem must contain a linegroup: <br />[nordic135] Poem lines must be wrapped in a linegroup:  contains; <br /></td>
+            </tr>
+            <tr>
+               <td>140</td>
+               <td>Jacket copy must contain at least one part of the cover, at most one of each @class
+                  value and no other elements
+               </td>
+               <td>[nordic140] Only sections with one of the classes 'frontcover', 'rearcover', 'leftflap'
+                  or 'rightflap' is allowed in cover<br />[nordic140] There must be at least one section with one of the classes
+                  'frontcover', 'rearcover', 'leftflap' or 'rightflap' in cover.<br />[nordic140] Too many sections with class="frontcover" in cover<br />[nordic140] Too many sections with class="rearcover" in cover<br />[nordic140] Too many sections with class="leftflap" in cover<br />[nordic140] Too many sections with class="rightflap" in cover<br /></td>
+            </tr>
+            <tr>
+               <td>142</td>
+               <td>Only tokenize(@class,' ')='page-special' in level1/@class='nonstandardpagination'</td>
+               <td>[nordic142] The class page-special must be used in section/@class='nonstandardpagination':
+                  <br /></td>
+            </tr>
+            <tr>
+               <td>143a</td>
+               <td>Don't allow pagebreak as siblings to list items or inside the first list item</td>
+               <td>[nordic143a] pagebreak is not allowed as sibling to list items: <br /></td>
+            </tr>
+            <tr>
+               <td>143b</td>
+               <td></td>
+               <td>[nordic143b] pagebreak is not allowed at the beginning of the first list item; it
+                  should be placed before the list: <br /></td>
+            </tr>
+            <tr>
+               <td>200</td>
+               <td>The title element must not be empty</td>
+               <td>[nordic200] The title element must not be empty.<br /></td>
+            </tr>
+            <tr>
+               <td>201</td>
+               <td>cover</td>
+               <td>[nordic201] cover is not allowed in frontmatter, bodymatter or backmatter.<br /></td>
+            </tr>
+            <tr>
+               <td>202</td>
+               <td>frontmatter</td>
+               <td>[nordic202] '' is not an allowed type in frontmatter. On elements with the epub:type
+                  "frontmatter", you can either leave the type blank, or you can use one of the following
+                  types:  or ''.<br /></td>
+            </tr>
+            <tr>
+               <td>203a</td>
+               <td>Check that both the epub:types "rearnote"/"endnote" and "rearnotes"/"endnotes" are
+                  used in rearnotes/endnotes
+               </td>
+               <td>[nordic203a] 'rearnote' must have a section ancestor with 'rearnotes': [nordic203a] 'endnote' must have a section ancestor with 'endnotes': <br /></td>
+            </tr>
+            <tr>
+               <td>203c</td>
+               <td></td>
+               <td>[nordic203c]  with the epub:type
+                  'rearnotes' must have descendants with 'rearnote'.<br />[nordic204c]  with the epub:type 'rearnotes' must have &lt;ol&gt; descendant elements.[nordic203c]  with the epub:type
+                  'endnotes' must have descendants with 'endnote'.<br />[nordic204c]  with the epub:type 'endnotes' must have &lt;ol&gt; descendant elements.<br /></td>
+            </tr>
+            <tr>
+               <td>203d</td>
+               <td></td>
+               <td>[nordic203d] 'rearnote' can only be applied to &lt;li&gt; elements: <br />[nordic203d] The 'notebody' class must be applied to all rearnotes: [nordic203d] 'endnote' can only be applied to &lt;li&gt; elements: <br />[nordic203d] The 'notebody' class must be applied to all endnotes: <br /></td>
+            </tr>
+            <tr>
+               <td>204a</td>
+               <td>Check that both the epub:types "footnote" and "footnotes" are used in footnotes</td>
+               <td>[nordic204a] 'footnote' must have a section ancestor with 'footnotes': <br /></td>
+            </tr>
+            <tr>
+               <td>204c</td>
+               <td></td>
+               <td>[nordic204c]  with the epub:type
+                  'footnotes' must have descendants with 'footnote'.<br />[nordic204c]  with the epub:type 'footnotes' must have &lt;ol&gt; descendant elements.<br /></td>
+            </tr>
+            <tr>
+               <td>204d</td>
+               <td></td>
+               <td>[nordic204d] 'footnote' can only be applied to &lt;li&gt; elements: <br />[nordic204d] The 'notebody' class must be applied to all footnotes: <br /></td>
+            </tr>
+            <tr>
+               <td>208</td>
+               <td>bodymatter</td>
+               <td>[nordic208] '' is not an allowed type in bodymatter. Elements with the type "bodymatter"
+                  must also have one of the types  or ''.<br /></td>
+            </tr>
+            <tr>
+               <td>211</td>
+               <td>bodymatter.part</td>
+               <td>[nordic211] '' is not an allowed type in a part. Sections inside a part must also
+                  have one of the types  or ''.<br /></td>
+            </tr>
+            <tr>
+               <td>215</td>
+               <td>backmatter</td>
+               <td>[nordic215] '' is not an allowed type in backmatter. On elements with the epub:type
+                  "backmatter", you can either leave the type blank, or you can use one of the following
+                  types:  or ''.<br /></td>
+            </tr>
+            <tr>
+               <td>224</td>
+               <td>linenum - span</td>
+               <td>[nordic224] linenums (span class="linenum") must be the child element of a line (p
+                  class="line"): <br /></td>
+            </tr>
+            <tr>
+               <td>225</td>
+               <td>pagebreak</td>
+               <td>[nordic225] The title attribute must be used to describe the page number: <br /></td>
+            </tr>
+            <tr>
+               <td>247</td>
+               <td>doctitle.headline - h1</td>
+               <td>[nordic247] The first headline in the html:body/html:header element must have the
+                  'fulltitle' epub:type.<br /></td>
+            </tr>
+            <tr>
+               <td>248</td>
+               <td>docauthor - p</td>
+               <td>[nordic248] The only allowed element inside html/header besides "h1" is "p".<br /></td>
+            </tr>
+            <tr>
+               <td>251</td>
+               <td>lic - span</td>
+               <td>[nordic251] The parent of a list item component (span class="lic") must be either
+                  a "li" or a "a" (where the "a" has "li"
+                  as parent): <br /></td>
+            </tr>
+            <tr>
+               <td>253a</td>
+               <td>figures and captions</td>
+               <td>[nordic253a] &lt;figure&gt; elements must either have an epub:type of "sidebar" or a class
+                  of "image" or "image-series": <br />[nordic253a] &lt;figure&gt; elements must either have an epub:type of "sidebar" or a class
+                  of "image" or "image-series": <br />[nordic253a] There cannot be more than one &lt;figcaption&gt; in a single figure element:
+                  <br /></td>
+            </tr>
+            <tr>
+               <td>253b</td>
+               <td></td>
+               <td>[nordic253b] Image figures must contain exactly one img: <br />[nordic253b] The img in image figures must be a direct child of the figure: <br /></td>
+            </tr>
+            <tr>
+               <td>253c</td>
+               <td></td>
+               <td>[nordic253c] Image series figures cannot contain img childen (the img elements must
+                  be contained in children figure elements): <br />[nordic253c] Image series must contain at least 2 image figures ("figure" elements
+                  with class "image"): <br /></td>
+            </tr>
+            <tr>
+               <td>254</td>
+               <td>aside types</td>
+               <td>[nordic254] &lt;aside&gt; elements must use one of the following epub:types:
+                  z3998:production, sidebar, note, annotation, epigraph ()<br /></td>
+            </tr>
+            <tr>
+               <td>255</td>
+               <td>abbr types</td>
+               <td>[nordic255] "abbr" elements must use one of the following epub:types: z3998:acronym
+                  (formed from the first part of a word: "Mr.", "approx.", "lbs.", "rec'd"), z3998:initialism
+                  (each letter pronounced separately: "XML", "US"), z3998:truncation (pronounced as
+                  a word:
+                  "NATO"): <br /></td>
+            </tr>
+            <tr>
+               <td>256</td>
+               <td>HTML documents with only a headline</td>
+               <td>[nordic256] In bodymatter, "" elements must contain more than just a headline and
+                  pagebreaks (except when epub:type="part"):
+                  <br /></td>
+            </tr>
+            <tr>
+               <td>257</td>
+               <td>always require both xml:lang and lang</td>
+               <td>[nordic257] The `xml:lang` and the `lang` attributes must have the same value: <br /></td>
+            </tr>
+            <tr>
+               <td>258</td>
+               <td>allow at most one pagebreak before any content in each content file</td>
+               <td>[nordic258] Only one pagebreak is allowed before any content in each content file:
+                  <br /></td>
+            </tr>
+            <tr>
+               <td>259</td>
+               <td>don't allow pagebreak in thead</td>
+               <td>[nordic259] Pagebreaks can not occur within table headers (thead): <br />[nordic259] Pagebreaks can not occur within table footers (tfoot): <br /></td>
+            </tr>
+            <tr>
+               <td>260a</td>
+               <td>img must be first in image figure, and non-image content must be placed first in image-series</td>
+               <td>[nordic260a] The first element in a figure with class="image" must be a "img" element:
+                  <br /></td>
+            </tr>
+            <tr>
+               <td>260b</td>
+               <td></td>
+               <td>[nordic260b] Content not allowed between or after image figure elements: <br /></td>
+            </tr>
+            <tr>
+               <td>261</td>
+               <td>Text can't be direct child of div</td>
+               <td>[nordic261] Text can't be placed directly inside div elements. Try wrapping it in
+                  a p element: <br /></td>
+            </tr>
+            <tr>
+               <td>263</td>
+               <td>there must be a headline on the titlepage</td>
+               <td>[nordic263] the titlepage must have a headline (and the headline must have epub:type="fulltitle"
+                  and class="title")<br /></td>
+            </tr>
+            <tr>
+               <td>264</td>
+               <td>h1 on titlepage must be epub:type=fulltitle with class=title</td>
+               <td>[nordic264] the headline on the titlepage must have a epub:type with the value "fulltitle":
+                  <br />[nordic264] the headline on the titlepage must have a class with the value "title":
+                  <br /></td>
+            </tr>
+            <tr>
+               <td>265</td>
+               <td></td>
+               <td>[nordic265] linegroups with headlines must be section elements: <br />[nordic265] linegroups without headlines must be div elements: <br /></td>
+            </tr>
+            <tr>
+               <td>266a</td>
+               <td></td>
+               <td>[nordic266a] Footnotes must be wrapped in a "ol" element, but is currently wrapped
+                  in a : <br /></td>
+            </tr>
+            <tr>
+               <td>266b</td>
+               <td></td>
+               <td>[nordic266b] List items inside a footnotes list must use epub:type="footnote": <br /></td>
+            </tr>
+            <tr>
+               <td>267a</td>
+               <td></td>
+               <td>[nordic267a] Rearnotes must be wrapped in a "ol" element, but is currently wrapped
+                  in a : [nordic267a] Endnotes must be wrapped in a "ol" element, but is currently wrapped
+                  in a : <br /></td>
+            </tr>
+            <tr>
+               <td>267b</td>
+               <td></td>
+               <td>[nordic267b] List items inside a rearnotes list must use epub:type="rearnote": [nordic267b] List items inside a endnotes list must use epub:type="endnote": <br /></td>
+            </tr>
+            <tr>
+               <td>268</td>
+               <td>Check that the heading levels are nested correctly (necessary for sidebars and poems,
+                  and maybe other structures as well where the RelaxNG is unable to enforce the level)
+               </td>
+               <td>[nordic268] The subsections of  (which contains the headline &lt;/&gt;) must only use &lt;h&gt;
+                  for headlines. It contains the element  which contains the headline  <br /></td>
+            </tr>
+            <tr>
+               <td>269</td>
+               <td></td>
+               <td>[nordic269] The type used in the filename () must be present on the body element:
+                  <br /></td>
+            </tr>
+            <tr>
+               <td>270</td>
+               <td></td>
+               <td>[nordic270] Bridgehead is only allowed as a child of section, article and div: <br /></td>
+            </tr>
+            <tr>
+               <td>273</td>
+               <td></td>
+               <td>[nordic273] Internal link ("") does not resolve: <br /></td>
+            </tr>
+            <tr>
+               <td>273b</td>
+               <td>Disallow internal links without fragment identifiers (see https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/372)</td>
+               <td>[nordic273b] Internal links must contain a non-empty fragment identifier: <br /></td>
+            </tr>
+            <tr>
+               <td>274</td>
+               <td></td>
+               <td>[nordic274] Not all the tokens in the headers attribute match the id attributes of
+                  'th' elements in this or a parent table: <br /></td>
+            </tr>
+            <tr>
+               <td>275</td>
+               <td></td>
+               <td>[nordic275] The URL in the img longdesc attribute does not reference any element in
+                  the publication: <br /></td>
+            </tr>
+            <tr>
+               <td>276</td>
+               <td></td>
+               <td>[nordic276] The accesskey attribute value is not 1 character long: <br />[nordic276] The tabindex attribute value is not expressed in numbers: <br /></td>
+            </tr>
+            <tr>
+               <td>277</td>
+               <td></td>
+               <td>[nordic277] The image width is not expressed in pixels or percentage: <br />[nordic277] The image height is not expressed in pixels or percentage: <br /></td>
+            </tr>
+            <tr>
+               <td>278</td>
+               <td></td>
+               <td>[nordic278] Table width is not expressed in pixels or percentage: <br />[nordic278] Table cellspacing is not expressed in pixels or percentage: <br />[nordic278] Table cellpadding is not expressed in pixels or percentage: <br /></td>
+            </tr>
+            <tr>
+               <td>279a</td>
+               <td></td>
+               <td>[nordic279a] The start attribute occurs in a non-numbered list: <br /></td>
+            </tr>
+            <tr>
+               <td>279b</td>
+               <td></td>
+               <td>[nordic279b] The start attribute is not a non negative number: <br /></td>
+            </tr>
+            <tr>
+               <td>280</td>
+               <td></td>
+               <td>[nordic280] Unrecognized Dublin Core metadata name: <br />[nordic280] Unrecognized Dublin Core metadata prefix: <br /></td>
+            </tr>
+            <tr>
+               <td>281</td>
+               <td></td>
+               <td>[nordic281] span attribute is not a positive integer: <br /></td>
+            </tr>
+            <tr>
+               <td>282</td>
+               <td></td>
+               <td>[nordic282] The rowspan attribute value is not a positive integer: <br />[nordic282] The colspan attribute value is not a positive integer: <br />[nordic282] The rowspan attribute value is larger than the number of rows left in
+                  the table: <br /></td>
+            </tr>
+            <tr>
+               <td>283</td>
+               <td></td>
+               <td>[nordic283] When using MathML with a namespace prefix, that prefix must be 'm'. Not
+                  <br /></td>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>
