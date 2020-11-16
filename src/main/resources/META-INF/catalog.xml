@@ -31,7 +31,6 @@
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/library.xpl" uri="../xml/xproc/library.xpl"/>
     
     <!-- XSLT reusable stylesheets -->
-    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/dtbook-to-epub3.xsl" uri="../xml/xslt/dtbook-to-epub3.xsl"/>
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-dtbook.xsl" uri="../xml/xslt/epub3-to-dtbook.xsl"/>
     
     <!-- RelaxNG and Schematron schemas -->
@@ -50,14 +49,15 @@
     <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-validator"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:epub3-nav-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:epub3-pub-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:epubcheck-adapter"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:mathml-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:html-to-epub3"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:epub3-to-html"/>
     
 </catalog>

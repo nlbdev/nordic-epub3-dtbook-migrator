@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" prefix="nordic: http://www.mtm.se/epub/">
-    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
         <dc:identifier id="pub-id">C00000</dc:identifier>
         <dc:format id="format">EPUB3</dc:format>
         <dc:title id="title_0">Valentin Haüy - the father of the education for the blind</dc:title>

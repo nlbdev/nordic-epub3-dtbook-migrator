@@ -74,7 +74,14 @@
     <p:import href="step/dtbook-store.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="step/fail-on-error-status.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-join
+            px:fileset-copy
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
@@ -197,17 +204,17 @@
     <p:group name="html-to-dtbook.dtbook-move">
         <p:output port="fileset.out" primary="true"/>
         <p:output port="in-memory.out" sequence="true">
-            <p:pipe port="in-memory.out" step="html-to-dtbook.dtbook-move.inner"/>
+            <p:pipe step="html-to-dtbook.dtbook-move.inner" port="result.in-memory"/>
         </p:output>
         <p:variable name="dirname" select="(//d:file[@media-type='application/x-dtbook+xml'], //d:file[@media-type='application/xhtml+xml'])[1]/replace(replace(@href,'.*/',''),'^(.+)\..*?$','$1')"/>
-        <px:fileset-move name="html-to-dtbook.dtbook-move.inner">
-            <p:with-option name="new-base" select="concat(if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/'), $dirname, '/')">
+        <px:fileset-copy name="html-to-dtbook.dtbook-move.inner">
+            <p:with-option name="target" select="concat(if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/'), $dirname, '/')">
                 <p:pipe port="normalized" step="output-dir"/>
             </p:with-option>
-            <p:input port="in-memory.in">
+            <p:input port="source.in-memory">
                 <p:pipe port="in-memory.out" step="html-to-dtbook.html-to-dtbook"/>
             </p:input>
-        </px:fileset-move>
+        </px:fileset-copy>
     </p:group>
     <px:nordic-dtbook-store.step name="html-to-dtbook.dtbook-store">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>

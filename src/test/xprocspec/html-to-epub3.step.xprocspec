@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/step/html-to-epub3.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/">
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/"
+               script="../../main/resources/xml/xproc/step/html-to-epub3.step.xpl">
 
     <x:scenario label="px:nordic-html-to-epub3.step">
         <x:call step="px:nordic-html-to-epub3.step">
@@ -25,7 +29,7 @@
             <x:document type="port" port="fileset.out"/>
         </x:context>
         <x:expect type="count" label="There should be exactly one fileset" min="1" max="1"/>
-        <x:expect type="xpath" label="The fileset should have a xml:base attribute pointing to the 'epub' subdirectory of the temporary directory" test="/*/@xml:base" equals="concat(replace($temp-dir,'//tmp','/tmp'),'epub/')"/>
+        <x:expect type="xpath" label="The fileset should have a xml:base attribute pointing to the 'epub' subdirectory of the temporary directory" test="/*/@xml:base" equals="concat($temp-dir,'epub/')"/>
 
         <x:context label="all files in the fileset that does not exist on disk">
             <x:document type="port" port="fileset.out" select="//d:file[not(@original-href)]"/>
@@ -71,10 +75,10 @@
                 <d:file href="EPUB/nav.ncx" method="xml" indent="true" omit-xml-declaration="false" media-type="application/x-dtbncx+xml"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/package.opf" method="xml" indent="true" omit-xml-declaration="false" media-type="application/oebps-package+xml"/>
+                <d:file href="EPUB/nav.xhtml" method="xhtml" indent="true" omit-xml-declaration="false" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
-                <d:file href="EPUB/nav.xhtml" method="xhtml" indent="true" omit-xml-declaration="false" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                <d:file href="EPUB/package.opf" method="xml" indent="true" omit-xml-declaration="false" media-type="application/oebps-package+xml"/>
             </x:document>
             <x:document type="inline" base-uri="temp-dir">
                 <d:file href="META-INF/container.xml" method="xml" indent="true" omit-xml-declaration="false" media-type="application/xml"/>
@@ -98,6 +102,35 @@
         <x:expect label="there must be a OPF" type="count" min="1"/>
         <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
         <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
+        <x:expect label="the metadata must be as expected" type="custom"
+                  href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
+            <x:document type="inline">
+                <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
+                    <dc:title>Valentin Haüy - the father of the education for the blind</dc:title>
+                    <dc:identifier id="pub-identifier">C00000</dc:identifier>
+                    <dc:language id="language_1">en</dc:language>
+                    <dc:format id="format">EPUB3</dc:format>
+                    <dc:creator id="creator_1">Beatrice Christensen Sköld</dc:creator>
+                    <dc:source id="source_1">urn:isbn:123456789</dc:source>
+                    <dc:publisher id="publisher_1">MTM</dc:publisher>
+                    <dc:date id="date_1">2006-03-23</dc:date>
+                    <meta property="dcterms:modified">2019-08-13T15:33:01Z</meta>
+                    <meta name="dcterms:modified" content="2019-08-19T12:43:15Z"/>
+                    <meta property="nordic:guidelines" id="meta_4">2015-1</meta>
+                    <meta name="nordic:guidelines" content="2015-1"/>
+                    <meta property="nordic:supplier" id="meta_5">MTM</meta>
+                    <meta name="nordic:supplier" content="MTM"/>
+                    <meta property="a11y:certifiedBy" id="meta_12">Certifying Organization</meta>
+                    <meta name="a11y:certifiedBy" content="Certifying Organization"/>
+                    <meta property="schema:audience" id="meta_13">Adult</meta>
+                    <meta name="schema:audience" content="Adult"/>
+                </metadata>
+            </x:document>
+        </x:expect>
+        <x:expect label="the navigation document should be marked as such" type="xpath"
+                  test="//opf:item[@href='nav.xhtml']/@properties" equals="'nav'"/>
+        <x:expect label="the prefix attribute must be as expected" type="xpath" test="string(/*/@prefix)"
+                  equals="'nordic: http://www.mtm.se/epub/ a11y: http://www.idpf.org/epub/vocab/package/a11y/# schema: http://schema.org/'"/>
         
         <x:context label="the NCX metadata">
             <x:document type="port" port="in-memory.out" select="/ncx:ncx/ncx:head"/>

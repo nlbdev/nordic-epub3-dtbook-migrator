@@ -75,6 +75,7 @@
 
     <p:import href="step/dtbook-validate.step.xpl"/>
     <p:import href="step/dtbook-to-html.step.xpl"/>
+    <p:import href="step/html-add-accessibility.step.xpl"/>
     <p:import href="step/html-validate.step.xpl"/>
     <p:import href="step/html-store.step.xpl"/>
     <p:import href="step/html-to-epub3.step.xpl"/>
@@ -83,7 +84,13 @@
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="step/fail-on-error-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-copy
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
     <p:variable name="dtbook-href" select="resolve-uri($dtbook,static-base-uri())"/>
@@ -141,11 +148,17 @@
         </p:input>
     </px:nordic-dtbook-to-html.step>
 
+    <px:nordic-html-add-accessibility-css.step name="dtbook-to-epub3.add-css">
+        <p:input port="in-memory.in">
+            <p:pipe step="dtbook-to-epub3.dtbook-to-html" port="in-memory.out"/>
+        </p:input>
+    </px:nordic-html-add-accessibility-css.step>
+
     <px:nordic-html-validate.step name="dtbook-to-epub3.html-validate" check-images="false">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="dtbook-to-epub3.dtbook-to-html"/>
+            <p:pipe port="in-memory.out" step="dtbook-to-epub3.add-css"/>
         </p:input>
         <p:input port="report.in">
             <p:pipe port="report.out" step="dtbook-to-epub3.dtbook-to-html"/>
@@ -164,18 +177,18 @@
             <px:message message="Storing intermediary HTML$1">
                 <p:with-option name="param1" select="if ($discard-intermediary-html) then '' else ' (contains errors)'"/>
             </px:message>
-            <px:fileset-move name="dtbook-to-epub3.choose-discard-intermediary.html-move">
-                <p:with-option name="new-base" select="concat(if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/'), $subdir-name, '/')">
+            <px:fileset-copy name="dtbook-to-epub3.choose-discard-intermediary.html-move">
+                <p:with-option name="target" select="concat(if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/'), $subdir-name, '/')">
                     <p:pipe port="normalized" step="output-dir"/>
                 </p:with-option>
-                <p:input port="in-memory.in">
-                    <p:pipe port="in-memory.out" step="dtbook-to-epub3.html-validate"/>
+                <p:input port="source.in-memory">
+                    <p:pipe step="dtbook-to-epub3.html-validate" port="in-memory.out"/>
                 </p:input>
-            </px:fileset-move>
+            </px:fileset-copy>
             <px:nordic-html-store.step name="dtbook-to-epub3.choose-discard-intermediary.nordic-html-store">
                 <p:with-option name="fail-on-error" select="$fail-on-error"/>
                 <p:input port="in-memory.in">
-                    <p:pipe port="in-memory.out" step="dtbook-to-epub3.choose-discard-intermediary.html-move"/>
+                    <p:pipe step="dtbook-to-epub3.choose-discard-intermediary.html-move" port="result.in-memory"/>
                 </p:input>
             </px:nordic-html-store.step>
         </p:when>
