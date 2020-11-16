@@ -22,6 +22,8 @@
     <let name="ids" value="//xs:string(@id)"/>
 
     <pattern id="opf_and_html_nordic_1">
+        <title>Rule 1</title>
+        <p></p>
         <rule context="*[@id]">
             <let name="id" value="@id"/>
             <assert test="count($ids[.=$id]) = 1">[nordic_opf_and_html_1] id attributes must be unique; <value-of select="@id"/> in <value-of select="replace(base-uri(.),'^.*/','')"/> also exists
@@ -29,9 +31,10 @@
         </rule>
     </pattern>
     
-    <!-- Rule 13: All books must have frontmatter and bodymatter -->
     <pattern id="nordic_opf_and_html_13_a">
         <!-- see also nordic2015-1.sch for single-document version -->
+        <title>Rule 13</title>
+        <p>All books must have frontmatter and bodymatter</p>
         <rule context="html:html[not(preceding-sibling::html:html)]">
             <assert test="((.|following-sibling::html:html)/html:body/tokenize(@epub:type,'\s+')=('cover','frontmatter')) = true()">[nordic_opf_and_html_13a] There must be at least one frontmatter or
                 cover document</assert>
@@ -42,6 +45,8 @@
 
     <pattern id="nordic_opf_and_html_15">
         <!-- see also nordic2015-1.sch for single-document version -->
+        <title>Rule 15</title>
+        <p></p>
         <rule context="opf:itemref">
             <let name="this" value="."/>
             <let name="this-item" value="../../opf:manifest/opf:item[@id = $this/@idref]"/>
@@ -68,8 +73,9 @@
         </rule>
     </pattern>
     
-    <!-- Rule 40: No page numbering gaps for pagebreak w/page-normal -->
     <pattern id="nordic_opf_and_html_40">
+        <title>Rule 40</title>
+        <p>No page numbering gaps for pagebreak w/page-normal</p>
         <rule
             context="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and count(preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'])]">
             <let name="preceding-pagebreak" value="preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'][1]"/>
@@ -79,8 +85,9 @@
         </rule>
     </pattern>
 
-    <!-- Rule 23: Increasing pagebreak values for page-normal -->
     <pattern id="nordic_opf_and_html_23">
+        <title>Rule 23</title>
+        <p>Increasing pagebreak values for page-normal</p>
         <rule
             context="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][tokenize(@class,'\s+')='page-normal']]">
             <let name="preceding" value="preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'][1]"/>
@@ -90,16 +97,18 @@
         </rule>
     </pattern>
 
-    <!-- Rule 24: Values of pagebreak must be unique for page-front -->
     <pattern id="nordic_opf_and_html_24">
+        <title>Rule 24</title>
+        <p>Values of pagebreak must be unique for page-front</p>
         <rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front']">
             <assert test="count(//html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front' and @title=current()/@title])=1">[nordic_opf_and_html_24] pagebreak values must
                 be unique for pagebreaks with class="page-front" (see pagebreak with title="<value-of select="@title"/>" in <value-of select="replace(base-uri(.),'^.*/','')"/>)</assert>
         </rule>
     </pattern>
 
-    <!-- Rule 26a: Each note must have a noteref -->
     <pattern id="nordic_opf_and_html_26_a">
+        <title>Rule 26a</title>
+        <p>Each note must have a noteref</p>
         <rule context="html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote')]">
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
             <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref' and substring-after(@href,'#') = current()/@id]) &gt;= 1">[nordic_opf_and_html_26a] The <value-of
@@ -110,8 +119,9 @@
         </rule>
     </pattern>
 
-    <!-- Rule 26b: Each noteref must reference a note -->
     <pattern id="nordic_opf_and_html_26_b">
+        <title>Rule 26b</title>
+        <p>Each noteref must reference a note</p>
         <rule context="html:a[tokenize(@epub:type,'\s+')='noteref']">
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
             <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic_opf_and_html_26b] The note
@@ -121,8 +131,9 @@
         </rule>
     </pattern>
 
-    <!-- Rule 27a: Each note must have a noteref -->
     <pattern id="nordic_opf_and_html_27_a">
+        <title>Rule 27a</title>
+        <p>Each note must have a noteref</p>
         <rule context="html:*[tokenize(@epub:type,'\s+')=('annotation')]">
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
             <assert test="count(//html:a[tokenize(@epub:type,'\s+')='annoref' and substring-after(@href,'#') = current()/@id]) &gt;= 1">[nordic_opf_and_html_27a] The annotation<value-of
@@ -132,8 +143,9 @@
         </rule>
     </pattern>
 
-    <!-- Rule 27b: Each noteref must reference a note -->
     <pattern id="nordic_opf_and_html_27_b">
+        <title>Rule 27b</title>
+        <p>Each noteref must reference a note</p>
         <rule context="html:a[tokenize(@epub:type,'\s+')='annoref']">
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
             <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('annotation') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic_opf_and_html_26b] The annotation with the href
@@ -143,8 +155,9 @@
         </rule>
     </pattern>
 
-    <!-- Rule 28: The HTML title element must be the same as the OPF publication dc:title -->
     <pattern id="nordic_opf_and_html_28">
+        <title>Rule 28</title>
+        <p>The HTML title element must be the same as the OPF publication dc:title</p>
         <rule context="html:title">
             <assert test="text() = /*/opf:package/opf:metadata/dc:title[not(@refines)]/text()">[nordic_opf_and_html_28] The HTML title element in <value-of select="replace(base-uri(.),'.*/','')"/>
                 must contain the same text as the dc:title element in the OPF metadata. The HTML title element contains "<value-of select="."/>" while the dc:title element in the OPF contains
@@ -152,8 +165,9 @@
         </rule>
     </pattern>
 
-    <!-- Rule 29: The HTML meta element with dc:identifier must have as content the same as the OPF publication dc:identifier -->
     <pattern id="nordic_opf_and_html_29">
+        <title>Rule 29</title>
+        <p>The HTML meta element with dc:identifier must have as content the same as the OPF publication dc:identifier</p>
         <rule context="html:meta[@name='dc:identifier']">
             <assert test="@content = /*/opf:package/opf:metadata/dc:identifier[not(@refines)]/text()">[nordic_opf_and_html_29] The HTML meta element in <value-of select="replace(base-uri(.),'.*/','')"
                 /> with dc:identifier must have as content the same as the OPF publication dc:identifier. The OPF dc:identifier is "<value-of
@@ -166,6 +180,8 @@
         JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
     -->
     <pattern id="nordic_opf_and_html_32">
+        <title>Rule 32</title>
+        <p></p>
         <rule context="html:img[@longdesc]">
             <assert test="substring-after(normalize-space(@longdesc),'#') = //@id">[nordic_opf_and_html_32] The URL in the img longdesc attribute does not reference any element in the publication:
                     <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
@@ -178,6 +194,8 @@
     -->
     <pattern id="nordic_opf_and_html_276">
         <!-- see also nordic276 in nordic2015-1.sch -->
+        <title>Rule 276</title>
+        <p></p>
         <rule context="html:a">
             <report test="@accesskey and count(//html:a/@accesskey=@accesskey)!=1">[nordic_opf_and_html_276] The accesskey attribute value is not unique within the publication.</report>
             <report test="@tabindex and count(//html:a/@tabindex=@tabindex)!=1">[nordic_opf_and_html_276] The tabindex attribute value is not unique within the publication.</report>
