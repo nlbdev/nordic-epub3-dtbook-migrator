@@ -8,8 +8,9 @@
     <ns prefix="nordic" uri="http://www.mtm.se/epub/"/>
     <ns prefix="ncx" uri="http://www.daisy.org/z3986/2005/ncx/"/>
 
-    <!-- navdoc toc items must exist in the ncx -->
     <pattern>
+        <title>nordic_nav_ncx_1_a</title>
+        <p>navdoc toc items must exist in the ncx</p>
         <rule context="html:a[ancestor::html:nav/tokenize(@epub:type,'\s+')='toc']">
             <let name="navPoint" value="/*/ncx:*[1]/ncx:navMap//ncx:navPoint[ncx:content/@src=current()/@href]"/>
             <report test="count($navPoint) = 0">[nordic_nav_ncx_1_a] toc items in the navigation document must also occur in the NCX. <value-of
@@ -17,8 +18,9 @@
         </rule>
     </pattern>
 
-    <!-- navdoc page-list items must exist in the ncx -->
     <pattern>
+        <title>nordic_nav_ncx_2_a</title>
+        <p>navdoc page-list items must exist in the ncx</p>
         <rule context="html:a[ancestor::html:nav/tokenize(@epub:type,'\s+')='page-list']">
             <let name="pageTarget" value="/*/ncx:*[1]/ncx:pageList/ncx:pageTarget[ncx:content/@src=current()/@href]"/>
             <report test="count($pageTarget) = 0">[nordic_nav_ncx_2_a] page references in the navigation document must also occur as pageTarget items in the NCX. <value-of
@@ -26,8 +28,9 @@
         </rule>
     </pattern>
 
-    <!-- ncx toc items must exist in the navdoc, and must follow the same structure and order as in the navdoc -->
     <pattern>
+        <title>nordic_nav_ncx_3_a</title>
+        <p>ncx toc items must exist in the navdoc, and must follow the same structure and order as in the navdoc</p>
         <rule context="ncx:navPoint">
             <let name="navRef" value="/*/html:*[1]/html:body/html:nav[tokenize(@epub:type,'\s+')='toc']//html:a[@href=current()/ncx:content/@src]"/>
             <report test="count($navRef) = 0">[nordic_nav_ncx_3_a] toc items in the NCX must also occur in the navigation document.<value-of
@@ -74,8 +77,9 @@
         </rule>
     </pattern>
 
-    <!-- ncx page-list items must exist in the navdoc, and must follow the same order as in the navdoc -->
     <pattern>
+        <title>nordic_nav_ncx_4_a</title>
+        <p>ncx page-list items must exist in the navdoc, and must follow the same order as in the navdoc</p>
         <rule context="ncx:pageTarget">
             <let name="navRef" value="/*/html:*[1]/html:body/html:nav[tokenize(@epub:type,'\s+')='page-list']//html:a[@href=current()/ncx:content/@src]"/>
             <report test="count($navRef) = 0">[nordic_nav_ncx_4_a] pageTarget items in the NCX must also occur as page references in the navigation document. <value-of
@@ -105,24 +109,27 @@
         </rule>
     </pattern>
 
-    <!-- navdoc references must all be unique -->
     <pattern>
+        <title>nordic_nav_ncx_5</title>
+        <p>navdoc references must all be unique</p>
         <rule context="html:a">
             <report test="@href = preceding::html:a/@href">[nordic_nav_ncx_5] Two references in the navigation document can not point to the same location in the content. <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
     </pattern>
 
-    <!-- ncx references must all be unique -->
     <pattern>
+        <title>nordic_nav_ncx_6</title>
+        <p>ncx references must all be unique</p>
         <rule context="ncx:navPoint | ncx:pageTarget">
             <report test="@href = (preceding::ncx:navPoint/@href | preceding::ncx:pageTarget/@href)">[nordic_nav_ncx_6] Two references in the NCX (navPoint or pageTarget) can not point to the same
                 location in the content. <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
     </pattern>
 
-    <!-- toc headline must be the same in the ncx and navdoc -->
     <pattern>
+        <title>nordic_nav_ncx_7</title>
+        <p>toc headline must be the same in the ncx and navdoc</p>
         <rule context="ncx:navLabel[parent::ncx:navMap]">
             <assert test="normalize-space(string-join(.//text(),'')) = /*/html:*/html:body/html:nav[tokenize(@epub:type,'\s+')='toc']/html:h1/normalize-space(string-join(.//text(),''))"
                 >[nordic_nav_ncx_7] The navLabel in the NCX navMap must correspond to the h1 in the toc in the navigation document. The NCX navLabel has the value "<value-of
@@ -132,8 +139,9 @@
         </rule>
     </pattern>
 
-    <!-- page-list headline must be the same in the ncx and navdoc -->
     <pattern>
+        <title>nordic_nav_ncx_8</title>
+        <p>page-list headline must be the same in the ncx and navdoc</p>
         <rule context="ncx:navLabel[parent::ncx:pageList]">
             <assert test="normalize-space(string-join(.//text(),'')) = /*/html:*/html:body/html:nav[tokenize(@epub:type,'\s+')='page-list']/html:h1/normalize-space(string-join(.//text(),''))"
                 >[nordic_nav_ncx_8] The navLabel in the NCX pageList must correspond to the h1 in the page-list in the navigation document. The NCX navLabel has the value "<value-of
