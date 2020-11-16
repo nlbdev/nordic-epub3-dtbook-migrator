@@ -36,8 +36,9 @@
     <ns prefix="nordic" uri="http://www.mtm.se/epub/"/>
     <ns prefix="c" uri="http://www.w3.org/ns/xproc-step"/>
 
-    <!-- Rule 1: All headings in the book must be referenced from the navigation document -->
     <pattern id="nav_references_1">
+        <title>Rule 1</title>
+        <p>All headings in the book must be referenced from the navigation document</p>
         <rule context="c:result/c:result[@data-sectioning-element]">
             <let name="sectioning-ref" value="if (@data-sectioning-id) then concat(replace(@xml:base,'.*/',''),'#',@data-sectioning-id) else ()"/>
             <let name="heading-ref" value="if (@data-heading-id) then concat(replace(@xml:base,'.*/',''),'#',@data-heading-id) else ()"/>
@@ -55,8 +56,9 @@
         </rule>
     </pattern>
 
-    <!-- Rule 2: The toc must be in reading order and nested correctly -->
     <pattern id="nav_references_2">
+        <title>Rule 2</title>
+        <p>The toc must be in reading order and nested correctly</p>
         <rule context="html:a[ancestor::html:nav[tokenize(@epub:type,'\s+')='toc']]">
             <let name="href" value="substring-before(@href,'#')"/>
             <let name="fragment" value="substring-after(@href,'#')"/>
@@ -98,8 +100,9 @@
         </rule>
     </pattern>
 
-    <!-- Rule 3: All pagebreaks in the book must be referenced from the navigation document -->
     <pattern id="nav_references_3">
+        <title>Rule 3</title>
+        <p>All pagebreaks in the book must be referenced from the navigation document</p>
         <rule context="c:result/c:result[@data-pagebreak-element]">
             <let name="pagebreak-ref" value="if (@data-pagebreak-id) then concat(replace(@xml:base,'.*/',''),'#',@data-pagebreak-id) else ()"/>
             <let name="nav-ref" value="//html:nav[tokenize(@epub:type,'\s+')='page-list']//html:a[$pagebreak-ref and ends-with(@href, $pagebreak-ref)]"/>
@@ -119,8 +122,9 @@
         </rule>
     </pattern>
 
-    <!-- Rule 4: The page-list must be in reading order -->
     <pattern id="nav_references_4">
+        <title>Rule 4</title>
+        <p>The page-list must be in reading order</p>
         <rule context="html:a[ancestor::html:nav[tokenize(@epub:type,'\s+')='page-list']]">
             <let name="result-ref" value="/*/c:result/c:result[@data-pagebreak-id = substring-after(@href,'#')]"/>
             <let name="preceding-refs-which-is-following-in-content"
