@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schematron rules for Nordic EPUB 2020-1</title><style>
+                    body{
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 12px;
+                        max-width: 95%;
+                        margin: auto;
+                    }
+                    h1{
+                        text-align: center;
+                        font-size: 1.5rem;
+                        margin-top: 1rem;
+                        margin-bottom: 2rem;
+                    }
+                    table,
+                    th,
+                    td{
+                        border: 0.1rem solid #ddd;
+                        border-collapse: collapse;
+                        padding: 0.5rem;
+                    }
+                    table{
+                        margin-bottom: 2rem
+                    }
+                    tr:nth-child(even){
+                        background-color: #f2f2f2;
+                    }
+                    tbody tr:hover{
+                        background-color: #ddd;
+                    }
+                    thead{
+                        background-color: #1D393C;
+                        color: white;
+                    }
+                    td:first-child{
+                        white-space: nowrap;
+                    }
+                    footer{
+                        margin-top: 1rem;
+                        margin-bottom: 1rem;
+                        text-align: center;
+                        font-size: 0.8rem;
+                    }</style></head>
+   <body>
+      <h1>Schematron rules for Nordic EPUB 2020-1</h1>
+      <table>
+         <thead>
+            <tr>
+               <th>Rule</th>
+               <th>Global description</th>
+               <th>Detailed description</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td>1</td>
+               <td></td>
+               <td>[nordic_opf_and_html_1] id attributes must be unique;  in  also exists
+                  in <br /></td>
+            </tr>
+            <tr>
+               <td>13</td>
+               <td>All books must have frontmatter and bodymatter</td>
+               <td>[nordic_opf_and_html_13a] There must be at least one frontmatter or
+                  cover document<br />[nordic_opf_and_html_13a] There must be at least one bodymatter
+                  document<br /></td>
+            </tr>
+            <tr>
+               <td>15</td>
+               <td></td>
+               <td>[nordic_opf_and_html_15] Cover must not be preceded by any other itemrefs in the OPF
+                  spine:  (in <br />[nordic_opf_and_html_15] Frontmatter must be placed before all bodymatter in the spine:
+                  (in <br />[nordic_opf_and_html_15] Frontmatter must be placed before all backmatter in the spine:
+                  (in <br />[nordic_opf_and_html_15] Bodymatter must be placed before all backmatter in the spine:
+                  (in <br /></td>
+            </tr>
+            <tr>
+               <td>40</td>
+               <td>No page numbering gaps for pagebreak w/page-normal</td>
+               <td>[nordic_opf_and_html_40b] No gaps may occur in page numbering (see pagebreak with
+                  title=""
+                  in  and compare with pagebreak with title="" in )<br /></td>
+            </tr>
+            <tr>
+               <td>23</td>
+               <td>Increasing pagebreak values for page-normal</td>
+               <td>[nordic_opf_and_html_23] pagebreak values must increase for pagebreaks with class="page-normal"
+                  (see pagebreak with
+                  title="" in  and compare with pagebreak with title=" in
+                  )<br /></td>
+            </tr>
+            <tr>
+               <td>24</td>
+               <td>Values of pagebreak must be unique for page-front</td>
+               <td>[nordic_opf_and_html_24] pagebreak values must
+                  be unique for pagebreaks with class="page-front" (see pagebreak with title="" in )<br /></td>
+            </tr>
+            <tr>
+               <td>26a</td>
+               <td>Each note must have a noteref</td>
+               <td>[nordic_opf_and_html_26a] The  must have
+                  at least one &lt;a epub:type="noteref" ...&gt; referencing it:  (in )<br /></td>
+            </tr>
+            <tr>
+               <td>26b</td>
+               <td>Each noteref must reference a note</td>
+               <td>[nordic_opf_and_html_26b] The note
+                  reference with the href "" attribute must resolve to a note, rearnote or footnote
+                  in the publication:  (in )<br /></td>
+            </tr>
+            <tr>
+               <td>27a</td>
+               <td>Each note must have a noteref</td>
+               <td>[nordic_opf_and_html_27a] The annotation must have at least one &lt;a epub:type="annoref"
+                  ...&gt; referencing it:  (in )<br /></td>
+            </tr>
+            <tr>
+               <td>27b</td>
+               <td>Each noteref must reference a note</td>
+               <td>[nordic_opf_and_html_26b] The annotation with the href
+                  "" must resolve to a annotation in the publication:  (in )<br /></td>
+            </tr>
+            <tr>
+               <td>28</td>
+               <td>The HTML title element must be the same as the OPF publication dc:title</td>
+               <td>[nordic_opf_and_html_28] The HTML title element in 
+                  must contain the same text as the dc:title element in the OPF metadata. The HTML title
+                  element contains "" while the dc:title element in the OPF contains
+                  "".<br /></td>
+            </tr>
+            <tr>
+               <td>29</td>
+               <td>The HTML meta element with dc:identifier must have as content the same as the OPF
+                  publication dc:identifier
+               </td>
+               <td>[nordic_opf_and_html_29] The HTML meta element in  with dc:identifier must have as
+                  content the same as the OPF publication dc:identifier. The OPF dc:identifier is ""
+                  while the HTML dc:identifier is "".<br /></td>
+            </tr>
+            <tr>
+               <td>32</td>
+               <td></td>
+               <td>[nordic_opf_and_html_32] The URL in the img longdesc attribute does not reference
+                  any element in the publication:
+                  <br /></td>
+            </tr>
+            <tr>
+               <td>276</td>
+               <td></td>
+               <td>[nordic_opf_and_html_276] The accesskey attribute value is not unique within the publication.<br />[nordic_opf_and_html_276] The tabindex attribute value is not unique within the publication.<br /></td>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>
