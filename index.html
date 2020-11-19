@@ -36,7 +36,7 @@
         </div>
         <article class="markdown-body">
             <h1><a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
-            <p><strong>Latest version: 1.4.4</strong></p>
+            <p><strong>Latest version: 1.4.6</strong></p>
             <p>If you want to install the tool using some other mechanism than those describe below, then you can download the JAR file from
                 <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.daisy.pipeline.modules%22%20AND%20a%3A%22nordic-epub3-dtbook-migrator%22">Maven Central</a>,
                 or from the <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/releases">GitHub Release page</a>.
@@ -55,8 +55,7 @@
             <h2>Using Docker</h2>
             <p>The nordic migrator is published as <code>nlbdev/nordic-epub3-dtbook-migrator</code>, tagged with release versions.</p>
             <p>Example of how to run the Nordic EPUB3/DTBook Migrator with docker:</p>
-            <pre><code>docker run --network=host --rm -it nlbdev/nordic-epub3-dtbook-migrator:1.4.5</code></pre>
-            <p>Note: version 1.4.4 has a bug in the Docker build, which is fixed in 1.4.5. There are no other changes in 1.4.5, so 1.4.5 is only released as a Docker image)</p>
+            <pre><code>docker run --network=host --rm -it nlbdev/nordic-epub3-dtbook-migrator:1.4.6</code></pre>
             
             <p>After starting the nordic migrator, you could also start the Pipeline 2 Web UI on the same system like this, if you don't have any other interface (starts on <a href="http://localhost:9000/">http://localhost:9000/</a>):</p>
             <pre><code>docker run --network=host --rm -it daisyorg/pipeline-webui:v2.7.0</code></pre>
