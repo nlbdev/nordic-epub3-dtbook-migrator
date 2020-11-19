@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schematron rules for Nordic EPUB 2020-1</title><style>
+                    body{
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 12px;
+                        max-width: 95%;
+                        margin: auto;
+                    }
+                    h1{
+                        text-align: center;
+                        font-size: 1.5rem;
+                        margin-top: 1rem;
+                        margin-bottom: 2rem;
+                    }
+                    table,
+                    th,
+                    td{
+                        border: 0.1rem solid #ddd;
+                        border-collapse: collapse;
+                        padding: 0.5rem;
+                    }
+                    table{
+                        margin-bottom: 2rem
+                    }
+                    tr:nth-child(even){
+                        background-color: #f2f2f2;
+                    }
+                    tbody tr:hover{
+                        background-color: #ddd;
+                    }
+                    thead{
+                        background-color: #1D393C;
+                        color: white;
+                    }
+                    td:first-child{
+                        white-space: nowrap;
+                    }
+                    footer{
+                        margin-top: 1rem;
+                        margin-bottom: 1rem;
+                        text-align: center;
+                        font-size: 0.8rem;
+                    }</style></head>
+   <body>
+      <h1>Schematron rules for Nordic EPUB 2020-1</h1>
+      <table>
+         <thead>
+            <tr>
+               <th>Rule</th>
+               <th>Global description</th>
+               <th>Detailed description</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+               <td>1</td>
+               <td>All headings in the book must be referenced from the navigation document</td>
+               <td>[nordic_nav_references_1] All headings in the content documents must be referenced
+                  exactly once in the navigation document. In the content document
+                  "", the  "" element is
+                  from the navigation document.<br />[nordic_nav_references_1] The
+                  text for the heading in the navigation document ("") should match the headline in
+                  the content document ("" at )<br /></td>
+            </tr>
+            <tr>
+               <td>2</td>
+               <td>The toc must be in reading order and nested correctly</td>
+               <td>[nordic_nav_references_2a] All references from the navigation document must reference
+                  either a sectioning element or a headline in one of the content documents:
+                  <br />[nordic_nav_references_2a] All references from the navigation document must reference
+                  exactly one sectioning element or headline in one of the
+                  content documents, there are multiple sections or headlines matching the href="" in
+                  ; <br />[nordic_nav_references_2b] The nesting of headlines in the content does not match
+                  the
+                  nesting of headlines in the navigation document. The toc item `` in the navigation
+                  document is not nested at the correct
+                  level. The referenced document () occurs in the navigation document at nesting depth
+                  (). The referenced headline () occurs in the navigation document at nesting depth
+                  (). The referenced headline (`&lt;&gt;&lt;/&gt;) occurs in the content document  as a `` which
+                  implies that it should be referenced at nesting depth  in the
+                  navigation document.<br /></td>
+            </tr>
+            <tr>
+               <td>3</td>
+               <td>All pagebreaks in the book must be referenced from the navigation document</td>
+               <td>[nordic_nav_references_3] All pagebreaks in the content documents must be referenced
+                  exactly once in the navigation document. In the content document
+                  "", the pagebreak "" is  from the navigation document.<br />[nordic_nav_references_3] The page number for
+                  the pagebreak in the navigation document ("") should match the page number of the
+                  referenced pagebreak in the
+                  content document ("" at )<br />[nordic_nav_references_3] The page
+                  number for the pagebreak in the navigation document ("") should be a dash ("-") when
+                  the referenced pagebreak in
+                  the content document is unnumbered ("" at )<br /></td>
+            </tr>
+            <tr>
+               <td>4</td>
+               <td>The page-list must be in reading order</td>
+               <td>[nordic_nav_references_4] The page list in the navigation document must reference
+                  the pagebreaks in the correct order.
+                  The pagebreak with id="" in the document "" is referenced from the navigation document
+                  after the pagebreak with id="" in the document "", but in the content document it
+                  occurs before it.<br /></td>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>

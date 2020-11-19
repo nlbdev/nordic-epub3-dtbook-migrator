@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="schematron-to-html-2.xsl"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2" xml:lang="en">
     <title>Nordic EPUB3 and HTML5 rules (based on MTMs DTBook schematron rules, targeting nordic guidelines 2020-1)</title>
     <ns prefix="html" uri="http://www.w3.org/1999/xhtml"/>
