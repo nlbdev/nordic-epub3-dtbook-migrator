@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/dtbook-to-epub3.xsl" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../main/resources/xml/xslt/dtbook-to-html/dtbook-to-epub3.xsl" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
     xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xslt-version="2.0">
 
     <!-- dtbookblocknoimggroup -->
@@ -750,10 +750,10 @@
             <html:figure id="..." class="image-series">
                 <html:aside id="prodnote" epub:type="z3998:production" class="prodnote render-optional"/>
                 <html:figure class="image">
-                    <html:img id="img1" src="images/img.jpg" longdesc="#prodnote" alt="image"/>
+                    <html:img id="img1" src="img.jpg" longdesc="#prodnote" alt="image"/>
                 </html:figure>
                 <html:figure class="image">
-                    <html:img id="img2" src="images/img.jpg" longdesc="#prodnote" alt="image"/>
+                    <html:img id="img2" src="img.jpg" longdesc="#prodnote" alt="image"/>
                 </html:figure>
             </html:figure>
         </x:expect>
@@ -1398,7 +1398,7 @@
             <dtbook:img src="img.jpg"/>
         </x:context>
         <x:expect label="the resulting element should be a img">
-            <html:img src="images/img.jpg" id="..." alt="image"/>
+            <html:img src="img.jpg" id="..." alt="image"/>
         </x:expect>
     </x:scenario>
 
@@ -1408,7 +1408,7 @@
             <dtbook:img src="img.jpg#target" alt="alt text" longdesc="#image-description" height="100" width="100" id="id"/>
         </x:context>
         <x:expect label="the resulting element should be a img">
-            <html:img src="images/img.jpg#target" alt="alt text" longdesc="#image-description" height="100" width="100" id="id"/>
+            <html:img src="img.jpg#target" alt="alt text" longdesc="#image-description" height="100" width="100" id="id"/>
         </x:expect>
     </x:scenario>
 
@@ -1433,7 +1433,7 @@
             </x:context>
             <x:expect label="the resulting element should be a figure with class='image'">
                 <html:figure id="..." class="image">
-                    <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
+                    <html:img src="img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
                     <html:aside id="prodnote1" epub:type="z3998:production" class="prodnote"/>
                     <html:div epub:type="pagebreak" class="page-normal" title="1"/>
                     <html:figcaption id="caption1"/>
@@ -1467,14 +1467,14 @@
             <x:expect label="the resulting element should be a figure with class='image-series'">
                 <html:figure id="..." class="image-series">
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
+                        <html:img src="img.jpg" id="img1" longdesc="#prodnote1" alt="image"/>
                         <html:aside id="prodnote1" epub:type="z3998:production" class="prodnote"/>
                         <html:figcaption id="caption1">
                             <html:p/>
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img2" longdesc="#prodnote2" alt="image"/>
+                        <html:img src="img.jpg" id="img2" longdesc="#prodnote2" alt="image"/>
                         <html:aside id="prodnote2" epub:type="z3998:production" class="prodnote"/>
                         <html:figcaption>
                             <html:div id="caption2">
@@ -1486,16 +1486,16 @@
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img3" alt="image"/>
+                        <html:img src="img.jpg" id="img3" alt="image"/>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img4" alt="image"/>
+                        <html:img src="img.jpg" id="img4" alt="image"/>
                         <html:figcaption id="caption4">
                             <html:p/>
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img5" alt="image"/>
+                        <html:img src="img.jpg" id="img5" alt="image"/>
                     </html:figure>
                 </html:figure>
             </x:expect>
@@ -1527,7 +1527,7 @@
                         <html:p/>
                     </html:figcaption>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img1" alt="image"/>
+                        <html:img src="img.jpg" id="img1" alt="image"/>
                         <html:figcaption>
                             <html:div id="caption2">
                                 <html:p/>
@@ -1538,16 +1538,16 @@
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img2" alt="image"/>
+                        <html:img src="img.jpg" id="img2" alt="image"/>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img3" alt="image"/>
+                        <html:img src="img.jpg" id="img3" alt="image"/>
                         <html:figcaption id="caption4">
                             <html:p/>
                         </html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img4" alt="image"/>
+                        <html:img src="img.jpg" id="img4" alt="image"/>
                     </html:figure>
                 </html:figure>
             </x:expect>
@@ -1567,17 +1567,17 @@
             </x:context>
             <x:expect label="the text nodes should remain as text nodes">
                 <html:figure id="..." class="image">
-                    <html:img src="images/img.jpg" id="img1" alt="image"/>
+                    <html:img src="img.jpg" id="img1" alt="image"/>
                     <html:figcaption id="caption1">TEXT</html:figcaption>
                 </html:figure>
                 <html:figure id="..." class="image-series">
                     <html:figcaption id="caption2">TEXT</html:figcaption>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img2" alt="image"/>
+                        <html:img src="img.jpg" id="img2" alt="image"/>
                         <html:figcaption id="caption3">TEXT</html:figcaption>
                     </html:figure>
                     <html:figure class="image">
-                        <html:img src="images/img.jpg" id="img3" alt="image"/>
+                        <html:img src="img.jpg" id="img3" alt="image"/>
                     </html:figure>
                 </html:figure>
             </x:expect>
@@ -3043,7 +3043,7 @@
                 <html:tbody>
                     <html:tr>
                         <html:td>
-                            <html:img id="img" src="images/img.jpg" longdesc="#caption" alt="image"/>
+                            <html:img id="img" src="img.jpg" longdesc="#caption" alt="image"/>
                         </html:td>
                     </html:tr>
                 </html:tbody>
@@ -3554,16 +3554,16 @@
             <html:div>
                 <html:div xml:lang="no" lang="no" id="id1" class="class1">
                     <html:figure id="..." class="image">
-                        <html:img id="rId101" src="images/900340%20(Reparert)-Picture%201.png" alt=""/>
+                        <html:img id="rId101" src="900340%20(Reparert)-Picture%201.png" alt=""/>
                     </html:figure>
                 </html:div>
                 <html:p xml:lang="no" lang="no" id="id2" class="class2">
-                    <html:img id="rId101" src="images/900340%20(Reparert)-Picture%201.png" alt=""/>
+                    <html:img id="rId101" src="900340%20(Reparert)-Picture%201.png" alt=""/>
                 </html:p>
                 <html:div xml:lang="no" lang="no" id="id3" class="class3">
                     <html:p>TEXT</html:p>
                     <html:figure id="..." class="image">
-                        <html:img id="rId101" src="images/900340%20(Reparert)-Picture%201.png" alt=""/>
+                        <html:img id="rId101" src="900340%20(Reparert)-Picture%201.png" alt=""/>
                     </html:figure>
                     <html:p>TEXT</html:p>
                 </html:div>
@@ -3704,18 +3704,18 @@
                 <html:li id="...">
                     <html:strong>Sommarhalvåret</html:strong>
                     <html:figure id="..." class="image">
-                        <html:img id="..." src="images/img01.jpg" alt="illustration"/>
+                        <html:img id="..." src="img01.jpg" alt="illustration"/>
                     </html:figure> (vissa arter kan sällsynt övervintra)</html:li>
                 <html:li id="...">
                     <html:strong>Hela året</html:strong>
                     <html:figure id="..." class="image">
-                        <html:img id="..." src="images/img02.jpg" alt="illustration"/>
+                        <html:img id="..." src="img02.jpg" alt="illustration"/>
                     </html:figure>
                 </html:li>
                 <html:li id="...">
                     <html:strong>Vinterhalvåret</html:strong>
                     <html:figure id="..." class="image">
-                        <html:img id="..." src="images/img03.jpg" alt="illustration"/>
+                        <html:img id="..." src="img03.jpg" alt="illustration"/>
                     </html:figure>
                 </html:li>
                 <html:li id="..."><html:strong>ökande bestånd</html:strong> ↗</html:li>
@@ -3831,7 +3831,7 @@
         </x:context>
         <x:expect label="the pagebreaks should have become a div">
             <html:figure class="image" id="...">
-                <html:img id="img1" src="images/img.jpg" alt="image"/>
+                <html:img id="img1" src="img.jpg" alt="image"/>
                 <html:div epub:type="pagebreak" class="page-normal" title="1"/>
             </html:figure>
         </x:expect>
@@ -4214,82 +4214,82 @@
             <html:div id="image-tests">
                 <html:div>
                     <!-- image in block context - with placeholder alt text: -->
-                    <html:img id="image-tests-img-1" src="images/valentin.jpg" alt="image"/>
+                    <html:img id="image-tests-img-1" src="valentin.jpg" alt="image"/>
                 </html:div>
                 <html:div>
                     <!-- image in inline context - with placeholder alt text: -->
                     <html:p>
-                        <html:img id="image-tests-img-2" src="images/valentin.jpg" alt="image"/>
+                        <html:img id="image-tests-img-2" src="valentin.jpg" alt="image"/>
                     </html:p>
                 </html:div>
                 <html:div>
                     <!-- image in figure - with placeholder alt text: -->
                     <html:figure id="image-tests-figure-1" class="image">
-                        <html:img id="image-tests-img-3" src="images/valentin.jpg" alt="image"/>
+                        <html:img id="image-tests-img-3" src="valentin.jpg" alt="image"/>
                     </html:figure>
                 </html:div>
                 <html:div>
                     <!-- image in image series figure - with placeholder alt text: -->
                     <html:figure id="image-tests-figure-2" class="image-series">
                         <html:figure class="image">
-                            <html:img id="image-tests-img-4" src="images/valentin.jpg" alt="image"/>
+                            <html:img id="image-tests-img-4" src="valentin.jpg" alt="image"/>
                         </html:figure>
                         <html:figure class="image">
-                            <html:img id="image-tests-img-5" src="images/valentin.jpg" alt="image"/>
+                            <html:img id="image-tests-img-5" src="valentin.jpg" alt="image"/>
                         </html:figure>
                     </html:figure>
                 </html:div>
                 <html:div>
                     <!-- image in block context - decorative: -->
-                    <html:img id="image-tests-img-6" src="images/valentin.jpg" alt=""/>
+                    <html:img id="image-tests-img-6" src="valentin.jpg" alt=""/>
                 </html:div>
                 <html:div>
                     <!-- image in inline context - decorative: -->
                     <html:p>
-                        <html:img id="image-tests-img-7" src="images/valentin.jpg" alt=""/>
+                        <html:img id="image-tests-img-7" src="valentin.jpg" alt=""/>
                     </html:p>
                 </html:div>
                 <html:div>
                     <!-- image in figure - decorative (should not be allowed/valid): -->
                     <html:figure id="image-tests-figure-5" class="image">
-                        <html:img id="image-tests-img-8" src="images/valentin.jpg" alt=""/>
+                        <html:img id="image-tests-img-8" src="valentin.jpg" alt=""/>
                     </html:figure>
                 </html:div>
                 <html:div>
                     <!-- image in image series figure - decorative (should not be allowed/valid): -->
                     <html:figure id="image-tests-figure-6" class="image-series">
                         <html:figure class="image">
-                            <html:img id="image-tests-img-9" src="images/valentin.jpg" alt=""/>
+                            <html:img id="image-tests-img-9" src="valentin.jpg" alt=""/>
                         </html:figure>
                         <html:figure class="image">
-                            <html:img id="image-tests-img-10" src="images/valentin.jpg" alt=""/>
+                            <html:img id="image-tests-img-10" src="valentin.jpg" alt=""/>
                         </html:figure>
                     </html:figure>
                 </html:div>
                 <html:div>
                     <!-- image in block context - with custom alt text: -->
-                    <html:img id="image-tests-img-11" src="images/valentin.jpg" alt="中国文字"/>
+                    <html:img id="image-tests-img-11" src="valentin.jpg" alt="中国文字"/>
                 </html:div>
                 <html:div>
                     <!-- image in inline context - with custom alt text: -->
                     <html:p>
-                        <html:img id="image-tests-img-12" src="images/valentin.jpg" alt="中国文字"/>
+                        <html:img id="image-tests-img-12" src="valentin.jpg" alt="中国文字"/>
                     </html:p>
                 </html:div>
                 <html:div>
                     <!-- image in figure - with custom alt text: -->
                     <html:figure id="image-tests-figure-8" class="image">
-                        <html:img id="image-tests-img-13" src="images/valentin.jpg" alt="中国文字"/>
+                        <html:img id="image-tests-img-13" src="valentin.jpg" alt="中国文字"/>
                     </html:figure>
                 </html:div>
                 <html:div>
                     <!-- image in image series figure - with custom alt text: -->
                     <html:figure id="image-tests-figure-9" class="image-series">
                         <html:figure class="image">
-                            <html:img id="image-tests-img-14" src="images/valentin.jpg" alt="中国文字"/>
+                            <html:img id="image-tests-img-14" src="valentin.jpg" alt="中国文字"/>
                         </html:figure>
                         <html:figure class="image">
-                            <html:img id="image-tests-img-15" src="images/valentin.jpg" alt="中国文字"/>
+                            <html:img id="image-tests-img-15" src="valentin.jpg" alt="中国文字"/>
                         </html:figure>
                     </html:figure>
                 </html:div>

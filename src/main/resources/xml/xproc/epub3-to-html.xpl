@@ -65,7 +65,13 @@
     <p:import href="step/html-store.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="step/fail-on-error-status.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-copy
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
@@ -127,17 +133,17 @@
     <p:group name="epub3-to-html.html-move">
         <p:output port="fileset.out" primary="true"/>
         <p:output port="in-memory.out" sequence="true">
-            <p:pipe port="in-memory.out" step="epub3-to-html.html-move.inner"/>
+            <p:pipe step="epub3-to-html.html-move.inner" port="result.in-memory"/>
         </p:output>
         <p:variable name="dirname" select="replace(replace(/*/d:file[@media-type='application/xhtml+xml'][1]/@href,'^.*/',''),'^(.+)\..*?$','$1')"/>
-        <px:fileset-move name="epub3-to-html.html-move.inner">
-            <p:with-option name="new-base" select="concat(if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/'), $dirname, '/')">
+        <px:fileset-copy name="epub3-to-html.html-move.inner">
+            <p:with-option name="target" select="concat(if (ends-with(/*/text(),'/')) then /*/text() else concat(/*/text(),'/'), $dirname, '/')">
                 <p:pipe port="normalized" step="output-dir"/>
             </p:with-option>
-            <p:input port="in-memory.in">
+            <p:input port="source.in-memory">
                 <p:pipe port="in-memory.out" step="epub3-to-html.epub3-to-html"/>
             </p:input>
-        </px:fileset-move>
+        </px:fileset-copy>
     </p:group>
     <px:nordic-html-store.step name="epub3-to-html.html-store">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>

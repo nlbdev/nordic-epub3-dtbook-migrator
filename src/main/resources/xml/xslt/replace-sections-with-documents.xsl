@@ -9,8 +9,6 @@
     
     <xsl:output indent="no"/>
     
-    <xsl:include href="update-epub-prefixes.xsl"/>
-    
     <xsl:template match="/*">
         <xsl:choose>
             <xsl:when test="local-name()='wrapper'">
@@ -37,13 +35,8 @@
     
     <xsl:template match="html:html">
         <xsl:param name="collection" tunnel="yes" as="element()*"/>
-        <xsl:variable name="prefixes" select="distinct-values(for $document in ($collection) return f:prefixes($document/html:head, $document/html:body, ()))"/>
-        
         <xsl:copy exclude-result-prefixes="#all">
             <xsl:copy-of select="(. | $collection | $collection/*)/namespace::*" exclude-result-prefixes="#all"/>
-            <xsl:if test="count($prefixes)">
-                <xsl:attribute name="epub:prefix" select="string-join($prefixes, ' ')"/>
-            </xsl:if>
             <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
     </xsl:template>
@@ -63,7 +56,8 @@
             <xsl:otherwise>
                 <xsl:for-each select="$document/html:body">
                     <xsl:element name="{if (tokenize(@epub:type,'\s+')='article') then 'article' else 'section'}" namespace="http://www.w3.org/1999/xhtml">
-                        <xsl:copy-of select="@*" exclude-result-prefixes="#all"/>
+                        <xsl:copy-of select="@* except @epub:prefix" exclude-result-prefixes="#all"/>
+                        <xsl:sequence select="(ancestor-or-self::*/@epub:prefix)[last()]"/>
 
                         <xsl:attribute name="xml:base" select="$base-uri"/>
 

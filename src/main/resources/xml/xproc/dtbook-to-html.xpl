@@ -119,6 +119,7 @@
         </p:input>
     </px:nordic-dtbook-to-html.step>
 
+
     <px:nordic-html-store.step name="dtbook-to-html.html-store">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
         <p:input port="in-memory.in">

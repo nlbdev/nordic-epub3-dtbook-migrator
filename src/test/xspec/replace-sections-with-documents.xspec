@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/replace-sections-with-documents.xsl" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns="http://www.w3.org/1999/xhtml" xslt-version="2.0">
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns="http://www.w3.org/1999/xhtml"
+               xslt-version="2.0"
+               stylesheet="../../main/resources/xml/xslt/replace-sections-with-documents.xsl">
 
     <x:scenario label="when processing a HTML fileset with all kinds of document types and hierarchies">
         <x:context>
@@ -298,7 +301,7 @@
             </wrapper>
         </x:context>
         <x:expect label="each section should be split into its own HTML document, with a filename reflecting the type of its contents">
-            <html xmlns="http://www.w3.org/1999/xhtml" epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/C00000.xhtml">
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/tmp/C00000.xhtml">
                 <head/>
                 <body>
                     <section epub:type="cover" xml:base="file:/tmp/C00000-01-cover.xhtml">

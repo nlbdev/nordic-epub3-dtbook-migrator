@@ -42,8 +42,13 @@
     <p:import href="check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/dtbook-validator.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+        <p:documentation>
+            px:dtbook-load
+            px:dtbook-validate
+            px:dtbook-upgrade
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
 
@@ -76,10 +81,10 @@
             </p:output>
 
             <px:message severity="DEBUG" message="Validating DTBook according to DTBook specification..."/>
-            <px:dtbook-validator.script name="dtbook-validate.step.validate.input-dtbook.generic">
-                <p:with-option name="input-dtbook" select="(/*/*[@media-type='application/x-dtbook+xml']/resolve-uri(@href,base-uri(.)))[1]"/>
+            <px:fileset-filter media-types="application/x-dtbook+xml"/>
+            <px:dtbook-validate name="dtbook-validate.step.validate.input-dtbook.generic">
                 <p:with-option name="check-images" select="$check-images"/>
-            </px:dtbook-validator.script>
+            </px:dtbook-validate>
 
             <p:choose name="choose.inner">
                 <p:xpath-context>
@@ -93,7 +98,7 @@
                         <p:pipe port="in-memory.in" step="main"/>
                     </p:output>
                     <p:output port="report.out" sequence="true">
-                        <p:pipe port="report" step="dtbook-validate.step.validate.input-dtbook.generic"/>
+                        <p:pipe port="xml-report" step="dtbook-validate.step.validate.input-dtbook.generic"/>
                     </p:output>
 
                     <p:sink>
@@ -111,7 +116,7 @@
                         <p:pipe port="in-memory.out" step="dtbook-validate.step.input-dtbook.in-memory"/>
                     </p:output>
                     <p:output port="report.out" sequence="true">
-                        <p:pipe port="report" step="dtbook-validate.step.validate.input-dtbook.generic"/>
+                        <p:pipe port="xml-report" step="dtbook-validate.step.validate.input-dtbook.generic"/>
                         <p:pipe port="result" step="dtbook-validate.step.validate.input-dtbook.nordic"/>
                         <p:pipe port="result" step="dtbook-validate.step.validate.images"/>
                     </p:output>
@@ -133,11 +138,11 @@
                     </px:fileset-load>
                     <p:choose name="dtbook-validate.step.choose-if-legacy">
                         <p:when test="$allow-legacy='true' and $dtbook2005='true'">
-                            <px:upgrade-dtbook name="dtbook-validate.step.choose-if-legacy.upgrade-to-2005-3">
+                            <px:dtbook-upgrade name="dtbook-validate.step.choose-if-legacy.upgrade-to-2005-3">
                                 <p:input port="parameters">
                                     <p:empty/>
                                 </p:input>
-                            </px:upgrade-dtbook>
+                            </px:dtbook-upgrade>
                             <px:message severity="DEBUG" message="Cleaning up legacy markup"/>
                             <p:xslt name="dtbook-validate.step.dtbook-legacy-fix">
                                 <p:input port="parameters">
