@@ -41,7 +41,7 @@
         <x:context label="result DTBook">
             <x:document type="file" base-uri="temp-dir" href="output-dir/C00000/C00000.xml"/>
         </x:context>
-        <x:expect type="custom" href="xprocspec-assert-xml-declaration.xpl" step="px:xprocspec-read-xml-declaration"
+        <x:expect type="custom" href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl" step="x:assert-xml-declaration"
             label="The XML declaration must be present and equal '&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;'">
             <x:document type="inline">
                 <c:result version="1.0" encoding="UTF-8"/>

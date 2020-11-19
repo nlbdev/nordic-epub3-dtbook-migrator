@@ -94,7 +94,7 @@
                         <p>covercovercover</p>
                     </body>
                 </html>
-                <html epub:prefix="nordic: http://www.mtm.se/epub/ z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:base="file:/tmp/titlepage.xhtml">
+                <html epub:prefix="nordic: http://www.mtm.se/epub/" xml:base="file:/tmp/titlepage.xhtml">
                     <head>
                         <title>Single-page title</title>
                         <meta name="nordic:guidelines" value="2015-1"/>

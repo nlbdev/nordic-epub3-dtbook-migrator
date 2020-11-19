@@ -777,8 +777,14 @@
 <grammar ns="http://www.daisy.org/z3986/2005/dtbook/" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0"
     datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
     
-    <include href="mathml3/mathml3.rng">
+    <include href="http://www.daisy.org/pipeline/modules/mathml-utils/mathml3.rng">
         <a:documentation>MathML 3.0</a:documentation>
+        <start combine="choice">
+            <notAllowed/>
+        </start>
+        <define name="anyElement">
+            <ref name="flow"/>
+        </define>
     </include>
     
     <start>

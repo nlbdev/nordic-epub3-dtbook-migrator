@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/step/dtbook-to-html.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               script="../../main/resources/xml/xproc/step/dtbook-to-html.step.xpl">
+    
     <x:scenario label="px:nordic-dtbook-to-html.step">
         <x:call step="px:nordic-dtbook-to-html.step">
             <x:input port="fileset.in">
@@ -25,16 +29,16 @@
             <x:document type="port" port="in-memory.out"/>
         </x:context>
         <x:expect type="count" label="There should be exactly one output document" min="1" max="1"/>
-        <x:expect type="xpath" label="The output document (the intermediary HTML) should have an xml:base attribute with filename C00000.xhtml" test="tokenize(/*/@xml:base,'/')[last()]"
+        <x:expect type="xpath" label="The output document (the intermediary HTML) should have a base URI with filename C00000.xhtml" test="tokenize(/*/base-uri(.),'/')[last()]"
             equals="'C00000.xhtml'"/>
-        <x:expect type="xpath" label="The output document (the intermediary HTML) should have an xml:base attribute pointing to the temp-dir directory" test="/*/@xml:base"
+        <x:expect type="xpath" label="The output document (the intermediary HTML) should have a base URI pointing to the temp-dir directory" test="/*/base-uri(.)"
             equals="concat($temp-dir,'temp-dir/C00000.xhtml')"/>
 
         <x:context label="the fileset">
             <x:document type="port" port="fileset.out"/>
         </x:context>
         <x:expect type="count" label="There should be exactly one fileset document" min="1" max="1"/>
-        <x:expect type="xpath" label="The fileset should have a xml:base attribute pointing to the temp-dir" test="/*/@xml:base" equals="concat(replace($temp-dir,'//tmp','/tmp'),'temp-dir/')"/>
+        <x:expect type="xpath" label="The fileset should have a xml:base attribute pointing to the temp-dir" test="/*/@xml:base" equals="concat($temp-dir,'temp-dir/')"/>
         <x:expect type="xpath" label="There should be a file with href='images/valentin.jpg'" test="//d:file[@href='images/valentin.jpg']"/>
         <x:expect type="xpath" label="There should be a file with href='css/accessibility.css'" test="//d:file[@href='css/accessibility.css']"/>
         <x:expect type="xpath" label="There should be a file with href='css/fonts/opendyslexic/OpenDyslexic-Regular.otf'" test="//d:file[@href='css/fonts/opendyslexic/OpenDyslexic-Regular.otf']"/>

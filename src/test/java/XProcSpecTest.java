@@ -16,19 +16,21 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
             // because 1.12.1 of scripts-parent is not released.
             "org.w3c:epubcheck:4.2.0",
             
+            pipelineModule("html-to-dtbook"),
             pipelineModule("asciimath-utils"),
             pipelineModule("common-utils"),
             pipelineModule("dtbook-utils"),
             pipelineModule("dtbook-validator"),
-            pipelineModule("epub3-nav-utils"),
-            pipelineModule("epub3-ocf-utils"),
-            pipelineModule("epub3-pub-utils"),
+            pipelineModule("epub-utils"),
             pipelineModule("epubcheck-adapter"),
             pipelineModule("file-utils"),
             pipelineModule("fileset-utils"),
             pipelineModule("html-utils"),
             pipelineModule("mediatype-utils"),
-            pipelineModule("validation-utils")
+            pipelineModule("validation-utils"),
+            pipelineModule("mathml-utils"),
+            pipelineModule("html-to-epub3"),
+            pipelineModule("epub3-to-html"),
         }; 
     } 
      

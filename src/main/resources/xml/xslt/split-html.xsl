@@ -13,8 +13,6 @@
                 version="2.0">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-    <!--    <xsl:import href="../../../../test/xspec/mock/uri-functions.xsl"/>-->
-    <xsl:import href="update-epub-prefixes.xsl"/>
 
     <xsl:template match="@*|node()">
         <xsl:copy exclude-result-prefixes="#all">
@@ -34,10 +32,6 @@
                 <html>
                     <xsl:copy-of select="/*/@* | @xml:base" exclude-result-prefixes="#all"/>
                     <xsl:namespace name="epub" select="'http://www.idpf.org/2007/ops'"/>
-                    <xsl:variable name="prefixes" select="f:prefixes($head, $body, ())"/>
-                    <xsl:if test="count($prefixes)">
-                        <xsl:attribute name="epub:prefix" select="string-join($prefixes, ' ')"/>
-                    </xsl:if>
                     <xsl:text>
 </xsl:text>
                     <head>
