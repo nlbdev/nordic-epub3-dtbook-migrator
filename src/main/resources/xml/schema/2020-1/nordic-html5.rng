@@ -47,9 +47,9 @@
     <!-- space-separated list of link types. -->
     
     <define name="MediaDesc">
-        <a:documentation>single or comma-separated list of media descriptors;
-            possible values include BRAILLE, PRINT, PROJECTION, SPEECH, ALL,
-            or the default SCREEN.</a:documentation>
+        <a:documentation>single or comma-separated list of media descriptors;</a:documentation>
+        <a:documentation>possible values include BRAILLE, PRINT, PROJECTION, SPEECH, ALL,</a:documentation>
+        <a:documentation> or the default SCREEN.</a:documentation>
         <data type="string" datatypeLibrary=""/>
     </define>
     <!--
