@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns="http://www.w3.org/1999/xhtml"
+               script="../../../main/resources/xml/xproc/step/update-epub-prefixes.xpl">
+
+    <x:scenario label="add prefixes as necessary">
+        <x:call step="px:nordic-update-epub-prefixes">
+            <x:input port="source">
+                <x:document type="inline">
+                    <html xmlns:schema="http://schema.org/">
+                        <head>
+                            <meta name="schema:isbn" content=""/>
+                            <meta name="nordic:guidelines" content="2015-1"/>
+                            <meta name="dcterms:modified" content="2018-09-12T10:24:30Z"/>
+                        </head>
+                        <body>
+                            <h1 epub:type="prism:title"/>
+                        </body>
+                    </html>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the prefixes should be calculated as expected" type="compare">
+            <x:document type="inline">
+                <html epub:prefix="schema: http://schema.org/ nordic: http://www.mtm.se/epub/ prism: http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm#">
+                    <head>
+                        <meta name="schema:isbn" content=""/>
+                        <meta name="nordic:guidelines" content="2015-1"/>
+                        <meta name="dcterms:modified" content="2018-09-12T10:24:30Z"/>
+                    </head>
+                    <body>
+                        <h1 epub:type="prism:title"/>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="look for namespaces in existing epub:prefix attribute">
+        <x:call step="px:nordic-update-epub-prefixes">
+            <x:input port="source">
+                <x:document type="inline">
+                    <html epub:prefix="schema: http://schema.org/">
+                        <head>
+                            <meta name="schema:isbn" content=""/>
+                        </head>
+                        <body/>
+                    </html>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the prefixes should be calculated as expected" type="compare">
+            <x:document type="inline">
+                <html epub:prefix="schema: http://schema.org/ nordic: http://www.mtm.se/epub/">
+                    <head>
+                        <meta name="schema:isbn" content=""/>
+                    </head>
+                    <body/>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>
