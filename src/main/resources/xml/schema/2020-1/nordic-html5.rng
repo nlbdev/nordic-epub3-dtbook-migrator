@@ -70,7 +70,7 @@
         <!-- a Uniform Resource Identifier, see [RFC2396]. -->
     </define>
     
-    <!-- ======================== Content Models ======================== -->
+    <a:documentation>Content Models</a:documentation>
     
     <define name="htmlblocknoimggroup">
         <a:documentation>block elements unique to html without imggroup.</a:documentation>
@@ -177,7 +177,7 @@
         <!-- common non-head elements for use with sectioning elements -->
     </define>
     
-    <!-- ========================= Generic Attributes ========================== -->
+    <a:documentation>Generic Attributes</a:documentation>
     
     <define name="attr.id">
         <attribute name="id">
@@ -377,7 +377,7 @@
       -->
     </define>
     
-    <!-- ========================= Document Structure ========================== -->
+    <a:documentation>Document Structure</a:documentation>
     
     <define name="htmlcontent">
         <a:documentation>htmlContent designates that each html has a &lt;head&gt; of
@@ -430,7 +430,7 @@
         <ref name="i18n"/>
     </define>
     
-    <!-- ======================== Document Head Metadata ======================= -->
+    <a:documentation>Document Head Metadata</a:documentation>
     
     <define name="headmisc">
         <choice>
@@ -645,7 +645,7 @@
         </optional>
     </define>
     
-    <!-- ============================ Body Content ============================= -->
+    <a:documentation>Body Content</a:documentation>
     
     <define name="book">
         <!--
@@ -725,7 +725,7 @@
         </element>
     </define>
     
-    <!-- ======================== Book Major Structures ======================== -->
+    <a:documentation>Book Major Structures</a:documentation>
   
     <define name="cover">
             <attribute name="epub:type">
@@ -902,7 +902,7 @@
         </optional>
     </define>
     
-    <!-- ============ Hierarchic Structure (6 levels deep) ============ -->
+    <a:documentation>Hierarchic Structure (6 levels deep)</a:documentation>
     
     <define name="level1">
         <a:documentation>Hierarchic Structure (6 levels deep).</a:documentation>
@@ -1265,7 +1265,7 @@
         <ref name="attrsrqd.notype"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
     
-    <!-- ============================= Text Markup ============================= -->
+    <a:documentation>Text Markup</a:documentation>
     
     <define name="phrase">
         <a:documentation>STRICT NOTE: figure (i.e. images) is not allowed as "phrasing content" in HTML.</a:documentation>
@@ -1331,7 +1331,7 @@
         <!-- specialnoa inline text elements for anchor <a> -->
     </define>
     
-    <!-- =========================== Inline Entities =========================== -->
+    <a:documentation>Inline Entities</a:documentation>
     
     <define name="htmlinline">
         <choice>
@@ -1433,7 +1433,7 @@
         <!-- inlinenoprodnote excludes z3998:production, used so that they don't nest -->
     </define>
     
-    <!-- =================== Flow (Block or Inline) Entities =================== -->
+    <a:documentation>Flow (Block or Inline) Entities</a:documentation>
     
     <define name="flow">
         <a:documentation>flow elements add inlinenoprodnote to block.</a:documentation>
@@ -1523,7 +1523,7 @@
         </choice>
     </define>
     
-    <!-- ========= Br, Line, Linenum, Address, and Div Content Models ========== -->
+    <a:documentation>Br, Line, Linenum, Address, and Div Content Models</a:documentation>
     
     <define name="br">
         <!-- Use: br marks a forced line break. -->
@@ -1533,7 +1533,7 @@
             <empty/>
         </element>
     </define>
-    
+
     <define name="attlist.br" combine="interleave">
         <!--
         Attuse: br
@@ -1649,7 +1649,7 @@
         <ref name="attrs"/>
     </define>
     
-    <!-- === Block Elements: Title, Author, Prodnote, Sidebar === -->
+    <a:documentation>Block Elements: Title, Author, Prodnote, Sidebar</a:documentation>
     
     <define name="inlinetitle">
         <element name="span">
@@ -1925,7 +1925,7 @@
         <ref name="attrsrqd.base"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
     
-    <!-- ====================== Byline, Epigraph, Dateline ===================== -->
+    <a:documentation>Byline, Epigraph, Dateline</a:documentation>
     
     <define name="epigraph">
         <!--
@@ -2017,7 +2017,7 @@
         <ref name="attrs.noclass"/>
     </define>
     
-    <!-- ============================= Poem, Linegroup ========================= -->
+    <a:documentation>Poem, Linegroup</a:documentation>
     
     <define name="linegroup">
         <!-- Use: linegroup provides means to group a set of lines of a poem. -->
@@ -2134,7 +2134,7 @@
         <ref name="attrsrqd.base"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
     
-    <!-- ========================= The Anchor Element ========================== -->
+    <a:documentation>The Anchor Element</a:documentation>
     
     <define name="a">
         <!--
@@ -2220,7 +2220,7 @@
         </optional>
     </define>
     
-    <!-- =========================== Inline Elements =========================== -->
+    <a:documentation>Inline Elements</a:documentation>
     
     <define name="em">
         <!--
@@ -2389,7 +2389,7 @@
             </zeroOrMore>
         </element>
     </define>
-    
+
     <define name="attlist.abbr" combine="interleave">
         <!--
         Attuse: abbr
@@ -2415,7 +2415,7 @@
             </zeroOrMore>
         </element>
     </define>
-    
+
     <define name="attlist.acronym" combine="interleave">
         <!--
         Attuse: acronym
@@ -2529,7 +2529,7 @@
         <ref name="i18n"/>
     </define>
     
-    <!-- =================== Inline Sentence and Word =================== -->
+    <a:documentation>Inline Sentence and Word</a:documentation>
     
     <define name="sent">
         <!-- Use: marks a sentence. -->
@@ -2575,7 +2575,7 @@
         <ref name="attrs.notype"/>
     </define>
     
-    <!-- ======== Page Number, Footnote and Annotation Reference ======== -->
+    <a:documentation>Page Number, Footnote and Annotation Reference</a:documentation>
     
     <define name="pagebreak.block">
         <!--
@@ -2597,7 +2597,7 @@
             <ref name="attlist.pagebreak"/>
         </element>
     </define>
-    
+
     <define name="attlist.pagebreak" combine="interleave">
         <!--
         Attuse: pagebreak
@@ -2640,7 +2640,7 @@
             <text/>
         </element>
     </define>
-    
+
     <define name="attlist.noteref" combine="interleave">
         <!--
         Attuse: noteref
@@ -2694,7 +2694,7 @@
             <text/>
         </element>
     </define>
-    
+
     <define name="attlist.annoref" combine="interleave">
         <!--
         Attuse: annoref
@@ -2734,7 +2734,7 @@
         </optional>
     </define>
     
-    <!-- ============================ Inline Quotes ============================ -->
+    <a:documentation>Inline Quotes</a:documentation>
     
     <define name="q">
         <!--
@@ -2751,7 +2751,7 @@
             </zeroOrMore>
         </element>
     </define>
-    
+
     <define name="attlist.q" combine="interleave">
         <!--
         Attuse: q
@@ -2767,7 +2767,7 @@
         </optional>
     </define>
     
-    <!-- =============================== Images ================================ -->
+    <a:documentation>Images</a:documentation>
     
     <define name="Length">
         <a:documentation>measured in pixels, percent (nn%)</a:documentation>
@@ -2787,7 +2787,7 @@
             <empty/>
         </element>
     </define>
-    
+
     <define name="attlist.img" combine="interleave">
         <!--
         Attuse: img
@@ -2836,7 +2836,7 @@
             </attribute>
         </optional>
     </define>
-    
+
     <define name="figure.imggroup">
         <!--
         Use: figure provides a container for one or more <img> and associated <figcaption>(s).
@@ -2956,7 +2956,7 @@
         </attribute>
     </define>
     
-    <!-- ============================= Paragraphs ============================== -->
+    <a:documentation>Paragraphs</a:documentation>
     
     <define name="p">
         <!-- Use: p contains a paragraph, which may contain subsidiary lists -->
@@ -2983,7 +2983,7 @@
         <ref name="attrs"/>
     </define>
     
-    <!-- =========== Doctitle, Docauthor, Covertitle, and Headings  ============ -->
+    <a:documentation>Doctitle, Docauthor, Covertitle, and Headings </a:documentation>
     
     <define name="doctitle">
         <!--
@@ -3243,7 +3243,7 @@
         <ref name="attrs"/>
     </define>
     
-    <!-- ========================== Block-like Quotes ========================== -->
+    <a:documentation>Block-like Quotes</a:documentation>
     
     <define name="blockquote">
         <!--
@@ -3264,7 +3264,7 @@
             </zeroOrMore>
         </element>
     </define>
-    
+
     <define name="attlist.blockquote" combine="interleave">
         <!--
         Attuse: blockquote
@@ -3281,7 +3281,7 @@
         </optional>
     </define>
     
-    <!-- ================== Definition List, and Other Lists =================== -->
+    <a:documentation>Definition List, and Other Lists</a:documentation>
     
     <define name="dl">
         <!--
@@ -3388,7 +3388,7 @@
             </element>
         </choice>
     </define>
-    
+
     <define name="attlist.list.ordered" combine="interleave">
         <!--
         Attuse: list
@@ -3508,7 +3508,7 @@
             </zeroOrMore>
         </element>
     </define>
-    
+
     <define name="attlist.lic" combine="interleave">
         <!--
         Attuse: lic
@@ -3530,7 +3530,7 @@
         <ref name="attrs.noclass"/>
     </define>
     
-    <!-- =============================== Tables ================================ -->
+    <a:documentation>Tables</a:documentation>
     
     <define name="Scope">
         <a:documentation>    Scope specifies a set of data cells for which the th provides header information.</a:documentation>
@@ -3742,7 +3742,7 @@
             </zeroOrMore>
         </element>
     </define>
-    
+
     <define name="attlist.colgroup" combine="interleave">
         <!--
         Attuse: colgroup
@@ -3775,7 +3775,7 @@
             <empty/>
         </element>
     </define>
-    
+
     <define name="attlist.col" combine="interleave">
         <!--
         Attuse: col
@@ -3824,7 +3824,7 @@
             <ref name="flowtd"/> <!-- em, strong, dfn, code, samp, kbd, time, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
         </element>
     </define>
-    
+
     <define name="attlist.th" combine="interleave">
         <!--
         Attuse: th
@@ -3887,7 +3887,7 @@
             <ref name="flowtd"/> <!-- em, strong, dfn, code, samp, kbd, time, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
         </element>
     </define>
-    
+
     <define name="attlist.td" combine="interleave">
         <!--
         Attuse: td
@@ -3942,7 +3942,7 @@
         <ref name="cellhvalign"/>
     </define>
     
-    <!-- ======================== values for the epub:type and class attributes ======================== -->
+    <a:documentation>values for the epub:type and class attributes</a:documentation>
     
     <define name="types.sectioning">
         <a:documentation>  values for the epub:type and class attributes   </a:documentation>
