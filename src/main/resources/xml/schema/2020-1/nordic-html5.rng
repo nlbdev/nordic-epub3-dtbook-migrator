@@ -248,13 +248,6 @@
     </define>
 
     <define name="coreattrs">
-        <ref name="coreattrs.base"/>
-        <optional>
-            <ref name="attr.type"/>
-        </optional>
-        <optional>
-            <ref name="attr.class"/>
-        </optional>
         <!--
         coreattrs are attributes permissible for most elements
         
@@ -263,7 +256,14 @@
         title    advisory title/amplification
         xml:space    whitespace handling (see http://www.w3.org/TR/xml11/#sec-white-space)
         epub:type
-      -->
+        -->
+        <ref name="coreattrs.base"/>
+        <optional>
+            <ref name="attr.type"/>
+        </optional>
+        <optional>
+            <ref name="attr.class"/>
+        </optional>
     </define>
     
     <define name="i18n">
@@ -321,13 +321,6 @@
     </define>
 
     <define name="attrs">
-        <ref name="attrs.base"/>
-        <optional>
-            <ref name="attr.type"/>
-        </optional>
-        <optional>
-            <ref name="attr.class"/>
-        </optional>
         <!--
         %attrs; is part of most attribute lists. It includes
         
@@ -335,7 +328,14 @@
             id, class, title, xml:space, epub:type
         
         %i18n; from which come the implied attributes: xml:lang, lang and dir
-      -->
+        -->
+        <ref name="attrs.base"/>
+        <optional>
+            <ref name="attr.type"/>
+        </optional>
+        <optional>
+            <ref name="attr.class"/>
+        </optional>
     </define>
     
     <define name="attrsrqd.base">
@@ -365,13 +365,6 @@
     </define>
 
     <define name="attrsrqd">
-        <ref name="attrsrqd.base"/>
-        <optional>
-            <ref name="attr.type"/>
-        </optional>
-        <optional>
-            <ref name="attr.class"/>
-        </optional>
         <!--
         %attrsrqd; includes required id and implied class,
             title, and xml:space (see %coreattrs above)
@@ -379,20 +372,27 @@
         %i18n; from which come the implied attributes: xml:lang, lang and dir
         
         %externalnamespace; (See entity declaration)
-      -->
+        -->
+        <ref name="attrsrqd.base"/>
+        <optional>
+            <ref name="attr.type"/>
+        </optional>
+        <optional>
+            <ref name="attr.class"/>
+        </optional>
     </define>
     
     <a:documentation>Document Structure</a:documentation>
     
     <define name="htmlcontent">
+        <!--
+        htmlContent designates that each html has a <head> of
+        metainformation preceding the <book> content.
+        -->
         <a:documentation>htmlContent designates that each html has a &lt;head&gt; of
             metainformation preceding the &lt;book&gt; content.</a:documentation>
         <ref name="head"/> <!-- head -->
         <ref name="book"/> <!-- body -->
-        <!--
-        htmlContent designates that each html has a <head> of
-        metainformation preceding the <book> content.
-      -->
     </define>
     
     <define name="html">
@@ -1764,6 +1764,11 @@
     </define>
 
     <define name="attlist.prodnote" combine="interleave">
+        <!--
+            @imgref removed. The relationship is stored in img/@longdesc.
+            NOTE: an alternative would be to use aria-describedat, linking from the image to the prodnote:
+            https://dvcs.w3.org/hg/aria-unofficial/raw-file/tip/describedat.html
+        -->
         <attribute name="epub:type">
             <list>
                 <ref name="types"/>
@@ -1779,11 +1784,6 @@
             </list>
         </attribute>
         <ref name="attrsrqd.base"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
-        <!--
-            @imgref removed. The relationship is stored in img/@longdesc.
-            NOTE: an alternative would be to use aria-describedat, linking from the image to the prodnote:
-            https://dvcs.w3.org/hg/aria-unofficial/raw-file/tip/describedat.html
-        -->
     </define>
     
     <define name="sidebar">
@@ -3635,12 +3635,12 @@
     </define>
 
     <define name="attlist.table" combine="interleave">
-        <ref name="attrs"/>
         <!-- summary moved into table/caption/p[@class=~'table-summary'] -->
         <!--
             Most attributes are deprecated. Convert to CSS according to Mozilla:
             http://hg.mozilla.org/mozilla-central/file/3fd770ef6a65/layout/style/html.css
         -->
+        <ref name="attrs"/>
         <optional>
             <attribute name="style"/>
         </optional>
@@ -3667,11 +3667,11 @@
     </define>
     
     <define name="attlist.caption" combine="interleave">
-        <ref name="attrs"/>
         <!--
             STRICT NOTE: the imgref attribute for images is deleted. The images now reference
             the caption instead of the other way around, using the longdesc attribute (see the img element).
         -->
+        <ref name="attrs"/>
     </define>
     
     <define name="thead">
