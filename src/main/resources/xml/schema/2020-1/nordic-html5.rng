@@ -19,56 +19,56 @@
     <define name="Character">
         <a:documentation>a single character from [ISO10646]</a:documentation>
         <data type="string" datatypeLibrary=""/>
+        <!-- a single character from [ISO10646]. -->
     </define>
-    <!-- a single character from [ISO10646]. -->
     
     <define name="ContentType">
         <a:documentation>media type, as per [RFC2046].</a:documentation>
         <data type="string" datatypeLibrary=""/>
+        <!-- media type, as per [RFC2046]. -->
     </define>
-    <!-- media type, as per [RFC2046]. -->
     
     <define name="LanguageCode">
         <a:documentation>a language code, per [RFC4646]. </a:documentation>
         <data type="NMTOKEN"/>
+        <!-- a language code, per [RFC4646]. -->
     </define>
-    <!-- a language code, per [RFC4646]. -->
     
     <define name="Number">
         <a:documentation>one or more digits.</a:documentation>
         <data type="string" datatypeLibrary=""/>
+        <!-- one or more digits. -->
     </define>
-    <!-- one or more digits. -->
     
     <define name="LinkTypes">
         <a:documentation>space-separated list of link types.</a:documentation>
         <data type="string" datatypeLibrary=""/>
+        <!-- space-separated list of link types. -->
     </define>
-    <!-- space-separated list of link types. -->
     
     <define name="MediaDesc">
         <a:documentation>single or comma-separated list of media descriptors;</a:documentation>
         <a:documentation>possible values include BRAILLE, PRINT, PROJECTION, SPEECH, ALL,</a:documentation>
         <a:documentation> or the default SCREEN.</a:documentation>
         <data type="string" datatypeLibrary=""/>
+        <!--
+        single or comma-separated list of media descriptors;
+        possible values include BRAILLE, PRINT, PROJECTION, SPEECH, ALL,
+        or the default SCREEN.
+      -->
     </define>
-    <!--
-    single or comma-separated list of media descriptors;
-    possible values include BRAILLE, PRINT, PROJECTION, SPEECH, ALL,
-    or the default SCREEN.
-  -->
     
     <define name="Text">
         <a:documentation>used for titles etc.</a:documentation>
         <data type="string" datatypeLibrary=""/>
+        <!-- used for titles etc. -->
     </define>
-    <!-- used for titles etc. -->
     
     <define name="URI">
         <a:documentation>a Uniform Resource Identifier, see [RFC2396].</a:documentation>
         <data type="string" datatypeLibrary=""/>
+        <!-- a Uniform Resource Identifier, see [RFC2396]. -->
     </define>
-    <!-- a Uniform Resource Identifier, see [RFC2396]. -->
     
     <!-- ======================== Content Models ======================== -->
     
@@ -81,8 +81,8 @@
             <ref name="note"/> <!-- aside -->
             <ref name="annotation"/> <!-- aside -->
         </choice>
+        <!-- block elements unique to html without imggroup. -->
     </define>
-    <!-- block elements unique to html without imggroup. -->
     
     <define name="inlineinblock">
         <a:documentation>inlines that may alternatively be in block elements.</a:documentation>
@@ -93,8 +93,8 @@
             <ref name="kbd"/> <!-- kbd -->
             <ref name="pagebreak.inline"/> <!-- span -->
         </choice>
+        <!-- inlines that may alternatively be in block elements. -->
     </define>
-    <!-- inlines that may alternatively be in block elements. -->
     
     <define name="block">
         <a:documentation>common non-head elements for use with sectioning elements.</a:documentation>
@@ -174,8 +174,8 @@
             <ref name="block"/> <!-- p, ol, ul, dl, div, blockquote, img, figure, table, address, span, aside, section -->
             <ref name="pagebreak.block"/> <!-- a, samp, kbd, span -->
         </choice>
+        <!-- common non-head elements for use with sectioning elements -->
     </define>
-    <!-- common non-head elements for use with sectioning elements -->
     
     <!-- ========================= Generic Attributes ========================== -->
     
@@ -227,18 +227,21 @@
             <ref name="attr.xmlspace"/>
         </optional>
     </define>
+
     <define name="coreattrs.notype">
         <ref name="coreattrs.base"/>
         <optional>
             <ref name="attr.class"/>
         </optional>
     </define>
+
     <define name="coreattrs.noclass">
         <ref name="coreattrs.base"/>
         <optional>
             <ref name="attr.type"/>
         </optional>
     </define>
+
     <define name="coreattrs">
         <ref name="coreattrs.base"/>
         <optional>
@@ -247,16 +250,16 @@
         <optional>
             <ref name="attr.class"/>
         </optional>
+        <!--
+        coreattrs are attributes permissible for most elements
+        
+        id       document-wide unique id
+        class    space separated list of classes used for rendering
+        title    advisory title/amplification
+        xml:space    whitespace handling (see http://www.w3.org/TR/xml11/#sec-white-space)
+        epub:type
+      -->
     </define>
-    <!--
-    coreattrs are attributes permissible for most elements
-    
-    id       document-wide unique id
-    class    space separated list of classes used for rendering
-    title    advisory title/amplification
-    xml:space    whitespace handling (see http://www.w3.org/TR/xml11/#sec-white-space)
-    epub:type
-  -->
     
     <define name="i18n">
         <a:documentation>i18n internationalization attributes.</a:documentation>
@@ -276,20 +279,20 @@
                 </choice>
             </attribute>
         </optional>
+        <!--
+        i18n internationalization attributes
+            lang
+            xml:lang    language code (as per XML 1.0 spec)
+            dir         direction for weak/neutral text
+                        ltr=left to right
+                        rtl=right to left
+        
+        xhtml recommendation: use xml:lang such as "en-US", on the major
+        containing block, to provide source language for
+        the #IMPLIED values of its descendent elements.
+        See [RFC1556] for handling bi-directional text in MIME.
+      -->
     </define>
-    <!--
-    i18n internationalization attributes
-        lang
-        xml:lang    language code (as per XML 1.0 spec)
-        dir         direction for weak/neutral text
-                    ltr=left to right
-                    rtl=right to left
-    
-    xhtml recommendation: use xml:lang such as "en-US", on the major
-    containing block, to provide source language for
-    the #IMPLIED values of its descendent elements.
-    See [RFC1556] for handling bi-directional text in MIME.
-  -->
     
     <define name="attrs.base">
         <a:documentation>%attrs; is part of most attribute lists.</a:documentation>
@@ -297,18 +300,21 @@
         <ref name="i18n"/>
         <!-- the showin attribute in DTBook maps to the following classes in HTML: showin-xxx, showin-xxp, showin-xlx, showin-xlp, showin-bxx, showin-bxp, showin-blx, showin-blp -->
     </define>
+
     <define name="attrs.notype">
         <ref name="attrs.base"/>
         <optional>
             <ref name="attr.class"/>
         </optional>
     </define>
+
     <define name="attrs.noclass">
         <ref name="attrs.base"/>
         <optional>
             <ref name="attr.type"/>
         </optional>
     </define>
+
     <define name="attrs">
         <ref name="attrs.base"/>
         <optional>
@@ -317,15 +323,15 @@
         <optional>
             <ref name="attr.class"/>
         </optional>
+        <!--
+        %attrs; is part of most attribute lists. It includes
+        
+        %coreattrs; from which come the four #IMPLIED attributes as well as epub:type:
+            id, class, title, xml:space, epub:type
+        
+        %i18n; from which come the implied attributes: xml:lang, lang and dir
+      -->
     </define>
-    <!--
-    %attrs; is part of most attribute lists. It includes
-    
-    %coreattrs; from which come the four #IMPLIED attributes as well as epub:type:
-        id, class, title, xml:space, epub:type
-    
-    %i18n; from which come the implied attributes: xml:lang, lang and dir
-  -->
     
     <define name="attrsrqd.base">
         <ref name="attr.id"/>
@@ -338,18 +344,21 @@
         <ref name="i18n"/>
         <!-- the showin attribute in DTBook maps to the following classes in HTML: showin-xxx, showin-xxp, showin-xlx, showin-xlp, showin-bxx, showin-bxp, showin-blx, showin-blp -->
     </define>
+
     <define name="attrsrqd.notype">
         <ref name="attrsrqd.base"/>
         <optional>
             <ref name="attr.class"/>
         </optional>
     </define>
+
     <define name="attrsrqd.noclass">
         <ref name="attrsrqd.base"/>
         <optional>
             <ref name="attr.type"/>
         </optional>
     </define>
+
     <define name="attrsrqd">
         <ref name="attrsrqd.base"/>
         <optional>
@@ -358,15 +367,15 @@
         <optional>
             <ref name="attr.class"/>
         </optional>
+        <!--
+        %attrsrqd; includes required id and implied class,
+            title, and xml:space (see %coreattrs above)
+        
+        %i18n; from which come the implied attributes: xml:lang, lang and dir
+        
+        %externalnamespace; (See entity declaration)
+      -->
     </define>
-    <!--
-    %attrsrqd; includes required id and implied class,
-        title, and xml:space (see %coreattrs above)
-    
-    %i18n; from which come the implied attributes: xml:lang, lang and dir
-    
-    %externalnamespace; (See entity declaration)
-  -->
     
     <!-- ========================= Document Structure ========================== -->
     
@@ -375,18 +384,18 @@
             metainformation preceding the &lt;book&gt; content.</a:documentation>
         <ref name="head"/> <!-- head -->
         <ref name="book"/> <!-- body -->
+        <!--
+        htmlContent designates that each html has a <head> of
+        metainformation preceding the <book> content.
+      -->
     </define>
-    <!--
-    htmlContent designates that each html has a <head> of
-    metainformation preceding the <book> content.
-  -->
     
-    <!--
-    Use: html is the root element in the Digital Talking Book DTD.
-    <html> contains metadata in <head> and the contents itself
-    in <book>.
-  -->
     <define name="html">
+        <!--
+        Use: html is the root element in the Digital Talking Book DTD.
+        <html> contains metadata in <head> and the contents itself
+        in <book>.
+      -->
         <element name="html">
             <a:documentation>The HTML root element (&lt;html&gt;) represents the root of an HTML document. All other elements must be descendants of this element.</a:documentation>
             <!-- HTML content model: head body -->
@@ -402,21 +411,21 @@
             <ref name="htmlcontent"/> <!-- head, body -->
         </element>
     </define>
-    <!--
-    Attuse: html
-    
-    "version" is required, and contains the specific
-    version of the dtd, so that the dtd version for any html can
-    be recognized.
-    
-    "xmlns" is the URL where this dtd and its related materials can
-    be found.
-    
-    "%i18n;" internationalization attributes characterize the <book>.
-    Those values may be adjusted for language changes within it.
-  -->
     
     <define name="attlist.html" combine="interleave">
+        <!--
+        Attuse: html
+        
+        "version" is required, and contains the specific
+        version of the dtd, so that the dtd version for any html can
+        be recognized.
+        
+        "xmlns" is the URL where this dtd and its related materials can
+        be found.
+        
+        "%i18n;" internationalization attributes characterize the <book>.
+        Those values may be adjusted for language changes within it.
+      -->
         <a:documentation>Attribute list</a:documentation>
         <ref name="i18n"/>
     </define>
@@ -430,20 +439,19 @@
             <ref name="style"/>
             <ref name="script"/>
         </choice>
+        <!-- optional head elements -->
     </define>
-    <!-- optional head elements -->
     
-    <!--
-    Use: head contains metainformation about the book but no
-    actual content of the book itself, which is placed in <book>.
-    This information is consonant with the <head> information
-    in xhtml, see [XHTML11STRICT].
-  -->
     <define name="head">
+        <!--
+        Use: head contains metainformation about the book but no
+        actual content of the book itself, which is placed in <book>.
+        This information is consonant with the <head> information
+        in xhtml, see [XHTML11STRICT].
+      -->
         <a:documentation>&lt;head&gt; contains metainformation about the book but no
             actual content of the book itself, which is placed in &lt;book&gt;.</a:documentation>
         <element name="head">
-            
             <!-- HTML content model: title & base? & (link | meta | noscript | script | style | template)* -->
             <!-- Strict content model: meta[charset] title meta[name=viewport] meta[name=nordic:guidelines] (meta | link)* link[rel=profile]? -->
             <ref name="attlist.head"/>
@@ -492,14 +500,14 @@
         <!-- NOTE: profile moved to head as link element -->
     </define>
     
-    <!--
-    Use: link is an empty element appearing in the <head> section
-    of a document that establishes a connection between the current
-    document and another document. The <link> element conveys
-    relationship information (for example, "next" and "previous") that
-    may be rendered by user agents in a variety of ways.
-  -->
     <define name="link">
+        <!--
+        Use: link is an empty element appearing in the <head> section
+        of a document that establishes a connection between the current
+        document and another document. The <link> element conveys
+        relationship information (for example, "next" and "previous") that
+        may be rendered by user agents in a variety of ways.
+      -->
         <a:documentation>&lt;link&gt; is an empty element appearing in the &lt;head&gt;section of a document.</a:documentation>
         <a:documentation>&lt;link&gt; establishes a connection between the current document and another document.</a:documentation>
         <element name="link">
@@ -507,17 +515,18 @@
             <empty/>
         </element>
     </define>
-    <!--
-    Attuse: link
-    
-    Each attribute use indicated by a parameter entity is
-    defined in the comment following its definition.
-    
-    Attuse: head
-    When rel="profile", href is points to a target that may provide
-    additional information about the current document.
-  -->
+
     <define name="attlist.link" combine="interleave">
+        <!--
+        Attuse: link
+        
+        Each attribute use indicated by a parameter entity is
+        defined in the comment following its definition.
+        
+        Attuse: head
+        When rel="profile", href is points to a target that may provide
+        additional information about the current document.
+      -->
         <ref name="attrs"/>
         <optional>
             <attribute name="href">
@@ -546,37 +555,38 @@
         </optional>
     </define>
     
-    <!--
-    Use: meta indicates metadata about the book. It is an empty
-    element that may appear repeatedly only in <head>.
-    Meta is the container for the Dublin Core attributes, 
-    and the additional DTBook attributes.
-    As a minumum the dc:Title and dtb:uid meta are required.
-    Inclusion of the full range of applicable Dublin Core elements is 
-    recommended, to make a DTBook document more useful as stand-alone 
-    content.
-    The Dublin Core specification is available at:
-        http://purl.org/dc/
-  -->
     <define name="meta">
+        <!--
+        Use: meta indicates metadata about the book. It is an empty
+        element that may appear repeatedly only in <head>.
+        Meta is the container for the Dublin Core attributes, 
+        and the additional DTBook attributes.
+        As a minumum the dc:Title and dtb:uid meta are required.
+        Inclusion of the full range of applicable Dublin Core elements is 
+        recommended, to make a DTBook document more useful as stand-alone 
+        content.
+        The Dublin Core specification is available at:
+            http://purl.org/dc/
+      -->
         <element name="meta">
             <ref name="attlist.meta"/>
             <empty/>
         </element>
     </define>
-    <!--
-    Attuse: meta
-    
-    "http-equiv" connects the content attribute
-    value to an http header field.
-    
-    "name" value identifies the specific kind of
-    content value.
-    
-    "content" indicates the value for that "name",
-    possibly constrained by the semantics for the individual names.
-  -->
+
     <define name="attlist.meta" combine="interleave">
+        <!--
+        Attuse: meta
+        
+        "http-equiv" connects the content attribute
+        value to an http header field.
+        
+        "name" value identifies the specific kind of
+        content value.
+        
+        "content" indicates the value for that "name",
+        possibly constrained by the semantics for the individual names.
+      -->
         <ref name="i18n"/>
         <optional>
             <attribute name="http-equiv">
@@ -637,11 +647,11 @@
     
     <!-- ============================ Body Content ============================= -->
     
-    <!--
-    Use: body surrounds the actual content of the document.
-    <head>, which contains metadata, precedes <body>.
-  -->
     <define name="book">
+        <!--
+        Use: body surrounds the actual content of the document.
+        <head>, which contains metadata, precedes <body>.
+      -->
         <element name="body">
             <a:documentation>&lt;body&gt; surrounds the actual content of the document.</a:documentation>
             <a:documentation>&lt;head&gt;, which contains metadata, precedes &lt;body&gt;.</a:documentation>
@@ -709,7 +719,6 @@
                 </group>
             </choice>
             <!-- (attributes and content is defined by cover/frontmatter/bodymatter/backmatter definitions) -->
-            
             <zeroOrMore>
                 <ref name="script"/>
             </zeroOrMore>
@@ -747,14 +756,14 @@
         </zeroOrMore>
     </define>
     
-    <!--
-    Use: frontmatter usually contains <doctitle> and <docauthor>, as
-    well as preliminary material that is often enclosed in appropriate
-    <level> or <level1>. Content may include copyright notice, foreword,
-    acknowledgments, table of contents, etc. <frontmatter> serves as a
-    guide to the content and nature of a <book>.
-  -->
     <define name="frontmatter">
+        <!--
+        Use: frontmatter usually contains <doctitle> and <docauthor>, as
+        well as preliminary material that is often enclosed in appropriate
+        <level> or <level1>. Content may include copyright notice, foreword,
+        acknowledgments, table of contents, etc. <frontmatter> serves as a
+        guide to the content and nature of a <book>.
+      -->
         <a:documentation>&lt;frontmatter&gt; usually contains &lt;doctitle&gt; and &lt;docauthor&gt;</a:documentation>
         <a:documentation>Content may include copyright notice, foreword, acknowledgments, table of contents, etc.</a:documentation>
         <a:documentation>&lt;frontmatter&gt; serves as a guide to the content and nature of a &lt;book&gt;</a:documentation>
@@ -781,6 +790,7 @@
             <ref name="level1.content"/>
         </choice>
     </define>
+
     <define name="frontmatter.types">
         <optional>
             <choice>
@@ -790,16 +800,16 @@
         </optional>
     </define>
     
-    <!--
-    Use: bodymatter consists of the text proper of a book, as contrasted
-    with preliminary material <frontmatter> or supplementary information
-    in <backmatter>.
-  -->
-    <!--
-    HB: 2004-03-25 29: bodymatter: eliminate %block;
-    level or level1 container is required.
-  -->
     <define name="bodymatter">
+        <!--
+        Use: bodymatter consists of the text proper of a book, as contrasted
+        with preliminary material <frontmatter> or supplementary information
+        in <backmatter>.
+      -->
+        <!--
+        HB: 2004-03-25 29: bodymatter: eliminate %block;
+        level or level1 container is required.
+      -->
         <a:documentation>&lt;bodymatter&gt; consists of the text proper of a book</a:documentation>
                 <choice>
             <group>
@@ -849,17 +859,17 @@
             </group>
         </choice>
     </define>
+
     <define name="bodymatter.types">
         <ref name="types.sectioning"/>
     </define>
     
-    <!--
-    Use: backmatter contains supplementary material such as
-    appendices, glossaries, bibliographies, and indices. It follows
-    the bodymatter of the book.
-  -->
     <define name="backmatter">
-        
+        <!--
+        Use: backmatter contains supplementary material such as
+        appendices, glossaries, bibliographies, and indices. It follows
+        the bodymatter of the book.
+      --> 
         <a:documentation>&lt;backmatter&gt; contains supplementary material such as appendices, glossaries, bibliographies, indices.</a:documentation>
         <a:documentation>It follows the bodymatter of the book.</a:documentation>
         <attribute name="epub:type">
@@ -885,6 +895,7 @@
             <ref name="level1.content"/>
         </choice>
     </define>
+
     <define name="backmatter.types">
         <optional>
             <ref name="types.sectioning"/>
@@ -894,7 +905,6 @@
     <!-- ============ Hierarchic Structure (6 levels deep) ============ -->
     
     <define name="level1">
-    
         <a:documentation>Hierarchic Structure (6 levels deep).</a:documentation>
         <choice>
             <element name="section">
@@ -906,6 +916,7 @@
             </element>
         </choice>
     </define>
+
     <define name="level1.content">
         <ref name="attlist.level1"/>
         <choice>
@@ -937,6 +948,7 @@
             </group>
         </choice>
     </define>
+
     <define name="attlist.level1" combine="interleave">
         <ref name="attrsrqd.notype"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
@@ -961,10 +973,12 @@
             </element>
         </choice>
     </define>
+
     <define name="level2.content">
         <ref name="attlist.level2"/>
         <ref name="level2.content.noattrs"/>
     </define>
+
     <define name="level2.content.noattrs">
         <choice>
             <group>
@@ -995,6 +1009,7 @@
             </group>
         </choice>
     </define>
+
     <define name="attlist.level2" combine="interleave">
         <optional>
             <attribute name="epub:type">
@@ -1022,6 +1037,7 @@
             </element>
         </choice>
     </define>
+
     <define name="level3.content">
         <ref name="attlist.level3"/>
         <choice>
@@ -1053,6 +1069,7 @@
             </group>
         </choice>
     </define>
+
     <define name="attlist.level3" combine="interleave">
         <optional>
             <attribute name="epub:type">
@@ -1080,6 +1097,7 @@
             </element>
         </choice>
     </define>
+
     <define name="level4.content">
         <ref name="attlist.level4"/>
         <choice>
@@ -1111,6 +1129,7 @@
             </group>
         </choice>
     </define>
+
     <define name="attlist.level4" combine="interleave">
         <optional>
             <attribute name="epub:type">
@@ -1138,6 +1157,7 @@
             </element>
         </choice>
     </define>
+
     <define name="level5.content">
         <ref name="attlist.level5"/>
         <choice>
@@ -1169,6 +1189,7 @@
             </group>
         </choice>
     </define>
+
     <define name="attlist.level5" combine="interleave">
         <optional>
             <attribute name="epub:type">
@@ -1196,6 +1217,7 @@
             </element>
         </choice>
     </define>
+
     <define name="level6.content">
         <ref name="attlist.level6"/>
         <choice>
@@ -1227,6 +1249,7 @@
             </group>
         </choice>
     </define>
+
     <define name="attlist.level6" combine="interleave">
         <optional>
             <attribute name="epub:type">
@@ -1259,6 +1282,7 @@
             <ref name="math"/> <!-- MathML -->
         </choice>
     </define>
+
     <define name="phrasenodfn">
         <choice>
             <ref name="em"/> <!-- em -->
@@ -1271,8 +1295,8 @@
             <ref name="acronym"/> <!-- abbr -->
             <ref name="math"/> <!-- MathML -->
         </choice>
+        <!-- inline text elements -->
     </define>
-    <!-- inline text elements -->
     
     <define name="special">
         <choice>
@@ -1288,8 +1312,8 @@
             <ref name="bdo"/> <!-- bdo -->
             <ref name="math"/> <!-- MathML -->
         </choice>
+        <!-- special inline text elements -->
     </define>
-    <!-- special inline text elements -->
     
     <define name="specialnoa">
         <choice>
@@ -1304,8 +1328,8 @@
             <ref name="bdo"/> <!-- bdo -->
             <ref name="math"/> <!-- MathML -->
         </choice>
+        <!-- specialnoa inline text elements for anchor <a> -->
     </define>
-    <!-- specialnoa inline text elements for anchor <a> -->
     
     <!-- =========================== Inline Entities =========================== -->
     
@@ -1316,6 +1340,7 @@
             <ref name="noteref"/> <!-- a -->
         </choice>
     </define>
+
     <define name="htmlinlinenoa">
         <choice>
             <ref name="sent"/> <!-- span -->
@@ -1324,8 +1349,8 @@
             <!-- STRICT NOTE: The DTBook element "prodnote" is mapped to "aside" in HTML, which is not allowed as HTML "phrasing content". This means that prodnotes must not be allowed to be placed as inline content in DTBook. -->
             <!-- STRICT NOTE: The DTBook elements "annoref" and "noteref" is mapped to "a" in HTML. In HTML, "a" cannot have "a" descendants which means html:annorefs and html:noterefs must be disallowed inside html:a elements. -->
         </choice>
+        <!-- html added inline text elements -->
     </define>
-    <!-- html added inline text elements -->
     
     <define name="inline">
         <choice>
@@ -1334,8 +1359,8 @@
             <ref name="special"/> <!-- a, img, br, q, sub, sup, span, bdo -->
             <ref name="htmlinline"/> <!-- span, a -->
         </choice>
+        <!-- inline text elements -->
     </define>
-    <!-- inline text elements -->
     
     <define name="inlinenoa">
         <choice>
@@ -1345,6 +1370,7 @@
             <ref name="htmlinlinenoa"/> <!-- span -->
         </choice>
     </define>
+
     <define name="inlinenodfn">
         <choice>
             <text/>
@@ -1352,8 +1378,8 @@
             <ref name="special"/> <!-- a, img, br, q, sub, sup, span, bdo -->
             <ref name="htmlinlinenoa"/> <!-- span -->
         </choice>
+        <!-- inlinenoa excludes nested <a> -->
     </define>
-    <!-- inlinenoa excludes nested <a> -->
     
     <define name="inlines">
         <choice>
@@ -1366,8 +1392,8 @@
             <ref name="annoref"/> <!-- a -->
             <ref name="noteref"/> <!-- a -->
         </choice>
+        <!-- inlines excludes direct nesting of sentences (z3998:sentence) -->
     </define>
-    <!-- inlines excludes direct nesting of sentences (z3998:sentence) -->
     
     <define name="inlinew">
         <choice>
@@ -1375,8 +1401,8 @@
             <ref name="phrase"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr -->
             <ref name="special"/> <!-- a, img, br, q, sub, sup, span, bdo -->
         </choice>
+        <!-- inlinew for word z3998:word excludes any of the "htmlinline" content -->
     </define>
-    <!-- inlinew for word z3998:word excludes any of the "htmlinline" content -->
     
     <define name="inlinenopagebreak">
         <a:documentation>inlinenopagebreak excludes pagebreaks directly inside table, th and td.</a:documentation>
@@ -1389,8 +1415,8 @@
             <ref name="annoref"/> <!-- a -->
             <ref name="noteref"/> <!-- a -->
         </choice>
+        <!-- inlinenopagebreak excludes pagebreaks directly inside <table>, <th> and <td>. -->
     </define>
-    <!-- inlinenopagebreak excludes pagebreaks directly inside <table>, <th> and <td>. -->
     
     <define name="inlinenoprodnote">
         <a:documentation>inlinenoprodnote excludes production, used so that they don't nest </a:documentation>
@@ -1404,8 +1430,8 @@
             <ref name="annoref"/> <!-- a -->
             <ref name="noteref"/> <!-- a -->
         </choice>
+        <!-- inlinenoprodnote excludes z3998:production, used so that they don't nest -->
     </define>
-    <!-- inlinenoprodnote excludes z3998:production, used so that they don't nest -->
     
     <!-- =================== Flow (Block or Inline) Entities =================== -->
     
@@ -1414,7 +1440,6 @@
         <choice>
             <zeroOrMore>
                 <ref name="inlinenoprodnote"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
-             
             </zeroOrMore>
             <zeroOrMore>
                 <choice>
@@ -1426,8 +1451,8 @@
                 </choice>
             </zeroOrMore>
         </choice>
+        <!-- flow elements add inlinenoprodnote to block -->
     </define>
-    <!-- flow elements add inlinenoprodnote to block -->
     
     <define name="flowtd">
         <a:documentation>flowtd ideally excludes pagebreak other than at the end of the content, although</a:documentation>
@@ -1453,11 +1478,11 @@
                 </optional>
             </group>
         </choice>
+        <!--
+          flowtd ideally excludes pagebreak other than at the end of the content, although
+          it can get in indirectly through elements of %blocknoimggroup;
+        -->
     </define>
-    <!--
-      flowtd ideally excludes pagebreak other than at the end of the content, although
-      it can get in indirectly through elements of %blocknoimggroup;
-    -->
     
     <define name="flownotable">
         <choice>
@@ -1475,6 +1500,7 @@
             </zeroOrMore>
         </choice>
     </define>
+
     <define name="flowlic">
         <choice>
             <zeroOrMore>
@@ -1499,31 +1525,32 @@
     
     <!-- ========= Br, Line, Linenum, Address, and Div Content Models ========== -->
     
-    <!-- Use: br marks a forced line break. -->
     <define name="br">
+        <!-- Use: br marks a forced line break. -->
         <a:documentation>Use: br marks a forced line break. </a:documentation>
         <element name="br">
             <ref name="attlist.br"/>
             <empty/>
         </element>
     </define>
-    <!--
-    Attuse: br
     
-    The %coreattrs; only appear, as there is no content
-    to which the more general %attrs; apply.
-  -->
     <define name="attlist.br" combine="interleave">
+        <!--
+        Attuse: br
+        
+        The %coreattrs; only appear, as there is no content
+        to which the more general %attrs; apply.
+      -->
         <a:documentation> The %coreattrs; only appear, as there is no content </a:documentation>
         <a:documentation> to which the more general %attrs; apply.</a:documentation>
         <ref name="coreattrs"/>
     </define>
     
-    <!--
-    Use: line marks a single logical line of text. Often used in
-    conjunction with linenum in documents with numbered lines.
-  -->
     <define name="line">
+        <!--
+        Use: line marks a single logical line of text. Often used in
+        conjunction with linenum in documents with numbered lines.
+      -->
         <a:documentation> Use: line marks a single logical line of text. Often used in</a:documentation>
         <a:documentation>  conjunction with linenum in documents with numbered lines..</a:documentation>
         <element name="p">
@@ -1538,6 +1565,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.line" combine="interleave">
         <attribute name="class">
             <list>
@@ -1549,10 +1577,9 @@
         <ref name="attrs.noclass"/>
     </define>
     
-    <!-- Use: linenum contains a line number, for example in legal text, or <poem>. -->
     <define name="linenum">
+        <!-- Use: linenum contains a line number, for example in legal text, or <poem>. -->
         <a:documentation> Use: linenum contains a line number, for example in legal text, or poem. </a:documentation>
-      
         <element name="span">
             <attribute name="class">
                 <list>
@@ -1566,17 +1593,16 @@
         </element>
     </define>
     
-    <!--
-    Use: address contains a location at which a person or agency
-    may be contacted. By use of <p class="line"> to contain content of the
-    individual lines, the class attribute can also be used to identify
-    the content of that "line". For example, class values might include:
-    name, address, region (state. province, etc.), country, location
-    code (such as zipcode, provincial code), phone, fax, email, etc.
-  -->
     <define name="address">
+        <!--
+        Use: address contains a location at which a person or agency
+        may be contacted. By use of <p class="line"> to contain content of the
+        individual lines, the class attribute can also be used to identify
+        the content of that "line". For example, class values might include:
+        name, address, region (state. province, etc.), country, location
+        code (such as zipcode, provincial code), phone, fax, email, etc.
+      -->
         <a:documentation> Use: address contains a location at which a person or agency may be contacted.</a:documentation>
-       
         <element name="address">
             <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | form | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
             <!-- Strict content model: (p | em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
@@ -1591,23 +1617,23 @@
             </choice>
         </element>
     </define>
+
     <define name="attlist.address" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: div is a generic container for subdivisions of content. The
-    <section> hierarchy, should mark the major hierarchical structures of a book,
-    while <div> is used in less formal circumstances or when for production purposes
-    it is desired that a structure should be treated differently.
-    Compare with <span>, which is used in inline settings.
-  -->
     <define name="div">
+        <!--
+        Use: div is a generic container for subdivisions of content. The
+        <section> hierarchy, should mark the major hierarchical structures of a book,
+        while <div> is used in less formal circumstances or when for production purposes
+        it is desired that a structure should be treated differently.
+        Compare with <span>, which is used in inline settings.
+      -->
         <a:documentation>Use: div is a generic container for subdivisions of content. The section hierarchy</a:documentation>
         <a:documentation> should mark the major hierarchical structures of a book,while div is used in less formal</a:documentation>
         <a:documentation> circumstances or when for production purposes it is desired that a structure should be treated </a:documentation>
         <a:documentation>differently.Compare with span, which is used in inline settings.</a:documentation>
-        
         <element name="div">
             <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
             <!-- Strict content model: (h1 | p | ol | ul | dl | div | blockquote | img | figure | table | address | span | aside | section | a | samp | kbd)+ -->
@@ -1618,6 +1644,7 @@
             </oneOrMore>
         </element>
     </define>
+
     <define name="attlist.div" combine="interleave">
         <ref name="attrs"/>
     </define>
@@ -1629,6 +1656,7 @@
             <ref name="title.content"/>
         </element>
     </define>
+
     <define name="title">
         <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
         <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
@@ -1653,12 +1681,14 @@
             </element>
         </choice>
     </define>
+
     <define name="title.content">
         <ref name="attlist.title"/>
         <zeroOrMore>
             <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
         </zeroOrMore>
     </define>
+
     <define name="attlist.title" combine="interleave">
         <attribute name="class">
             <list>
@@ -1673,16 +1703,17 @@
     <!-- Use: author identifies the writer of a work. -->
     <define name="author.inline">
         <a:documentation>Use: author identifies the writer of a work.</a:documentation>
-        
         <element name="span">
             <ref name="author"/>
         </element>
     </define>
+
     <define name="author.block">
         <element name="p">
             <ref name="author"/>
         </element>
     </define>
+
     <define name="author">
         <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
         <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
@@ -1691,6 +1722,7 @@
             <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
         </zeroOrMore>
     </define>
+
     <define name="attlist.author" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -1702,22 +1734,21 @@
         <ref name="attrs.notype"/>
     </define>
     
-    <!--
-    Use: prodnote contains language added to the alternative-format
-    version by the producer; commonly used to:
-    1) provide descriptions of one or more visual elements such
-        as charts, graphs, etc.
-    2) supply operating instructions
-    3) describe differences between the print book and the audio
-    version.
-  -->
     <define name="prodnote">
+        <!--
+        Use: prodnote contains language added to the alternative-format
+        version by the producer; commonly used to:
+        1) provide descriptions of one or more visual elements such
+            as charts, graphs, etc.
+        2) supply operating instructions
+        3) describe differences between the print book and the audio
+        version.
+      -->
         <a:documentation>Use: prodnote contains language added to the alternative-format version by the producer; </a:documentation>
         <a:documentation>commonly used to:</a:documentation>
         <a:documentation>1) provide descriptions of one or more visual elements such as charts, graphs, etc.</a:documentation>
         <a:documentation>2) supply operating instructions.</a:documentation>
         <a:documentation> 3) describe differences between the print book and the audio version.</a:documentation>
-        
         <element name="aside">
             <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
             <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | figure | br | q | sub | sup | span | bdo | p | ol | ul | dl | div | blockquote | table | address | (text))* -->
@@ -1725,6 +1756,7 @@
             <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
         </element>
     </define>
+
     <define name="attlist.prodnote" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -1748,12 +1780,12 @@
         -->
     </define>
     
-    <!--
-    Use: aside epub:type="sidebar" contains information supplementary to the main
-    text and/or narrative flow and is often boxed and printed apart
-    from the main text block on a page. It may have a heading <hd>.
-  -->
     <define name="sidebar">
+        <!--
+        Use: aside epub:type="sidebar" contains information supplementary to the main
+        text and/or narrative flow and is often boxed and printed apart
+        from the main text block on a page. It may have a heading <hd>.
+      -->
         <a:documentation> Use: aside epub:type="sidebar" contains information supplementary to the main</a:documentation>
         <a:documentation>text and/or narrative flow and is often boxed and printed apart</a:documentation>
         <a:documentation>from the main text block on a page. It may have a heading hd.</a:documentation>
@@ -1783,6 +1815,7 @@
         </choice>
 
     </define>
+
     <define name="attlist.sidebar" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -1801,11 +1834,11 @@
         <ref name="attrsrqd.base"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
     
-    <!--
-    Use: note marks a footnote, endnote, etc. Any local reference to
-    <note id="yyy"> is by <noteref idref="#yyy">.
-  -->
     <define name="note">
+        <!--
+        Use: note marks a footnote, endnote, etc. Any local reference to
+        <note id="yyy"> is by <noteref idref="#yyy">.
+      -->
         <a:documentation>   Use: note marks a footnote, endnote, etc. Any local reference to</a:documentation>
         <a:documentation> note id="yyy" is by noteref idref="#yyy".</a:documentation>
         <element name="aside">
@@ -1825,6 +1858,7 @@
             </choice>
         </element>
     </define>
+
     <define name="attlist.note" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -1843,14 +1877,14 @@
         <ref name="attrsrqd.base"/> <!-- attrsrqd instead of attrs because all sectioning elements should have id attributes -->
     </define>
     
-    <!--
-    Use: annotation is a comment on or explanation of a portion of
-    a printed book. It differs from <note> in that an <annotation>
-    is usually set in the margin or on a facing page, often with
-    no explicit reference to it inserted in the text. Any local
-    reference to <annotation id="xxx"> is by <annoref idref="#xxx">.
-  -->
     <define name="annotation">
+        <!--
+        Use: annotation is a comment on or explanation of a portion of
+        a printed book. It differs from <note> in that an <annotation>
+        is usually set in the margin or on a facing page, often with
+        no explicit reference to it inserted in the text. Any local
+        reference to <annotation id="xxx"> is by <annoref idref="#xxx">.
+      -->
         <a:documentation> Use: annotation is a comment on or explanation of a portion of a printed book. </a:documentation>
         <a:documentation> It differs from note in that an annotation is usually set in the margin or on a facing page, </a:documentation>
         <a:documentation> often with no explicit reference to it inserted in the text. </a:documentation>
@@ -1872,6 +1906,7 @@
             </choice>
         </element>
     </define>
+
     <define name="attlist.annotation" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -1892,11 +1927,11 @@
     
     <!-- ====================== Byline, Epigraph, Dateline ===================== -->
     
-    <!--
-    Use: epigraph marks a quotation placed at the beginning of a work
-    or a division of a work.
-  -->
     <define name="epigraph">
+        <!--
+        Use: epigraph marks a quotation placed at the beginning of a work
+        or a division of a work.
+      -->
         <a:documentation>  Use: epigraph marks a quotation placed at the beginning of a work or a division of a work.</a:documentation>
         <choice>
             <element name="blockquote">
@@ -1915,6 +1950,7 @@
             </element>
         </choice>
     </define>
+
     <define name="attlist.epigraph" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -1926,11 +1962,11 @@
         <ref name="attrs.notype"/>
     </define>
     
-    <!--
-    Use: byline contains information about the creator of or contributor
-    to a work. 
-  -->
     <define name="byline">
+        <!--
+        Use: byline contains information about the creator of or contributor
+        to a work. 
+      -->
         <a:documentation>  Use: byline contains information about the creator of or contributor to a work. </a:documentation>
         <element name="span">
             <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
@@ -1941,6 +1977,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.byline" combine="interleave">
         <attribute name="class">
             <list>
@@ -1952,14 +1989,13 @@
         <ref name="attrs.noclass"/>
     </define>
     
-    <!--
-    Use: dateline contains information about the time and/or place at which
-    a work was authored. 
-  -->
-    <!-- MM: 2005-04-22 dateline - changed ATTLIST to %attrs; -->
     <define name="dateline"> 
+        <!--
+        Use: dateline contains information about the time and/or place at which
+        a work was authored. 
+      -->
+        <!-- MM: 2005-04-22 dateline - changed ATTLIST to %attrs; -->
         <a:documentation>  Use: dateline contains information about the time and/or place at which a work was authored.  </a:documentation>
-        
         <element name="span">
             <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
             <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
@@ -1969,6 +2005,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.dateline" combine="interleave">
         <attribute name="class">
             <list>
@@ -1982,10 +2019,9 @@
     
     <!-- ============================= Poem, Linegroup ========================= -->
     
-    <!-- Use: linegroup provides means to group a set of lines of a poem. -->
     <define name="linegroup">
+        <!-- Use: linegroup provides means to group a set of lines of a poem. -->
         <a:documentation>  Use: linegroup provides means to group a set of lines of a poem.  </a:documentation>
-        
         <!-- linegroups with headlines must be section elements; otherwise they must be div elements -->
         <choice>
             <element name="div">
@@ -2002,6 +2038,7 @@
             </element>
         </choice>
     </define>
+
     <define name="linegroup.common">
         <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
         <!-- Strict content model: (h1 | span | p | section | aside | a | ul | ol | dl | blockquote | img | figure)* -->
@@ -2027,6 +2064,7 @@
             </choice>
         </zeroOrMore>
     </define>
+
     <define name="attlist.linegroup" combine="interleave">
         <attribute name="class">
             <list>
@@ -2048,8 +2086,8 @@
         </optional>
     </define>
     
-    <!-- Use: poem is a complete poem or fragment thereof. -->
     <define name="poem">
+        <!-- Use: poem is a complete poem or fragment thereof. -->
         <a:documentation>  Use: poem is a complete poem or fragment thereof.  </a:documentation>
         <element name="section">
             <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
@@ -2073,6 +2111,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.poem" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -2097,15 +2136,14 @@
     
     <!-- ========================= The Anchor Element ========================== -->
     
-    <!--
-    Use: a contains an anchor, which is used to reference another
-    location, within the same or another <html>.
-  -->
     <define name="a">
+        <!--
+        Use: a contains an anchor, which is used to reference another
+        location, within the same or another <html>.
+      -->
         <a:documentation>  Use: a contains an anchor, which is used to reference another location, within the same </a:documentation>
         <a:documentation>  or another html.</a:documentation>
         <element name="a">
-            
             <!-- HTML content model: Transparent (same content model as parent), but descendants must not be "interactive", which for us means one of (a | audio | button | details | embed | iframe | input | keygen | label | object | select | textarea | video) -->
             <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | img | br | q | sub | sup | span | bdo | (text))* -->
             <ref name="attlist.a"/>
@@ -2114,35 +2152,36 @@
             </zeroOrMore>
         </element>
     </define>
-    <!--
-    Attuse: a
-    
-    "href" value may have three forms:
-    
-    1) '#idref', in the <html>, to the element type having the
-        referenced id value;
-    
-    2) 'uri', a uniform resource identifier to a resource, typically a
-        document, see [RFC2396], possibly restricted to work with only
-        the <html> document content, as referenced content is
-        expected to be available on the same media, and off-media
-        references may not be available;
-    
-    3) 'uri#xxx', in the resource uri, the element with id='xxx'.
-    
-    Uses of the remaining attributes other than %attrs; are:
-    
-        "hreflang" is the language code of the href target, see [RFC4646];
-    
-        "rel" is a list of forward link type(s), the relationship(s)
-            expressed by the href value to the target, space-separated
-            if multiple;
-    
-        "accesskey"=accessibility key character shortcut;
-    
-        "tabindex"=tabbing order.
-  -->
+
     <define name="attlist.a" combine="interleave">
+        <!--
+        Attuse: a
+        
+        "href" value may have three forms:
+        
+        1) '#idref', in the <html>, to the element type having the
+            referenced id value;
+        
+        2) 'uri', a uniform resource identifier to a resource, typically a
+            document, see [RFC2396], possibly restricted to work with only
+            the <html> document content, as referenced content is
+            expected to be available on the same media, and off-media
+            references may not be available;
+        
+        3) 'uri#xxx', in the resource uri, the element with id='xxx'.
+        
+        Uses of the remaining attributes other than %attrs; are:
+        
+            "hreflang" is the language code of the href target, see [RFC4646];
+        
+            "rel" is a list of forward link type(s), the relationship(s)
+                expressed by the href value to the target, space-separated
+                if multiple;
+        
+            "accesskey"=accessibility key character shortcut;
+        
+            "tabindex"=tabbing order.
+      -->
         <ref name="attrs"/>
         <optional>
             <attribute name="type">
@@ -2183,11 +2222,11 @@
     
     <!-- =========================== Inline Elements =========================== -->
     
-    <!--
-    Use: em indicates emphasis. Usually <em> is rendered in italics.
-    Compare with <strong>.
-  -->
     <define name="em">
+        <!--
+        Use: em indicates emphasis. Usually <em> is rendered in italics.
+        Compare with <strong>.
+      -->
         <a:documentation> Use: em indicates emphasis. Usually em is rendered in italics.Compare with strong.</a:documentation>
         <element name="em">
             <ref name="attlist.em"/>
@@ -2196,15 +2235,16 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.em" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: strong marks stronger emphasis than <em>. Visually <strong> is
-    usually rendered bold.
-  -->
     <define name="strong">
+        <!--
+        Use: strong marks stronger emphasis than <em>. Visually <strong> is
+        usually rendered bold.
+      -->
         <a:documentation> Use: strong marks stronger emphasis than em. Visually strong is usually rendered bold.</a:documentation>
         <element name="strong">
             <ref name="attlist.strong"/>
@@ -2213,16 +2253,17 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.strong" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: dfn marks the first occurrence of a word or term that is
-    defined or explained there or elsewhere in <book>. Often
-    <dfn> is rendered in italics, sometimes in parentheses.
-  -->
     <define name="dfn">
+        <!--
+        Use: dfn marks the first occurrence of a word or term that is
+        defined or explained there or elsewhere in <book>. Often
+        <dfn> is rendered in italics, sometimes in parentheses.
+      -->
         <a:documentation>  Use: dfn marks the first occurrence of a word or term that is</a:documentation>
         <a:documentation>  defined or explained there or elsewhere in book. Often</a:documentation>
         <a:documentation> dfn is rendered in italics, sometimes in parentheses.</a:documentation>
@@ -2234,18 +2275,18 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.dfn" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: kbd designates information that the reader is to input
-    directly into a computer using the keyboard.
-  -->
     <define name="kbd">
+        <!--
+        Use: kbd designates information that the reader is to input
+        directly into a computer using the keyboard.
+      -->
         <a:documentation>Use: kbd designates information that the reader is to input</a:documentation>
         <a:documentation>  directly into a computer using the keyboard.</a:documentation>
-        
         <element name="kbd">
             <ref name="attlist.kbd"/>
             <zeroOrMore>
@@ -2253,14 +2294,14 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.kbd" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!-- Use: code designates a fragment of computer code. -->
     <define name="code">
+        <!-- Use: code designates a fragment of computer code. -->
         <a:documentation>Use: code designates a fragment of computer code.</a:documentation>
-       
         <element name="code">
             <ref name="attlist.code"/>
             <zeroOrMore>
@@ -2268,6 +2309,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.code" combine="interleave">
         <ref name="attrs"/>
     </define>
@@ -2280,16 +2322,17 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.pre" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: samp contains a sample of work created by the author for
-    use as an example or template. For example, a sample business
-    letter, resume, computer program output, or form.
-  -->
     <define name="samp">
+        <!--
+        Use: samp contains a sample of work created by the author for
+        use as an example or template. For example, a sample business
+        letter, resume, computer program output, or form.
+      -->
         <a:documentation>   Use: samp contains a sample of work created by the author for.</a:documentation>
         <a:documentation>   use as an example or template. For example, a sample business</a:documentation>
         <a:documentation>  letter, resume, computer program output, or form.</a:documentation>
@@ -2300,6 +2343,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.samp" combine="interleave">
         <ref name="attrs"/>
     </define>
@@ -2318,6 +2362,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.cite" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -2329,12 +2374,12 @@
         <ref name="attrs.notype"/>
     </define>
     
-    <!--
-    Use: abbr designates an abbreviation, a shortened form of a
-    word. For examples: Mr., approx., lbs., rec'd.
-    Contrast with <acronym>.
-  -->
     <define name="abbr">
+        <!--
+        Use: abbr designates an abbreviation, a shortened form of a
+        word. For examples: Mr., approx., lbs., rec'd.
+        Contrast with <acronym>.
+      -->
         <a:documentation>Use: abbr designates an abbreviation, a shortened form of a word.</a:documentation>
         <a:documentation>For examples: Mr., approx., lbs., rec'd. Contrast with acronym.</a:documentation>
         <element name="abbr">
@@ -2344,21 +2389,22 @@
             </zeroOrMore>
         </element>
     </define>
-    <!--
-    Attuse: abbr
     
-    "title" value may expand that abbreviation.
-  -->
     <define name="attlist.abbr" combine="interleave">
+        <!--
+        Attuse: abbr
+        
+        "title" value may expand that abbreviation.
+      -->
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: acronym marks a word formed from key letters (usually
-    initials) of a group of words. For examples: UNESCO, NATO, XML, US.
-    Contrast with <abbr>.
-  -->
     <define name="acronym">
+        <!--
+        Use: acronym marks a word formed from key letters (usually
+        initials) of a group of words. For examples: UNESCO, NATO, XML, US.
+        Contrast with <abbr>.
+      -->
         <a:documentation> Use: acronym marks a word formed from key letters (usually</a:documentation>
         <a:documentation> initials) of a group of words. For examples: UNESCO, NATO, XML, US.</a:documentation>
         <a:documentation>  Contrast with abbr.</a:documentation>
@@ -2369,15 +2415,16 @@
             </zeroOrMore>
         </element>
     </define>
-    <!--
-    Attuse: acronym
     
-    "title" value may expand that acronym.
-    "style" value '-epub-speak-as: spell-out;' indicates that the
-    acronym is best presented as a sequence of letters (for examples, "XML" or  "US").
-    Otherwise it may be pronounced as a word (for example, NATO).
-  -->
     <define name="attlist.acronym" combine="interleave">
+        <!--
+        Attuse: acronym
+        
+        "title" value may expand that acronym.
+        "style" value '-epub-speak-as: spell-out;' indicates that the
+        acronym is best presented as a sequence of letters (for examples, "XML" or  "US").
+        Otherwise it may be pronounced as a word (for example, NATO).
+      -->
         <attribute name="class">
             <list>
                 <ref name="classes"/>
@@ -2393,12 +2440,12 @@
         </optional>
     </define>
     
-    <!--
-    Use: sub indicates a subscript character (printed below a
-    character's normal baseline). Can be used recursively and/or
-    intermixed with <sup>.
-  -->
     <define name="sub">
+        <!--
+        Use: sub indicates a subscript character (printed below a
+        character's normal baseline). Can be used recursively and/or
+        intermixed with <sup>.
+      -->
         <a:documentation> Use: sub indicates a subscript character (printed below a</a:documentation>
         <a:documentation> character's normal baseline). Can be used recursively and/or</a:documentation>
         <a:documentation> intermixed with sup.</a:documentation>
@@ -2409,41 +2456,41 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.sub" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: sup marks a superscript character (printed above a
-    character's normal baseline). Can be used recursively and/or
-    intermixed with <sub>.
-  -->
     <define name="sup">
+        <!--
+        Use: sup marks a superscript character (printed above a
+        character's normal baseline). Can be used recursively and/or
+        intermixed with <sub>.
+      -->
         <a:documentation>  Use: sup marks a superscript character (printed above a</a:documentation>
         <a:documentation>  character's normal baseline). Can be used recursively and or</a:documentation>
         <a:documentation>intermixed with sub.</a:documentation>
-      
         <element name="sup">
             <ref name="attlist.sup"/>
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, br, q, sub, sup, span, bdo, (text) -->
             </zeroOrMore>
-       
         </element>
     </define>
+
     <define name="attlist.sup" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: span is a generic container for use in inline settings
-    when no specific tag exists for a given situation. The class
-    attribute may describe the nature of the text it marks (e.g.,
-    a typographical error). May be used to mark a class of items
-    to which styles are to be applied. Compare with <div>, which
-    is used in a block settings.
-  -->
     <define name="span">
+        <!--
+        Use: span is a generic container for use in inline settings
+        when no specific tag exists for a given situation. The class
+        attribute may describe the nature of the text it marks (e.g.,
+        a typographical error). May be used to mark a class of items
+        to which styles are to be applied. Compare with <div>, which
+        is used in a block settings.
+      -->
         <a:documentation>  Use: span is a generic container for use in inline settings</a:documentation>
         <a:documentation>  when no specific tag exists for a given situation. The class</a:documentation>
         <a:documentation>  attribute may describe the nature of the text it marks (e.g.,</a:documentation>
@@ -2457,15 +2504,16 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.span" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: bdo is used in special cases where the automatic actions
-    of the bi-directional algorithm would result in incorrect display.
-  -->
     <define name="bdo">
+        <!--
+        Use: bdo is used in special cases where the automatic actions
+        of the bi-directional algorithm would result in incorrect display.
+      -->
         <a:documentation>   Use: bdo is used in special cases where the automatic actions</a:documentation>
         <a:documentation> of the bi-directional algorithm would result in incorrect display.</a:documentation>
         <element name="bdo">
@@ -2475,6 +2523,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.bdo" combine="interleave">
         <ref name="coreattrs"/>
         <ref name="i18n"/>
@@ -2482,8 +2531,8 @@
     
     <!-- =================== Inline Sentence and Word =================== -->
     
-    <!-- Use: marks a sentence. -->
     <define name="sent">
+        <!-- Use: marks a sentence. -->
         <a:documentation>   Use: marks a sentence.</a:documentation>
         <element name="span">
             <ref name="attlist.sent"/>
@@ -2492,6 +2541,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.sent" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -2503,8 +2553,8 @@
         <ref name="attrs.notype"/>
     </define>
     
-    <!-- Use: marks a word. -->
     <define name="w">
+        <!-- Use: marks a word. -->
         <a:documentation>   Use: marks a word.</a:documentation>
         <element name="span">
             <ref name="attlist.w"/>
@@ -2513,6 +2563,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.w" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -2526,12 +2577,12 @@
     
     <!-- ======== Page Number, Footnote and Annotation Reference ======== -->
     
-    <!--
-    Use: pagebreak contains one page number as it appears from the print
-    document, usually inserted at the point within the file immediately
-    preceding the first item of content on a new page.
-  -->
     <define name="pagebreak.block">
+        <!--
+        Use: pagebreak contains one page number as it appears from the print
+        document, usually inserted at the point within the file immediately
+        preceding the first item of content on a new page.
+      -->
         <a:documentation> Use: pagebreak contains one page number as it appears from the print</a:documentation>
         <a:documentation> document, usually inserted at the point within the file immediately</a:documentation>
         <a:documentation>   preceding the first item of content on a new page.</a:documentation>
@@ -2540,20 +2591,22 @@
             <ref name="attlist.pagebreak"/>
         </element>
     </define>
+
     <define name="pagebreak.inline">
         <element name="span">
             <ref name="attlist.pagebreak"/>
         </element>
     </define>
-    <!--
-    Attuse: pagebreak
     
-    three kinds of page numbering schemes are allowed using the class attribute:
-    "page-front" (for roman-numeral pages at the start of a book), 
-    "page-normal" (for pages identified by arabic numerals),
-    or "page-special" (for all other kinds of pages)
-  -->
     <define name="attlist.pagebreak" combine="interleave">
+        <!--
+        Attuse: pagebreak
+        
+        three kinds of page numbering schemes are allowed using the class attribute:
+        "page-front" (for roman-numeral pages at the start of a book), 
+        "page-normal" (for pages identified by arabic numerals),
+        or "page-special" (for all other kinds of pages)
+      -->
         <attribute name="epub:type">
             <list>
                 <ref name="types"/>
@@ -2573,33 +2626,33 @@
             </list>
         </attribute>
         <ref name="attrsrqd.base"/>
-    
         <!-- The title attribute must be used to describe the page number. -->
     </define>
     
-    <!--
-    Use: noteref marks one or more characters that reference a footnote
-    or endnote.
-  -->
     <define name="noteref">
+        <!--
+        Use: noteref marks one or more characters that reference a footnote
+        or endnote.
+      -->
         <a:documentation> Use: noteref marks one or more characters that reference a footnote or endnote.</a:documentation>
         <element name="a">
             <ref name="attlist.noteref"/>
             <text/>
         </element>
     </define>
-    <!--
-    Attuse: noteref
     
-    "href" is a URI pointing to the target note, either within
-    same document or in another document.  For example:
-    <a href='#yyy'> refers to note with id "yyy" within same document.
-    <a href='foobar.xhtml#xxx'> refers to note with id "xxx" in document foobar.xhtml
-    
-    "type" provides advisory content MIME type of
-    the target, see [RFC2046].
-  -->
     <define name="attlist.noteref" combine="interleave">
+        <!--
+        Attuse: noteref
+        
+        "href" is a URI pointing to the target note, either within
+        same document or in another document.  For example:
+        <a href='#yyy'> refers to note with id "yyy" within same document.
+        <a href='foobar.xhtml#xxx'> refers to note with id "xxx" in document foobar.xhtml
+        
+        "type" provides advisory content MIME type of
+        the target, see [RFC2046].
+      -->
         <attribute name="epub:type">
             <list>
                 <ref name="types"/>
@@ -2627,32 +2680,33 @@
         </optional>
     </define>
     
-    <!--
-    Use: annoref marks a text segment that references an <annotation>.
-    Each <annoref> is usually a word, phrase, or whole line that
-    is part of the surrounding text (identified in the original
-    print book by bolding, italics, etc.). It should not normally
-    be allowed to be turned off in a DTB application.
-  -->
     <define name="annoref">
+        <!--
+        Use: annoref marks a text segment that references an <annotation>.
+        Each <annoref> is usually a word, phrase, or whole line that
+        is part of the surrounding text (identified in the original
+        print book by bolding, italics, etc.). It should not normally
+        be allowed to be turned off in a DTB application.
+      -->
         <a:documentation> Use: annoref marks a text segment that references an annotation.</a:documentation>
         <element name="a">
             <ref name="attlist.annoref"/>
             <text/>
         </element>
     </define>
-    <!--
-    Attuse: annoref
     
-    "href" is a URI pointing to the target annotation, either within
-    same document or in another document.  For example:
-    <a href='#yyy'> refers to the annotation with id "yyy" within same document.
-    <a href='foobar.xhtml#xxx'> refers to the annotation with id "xxx" in document foobar.xhtml
-    
-    "type" provides advisory content MIME
-    type of the targeted id, see [RFC2046].
-  -->
     <define name="attlist.annoref" combine="interleave">
+        <!--
+        Attuse: annoref
+        
+        "href" is a URI pointing to the target annotation, either within
+        same document or in another document.  For example:
+        <a href='#yyy'> refers to the annotation with id "yyy" within same document.
+        <a href='foobar.xhtml#xxx'> refers to the annotation with id "xxx" in document foobar.xhtml
+        
+        "type" provides advisory content MIME
+        type of the targeted id, see [RFC2046].
+      -->
         <attribute name="epub:type">
             <list>
                 <ref name="types"/>
@@ -2675,7 +2729,6 @@
         <optional>
             <attribute name="type">
                 <a:documentation> "type" provides advisory content MIME type of the target, see [RFC2046]. </a:documentation>
-                
                 <ref name="ContentType"/>
             </attribute>
         </optional>
@@ -2683,15 +2736,14 @@
     
     <!-- ============================ Inline Quotes ============================ -->
     
-    <!--
-    Use: q contains a short, inline quotation. Compare with
-    <blockquote>, which marks a longer quotation set off from the
-    surrounding text.
-  -->
     <define name="q">
+        <!--
+        Use: q contains a short, inline quotation. Compare with
+        <blockquote>, which marks a longer quotation set off from the
+        surrounding text.
+      -->
         <a:documentation> Use: q contains a short, inline quotation. Compare with</a:documentation>
         <a:documentation>  blockquote, which marks a longer quotation set off from the surrounding text. </a:documentation>
-        
         <element name="q">
             <ref name="attlist.q"/>
             <zeroOrMore>
@@ -2699,12 +2751,13 @@
             </zeroOrMore>
         </element>
     </define>
-    <!--
-    Attuse: q
     
-    "cite" may provide a URI reference.
-  -->
     <define name="attlist.q" combine="interleave">
+        <!--
+        Attuse: q
+        
+        "cite" may provide a URI reference.
+      -->
         <ref name="attrs"/>
         <optional>
             <attribute name="cite">
@@ -2719,14 +2772,14 @@
     <define name="Length">
         <a:documentation>measured in pixels, percent (nn%)</a:documentation>
         <data type="string" datatypeLibrary=""/>
+        <!-- measured in pixels, percent (nn%) -->
     </define>
-    <!-- measured in pixels, percent (nn%) -->
     
-    <!--
-    Use: img marks a visual image. An <img> will always contain an alt and
-    generally contain a longdesc, a pointer to a related <aside epub:type="z3998:production"> (prodnote).
-  -->
     <define name="img">
+        <!--
+        Use: img marks a visual image. An <img> will always contain an alt and
+        generally contain a longdesc, a pointer to a related <aside epub:type="z3998:production"> (prodnote).
+      -->
         <a:documentation> Use: img marks a visual image. An img will always contain an alt and</a:documentation>
         <a:documentation>generally contain a longdesc, a pointer to a related aside epub:type="z3998:production"(prodnote).</a:documentation>
         <element name="img">
@@ -2734,29 +2787,28 @@
             <empty/>
         </element>
     </define>
-    <!--
-    Attuse: img
     
-    "src" specifies by URI the location of the image file.
-    
-    "alt" is used to supply a short description of the <img>.
-    
-    "longdesc" generally contains a pointer to a related
-    <aside epub:type="z3998:production"> (prodnote) that contains a detailed description of the <img>.
-    
-    The attributes "height" and "width" provide visual sizing
-    information, measured in pixels.
-  -->
     <define name="attlist.img" combine="interleave">
+        <!--
+        Attuse: img
+        
+        "src" specifies by URI the location of the image file.
+        
+        "alt" is used to supply a short description of the <img>.
+        
+        "longdesc" generally contains a pointer to a related
+        <aside epub:type="z3998:production"> (prodnote) that contains a detailed description of the <img>.
+        
+        The attributes "height" and "width" provide visual sizing
+        information, measured in pixels.
+      -->
         <ref name="attrs"/>
         <attribute name="src">
             <a:documentation> "src" specifies by URI the location of the image file.</a:documentation>
-            
             <ref name="URI"/>
         </attribute>
         <attribute name="alt">
             <a:documentation> "alt" is used to supply a short description of the img.</a:documentation>
-            
             <ref name="Text"/>
         </attribute>
         <optional>
@@ -2770,7 +2822,6 @@
             <attribute name="longdesc">
                 <a:documentation> "longdesc" generally contains a pointer to a related aside epub:type="z3998:production" </a:documentation>
                 <a:documentation> (prodnote) that contains a detailed description of the img.</a:documentation>
-                
                 <ref name="URI"/>
             </attribute>
         </optional>
@@ -2785,79 +2836,65 @@
             </attribute>
         </optional>
     </define>
-    <!--
-    Use: figure provides a container for one or more <img> and associated <figcaption>(s).
-  -->
+    
     <define name="figure.imggroup">
+        <!--
+        Use: figure provides a container for one or more <img> and associated <figcaption>(s).
+      -->
         <a:documentation> Use: figure provides a container for one or more img and associated figcaption(s).</a:documentation>
         <element name="figure">
             <!-- HTML content model: figcaption? ( a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text) )* figcaption? -->
             <!-- Strict content model: figcaption? (aside | img | span)* figcaption? -->
             <!-- STRICT NOTE: In HTML there can be at most one figcaption per figure, and it must be either the first or last child of the figure. As a result, we wrap each (img caption*)-group in figure elements. -->
-            
             <choice>
                 <group>
                     <!-- A single image -->
                     <ref name="attlist.figure.image"/>
-                    
                     <ref name="img"/> <!-- img -->
-                    
                     <zeroOrMore>
                         <choice>
                             <ref name="pagebreak.block"/> <!-- div -->
                             <ref name="prodnote"/> <!-- aside -->
                         </choice>
                     </zeroOrMore>
-                    
                     <optional>
                         <a:documentation> STRICT NOTE: In HTML there can be at most one figcaption per figure, and it must be either the first </a:documentation>
                         <a:documentation>  or last child of the figure. As a result, we wrap each (img caption*)-group in figure elements.</a:documentation>
-                        
                         <ref name="caption.figure"/> <!-- figcaption -->
                     </optional>
                 </group>
-                
                 <group>
                     <!-- Image series -->
                     <ref name="attlist.figure.image-series"/>
-                    
                     <optional>
                         <ref name="caption.figure"/> <!-- figcaption -->
                     </optional>
-                    
                     <zeroOrMore>
                         <choice>
                             <ref name="pagebreak.block"/> <!-- div -->
                             <ref name="prodnote"/> <!-- aside -->
                         </choice>
                     </zeroOrMore>
-                    
                     <oneOrMore>
-                        
                         <element name="figure">
                             <ref name="attlist.figure.image"/>
-                            
                             <ref name="img"/> <!-- img -->
-                            
                             <zeroOrMore>
                                 <choice>
                                     <ref name="pagebreak.block"/> <!-- div -->
                                     <ref name="prodnote"/> <!-- aside -->
                                 </choice>
                             </zeroOrMore>
-                            
                             <optional>
                                 <ref name="caption.figure"/> <!-- figcaption -->
                             </optional>
                         </element>
-                        
                     </oneOrMore>
-                    
                 </group>
             </choice>
-            
         </element>
     </define>
+
     <define name="attlist.figure.image-series" combine="interleave">
         <attribute name="class">
             <list>
@@ -2868,6 +2905,7 @@
         </attribute>
         <ref name="attrs.noclass"/>
     </define>
+
     <define name="attlist.figure.image" combine="interleave">
         <attribute name="class">
             <list>
@@ -2898,6 +2936,7 @@
             </choice>
         </element>
     </define>
+
     <define name="attlist.figcaption" combine="interleave">
         <ref name="attrs"/>
     </define>
@@ -2907,6 +2946,7 @@
             <ref name="attlist.hr"/>
         </element>
     </define>
+
     <define name="attlist.hr" combine="interleave">
         <attribute name="class">
             <choice>
@@ -2918,8 +2958,8 @@
     
     <!-- ============================= Paragraphs ============================== -->
     
-    <!-- Use: p contains a paragraph, which may contain subsidiary lists -->
     <define name="p">
+        <!-- Use: p contains a paragraph, which may contain subsidiary lists -->
         <a:documentation> Use: p contains a paragraph. In HTML, lists are not allowed inside paragraphs. </a:documentation>
         <optional>
             <ref name="hr"/>
@@ -2938,18 +2978,18 @@
             </choice>
         </zeroOrMore>
     </define>
+
     <define name="attlist.p" combine="interleave">
         <ref name="attrs"/>
     </define>
     
     <!-- =========== Doctitle, Docauthor, Covertitle, and Headings  ============ -->
     
-    <!--
-    Use: doctitle marks the full title of the book, including any subtitles.
-  -->
     <define name="doctitle">
+        <!--
+        Use: doctitle marks the full title of the book, including any subtitles.
+      -->
         <a:documentation> Use: doctitle marks the full title of the book, including any subtitles. </a:documentation>
-        
         <element name="p">
             <ref name="attlist.doctitle"/>
             <zeroOrMore>
@@ -2957,6 +2997,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="doctitle.headline">
         <element name="h1">
             <ref name="attlist.doctitle"/>
@@ -2965,6 +3006,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.doctitle" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -2983,12 +3025,11 @@
         <ref name="attrs.base"/>
     </define>
     
-    <!--
-    Use: docauthor marks each author or editor of this work.
-  -->
     <define name="docauthor">
+        <!--
+        Use: docauthor marks each author or editor of this work.
+      -->
         <a:documentation> Use: docauthor marks each author or editor of this work. </a:documentation>
-        
         <element name="p">
             <ref name="attlist.docauthor"/>
             <zeroOrMore>
@@ -2996,6 +3037,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.docauthor" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -3014,19 +3056,19 @@
         <ref name="attrs.base"/>
     </define>
     
-    <!--
-    Use: covertitle is the short title of a book, often found on the
-    spine. It may be the same as the doctitle.
-  -->
     <define name="covertitle">
+        <!--
+        Use: covertitle is the short title of a book, often found on the
+        spine. It may be the same as the doctitle.
+      -->
         <a:documentation> Use: covertitle is the short title of a book, often found on the </a:documentation>
         <a:documentation>   spine. It may be the same as the doctitle. </a:documentation>
-        
         <element name="p">
             <ref name="attlist.covertitle"/>
             <text/>
         </element>
     </define>
+
     <define name="attlist.covertitle" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -3046,6 +3088,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.h1" combine="interleave">
         <ref name="attrs"/>
     </define>
@@ -3058,6 +3101,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.h2" combine="interleave">
         <ref name="attrs"/>
     </define>
@@ -3070,6 +3114,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.h3" combine="interleave">
         <ref name="attrs"/>
     </define>
@@ -3082,6 +3127,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.h4" combine="interleave">
         <ref name="attrs"/>
     </define>
@@ -3094,6 +3140,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.h5" combine="interleave">
         <ref name="attrs"/>
     </define>
@@ -3106,18 +3153,19 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.h6" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: bridgehead is a free-floating heading that is not associated with the
-    hierarchical structure of a document. It may occur only subsidiary to one
-    of the hierarchic elements. <h1> ... <h6> are
-    restricted to one occurrence per level. bridgehead has no such restriction, but should be used
-    only when it is clear that none of the structural headings is appropriate.
-  -->
     <define name="bridgehead">
+        <!--
+        Use: bridgehead is a free-floating heading that is not associated with the
+        hierarchical structure of a document. It may occur only subsidiary to one
+        of the hierarchic elements. <h1> ... <h6> are
+        restricted to one occurrence per level. bridgehead has no such restriction, but should be used
+        only when it is clear that none of the structural headings is appropriate.
+      -->
         <a:documentation>  Use: bridgehead is a free-floating heading that is not associated with the </a:documentation>
         <a:documentation>    hierarchical structure of a document. </a:documentation>
         <element name="p">
@@ -3127,6 +3175,7 @@
             </zeroOrMore>
         </element>
     </define>
+
     <define name="attlist.bridgehead" combine="interleave">
         <attribute name="epub:type">
             <list>
@@ -3145,12 +3194,11 @@
         <ref name="attrs.base"/>
     </define>
     
-    <!--
-    Use: h1-h6 marks the text of a heading in <body>, <section>, etc.
-  -->
     <define name="hd">
+        <!--
+        Use: h1-h6 marks the text of a heading in <body>, <section>, etc.
+      -->
         <a:documentation>  Use: h1-h6 marks the text of a heading in body, section, etc. </a:documentation>
-     
         <choice>
             <element name="h1">
                 <ref name="attlist.hd"/>
@@ -3190,18 +3238,19 @@
             </element>
         </choice>
     </define>
+
     <define name="attlist.hd" combine="interleave">
         <ref name="attrs"/>
     </define>
     
     <!-- ========================== Block-like Quotes ========================== -->
     
-    <!--
-    Use: blockquote indicates a block of quoted content that is set
-    off from the surrounding text by paragraph breaks. Compare with
-    <q>, which marks short, inline quotations.
-  -->
     <define name="blockquote">
+        <!--
+        Use: blockquote indicates a block of quoted content that is set
+        off from the surrounding text by paragraph breaks. Compare with
+        <q>, which marks short, inline quotations.
+      -->
         <a:documentation> Use: blockquote indicates a block of quoted content that is set </a:documentation>
         <a:documentation>  off from the surrounding text by paragraph breaks. Compare with</a:documentation>
         <a:documentation>  q, which marks short, inline quotations.</a:documentation>
@@ -3215,18 +3264,18 @@
             </zeroOrMore>
         </element>
     </define>
-    <!--
-    Attuse: blockquote
     
-    "cite" permits inclusion of the
-    URI from which the blockquote came.
-  -->
     <define name="attlist.blockquote" combine="interleave">
+        <!--
+        Attuse: blockquote
+        
+        "cite" permits inclusion of the
+        URI from which the blockquote came.
+      -->
         <ref name="attrs"/>
         <optional>
             <attribute name="cite">
                 <a:documentation> "cite" permits inclusion of the URI from which the blockquote came. </a:documentation>
-              
                 <ref name="URI"/>
             </attribute>
         </optional>
@@ -3234,12 +3283,12 @@
     
     <!-- ================== Definition List, and Other Lists =================== -->
     
-    <!--
-    Use: dl contains a definition list, usually consisting of pairs of
-    terms <dt> and definitions <dd>. Any definition can contain another
-    definition list.
-  -->
     <define name="dl">
+        <!--
+        Use: dl contains a definition list, usually consisting of pairs of
+        terms <dt> and definitions <dd>. Any definition can contain another
+        definition list.
+      -->
         <a:documentation>  Use: dl contains a definition list, usually consisting of pairs of terms dt and definitions dd.</a:documentation>
         <a:documentation>  Any definition can contain another definition list.</a:documentation>
         <!--
@@ -3259,17 +3308,17 @@
             </oneOrMore>
         </element>
     </define>
+
     <define name="attlist.dl" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: dt marks a term in a definition list <dl> for which a
-    definition <dd> follows.
-  -->
     <define name="dt">
+        <!--
+        Use: dt marks a term in a definition list <dl> for which a
+        definition <dd> follows.
+      -->
         <a:documentation>  Use: dt marks a term in a definition list dl for which a definition dd follows.</a:documentation>
-        
         <element name="dt">
             <ref name="attlist.dt"/>
             <zeroOrMore>
@@ -3280,17 +3329,18 @@
             </optional>
         </element>
     </define>
+
     <define name="attlist.dt" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-    Use: dd marks a definition of the preceding term <dt> within a
-    definition list <dl>. A definition without a preceding <dt> has
-    no semantic interpretation, but is visually presented aligned
-    with other <dd>.
-  -->
     <define name="dd">
+        <!--
+        Use: dd marks a definition of the preceding term <dt> within a
+        definition list <dl>. A definition without a preceding <dt> has
+        no semantic interpretation, but is visually presented aligned
+        with other <dd>.
+      -->
         <a:documentation> Use: dd marks a definition of the preceding term dt within a definition list dl.</a:documentation>
         <a:documentation>  A definition without a preceding dt has no semantic interpretation,</a:documentation>
         <a:documentation>  but is visually presented aligned with other dd.</a:documentation>
@@ -3302,17 +3352,18 @@
             </optional>
         </element>
     </define>
+
     <define name="attlist.dd" combine="interleave">
         <ref name="attrs"/>
     </define>
     
-    <!--
-        Use: lists contains some form of list, ordered, unordered, or preformatted.
-        If bullets and outline enumerations are part of
-        the preformatted print content, they are expected to prefix those list
-        items in content, rather than be implicitly generated.
-    -->
     <define name="list">
+        <!--
+            Use: lists contains some form of list, ordered, unordered, or preformatted.
+            If bullets and outline enumerations are part of
+            the preformatted print content, they are expected to prefix those list
+            items in content, rather than be implicitly generated.
+        -->
         <a:documentation> Use: lists contains some form of list, ordered, unordered, or preformatted.</a:documentation>
         <a:documentation>    If bullets and outline enumerations are part of the preformatted print content,</a:documentation>
         <a:documentation> they are expected to prefix those list items in content, rather than be implicitly generated.</a:documentation>
@@ -3337,22 +3388,23 @@
             </element>
         </choice>
     </define>
-    <!--
-    Attuse: list
     
-    "type" indicates the kind of enumeration:
-        '1'=integer,
-        'a'=lowercase,
-        'A'=uppercase,
-        'i'=lowercase Roman, or
-        'I'=uppercase Roman.
-    
-    "start" value indicates the ordered list integer ordinal, impllcitly 1,
-    to denote the first ordered list item. Its value is determined for the
-    indicated enum type. A start value is useful when there is an injection
-    of a different element type, such as <pageno>.
-  -->
     <define name="attlist.list.ordered" combine="interleave">
+        <!--
+        Attuse: list
+        
+        "type" indicates the kind of enumeration:
+            '1'=integer,
+            'a'=lowercase,
+            'A'=uppercase,
+            'i'=lowercase Roman, or
+            'I'=uppercase Roman.
+        
+        "start" value indicates the ordered list integer ordinal, impllcitly 1,
+        to denote the first ordered list item. Its value is determined for the
+        indicated enum type. A start value is useful when there is an injection
+        of a different element type, such as <pageno>.
+      -->
         <ref name="attlist.list.common"/>
         <!-- ordered list -->
         <optional>
@@ -3409,15 +3461,15 @@
         <ref name="attrs.notype"/>
     </define>
     
-    <!--
-    Use: li marks each list item in a list. <li> content may be
-    either inline or block and may include other nested
-    lists. Alternatively it may contain a sequence of list item
-    components, lic, that identify regularly occurring content,
-    such as the heading and page number of each entry in a
-    table of contents.
-  -->
     <define name="li">
+        <!--
+        Use: li marks each list item in a list. <li> content may be
+        either inline or block and may include other nested
+        lists. Alternatively it may contain a sequence of list item
+        components, lic, that identify regularly occurring content,
+        such as the heading and page number of each entry in a
+        table of contents.
+      -->
         <a:documentation>  Use: li marks each list item in a list. li content may be either inline or block and</a:documentation>
         <a:documentation>  and may include other nested lists. Alternatively it may contain a sequence of list item</a:documentation>
         <a:documentation>  components, lic, that identify regularly occurring content,</a:documentation>
@@ -3427,6 +3479,7 @@
             <ref name="flowlic"/> <!-- em, strong, dfn, code, samp, kbd, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
         </element>
     </define>
+
     <define name="attlist.li" combine="interleave">
         <ref name="attrs"/>
         <optional>
@@ -3436,19 +3489,18 @@
         </optional>
     </define>
     
-    <!--
-    Use: lic ("list item component") allows ordered substructure
-    within a list item <li>. Used when a list item is made up of
-    two or more components, as in a table of contents entry.
-    The same number of lic should occur in each <li>. If not,
-    correspondence of lic in different <li> is in order of
-    occurrence for the current writing direction of the <li>.
-  -->
     <define name="lic">
+        <!--
+        Use: lic ("list item component") allows ordered substructure
+        within a list item <li>. Used when a list item is made up of
+        two or more components, as in a table of contents entry.
+        The same number of lic should occur in each <li>. If not,
+        correspondence of lic in different <li> is in order of
+        occurrence for the current writing direction of the <li>.
+      -->
         <a:documentation>   Use: lic ("list item component") allows ordered substructure</a:documentation>
         <a:documentation>  within a list item li. Used when a list item is made up of</a:documentation>
         <a:documentation>    two or more components, as in a table of contents entry.</a:documentation>
-        
         <element name="span">
             <ref name="attlist.lic"/>
             <zeroOrMore>
@@ -3456,19 +3508,19 @@
             </zeroOrMore>
         </element>
     </define>
-    <!--
-    Attuse: lic
     
-    class attribute may be used to identify the particular
-    component of a list item <li>. For example, in a table of contents
-    class values might include "section", and "pagebreakber".
-  -->
     <define name="attlist.lic" combine="interleave">
+        <!--
+        Attuse: lic
+        
+        class attribute may be used to identify the particular
+        component of a list item <li>. For example, in a table of contents
+        class values might include "section", and "pagebreakber".
+      -->
         <attribute name="class">
             <a:documentation>   class attribute may be used to identify the particular</a:documentation>
             <a:documentation>  component of a list item li. </a:documentation>
             <a:documentation>   For example, in a table of contents class values might include "section", and "pagebreak".</a:documentation>
-            
             <list>
                 <ref name="classes"/>
                 <value>lic</value>
@@ -3482,7 +3534,6 @@
     
     <define name="Scope">
         <a:documentation>    Scope specifies a set of data cells for which the th provides header information.</a:documentation>
-        
         <choice>
             <value>row</value>
             <value>col</value>
@@ -3490,63 +3541,60 @@
             <value>colgroup</value>
         </choice>
     </define>
-    <!--
-    Scope specifies a set of data cells for which the <th> provides
-    header information.
-  -->
     
     <define name="cellhvalign">
+        <!--
+        Scope specifies a set of data cells for which the <th> provides
+        header information.
+      -->
         <a:documentation>  values supported in HTML5 are left, center, right and justify </a:documentation>
-       
         <!-- values supported in HTML5 are left, center, right and justify -->
         <optional>
             <attribute name="style">
                 <data type="string">
                     <param name="pattern">^vertical-align: (top|middle|bottom|baseline); (text-align: (left|center|right|justify);|text-align: right; padding-right: \d+ch;)(| width: \w+;)$</param>
-                    
                     <!-- NOTE: text-align: "{char}" right; is not currently supported and may be removed from the CSS3 draft; using padding-right instead. -->
                 </data>
             </attribute>
         </optional>
         <!-- the char attribute from the DTBook is used when calculating the CSS padding -->
         <!-- STRICT NOTE: the charoff attribute is removed when converting from dtbook to epub3 -->
+        <!--
+        % cellhalign
+        cellhalign sets horizontal alignment of content in
+        a table cell.
+        
+        char indicates a character expected in each table
+        cell of a column that text should align on. The default is
+        the decimal point for the current language.
+        
+        charoff sets the alignment offset of the first character
+        to align on, as specified with char.
+        
+        Inheritance order for horizontal alignment is <th>|<td>,
+        <tr>, <thead>|<tfoot>|<tbody>, <col>, <colgroup>, default. The
+        default value is from the user agent, and may be affected
+        by user preference. The recommended default alignment for
+        <th> is center, and for <td> is left.
+      -->
     </define>
-    <!--
-    % cellhalign
-    cellhalign sets horizontal alignment of content in
-    a table cell.
     
-    char indicates a character expected in each table
-    cell of a column that text should align on. The default is
-    the decimal point for the current language.
-    
-    charoff sets the alignment offset of the first character
-    to align on, as specified with char.
-    
-    Inheritance order for horizontal alignment is <th>|<td>,
-    <tr>, <thead>|<tfoot>|<tbody>, <col>, <colgroup>, default. The
-    default value is from the user agent, and may be affected
-    by user preference. The recommended default alignment for
-    <th> is center, and for <td> is left.
-  -->
-    
-    <!--
-    Use: table contains cells of tabular data arranged in rows and
-    columns. A <table> may have a caption. It may have descriptions of
-    the columns in <col>s or groupings of several <col> in <colgroup>.
-    A simple <table> may be made up of just rows <tr>. Note the logical order of
-    optional <thead>, optional <tfoot>, then one or more of either
-    <tbody> or just rows <tr>. This order accommodates simple or large,
-    complex tables. The <thead> and <tfoot> information usually helps
-    identify content of the <tbody> rows, For a multiple-page print
-    <table> the <thead> and <tfoot> are repeated on each page, but
-    not redundantly tagged.
-  -->
     <define name="table">
+        <!--
+        Use: table contains cells of tabular data arranged in rows and
+        columns. A <table> may have a caption. It may have descriptions of
+        the columns in <col>s or groupings of several <col> in <colgroup>.
+        A simple <table> may be made up of just rows <tr>. Note the logical order of
+        optional <thead>, optional <tfoot>, then one or more of either
+        <tbody> or just rows <tr>. This order accommodates simple or large,
+        complex tables. The <thead> and <tfoot> information usually helps
+        identify content of the <tbody> rows, For a multiple-page print
+        <table> the <thead> and <tfoot> are repeated on each page, but
+        not redundantly tagged.
+      -->
         <a:documentation>  Use: table contains cells of tabular data arranged in rows and</a:documentation>
         <a:documentation>  columns. A table may have a caption. It may have descriptions of</a:documentation>
         <a:documentation>  the columns in cols or groupings of several col in colgroup.</a:documentation>
-        
         <element name="table">
             <ref name="attlist.table"/>
             <optional>
@@ -3554,7 +3602,6 @@
             </optional>
             <a:documentation>STRICT NOTE: col elements are not allowed as direct children of the table element in HTML.</a:documentation>
             <a:documentation>Must be wrapped in colgroup elements.</a:documentation>
-            
             <!-- STRICT NOTE: col elements are not allowed as direct children of the table element in HTML. Must be wrapped in colgroup elements. -->
             <zeroOrMore>
                 <ref name="colgroup"/> <!-- colgroup -->
@@ -3572,7 +3619,6 @@
             <a:documentation>STRICT NOTE: spans (HTML equivalent for pagebreaks) are not allowed as direct children of the table </a:documentation>
             <a:documentation> element in HTML. They must be moved to the following cell (th,td), or to outside of the table</a:documentation>
             <a:documentation> element.Must be wrapped in colgroup elements.</a:documentation>
-            
                 <!--<oneOrMore>
                     <ref name="tr"/> <!-\- tr -\->
                    
@@ -3581,6 +3627,7 @@
             </choice>-->
         </element>
     </define>
+
     <define name="attlist.table" combine="interleave">
         <ref name="attrs"/>
         <!-- summary moved into table/caption/p[@class=~'table-summary'] -->
@@ -3621,15 +3668,13 @@
         -->
     </define>
     
-    <!--
-    Use: thead marks header information in a <table>, consisting of
-    one or more rows <tr> of <th> cells.
-  -->
     <define name="thead">
+        <!--
+        Use: thead marks header information in a <table>, consisting of
+        one or more rows <tr> of <th> cells.
+      -->
         <a:documentation>Use: thead marks header information in a table, consisting of</a:documentation>
         <a:documentation> one or more rows tr of th cells.</a:documentation>
-    
-        
         <element name="thead">
             <ref name="attlist.thead"/>
             <oneOrMore>
@@ -3637,16 +3682,17 @@
             </oneOrMore>
         </element>
     </define>
+
     <define name="attlist.thead" combine="interleave">
         <ref name="attrs"/>
         <ref name="cellhvalign"/>
     </define>
     
-    <!--
-    Use: tfoot marks footer information in a <table>, consisting of
-    one or more rows <tr>, usually of <th> cells.
-  -->
     <define name="tfoot">
+        <!--
+        Use: tfoot marks footer information in a <table>, consisting of
+        one or more rows <tr>, usually of <th> cells.
+      -->
         <a:documentation> Use: tfoot marks footer information in a table consisting of</a:documentation>
         <a:documentation> one or more rows tr, usually of th cells.</a:documentation>
         <element name="tfoot">
@@ -3656,15 +3702,16 @@
             </oneOrMore>
         </element>
     </define>
+
     <define name="attlist.tfoot" combine="interleave">
         <ref name="attrs"/>
         <ref name="cellhvalign"/>
     </define>
     
-    <!--
-    Use: tbody marks a group of rows in the main body of a <table>.
-  -->
     <define name="tbody">
+        <!--
+        Use: tbody marks a group of rows in the main body of a <table>.
+      -->
         <a:documentation> Use: tbody marks a group of rows in the main body of a table.</a:documentation>
         <a:documentation> STRICT NOTE: spans (HTML equivalent for pagebreaks) are not allowed as direct children of the tbody </a:documentation>
         <a:documentation> element in HTML. They must be moved to the preceding cell (th/td) or to before the table starts.</a:documentation>
@@ -3676,18 +3723,18 @@
             </oneOrMore>
         </element>
     </define>
+
     <define name="attlist.tbody" combine="interleave">
         <ref name="attrs"/>
         <ref name="cellhvalign"/>
     </define>
     
-    <!--
-    Use: colgroup groups adjacent columns <col> that are semantically
-    related.
-  -->
     <define name="colgroup">
+        <!--
+        Use: colgroup groups adjacent columns <col> that are semantically
+        related.
+      -->
         <a:documentation>  Use: colgroup groups adjacent columns col that are semantically related.</a:documentation>
-       
         <element name="colgroup">
             <ref name="attlist.colgroup"/>
             <zeroOrMore>
@@ -3695,21 +3742,21 @@
             </zeroOrMore>
         </element>
     </define>
-    <!--
-    Attuse: colgroup
     
-    "span" causes the attributes of one
-    col element to apply to more than one column, extending in the
-    writing direction for the language. Span is ignored if
-    any <col> are present.
-  -->
     <define name="attlist.colgroup" combine="interleave">
+        <!--
+        Attuse: colgroup
+        
+        "span" causes the attributes of one
+        col element to apply to more than one column, extending in the
+        writing direction for the language. Span is ignored if
+        any <col> are present.
+      -->
         <ref name="attrs"/>
         <optional>
             <a:documentation> "span" causes the attributes of one col element to apply to more than one column, </a:documentation>
             <a:documentation>extending in the writing direction for the language. </a:documentation>
             <a:documentation>Span is ignored if any col are present. </a:documentation>
-            
             <attribute name="span" a:defaultValue="1">
                 <data type="NMTOKEN"/>
             </attribute>
@@ -3717,34 +3764,33 @@
         <ref name="cellhvalign"/>
     </define>
     
-    <!--
-    Use: col elements define the alignment properties for cells in
-    one or more columns.
-  -->
     <define name="col">
+        <!--
+        Use: col elements define the alignment properties for cells in
+        one or more columns.
+      -->
         <a:documentation>Use: col elements define the alignment properties for cells in one or more columns. </a:documentation>
         <element name="col">
             <ref name="attlist.col"/>
             <empty/>
         </element>
     </define>
-    <!--
-    Attuse: col
-    "span" indicates how many columns the <col>
-    extends, in the writing direction of the <table>. The
-    attribute values apply to <th> and <td> that start in the
-    column, even if they extend into the next column(s), by
-    span value more than 1, and that next <col> may have different
-    attribute values.
-  -->
+    
     <define name="attlist.col" combine="interleave">
+        <!--
+        Attuse: col
+        "span" indicates how many columns the <col>
+        extends, in the writing direction of the <table>. The
+        attribute values apply to <th> and <td> that start in the
+        column, even if they extend into the next column(s), by
+        span value more than 1, and that next <col> may have different
+        attribute values.
+      -->
         <ref name="attrs"/>
         <optional>
             <a:documentation> "span" indicates how many columns the col </a:documentation>
             <a:documentation>extends, in the writing direction of the table. </a:documentation>
-           
             <attribute name="span" a:defaultValue="1">
-                
                 <data type="NMTOKEN"/>
             </attribute>
         </optional>
@@ -3764,6 +3810,7 @@
             </oneOrMore>
         </element>
     </define>
+
     <define name="attlist.tr" combine="interleave">
         <ref name="attrs"/>
         <ref name="cellhvalign"/>
@@ -3772,42 +3819,38 @@
     <!-- Use: th indicates a table cell containing header information. -->
     <define name="th">
         <a:documentation>Use: th indicates a table cell containing header information. </a:documentation>
-        
         <element name="th">
             <ref name="attlist.th"/>
             <ref name="flowtd"/> <!-- em, strong, dfn, code, samp, kbd, time, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
         </element>
     </define>
-    <!--
-    Attuse: th
     
-    "headers" provides the id value(s), used with <td> cells, to reference
-    one or more cells with <th id="xxx"> that contain headings that
-    collectively describe or qualify the content of the cell, for example
-    <td headers="id1 id2">.
-    
-    "scope" identifies one of
-        (row | rowgroup | column | colgroup)
-    to which the header information applies.
-    
-    "rowspan" indicates the total number of rows that the cell extends, by
-    default 1. All spanned cells share these attributes.
-    
-    "colspan" indicates the total number of columns the cell extends,
-    by default 1, in the writing direction of the table. All spanned
-    cells share these attributes.
-  -->
     <define name="attlist.th" combine="interleave">
+        <!--
+        Attuse: th
+        
+        "headers" provides the id value(s), used with <td> cells, to reference
+        one or more cells with <th id="xxx"> that contain headings that
+        collectively describe or qualify the content of the cell, for example
+        <td headers="id1 id2">.
+        
+        "scope" identifies one of
+            (row | rowgroup | column | colgroup)
+        to which the header information applies.
+        
+        "rowspan" indicates the total number of rows that the cell extends, by
+        default 1. All spanned cells share these attributes.
+        
+        "colspan" indicates the total number of columns the cell extends,
+        by default 1, in the writing direction of the table. All spanned
+        cells share these attributes.
+      -->
         <ref name="attrs"/>
-        
         <!-- STRICT NOTE: The DTBook attribute "abbr" on the "th" element is ignored when converting to HTML5. It has no good equivalent in HTML5. -->
-        
         <!-- STRICT NOTE: The DTBook attribute "axis" on the "th" element is ignored when converting to HTML5. -->
-        
         <optional>
             <a:documentation> "headers" provides the id value(s), used with td cells, </a:documentation>
             <a:documentation> for example td headers="id1 id2". </a:documentation>
-            
             <attribute name="headers">
                 <data type="IDREFS"/>
             </attribute>
@@ -3836,41 +3879,38 @@
         <ref name="cellhvalign"/>
     </define>
     
-    <!-- Use: td indicates a table cell containing data. -->
     <define name="td">
+        <!-- Use: td indicates a table cell containing data. -->
         <a:documentation>  Use: td indicates a table cell containing data.  </a:documentation>
-        
         <element name="td">
             <ref name="attlist.td"/>
             <ref name="flowtd"/> <!-- em, strong, dfn, code, samp, kbd, time, abbr, a, img, figure, br, q, sub, sup, span, bdo, p, ol, ul, dl, div, blockquote, table, address, section, (text) -->
         </element>
     </define>
-    <!--
-    Attuse: td
     
-    "headers" provides the id value(s), used with <td> cells, to reference
-    one or more cells with <th id="xxx"> that contain headings that
-    collectively describe or qualify the content of the cell, for example
-    <td headers="id1 id2">.
-    
-    "scope" identifies one of
-        (row | rowgroup | column | colgroup)
-    to which the header information applies.
-    
-    "rowspan" indicates the total number of rows that the cell extends, by
-    default 1. All spanned cells share these attributes.
-    
-    "colspan" indicates the total number of columns the cell extends,
-    by default 1, in the writing direction of the table. All spanned
-    cells share these attributes.
-  -->
     <define name="attlist.td" combine="interleave">
+        <!--
+        Attuse: td
+        
+        "headers" provides the id value(s), used with <td> cells, to reference
+        one or more cells with <th id="xxx"> that contain headings that
+        collectively describe or qualify the content of the cell, for example
+        <td headers="id1 id2">.
+        
+        "scope" identifies one of
+            (row | rowgroup | column | colgroup)
+        to which the header information applies.
+        
+        "rowspan" indicates the total number of rows that the cell extends, by
+        default 1. All spanned cells share these attributes.
+        
+        "colspan" indicates the total number of columns the cell extends,
+        by default 1, in the writing direction of the table. All spanned
+        cells share these attributes.
+      -->
         <ref name="attrs"/>
-        
         <!-- STRICT NOTE: The DTBook attribute "abbr" on the "td" element is ignored when converting to HTML5. It has no good equivalent in HTML5. -->
-        
         <!-- STRICT NOTE: The DTBook attribute "axis" on the "td" element is ignored when converting to HTML5. -->
-        
         <optional>
             <a:documentation> "headers" provides the id value(s), used with td cells, </a:documentation>
             <a:documentation> for example td headers="id1 id2". </a:documentation>
@@ -4342,7 +4382,6 @@
     <define name="classes">
         <zeroOrMore>
             <a:documentation> Common classes in use </a:documentation>
-             
             <choice>
                 <!-- Common classes in use -->
                 <value>address</value>
