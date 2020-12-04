@@ -2,6 +2,10 @@
 <grammar ns="http://www.w3.org/1999/xhtml" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
     xmlns:epub="http://www.idpf.org/2007/ops" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
     
+    <a:documentation>Nordic EPUB3 content document structure - 2020-1</a:documentation>
+    
+    <a:documentation>Imports</a:documentation>
+    
     <include href="http://www.daisy.org/pipeline/modules/mathml-utils/mathml3.rng">
         <a:documentation>MathML 3.0</a:documentation>
         <start combine="choice">
@@ -13,6 +17,7 @@
     </include>
     
     <start>
+        <a:documentation>The root element.</a:documentation>
         <ref name="html"/> <!-- html -->
     </start>
     
@@ -1658,6 +1663,7 @@
     </define>
 
     <define name="title">
+        <a:documentation>Headline</a:documentation>
         <!-- HTML content model: (a | abbr | audio | b | bdi | bdo | br | button | canvas | cite | code | data | datalist | del | dfn | em | embed | i | iframe | img | input | ins | kbd | keygen | label | link | map | mark | math | meta | meter | noscript | object | output | progress | q | ruby | s | samp | script | select | small | span | strong | sub | sup | svg | template | textarea | time | u | var | video | wbr | (text))* -->
         <!-- Strict content model: (em | strong | dfn | code | samp | kbd | abbr | a | img | br | q | sub | sup | span | bdo | (text))* -->
         <choice>
