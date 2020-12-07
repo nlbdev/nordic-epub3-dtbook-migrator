@@ -203,7 +203,7 @@
         <p>Each annoref must reference a annotation</p>
         <rule context="html:a[ancestor::html:body[html:header] and tokenize(@epub:type, '\s+') = 'annoref']">
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
-            <assert test="count(//html:*[tokenize(@epub:type, '\s+') = ('annotation') and @id = current()/substring-after(@href, '#')]) &gt;= 1">[nordic26b] The annotation with the href "<value-of select="@href"/>" must resolve to a annotation in the publication: <value-of select="
+            <assert test="count(//html:*[tokenize(@epub:type, '\s+') = ('annotation') and @id = current()/substring-after(@href, '#')]) &gt;= 1">[nordic27b] The annotation with the href "<value-of select="@href"/>" must resolve to a annotation in the publication: <value-of select="
                     concat('&lt;', name(), string-join(for $a in (@*)
                     return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;')"/></assert>
         </rule>
