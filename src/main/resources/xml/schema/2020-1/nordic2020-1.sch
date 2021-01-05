@@ -35,7 +35,7 @@
         <p>Disallow empty elements (with a few exceptions)</p>
         <rule context="html:*">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="normalize-space(.) = '' and not(*) and not(self::html:img or self::html:br or self::html:meta or self::html:link or self::html:col or self::html:th or self::html:td or self::html:dd or self::html:*[tokenize(@epub:type, '\s+') = 'pagebreak'] or self::html:hr or self::html:script)">[nordic09] Element may not be empty: <value-of select="$context"/></report>
+            <report test="normalize-space(.) = '' and not(*) and not(self::html:img or self::html:br or self::html:meta or self::html:link or self::html:col or self::html:th or self::html:td or self::html:dd or self::html:*[tokenize(@epub:type, '\s+') = 'pagebreak'] or self::html:hr or self::html:script)">[nordic09] Only the following elements can be empty: img, br, meta, link, col, th, td, dd, hr, script, and pagebreaks (span/div). <value-of select="$context"/></report>
         </rule>
     </pattern>
     
@@ -68,7 +68,7 @@
         <p>Frontmatter starts with doctitle and docauthor</p>
         <rule context="html:body/html:header">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="html:*[1][self::html:h1[tokenize(@epub:type, ' ') = 'fulltitle']]">[nordic12] Single-HTML document must begin with a fulltitle headline in its header element (xpath:
+            <assert test="html:*[1][self::html:h1[tokenize(@epub:type, '\s+') = 'fulltitle']]">[nordic12] Single-HTML document must begin with a fulltitle headline in its header element (xpath:
                 /html/body/header/h1).</assert>
         </rule>
     </pattern>
@@ -139,7 +139,7 @@
         <p>No image series in inline context</p>
         <rule context="html:figure">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="ancestor::html:a or ancestor::html:abbr or ancestor::html:a[tokenize(@epub:type, ' ') = 'annoref'] or ancestor::html:bdo or ancestor::html:code or ancestor::html:dfn or ancestor::html:em or ancestor::html:kbd or ancestor::html:p[tokenize(@class, ' ') = 'linenum'] or ancestor::html:a[tokenize(@epub:type, ' ') = 'noteref'] or ancestor::html:span[tokenize(@class, ' ') = 'lic'] or ancestor::html:q or ancestor::html:samp or ancestor::html:span[tokenize(@epub:type, ' ') = 'z3998:sentence'] or ancestor::html:span or ancestor::html:strong or ancestor::html:sub or ancestor::html:sup or ancestor::html:span[tokenize(@epub:type, ' ') = 'z3998:word'] or ancestor::html:address or ancestor::html:*[tokenize(@epub:type, ' ') = 'z3998:author' and not(parent::html:header[parent::html:body])] or ancestor::html:p[tokenize(@epub:type, ' ') = 'bridgehead'] or ancestor::html:*[tokenize(@class, ' ') = 'byline'] or ancestor::html:cite or ancestor::html:*[tokenize(@epub:type, ' ') = 'covertitle'] or ancestor::html:*[tokenize(@class, ' ') = 'dateline'] or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type, ' ') = 'z3998:author'] or ancestor::html:h1[tokenize(@epub:type, ' ') = 'fulltitle'] or ancestor::html:dt or ancestor::html:h1 or ancestor::html:h2 or ancestor::html:h3 or ancestor::html:h4 or ancestor::html:h5 or ancestor::html:h6 or ancestor::html:p[tokenize(@class, ' ') = 'line'] or ancestor::html:p">[nordic20] Image series are not allowed in inline context. <value-of select="$context"/></report>
+            <report test="ancestor::html:a or ancestor::html:abbr or ancestor::html:a[tokenize(@epub:type, '\s+') = 'annoref'] or ancestor::html:bdo or ancestor::html:code or ancestor::html:dfn or ancestor::html:em or ancestor::html:kbd or ancestor::html:p[tokenize(@class, '\s+') = 'linenum'] or ancestor::html:a[tokenize(@epub:type, '\s+') = 'noteref'] or ancestor::html:span[tokenize(@class, '\s+') = 'lic'] or ancestor::html:q or ancestor::html:samp or ancestor::html:span[tokenize(@epub:type, '\s+') = 'z3998:sentence'] or ancestor::html:span or ancestor::html:strong or ancestor::html:sub or ancestor::html:sup or ancestor::html:span[tokenize(@epub:type, '\s+') = 'z3998:word'] or ancestor::html:address or ancestor::html:*[tokenize(@epub:type, '\s+') = 'z3998:author' and not(parent::html:header[parent::html:body])] or ancestor::html:p[tokenize(@epub:type, '\s+') = 'bridgehead'] or ancestor::html:*[tokenize(@class, '\s+') = 'byline'] or ancestor::html:cite or ancestor::html:*[tokenize(@epub:type, '\s+') = 'covertitle'] or ancestor::html:*[tokenize(@class, '\s+') = 'dateline'] or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type, '\s+') = 'z3998:author'] or ancestor::html:h1[tokenize(@epub:type, '\s+') = 'fulltitle'] or ancestor::html:dt or ancestor::html:h1 or ancestor::html:h2 or ancestor::html:h3 or ancestor::html:h4 or ancestor::html:h5 or ancestor::html:h6 or ancestor::html:p[tokenize(@class, '\s+') = 'line'] or ancestor::html:p">[nordic20] Image series are not allowed in inline context. <value-of select="$context"/></report>
         </rule>
     </pattern>
     
@@ -165,7 +165,7 @@
     <pattern id="epub_nordic_24">
         <title>Rule 24</title>
         <p>Values of pagebreak must be unique for page-front</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'pagebreak'][tokenize(@class, ' ') = 'page-front']">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak'][tokenize(@class, '\s+') = 'page-front']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="count(//html:*[tokenize(@epub:type, '\s+') = 'pagebreak' and tokenize(@class, '\s+') = 'page-front' and @title = current()/@title]) = 1">[nordic24] pagebreak values must be unique for pagebreaks with class="page-front" (see pagebreak with title="<value-of select="@title"/>").</assert>
         </rule>
@@ -195,10 +195,10 @@
     <pattern id="epub_nordic_27_a">
         <title>Rule 27a</title>
         <p>Each annotation must have an annoref</p>
-        <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type, ' ') = 'annotation']">
+        <rule context="html:*[ancestor::html:body[html:header] and tokenize(@epub:type, '\s+') = 'annotation']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2015-1.opf-and-html.sch -->
-            <assert test="count(//html:a[tokenize(@epub:type, ' ') = 'annoref'][substring-after(@href, '#') = current()/@id]) &gt;= 1">[nordic27a] Each annotation must have at least one &lt;a epub:type="annoref" ...&gt; referencing it. <value-of select="$context"/></assert>
+            <assert test="count(//html:a[tokenize(@epub:type, '\s+') = 'annoref'][substring-after(@href, '#') = current()/@id]) &gt;= 1">[nordic27a] Each annotation must have at least one &lt;a epub:type="annoref" ...&gt; referencing it. <value-of select="$context"/></assert>
         </rule>
     </pattern>
     
@@ -248,9 +248,9 @@
     <pattern id="epub_nordic_29c">
         <title>Rule 29c</title>
         <p>No block elements in inline context - continued</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'z3998:production'][ancestor::html:a or ancestor::html:abbr or ancestor::html:a[tokenize(@epub:type, ' ') = 'annoref'] or ancestor::html:bdo or ancestor::html:code or ancestor::html:dfn or ancestor::html:em or ancestor::html:kbd or ancestor::html:p[tokenize(@class, ' ') = 'linenum'] or ancestor::html:a[tokenize(@epub:type, ' ') = 'noteref'] or ancestor::html:q or ancestor::html:samp or ancestor::html:span[tokenize(@epub:type, ' ') = 'z3998:sentence'] or ancestor::html:span or ancestor::html:strong or ancestor::html:sub or ancestor::html:sup or ancestor::html:span[tokenize(@epub:type, ' ') = 'z3998:word'] or ancestor::html:address or ancestor::html:*[tokenize(@epub:type, ' ') = 'z3998:author' and not(parent::html:header[parent::html:body])] or ancestor::html:p[tokenize(@epub:type, ' ') = 'bridgehead'] or ancestor::html:*[tokenize(@class, ' ') = 'byline'] or ancestor::html:cite or ancestor::html:*[tokenize(@epub:type, ' ') = 'covertitle'] or ancestor::html:*[tokenize(@class, ' ') = 'dateline'] or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type, ' ') = 'z3998:author'] or ancestor::html:h1[tokenize(@epub:type, ' ') = 'fulltitle'] or ancestor::html:dt or ancestor::html:h1 or ancestor::html:h2 or ancestor::html:h3 or ancestor::html:h4 or ancestor::html:h5 or ancestor::html:h6 or ancestor::html:p[tokenize(@class, ' ') = 'line'] or ancestor::html:p]">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'z3998:production'][ancestor::html:a or ancestor::html:abbr or ancestor::html:a[tokenize(@epub:type, '\s+') = 'annoref'] or ancestor::html:bdo or ancestor::html:code or ancestor::html:dfn or ancestor::html:em or ancestor::html:kbd or ancestor::html:p[tokenize(@class, '\s+') = 'linenum'] or ancestor::html:a[tokenize(@epub:type, '\s+') = 'noteref'] or ancestor::html:q or ancestor::html:samp or ancestor::html:span[tokenize(@epub:type, '\s+') = 'z3998:sentence'] or ancestor::html:span or ancestor::html:strong or ancestor::html:sub or ancestor::html:sup or ancestor::html:span[tokenize(@epub:type, '\s+') = 'z3998:word'] or ancestor::html:address or ancestor::html:*[tokenize(@epub:type, '\s+') = 'z3998:author' and not(parent::html:header[parent::html:body])] or ancestor::html:p[tokenize(@epub:type, '\s+') = 'bridgehead'] or ancestor::html:*[tokenize(@class, '\s+') = 'byline'] or ancestor::html:cite or ancestor::html:*[tokenize(@epub:type, '\s+') = 'covertitle'] or ancestor::html:*[tokenize(@class, '\s+') = 'dateline'] or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type, '\s+') = 'z3998:author'] or ancestor::html:h1[tokenize(@epub:type, '\s+') = 'fulltitle'] or ancestor::html:dt or ancestor::html:h1 or ancestor::html:h2 or ancestor::html:h3 or ancestor::html:h4 or ancestor::html:h5 or ancestor::html:h6 or ancestor::html:p[tokenize(@class, '\s+') = 'line'] or ancestor::html:p]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="descendant::html:*[self::html:address or self::html:aside[tokenize(@epub:type, ' ') = 'annotation'] or self::html:*[tokenize(@epub:type, ' ') = 'z3998:author' and not(parent::html:header[parent::html:body])] or self::html:blockquote or self::html:p[tokenize(@epub:type, ' ') = 'bridgehead'] or self::html:caption or self::html:*[tokenize(@class, ' ') = 'dateline'] or self::html:div or self::html:dl or self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type, ' ') = 'z3998:author'] or self::html:h1[tokenize(@epub:type, ' ') = 'fulltitle'] or self::html:aside[tokenize(@epub:type, ' ') = 'epigraph'] or self::html:p[tokenize(@class, ' ') = 'line'] or self::html:*[tokenize(@class, ' ') = 'linegroup'] or self::html:*[self::html:ul or self::html:ol] or self::html:a[tokenize(@epub:type, ' ') = ('note', 'rearnote', 'endnote', 'footnote')] or self::html:p or self::html:*[tokenize(@epub:type, ' ') = 'z3998:poem'] or self::html:*[(self::figure or self::aside) and tokenize(@epub:type, 's') = 'sidebar'] or self::html:table or self::html:*[matches(local-name(), '^h\d$') and tokenize(@class, ' ') = 'title']]">[nordic29] Prodnote in inline context used as block element. <value-of select="$context"/></report>
+            <report test="descendant::html:*[self::html:address or self::html:aside[tokenize(@epub:type, '\s+') = 'annotation'] or self::html:*[tokenize(@epub:type, '\s+') = 'z3998:author' and not(parent::html:header[parent::html:body])] or self::html:blockquote or self::html:p[tokenize(@epub:type, '\s+') = 'bridgehead'] or self::html:caption or self::html:*[tokenize(@class, '\s+') = 'dateline'] or self::html:div or self::html:dl or self::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type, '\s+') = 'z3998:author'] or self::html:h1[tokenize(@epub:type, '\s+') = 'fulltitle'] or self::html:aside[tokenize(@epub:type, '\s+') = 'epigraph'] or self::html:p[tokenize(@class, '\s+') = 'line'] or self::html:*[tokenize(@class, '\s+') = 'linegroup'] or self::html:*[self::html:ul or self::html:ol] or self::html:a[tokenize(@epub:type, '\s+') = ('note', 'rearnote', 'endnote', 'footnote')] or self::html:p or self::html:*[tokenize(@epub:type, '\s+') = 'z3998:poem'] or self::html:*[(self::figure or self::aside) and tokenize(@epub:type, 's') = 'sidebar'] or self::html:table or self::html:*[matches(local-name(), '^h\d$') and tokenize(@class, '\s+') = 'title']]">[nordic29] Prodnote in inline context used as block element. <value-of select="$context"/></report>
         </rule>
     </pattern>
     
@@ -288,7 +288,7 @@
     <pattern id="epub_nordic_59">
         <title>Rule 59</title>
         <p>No pagegnum between a term and a definition in definition lists</p>
-        <rule context="html:dl/html:*[tokenize(@epub:type, ' ') = 'pagebreak']">
+        <rule context="html:dl/html:*[tokenize(@epub:type, '\s+') = 'pagebreak']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="not(parent::*/html:dd or parent::*/html:dt)">[nordic59] pagebreak in definition list must not occur as siblings to dd or dt. <value-of select="$context"/></assert>
         </rule>
@@ -297,7 +297,7 @@
     <pattern id="epub_nordic_63">
         <title>Rule 63</title>
         <p>Only note references within the same document</p>
-        <rule context="html:a[tokenize(@epub:type, ' ') = 'noteref']">
+        <rule context="html:a[tokenize(@epub:type, '\s+') = 'noteref']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <report test="matches(@href, '^[^/]+:')">[nordic63] Only note references within the same publication are allowed. <value-of select="$context"/></report>
         </rule>
@@ -306,7 +306,7 @@
     <pattern id="epub_nordic_64">
         <title>Rule 64</title>
         <p>Only annotation references within the same document</p>
-        <rule context="html:a[tokenize(@epub:type, ' ') = 'annoref']">
+        <rule context="html:a[tokenize(@epub:type, '\s+') = 'annoref']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <report test="matches(@href, '^[^/]+:')">[nordic64] Only annotation references within the same publication are allowed.</report>
         </rule>
@@ -325,7 +325,7 @@
     <pattern id="epub_nordic_96_a">
         <title>Rule 96a</title>
         <p>no nested prodnotes or image groups</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'z3998:production']">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'z3998:production']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <report test="ancestor::html:*[tokenize(@epub:type, '\s+') = 'z3998:production']">[nordic96a] nested production notes are not allowed. <value-of select="$context"/></report>
             <report test="parent::html:figure and ancestor::*/tokenize(@epub:type, '\s+') = 'cover'">[nordic96a] production notes are not allowed inside figures in the cover
@@ -378,7 +378,7 @@
     <pattern id="epub_nordic_105">
         <title>Rule 105</title>
         <p>Pagebreaks must have a page-* class and must not contain anything</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'pagebreak']">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="tokenize(@class, '\s+') = ('page-front', 'page-normal', 'page-special')">[nordic105] Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special' class. <value-of select="$context"/></assert>
             <assert test="count(* | comment()) = 0 and string-length(string-join(text(), '')) = 0">[nordic105] Pagebreaks must not contain anything<value-of select="
@@ -392,7 +392,7 @@
     <pattern id="epub_nordic_110">
         <title>Rule 110</title>
         <p>pagebreak in headings</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'pagebreak']">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <report test="ancestor::*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]">[nordic110] Pagebreak elements are not allowed in headings. <value-of select="$context"/></report>
         </rule>
@@ -401,9 +401,9 @@
     <pattern id="epub_nordic_116">
         <title>Rule 116</title>
         <p>Don't allow arabic numbers in pagebreak w/page-front</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'pagebreak']">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="tokenize(@class, ' ') = 'page-front' and translate(., '0123456789', 'xxxxxxxxxx') != .">[nordic116] Hindu-Arabic numbers when @class="page-front" are not allowed. <value-of select="$context"/></report>
+            <report test="tokenize(@class, '\s+') = 'page-front' and translate(., '0123456789', 'xxxxxxxxxx') != .">[nordic116] Hindu-Arabic numbers (0-9) when @class="page-front" are not allowed. <value-of select="$context"/></report>
         </rule>
     </pattern>
     
@@ -412,7 +412,7 @@
         <p>Allow only pagebreak before hx in section/article</p>
         <rule context="html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="not(preceding-sibling::html:*) or preceding-sibling::html:*[tokenize(@epub:type, ' ') = 'pagebreak']">[nordic120] Only pagebreaks are allowed before the heading <value-of select="
+            <assert test="not(preceding-sibling::html:*) or preceding-sibling::html:*[tokenize(@epub:type, '\s+') = 'pagebreak']">[nordic120] Only pagebreaks are allowed before the heading <value-of select="
                     concat('&lt;', name(), string-join(for $a in (@*)
                     return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;', string-join(.//text(), ' '), '&lt;/', name(), '&gt;')"/>.</assert>
         </rule>
@@ -421,7 +421,7 @@
     <pattern id="epub_nordic_121">
         <title>Rule 121</title>
         <p>pagebreaks in tables must not occur between table rows</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'pagebreak'][ancestor::html:table]">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak'][ancestor::html:table]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="not(../html:tr)">[nordic121] Page numbers in tables must not be placed between table rows. <value-of select="$context"/></assert>
         </rule>
@@ -459,9 +459,9 @@
     <pattern id="epub_nordic_126">
         <title>Rule 126</title>
         <p>pagebreak must not occur directly after hx unless the hx is preceded by a pagebreak</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'pagebreak']">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="preceding-sibling::*[1][self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6] and not(preceding-sibling::*[2][self::html:*[tokenize(@epub:type, ' ') = 'pagebreak']])">[nordic126] pagebreak must not occur directly after hx unless the hx is preceded by a pagebreak. <value-of select="$context"/></report>
+            <report test="preceding-sibling::*[1][self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6] and not(preceding-sibling::*[2][self::html:*[tokenize(@epub:type, '\s+') = 'pagebreak']])">[nordic126] pagebreak must not occur directly after hx unless the hx is preceded by a pagebreak. <value-of select="$context"/></report>
         </rule>
     </pattern>
     
@@ -621,16 +621,16 @@
     <pattern id="epub_nordic_142">
         <title>Rule 142</title>
         <p>Only tokenize(@class,' ')='page-special' in level1/@class='nonstandardpagination'</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'pagebreak'][ancestor::html:section[@class = 'nonstandardpagination']]">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak'][ancestor::html:section[@class = 'nonstandardpagination']]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@class, ' ') = 'page-special'">[nordic142] The class page-special must be used in section/@class='nonstandardpagination'. <value-of select="$context"/></assert>
+            <assert test="tokenize(@class, '\s+') = 'page-special'">[nordic142] The class page-special must be used in section/@class='nonstandardpagination'. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
     <pattern id="epub_nordic_143_a">
         <title>Rule 143a</title>
         <p>Don't allow pagebreak as siblings to list items or inside the first list item</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'pagebreak'][parent::html:ul or parent::html:ol]">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak'][parent::html:ul or parent::html:ol]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <report test="../html:li">[nordic143a] pagebreak is not allowed as sibling to list items. <value-of select="$context"/></report>
         </rule>
@@ -639,7 +639,7 @@
     <pattern id="epub_nordic_143_b">
         <title>Rule 143b</title>
         <p></p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'pagebreak'][parent::html:li]">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak'][parent::html:li]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="../preceding-sibling::html:li or preceding-sibling::* or preceding-sibling::text()[normalize-space()]">[nordic143b] pagebreak is not allowed at the beginning of the first list item; it should be placed before the list. <value-of select="$context"/></assert>
         </rule>
@@ -666,7 +666,7 @@
     <pattern id="epub_nordic_202">
         <title>Rule 202</title>
         <p>frontmatter</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'frontmatter']">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'frontmatter']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="always-allowed-types" value="('abstract', 'acknowledgments', 'afterword', 'answers', 'appendix', 'assessment', 'assessments', 'bibliography', 'z3998:biographical-note', 'case-study', 'chapter', 'colophon', 'conclusion', 'contributors', 'copyright-page', 'credits', 'dedication', 'z3998:discography', 'division', 'z3998:editorial-note', 'epigraph', 'epilogue', 'errata', 'z3998:filmography', 'footnotes', 'foreword', 'glossary', 'dictionary', 'z3998:grant-acknowledgment', 'halftitlepage', 'imprimatur', 'imprint', 'index', 'index-group', 'index-headnotes', 'index-legend', 'introduction', 'keywords', 'landmarks', 'loa', 'loi', 'lot', 'lov', 'notice', 'other-credits', 'page-list', 'practices', 'preamble', 'preface', 'prologue', 'z3998:promotional-copy', 'z3998:published-works', 'z3998:publisher-address', 'qna', 'rearnotes', 'endnotes', 'revision-history', 'z3998:section', 'seriespage', 'subchapter', 'z3998:subsection', 'toc', 'toc-brief', 'z3998:translator-note', 'volume')"/>
             <let name="allowed-types" value="($always-allowed-types, 'titlepage')"/>
@@ -792,7 +792,7 @@
     <pattern id="epub_nordic_208">
         <title>Rule 208</title>
         <p>bodymatter</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'bodymatter']">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'bodymatter']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="always-allowed-types" value="('abstract', 'acknowledgments', 'afterword', 'answers', 'appendix', 'assessment', 'assessments', 'bibliography', 'z3998:biographical-note', 'case-study', 'chapter', 'colophon', 'conclusion', 'contributors', 'copyright-page', 'credits', 'dedication', 'z3998:discography', 'division', 'z3998:editorial-note', 'epigraph', 'epilogue', 'errata', 'z3998:filmography', 'footnotes', 'foreword', 'glossary', 'dictionary', 'z3998:grant-acknowledgment', 'halftitlepage', 'imprimatur', 'imprint', 'index', 'index-group', 'index-headnotes', 'index-legend', 'introduction', 'keywords', 'landmarks', 'loa', 'loi', 'lot', 'lov', 'notice', 'other-credits', 'page-list', 'practices', 'preamble', 'preface', 'prologue', 'z3998:promotional-copy', 'z3998:published-works', 'z3998:publisher-address', 'qna', 'rearnotes', 'endnotes', 'revision-history', 'z3998:section', 'seriespage', 'subchapter', 'z3998:subsection', 'toc', 'toc-brief', 'z3998:translator-note', 'volume')"/>
             <let name="allowed-types" value="($always-allowed-types, 'part')"/>
@@ -803,7 +803,7 @@
     <pattern id="epub_nordic_211">
         <title>Rule 211</title>
         <p>bodymatter.part</p>
-        <rule context="html:*[self::html:section or self::html:article][parent::html:*[tokenize(@epub:type, ' ') = ('part', 'volume')]]">
+        <rule context="html:*[self::html:section or self::html:article][parent::html:*[tokenize(@epub:type, '\s+') = ('part', 'volume')]]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="always-allowed-types" value="('abstract', 'acknowledgments', 'afterword', 'answers', 'appendix', 'assessment', 'assessments', 'bibliography', 'z3998:biographical-note', 'case-study', 'chapter', 'colophon', 'conclusion', 'contributors', 'copyright-page', 'credits', 'dedication', 'z3998:discography', 'division', 'z3998:editorial-note', 'epigraph', 'epilogue', 'errata', 'z3998:filmography', 'footnotes', 'foreword', 'glossary', 'dictionary', 'z3998:grant-acknowledgment', 'halftitlepage', 'imprimatur', 'imprint', 'index', 'index-group', 'index-headnotes', 'index-legend', 'introduction', 'keywords', 'landmarks', 'loa', 'loi', 'lot', 'lov', 'notice', 'other-credits', 'page-list', 'practices', 'preamble', 'preface', 'prologue', 'z3998:promotional-copy', 'z3998:published-works', 'z3998:publisher-address', 'qna', 'rearnotes', 'endnotes', 'revision-history', 'z3998:section', 'seriespage', 'subchapter', 'z3998:subsection', 'toc', 'toc-brief', 'z3998:translator-note', 'volume')"/>
             <let name="document-components" value="('z3998:pgroup', 'z3998:example', 'z3998:epigraph', 'z3998:annotation', 'z3998:introductory-note', 'z3998:commentary', 'z3998:clarification', 'z3998:correction', 'z3998:alteration', 'z3998:presentation', 'z3998:production', 'z3998:attribution', 'z3998:author', 'z3998:editor', 'z3998:general-editor', 'z3998:commentator', 'z3998:translator', 'z3998:republisher', 'z3998:structure', 'z3998:geographic', 'z3998:postal', 'z3998:email', 'z3998:ftp', 'z3998:http', 'z3998:ip', 'z3998:aside', 'z3998:sidebar', 'z3998:practice', 'z3998:notice', 'z3998:warning', 'z3998:marginalia', 'z3998:help', 'z3998:drama', 'z3998:scene', 'z3998:stage-direction', 'z3998:dramatis-personae', 'z3998:persona', 'z3998:actor', 'z3998:role-description', 'z3998:speech', 'z3998:diary', 'z3998:diary-entry', 'z3998:figure', 'z3998:plate', 'z3998:gallery', 'z3998:letter', 'z3998:sender', 'z3998:recipient', 'z3998:salutation', 'z3998:valediction', 'z3998:postscript', 'z3998:email-message', 'z3998:to', 'z3998:from', 'z3998:cc', 'z3998:bcc', 'z3998:subject', 'z3998:collection', 'z3998:orderedlist', 'z3998:unorderedlist', 'z3998:abbreviations', 'z3998:timeline', 'z3998:note', 'z3998:footnotes', 'z3998:footnote', 'z3998:rearnote', 'z3998:rearnotes', 'z3998:verse', 'z3998:poem', 'z3998:song', 'z3998:hymn', 'z3998:lyrics')"/>
@@ -830,9 +830,9 @@
     <pattern id="epub_nordic_224">
         <title>Rule 224</title>
         <p>linenum - span</p>
-        <rule context="html:span[tokenize(@class, ' ') = 'linenum']">
+        <rule context="html:span[tokenize(@class, '\s+') = 'linenum']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="parent::html:p[tokenize(@class, ' ') = 'line']">[nordic224] linenums (span class="linenum") must be the child element of a line (p class="line"): <value-of select="
+            <assert test="parent::html:p[tokenize(@class, '\s+') = 'line']">[nordic224] linenums (span class="linenum") must be the child element of a line (p class="line"): <value-of select="
                     concat('&lt;', name(), string-join(for $a in (@*)
                     return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;', string-join(.//text()[normalize-space()], ' '), '&lt;/', name(), '&gt;')"/>.</assert>
         </rule>
@@ -841,7 +841,7 @@
     <pattern id="epub_nordic_225">
         <title>Rule 225</title>
         <p>pagebreak</p>
-        <rule context="html:*[tokenize(@epub:type, ' ') = 'pagebreak' and text()]">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak' and text()]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="matches(@title, '.+')">[nordic225] The title attribute must be used to describe the page number: <value-of select="
                     concat('&lt;', name(), string-join(for $a in (@*)
@@ -854,7 +854,7 @@
         <p>doctitle.headline - h1</p>
         <rule context="html:body/html:header/html:h1">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@epub:type, ' ') = 'fulltitle'">[nordic247] The first headline in the html:body/html:header element must have the 'fulltitle' epub:type.</assert>
+            <assert test="tokenize(@epub:type, '\s+') = 'fulltitle'">[nordic247] The first headline in the html:body/html:header element must have the 'fulltitle' epub:type.</assert>
         </rule>
     </pattern>
     
@@ -872,7 +872,7 @@
     <pattern id="epub_nordic_251">
         <title>Rule 251</title>
         <p>lic - span</p>
-        <rule context="html:span[tokenize(@class, ' ') = 'lic']">
+        <rule context="html:span[tokenize(@class, '\s+') = 'lic']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="parent::html:li or parent::html:a/parent::html:li">[nordic251] The parent of a list item component (span class="lic") must be either a "li" or a "a" (where the "a" has "li"
                 as parent). <value-of select="$context"/></assert>
@@ -915,7 +915,7 @@
         <p>aside types</p>
         <rule context="html:aside">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@epub:type, ' ') = ('z3998:production', 'sidebar', 'note', 'annotation', 'epigraph')"
+            <assert test="tokenize(@epub:type, '\s+') = ('z3998:production', 'sidebar', 'note', 'annotation', 'epigraph')"
                 >[nordic254] &lt;aside&gt; elements must use one of the following epub:types: z3998:production, sidebar, note, annotation, epigraph. <value-of select="$context"/></assert>
         </rule>
     </pattern>
@@ -925,7 +925,7 @@
         <p>abbr types</p>
         <rule context="html:abbr">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@epub:type, ' ') = ('z3998:acronym', 'z3998:initialism', 'z3998:truncation')">[nordic255] "abbr" elements must use one of the following epub:types: z3998:acronym
+            <assert test="tokenize(@epub:type, '\s+') = ('z3998:acronym', 'z3998:initialism', 'z3998:truncation')">[nordic255] "abbr" elements must use one of the following epub:types: z3998:acronym
                 (formed from the first part of a word: "Mr.", "approx.", "lbs.", "rec'd"), z3998:initialism (each letter pronounced separately: "XML", "US"), z3998:truncation (pronounced as a word:
                 "NATO"). <value-of select="$context"/></assert>
         </rule>
