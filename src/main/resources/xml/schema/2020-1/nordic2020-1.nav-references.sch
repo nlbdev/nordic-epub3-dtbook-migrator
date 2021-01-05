@@ -40,6 +40,7 @@
         <title>Rule 1</title>
         <p>All headings in the book must be referenced from the navigation document</p>
         <rule context="c:result/c:result[@data-sectioning-element]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="sectioning-ref" value="if (@data-sectioning-id) then concat(replace(@xml:base,'.*/',''),'#',@data-sectioning-id) else ()"/>
             <let name="heading-ref" value="if (@data-heading-id) then concat(replace(@xml:base,'.*/',''),'#',@data-heading-id) else ()"/>
             <let name="nav-ref" value="//html:nav[tokenize(@epub:type,'\s+')='toc']//html:a[$sectioning-ref and ends-with(@href, $sectioning-ref) or $heading-ref and ends-with(@href, $heading-ref)]"/>
@@ -60,15 +61,15 @@
         <title>Rule 2</title>
         <p>The toc must be in reading order and nested correctly</p>
         <rule context="html:a[ancestor::html:nav[tokenize(@epub:type,'\s+')='toc']]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="href" value="substring-before(@href,'#')"/>
             <let name="fragment" value="substring-after(@href,'#')"/>
             <let name="result-ref" value="/*/c:result/c:result[(@data-sectioning-id, @data-heading-id) = $fragment]"/>
 
             <assert test="$result-ref">[nordic_nav_references_2a] All references from the navigation document must reference either a sectioning element or a headline in one of the content documents:
-                    <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+                    <value-of select="$context"/></assert>
             <report test="count($result-ref) &gt; 1">[nordic_nav_references_2a] All references from the navigation document must reference exactly one sectioning element or headline in one of the
-                content documents, there are multiple sections or headlines matching the href="<value-of select="@href"/>" in <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>; <value-of
+                content documents, there are multiple sections or headlines matching the href="<value-of select="@href"/>" in <value-of select="$context"/>; <value-of
                     select="string-join($result-ref/concat(replace(@xml:base,'.*/',''),'#',$fragment), ',')"/></report>
 
             <!-- TODO: commented out due to performance issues! this assertion needs to be rewritten in a much more efficient way before re-enabling it -->
@@ -85,8 +86,7 @@
             <let name="depth-in-nav" value="count(ancestor::html:li)"/>
             <let name="depth-in-content" value="$result-ref/xs:integer((@data-heading-depth, @data-sectioning-depth)[1])"/>
             <assert test="not($result-ref) or $depth-in-nav = $depth-in-content + $document-in-nav-depth - 1">[nordic_nav_references_2b] The nesting of headlines in the content does not match the
-                nesting of headlines in the navigation document. The toc item `<value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>` in the navigation document is not nested at the correct
+                nesting of headlines in the navigation document. The toc item `<value-of select="$context"/>` in the navigation document is not nested at the correct
                 level. The referenced document (<value-of select="$href"/>) occurs in the navigation document at nesting depth <value-of select="$document-in-nav-depth"/> (<value-of
                     select="if ($document-in-nav-depth = 1) then 'it is not contained inside other sections such as a part or a chapter'
                     else concat('it is contained inside ',string-join($document-in-nav/ancestor::html:li[1]/ancestor::html:li/concat('&quot;',(text(),*[not(local-name()=('ol','ul'))]/string-join(.//text(),''))[normalize-space()][1],'&quot;'),', which is contained inside'))"
@@ -104,6 +104,7 @@
         <title>Rule 3</title>
         <p>All pagebreaks in the book must be referenced from the navigation document</p>
         <rule context="c:result/c:result[@data-pagebreak-element]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="pagebreak-ref" value="if (@data-pagebreak-id) then concat(replace(@xml:base,'.*/',''),'#',@data-pagebreak-id) else ()"/>
             <let name="nav-ref" value="//html:nav[tokenize(@epub:type,'\s+')='page-list']//html:a[$pagebreak-ref and ends-with(@href, $pagebreak-ref)]"/>
 
@@ -126,6 +127,7 @@
         <title>Rule 4</title>
         <p>The page-list must be in reading order</p>
         <rule context="html:a[ancestor::html:nav[tokenize(@epub:type,'\s+')='page-list']]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="result-ref" value="/*/c:result/c:result[@data-pagebreak-id = substring-after(@href,'#')]"/>
             <let name="preceding-refs-which-is-following-in-content"
                 value="(preceding::html:a intersect ancestor::html:nav//html:a)[@href = $result-ref/following-sibling::c:result/concat(replace(@xml:base,'.*/',''),@data-pagebreak-id)]"/>
