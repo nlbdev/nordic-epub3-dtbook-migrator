@@ -553,7 +553,7 @@
                                             concat($prefix, ': ', 'http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm#')
                                         else
                                             ())"/>
-            <report test="parent::*/@class = 'myclass' and count($prefixes) = 0">prefixes: <value-of select="$prefixes"/></report>
+            
             <assert test="
                     count($prefixes) = 0 or not(false() = (for $prefix in $prefixes return matches(string(ancestor::html:html[1]/@epub:prefix[1]), concat('(^|\s)', $prefix, ': *[^\s]+(\s|$)'))))">[nordic128e] all of the prefixes in use (<value-of select="concat('''', string-join($prefixes, ''','''), '''')"/>) on the element (<value-of select="
                     concat('&lt;', name(), string-join(for $a in (@*)
