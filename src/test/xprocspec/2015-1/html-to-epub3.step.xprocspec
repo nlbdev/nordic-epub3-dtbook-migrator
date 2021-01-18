@@ -22,6 +22,7 @@
                 <x:document href="../../resources/2015-1/single-html/C00000.xhtml" type="file" method="xml"/>
             </x:input>
             <x:option name="temp-dir" select="$temp-dir"/>
+            <x:option name="indent" select="'true'"/>
             <x:option name="fail-on-error" select="'true'"/>
         </x:call>
 

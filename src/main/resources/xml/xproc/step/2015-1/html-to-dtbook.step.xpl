@@ -34,6 +34,7 @@
     <!-- option supporting convert to DTBook 1.1.0 -->
     <p:option name="dtbook2005" required="false" select="'true'"/>
     <p:option name="fail-on-error" required="true"/>
+    <p:option name="indent" required="true"/>
 
     <p:import href="../validation-status.xpl">
         <p:documentation>

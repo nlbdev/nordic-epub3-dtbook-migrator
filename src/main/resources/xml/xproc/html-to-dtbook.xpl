@@ -30,6 +30,13 @@
         </p:documentation>
     </p:option>
     
+    <p:option name="indent" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Indent XML</h2>
+            <p px:role="desc">If 'true', will automatically indent HTML and XML documents.</p>
+        </p:documentation>
+    </p:option>
+    
     <p:option name="organization-specific-validation" required="false" px:type="string" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Organization-specific validation</h2>
@@ -187,6 +194,7 @@
     <px:message message="Converting from HTML to DTBook"/>
     <px:nordic-html-to-dtbook.step name="html-to-dtbook.html-to-dtbook">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="indent" select="$indent"/>
         <!-- call with dtbook2005 option whether to convert to a DTBook 2005 or DTBook 1.1.0 -->
         <p:with-option name="dtbook2005" select="$dtbook2005"/>
         <p:input port="in-memory.in">

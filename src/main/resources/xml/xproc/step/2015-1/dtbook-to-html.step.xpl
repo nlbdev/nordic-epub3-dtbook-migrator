@@ -34,6 +34,7 @@
     </p:output>
 
     <p:option name="fail-on-error" required="true"/>
+    <p:option name="indent" required="true"/>
     <p:option name="temp-dir" required="true"/>
 
     <p:import href="../pretty-print.xpl">

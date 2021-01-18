@@ -22,6 +22,7 @@
                 <x:document type="file" href="../../resources/2015-1/DTBook/C00000.xml"/>
             </x:input>
             <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+            <x:option name="indent" select="'true'"/>
             <x:option name="fail-on-error" select="'true'"/>
         </x:call>
 

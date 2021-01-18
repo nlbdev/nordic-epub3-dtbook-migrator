@@ -30,6 +30,13 @@
         </p:documentation>
     </p:option>
     
+    <p:option name="indent" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Indent HTML and XML</h2>
+            <p px:role="desc">If 'true', will automatically indent HTML and XML documents.</p>
+        </p:documentation>
+    </p:option>
+    
     <p:option name="organization-specific-validation" required="false" px:type="string" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Organization-specific validation</h2>
@@ -118,6 +125,7 @@
     <px:message message="Converting from EPUB to HTML"/>
     <px:nordic-epub3-to-html.step name="epub3-to-html.epub3-to-html">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="indent" select="$indent"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="epub3-to-html.epub3-validate"/>
         </p:input>
