@@ -30,6 +30,13 @@
         </p:documentation>
     </p:option>
     
+    <p:option name="check-images" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Validate images</h2>
+            <p px:role="desc">Whether or not to check that referenced images exist and has the right file signatures.</p>
+        </p:documentation>
+    </p:option>
+    
     <p:option name="indent" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Indent HTML and XML</h2>
@@ -135,6 +142,7 @@
     <px:message message="Validating EPUB"/>
     <px:nordic-epub3-validate.step name="epub3-to-dtbook.epub3-validate">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="temp-dir" select="concat(/*/text(),'validate/')">
             <p:pipe port="normalized" step="temp-dir"/>
         </p:with-option>
@@ -157,8 +165,9 @@
     </px:nordic-epub3-to-html.step>
 
     <px:message message="Validating HTML"/>
-    <px:nordic-html-validate.step name="epub3-to-dtbook.html-validate" document-type="Nordic HTML (intermediary single-document)" check-images="false">
+    <px:nordic-html-validate.step name="epub3-to-dtbook.html-validate" document-type="Nordic HTML (intermediary single-document)">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="epub3-to-dtbook.epub3-to-html"/>
@@ -262,8 +271,9 @@
     </px:nordic-dtbook-store.step>
 
     <px:message message="Validating DTBook"/>
-    <px:nordic-dtbook-validate.step name="epub3-to-dtbook.dtbook-validate" check-images="false">
+    <px:nordic-dtbook-validate.step name="epub3-to-dtbook.dtbook-validate">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="check-images" select="$check-images"/>
         <!-- call with dtbook2005 option whether to validate a DTBook 2005 or DTBook 1.1.0 -->
         <p:with-option name="dtbook2005" select="$dtbook2005"/>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>

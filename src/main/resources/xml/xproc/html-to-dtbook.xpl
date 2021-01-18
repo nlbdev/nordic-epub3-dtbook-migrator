@@ -238,8 +238,9 @@
     </px:nordic-dtbook-store.step>
 
     <px:message message="Validating DTBook"/>
-    <px:nordic-dtbook-validate.step name="html-to-dtbook.dtbook-validate" check-images="false">
+    <px:nordic-dtbook-validate.step name="html-to-dtbook.dtbook-validate">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="check-images" select="$check-images"/>
         <!-- call with dtbook2005 option whether to validate a DTBook 2005 or DTBook 1.1.0 -->
         <p:with-option name="dtbook2005" select="$dtbook2005"/>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>

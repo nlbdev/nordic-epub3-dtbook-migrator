@@ -30,6 +30,13 @@
         </p:documentation>
     </p:option>
     
+    <p:option name="check-images" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Validate images</h2>
+            <p px:role="desc">Whether or not to check that referenced images exist and has the right file signatures.</p>
+        </p:documentation>
+    </p:option>
+    
     <p:option name="indent" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Indent HTML and XML</h2>
@@ -163,8 +170,9 @@
         </p:otherwise>
     </p:choose>
 
-    <px:nordic-html-validate.step name="html-to-epub3.html-validate" check-images="true">
+    <px:nordic-html-validate.step name="html-to-epub3.html-validate">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
             <p:pipe step="html-to-epub3.html-load" port="in-memory.out"/>
@@ -210,8 +218,9 @@
         </p:input>
     </px:nordic-epub3-store.step>
 
-    <px:nordic-epub3-validate.step name="html-to-epub3.epub3-validate" check-images="false">
+    <px:nordic-epub3-validate.step name="html-to-epub3.epub3-validate">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="temp-dir" select="concat(/*/text(),'validate-epub/')">
             <p:pipe step="temp-dir" port="normalized"/>
         </p:with-option>

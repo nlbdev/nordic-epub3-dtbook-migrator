@@ -30,6 +30,13 @@
         </p:documentation>
     </p:option>
     
+    <p:option name="check-images" required="false" px:type="boolean" select="'true'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Validate images</h2>
+            <p px:role="desc">Whether or not to check that referenced images exist and has the right file signatures.</p>
+        </p:documentation>
+    </p:option>
+    
     <p:option name="indent" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Indent HTML and XML</h2>
@@ -133,8 +140,9 @@
             <p:pipe port="normalized" step="dtbook"/>
         </p:with-option>
     </px:fileset-add-entry>
-    <px:nordic-dtbook-validate.step name="dtbook-to-epub3.dtbook-validate" check-images="true" cx:depends-on="nordic-version-message-and-variables">
+    <px:nordic-dtbook-validate.step name="dtbook-to-epub3.dtbook-validate" cx:depends-on="nordic-version-message-and-variables">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="allow-legacy" select="if ($no-legacy='false') then 'true' else 'false'"/>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
     </px:nordic-dtbook-validate.step>
@@ -162,8 +170,9 @@
         </p:input>
     </px:nordic-html-add-accessibility-css.step>
 
-    <px:nordic-html-validate.step name="dtbook-to-epub3.html-validate" check-images="false">
+    <px:nordic-html-validate.step name="dtbook-to-epub3.html-validate">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="dtbook-to-epub3.add-css"/>
@@ -239,8 +248,9 @@
         </p:with-option>
     </px:nordic-epub3-store.step>
 
-    <px:nordic-epub3-validate.step name="dtbook-to-epub3.epub3-validate" check-images="false">
+    <px:nordic-epub3-validate.step name="dtbook-to-epub3.epub3-validate">
         <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="dtbook-to-epub3.epub3-store"/>

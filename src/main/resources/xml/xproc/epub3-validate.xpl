@@ -15,6 +15,13 @@
         </p:documentation>
     </p:option>
     
+    <p:option name="check-images" required="false" select="'true'" px:type="boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Check image file signatures</h2>
+            <p px:role="desc">Check the "magic numbers" of the image files to make sure that they are as expected.</p>
+        </p:documentation>
+    </p:option>
+    
     <p:option name="organization-specific-validation" required="false" px:type="string" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Organization-specific validation</h2>
@@ -84,6 +91,7 @@
         <p:with-option name="temp-dir" select="concat(/*/text(),'validate/')">
             <p:pipe port="normalized" step="temp-dir"/>
         </p:with-option>
+                <p:with-option name="check-images" select="$check-images"/>
         <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
     </px:nordic-epub3-validate.step>
     <px:fileset-load media-types="application/xhtml+xml" name="epub3-validate.load-epub-xhtml">
