@@ -6,7 +6,7 @@
                xmlns:html="http://www.w3.org/1999/xhtml"
                xmlns:opf="http://www.idpf.org/2007/opf"
                xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/"
-               script="../../../main/resources/xml/xproc/step/html-to-epub3.step.xpl">
+               script="../../../main/resources/xml/xproc/step/2015-1/html-to-epub3.step.xpl">
 
     <x:scenario label="px:nordic-html-to-epub3.step">
         <x:call step="px:nordic-html-to-epub3.step">

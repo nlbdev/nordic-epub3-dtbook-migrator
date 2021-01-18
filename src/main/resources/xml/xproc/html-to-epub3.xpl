@@ -59,11 +59,11 @@
         </p:documentation>
     </p:option>
 
+    <p:import href="step/2015-1/html-validate.step.xpl"/>
+    <p:import href="step/2015-1/html-to-epub3.step.xpl"/>
+    <p:import href="step/2015-1/epub3-validate.step.xpl"/>
     <p:import href="step/validation-status.xpl"/>
-    <p:import href="step/html-validate.step.xpl"/>
-    <p:import href="step/html-to-epub3.step.xpl"/>
     <p:import href="step/epub3-store.step.xpl"/>
-    <p:import href="step/epub3-validate.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="step/fail-on-error-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>

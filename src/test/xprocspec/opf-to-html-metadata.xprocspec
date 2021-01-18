@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               script="../../../main/resources/xml/xproc/step/opf-to-html-metadata.xpl">
+               script="../../main/resources/xml/xproc/step/opf-to-html-metadata.xpl">
 
   <x:scenario label="A full package document">
     <x:call step="px:nordic-opf-to-html-metadata">
       <x:input port="source">
-        <x:document type="file" href="../../resources/2015-1/package.opf"/>
+        <x:document type="file" href="../resources/2015-1/package.opf"/>
       </x:input>
       <x:param port="parameters" name="modified" select="'2013-11-13T14:16:00Z'"/>
     </x:call>

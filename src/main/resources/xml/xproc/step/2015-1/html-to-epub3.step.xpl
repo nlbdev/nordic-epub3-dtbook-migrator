@@ -46,17 +46,17 @@
             px:nordic-html-split-perform
         </p:documentation>
     </p:import>
-    <p:import href="validation-status.xpl">
+    <p:import href="../validation-status.xpl">
         <p:documentation>
             px:nordic-validation-status
         </p:documentation>
     </p:import>
-    <p:import href="pretty-print.xpl">
+    <p:import href="../pretty-print.xpl">
         <p:documentation>
             px:nordic-pretty-print
         </p:documentation>
     </p:import>
-    <p:import href="update-epub-prefixes.xpl">
+    <p:import href="../update-epub-prefixes.xpl">
         <p:documentation>
             px:nordic-update-epub-prefixes
         </p:documentation>
@@ -228,7 +228,7 @@
                 <!-- post-process -->
                 <p:xslt>
                     <p:input port="stylesheet">
-                        <p:document href="../../xslt/process-opf-metadata.xsl"/>
+                        <p:document href="../../../xslt/process-opf-metadata.xsl"/>
                     </p:input>
                     <p:input port="parameters">
                         <p:empty/>
@@ -277,7 +277,7 @@
                                 <p:empty/>
                             </p:input>
                             <p:input port="stylesheet">
-                                <p:document href="../../xslt/generate-missing-headlines.xsl"/>
+                                <p:document href="../../../xslt/generate-missing-headlines.xsl"/>
                             </p:input>
                         </p:xslt>
                         <p:delete match="html:a[tokenize(@epub:type,'\s+')='noteref']" name="html-to-epub3.step.nav.toc.delete-noterefs"/>
@@ -303,7 +303,7 @@
                                     <p:empty/>
                                 </p:input>
                                 <p:input port="stylesheet">
-                                    <p:document href="../../xslt/replace-single-html-hrefs-with-multi-html-hrefs.xsl"/>
+                                    <p:document href="../../../xslt/replace-single-html-hrefs-with-multi-html-hrefs.xsl"/>
                                 </p:input>
                             </p:xslt>
                         </p:group>
@@ -350,7 +350,7 @@
                             <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                         </p:with-param>
                         <p:input port="stylesheet">
-                            <p:document href="../../xslt/navdoc-nordic-normalization.xsl"/>
+                            <p:document href="../../../xslt/navdoc-nordic-normalization.xsl"/>
                         </p:input>
                     </p:xslt>
                     <px:nordic-update-epub-prefixes/>

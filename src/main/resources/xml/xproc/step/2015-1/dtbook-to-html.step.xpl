@@ -36,22 +36,22 @@
     <p:option name="fail-on-error" required="true"/>
     <p:option name="temp-dir" required="true"/>
 
-    <p:import href="pretty-print.xpl">
+    <p:import href="../pretty-print.xpl">
         <p:documentation>
             px:nordic-pretty-print
         </p:documentation>
     </p:import>
-    <p:import href="validation-status.xpl">
+    <p:import href="../validation-status.xpl">
         <p:documentation>
             px:nordic-validation-status
         </p:documentation>
     </p:import>
-    <p:import href="update-epub-prefixes.xpl">
+    <p:import href="../update-epub-prefixes.xpl">
         <p:documentation>
             px:nordic-update-epub-prefixes
         </p:documentation>
     </p:import>
-    <p:import href="html-add-accessibility.step.xpl">
+    <p:import href="../html-add-accessibility.step.xpl">
         <p:documentation>
             px:nordic-html-add-accessibility-css.step
         </p:documentation>

@@ -3,7 +3,7 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:epub="http://www.idpf.org/2007/ops"
                xmlns="http://www.w3.org/1999/xhtml"
-               script="../../../main/resources/xml/xproc/step/update-epub-prefixes.xpl">
+               script="../../main/resources/xml/xproc/step/update-epub-prefixes.xpl">
 
     <x:scenario label="add prefixes as necessary">
         <x:call step="px:nordic-update-epub-prefixes">

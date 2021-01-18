@@ -6,7 +6,7 @@
                xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                xmlns:html="http://www.w3.org/1999/xhtml"
-               script="../../../main/resources/xml/xproc/step/dtbook-to-html.step.xpl">
+               script="../../../main/resources/xml/xproc/step/2015-1/dtbook-to-html.step.xpl">
     
     <x:scenario label="px:nordic-dtbook-to-html.step">
         <x:call step="px:nordic-dtbook-to-html.step">

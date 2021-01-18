@@ -13,18 +13,19 @@
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/dtbook-validate.xpl" uri="../xml/xproc/dtbook-validate.xpl" px:content-type="script" px:id="nordic-dtbook-validate"/>
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-asciimath-to-mathml.xpl" uri="../xml/xproc/epub3-asciimath-to-mathml.xpl" px:content-type="script" px:id="nordic-epub3-asciimath-to-mathml"/>
     
-    <!-- Reusable XProc conversion and validation steps -->
-    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/dtbook-validate.step.xpl" uri="../xml/xproc/step/dtbook-validate.step.xpl"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/html-validate.step.xpl" uri="../xml/xproc/step/html-validate.step.xpl"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-validate.step.xpl" uri="../xml/xproc/step/epub3-validate.step.xpl"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/dtbook-to-html.step.xpl" uri="../xml/xproc/step/dtbook-to-html.step.xpl"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/html-to-dtbook.step.xpl" uri="../xml/xproc/step/html-to-dtbook.step.xpl"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/html-to-epub3.step.xpl" uri="../xml/xproc/step/html-to-epub3.step.xpl"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-html.step.xpl" uri="../xml/xproc/step/epub3-to-html.step.xpl"/>
+    <!-- Reusable XProc conversion and validation steps (guidelines: 2015-1) -->
+    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/dtbook-validate.step.xpl" uri="../xml/xproc/step/2015-1/dtbook-validate.step.xpl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/html-validate.step.xpl" uri="../xml/xproc/step/2015-1/html-validate.step.xpl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-validate.step.xpl" uri="../xml/xproc/step/2015-1/epub3-validate.step.xpl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/dtbook-to-html.step.xpl" uri="../xml/xproc/step/2015-1/dtbook-to-html.step.xpl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/html-to-dtbook.step.xpl" uri="../xml/xproc/step/2015-1/html-to-dtbook.step.xpl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/html-to-epub3.step.xpl" uri="../xml/xproc/step/2015-1/html-to-epub3.step.xpl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-html.step.xpl" uri="../xml/xproc/step/2015-1/epub3-to-html.step.xpl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-asciimath-to-mathml.step.xpl" uri="../xml/xproc/step/2015-1/epub3-asciimath-to-mathml.step.xpl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/html-split.xpl" uri="../xml/xproc/step/2015-1/html-split.xpl"/>
+    <!-- Reusable XProc conversion and validation steps (independent of guidelines version) -->
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/html-store.step.xpl" uri="../xml/xproc/step/html-store.step.xpl"/>
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-store.step.xpl" uri="../xml/xproc/step/epub3-store.step.xpl"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-asciimath-to-mathml.step.xpl" uri="../xml/xproc/step/epub3-asciimath-to-mathml.step.xpl"/>
-    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/html-split.xpl" uri="../xml/xproc/step/html-split.xpl"/>
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/format-html-report.xpl" uri="../xml/xproc/step/format-html-report.xpl"/>
     
     <!-- Include all reusable XProc conversion and validation steps at once (discouraged, importing too much can have performance impacts) -->

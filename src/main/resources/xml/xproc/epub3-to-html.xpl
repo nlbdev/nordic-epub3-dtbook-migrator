@@ -59,9 +59,9 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="step/epub3-validate.step.xpl"/>
-    <p:import href="step/epub3-to-html.step.xpl"/>
-    <p:import href="step/html-validate.step.xpl"/>
+    <p:import href="step/2015-1/epub3-validate.step.xpl"/>
+    <p:import href="step/2015-1/epub3-to-html.step.xpl"/>
+    <p:import href="step/2015-1/html-validate.step.xpl"/>
     <p:import href="step/html-store.step.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="step/fail-on-error-status.xpl"/>

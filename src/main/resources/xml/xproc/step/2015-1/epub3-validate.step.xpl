@@ -38,9 +38,9 @@
     <p:option name="check-images" select="'true'"/>
     <p:option name="organization-specific-validation" required="false" select="''"/>
 
-    <p:import href="validation-status.xpl"/>
     <p:import href="html-validate.step.xpl"/>
-    <p:import href="check-image-file-signatures.xpl"/>
+    <p:import href="../validation-status.xpl"/>
+    <p:import href="../check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:read-xml-declaration
@@ -118,7 +118,7 @@
                     <p:empty/>
                 </p:input>
                 <p:input port="stylesheet">
-                    <p:document href="../../xslt/epubcheck-report-to-pipeline-report.xsl"/>
+                    <p:document href="../../../xslt/epubcheck-report-to-pipeline-report.xsl"/>
                 </p:input>
             </p:xslt>
             <p:identity name="epub3-validate.step.epubcheck.validate"/>
@@ -188,7 +188,7 @@
                     <p:pipe port="result" step="epub3-validate.step.opf"/>
                 </p:input>
                 <p:input port="stylesheet">
-                    <p:document href="../../xslt/opf-to-spine-fileset.xsl"/>
+                    <p:document href="../../../xslt/opf-to-spine-fileset.xsl"/>
                 </p:input>
             </p:xslt>
             <px:fileset-load media-types="application/xhtml+xml" name="epub3-validate.step.load-unzipped-spine">
@@ -247,7 +247,7 @@
                     <p:empty/>
                 </p:input>
                 <p:input port="schema">
-                    <p:document href="../../schema/2015-1/nordic2015-1.opf.sch"/>
+                    <p:document href="../../../schema/2015-1/nordic2015-1.opf.sch"/>
                 </p:input>
             </p:validate-with-schematron>
             <p:sink/>
@@ -549,7 +549,7 @@
                         <p:empty/>
                     </p:input>
                     <p:input port="schema">
-                        <p:document href="../../schema/2015-1/nordic2015-1.opf-and-html.sch"/>
+                        <p:document href="../../../schema/2015-1/nordic2015-1.opf-and-html.sch"/>
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>
@@ -595,7 +595,7 @@
                             <p:empty/>
                         </p:input>
                         <p:input port="stylesheet">
-                            <p:document href="../../xslt/list-heading-and-pagebreak-references.xsl"/>
+                            <p:document href="../../../xslt/list-heading-and-pagebreak-references.xsl"/>
                         </p:input>
                     </p:xslt>
                 </p:for-each>
@@ -623,7 +623,7 @@
                         <p:empty/>
                     </p:input>
                     <p:input port="schema">
-                        <p:document href="../../schema/2015-1/nordic2015-1.nav-references.sch"/>
+                        <p:document href="../../../schema/2015-1/nordic2015-1.nav-references.sch"/>
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>
@@ -655,7 +655,7 @@
                         <p:empty/>
                     </p:input>
                     <p:input port="schema">
-                        <p:document href="../../schema/2015-1/nordic2015-1.nav-ncx.sch"/>
+                        <p:document href="../../../schema/2015-1/nordic2015-1.nav-ncx.sch"/>
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>
@@ -692,7 +692,7 @@
                         <p:empty/>
                     </p:input>
                     <p:input port="stylesheet">
-                        <p:document href="../../xslt/determine-complexity.xsl"/>
+                        <p:document href="../../../xslt/determine-complexity.xsl"/>
                     </p:input>
                 </p:xslt>
             </p:group>
