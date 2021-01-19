@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-html-to-epub3" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions">
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:opf="http://www.idpf.org/2007/opf">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic HTML5 to EPUB3</h1>
@@ -13,7 +13,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="result" step="status"/>
+        <p:pipe port="status" step="guidelines-version.choose"/>
     </p:output>
 
     <p:option name="html-report" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/vnd.pipeline.report+xml">
@@ -90,8 +90,9 @@
     <p:import href="step/2015-1/html-validate.step.xpl"/>
     <p:import href="step/2015-1/html-to-epub3.step.xpl"/>
     <p:import href="step/2015-1/epub3-validate.step.xpl"/>
-    <p:import href="step/validation-status.xpl"/>
     <p:import href="step/epub3-store.step.xpl"/>
+    <p:import href="step/determine-guidelines-version.xpl"/>
+    <p:import href="step/validation-status.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
     <p:import href="step/fail-on-error-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
@@ -121,6 +122,16 @@
     <p:identity name="nordic-version-message-and-variables"/>
     <p:sink/>
     
+    <px:nordic-determine-guidelines-version name="guidelines-version">
+        <p:with-option name="href" select="/*/text()">
+            <p:pipe port="normalized" step="html"/>
+        </p:with-option>
+    </px:nordic-determine-guidelines-version>
+    <px:message message="Guidelines version: $1">
+        <p:with-option name="param1" select="/*/text()"/>
+    </px:message>
+    <p:sink/>
+    
     <px:fileset-create name="html-to-epub3.create-html-fileset">
         <p:with-option name="base" select="replace(/*/text(),'[^/]+$','')">
             <p:pipe port="normalized" step="html"/>
@@ -132,153 +143,177 @@
         </p:with-option>
     </px:fileset-add-entry>
     <p:identity name="html-to-epub3.html-fileset.no-resources"/>
-
-    <px:check-files-wellformed name="html-to-epub3.check-html-wellformed"/>
-
-    <p:choose name="html-to-epub3.html-load">
+    
+    <p:choose name="guidelines-version.choose">
         <p:xpath-context>
-            <p:pipe port="validation-status" step="html-to-epub3.check-html-wellformed"/>
+            <p:pipe port="result" step="guidelines-version"/>
         </p:xpath-context>
-        <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
-            <p:output port="fileset.out" primary="true">
-                <p:pipe port="result" step="html-to-epub3.html-load.fileset"/>
+        <p:when test="/*/text() = '2015-1'">
+            <p:output port="status">
+                <p:pipe port="result" step="status.2015-1"/>
             </p:output>
-            <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="result" step="html-to-epub3.html-load.load"/>
-            </p:output>
-            <p:output port="report.out" sequence="true">
-                <p:empty/>
-            </p:output>
-
-            <p:load name="html-to-epub3.html-load.load">
-                <p:with-option name="href" select="/*/text()">
-                    <p:pipe port="normalized" step="html"/>
-                </p:with-option>
-            </p:load>
-
-            <px:html-to-fileset name="html-to-epub3.html-load.resource-fileset"/>
-            <px:fileset-join name="html-to-epub3.html-load.fileset">
-                <p:input port="source">
-                    <p:pipe port="result" step="html-to-epub3.html-fileset.no-resources"/>
-                    <p:pipe port="fileset.out" step="html-to-epub3.html-load.resource-fileset"/>
+            
+            <px:check-files-wellformed name="html-to-epub3.check-html-wellformed"/>
+            
+            <p:choose name="html-to-epub3.html-load">
+                <p:xpath-context>
+                    <p:pipe port="validation-status" step="html-to-epub3.check-html-wellformed"/>
+                </p:xpath-context>
+                <p:when test="/*/@result='ok' or $fail-on-error = 'false'">
+                    <p:output port="fileset.out" primary="true">
+                        <p:pipe port="result" step="html-to-epub3.html-load.fileset"/>
+                    </p:output>
+                    <p:output port="in-memory.out" sequence="true">
+                        <p:pipe port="result" step="html-to-epub3.html-load.load"/>
+                    </p:output>
+                    <p:output port="report.out" sequence="true">
+                        <p:empty/>
+                    </p:output>
+                    
+                    <p:load name="html-to-epub3.html-load.load">
+                        <p:with-option name="href" select="/*/text()">
+                            <p:pipe port="normalized" step="html"/>
+                        </p:with-option>
+                    </p:load>
+                    
+                    <px:html-to-fileset name="html-to-epub3.html-load.resource-fileset"/>
+                    <px:fileset-join name="html-to-epub3.html-load.fileset">
+                        <p:input port="source">
+                            <p:pipe port="result" step="html-to-epub3.html-fileset.no-resources"/>
+                            <p:pipe port="fileset.out" step="html-to-epub3.html-load.resource-fileset"/>
+                        </p:input>
+                    </px:fileset-join>
+                    
+                </p:when>
+                <p:otherwise>
+                    <p:output port="fileset.out" sequence="true" primary="true">
+                        <p:pipe port="result" step="html-to-epub3.html-fileset.no-resources"/>
+                    </p:output>
+                    <p:output port="in-memory.out" sequence="true">
+                        <p:empty/>
+                    </p:output>
+                    <p:output port="report.out" sequence="true">
+                        <p:pipe port="report" step="html-to-epub3.check-html-wellformed"/>
+                    </p:output>
+                    
+                    <p:sink>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:sink>
+                </p:otherwise>
+            </p:choose>
+            
+            <px:nordic-html-validate.step name="html-to-epub3.html-validate">
+                <p:with-option name="fail-on-error" select="$fail-on-error"/>
+                <p:with-option name="check-images" select="$check-images"/>
+                <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
+                <p:input port="in-memory.in">
+                    <p:pipe step="html-to-epub3.html-load" port="in-memory.out"/>
                 </p:input>
-            </px:fileset-join>
-
+                <p:input port="report.in">
+                    <p:pipe step="html-to-epub3.html-load" port="report.out"/>
+                </p:input>
+                <p:input port="status.in">
+                    <p:pipe port="validation-status" step="html-to-epub3.check-html-wellformed"/>
+                </p:input>
+            </px:nordic-html-validate.step>
+            
+            <px:nordic-html-to-epub3.step name="html-to-epub3.html-to-epub3">
+                <p:with-option name="fail-on-error" select="$fail-on-error"/>
+                <p:with-option name="indent" select="$indent"/>
+                <p:with-option name="temp-dir" select="concat(/*/text(),'html/')">
+                    <p:pipe step="temp-dir" port="normalized"/>
+                </p:with-option>
+                <p:input port="in-memory.in">
+                    <p:pipe port="in-memory.out" step="html-to-epub3.html-validate"/>
+                </p:input>
+                <p:input port="report.in">
+                    <p:pipe port="report.out" step="html-to-epub3.html-validate"/>
+                </p:input>
+                <p:input port="status.in">
+                    <p:pipe port="status.out" step="html-to-epub3.html-validate"/>
+                </p:input>
+            </px:nordic-html-to-epub3.step>
+            
+            <px:nordic-epub3-store.step name="html-to-epub3.epub3-store">
+                <p:with-option name="fail-on-error" select="$fail-on-error"/>
+                <p:with-option name="output-dir" select="/*/text()">
+                    <p:pipe step="output-dir" port="normalized"/>
+                </p:with-option>
+                <p:input port="in-memory.in">
+                    <p:pipe port="in-memory.out" step="html-to-epub3.html-to-epub3"/>
+                </p:input>
+                <p:input port="report.in">
+                    <p:pipe port="report.out" step="html-to-epub3.html-to-epub3"/>
+                </p:input>
+                <p:input port="status.in">
+                    <p:pipe port="status.out" step="html-to-epub3.html-to-epub3"/>
+                </p:input>
+            </px:nordic-epub3-store.step>
+            
+            <px:nordic-epub3-validate.step name="html-to-epub3.epub3-validate">
+                <p:with-option name="fail-on-error" select="$fail-on-error"/>
+                <p:with-option name="check-images" select="$check-images"/>
+                <p:with-option name="use-epubcheck" select="$use-epubcheck"/>
+                <p:with-option name="use-ace" select="$use-ace"/>
+                <p:with-option name="temp-dir" select="concat(/*/text(),'validate-epub/')">
+                    <p:pipe step="temp-dir" port="normalized"/>
+                </p:with-option>
+                <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
+                <p:input port="in-memory.in">
+                    <p:pipe port="in-memory.out" step="html-to-epub3.epub3-store"/>
+                </p:input>
+                <p:input port="report.in">
+                    <p:pipe port="report.out" step="html-to-epub3.epub3-store"/>
+                </p:input>
+                <p:input port="status.in">
+                    <p:pipe port="status.out" step="html-to-epub3.epub3-store"/>
+                </p:input>
+            </px:nordic-epub3-validate.step>
+            <p:sink/>
+            
+            <px:nordic-format-html-report name="html-to-epub3.nordic-format-html-report">
+                <p:input port="source">
+                    <p:pipe port="report.out" step="html-to-epub3.epub3-validate"/>
+                </p:input>
+            </px:nordic-format-html-report>
+            <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="html-to-epub3.store-report">
+                <p:with-option name="href" select="concat(/*/text(),if (ends-with(/*/text(),'/')) then '' else '/','report.xhtml')">
+                    <p:pipe port="normalized" step="html-report"/>
+                </p:with-option>
+            </p:store>
+            <px:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="html-to-epub3.set-report-doctype">
+                <p:with-option name="href" select="/*/text()">
+                    <p:pipe port="result" step="html-to-epub3.store-report"/>
+                </p:with-option>
+            </px:set-doctype>
+            <p:sink/>
+            
+            <px:nordic-fail-on-error-status name="status.2015-1">
+                <p:with-option name="fail-on-error" select="$fail-on-error"/>
+                <p:with-option name="output-dir" select="/*/text()">
+                    <p:pipe step="output-dir" port="normalized"/>
+                </p:with-option>
+                <p:input port="source">
+                    <p:pipe port="status.out" step="html-to-epub3.epub3-validate"/>
+                </p:input>
+            </px:nordic-fail-on-error-status>
+            <p:sink/>
+            
         </p:when>
         <p:otherwise>
-            <p:output port="fileset.out" sequence="true" primary="true">
-                <p:pipe port="result" step="html-to-epub3.html-fileset.no-resources"/>
-            </p:output>
-            <p:output port="in-memory.out" sequence="true">
-                <p:empty/>
-            </p:output>
-            <p:output port="report.out" sequence="true">
-                <p:pipe port="report" step="html-to-epub3.check-html-wellformed"/>
-            </p:output>
-
-            <p:sink>
+            <p:output port="status"/>
+            
+            <p:identity>
                 <p:input port="source">
-                    <p:empty/>
+                    <p:inline exclude-inline-prefixes="#all">
+                        <d:validation-status result="error"/>
+                    </p:inline>
                 </p:input>
-            </p:sink>
+            </p:identity>
+            <px:message message="Unknown guidelines version"/>
         </p:otherwise>
     </p:choose>
-
-    <px:nordic-html-validate.step name="html-to-epub3.html-validate">
-        <p:with-option name="fail-on-error" select="$fail-on-error"/>
-        <p:with-option name="check-images" select="$check-images"/>
-        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
-        <p:input port="in-memory.in">
-            <p:pipe step="html-to-epub3.html-load" port="in-memory.out"/>
-        </p:input>
-        <p:input port="report.in">
-            <p:pipe step="html-to-epub3.html-load" port="report.out"/>
-        </p:input>
-        <p:input port="status.in">
-            <p:pipe port="validation-status" step="html-to-epub3.check-html-wellformed"/>
-        </p:input>
-    </px:nordic-html-validate.step>
-
-    <px:nordic-html-to-epub3.step name="html-to-epub3.html-to-epub3">
-        <p:with-option name="fail-on-error" select="$fail-on-error"/>
-        <p:with-option name="indent" select="$indent"/>
-        <p:with-option name="temp-dir" select="concat(/*/text(),'html/')">
-            <p:pipe step="temp-dir" port="normalized"/>
-        </p:with-option>
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="html-to-epub3.html-validate"/>
-        </p:input>
-        <p:input port="report.in">
-            <p:pipe port="report.out" step="html-to-epub3.html-validate"/>
-        </p:input>
-        <p:input port="status.in">
-            <p:pipe port="status.out" step="html-to-epub3.html-validate"/>
-        </p:input>
-    </px:nordic-html-to-epub3.step>
-
-    <px:nordic-epub3-store.step name="html-to-epub3.epub3-store">
-        <p:with-option name="fail-on-error" select="$fail-on-error"/>
-        <p:with-option name="output-dir" select="/*/text()">
-            <p:pipe step="output-dir" port="normalized"/>
-        </p:with-option>
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="html-to-epub3.html-to-epub3"/>
-        </p:input>
-        <p:input port="report.in">
-            <p:pipe port="report.out" step="html-to-epub3.html-to-epub3"/>
-        </p:input>
-        <p:input port="status.in">
-            <p:pipe port="status.out" step="html-to-epub3.html-to-epub3"/>
-        </p:input>
-    </px:nordic-epub3-store.step>
-
-    <px:nordic-epub3-validate.step name="html-to-epub3.epub3-validate">
-        <p:with-option name="fail-on-error" select="$fail-on-error"/>
-        <p:with-option name="check-images" select="$check-images"/>
-        <p:with-option name="use-epubcheck" select="$use-epubcheck"/>
-        <p:with-option name="use-ace" select="$use-ace"/>
-        <p:with-option name="temp-dir" select="concat(/*/text(),'validate-epub/')">
-            <p:pipe step="temp-dir" port="normalized"/>
-        </p:with-option>
-        <p:with-option name="organization-specific-validation" select="$organization-specific-validation"/>
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="html-to-epub3.epub3-store"/>
-        </p:input>
-        <p:input port="report.in">
-            <p:pipe port="report.out" step="html-to-epub3.epub3-store"/>
-        </p:input>
-        <p:input port="status.in">
-            <p:pipe port="status.out" step="html-to-epub3.epub3-store"/>
-        </p:input>
-    </px:nordic-epub3-validate.step>
-    <p:sink/>
-
-    <px:nordic-format-html-report name="html-to-epub3.nordic-format-html-report">
-        <p:input port="source">
-            <p:pipe port="report.out" step="html-to-epub3.epub3-validate"/>
-        </p:input>
-    </px:nordic-format-html-report>
-    <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="html-to-epub3.store-report">
-        <p:with-option name="href" select="concat(/*/text(),if (ends-with(/*/text(),'/')) then '' else '/','report.xhtml')">
-            <p:pipe port="normalized" step="html-report"/>
-        </p:with-option>
-    </p:store>
-    <px:set-doctype doctype="&lt;!DOCTYPE html&gt;" name="html-to-epub3.set-report-doctype">
-        <p:with-option name="href" select="/*/text()">
-            <p:pipe port="result" step="html-to-epub3.store-report"/>
-        </p:with-option>
-    </px:set-doctype>
-    <p:sink/>
-    
-    <px:nordic-fail-on-error-status name="status">
-        <p:with-option name="fail-on-error" select="$fail-on-error"/>
-        <p:with-option name="output-dir" select="/*/text()">
-            <p:pipe step="output-dir" port="normalized"/>
-        </p:with-option>
-        <p:input port="source">
-            <p:pipe port="status.out" step="html-to-epub3.epub3-validate"/>
-        </p:input>
-    </px:nordic-fail-on-error-status>
-    <p:sink/>
 
 </p:declare-step>

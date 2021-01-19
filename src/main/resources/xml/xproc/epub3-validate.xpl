@@ -62,7 +62,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
-        <p:pipe port="status" step="epub3-validate.choose"/>
+        <p:pipe port="status" step="guidelines-version.choose"/>
     </p:output>
 
     <p:import href="step/2015-1/epub3-validate.step.xpl"/>
@@ -112,13 +112,13 @@
         </p:with-option>
     </px:fileset-add-entry>
     
-    <p:choose name="epub3-validate.choose">
+    <p:choose name="guidelines-version.choose">
         <p:xpath-context>
             <p:pipe port="result" step="guidelines-version"/>
         </p:xpath-context>
         <p:when test="/*/text() = '2015-1'">
             <p:output port="status">
-                <p:pipe port="result" step="epub3-validate.status"/>
+                <p:pipe port="result" step="status.2015-1"/>
             </p:output>
         
             <px:nordic-epub3-validate.step name="epub3-validate.validate.nordic" fail-on-error="true">
@@ -164,7 +164,7 @@
             </px:set-doctype>
             <p:sink/>
         
-            <px:nordic-validation-status name="epub3-validate.status">
+            <px:nordic-validation-status name="status.2015-1">
                 <p:input port="source">
                     <p:pipe port="report.out" step="epub3-validate.validate.nordic"/>
                 </p:input>
