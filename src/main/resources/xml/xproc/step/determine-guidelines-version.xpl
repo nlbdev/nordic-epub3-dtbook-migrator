@@ -4,6 +4,8 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:opf="http://www.idpf.org/2007/opf"
+                xmlns:html="http://www.w3.org/1999/xhtml"
+                xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
                 type="px:nordic-determine-guidelines-version"
                 name="main" version="1.0">
 
@@ -26,27 +28,95 @@
         </p:documentation>
     </p:import>
     
-    <!-- create a fileset for the EPUB -->
-    <px:epub-load name="determine-guidelines-version.epub-load">
-        <p:with-option name="href" select="$href"/>
-    </px:epub-load>
+    <p:choose>
+        <p:when test="ends-with($href, '.xhtml') or ends-with($href, '.html')">
+            <!-- HTML fileset -->
+            
+            <!-- load the HTML -->
+            <p:load>
+                <p:with-option name="href" select="$href"></p:with-option>
+            </p:load>
+            
+            <!-- get the nordic:guidelines metadata (default to "unknown" if none were found - so that there is always exactly one meta element returned) -->
+            <p:filter select="/html:html/html:head/html:meta[lower-case(@name) = 'nordic:guidelines']" name="html.versions"/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe port="result" step="html.versions"/>
+                    <p:inline><html:meta name="nordic:guidelines" content="unknown"/></p:inline>
+                </p:input>
+            </p:identity>
+            <p:split-sequence test="position()=1"/>
+            
+            <!-- convert from HTML meta element to OPF meta element -->
+            <p:template>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="template">
+                    <p:inline exclude-inline-prefixes="#all">
+                        <meta xmlns="http://www.idpf.org/2007/opf" property="nordic:guidelines">{string(/*/@content)}</meta>
+                    </p:inline>
+                </p:input>
+            </p:template>
+        </p:when>
+        
+        <p:when test="ends-with($href, '.xml')">
+            <!-- DTBook fileset -->
+            
+            <!-- load the HTML -->
+            <p:load>
+                <p:with-option name="href" select="$href"></p:with-option>
+            </p:load>
+            
+            <!-- get the track:Guidelines metadata (default to "unknown" if none were found - so that there is always exactly one meta element returned) -->
+            <p:filter select="/dtbook:dtbook/dtbook:head/dtbook:meta[lower-case(@name) = 'track:guidelines']" name="dtbook.versions"/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe port="result" step="dtbook.versions"/>
+                    <p:inline><dtbook:meta name="track:Guidelines" content="unknown"/></p:inline>
+                </p:input>
+            </p:identity>
+            <p:split-sequence test="position()=1"/>
+            
+            <!-- convert from DTBook meta element to OPF meta element -->
+            <p:template>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="template">
+                    <p:inline exclude-inline-prefixes="#all">
+                        <meta xmlns="http://www.idpf.org/2007/opf" property="nordic:guidelines">{string(/*/@content)}</meta>
+                    </p:inline>
+                </p:input>
+            </p:template>
+        </p:when>
+        
+        <p:otherwise>
+            <!-- EPUB file/fileset -->
     
-    <!-- load the OPF -->
-    <px:fileset-load media-types="application/oebps-package+xml" fail-on-not-found="true">
-        <p:input port="in-memory">
-            <p:pipe port="result.in-memory" step="determine-guidelines-version.epub-load"/>
-        </p:input>
-    </px:fileset-load>
-    <p:split-sequence test="position()=1"/>
-    
-    <!-- get the nordic:guidelines metadata (default to "unknown" if none were found - so that there is always exactly one meta element returned) -->
-    <p:filter select="/opf:package/opf:metadata/opf:meta[@property='nordic:guidelines']" name="determine-guidelines-version.versions"/>
-    <p:identity>
-        <p:input port="source">
-            <p:pipe port="result" step="determine-guidelines-version.versions"/>
-            <p:inline><opf:meta property="nordic:guidelines">unknown</opf:meta></p:inline>
-        </p:input>
-    </p:identity>
-    <p:split-sequence test="position()=1"/>
+            <!-- create a fileset for the EPUB -->
+            <px:epub-load name="epub.load">
+                <p:with-option name="href" select="$href"/>
+            </px:epub-load>
+            
+            <!-- load the OPF -->
+            <px:fileset-load media-types="application/oebps-package+xml" fail-on-not-found="true">
+                <p:input port="in-memory">
+                    <p:pipe port="result.in-memory" step="epub.load"/>
+                </p:input>
+            </px:fileset-load>
+            <p:split-sequence test="position()=1"/>
+            
+            <!-- get the nordic:guidelines metadata (default to "unknown" if none were found - so that there is always exactly one meta element returned) -->
+            <p:filter select="/opf:package/opf:metadata/opf:meta[lower-case(@property) = 'nordic:guidelines']" name="epub.versions"/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe port="result" step="epub.versions"/>
+                    <p:inline><meta xmlns="http://www.idpf.org/2007/opf" property="nordic:guidelines">unknown</meta></p:inline>
+                </p:input>
+            </p:identity>
+            <p:split-sequence test="position()=1"/>
+        </p:otherwise>
+    </p:choose>
 
 </p:declare-step>
