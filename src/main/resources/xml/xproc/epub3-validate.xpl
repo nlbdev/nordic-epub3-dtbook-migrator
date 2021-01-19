@@ -66,6 +66,7 @@
     </p:output>
 
     <p:import href="step/2015-1/epub3-validate.step.xpl"/>
+    <p:import href="step/2020-1/epub3-validate.step.xpl"/>
     <p:import href="step/determine-guidelines-version.xpl"/>
     <p:import href="step/validation-status.xpl"/>
     <p:import href="step/format-html-report.xpl"/>
@@ -167,6 +168,40 @@
             <px:nordic-validation-status name="status.2015-1">
                 <p:input port="source">
                     <p:pipe port="report.out" step="epub3-validate.validate.nordic"/>
+                </p:input>
+            </px:nordic-validation-status>
+            <p:sink/>
+            
+        </p:when>
+        <p:when test="/*/text() = '2020-1'">
+            <p:output port="status">
+                <p:pipe port="result" step="status.2020-1"/>
+            </p:output>
+            
+            <px:nordic-epub3-validate.step.2020-1 name="epub3-validate.2020-1.validate.nordic" fail-on-error="true">
+                <p:with-option name="temp-dir" select="concat(/*/text(),'validate/')">
+                    <p:pipe port="normalized" step="temp-dir"/>
+                </p:with-option>
+                <p:with-option name="check-images" select="$check-images"/>
+                <p:with-option name="use-epubcheck" select="$use-epubcheck"/>
+                <p:with-option name="use-ace" select="$use-ace"/>
+            </px:nordic-epub3-validate.step.2020-1>
+            <p:sink/>
+            
+            <px:nordic-format-html-report name="epub3-validate.2020-1.html">
+                <p:input port="source">
+                    <p:pipe port="report.out" step="epub3-validate.2020-1.validate.nordic"/>
+                </p:input>
+            </px:nordic-format-html-report>
+            <p:store include-content-type="false" method="xhtml" omit-xml-declaration="false" name="epub3-validate.2020-1.store-report">
+                <p:with-option name="href" select="concat(/*/text(),if (ends-with(/*/text(),'/')) then '' else '/','report.xhtml')">
+                    <p:pipe port="normalized" step="html-report"/>
+                </p:with-option>
+            </p:store>
+            
+            <px:nordic-validation-status name="status.2020-1">
+                <p:input port="source">
+                    <p:pipe port="report.out" step="epub3-validate.2020-1.validate.nordic"/>
                 </p:input>
             </px:nordic-validation-status>
             <p:sink/>

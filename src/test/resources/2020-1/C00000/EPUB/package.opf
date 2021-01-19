@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.opf.sch"?>
 <package xmlns="http://www.idpf.org/2007/opf"
          xmlns:dc="http://purl.org/dc/elements/1.1/"
          xmlns:dcterms="http://purl.org/dc/terms/"
@@ -19,8 +18,8 @@
         <meta property="schema:audience">Adult</meta>
         <meta property="dcterms:modified">2013-11-07T10:05:30Z</meta>
         <meta name="dcterms:modified" content="2013-11-07T10:05:30Z"/>
-        <meta property="nordic:guidelines">2015-1</meta>
-        <meta name="nordic:guidelines" content="2015-1"/>
+        <meta property="nordic:guidelines">2020-1</meta>
+        <meta name="nordic:guidelines" content="2020-1"/>
         <meta property="nordic:supplier">MTM</meta>
         <meta name="nordic:supplier" content="MTM"/>
     </metadata>

@@ -23,6 +23,10 @@
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-to-html.step.xpl" uri="../xml/xproc/step/2015-1/epub3-to-html.step.xpl"/>
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-asciimath-to-mathml.step.xpl" uri="../xml/xproc/step/2015-1/epub3-asciimath-to-mathml.step.xpl"/>
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/html-split.xpl" uri="../xml/xproc/step/2015-1/html-split.xpl"/>
+    
+    <!-- Reusable XProc conversion and validation steps (guidelines: 2020-1) -->
+    <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-validate.step.xpl" uri="../xml/xproc/step/2020-1/epub3-validate.step.xpl"/>
+    
     <!-- Reusable XProc conversion and validation steps (independent of guidelines version) -->
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/html-store.step.xpl" uri="../xml/xproc/step/html-store.step.xpl"/>
     <uri name="http://www.daisy.org/pipeline/modules/nordic-epub3-dtbook-migrator/epub3-store.step.xpl" uri="../xml/xproc/step/epub3-store.step.xpl"/>
