@@ -6,12 +6,20 @@
 	<p:input port="source"/>
 	<p:output port="result"/>
 	<p:option name="preserve-empty-whitespace" select="'true'"/>
-
-	<p:xslt>
-		<p:with-param name="preserve-empty-whitespace" select="$preserve-empty-whitespace"/>
-		<p:input port="stylesheet">
-			<p:document href="../../xslt/pretty-print.xsl"/>
-		</p:input>
-	</p:xslt>
+	<p:option name="indent" select="'true'"/>
+	
+	<p:choose>
+		<p:when test="$indent = 'true'">
+			<p:xslt>
+				<p:with-param name="preserve-empty-whitespace" select="$preserve-empty-whitespace"/>
+				<p:input port="stylesheet">
+					<p:document href="../../xslt/pretty-print.xsl"/>
+				</p:input>
+			</p:xslt>
+		</p:when>
+		<p:otherwise>
+			<p:identity/>
+		</p:otherwise>
+	</p:choose>
 
 </p:declare-step>

@@ -241,6 +241,7 @@
             -->
             <px:nordic-pretty-print name="html-to-dtbook.step.pretty-print-dtbook">
                 <!-- FIXME: remove all pretty-printing to improve performance -->
+                <p:with-option name="indent" select="$indent"/>
             </px:nordic-pretty-print>
             <p:sink/>
 
@@ -291,6 +292,7 @@
             </px:fileset-join>
             <px:nordic-pretty-print preserve-empty-whitespace="false">
                 <!-- FIXME: remove all pretty-printing to improve performance -->
+                <p:with-option name="indent" select="$indent"/>
             </px:nordic-pretty-print>
 
 

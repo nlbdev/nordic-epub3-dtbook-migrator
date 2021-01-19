@@ -187,7 +187,9 @@
                 <p:for-each name="html-to-epub3.step.iterate-spine">
                     <p:viewport match="/html:html/html:head" name="html-to-epub3.step.iterate-spine.viewport-html-head">
                         <!-- TODO: remove as many pretty printing steps as possible to improve performance -->
-                        <px:nordic-pretty-print preserve-empty-whitespace="false"/>
+                        <px:nordic-pretty-print preserve-empty-whitespace="false">
+                            <p:with-option name="indent" select="$indent"/>
+                        </px:nordic-pretty-print>
                     </p:viewport>
                 </p:for-each>
                 <p:identity name="html-to-epub3.step.spine-html"/>
@@ -357,7 +359,9 @@
                     <px:nordic-update-epub-prefixes/>
                     <p:viewport match="/html:html/html:head" name="html-to-epub3.step.viewport-html-head">
                         <!-- TODO: consider which pretty-print.xsl invocations can be removed to improve performance -->
-                        <px:nordic-pretty-print preserve-empty-whitespace="false"/>
+                        <px:nordic-pretty-print preserve-empty-whitespace="false">
+                            <p:with-option name="indent" select="$indent"/>
+                        </px:nordic-pretty-print>
                     </p:viewport>
                     <p:identity name="html-to-epub3.step.nav.html"/>
 
@@ -367,7 +371,9 @@
                     <px:epub3-nav-to-ncx name="html-to-epub3.step.nav-to-ncx"/>
                     <!-- TODO: remove pretty printing to improve performance -->
                     <px:nordic-pretty-print preserve-empty-whitespace="false"
-                                            name="html-to-epub3.step.ncx-pretty-print"/>
+                                            name="html-to-epub3.step.ncx-pretty-print">
+                        <p:with-option name="indent" select="$indent"/>
+                    </px:nordic-pretty-print>
                     <px:set-base-uri name="html-to-epub3.step.ncx-add-xml-base">
                         <p:with-option name="base-uri" select="concat($publication-dir,'nav.ncx')"/>
                     </px:set-base-uri>
@@ -544,7 +550,9 @@
                     Pretty-print
                 -->
                 <!-- TODO: consider removing this to improve performance -->
-                <px:nordic-pretty-print preserve-empty-whitespace="false"/>
+                <px:nordic-pretty-print preserve-empty-whitespace="false">
+                    <p:with-option name="indent" select="$indent"/>
+                </px:nordic-pretty-print>
                 <p:identity name="html-to-epub3.step.package-doc.processed"/>
 
                 <px:fileset-update name="update">

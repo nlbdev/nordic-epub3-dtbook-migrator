@@ -30,7 +30,7 @@
     </p:output>
     
     <p:option name="fail-on-error" required="true"/>
-    <p:option name="indent" required="true"/>
+    <p:option name="indent" required="true"/>  <!-- TODO: this does not do anything yet -->
 
     <p:import href="../validation-status.xpl"/>
     <p:import href="../update-epub-prefixes.xpl">

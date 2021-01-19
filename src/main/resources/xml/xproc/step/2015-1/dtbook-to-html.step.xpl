@@ -167,7 +167,9 @@
                 -->
                 <p:viewport match="/html:html/html:head" name="dtbook-to-html.step.viewport-html-head">
                     <!-- TODO: consider dropping this if it causes performance issues -->
-                    <px:nordic-pretty-print preserve-empty-whitespace="false"/>
+                    <px:nordic-pretty-print preserve-empty-whitespace="false">
+                        <p:with-option name="indent" select="$indent"/>
+                    </px:nordic-pretty-print>
                 </p:viewport>
                 <p:identity name="dtbook-to-html.step.html.processed"/>
                 <p:sink/>
