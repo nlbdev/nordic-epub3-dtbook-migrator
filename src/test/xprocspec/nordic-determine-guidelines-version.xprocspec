@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/step/determine-guidelines-version.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf">
+    
+    <x:scenario label="px:nordic-determine-guidelines-version">
+        <x:call step="px:nordic-determine-guidelines-version">
+            <x:option name="href" select="resolve-uri('../resources/2015-1/C00000.epub',base-uri())"/>
+        </x:call>
+        
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="The version should be as expected (2015-1)">
+            <x:document type="inline">
+                <opf:meta property="nordic:guidelines">2015-1</opf:meta>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>
