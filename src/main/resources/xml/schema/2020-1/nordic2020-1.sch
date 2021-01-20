@@ -606,9 +606,9 @@
     <pattern id="epub_nordic_247">
         <title>Rule 247</title>
         <p>doctitle.heading - h1</p>
-        <rule context="html:body/html:header/html:h1">
+        <rule context="html:body/html:section[tokenize(@epub:type, '\s+') = 'titlepage']/html:h1">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@epub:type, '\s+') = 'fulltitle'">[nordic247] The first heading in the html:body/html:header element must have the 'fulltitle' epub:type.</assert>
+            <assert test="tokenize(@epub:type, '\s+') = 'fulltitle'">[nordic247] The first (h1) heading on the titlepage must have the 'fulltitle' epub:type.</assert>
         </rule>
     </pattern>
     
