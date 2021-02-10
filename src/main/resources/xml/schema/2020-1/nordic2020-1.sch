@@ -9,17 +9,7 @@
     <ns prefix="m" uri="http://www.w3.org/1998/Math/MathML"/>
     <ns prefix="msv" uri="http://www.idpf.org/epub/vocab/structure/magazine/#"/>
     <ns prefix="prism" uri="http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm#"/>
-    
-    <pattern id="epub_nordic_7">
-        <title>Rule 7</title>
-        <p>No &lt;ul&gt;, &lt;ol&gt; or &lt;dl&gt; inside &lt;p&gt;</p>
-        <rule context="html:p">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/> 
-            <report test="html:ul | html:ol">[nordic07] Lists are not allowed inside paragraphs. <value-of select="$context"/></report>
-            <report test="html:dl">[nordic07] Definition lists are not allowed inside paragraphs. <value-of select="$context"/></report>
-        </rule>
-    </pattern>
-    
+
     <pattern id="epub_nordic_8">
         <title>Rule 8</title>
         <p>Only allow pagebreak w/page-front in frontmatter</p>
@@ -121,16 +111,6 @@
             <report test="tokenize(@epub:type, '\s+')[. = 'cover'] and preceding-sibling::html:*[self::html:section or self::html:article]">[nordic15] Cover must not be preceded by any other top-level sections. <value-of select="$context"/></report>
             <report test="tokenize(@epub:type, '\s+')[. = 'frontmatter'] and preceding-sibling::html:*[self::html:section or self::html:article]/tokenize(@epub:type, '\s') = ('bodymatter', 'backmatter')">[nordic15] Frontmatter must not be preceded by bodymatter or rearmatter. <value-of select="$context"/></report>
             <report test="tokenize(@epub:type, '\s+')[. = 'frontmatter'] and preceding-sibling::html:*[self::html:section or self::html:article]/tokenize(@epub:type, '\s') = ('backmatter')">[nordic15] Bodymatter must not be preceded by backmatter. <value-of select="$context"/></report>
-        </rule>
-    </pattern>
-    
-    <pattern id="epub_nordic_20">
-        <title>Rule 20</title>
-        <p>No image series in inline context</p>
-        <rule context="html:figure">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="ancestor::html:a or ancestor::html:abbr or ancestor::html:a[tokenize(@epub:type, '\s+') = 'annoref'] or ancestor::html:bdo or ancestor::html:code or ancestor::html:dfn or ancestor::html:em or ancestor::html:kbd or ancestor::html:p[tokenize(@class, '\s+') = 'linenum'] or ancestor::html:a[tokenize(@epub:type, '\s+') = 'noteref'] or ancestor::html:span[tokenize(@class, '\s+') = 'lic'] or ancestor::html:q or ancestor::html:samp or ancestor::html:span[tokenize(@epub:type, '\s+') = 'z3998:sentence'] or ancestor::html:span or ancestor::html:strong or ancestor::html:sub or ancestor::html:sup or ancestor::html:span[tokenize(@epub:type, '\s+') = 'z3998:word'] or ancestor::html:address or ancestor::html:*[tokenize(@epub:type, '\s+') = 'z3998:author' and not(parent::html:header[parent::html:body])] or ancestor::html:p[tokenize(@epub:type, '\s+') = 'bridgehead'] or ancestor::html:*[tokenize(@class, '\s+') = 'byline'] or ancestor::html:cite or ancestor::html:*[tokenize(@epub:type, '\s+') = 'covertitle'] or ancestor::html:*[tokenize(@class, '\s+') = 'dateline'] or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type, '\s+') = 'z3998:author'] or ancestor::html:h1[tokenize(@epub:type, '\s+') = 'fulltitle'] or ancestor::html:dt or ancestor::html:h1 or ancestor::html:h2 or ancestor::html:h3 or ancestor::html:h4 or ancestor::html:h5 or ancestor::html:h6 or ancestor::html:p[tokenize(@class, '\s+') = 'line'] or ancestor::html:p"
-                >[nordic20] Image series are not allowed in inline context. <value-of select="$context"/></report>
         </rule>
     </pattern>
     
@@ -818,19 +798,6 @@
         <rule context="html:a[not(matches(@href, '^([a-z]+:/+|mailto:|tel:)'))]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="matches(@href, '.*#.+')">[nordic273b] Internal links must contain a non-empty fragment identifier. <value-of select="$context"/></assert>
-        </rule>
-    </pattern>
-    
-    <!--
-        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
-        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
-    -->
-    <pattern id="epub_nordic_274">
-        <title>Rule 274</title>
-        <p></p>
-        <rule context="html:th[@headers] | html:td[@headers]">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="count(ancestor::html:table//html:th/@id[contains(concat(' ', current()/@headers, ' '), concat(' ', normalize-space(), ' '))]) = string-length(normalize-space(@headers)) - string-length(translate(normalize-space(@headers), ' ', '')) + 1">[nordic274] Not all the tokens in the headers attribute match the id attributes of 'th' elements in this or a parent table. <value-of select="$context"/></assert>
         </rule>
     </pattern>
     
