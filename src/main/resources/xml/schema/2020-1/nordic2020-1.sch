@@ -319,7 +319,7 @@
         <rule context="html:figure[tokenize(@class, '\s+') = 'image']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="html:img">[nordic102] There must be an img element in every figure with class="image". <value-of select="$context"/></assert>
-            <report test="parent::html:figure">[nordic102] Nested image figures are not allowed. Image figures must use the class "image", while image series figures must use the class "image-series". <value-of select="$context"/></report>
+            <report test="parent::html:figure">[nordic102] Figures within image figures not allowed. Image figures must use the class "image", while image series figures must use the class "image-series". <value-of select="$context"/></report>
         </rule>
     </pattern>
 
