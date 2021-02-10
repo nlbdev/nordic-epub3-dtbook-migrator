@@ -98,7 +98,7 @@
         <p>The body element must not have a epub:type attribute.</p>
         <rule context="html:body">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="@epub:type">[nordic13e] The body element must not have a epub:type attribute.</assert>
+            <assert test="not(@epub:type)">[nordic13e] The body element must not have a epub:type attribute.</assert>
         </rule>
     </pattern>
 
