@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
 
+
+    <!--
+        The input for nordic2015-1.nav-ncx.sch is a wrapper element containing the navigation document as its first child, and the ncx as its
+        second child. Example:
+
+        <wrapper>
+            <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
+                epub:prefix="z3998: http://www.daisy.org/z3998/2012/vocab/structure/#" xml:lang="no" lang="no">
+
+                <head>…</head>
+                <body>
+                    <nav epub:type="toc">…</nav>
+                    <nav epub:type="page-list" hidden="">…</nav>
+                </body>
+            </html>
+            <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+                <head>…</head>
+                <docTitle><text>…</text></docTitle>
+                <navMap>…</navMap>
+                <pageList>…</pageList>
+            </ncx>
+        </wrapper>
+    -->
+
     <title>Nordic EPUB3 Navigation Document and NCX rules</title>
 
     <ns prefix="html" uri="http://www.w3.org/1999/xhtml"/>
