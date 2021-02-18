@@ -4,27 +4,76 @@
     <title>Nordic EPUB3 Navigation Document content reference rules</title>
 
     <!--
-        Example input to this schematron (c:result elements are assumed to be in reading order):
-        
-        <html>
-            <c:result>
-                <c:result xml:base="..." data-sectioning-element="body" data-sectioning-id="..." data-heading-element="h1" data-heading-id="...">Chapter 1</c:result>
-                <c:result xml:base="..." data-sectioning-element="body" data-sectioning-id="..." data-heading-element="h1" data-heading-id="...">Chapter 2</c:result>
-                <c:result xml:base="..." data-pagebreak-element="div" data-pagebreak-id="...">1</c:result>
-                <c:result xml:base="..." data-pagebreak-element="span" data-pagebreak-id="...">2</c:result>
-                ...
+        The input for nordic2015-1.nav-references.sch is the navigation document, with its xml:base set explicitly on the root element,
+        and with an added c:result element inserted as the first child of its root element. The contents of the c:result element contains
+        references to all the headings and pabebreaks in the content documents, in spine order. These references are created by running
+        list-heading-and-pagebreak-references.xsl on each content document individually, and then combining the results. Example:
+
+        <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
+            xml:base="file:/…/temp-dir/validate/EPUB/nav.xhtml">
+
+            <c:result xmlns:c="http://www.w3.org/ns/xproc-step">
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-001-halftitlepage.xhtml"
+                        data-sectioning-element="body" data-sectioning-id="level1_1" data-sectioning-depth="1"/>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-001-halftitlepage.xhtml"
+                        data-pagebreak-element="div" data-pagebreak-id="page-1">1</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-001-halftitlepage.xhtml"
+                        data-pagebreak-element="div" data-pagebreak-id="page-2">2</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-002-titlepage.xhtml"
+                        data-pagebreak-element="div" data-pagebreak-id="page-3">3</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-002-titlepage.xhtml"
+                        data-sectioning-element="body" data-sectioning-id="level1_2" data-heading-element="h1"
+                        data-heading-id="h1_1" data-heading-depth="1" data-sectioning-depth="1">Book title</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-003-colophon.xhtml"
+                        data-sectioning-element="body" data-sectioning-id="level1_3" data-sectioning-depth="1"/>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-003-colophon.xhtml"
+                        data-pagebreak-element="div" data-pagebreak-id="page-4">4</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-004-dedication.xhtml"
+                        data-sectioning-element="body" data-sectioning-id="level1_4" data-sectioning-depth="1"/>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-004-dedication.xhtml"
+                        data-pagebreak-element="div" data-pagebreak-id="page-5">5</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-004-dedication.xhtml"
+                        data-pagebreak-element="div" data-pagebreak-id="page-6">6</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-005-toc.xhtml"
+                        data-pagebreak-element="div" data-pagebreak-id="page-7">7</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-005-toc.xhtml"
+                        data-sectioning-element="body" data-sectioning-id="level1_5" data-heading-element="h1"
+                        data-heading-id="h1_2" data-heading-depth="1" data-sectioning-depth="1">Table of contents</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-005-toc.xhtml"
+                        data-pagebreak-element="span" data-pagebreak-id="page-8">8</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-005-toc.xhtml"
+                        data-pagebreak-element="span" data-pagebreak-id="page-9">9</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-005-toc.xhtml"
+                        data-pagebreak-element="span" data-pagebreak-id="page-10">10</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-005-toc.xhtml"
+                        data-pagebreak-element="span" data-pagebreak-id="page-11">11</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-005-toc.xhtml"
+                        data-pagebreak-element="div" data-pagebreak-id="page-12">12</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-006-preface.xhtml"
+                        data-pagebreak-element="div" data-pagebreak-id="page-13">13</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-006-preface.xhtml"
+                        data-sectioning-element="body" data-sectioning-id="level1_6" data-heading-element="h1"
+                        data-heading-id="h1_3" data-heading-depth="1" data-sectioning-depth="1">Preface</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-006-preface.xhtml"
+                        data-pagebreak-element="span" data-pagebreak-id="page-14">14</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-007-chapter.xhtml"
+                        data-pagebreak-element="div" data-pagebreak-id="page-15">15</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-007-chapter.xhtml"
+                        data-sectioning-element="body" data-sectioning-id="level1_7" data-heading-element="h1"
+                        data-heading-id="h1_4" data-heading-depth="1" data-sectioning-depth="1">Chapter title</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-007-chapter.xhtml"
+                        data-pagebreak-element="span" data-pagebreak-id="page-16">16</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-007-chapter.xhtml"
+                        data-sectioning-element="section" data-sectioning-id="level2_1" data-heading-element="h2"
+                        data-heading-id="h2_1" data-heading-depth="2" data-sectioning-depth="2">Subchapter title</c:result>
+                <c:result xml:base="file:/…/temp-dir/validate/EPUB/581202-007-chapter.xhtml"
+                        data-pagebreak-element="span" data-pagebreak-id="page-17">17</c:result>
             </c:result>
-            <head>...</head>
+
+            <head>…</head>
             <body>
-                ...
-                <nav epub:type="nav">
-                    ...
-                </nav>
-                ...
-                <nav epub:type="page-list">
-                    ...
-                </nav>
-                ...
+                <nav epub:type="toc">…</nav>
+                <nav epub:type="page-list" hidden="">…</nav>
             </body>
         </html>
     -->

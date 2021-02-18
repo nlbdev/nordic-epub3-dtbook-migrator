@@ -4,13 +4,35 @@
     <title>Nordic EPUB3 Package Document and Content Document cross-reference rules</title>
 
     <!--
-        Example input to this schematron:
-        
-        <wrapper>
-            <opf:package xml:base="..." .../>
-            <html:html xml:base="..." .../>
-            <html:html xml:base="..." .../>
-        </wrapper>
+        The input for nordic2015-1.opf-and-html.sch is a c:result wrapper element, containing the package file as its first child element,
+        and the content documents, in spine order, as the other child elements. The xml:base is set explicitly for the package document and
+        the content documents. Example:
+
+        <c:result xmlns:c="http://www.w3.org/ns/xproc-step">
+            <package xmlns="http://www.idpf.org/2007/opf" xml:base="file:/…/temp-dir/validate/EPUB/package.opf">
+                <metadata>…</metadata>
+                <manifest>…</manifest>
+                <spine toc="ncx">…</spine>
+            </package>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-001-halftitlepage.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-002-titlepage.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-003-colophon.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-004-dedication.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-005-toc.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-006-preface.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-007-chapter.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-008-chapter.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-009-chapter.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-010-chapter.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-011-chapter.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-012-chapter.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-013-chapter.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-014-chapter.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-015-afterword.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-016-backmatter.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-017-index.xhtml">…</html>
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/…/temp-dir/validate/EPUB/581202-018-footnotes.xhtml">…</html>
+        </c:result>
     -->
 
     <ns prefix="html" uri="http://www.w3.org/1999/xhtml"/>
@@ -18,7 +40,7 @@
     <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
     <ns prefix="epub" uri="http://www.idpf.org/2007/ops"/>
     <ns prefix="nordic" uri="http://www.mtm.se/epub/"/>
-    
+
     <let name="ids" value="//xs:string(@id)"/>
 
     <pattern id="opf_and_html_nordic_1">
@@ -31,7 +53,7 @@
                 in <value-of select="(//*[@id=$id] except .)/replace(base-uri(.),'^.*/','')"/></assert>
         </rule>
     </pattern>
-    
+
     <pattern id="nordic_opf_and_html_13_a">
         <!-- see also nordic2015-1.sch for single-document version -->
         <title>Rule 13</title>
@@ -71,7 +93,7 @@
                 /></report>
         </rule>
     </pattern>
-    
+
     <pattern id="nordic_opf_and_html_40">
         <title>Rule 40</title>
         <p>No page numbering gaps for pagebreak w/page-normal</p>
