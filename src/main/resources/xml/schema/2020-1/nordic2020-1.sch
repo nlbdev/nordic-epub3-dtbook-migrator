@@ -400,7 +400,7 @@
     <pattern id="epub_nordic_135_a">
         <title>Rule 135a</title>
         <p>Poem contents</p>
-        <rule context="html:*[tokenize(@class, '\s+') = 'verse' and not(ancestor::html:*tokenize(@class, '\s+') = 'verse')]">
+        <rule context="html:*[tokenize(@class, '\s+') = 'verse' and not(ancestor::html:*[tokenize(@class, '\s+') = 'verse'])]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="html:*[tokenize(@class, '\s+') = 'linegroup']">[nordic135] Every poem must contain a linegroup. <value-of select="$context"/></assert>
             <report test="html:p[tokenize(@class, '\s+') = 'line']">[nordic135] Poem lines must be wrapped in a linegroup. <value-of select="$context"/> contains; <value-of select="
@@ -484,7 +484,7 @@
     <pattern id="epub_nordic_202">
         <title>Rule 202</title>
         <p>frontmatter</p>
-        <rule context="html:body/html:section[tokenize(@role, '\s+') = 'frontmatter']">
+        <rule context="html:body/html:section[tokenize(@epub:type, '\s+') = 'frontmatter']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="always-allowed-types" value="('abstract', 'acknowledgments', 'afterword', 'answers', 'appendix', 'assessment', 'assessments', 'bibliography', 'z3998:biographical-note', 'case-study', 'chapter', 'colophon', 'conclusion', 'contributors', 'copyright-page', 'credits', 'dedication', 'z3998:discography', 'division', 'z3998:editorial-note', 'epigraph', 'epilogue', 'errata', 'z3998:filmography', 'footnotes', 'foreword', 'glossary', 'dictionary', 'z3998:grant-acknowledgment', 'halftitlepage', 'imprimatur', 'imprint', 'index', 'index-group', 'index-headnotes', 'index-legend', 'introduction', 'keywords', 'landmarks', 'loa', 'loi', 'lot', 'lov', 'notice', 'other-credits', 'page-list', 'practices', 'preamble', 'preface', 'prologue', 'z3998:promotional-copy', 'z3998:published-works', 'z3998:publisher-address', 'qna', 'endnotes', 'revision-history', 'z3998:section', 'seriespage', 'subchapter', 'z3998:subsection', 'toc', 'toc-brief', 'z3998:translator-note', 'volume')"/>
             <let name="allowed-types" value="($always-allowed-types, 'titlepage')"/>
