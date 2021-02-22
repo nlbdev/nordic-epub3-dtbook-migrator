@@ -102,17 +102,6 @@
         </rule>
     </pattern>
 
-    <pattern id="epub_nordic_13_f">
-        <title>Rule 13f</title>
-        <p>All top sections need aria information</p>
-        <rule context="html:body/html:section">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="@role">[nordic13f] The top-level section element must have a aria role. <value-of select="$context"/></assert>
-            <assert test="@aria-labelledby or @aria-label">The top-level section element must have an aria-label or a labelledby attribute. <value-of select="$context"/></assert>
-            <assert test="not(@aria-labelledby) or (@aria-labelledby = (html:h1|html:h2|html:h3|html:h4|html:h5|html:h6)[1]/@id)">[nordic13f] The top-level section element labelledby attribute must be associated with the first header in the section.</assert>
-        </rule>
-    </pattern>
-
     <pattern id="epub_nordic_15">
         <title>Rule 15</title>
         <p></p>
