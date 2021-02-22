@@ -510,27 +510,13 @@
         </rule>
     </pattern>
 
-    <!-- TODO: footnotes will always be placed individually in single asides. -->
     <pattern id="epub_nordic_204_a">
         <title>Rule 204a</title>
-        <p>Check that both the epub:types "footnote" and "footnotes" are used in footnotes</p>
+        <p>Check that footnotes are placed correctly in a section.</p>
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'footnote']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="(ancestor::html:section | ancestor::html:body)[tokenize(@epub:type, '\s+') = 'footnotes']">[nordic204a] 'footnote' must have a section<value-of select="
-                    if (ancestor::html:body[html:header]) then
-                        ''
-                    else
-                        ' or body'"/> ancestor with 'footnotes'. <value-of select="$context"/></assert>
-        </rule>
-    </pattern>
-
-    <pattern id="epub_nordic_204_c">
-        <title>Rule 204c</title>
-        <p></p>
-        <rule context="html:body[tokenize(@epub:type, '\s+') = 'footnotes'] | html:section[tokenize(@epub:type, '\s+') = 'footnotes']">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="descendant::html:*[tokenize(@epub:type, '\s+') = 'footnote']">[nordic204c] Sections with the epub:type 'footnotes' must have descendants with 'footnote'. <value-of select="$context"/></assert>
-            <assert test=".//html:ol">[nordic204c] Sections with the epub:type 'footnotes' must have one or more &lt;ol&gt; descendant elements. <value-of select="$context"/></assert>
+            <assert test="(ancestor::html:section)">[nordic204a] 'footnote' must have a section ancestor. <value-of select="$context"/></assert>
+            <assert test="not(following-sibling::html:*[not(local-name()='aside' and @epub-type='footnote')])">[nordic204a] 'footnote' must be placed at the end of a section.</assert>
         </rule>
     </pattern>
 
@@ -539,8 +525,8 @@
         <p></p>
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'footnote']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="self::html:li">[nordic204d] 'footnote' can only be applied to &lt;li&gt; elements. <value-of select="$context"/></assert>
-            <assert test="tokenize(@class, '\s+') = 'notebody'">[nordic204d] The 'notebody' class must be applied to all footnotes. <value-of select="$context"/></assert>
+            <assert test="self::html:aside">[nordic204d] 'footnote' can only be applied to &lt;aside&gt; elements. <value-of select="$context"/></assert>
+            <assert test="tokenize(@role, '\s+') = 'doc-footnote'">[nordic204d] The 'doc-footnote' role must be applied to all footnotes. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
