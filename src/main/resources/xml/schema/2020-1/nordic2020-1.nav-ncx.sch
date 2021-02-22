@@ -133,10 +133,10 @@
         <p>toc headline must be the same in the ncx and navdoc</p>
         <rule context="ncx:navLabel[parent::ncx:navMap]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="normalize-space(string-join(.//text(),'')) = /*/html:*/html:body/html:nav[tokenize(@epub:type,'\s+')='toc']/html:h1/normalize-space(string-join(.//text(),''))"
-                >[nordic_nav_ncx_7] The navLabel in the NCX navMap must correspond to the h1 in the toc in the navigation document. The NCX navLabel has the value "<value-of
-                    select="normalize-space(string-join(.//text(),''))"/>", while the page-list h1 in the navigation document <value-of
-                    select="(/*/html:*/html:body/html:nav[tokenize(@epub:type,'\s+')='toc']/html:h1/concat('has the value &quot;',normalize-space(string-join(.//text(),'')),'&quot;'), 'does not exist')[1]"
+            <assert test="normalize-space(string-join(.//text(),'')) = /*/html:*/html:body/html:nav[tokenize(@epub:type,'\s+')='toc']/*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6]/normalize-space(string-join(.//text(),''))"
+                >[nordic_nav_ncx_7] The navLabel in the NCX navMap must correspond to the h[x] in the toc in the navigation document. The NCX navLabel has the value "<value-of
+                    select="normalize-space(string-join(.//text(),''))"/>", while the page-list h[x] in the navigation document <value-of
+                    select="(/*/html:*/html:body/html:nav[tokenize(@epub:type,'\s+')='toc']/*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6]/concat('has the value &quot;',normalize-space(string-join(.//text(),'')),'&quot;'), 'does not exist')[1]"
                 />.</assert>
         </rule>
     </pattern>
@@ -146,10 +146,10 @@
         <p>page-list headline must be the same in the ncx and navdoc</p>
         <rule context="ncx:navLabel[parent::ncx:pageList]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="normalize-space(string-join(.//text(),'')) = /*/html:*/html:body/html:nav[tokenize(@epub:type,'\s+')='page-list']/html:h1/normalize-space(string-join(.//text(),''))"
-                >[nordic_nav_ncx_8] The navLabel in the NCX pageList must correspond to the h1 in the page-list in the navigation document. The NCX navLabel has the value "<value-of
-                    select="normalize-space(string-join(.//text(),''))"/>", while the page-list h1 in the navigation document <value-of
-                    select="(/*/html:*/html:body/html:nav[tokenize(@epub:type,'\s+')='page-list']/html:h1/concat('has the value &quot;',normalize-space(string-join(.//text(),'')),'&quot;'), 'does not exist')[1]"
+            <assert test="normalize-space(string-join(.//text(),'')) = /*/html:*/html:body/html:nav[tokenize(@epub:type,'\s+')='page-list']/*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6]/normalize-space(string-join(.//text(),''))"
+                >[nordic_nav_ncx_8] The navLabel in the NCX pageList must correspond to the h[x] in the page-list in the navigation document. The NCX navLabel has the value "<value-of
+                    select="normalize-space(string-join(.//text(),''))"/>", while the page-list h[x] in the navigation document <value-of
+                    select="(/*/html:*/html:body/html:nav[tokenize(@epub:type,'\s+')='page-list']/*[self::h1 or self::h2 or self::h3 or self::h4 or self::h5 or self::h6]/concat('has the value &quot;',normalize-space(string-join(.//text(),'')),'&quot;'), 'does not exist')[1]"
                 />.</assert>
         </rule>
     </pattern>
