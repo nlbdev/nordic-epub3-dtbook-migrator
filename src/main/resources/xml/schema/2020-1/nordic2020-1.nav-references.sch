@@ -129,12 +129,12 @@
                 with id="<value-of select="$preceding-refs-which-is-following-in-content[1]/substring-after(@href,'#')"/>" in the document "<value-of
                     select="$preceding-refs-which-is-following-in-content[1]/substring-before(@href,'#')"/>", but in the content document it occurs before it.</report>-->
 
-            <let name="result-ref" value="$result-ref[1]"/>
+            <let name="result-ref-first" value="$result-ref[1]"/>
             <let name="document-in-nav" value="((preceding::html:a | self::*) intersect ancestor::html:nav//html:a)[substring-before(@href,'#') = $href][1]"/>
             <let name="document-in-nav-depth" value="count($document-in-nav/ancestor::html:li)"/>
             <let name="depth-in-nav" value="count(ancestor::html:li)"/>
-            <let name="depth-in-content" value="$result-ref/xs:integer((@data-heading-depth, @data-sectioning-depth)[1])"/>
-            <assert test="not($result-ref) or $depth-in-nav = $depth-in-content + $document-in-nav-depth - 1">[nordic_nav_references_2b] The nesting of headlines in the content does not match the
+            <let name="depth-in-content" value="$result-ref-first/xs:integer((@data-heading-depth, @data-sectioning-depth)[1])"/>
+            <assert test="not($result-ref-first) or $depth-in-nav = $depth-in-content + $document-in-nav-depth - 1">[nordic_nav_references_2b] The nesting of headlines in the content does not match the
                 nesting of headlines in the navigation document. The toc item `<value-of select="$context"/>` in the navigation document is not nested at the correct
                 level. The referenced document (<value-of select="$href"/>) occurs in the navigation document at nesting depth <value-of select="$document-in-nav-depth"/> (<value-of
                     select="if ($document-in-nav-depth = 1) then 'it is not contained inside other sections such as a part or a chapter'
@@ -142,9 +142,9 @@
                 />). The referenced headline (<value-of select="@href"/>) occurs in the navigation document at nesting depth <value-of select="$depth-in-nav"/> (<value-of
                     select="if ($depth-in-nav = 1) then 'it is not contained inside other sections such as a part or a chapter'
                     else concat('it is contained inside ',string-join(ancestor::html:li[1]/ancestor::html:li/concat('&quot;',(text(),*/string-join(.//text(),''))[normalize-space()][1],'&quot;'),', which is contained inside'))"
-                />). The referenced headline (`&lt;<value-of select="$result-ref/@data-heading-element"/><value-of select="$result-ref/@data-heading-id/concat(' id=&quot;',.,'&quot;')"/>&gt;<value-of
-                    select="$result-ref/text()"/>&lt;/<value-of select="$result-ref/@data-heading-element"/>&gt;) occurs in the content document <value-of select="$href"/> as a `<value-of
-                    select="$result-ref/@data-heading-element"/>` which implies that it should be referenced at nesting depth <value-of select="$depth-in-content + $document-in-nav-depth - 1"/> in the
+                />). The referenced headline (`&lt;<value-of select="$result-ref-first/@data-heading-element"/><value-of select="$result-ref-first/@data-heading-id/concat(' id=&quot;',.,'&quot;')"/>&gt;<value-of
+                    select="$result-ref-first/text()"/>&lt;/<value-of select="$result-ref-first/@data-heading-element"/>&gt;) occurs in the content document <value-of select="$href"/> as a `<value-of
+                    select="$result-ref-first/@data-heading-element"/>` which implies that it should be referenced at nesting depth <value-of select="$depth-in-content + $document-in-nav-depth - 1"/> in the
                 navigation document.</assert>
         </rule>
     </pattern>
