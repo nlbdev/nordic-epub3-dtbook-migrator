@@ -28,16 +28,17 @@
     <p:output port="status.out">
         <p:pipe port="result" step="status"/>
     </p:output>
-
+    
     <p:option name="fail-on-error" required="true"/>
+    <p:option name="indent" required="true"/>  <!-- TODO: this does not do anything yet -->
 
-    <p:import href="validation-status.xpl"/>
-    <p:import href="update-epub-prefixes.xpl">
+    <p:import href="../validation-status.xpl"/>
+    <p:import href="../update-epub-prefixes.xpl">
         <p:documentation>
             px:nordic-update-epub-prefixes
         </p:documentation>
     </p:import>
-    <p:import href="opf-to-html-metadata.xpl">
+    <p:import href="../opf-to-html-metadata.xpl">
         <p:documentation>
             px:nordic-opf-to-html-metadata
         </p:documentation>
@@ -87,7 +88,7 @@
                     <p:pipe port="result" step="epub3-to-html.step.package-doc"/>
                 </p:input>
                 <p:input port="stylesheet">
-                    <p:document href="../../xslt/opf-to-spine-fileset.xsl"/>
+                    <p:document href="../../../xslt/opf-to-spine-fileset.xsl"/>
                 </p:input>
             </p:xslt>
             <px:message message="Loading spine..."/>
@@ -157,7 +158,7 @@
                     <p:empty/>
                 </p:input>
                 <p:input port="stylesheet">
-                    <p:document href="../../xslt/navdoc-to-outline.xsl"/>
+                    <p:document href="../../../xslt/navdoc-to-outline.xsl"/>
                 </p:input>
             </p:xslt>
             <p:xslt name="epub3-to-html.step.replace-sections-with-documents">
@@ -169,13 +170,13 @@
                     <p:pipe port="result" step="epub3-to-html.step.spine-xhtml"/>
                 </p:input>
                 <p:input port="stylesheet">
-                    <p:document href="../../xslt/replace-sections-with-documents.xsl"/>
+                    <p:document href="../../../xslt/replace-sections-with-documents.xsl"/>
                 </p:input>
             </p:xslt>
             <p:xslt name="epub3-to-html.step.fix-section-hierarchy">
                 <p:with-param name="body-is-section" select="'false'"/>
                 <p:input port="stylesheet">
-                    <p:document href="../../xslt/fix-section-hierarchy.xsl"/>
+                    <p:document href="../../../xslt/fix-section-hierarchy.xsl"/>
                 </p:input>
             </p:xslt>
             <p:xslt name="epub3-to-html.step.make-uris-relative-to-document">
@@ -183,7 +184,7 @@
                     <p:empty/>
                 </p:input>
                 <p:input port="stylesheet">
-                    <p:document href="../../xslt/make-uris-relative-to-document.xsl"/>
+                    <p:document href="../../../xslt/make-uris-relative-to-document.xsl"/>
                 </p:input>
             </p:xslt>
             <p:identity name="epub3-to-html.step.single-html.body"/>

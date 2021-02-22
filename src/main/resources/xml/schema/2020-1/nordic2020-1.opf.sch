@@ -13,6 +13,7 @@
         <title>Rule 1</title>
         <p></p>
         <rule context="/*">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="ends-with(base-uri(/*),'.opf')">[opf1] the OPF file must have the extension .opf</assert>
             <assert test="matches(base-uri(/*),'.*/package.opf')">[opf1] the filename of the OPF must be package.opf</assert>
             <assert test="matches(base-uri(/*),'EPUB/package.opf')">[opf1] the OPF must be contained in a folder named EPUB</assert>
@@ -23,6 +24,7 @@
         <title>Rule 2</title>
         <p></p>
         <rule context="opf:package">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="@version = '3.0'">[opf2] the version attribute must be 3.0</assert>
             <assert test="@unique-identifier = 'pub-identifier'">[opf2] on the package element; the unique-identifier-attribute must be present and equal 'pub-identifier'</assert>
             <assert test="namespace-uri-for-prefix('dc',.) = 'http://purl.org/dc/elements/1.1/'">[opf2] on the package element; the dublin core namespace (xmlns:dc="http://purl.org/dc/elements/1.1/")
@@ -33,6 +35,7 @@
                 http://www.idpf.org/epub/vocab/package/a11y/#")</assert>
         </rule>
         <rule context="opf:meta[boolean(@property) and contains(@property, ':') and not(substring-before(@property, ':') = ('dc', 'dcterms'))]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="prefix" value="substring-before(@property, ':')"/>
             <assert test="matches(string(ancestor::opf:package[1]/@prefix[1]), concat('(^|\s)', $prefix, ':(\s|$)'))">[opf2] on the package element; the prefix attribute must declare the '<value-of select="$prefix"/>' prefix</assert>
         </rule>
@@ -42,6 +45,7 @@
         <title>Rule 3</title>
         <p></p>
         <rule context="opf:metadata">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="count(dc:identifier) = 1">[opf3a] there must be exactly one dc:identifier element</assert>
             <assert test="parent::opf:package/@unique-identifier = dc:identifier/@id">[opf3a] the id of the dc:identifier must equal the value of the package elements unique-identifier
                 attribute</assert>
@@ -109,6 +113,7 @@
         <title>Rule 5a</title>
         <p></p>
         <rule context="opf:manifest">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="opf:item[@media-type='application/x-dtbncx+xml']">[opf5a] a NCX must be present in the manifest (media-type="application/x-dtbncx+xml")</assert>
         </rule>
     </pattern>
@@ -117,6 +122,7 @@
         <title>Rule 5b</title>
         <p></p>
         <rule context="opf:item[@media-type='application/x-dtbncx+xml']">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="@href = 'nav.ncx'">[opf5b] the NCX must be located in the same directory as the package document, and must be named "nav.ncx" (not "<value-of select="@href"/>")</assert>
         </rule>
     </pattern>
@@ -125,6 +131,7 @@
         <title>Rule 6</title>
         <p></p>
         <rule context="opf:spine">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="@toc">[opf6] the toc attribute must be present</assert>
             <assert test="/opf:package/opf:manifest/opf:item/@id = @toc">[opf6] the toc attribute must refer to an item in the manifest</assert>
         </rule>
@@ -134,6 +141,7 @@
         <title>Rule 7</title>
         <p></p>
         <rule context="opf:item[@media-type='application/xhtml+xml' and tokenize(@properties,'\s+')='nav']">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="@href = 'nav.xhtml'">[opf7] the Navigation Document must be located in the same directory as the package document, and must be named 'nav.xhtml' (not "<value-of
                     select="@href"/>")</assert>
         </rule>
@@ -143,6 +151,7 @@
         <title>Rule 8</title>
         <p></p>
         <rule context="opf:item[starts-with(@media-type,'image/')]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="matches(@href,'^images/[^/]+$')">[opf8] all images must be stored in the "images" directory (which is a subdirectory relative to the package document). The image file
                     "<value-of select="replace(@href,'.*/','')"/>" is located in "<value-of select="replace(@href,'[^/]+$','')"/>".</assert>
         </rule>
@@ -152,6 +161,7 @@
         <title>Rule 9</title>
         <p></p>
         <rule context="opf:item[@media-type='application/xhtml+xml' and not(tokenize(@properties,'\s+')='nav')]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <report test="contains(@href,'/')">[opf9] all content files must be located in the same directory as the package document. The content file file "<value-of select="replace(@href,'.*/','')"
                 />" is located in "<value-of select="replace(@href,'[^/]+$','')"/>".</report>
         </rule>
@@ -161,6 +171,7 @@
         <title>Rule 10</title>
         <p></p>
         <rule context="opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-cover.xhtml')]/@id = @idref]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="@linear = 'no'">[opf10] Cover must be marked as secondary in the spine (i.e. set linear="no" on the itemref with idref="<value-of select="@idref"/>", which refers to the
                 cover)</assert>
         </rule>
@@ -170,6 +181,7 @@
         <title>Rule 11</title>
         <p></p>
         <rule context="opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-rearnotes.xhtml')]/@id = @idref]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="@linear = 'no'">[opf11] Rearnotes must be marked as secondary in the spine (i.e. set linear="no" on the itemref with idref="<value-of select="@idref"/>, which refers to the
                 rearnote)</assert>
         </rule>
@@ -179,6 +191,7 @@
         <title>Rule 12a</title>
         <p></p>
         <rule context="opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav')]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')">[opf12a] The content document "<value-of select="@href"/>" has a bad filename. Content documents must match the
                 "[dc:identifier]-[position in spine]-[epub:type].xhtml" file naming convention. Example: "DTB123-01-cover.xhtml". The identifier are allowed to contain the upper- and lower-case
                 characters A-Z and a-z as well as digits (0-9), dashes (-) and underscores (_). The position is a positive whole number consisting of the digits 0-9. The epub:type must be all
@@ -191,6 +204,7 @@
         <title>Rule 12b</title>
         <p></p>
         <rule context="opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="identifier" value="replace(@href,'^([A-Za-z0-9_-]+)-\d+-[a-z-]+(-\d+)?\.xhtml$','$1')"/>
             <let name="position" value="replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+(-\d+)?\.xhtml$','$1')"/>
             <let name="type" value="replace(@href,'^[A-Za-z0-9_-]+-\d+-([a-z-]+)(-\d+)?\.xhtml$','$1')"/>
@@ -234,6 +248,7 @@
         <title>Rule 13</title>
         <p></p>
         <rule context="opf:item[@media-type='application/xhtml+xml' and @href='nav.xhtml']">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="tokenize(@properties,'\s+')='nav'">[opf13] the Navigation Document must be identified with the attribute properties="nav" in the OPF manifest. It currently <value-of
                     select="if (not(@properties)) then 'does not have a &quot;properties&quot; attribute' else concat('has the properties: ',string-join(tokenize(@properties,'\s+'),', '),', but not &quot;nav&quot;')"
                 /></assert>
@@ -244,6 +259,7 @@
         <title>Rule 14</title>
         <p></p>
         <rule context="opf:itemref">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="itemref" value="."/>
             <report test="count(//opf:item[@id=$itemref/@idref and (tokenize(@properties,'\s+')='nav' or @href='nav.xhtml')])">[opf14] the Navigation Document must not be present in the OPF spine
                 (itemref with idref="<value-of select="@idref"/>").</report>
@@ -254,8 +270,8 @@
         <title>Rule 15a</title>
         <p></p>
         <rule context="opf:item[substring-after(@href,'/') = 'cover.jpg']">
-            <assert test="tokenize(@properties,'\s+') = 'cover-image'">[opf15a] The cover image must have a properties attribute containing the value 'cover-image': <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="tokenize(@properties,'\s+') = 'cover-image'">[opf15a] The cover image must have a properties attribute containing the value 'cover-image': <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
@@ -263,8 +279,8 @@
         <title>Rule 15b</title>
         <p></p>
         <rule context="opf:item[tokenize(@properties,'\s+') = 'cover-image']">
-            <assert test="substring-after(@href,'/') = 'cover.jpg'">[opf15b] The image with property value 'cover-image' must have the filename 'cover.jpg': <value-of
-                    select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="substring-after(@href,'/') = 'cover.jpg'">[opf15b] The image with property value 'cover-image' must have the filename 'cover.jpg': <value-of select="$context"/></assert>
         </rule>
     </pattern>
 

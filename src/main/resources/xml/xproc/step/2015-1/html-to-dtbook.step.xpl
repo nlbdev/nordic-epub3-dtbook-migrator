@@ -34,13 +34,14 @@
     <!-- option supporting convert to DTBook 1.1.0 -->
     <p:option name="dtbook2005" required="false" select="'true'"/>
     <p:option name="fail-on-error" required="true"/>
+    <p:option name="indent" required="true"/>
 
-    <p:import href="validation-status.xpl">
+    <p:import href="../validation-status.xpl">
         <p:documentation>
             px:nordic-validation-status
         </p:documentation>
     </p:import>
-    <p:import href="pretty-print.xpl">
+    <p:import href="../pretty-print.xpl">
         <p:documentation>
             px:nordic-pretty-print
         </p:documentation>
@@ -111,13 +112,13 @@
                 <p:with-param name="max-depth" select="6"/>
                 <p:with-param name="copy-wrapping-elements-into-result" select="true()"/>
                 <p:input port="stylesheet">
-                    <p:document href="../../xslt/deep-level-grouping.xsl"/>
+                    <p:document href="../../../xslt/deep-level-grouping.xsl"/>
                 </p:input>
             </p:xslt>
             <!-- Nordic HTML to generic HTML -->
             <p:xslt name="html-to-dtbook.step.nordic-to-generic-epub3">
                 <p:input port="stylesheet">
-                    <p:document href="../../xslt/nordic-to-generic-epub3.xsl"/>
+                    <p:document href="../../../xslt/nordic-to-generic-epub3.xsl"/>
                 </p:input>
                 <p:input port="parameters">
                     <p:empty/>
@@ -165,7 +166,7 @@
             -->
             <p:xslt>
                 <p:input port="stylesheet">
-                    <p:document href="../../xslt/generic-to-nordic-dtbook.xsl"/>
+                    <p:document href="../../../xslt/generic-to-nordic-dtbook.xsl"/>
                 </p:input>
                 <p:input port="parameters">
                     <p:empty/>
@@ -213,7 +214,7 @@
                                 <p:empty/>
                             </p:input>
                             <p:input port="stylesheet">
-                                <p:document href="../../xslt/dtbook2005-to-dtbook110.xsl"/>
+                                <p:document href="../../../xslt/dtbook2005-to-dtbook110.xsl"/>
                             </p:input>
                         </p:xslt>
                         <p:sink/>
@@ -240,6 +241,7 @@
             -->
             <px:nordic-pretty-print name="html-to-dtbook.step.pretty-print-dtbook">
                 <!-- FIXME: remove all pretty-printing to improve performance -->
+                <p:with-option name="indent" select="$indent"/>
             </px:nordic-pretty-print>
             <p:sink/>
 
@@ -290,6 +292,7 @@
             </px:fileset-join>
             <px:nordic-pretty-print preserve-empty-whitespace="false">
                 <!-- FIXME: remove all pretty-printing to improve performance -->
+                <p:with-option name="indent" select="$indent"/>
             </px:nordic-pretty-print>
 
 

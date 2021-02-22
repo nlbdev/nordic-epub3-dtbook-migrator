@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../../main/resources/xml/xproc/step/2015-1/html-validate.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
-    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf">
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               script="../../../main/resources/xml/xproc/step/2020-1/html-validate.step.xpl" pending="single-HTML representation not defined for 2020-1 yet">
 
     <x:scenario label="px:nordic-html-validate.step">
         <x:call step="px:nordic-html-validate.step">
             <x:input port="fileset.in">
                 <x:document type="inline">
-                    <d:fileset xml:base="../../resources/2015-1/">
+                    <d:fileset xml:base="../../resources/2020-1/">
                         <d:file media-type="image/jpeg" href="single-html/images/valentin.jpg"/>
                         <d:file media-type="application/xhtml+xml" href="single-html/C00000.xhtml" doctype="&lt;!DOCTYPE html&gt;"/>
                     </d:fileset>
                 </x:document>
             </x:input>
             <x:input port="in-memory.in">
-                <x:document href="../../resources/2015-1/single-html/C00000.xhtml" type="file" method="xml"/>
+                <x:document href="../../resources/2020-1/single-html/C00000.xhtml" type="file" method="xml"/>
             </x:input>
             <x:input port="report.in"/>
             <x:option name="fail-on-error" select="'true'"/>
@@ -32,7 +38,7 @@
             <x:document type="port" port="in-memory.out"/>
         </x:context>
         <x:expect type="compare" label="the in-memory.out port should contain the same documents as was received on the in-memory.in port">
-            <x:document href="../../resources/2015-1/single-html/C00000.xhtml" type="file" method="xml"/>
+            <x:document href="../../resources/2020-1/single-html/C00000.xhtml" type="file" method="xml"/>
         </x:expect>
         <x:expect type="xpath" label="The output should preserve metadata with the a11y prefix" test="/html:html/html:head/html:meta[@name='a11y:certifiedBy']/@content" equals="'Certifying Organization'"/>
         <x:expect type="xpath" label="The output should preserve metadata using unknown prefixes" test="/html:html/html:head/html:meta[@name='schema:audience']/@content" equals="'Adult'"/>

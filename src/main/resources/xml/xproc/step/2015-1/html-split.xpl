@@ -38,7 +38,7 @@
             <p:pipe port="result" step="html-split.html"/>
         </p:with-param>
         <p:input port="stylesheet">
-            <p:document href="../../xslt/split-html.annotate.xsl"/>
+            <p:document href="../../../xslt/split-html.annotate.xsl"/>
         </p:input>
     </p:xslt>
     <p:xslt name="html-split.split-html">
@@ -46,13 +46,13 @@
             <p:pipe port="result" step="html-split.html"/>
         </p:with-param>
         <p:input port="stylesheet">
-            <p:document href="../../xslt/split-html.xsl"/>
+            <p:document href="../../../xslt/split-html.xsl"/>
         </p:input>
     </p:xslt>
     <p:xslt name="html-split.fix-section-hierarchy">
         <p:with-param name="body-is-section" select="'true'"/>
         <p:input port="stylesheet">
-            <p:document href="../../xslt/fix-section-hierarchy.xsl"/>
+            <p:document href="../../../xslt/fix-section-hierarchy.xsl"/>
         </p:input>
     </p:xslt>
     <p:identity name="html-split.split"/>

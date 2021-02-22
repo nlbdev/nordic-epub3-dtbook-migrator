@@ -38,8 +38,8 @@
     <!-- option supporting convert to DTBook 1.1.0 -->
     <p:option name="dtbook2005" required="false" select="'true'"/>
 
-    <p:import href="validation-status.xpl"/>
-    <p:import href="check-image-file-signatures.xpl"/>
+    <p:import href="../validation-status.xpl"/>
+    <p:import href="../check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
@@ -149,7 +149,7 @@
                                     <p:empty/>
                                 </p:input>
                                 <p:input port="stylesheet">
-                                    <p:document href="../../xslt/dtbook-legacy-fix.xsl"/>
+                                    <p:document href="../../../xslt/dtbook-legacy-fix.xsl"/>
                                 </p:input>
                             </p:xslt>
                             <p:identity/>
@@ -168,7 +168,7 @@
                             <px:message severity="DEBUG" message="Validating against nordic-dtbook-2005-3.rng"/>
                             <l:relax-ng-report name="dtbook-validate.step.choose-if-not-dtbook110.validate.input-dtbook.nordic.validation">
                                 <p:input port="schema">
-                                    <p:document href="../../schema/2015-1/nordic-dtbook-2005-3.rng"/>
+                                    <p:document href="../../../schema/2015-1/nordic-dtbook-2005-3.rng"/>
                                 </p:input>
                                 <p:with-option name="dtd-attribute-values" select="'false'"/>
                                 <p:with-option name="dtd-id-idref-warnings" select="'false'"/>
@@ -190,7 +190,7 @@
                                             <p:empty/>
                                         </p:input>
                                         <p:input port="schema">
-                                            <p:document href="../../schema/2015-1/mtm2015-1.nota.sch"/>
+                                            <p:document href="../../../schema/2015-1/mtm2015-1.nota.sch"/>
                                         </p:input>
                                     </p:validate-with-schematron>
                                     <p:sink/>
@@ -209,7 +209,7 @@
                                             <p:empty/>
                                         </p:input>
                                         <p:input port="schema">
-                                            <p:document href="../../schema/2015-1/mtm2015-1.sch"/>
+                                            <p:document href="../../../schema/2015-1/mtm2015-1.sch"/>
                                         </p:input>
                                     </p:validate-with-schematron>
                                     <p:sink/>

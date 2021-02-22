@@ -37,10 +37,12 @@
     <p:option name="temp-dir" required="true"/>
     <p:option name="check-images" select="'true'"/>
     <p:option name="organization-specific-validation" required="false" select="''"/>
+    <p:option name="use-epubcheck" required="false" select="'true'"/>
+    <p:option name="use-ace" required="false" select="'true'"/>  <!-- TODO: not implemented yet -->
 
-    <p:import href="validation-status.xpl"/>
     <p:import href="html-validate.step.xpl"/>
-    <p:import href="check-image-file-signatures.xpl"/>
+    <p:import href="../validation-status.xpl"/>
+    <p:import href="../check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:read-xml-declaration
@@ -94,33 +96,44 @@
 
 
             <p:variable name="basedir" select="if (/*/d:file[@media-type='application/epub+zip']) then $temp-dir else base-uri(/*)"/>
-
-            <p:choose name="epub3-validate.step.choose-zipped-or-not">
-                <p:when test="/*/d:file[@media-type='application/epub+zip']">
-                    <px:epubcheck mode="epub" version="3" name="epub3-validate.step.choose-zipped-or-not.epubcheck-zipped">
-                        <p:with-option name="epub" select="(/*/d:file[@media-type='application/epub+zip'])[1]/resolve-uri(@href,base-uri(.))"/>
-                    </px:epubcheck>
+            
+            <p:choose>
+                <p:when test="$use-epubcheck = 'true'">
+                    <p:choose name="epub3-validate.step.choose-zipped-or-not">
+                        <p:when test="/*/d:file[@media-type='application/epub+zip']">
+                            <px:epubcheck mode="epub" version="3" name="epub3-validate.step.choose-zipped-or-not.epubcheck-zipped">
+                                <p:with-option name="epub" select="(/*/d:file[@media-type='application/epub+zip'])[1]/resolve-uri(@href,base-uri(.))"/>
+                            </px:epubcheck>
+                        </p:when>
+                        <p:otherwise>
+                            <px:epubcheck mode="expanded" version="3" name="epub3-validate.step.choose-zipped-or-not.epubcheck-not-zipped">
+                                <p:with-option name="epub" select="(/*/d:file[@media-type='application/oebps-package+xml'])[1]/resolve-uri(@href,base-uri(.))"/>
+                            </px:epubcheck>
+                        </p:otherwise>
+                    </p:choose>
+                    <p:delete match="jhove:message[starts-with(.,'HTM-047')]" name="epub3-validate.step.delete-htm047">
+                        <!--
+                            https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/111
+                            https://github.com/IDPF/epubcheck/issues/419
+                        -->
+                    </p:delete>
+                    <p:xslt name="epub3-validate.step.epubcheck-report-to-pipeline-report">
+                        <p:input port="parameters">
+                            <p:empty/>
+                        </p:input>
+                        <p:input port="stylesheet">
+                            <p:document href="../../../xslt/epubcheck-report-to-pipeline-report.xsl"/>
+                        </p:input>
+                    </p:xslt>
                 </p:when>
                 <p:otherwise>
-                    <px:epubcheck mode="expanded" version="3" name="epub3-validate.step.choose-zipped-or-not.epubcheck-not-zipped">
-                        <p:with-option name="epub" select="(/*/d:file[@media-type='application/oebps-package+xml'])[1]/resolve-uri(@href,base-uri(.))"/>
-                    </px:epubcheck>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:identity>
                 </p:otherwise>
             </p:choose>
-            <p:delete match="jhove:message[starts-with(.,'HTM-047')]" name="epub3-validate.step.delete-htm047">
-                <!--
-                    https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/111
-                    https://github.com/IDPF/epubcheck/issues/419
-                -->
-            </p:delete>
-            <p:xslt name="epub3-validate.step.epubcheck-report-to-pipeline-report">
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
-                <p:input port="stylesheet">
-                    <p:document href="../../xslt/epubcheck-report-to-pipeline-report.xsl"/>
-                </p:input>
-            </p:xslt>
             <p:identity name="epub3-validate.step.epubcheck.validate"/>
             <p:sink/>
 
@@ -188,7 +201,7 @@
                     <p:pipe port="result" step="epub3-validate.step.opf"/>
                 </p:input>
                 <p:input port="stylesheet">
-                    <p:document href="../../xslt/opf-to-spine-fileset.xsl"/>
+                    <p:document href="../../../xslt/opf-to-spine-fileset.xsl"/>
                 </p:input>
             </p:xslt>
             <px:fileset-load media-types="application/xhtml+xml" name="epub3-validate.step.load-unzipped-spine">
@@ -247,7 +260,7 @@
                     <p:empty/>
                 </p:input>
                 <p:input port="schema">
-                    <p:document href="../../schema/2015-1/nordic2015-1.opf.sch"/>
+                    <p:document href="../../../schema/2015-1/nordic2015-1.opf.sch"/>
                 </p:input>
             </p:validate-with-schematron>
             <p:sink/>
@@ -549,7 +562,7 @@
                         <p:empty/>
                     </p:input>
                     <p:input port="schema">
-                        <p:document href="../../schema/2015-1/nordic2015-1.opf-and-html.sch"/>
+                        <p:document href="../../../schema/2015-1/nordic2015-1.opf-and-html.sch"/>
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>
@@ -595,7 +608,7 @@
                             <p:empty/>
                         </p:input>
                         <p:input port="stylesheet">
-                            <p:document href="../../xslt/list-heading-and-pagebreak-references.xsl"/>
+                            <p:document href="../../../xslt/list-heading-and-pagebreak-references.xsl"/>
                         </p:input>
                     </p:xslt>
                 </p:for-each>
@@ -623,7 +636,7 @@
                         <p:empty/>
                     </p:input>
                     <p:input port="schema">
-                        <p:document href="../../schema/2015-1/nordic2015-1.nav-references.sch"/>
+                        <p:document href="../../../schema/2015-1/nordic2015-1.nav-references.sch"/>
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>
@@ -655,7 +668,7 @@
                         <p:empty/>
                     </p:input>
                     <p:input port="schema">
-                        <p:document href="../../schema/2015-1/nordic2015-1.nav-ncx.sch"/>
+                        <p:document href="../../../schema/2015-1/nordic2015-1.nav-ncx.sch"/>
                     </p:input>
                 </p:validate-with-schematron>
                 <p:sink/>
@@ -692,7 +705,7 @@
                         <p:empty/>
                     </p:input>
                     <p:input port="stylesheet">
-                        <p:document href="../../xslt/determine-complexity.xsl"/>
+                        <p:document href="../../../xslt/determine-complexity.xsl"/>
                     </p:input>
                 </p:xslt>
             </p:group>

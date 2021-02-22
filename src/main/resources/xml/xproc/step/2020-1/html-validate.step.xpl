@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-html-validate.step" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf"
-    xmlns:l="http://xproc.org/library">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:epub="http://www.idpf.org/2007/ops"
+                xmlns:html="http://www.w3.org/1999/xhtml"
+                xmlns:opf="http://www.idpf.org/2007/opf"
+                xmlns:l="http://xproc.org/library"
+                type="px:nordic-html-validate.step.2020-1"
+                name="main"
+                version="1.0">
 
     <p:serialization port="report.out" indent="true"/>
 
@@ -34,11 +42,10 @@
 
     <p:option name="fail-on-error" required="true"/>
     <p:option name="check-images" required="false" select="'true'"/>
-    <p:option name="organization-specific-validation" required="false" select="''"/>
     <p:option name="document-type" required="false" select="'Nordic HTML'"/>
 
-    <p:import href="validation-status.xpl"/>
-    <p:import href="check-image-file-signatures.xpl"/>
+    <p:import href="../validation-status.xpl"/>
+    <p:import href="../check-image-file-signatures.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
@@ -119,7 +126,7 @@
                     <p:pipe step="html-validate.step.html" port="result"/>
                 </p:input>
                 <p:input port="schema">
-                    <p:document href="../../schema/2015-1/nordic-html5.rng"/>
+                    <p:document href="../../../schema/2020-1/nordic-html5.rng"/>
                 </p:input>
                 <p:with-option name="dtd-attribute-values" select="'false'"/>
                 <p:with-option name="dtd-id-idref-warnings" select="'false'"/>
@@ -131,46 +138,23 @@
                     <p:pipe step="html-validate.step.html" port="result"/>
                 </p:input>
             </p:identity>
-            <p:choose>
-                <p:when test="lower-case($organization-specific-validation) = 'nota'">
-                    <px:message severity="DEBUG" message="Validating against nordic2015-1.nota.sch: $1">
-                        <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
-                    </px:message>
-                    <p:validate-with-schematron name="html-validate.step.validate.sch.nota" assert-valid="false">
-                        <p:input port="parameters">
-                            <p:empty/>
-                        </p:input>
-                        <p:input port="schema">
-                            <p:document href="../../schema/2015-1/nordic2015-1.nota.sch"/>
-                        </p:input>
-                    </p:validate-with-schematron>
-                    <p:sink/>
-                    <p:identity>
-                        <p:input port="source">
-                            <p:pipe port="report" step="html-validate.step.validate.sch.nota"/>
-                        </p:input>
-                    </p:identity>
-                </p:when>
-                <p:otherwise>
-                    <px:message severity="DEBUG" message="Validating against nordic2015-1.sch: $1">
-                        <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
-                    </px:message>
-                    <p:validate-with-schematron name="html-validate.step.validate.sch.generic" assert-valid="false">
-                        <p:input port="parameters">
-                            <p:empty/>
-                        </p:input>
-                        <p:input port="schema">
-                            <p:document href="../../schema/2015-1/nordic2015-1.sch"/>
-                        </p:input>
-                    </p:validate-with-schematron>
-                    <p:sink/>
-                    <p:identity>
-                        <p:input port="source">
-                            <p:pipe port="report" step="html-validate.step.validate.sch.generic"/>
-                        </p:input>
-                    </p:identity>
-                </p:otherwise>
-            </p:choose>
+            <px:message severity="DEBUG" message="Validating against nordic2020-1.sch: $1">
+                <p:with-option name="param1" select="replace(base-uri(/*),'.*/','')"/>
+            </px:message>
+            <p:validate-with-schematron name="html-validate.step.validate.sch.generic" assert-valid="false">
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+                <p:input port="schema">
+                    <p:document href="../../../schema/2020-1/nordic2020-1.sch"/>
+                </p:input>
+            </p:validate-with-schematron>
+            <p:sink/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe port="report" step="html-validate.step.validate.sch.generic"/>
+                </p:input>
+            </p:identity>
             <p:identity name="html-validate.step.validate.sch"/>
             <p:sink/>
 

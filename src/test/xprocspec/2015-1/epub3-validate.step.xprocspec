@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../../main/resources/xml/xproc/step/epub3-validate.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../../main/resources/xml/xproc/step/2015-1/epub3-validate.step.xpl" xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops"
     xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf">
 
-    <x:scenario label="px:nordic-epub3-validate.step" pending="https://github.com/daisy/pipeline-scripts-utils/pull/92">
+    <x:scenario label="px:nordic-epub3-validate.step">
         <x:call step="px:nordic-epub3-validate.step">
             <x:input port="fileset.in">
                 <x:document type="inline" xml:base="../../resources/2015-1/C00000/">
@@ -92,14 +92,9 @@
         </x:context>
         <x:expect label="there should be no errors under d:reports" type="xpath" test="count(/*/d:reports/d:report/d:error)" equals="0"/>
         <x:expect label="the error count should be 0" type="xpath" test="if (/d:errors) then count(/*/*) else if (/*/d:document-info) then /*/d:document-info/d:error-count/number(.) else 0" equals="0"/>
-        <x:expect type="xpath" label="The output should preserve metadata with the a11y prefix in the HTML file" test="count(/html:html/html:head/html:meta[@name='a11y:certifiedBy' and @content='Certifying Organization'])" equals="1"/>
-        <x:expect type="xpath" label="The output should preserve metadata with the a11y prefix in the OPF file" test="/opf:package/opf:metadata/opf:meta[@property='a11y:certifiedBy']/text()" equals="'Certifying Organization'"/>
-        <x:expect type="xpath" label="The output should preserve metadata using unknown prefixes in the HTML file" test="count(/html:html/html:head/html:meta[@name='schema:audience' and @content='Adult'])" equals="1"/>
-        <x:expect type="xpath" label="The output should preserve metadata using unknown prefixes in the OPF file" test="/opf:package/opf:metadata/opf:meta[@property='schema:audience']/text()" equals="'Adult'"/>
-        
     </x:scenario>
     
-    <x:scenario label="px:nordic-epub3-validate.step - regression for error: java.util.MissingFormatArgumentException: Format specifier '%3$s'" pending="https://github.com/daisy/pipeline-scripts-utils/pull/92">
+    <x:scenario label="px:nordic-epub3-validate.step - regression for error: java.util.MissingFormatArgumentException: Format specifier '%3$s'">
         <x:call step="px:nordic-epub3-validate.step">
             <x:input port="fileset.in">
                 <x:document type="inline" xml:base="../../resources/2015-1/regression-MissingFormatArgumentException/">

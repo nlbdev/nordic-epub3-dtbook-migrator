@@ -34,24 +34,25 @@
     </p:output>
 
     <p:option name="fail-on-error" required="true"/>
+    <p:option name="indent" required="true"/>
     <p:option name="temp-dir" required="true"/>
 
-    <p:import href="pretty-print.xpl">
+    <p:import href="../pretty-print.xpl">
         <p:documentation>
             px:nordic-pretty-print
         </p:documentation>
     </p:import>
-    <p:import href="validation-status.xpl">
+    <p:import href="../validation-status.xpl">
         <p:documentation>
             px:nordic-validation-status
         </p:documentation>
     </p:import>
-    <p:import href="update-epub-prefixes.xpl">
+    <p:import href="../update-epub-prefixes.xpl">
         <p:documentation>
             px:nordic-update-epub-prefixes
         </p:documentation>
     </p:import>
-    <p:import href="html-add-accessibility.step.xpl">
+    <p:import href="../html-add-accessibility.step.xpl">
         <p:documentation>
             px:nordic-html-add-accessibility-css.step
         </p:documentation>
@@ -166,7 +167,9 @@
                 -->
                 <p:viewport match="/html:html/html:head" name="dtbook-to-html.step.viewport-html-head">
                     <!-- TODO: consider dropping this if it causes performance issues -->
-                    <px:nordic-pretty-print preserve-empty-whitespace="false"/>
+                    <px:nordic-pretty-print preserve-empty-whitespace="false">
+                        <p:with-option name="indent" select="$indent"/>
+                    </px:nordic-pretty-print>
                 </p:viewport>
                 <p:identity name="dtbook-to-html.step.html.processed"/>
                 <p:sink/>

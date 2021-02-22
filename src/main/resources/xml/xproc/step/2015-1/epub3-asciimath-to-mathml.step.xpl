@@ -35,7 +35,7 @@
 
     <p:option name="fail-on-error" required="true"/>
 
-    <p:import href="validation-status.xpl"/>
+    <p:import href="../validation-status.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/asciimath-utils/library.xpl"/>

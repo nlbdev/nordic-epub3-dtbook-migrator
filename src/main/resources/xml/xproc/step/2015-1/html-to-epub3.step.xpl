@@ -38,6 +38,7 @@
     </p:output>
 
     <p:option name="fail-on-error" required="true"/>
+    <p:option name="indent" required="true"/>
     <p:option name="temp-dir" required="true"/>
     <p:option name="compatibility-mode" select="'true'"/>
 
@@ -46,17 +47,17 @@
             px:nordic-html-split-perform
         </p:documentation>
     </p:import>
-    <p:import href="validation-status.xpl">
+    <p:import href="../validation-status.xpl">
         <p:documentation>
             px:nordic-validation-status
         </p:documentation>
     </p:import>
-    <p:import href="pretty-print.xpl">
+    <p:import href="../pretty-print.xpl">
         <p:documentation>
             px:nordic-pretty-print
         </p:documentation>
     </p:import>
-    <p:import href="update-epub-prefixes.xpl">
+    <p:import href="../update-epub-prefixes.xpl">
         <p:documentation>
             px:nordic-update-epub-prefixes
         </p:documentation>
@@ -186,7 +187,9 @@
                 <p:for-each name="html-to-epub3.step.iterate-spine">
                     <p:viewport match="/html:html/html:head" name="html-to-epub3.step.iterate-spine.viewport-html-head">
                         <!-- TODO: remove as many pretty printing steps as possible to improve performance -->
-                        <px:nordic-pretty-print preserve-empty-whitespace="false"/>
+                        <px:nordic-pretty-print preserve-empty-whitespace="false">
+                            <p:with-option name="indent" select="$indent"/>
+                        </px:nordic-pretty-print>
                     </p:viewport>
                 </p:for-each>
                 <p:identity name="html-to-epub3.step.spine-html"/>
@@ -228,7 +231,7 @@
                 <!-- post-process -->
                 <p:xslt>
                     <p:input port="stylesheet">
-                        <p:document href="../../xslt/process-opf-metadata.xsl"/>
+                        <p:document href="../../../xslt/process-opf-metadata.xsl"/>
                     </p:input>
                     <p:input port="parameters">
                         <p:empty/>
@@ -277,7 +280,7 @@
                                 <p:empty/>
                             </p:input>
                             <p:input port="stylesheet">
-                                <p:document href="../../xslt/generate-missing-headlines.xsl"/>
+                                <p:document href="../../../xslt/generate-missing-headlines.xsl"/>
                             </p:input>
                         </p:xslt>
                         <p:delete match="html:a[tokenize(@epub:type,'\s+')='noteref']" name="html-to-epub3.step.nav.toc.delete-noterefs"/>
@@ -303,7 +306,7 @@
                                     <p:empty/>
                                 </p:input>
                                 <p:input port="stylesheet">
-                                    <p:document href="../../xslt/replace-single-html-hrefs-with-multi-html-hrefs.xsl"/>
+                                    <p:document href="../../../xslt/replace-single-html-hrefs-with-multi-html-hrefs.xsl"/>
                                 </p:input>
                             </p:xslt>
                         </p:group>
@@ -350,13 +353,15 @@
                             <p:pipe port="result" step="html-to-epub3.step.single-html"/>
                         </p:with-param>
                         <p:input port="stylesheet">
-                            <p:document href="../../xslt/navdoc-nordic-normalization.xsl"/>
+                            <p:document href="../../../xslt/navdoc-nordic-normalization.xsl"/>
                         </p:input>
                     </p:xslt>
                     <px:nordic-update-epub-prefixes/>
                     <p:viewport match="/html:html/html:head" name="html-to-epub3.step.viewport-html-head">
                         <!-- TODO: consider which pretty-print.xsl invocations can be removed to improve performance -->
-                        <px:nordic-pretty-print preserve-empty-whitespace="false"/>
+                        <px:nordic-pretty-print preserve-empty-whitespace="false">
+                            <p:with-option name="indent" select="$indent"/>
+                        </px:nordic-pretty-print>
                     </p:viewport>
                     <p:identity name="html-to-epub3.step.nav.html"/>
 
@@ -366,7 +371,9 @@
                     <px:epub3-nav-to-ncx name="html-to-epub3.step.nav-to-ncx"/>
                     <!-- TODO: remove pretty printing to improve performance -->
                     <px:nordic-pretty-print preserve-empty-whitespace="false"
-                                            name="html-to-epub3.step.ncx-pretty-print"/>
+                                            name="html-to-epub3.step.ncx-pretty-print">
+                        <p:with-option name="indent" select="$indent"/>
+                    </px:nordic-pretty-print>
                     <px:set-base-uri name="html-to-epub3.step.ncx-add-xml-base">
                         <p:with-option name="base-uri" select="concat($publication-dir,'nav.ncx')"/>
                     </px:set-base-uri>
@@ -543,7 +550,9 @@
                     Pretty-print
                 -->
                 <!-- TODO: consider removing this to improve performance -->
-                <px:nordic-pretty-print preserve-empty-whitespace="false"/>
+                <px:nordic-pretty-print preserve-empty-whitespace="false">
+                    <p:with-option name="indent" select="$indent"/>
+                </px:nordic-pretty-print>
                 <p:identity name="html-to-epub3.step.package-doc.processed"/>
 
                 <px:fileset-update name="update">
