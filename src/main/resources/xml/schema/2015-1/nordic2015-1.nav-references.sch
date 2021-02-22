@@ -60,12 +60,12 @@
         <rule context="html:a[ancestor::html:nav[tokenize(@epub:type,'\s+')='toc']]">
             <let name="href" value="substring-before(@href,'#')"/>
             <let name="fragment" value="substring-after(@href,'#')"/>
-            <let name="result-ref" value="/*/c:result/c:result[(@data-sectioning-id, @data-heading-id) = $fragment]"/>
+            <let name="result-ref" value="/*/c:result/c:result[(@data-sectioning-id) = $fragment]"/>
 
-            <assert test="$result-ref">[nordic_nav_references_2a] All references from the navigation document must reference either a sectioning element or a headline in one of the content documents:
+            <assert test="$result-ref">[nordic_nav_references_2a] All references from the navigation document must reference either a sectioning element in one of the content documents:
                     <value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
-            <report test="count($result-ref) &gt; 1">[nordic_nav_references_2a] All references from the navigation document must reference exactly one sectioning element or headline in one of the
-                content documents, there are multiple sections or headlines matching the href="<value-of select="@href"/>" in <value-of
+            <report test="count($result-ref) &gt; 1">[nordic_nav_references_2a] All references from the navigation document must reference exactly one sectioning element in one of the
+                content documents, there are multiple sections matching the href="<value-of select="@href"/>" in <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/>; <value-of
                     select="string-join($result-ref/concat(replace(@xml:base,'.*/',''),'#',$fragment), ',')"/></report>
 
@@ -112,10 +112,6 @@
             <report test="count($nav-ref) and not(normalize-space(string-join(.//text(),'')) = ('', normalize-space(string-join($nav-ref//text(),''))))">[nordic_nav_references_3] The page number for
                 the pagebreak in the navigation document ("<value-of select="normalize-space(string-join($nav-ref//text(),''))"/>") should match the page number of the referenced pagebreak in the
                 content document ("<value-of select="normalize-space(string-join(.//text(),''))"/>" at <value-of select="$pagebreak-ref"/>)</report>
-
-            <report test="count($nav-ref) and normalize-space(string-join(.//text(),'')) = '' and not(normalize-space(string-join($nav-ref//text(),'')) = '-')">[nordic_nav_references_3] The page
-                number for the pagebreak in the navigation document ("<value-of select="normalize-space(string-join($nav-ref//text(),''))"/>") should be a dash ("-") when the referenced pagebreak in
-                the content document is unnumbered ("<value-of select="normalize-space(string-join(.//text(),''))"/>" at <value-of select="$pagebreak-ref"/>)</report>
         </rule>
     </pattern>
 
