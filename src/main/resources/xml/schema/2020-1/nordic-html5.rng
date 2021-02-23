@@ -909,8 +909,14 @@
         <ref name="attlist.level1"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
         <choice>
             <group>
-                <ref name="h1"/> <!-- h1 -->
-                <ref name="h2"/> <!-- h2 -->
+                <choice>
+                    <ref name="h1"/> <!-- h1 -->
+                    <ref name="h2"/> <!-- h2 -->
+                    <ref name="h3"/> <!-- h3 -->
+                    <ref name="h4"/> <!-- h4 -->
+                    <ref name="h5"/> <!-- h5 -->
+                    <ref name="h6"/> <!-- h6 -->
+                </choice>
                 <oneOrMore>
                     <choice>
                         <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->
@@ -926,8 +932,14 @@
                     </choice>
                 </oneOrMore>
                 <optional>
-                    <ref name="h1"/> <!-- h1 -->
-                    <ref name="h2"/> <!-- h2 -->
+                    <choice>
+                        <ref name="h1"/> <!-- h1 -->
+                        <ref name="h2"/> <!-- h2 -->
+                        <ref name="h3"/> <!-- h3 -->
+                        <ref name="h4"/> <!-- h4 -->
+                        <ref name="h5"/> <!-- h5 -->
+                        <ref name="h6"/> <!-- h6 -->
+                    </choice>
                     <oneOrMore>
                         <choice>
                             <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->
