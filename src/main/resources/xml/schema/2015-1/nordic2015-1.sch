@@ -857,7 +857,7 @@
 
     <!-- Rule 259: don't allow pagebreak in thead -->
     <pattern id="epub_nordic_259">
-        <rule context=".[tokenize(@epub:type,'\s+')='pagebreak']">
+        <rule context="html:*[tokenize(@epub:type,'\s+')='pagebreak']">
             <report test="ancestor::html:thead">[nordic259] Pagebreaks can not occur within table headers (thead): <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
             <report test="ancestor::html:tfoot">[nordic259] Pagebreaks can not occur within table footers (tfoot): <value-of
