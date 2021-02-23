@@ -218,16 +218,6 @@
         </rule>
     </pattern>
 
-    <pattern id="epub_nordic_40">
-        <title>Rule 40</title>
-        <p>No page numbering gaps for pagebreak w/page-normal</p>
-        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak' and tokenize(@class, '\s+') = 'page-normal' and count(preceding::html:*[tokenize(@epub:type, '\s+') = 'pagebreak' and tokenize(@class, '\s+') = 'page-normal'])]">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <let name="preceding-pagebreak" value="preceding::html:*[tokenize(@epub:type, '\s+') = 'pagebreak' and tokenize(@class, '\s+') = 'page-normal'][1]"/>
-            <report test="number($preceding-pagebreak/@title) != number(@title) - 1">[nordic40a] No gaps may occur in page numbering (see pagebreak with title="<value-of select="@title"/>" and compare with pagebreak with title="<value-of select="$preceding-pagebreak/@title"/>").</report>
-        </rule>
-    </pattern>
-
     <pattern id="epub_nordic_50_a">
         <title>Rule 50a</title>
         <p>image alt attribute</p>

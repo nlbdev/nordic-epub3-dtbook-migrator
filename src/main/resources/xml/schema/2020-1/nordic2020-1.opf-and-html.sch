@@ -94,19 +94,6 @@
         </rule>
     </pattern>
 
-    <pattern id="nordic_opf_and_html_40">
-        <title>Rule 40</title>
-        <p>No page numbering gaps for pagebreak w/page-normal</p>
-        <rule
-            context="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and count(preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'])]">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <let name="preceding-pagebreak" value="preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'][1]"/>
-            <report test="number($preceding-pagebreak/@title) != number(@title)-1">[nordic_opf_and_html_40b] No gaps may occur in page numbering (see pagebreak with title="<value-of select="@title"/>"
-                in <value-of select="replace(base-uri(.),'^.*/','')"/> and compare with pagebreak with title="<value-of select="$preceding-pagebreak/@title"/>" in <value-of
-                    select="replace(base-uri($preceding-pagebreak),'^.*/','')"/>)</report>
-        </rule>
-    </pattern>
-
     <pattern id="nordic_opf_and_html_23">
         <title>Rule 23</title>
         <p>Increasing pagebreak values for page-normal</p>
@@ -133,11 +120,11 @@
     <pattern id="nordic_opf_and_html_26_a">
         <title>Rule 26a</title>
         <p>Each note must have a noteref</p>
-        <rule context="html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote')]">
+        <rule context="html:*[tokenize(@epub:type,'\s+')=('note','endnote','footnote')]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
             <assert test="count(//html:a[tokenize(@epub:type,'\s+')='noteref' and substring-after(@href,'#') = current()/@id]) &gt;= 1">[nordic_opf_and_html_26a] The <value-of
-                    select="(tokenize(@epub:type,'\s+')[.=('note','rearnote','footnote')],'note')[1]"/><value-of select="if (@id) then concat(' with the id &quot;',@id,'&quot;') else ''"/> must have
+                    select="(tokenize(@epub:type,'\s+')[.=('note','endnote','footnote')],'note')[1]"/><value-of select="if (@id) then concat(' with the id &quot;',@id,'&quot;') else ''"/> must have
                 at least one &lt;a epub:type="noteref" ...&gt; referencing it: <value-of select="$context"/> (in <value-of select="replace(base-uri(),'.*/','')"
                 />)</assert>
         </rule>
@@ -149,8 +136,8 @@
         <rule context="html:a[tokenize(@epub:type,'\s+')='noteref']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
-            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('note','rearnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic_opf_and_html_26b] The note
-                reference with the href "<value-of select="@href"/>" attribute must resolve to a note, rearnote or footnote in the publication: <value-of select="$context"/> (in <value-of select="replace(base-uri(),'.*/','')"
+            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('note','endnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic_opf_and_html_26b] The note
+                reference with the href "<value-of select="@href"/>" attribute must resolve to a note, endnote or footnote in the publication: <value-of select="$context"/> (in <value-of select="replace(base-uri(),'.*/','')"
                 />)</assert>
         </rule>
     </pattern>
@@ -200,47 +187,5 @@
                     select="/*/opf:package/opf:metadata/dc:identifier[not(@refines)]/text()"/>" while the HTML dc:identifier is "<value-of select="@content"/>".</assert>
         </rule>
     </pattern>
-
-    <!--
-        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
-        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
-    -->
-    <pattern id="nordic_opf_and_html_32">
-        <title>Rule 32</title>
-        <p></p>
-        <rule context="html:img[@longdesc]">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="substring-after(normalize-space(@longdesc),'#') = //@id">[nordic_opf_and_html_32] The URL in the img longdesc attribute does not reference any element in the publication:
-                    <value-of select="$context"/></assert>
-        </rule>
-    </pattern>
-
-    <!--
-        MG20061101: added as a consequence of zedval feature request #1565049: http://sourceforge.net/p/zedval/feature-requests/12/
-        JAJ20150225: Imported from Pipeline 1 DTBook validator and adapted to EPUB3
-    -->
-    <pattern id="nordic_opf_and_html_276">
-        <!-- see also nordic276 in nordic2015-1.sch -->
-        <title>Rule 276</title>
-        <p></p>
-        <rule context="html:a">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="@accesskey and count(//html:a/@accesskey=@accesskey)!=1">[nordic_opf_and_html_276] The accesskey attribute value is not unique within the publication.</report>
-            <report test="@tabindex and count(//html:a/@tabindex=@tabindex)!=1">[nordic_opf_and_html_276] The tabindex attribute value is not unique within the publication.</report>
-        </rule>
-    </pattern>
-
-    <!--<pattern id="nordic_opf_and_html_284">
-        <rule context="html:p[tokenize(@class,'\s+') = ('isbn', 'issn')]">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <let name="source-element" value="/*/opf:package/opf:metadata/dc:source[not(@refines) and matches(.,'urn:is[bs]n:[\d-]+X?')]"/>
-            <let name="source-type" value="substring-before(substring-after($source-element,':'),':')"/>
-            <assert test="replace($source-element,'[^\dX]','') = replace(replace(string-join(.//text(),''),'^IS[SB]N:?\s*([\d –-]+X?).*?$','$1'),'[^\dX]','')">[nordic_opf_and_html_284] The <value-of
-                    select="upper-case($source-type)"/> in a paragraph with the class "<value-of select="string-join(tokenize(@class,'\s+')[.=('isbn','issn')],' ')"/>" in <value-of
-                    select="replace(base-uri(.),'.*/','')"/> must be the same as the one in the OPF metadata. The OPF contains a <value-of select="upper-case($source-type)"/> in a &lt;dc:source&gt;
-                element with the value "<value-of select="$source-element"/>", so the paragraph should have a value of for instance "<![CDATA[ISBN: ]]><value-of
-                    select="substring-after(substring-after($source-element,':'),':')"/>": <value-of select="$context"/></assert>
-        </rule>
-    </pattern>-->
 
 </schema>
