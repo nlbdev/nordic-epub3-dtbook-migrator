@@ -3410,11 +3410,6 @@
     </define>
     
     <define name="attlist.list.unordered" combine="interleave">
-        <attribute name="class">
-            <optional>
-                <value>plain</value>
-            </optional>
-        </attribute>
         <ref name="attlist.list.common"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
         <!-- depth is implicit (count number of ancestor list elements + 1) -->
     </define>
@@ -4398,6 +4393,7 @@
                 <value>page-special</value>
                 <value>part</value>
                 <value>poem</value>
+                <value>plain</value>
                 <value>prodnote</value>
                 <value>publisher</value>
                 <value>quote</value>
