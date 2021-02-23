@@ -755,7 +755,7 @@
     <pattern id="epub_nordic_269">
         <title>Rule 269</title>
         <p></p>
-        <rule context="html:body[not(html:header)]">
+        <rule context="html:body/html:section[not(html:header)]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="filename-regex" value="'^.*/[A-Za-z0-9_-]+-\d+-([a-z-]+)(-\d+)?\.xhtml$'"/>
             <let name="base-uri-type" value="
@@ -765,7 +765,7 @@
                         ()"/>
             <assert test="
                     not(matches(base-uri(.), $filename-regex)) or (for $t in tokenize(@epub:type, '\s+')
-                    return tokenize($t, ':')[last()]) = $base-uri-type">[nordic269] The type used in the filename (<value-of select="$base-uri-type"/>) must be present on the body element. <value-of select="$context"/></assert>
+                    return tokenize($t, ':')[last()]) = $base-uri-type">[nordic269] The type used in the filename (<value-of select="$base-uri-type"/>) must be present on the section element. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
