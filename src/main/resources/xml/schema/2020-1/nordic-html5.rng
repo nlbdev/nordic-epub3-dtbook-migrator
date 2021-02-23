@@ -392,7 +392,7 @@
         <a:documentation>htmlContent designates that each html has a &lt;head&gt; of
             metainformation preceding the &lt;book&gt; content.</a:documentation>
         <ref name="head"/> <!-- head -->
-        <ref name="book"/> <!-- body -->
+        <ref name="document-content"/> <!-- body -->
     </define>
     
     <define name="html">
@@ -652,7 +652,7 @@
     
     <a:documentation>Body Content</a:documentation>
     
-    <define name="book">
+    <define name="document-content">
         <!--
         Use: body surrounds the actual content of the document.
         <head>, which contains metadata, precedes <body>.
@@ -663,14 +663,6 @@
             <!-- HTML content model: a & abbr & address & article & aside & audio & b & bdi & bdo & blockquote & br & button & canvas & cite & code & data & datalist & del & details & dfn & dialog & div & dl & em & embed & fieldset & figure & footer & form & h1 & h2 & h3 & h4 & h5 & h6 & header & hr & i & iframe & img & input & ins & kbd & keygen & label & link & main & map & mark & math & menu & meta & meter & nav & noscript & object & ol & output & p & pre & progress & q & ruby & s & samp & script & section & select & small & span & strong & style & sub & sup & svg & table & template & textarea & time & u & ul & var & video & wbr & (text) -->
             <!-- Strict content model: (h1 p)? (section | article) -->
             <choice>
-                <choice>
-                    <a:documentation>multi-page HTML.</a:documentation>
-                    <!-- multi-page HTML -->
-                    <ref name="cover"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, section -->
-                    <ref name="frontmatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, div, h1, p, hr, ol, ul, dl, pre, blockquote, img, figure, section, span, table, address, aside, math, article -->
-                    <ref name="bodymatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, h1, p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math, article -->
-                    <ref name="backmatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, div, h1, p, hr, ol, ul, dl, pre, blockquote, img, figure, section, span, table, address, aside, math, article -->
-                </choice>
                 <group>
                     <a:documentation>single-page HTML.</a:documentation>
                     <!-- single-page HTML -->
@@ -688,23 +680,14 @@
                         </zeroOrMore>
                     </element>
                     <oneOrMore>
-                        <choice>
-                           <element name="section">
-                               <choice>
-                                   <ref name="cover"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, section -->
-                                   <ref name="frontmatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, div, h1, p, hr, ol, ul, dl, pre, blockquote, img, figure, section, span, table, address, aside, math, article -->
-                                   <ref name="bodymatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, h1, p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math, article -->
-                                   <ref name="backmatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, div, h1, p, hr, ol, ul, dl, pre, blockquote, img, figure, section, span, table, address, aside, math, article -->
-                               </choice>
-                           </element>
-                           <element name="article">
-                               <a:documentation>"article" should be used for magazine or newspaper articles. Otherwise, "section" should be used.</a:documentation>
-                               <!-- "article" should be used for magazine or newspaper articles. Otherwise, "section" should be used. -->
-                               <choice>
-                                   <ref name="bodymatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, h1, p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math, article -->
-                               </choice>
-                           </element>
-                       </choice>
+                       <element name="section">
+                           <choice>
+                               <ref name="cover"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, section -->
+                               <ref name="frontmatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, div, h1, p, hr, ol, ul, dl, pre, blockquote, img, figure, section, span, table, address, aside, math, article -->
+                               <ref name="bodymatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, h1, p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math, article -->
+                               <ref name="backmatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, div, h1, p, hr, ol, ul, dl, pre, blockquote, img, figure, section, span, table, address, aside, math, article -->
+                           </choice>
+                       </element>
                    </oneOrMore>
                 </group>
                 <group>
@@ -927,6 +910,7 @@
         <choice>
             <group>
                 <ref name="h1"/> <!-- h1 -->
+                <ref name="h2"/> <!-- h2 -->
                 <oneOrMore>
                     <choice>
                         <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->
@@ -943,6 +927,7 @@
                 </oneOrMore>
                 <optional>
                     <ref name="h1"/> <!-- h1 -->
+                    <ref name="h2"/> <!-- h2 -->
                     <oneOrMore>
                         <choice>
                             <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->
@@ -4083,7 +4068,7 @@
                 <value>preamble</value>
                 <!--<value>preface</value>-->
                 <!--<value>prologue</value>-->
-                <value>rearnote</value>
+                <!--<value>rearnote</value>-->
                 <value>endnote</value>
                 <!--<value>rearnotes</value>-->
                 <!--<value>endnotes</value>-->
