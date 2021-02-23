@@ -497,7 +497,7 @@
         <rule context="html:body[tokenize(@epub:type, '\s+') = 'endnotes'] | html:section[tokenize(@epub:type, '\s+') = 'endnotes']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="descendant::html:*[tokenize(@epub:type, '\s+') = 'endnote']">[nordic203c] Sections with the epub:type 'endnotes' must have descendants with 'endnote'. <value-of select="$context"/></assert>
-            <assert test=".//html:ol">[nordic204c] Sections with the epub:type 'endnotes' must have &lt;ol&gt; descendant elements. <value-of select="$context"/></assert>
+            <assert test=".//html:ol">[nordic203c] Sections with the epub:type 'endnotes' must have &lt;ol&gt; descendant elements. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
@@ -515,7 +515,7 @@
         <p>Check that footnotes are placed correctly in a section.</p>
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'footnote']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="(ancestor::html:section)">[nordic204a] 'footnote' must have a section ancestor. <value-of select="$context"/></assert>
+            <assert test="(parent::html:section)">[nordic204a] 'footnote' must have a parent section. <value-of select="$context"/></assert>
             <assert test="not(following-sibling::html:*[not(local-name()='aside' and @epub-type='footnote')])">[nordic204a] 'footnote' must be placed at the end of a section.</assert>
         </rule>
     </pattern>
