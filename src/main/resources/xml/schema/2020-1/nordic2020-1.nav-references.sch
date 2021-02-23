@@ -157,10 +157,6 @@
             <report test="count($nav-ref) and not(normalize-space(string-join(.//text(),'')) = ('', normalize-space(string-join($nav-ref//text(),''))))">[nordic_nav_references_3] The page number for
                 the pagebreak in the navigation document ("<value-of select="normalize-space(string-join($nav-ref//text(),''))"/>") should match the page number of the referenced pagebreak in the
                 content document ("<value-of select="normalize-space(string-join(.//text(),''))"/>" at <value-of select="$pagebreak-ref"/>)</report>
-
-            <report test="count($nav-ref) and normalize-space(string-join(.//text(),'')) = '' and not(normalize-space(string-join($nav-ref//text(),'')) = '-')">[nordic_nav_references_3] The page
-                number for the pagebreak in the navigation document ("<value-of select="normalize-space(string-join($nav-ref//text(),''))"/>") should be a dash ("-") when the referenced pagebreak in
-                the content document is unnumbered ("<value-of select="normalize-space(string-join(.//text(),''))"/>" at <value-of select="$pagebreak-ref"/>)</report>
         </rule>
     </pattern>
 
