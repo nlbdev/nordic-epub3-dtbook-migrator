@@ -678,7 +678,7 @@
     <pattern id="epub_nordic_259">
         <title>Rule 259</title>
         <p>don't allow pagebreak in thead</p>
-        <rule context=".[tokenize(@epub:type, '\s+') = 'pagebreak']">
+        <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <report test="ancestor::html:thead">[nordic259] Pagebreaks can not occur within table headers (thead). <value-of select="$context"/></report>
             <report test="ancestor::html:tfoot">[nordic259] Pagebreaks can not occur within table footers (tfoot). <value-of select="$context"/></report>
