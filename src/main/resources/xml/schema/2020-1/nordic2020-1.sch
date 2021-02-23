@@ -702,21 +702,12 @@
         </rule>
     </pattern>
 
-    <pattern id="epub_nordic_266_a">
-        <title>Rule 266a</title>
+    <pattern id="epub_nordic_266">
+        <title>Rule 266</title>
         <p></p>
         <rule context="html:*[*[tokenize(@epub:type, '\s+') = 'footnote']]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="self::html:ol">[nordic266a] Footnotes must be wrapped in a "ol" element, but is currently wrapped in a <name/>. <value-of select="$context"/></assert>
-        </rule>
-    </pattern>
-
-    <pattern id="epub_nordic_266_b">
-        <title>Rule 266b</title>
-        <p></p>
-        <rule context="html:section[tokenize(@epub:type, '\s+') = 'footnotes']/html:ol/html:li | html:body[tokenize(@epub:type, '\s+') = 'footnotes']/html:ol/html:li">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@epub:type, '\s+') = 'footnote'">[nordic266b] List items inside a footnotes list must use epub:type="footnote". <value-of select="$context"/></assert>
+            <assert test="self::html:aside">[nordic266] Footnotes must be wrapped in an "aside" element, but is currently wrapped in a <name/>. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
