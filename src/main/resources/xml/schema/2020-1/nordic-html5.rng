@@ -1762,7 +1762,6 @@
 
     <define name="attlist.prodnote" combine="interleave">
         <!--
-            @imgref removed. The relationship is stored in img/@longdesc.
             NOTE: an alternative would be to use aria-describedat, linking from the image to the prodnote:
             https://dvcs.w3.org/hg/aria-unofficial/raw-file/tip/describedat.html
         -->
@@ -1796,16 +1795,6 @@
             <element name="aside">
                 <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
                 <!-- Strict content model: (h1 | em | strong | dfn | code | samp | kbd | abbr | a | img | figure | br | q | sub | sup | span | bdo | p | ol | ul | dl | div | blockquote | table | address | (text))* -->
-                <ref name="attlist.sidebar"/> <!-- @epub:type, @class, @id, @title, @xml:space, @xml:lang, @lang, @dir -->
-                <optional>
-                    <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo, p, hr, ol, ul, dl, pre, div, blockquote, section, table, address, aside, figure -->
-                </optional>
-                <optional>
-                    <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
-                </optional>
-                <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo, p, hr, ol, ul, dl, pre, div, blockquote, section, table, address, aside, figure -->
-            </element>
-            <element name="figure">
                 <ref name="attlist.sidebar"/> <!-- @epub:type, @class, @id, @title, @xml:space, @xml:lang, @lang, @dir -->
                 <optional>
                     <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo, p, hr, ol, ul, dl, pre, div, blockquote, section, table, address, aside, figure -->
@@ -2779,14 +2768,9 @@
     </define>
     
     <define name="img">
-        <!--
-        Use: img marks a visual image. An <img> will always contain an alt and
-        generally contain a longdesc, a pointer to a related <aside epub:type="z3998:production"> (prodnote).
-      -->
-        <a:documentation> Use: img marks a visual image. An img will always contain an alt and</a:documentation>
-        <a:documentation>generally contain a longdesc, a pointer to a related aside epub:type="z3998:production"(prodnote).</a:documentation>
+        <a:documentation> Use: img marks a visual image. An img will always contain an alt a pointer to a related aside epub:type="z3998:production"(prodnote).</a:documentation>
         <element name="img">
-            <ref name="attlist.img"/> <!-- @src, @alt, @longdesc, @height, @width, @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @class -->
+            <ref name="attlist.img"/> <!-- @src, @alt, @height, @width, @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @class -->
             <empty/>
         </element>
     </define>
@@ -2799,7 +2783,6 @@
         
         "alt" is used to supply a short description of the <img>.
         
-        "longdesc" generally contains a pointer to a related
         <aside epub:type="z3998:production"> (prodnote) that contains a detailed description of the <img>.
         
         The attributes "height" and "width" provide visual sizing
@@ -2814,20 +2797,6 @@
             <a:documentation> "alt" is used to supply a short description of the img.</a:documentation>
             <ref name="Text"/>
         </attribute>
-        <optional>
-            <!--
-                 The longdesc attribute was originally removed in the HTML5 specification.
-                 However, as of March 2013, the longdesc attribute has been reinstated
-                 in HTML5 as an extension specification, and is now available as the
-                 HTML5 Image Description Extension (W3C working draft):
-                 http://www.w3.org/TR/html-longdesc/
-            -->
-            <attribute name="longdesc">
-                <a:documentation> "longdesc" generally contains a pointer to a related aside epub:type="z3998:production" </a:documentation>
-                <a:documentation> (prodnote) that contains a detailed description of the img.</a:documentation>
-                <ref name="URI"/>
-            </attribute>
-        </optional>
         <optional>
             <attribute name="height">
                 <ref name="Length"/>
@@ -2853,6 +2822,11 @@
                 <group>
                     <!-- A single image -->
                     <ref name="attlist.figure.image"/> <!-- @class, @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
+                    <optional>
+                        <a:documentation> STRICT NOTE: In HTML there can be at most one figcaption per figure, and it must be either the first </a:documentation>
+                        <a:documentation>  or last child of the figure. As a result, we wrap each (img caption*)-group in figure elements.</a:documentation>
+                        <ref name="caption.figure"/> <!-- figcaption -->
+                    </optional>
                     <ref name="img"/> <!-- img -->
                     <zeroOrMore>
                         <choice>
@@ -2860,11 +2834,6 @@
                             <ref name="prodnote"/> <!-- aside -->
                         </choice>
                     </zeroOrMore>
-                    <optional>
-                        <a:documentation> STRICT NOTE: In HTML there can be at most one figcaption per figure, and it must be either the first </a:documentation>
-                        <a:documentation>  or last child of the figure. As a result, we wrap each (img caption*)-group in figure elements.</a:documentation>
-                        <ref name="caption.figure"/> <!-- figcaption -->
-                    </optional>
                 </group>
                 <group>
                     <!-- Image series -->
@@ -2881,6 +2850,9 @@
                     <oneOrMore>
                         <element name="figure">
                             <ref name="attlist.figure.image"/> <!-- @class, @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
+                            <optional>
+                                <ref name="caption.figure"/> <!-- figcaption -->
+                            </optional>
                             <ref name="img"/> <!-- img -->
                             <zeroOrMore>
                                 <choice>
@@ -2888,9 +2860,6 @@
                                     <ref name="prodnote"/> <!-- aside -->
                                 </choice>
                             </zeroOrMore>
-                            <optional>
-                                <ref name="caption.figure"/> <!-- figcaption -->
-                            </optional>
                         </element>
                     </oneOrMore>
                 </group>
@@ -3441,6 +3410,11 @@
     </define>
     
     <define name="attlist.list.unordered" combine="interleave">
+        <attribute name="class">
+            <optional>
+                <value>plain</value>
+            </optional>
+        </attribute>
         <ref name="attlist.list.common"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
         <!-- depth is implicit (count number of ancestor list elements + 1) -->
     </define>
@@ -3664,10 +3638,6 @@
     </define>
     
     <define name="attlist.caption" combine="interleave">
-        <!--
-            STRICT NOTE: the imgref attribute for images is deleted. The images now reference
-            the caption instead of the other way around, using the longdesc attribute (see the img element).
-        -->
         <ref name="attrs"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @class -->
     </define>
     
