@@ -595,11 +595,15 @@
         <title>Rule 253a</title>
         <p>figures and captions</p>
         <rule context="html:figure">
+            <!--
+                The class "table" is undocumented to avoid unwanted use of that markup.
+                It should only be used by suppliers explicitly instructed to do so.
+            -->
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@epub:type, '\s+') = 'sidebar' or tokenize(@class, '\s+') = ('image', 'image-series')"
-                >[nordic253a] &lt;figure&gt; elements must either have an epub:type of "sidebar" or a class of "image" or "image-series". <value-of select="$context"/></assert>
-            <report test="count((.[tokenize(@epub:type, '\s+') = 'sidebar'], .[tokenize(@class, '\s+') = 'image'], .[tokenize(@class, '\s+') = 'image-series'])) &gt; 1"
-                >[nordic253a] &lt;figure&gt; elements must either have an epub:type of "sidebar" or a class of "image" or "image-series". <value-of select="$context"/></report>
+            <assert test="tokenize(@class, '\s+') = ('image', 'image-series', 'table')"
+                >[nordic253a] &lt;figure&gt; elements must either have a class of "image", "image-series" or "table". <value-of select="$context"/></assert>
+            <report test="count((.[tokenize(@class, '\s+') = 'image'], .[tokenize(@class, '\s+') = 'image-series'], .[tokenize(@class, '\s+') = 'table'])) &gt; 1"
+                >[nordic253a] &lt;figure&gt; elements must either have a class of "image", "image-series" or "table". <value-of select="$context"/></report>
             <assert test="count(html:figcaption) &lt;= 1">[nordic253a] There cannot be more than one &lt;figcaption&gt; in a single figure element. <value-of select="$context"/></assert>
         </rule>
     </pattern>
