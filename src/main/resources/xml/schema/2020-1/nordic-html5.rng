@@ -1867,13 +1867,12 @@
             <list>
                 <ref name="types"/>
                 <value>note</value>
+                <value>footnote</value>
                 <ref name="types"/>
             </list>
         </attribute>
         <attribute name="class">
             <list>
-                <ref name="classes"/>
-                <value>notebody</value>
                 <ref name="classes"/>
             </list>
         </attribute>
@@ -2088,55 +2087,70 @@
             </attribute>
         </optional>
     </define>
-    
+
     <define name="poem">
-        <!-- Use: poem is a complete poem or fragment thereof. -->
         <a:documentation>  Use: poem is a complete poem or fragment thereof.  </a:documentation>
-        <element name="section">
-            <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
-            <!-- Strict content model: (h1 | span | p | section | img | figure)* -->
-            <ref name="attlist.poem"/> <!-- @epub:type, @class, @id, @title, @xml:space, @xml:lang, @lang, @dir -->
-            <zeroOrMore>
+        <element name="div">
+            <attribute name="class">
+                <value>verse</value>
+            </attribute>
+            <optional>
                 <choice>
                     <ref name="title"/> <!-- h1, h2, h3, h4, h5, h6 -->
-                    <ref name="author.block"/> <!-- p -->
-                    <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
-                    <ref name="dateline"/> <!-- span -->
-                    <ref name="epigraph"/> <!-- blockquote, p -->
-                    <ref name="byline"/> <!-- span -->
-                    <ref name="linegroup"/> <!-- div, section -->
-                    <ref name="line"/> <!-- p -->
-                    <ref name="pagebreak.block"/> <!-- div -->
-                    <ref name="img"/> <!-- img -->
-                    <ref name="figure.imggroup"/> <!-- figure -->
-                    <ref name="sidebar"/> <!-- aside, figure -->
+                    <element name="p">
+                        <attribute name="class">
+                            <value>verse-title</value>
+                        </attribute>
+                    </element>
                 </choice>
-            </zeroOrMore>
+            </optional>
+            <ref name="poem.linegroup"/>
+            <optional>
+                <element name="p">
+                    <attribute name="class">
+                        <value>verse-author</value>
+                    </attribute>
+                </element>
+            </optional>
         </element>
     </define>
 
-    <define name="attlist.poem" combine="interleave">
-        <attribute name="epub:type">
-            <list>
-                <ref name="types"/>
-                <choice>
-                    <!-- By mistake, z:3998:verse is allowed on the poem in guidelines version 2015-1, so for now we'll allow suppliers to either follow the guidlines (z3998:verse) or do it correctly (z3998:poem) -->
-                    <value>z3998:verse</value>
-                    <value>z3998:poem</value>
-                </choice>
-                <ref name="types"/>
-            </list>
-        </attribute>
-        <attribute name="class">
-            <list>
-                <ref name="classes"/>
-                <value>poem</value>
-                <ref name="classes"/>
-            </list>
-        </attribute>
-        <ref name="attrsrqd.base"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir -->
+    <define name="poem.linegroup">
+        <element name="p">
+            <attribute name="class">
+                <value>linegroup</value>
+            </attribute>
+            <oneOrMore>
+                <ref name="poem.line"/>
+                <ref name="poem.linenum"/>
+            </oneOrMore>
+        </element>
     </define>
-    
+
+    <define name="poem.line">
+        <element name="span">
+            <attribute name="class">
+                <choice>
+                    <value>line</value>
+                    <value>line_indent</value>
+                    <value>line_longindent</value>
+                </choice>
+            </attribute>
+            <zeroOrMore>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
+            </zeroOrMore>
+        </element>
+        <element name="br"></element>
+    </define>
+
+    <define name="poem.linenum">
+        <element name="span">
+            <attribute name="class">
+                <value>linenum</value>
+            </attribute>
+        </element>
+    </define>
+
     <a:documentation>The Anchor Element</a:documentation>
     
     <define name="a">
@@ -3451,11 +3465,7 @@
                 <list>
                     <ref name="types"/>
                     <optional>
-                        <choice>
-                            <value>rearnotes</value>
-                            <value>endnotes</value>
-                            <value>footnotes</value>
-                        </choice>
+                        <value>endnotes</value>
                     </optional>
                     <ref name="types"/>
                 </list>
@@ -4001,7 +4011,6 @@
             <value>assessments</value>
             <value>qna</value>
             <value>practices</value>
-            <value>footnotes</value>
             <value>rearnotes</value>
             <value>endnotes</value>
             <value>page-list</value>
@@ -4046,8 +4055,6 @@
                 <!--<value>epigraph</value>-->
                 <!--<value>epilogue</value>-->
                 <value>errata</value>
-                <value>footnote</value>
-                <!--<value>footnotes</value>-->
                 <!--<value>foreword</value>-->
                 <!--<value>frontmatter</value>-->
                 <value>fulltitle</value>
@@ -4421,7 +4428,6 @@
                 <value>linegroup</value>
                 <value>linenum</value>
                 <value>nonstandardpagination</value>
-                <value>notebody</value>
                 <value>noteref</value>
                 <value>page-front</value>
                 <value>page-normal</value>
