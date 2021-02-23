@@ -113,21 +113,13 @@
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="href" value="substring-before(@href,'#')"/>
             <let name="fragment" value="substring-after(@href,'#')"/>
-            <let name="result-ref" value="/*/c:result/c:result[(@data-sectioning-id, @data-heading-id) = $fragment]"/>
+            <let name="result-ref" value="/*/c:result/c:result[(@data-sectioning-id) = $fragment]"/>
 
-            <assert test="$result-ref">[nordic_nav_references_2a] All references from the navigation document must reference either a sectioning element or a headline in one of the content documents:
+            <assert test="$result-ref">[nordic_nav_references_2a] All references from the navigation document must reference either a sectioning element in one of the content documents:
                     <value-of select="$context"/></assert>
-            <report test="count($result-ref) &gt; 1">[nordic_nav_references_2a] All references from the navigation document must reference exactly one sectioning element or headline in one of the
-                content documents, there are multiple sections or headlines matching the href="<value-of select="@href"/>" in <value-of select="$context"/>; <value-of
+            <report test="count($result-ref) &gt; 1">[nordic_nav_references_2a] All references from the navigation document must reference exactly one sectioning element in one of the
+                content documents, there are multiple sections matching the href="<value-of select="@href"/>" in <value-of select="$context"/>; <value-of
                     select="string-join($result-ref/concat(replace(@xml:base,'.*/',''),'#',$fragment), ',')"/></report>
-
-            <!-- TODO: commented out due to performance issues! this assertion needs to be rewritten in a much more efficient way before re-enabling it -->
-            <!--<let name="preceding-refs-which-is-following-in-content"
-                value="for $a in (preceding::html:a intersect ancestor::html:nav//html:a) return $result-ref/following-sibling::c:result[ends-with(concat(@xml:base,'#',(@data-sectioning-id, @data-heading-id)[1]), $a/@href)]"/>
-            <report test="$result-ref and count($preceding-refs-which-is-following-in-content)">[nordic_nav_references_2a] The table of contents in the navigation document must reference the headlines
-                in the correct order. The headline with id="<value-of select="$fragment"/>" in the document "<value-of select="$href"/>" is referenced from the navigation document after the headline
-                with id="<value-of select="$preceding-refs-which-is-following-in-content[1]/substring-after(@href,'#')"/>" in the document "<value-of
-                    select="$preceding-refs-which-is-following-in-content[1]/substring-before(@href,'#')"/>", but in the content document it occurs before it.</report>-->
 
             <let name="result-ref-first" value="$result-ref[1]"/>
             <let name="document-in-nav" value="((preceding::html:a | self::*) intersect ancestor::html:nav//html:a)[substring-before(@href,'#') = $href][1]"/>
