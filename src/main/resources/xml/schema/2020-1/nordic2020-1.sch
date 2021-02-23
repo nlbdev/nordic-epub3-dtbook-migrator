@@ -828,8 +828,8 @@
         <p></p>
         <rule context="html:meta">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="starts-with(@name, 'dc:') and not(@name = 'dc:title' or @name = 'dc:subject' or @name = 'dc:description' or @name = 'dc:type' or @name = 'dc:source' or @name = 'dc:relation' or @name = 'dc:coverage' or @name = 'dc:creator' or @name = 'dc:publisher' or @name = 'dc:contributor' or @name = 'dc:rights' or @name = 'dc:date' or @name = 'dc:format' or @name = 'dc:identifier' or @name = 'dc:language')"
-                >[nordic280] Metadata with the dc prefix are only allowed for the 15 official Dublin Core metadata elements: dc:title, dc:subject, dc:description, dc:type, dc:source, dc:relation, dc:coverage, dc:creator, dc:publisher, dc:contributor, dc:rights, dc:date, dc:format, dc:identifier and dc:language. <value-of select="$context"/></report>
+            <report test="starts-with(@name, 'dc:') and not(@name = 'dc:title' or @name = 'dc:subject' or @name = 'dc:description' or @name = 'dc:type' or @name = 'dc:source' or @name = 'dc:relation' or @name = 'dc:coverage' or @name = 'dc:creator' or @name = 'dc:publisher' or @name = 'dc:publisher.original' or @name = 'dc:contributor' or @name = 'dc:rights' or @name = 'dc:date' or @name = 'dc:format' or @name = 'dc:identifier' or @name = 'dc:language')"
+                >[nordic280] Metadata with the dc prefix are only allowed for the 15 official Dublin Core metadata elements: dc:title, dc:subject, dc:description, dc:type, dc:source, dc:relation, dc:coverage, dc:creator, dc:publisher, dc:publisher.original, dc:contributor, dc:rights, dc:date, dc:format, dc:identifier and dc:language. <value-of select="$context"/></report>
             <report test="starts-with(@name, 'DC:') or starts-with(@name, 'Dc:') or starts-with(@name, 'dC:')">[nordic280] The dc metadata prefix must be in lower case. <value-of select="$context"/></report>
         </rule>
     </pattern>
