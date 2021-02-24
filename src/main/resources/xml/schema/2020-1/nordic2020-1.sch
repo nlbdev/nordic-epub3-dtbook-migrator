@@ -755,7 +755,7 @@
     <pattern id="epub_nordic_269">
         <title>Rule 269</title>
         <p></p>
-        <rule context="html:body/html:section[not(html:header)]">
+        <rule context="html:body/html:section">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="filename-regex" value="'^.*/[A-Za-z0-9_-]+-\d+-([a-z-]+)(-\d+)?\.xhtml$'"/>
             <let name="base-uri-type" value="
