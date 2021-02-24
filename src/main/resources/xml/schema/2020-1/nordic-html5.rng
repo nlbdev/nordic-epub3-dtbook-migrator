@@ -2086,11 +2086,7 @@
             <optional>
                 <choice>
                     <ref name="title"/> <!-- h1, h2, h3, h4, h5, h6 -->
-                    <element name="p">
-                        <attribute name="class">
-                            <value>verse-title</value>
-                        </attribute>
-                    </element>
+                    <ref name="bridgehead"/>
                 </choice>
             </optional>
             <ref name="poem.linegroup"/>
