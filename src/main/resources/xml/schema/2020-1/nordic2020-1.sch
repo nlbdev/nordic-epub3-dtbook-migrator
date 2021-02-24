@@ -764,7 +764,7 @@
                     else
                         ()"/>
             <assert test="
-                    not(matches(base-uri(.), $filename-regex)) or (for $t in tokenize(@epub:type, '\s+')
+                    not(matches(base-uri(.), $filename-regex)) or (for $t in tokenize(@role, '\s+')
                     return tokenize($t, ':')[last()]) = $base-uri-type">[nordic269] The type used in the filename (<value-of select="$base-uri-type"/>) must be present on the section element. <value-of select="$context"/></assert>
         </rule>
     </pattern>
