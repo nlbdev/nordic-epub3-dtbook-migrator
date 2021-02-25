@@ -1855,16 +1855,17 @@
         <attribute name="epub:type">
             <list>
                 <ref name="types"/>
-                <value>note</value>
                 <value>footnote</value>
                 <ref name="types"/>
             </list>
         </attribute>
-        <attribute name="class">
-            <list>
-                <ref name="classes"/>
-            </list>
-        </attribute>
+        <optional>
+            <attribute name="class">
+                <list>
+                    <ref name="classes"/>
+                </list>
+            </attribute>
+        </optional>
         <ref name="attrsrqd.base"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir -->
     </define>
     
@@ -2084,12 +2085,11 @@
                 <value>verse</value>
             </attribute>
             <optional>
-                <choice>
-                    <ref name="title"/> <!-- h1, h2, h3, h4, h5, h6 -->
-                    <ref name="bridgehead"/>
-                </choice>
+                <ref name="bridgehead"/>
             </optional>
-            <ref name="poem.linegroup"/>
+            <oneOrMore>
+                <ref name="poem.linegroup"/>
+            </oneOrMore>
             <optional>
                 <element name="p">
                     <attribute name="class">
