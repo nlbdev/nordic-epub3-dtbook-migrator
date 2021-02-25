@@ -763,9 +763,17 @@
                         replace(base-uri(.), $filename-regex, '$1')
                     else
                         ()"/>
+            <let name="document-partitions" value="('cover', 'frontmatter', 'bodymatter', 'backmatter')"/>
+            <let name="document-divisions" value="('volume', 'part', 'chapter', 'division')"/>
+            <let name="values" value="(
+                for $t in tokenize(@role, '\s+') return tokenize(replace($t, '^doc-', ''), ':'),
+                for $t in tokenize(@epub:type, '\s+') return if ($t = ($document-partitions, $document-divisions)) then () else tokenize($t, ':'),
+                for $t in tokenize(@epub:type, '\s+') return if ($t = $document-divisions) then $t else (),
+                for $t in tokenize(@epub:type, '\s+') return if ($t = $document-partitions) then $t else ()
+            )"/>
             <assert test="
-                    not(matches(base-uri(.), $filename-regex)) or (for $t in tokenize(@role, '\s+')
-                    return tokenize($t, ':')[last()]) = $base-uri-type">[nordic269] The type used in the filename (<value-of select="$base-uri-type"/>) must be present on the section element. <value-of select="$context"/></assert>
+                not(matches(base-uri(.), $filename-regex))
+                or $values[1] = $base-uri-type">[nordic269] The type used in the filename (<value-of select="$base-uri-type"/>) must be present on the section element, and be the most specific (<value-of select="$values[1]"/>). <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
