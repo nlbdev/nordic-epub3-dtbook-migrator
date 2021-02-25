@@ -49,22 +49,15 @@
             <assert test="count(dc:identifier) = 1">[opf3a] there must be exactly one dc:identifier element</assert>
             <assert test="parent::opf:package/@unique-identifier = dc:identifier/@id">[opf3a] the id of the dc:identifier must equal the value of the package elements unique-identifier
                 attribute</assert>
-            <assert test="count(dc:identifier) = 1 and matches(dc:identifier/text(),'^[A-Za-z0-9].*$')">[opf3a] The identifier ("<value-of select="dc:identifier/text()"/>") must start with a upper- or
-                lower-case letter (A-Z or a-z), or a digit (0-9).</assert>
-            <assert test="count(dc:identifier) = 1 and matches(dc:identifier/text(),'^.*[A-Za-z0-9]$')">[opf3a] The identifier ("<value-of select="dc:identifier/text()"/>") must end with a upper- or
-                lower-case letter (A-Z or a-z), or a digit (0-9).</assert>
-            <assert test="count(dc:identifier) = 1 and matches(dc:identifier/text(),'^[A-Za-z0-9_-]*$')">[opf3a] The identifier ("<value-of select="dc:identifier/text()"/>") must only contain upper-
-                or lower-case letters (A-Z or a-z), digits (0-9), dashes (-) and underscores (_).</assert>
 
-            <assert test="count(dc:title[not(@refines)]) = 1">[opf3b] exactly one dc:title <value-of select="if (dc:title[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must be
-                present in the package document.</assert>
-            <assert test="string-length(normalize-space(dc:title[not(@refines)]/text()))">[opf3b] the dc:title <value-of
-                    select="if (dc:title[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must not be empty.</assert>
+            <assert test="count(dc:title[@id='maintitle']) = 1 or count(dc:title) = 1">[opf3b] exactly one dc:title must be present in the package document when no main title is specified.</assert>
+            <assert test="count(dc:title[@id='maintitle']) = 0 or count(dc:title) > 1">[opf3b] more than one dc:title must be present in the package document when a main title is specified.</assert>
+            <assert test="string-length(normalize-space(dc:title[1]/text()))">[opf3b] the dc:title must not be empty.</assert>
 
             <assert test="count(dc:language[not(@refines)]) = 1">[opf3c] exactly one dc:language <value-of select="if (dc:language[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"
                 /> must be present in the package document.</assert>
-            <assert test="count(dc:language[not(@refines)]) = 1 and matches(dc:language[not(@refines)]/text(), '^[a-z][a-z](-[A-Z][A-Z])?$')">[opf3c] the language code ("<value-of
-                    select="dc:language[not(@refines)]/text()"/>") must be either a "two-letter lower case" code or a "two-letter lower case + hyphen + two-letter upper case" code.</assert>
+            <assert test="count(dc:language[not(@refines)]) = 1 and matches(dc:language[not(@refines)]/text(), '^[a-z]{2}(-[A-Z]{2,3})?$')">[opf3c] the language code ("<value-of
+                    select="dc:language[not(@refines)]/text()"/>") must be either a "two-letter lower case" code or a "two-letter lower case + hyphen + two- or three-letter upper case" code.</assert>
             <!--<assert test="dc:language = ('no','nn-NO','nb-NO','sv','sv-FI','fi','da','en','de','de-CH','fr')" flag="warning">the language code should be one of: 'no' (Norwegian), 'nn-NO' (Norwegian
                 Nynorsk), 'nb-NO' (Norwegian Bokmål), 'sv' (Swedish), 'sv-FI' (Swedish (Finland)), 'fi' (Finnish), 'da' (Danish), 'en' (English), 'de' (German), 'de-CH' (German (Switzerland)), 'fr'
                 (French)</assert>-->
@@ -80,13 +73,6 @@
             <!--<assert test="dc:publisher[not(@refines)] = ('TPB','MTM','SPSM','Nota','NLB','Celia','SBS')" flag="warning">the publisher should be one of:
                 'TPB','MTM','SPSM','Nota','NLB','Celia','SBS'</assert>-->
 
-            <assert test="count(opf:meta[@property='dcterms:modified' and not(@refines)]) = 1">[opf3f] exactly one last modified date <value-of
-                    select="if (opf:meta[@property='dcterms:modified' and @refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must be present</assert>
-            <assert
-                test="count(opf:meta[@property='dcterms:modified' and not(@refines)]) = 1 and matches(opf:meta[@property='dcterms:modified' and not(@refines)]/text(), '\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ')"
-                >[opf3f] the last modified date (<value-of select="opf:meta[@property='dcterms:modified' and not(@refines)]/text()"/>) must use UTC time and be on the form "CCYY-MM-DDThh:mm:ssZ"
-                (year-month-date "T" hour:minute:second "Z")</assert>
-
             <assert test="count(dc:creator[not(@refines)]) &gt;= 1">[opf3g] at least dc:creator (i.e. book author) <value-of
                     select="if (dc:creator[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must be present</assert>
 
@@ -94,27 +80,16 @@
 
             <assert test="count(dc:source[not(@refines)]) = 1">[opf3h] exactly one dc:source <value-of select="if (dc:source[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"/> must
                 be present</assert>
-            <assert test="count(dc:source[not(@refines)]) = 1 and (starts-with(dc:source[not(@refines)],'urn:isbn:') or starts-with(dc:source[not(@refines)],'urn:issn:'))">[opf3h] the dc:source
-                    ("<value-of select="dc:source[not(@refines)]/text()"/>") must start with 'urn:isbn:' or 'urn:issn'</assert>
-            <assert test="count(dc:source[not(@refines)]) = 1 and matches(dc:source[not(@refines)],'^urn:is[bs]n:[\d-]+X?$')">[opf3h] the ISBN or ISSN in dc:source ("<value-of
+            <assert test="not(matches(dc:source[not(@refines)],'^urn:is[bs]n:')) or matches(dc:source[not(@refines)],'^urn:is[bs]n:[\d-]+X?$')">[opf3h] the ISBN or ISSN in dc:source ("<value-of
                     select="dc:source[not(@refines)]/text()"/>") can only contain numbers and hyphens, in addition to the 'urn:isbn:' or 'urn:issn:' prefix. The last digit can also be a 'X' in some
                 ISBNs.</assert>
 
             <assert test="count(opf:meta[@property='nordic:guidelines' and not(@refines)]) = 1">[opf3i] there must be exactly one meta element with the property "nordic:guidelines" <value-of
                     select="if (opf:meta[@property='nordic:guidelines' and @refines]) then '(without a &quot;refines&quot; attribute)' else ''"/></assert>
-            <assert test="opf:meta[@property='nordic:guidelines' and not(@refines)] = '2015-1'">[opf3i] the value of nordic:guidelines must be '2015-1'</assert>
+            <assert test="opf:meta[@property='nordic:guidelines' and not(@refines)] = '2020-1'">[opf3i] the value of nordic:guidelines must be '2020-1'</assert>
 
             <assert test="count(opf:meta[@property='nordic:supplier' and not(@refines)]) = 1">[opf3j] there must be exactly one meta element with the property "nordic:supplier" <value-of
                     select="if (opf:meta[@property='nordic:supplier' and @refines]) then '(without a &quot;refines&quot; attribute)' else ''"/></assert>
-        </rule>
-    </pattern>
-
-    <pattern id="opf_nordic_5_a">
-        <title>Rule 5a</title>
-        <p></p>
-        <rule context="opf:manifest">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="opf:item[@media-type='application/x-dtbncx+xml']">[opf5a] a NCX must be present in the manifest (media-type="application/x-dtbncx+xml")</assert>
         </rule>
     </pattern>
 
@@ -132,8 +107,9 @@
         <p></p>
         <rule context="opf:spine">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="@toc">[opf6] the toc attribute must be present</assert>
-            <assert test="/opf:package/opf:manifest/opf:item/@id = @toc">[opf6] the toc attribute must refer to an item in the manifest</assert>
+            <let name="toc-doc" value="/opf:package/opf:manifest/opf:item[@media-type='application/x-dtbncx+xml']"/>
+            <assert test="not($toc-doc) or @toc">[opf6] the toc attribute must be present</assert>
+            <assert test="not($toc-doc) or $toc-doc/@id = @toc">[opf6] the toc attribute must refer to the nav.ncx item in the manifest</assert>
         </rule>
     </pattern>
 
@@ -177,26 +153,16 @@
         </rule>
     </pattern>
 
-    <pattern id="opf_nordic_11">
-        <title>Rule 11</title>
-        <p></p>
-        <rule context="opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-rearnotes.xhtml')]/@id = @idref]">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="@linear = 'no'">[opf11] Rearnotes must be marked as secondary in the spine (i.e. set linear="no" on the itemref with idref="<value-of select="@idref"/>, which refers to the
-                rearnote)</assert>
-        </rule>
-    </pattern>
-
     <pattern id="opf_nordic_12_a">
         <title>Rule 12a</title>
         <p></p>
         <rule context="opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav')]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')">[opf12a] The content document "<value-of select="@href"/>" has a bad filename. Content documents must match the
-                "[dc:identifier]-[position in spine]-[epub:type].xhtml" file naming convention. Example: "DTB123-01-cover.xhtml". The identifier are allowed to contain the upper- and lower-case
-                characters A-Z and a-z as well as digits (0-9), dashes (-) and underscores (_). The position is a positive whole number consisting of the digits 0-9. The epub:type must be all
-                lower-case characters (a-z) and can contain a dash (-). An optional positive whole number (digits 0-9) can be added after the epub:type to be able to easily tell different files with
-                the same epub:type apart. For instance: "DTB123-13-chapter-7.xhtml".</assert>
+                "[dc:identifier]-[position in spine]-[role or epub:type].xhtml" file naming convention. Example: "DTB123-01-cover.xhtml". The identifier are allowed to contain the upper- and lower-case
+                characters A-Z and a-z as well as digits (0-9), dashes (-) and underscores (_). The position is a positive whole number consisting of the digits 0-9. The role or epub:type must be all
+                lower-case characters (a-z) and can contain a dash (-). An optional positive whole number (digits 0-9) can be added after the role or epub:type to be able to easily tell different files with
+                the same role or epub:type apart. For instance: "DTB123-13-chapter-7.xhtml".</assert>
         </rule>
     </pattern>
 
@@ -211,16 +177,16 @@
             <let name="number" value="if (matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+-\d+\.xhtml$')) then replace(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+-(\d+)\.xhtml$','$1') else ''"/>
             <let name="vocab-default"
                 value="('cover','frontmatter','bodymatter','backmatter','volume','part','chapter','subchapter','division','abstract','foreword','preface','prologue','introduction','preamble','conclusion','epilogue','afterword','epigraph','toc','toc-brief','landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','index-headnotes','index-legend','index-group','index-entry-list','index-entry','index-term','index-editor-note','index-locator','index-locator-list','index-locator-range','index-xref-preferred','index-xref-related','index-term-category','index-term-categories','glossary','glossterm','glossdef','bibliography','biblioentry','titlepage','halftitlepage','copyright-page','seriespage','acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','help','marginalia','notice','pullquote','sidebar','warning','halftitle','fulltitle','covertitle','title','subtitle','label','ordinal','bridgehead','learning-objective','learning-objectives','learning-outcome','learning-outcomes','learning-resource','learning-resources','learning-standard','learning-standards','answer','answers','assessment','assessments','feedback','fill-in-the-blank-problem','general-problem','qna','match-problem','multiple-choice-problem','practice','practices','question','true-false-problem','panel','panel-group','balloon','text-area','sound-area','annotation','note','footnote','rearnote','footnotes','rearnotes','annoref','biblioref','glossref','noteref','referrer','credit','keyword','topic-sentence','concluding-sentence','pagebreak','page-list','table','table-row','table-cell','list','list-item','figure')"/>
-            <let name="vocab-z3998"
-                value="('fiction','non-fiction','article','essay','textbook','catalogue','frontmatter','bodymatter','backmatter','volume','part','chapter','subchapter','division','section','subsection','foreword','preface','prologue','introduction','preamble','conclusion','epilogue','afterword','toc','appendix','glossary','bibliography','discography','filmography','index','colophon','title','halftitle','fulltitle','subtitle','covertitle','published-works','title-page','halftitle-page','acknowledgments','imprint','imprimatur','loi','lot','publisher-address','publisher-address','editorial-note','grant-acknowledgment','contributors','other-credits','biographical-note','translator-note','errata','promotional-copy','dedication','pgroup','example','epigraph','annotation','introductory-note','commentary','clarification','correction','alteration','presentation','production','attribution','author','editor','general-editor','commentator','translator','republisher','structure','geographic','postal','email','ftp','http','ip','aside','sidebar','practice','notice','warning','marginalia','help','drama','scene','stage-direction','dramatis-personae','persona','actor','role-description','speech','diary','diary-entry','figure','plate','gallery','letter','sender','recipient','salutation','valediction','postscript','email-message','to','from','cc','bcc','subject','collection','orderedlist','unorderedlist','abbreviations','timeline','note','footnotes','footnote','rearnote','rearnotes','verse','poem','song','hymn','lyrics','text','phrase','keyword','sentence','topic-sentence','concluding-sentence','t-form','v-form','acronym','initialism','truncation','cardinal','ordinal','ratio','percentage','phone','isbn','currency','postal-code','result','fraction','mixed','decimal','roman','weight','measure','coordinate','range','result','place','nationality','organization','taxonomy','product','event','award','personal-name','given-name','surname','family-name','name-title','signature','word','compound','homograph','portmanteau','root','stem','prefix','suffix','morpheme','phoneme','grapheme','illustration','photograph','decorative','publisher-logo','frontispiece','reference','resolving-reference','noteref','annoref','citation','nonresolving-citation','continuation','continuation-of','pagebreak','page-header','page-footer','recto','verso','image-placeholder','primary','secondary','tertiary')"/>
+            <let name="vocab-aria-epub"
+                value="('abstract', 'acknowledgments', 'afterword', 'appendix', 'backlink', 'biblioentry', 'bibliography', 'biblioref', 'chapter', 'colophon', 'conclusion', 'cover', 'credit', 'credits', 'dedication', 'endnote', 'endnotes', 'epigraph', 'epilogue', 'errata', 'example', 'footnote', 'foreword', 'glossary', 'glossref', 'index', 'introduction', 'noteref', 'notice', 'pagebreak', 'pagelist', 'part', 'preface', 'prologue', 'pullquote', 'qna', 'subtitle', 'tip', 'toc')"/>
 
             <assert test="$identifier = ../../opf:metadata/dc:identifier/text()">[opf12b_identifier] The "identifier" part of the filename ("<value-of select="$identifier"/>") must be the same as
                 declared in metadata, i.e.: "<value-of select="../../opf:metadata/dc:identifier/text()"/>".</assert>
 
-            <assert test="$type = ($vocab-default, $vocab-z3998)">[opf12b_type] "<value-of select="$type"/>" is not a valid type. <value-of
-                    select="if (count(($vocab-default,$vocab-z3998)[starts-with(.,substring($type,1,3))])) then concat('Did you mean &quot;',(($vocab-default,$vocab-z3998)[starts-with(.,substring($type,1,3))])[1],'&quot;?') else ''"
+            <assert test="$type = ($vocab-default, $vocab-aria-epub)">[opf12b_type] "<value-of select="$type"/>" is not a valid type. <value-of
+                    select="if (count(($vocab-default,$vocab-aria-epub)[starts-with(.,substring($type,1,3))])) then concat('Did you mean &quot;',(($vocab-default,$vocab-z3998)[starts-with(.,substring($type,1,3))])[1],'&quot;?') else ''"
                 /> The filename of content documents must end with a epub:type defined in either the EPUB3 Structural Semantics Vocabulary (http://www.idpf.org/epub/vocab/structure/#) or the
-                Z39.98-2012 Structural Semantics Vocabulary (http://www.daisy.org/z3998/2012/vocab/structure/).</assert>
+                ARIA EPUB Digital Publishing Roles (https://www.w3.org/TR/dpub-aria-1.0/#roles).</assert>
 
             <assert
                 test="not(count(../opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and not(matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$'))])) and string-length($position) = string-length(../opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')][1]/replace(@href,'^[A-Za-z0-9_-]+-(\d+)-[a-z-]+(-\d+)?.xhtml$','$1'))"
@@ -239,8 +205,8 @@
                 test="not(count(../opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and not(matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$'))])) and ../../opf:spine/opf:itemref[xs:integer(number($position))]/@idref = @id"
                 >[opf12b_position] The <value-of select="xs:integer(number($position))"/><value-of
                     select="if (ends-with($position,'1') and not(number($position)=11)) then 'st' else if (ends-with($position,'2') and not(number($position)=12)) then 'nd' else if (ends-with($position,'3') and not(number($position)=13)) then 'rd' else 'th'"
-                /> itemref (&lt;iremref id="<value-of select="../../opf:spine/opf:itemref[xs:integer(number($position))]/@id"/>" href="..."&gt;) should refer to &lt;item href="<value-of select="@href"
-                />"&gt;.</assert>
+                /> itemref (&lt;iremref idref="<value-of select="../../opf:spine/opf:itemref[xs:integer(number($position))]/@id"/>" href="..."&gt;)
+                should refer to &lt;item id="<value-of select="@id"/>" href="<value-of select="@href"/>"&gt;.</assert>
         </rule>
     </pattern>
 

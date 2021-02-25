@@ -232,9 +232,8 @@
         <p></p>
         <rule context="html:img">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <let name="found" value="ends-with(@src, '.jpg') or ends-with(@src, '.png')" />
-            <assert test="$found">[nordic52] Images must have either the .jpg file extension or the .png file extension. <value-of select="$context"/></assert>
-            <report test="$found and string-length(@src) = 4">[nordic52] Images must have a base name, not just an extension. <value-of select="$context"/></report>
+            <assert test="tokenize(@src, '.')[last()] = ('jpg', 'png')">[nordic52] Images must have either the .jpg file extension or the .png file extension. <value-of select="$context"/></assert>
+            <report test="tokenize(@src, '.')[last()] = ('jpg', 'png') and string-length(@src) = 4">[nordic52] Images must have a base name, not just an extension. <value-of select="$context"/></report>
             <report test="not(matches(@src, '^images/[^/]+$'))">[nordic51] Images must be in the "images" folder (relative to the HTML file).</report>
             <assert test="string-length(translate(substring(@src, 1, string-length(@src) - 4), '-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/', '')) = 0">[nordic52] Image file names can only contain the characters a-z, A-Z, 0-9, underscore (_) or hyphen (-). <value-of select="$context"/></assert>
         </rule>
@@ -328,12 +327,15 @@
 
     <pattern id="epub_nordic_105">
         <title>Rule 105</title>
-        <p>Pagebreaks must have a correct class</p>
+        <p>Pagebreaks must have a page-* class and must not contain anything</p>
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="tokenize(@class, '\s+') = ('page-front', 'page-normal', 'page-special')">[nordic105] Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special' class. <value-of select="$context"/></assert>
-            <assert test="count(node() except text()) = 0">[nordic105b] Pagebreaks must not contain anything other than a text node. <value-of select="$context"/></assert>
-            <assert test="normalize-space(.) = string(.)">[nordic105c] The text content of a pagebreak must not contain unneccessary whitespaces. <value-of select="$context"/></assert>
+            <assert test="count(* | comment()) = 0 and string-length(string-join(text(), '')) = 0">[nordic105] Pagebreaks must not contain anything<value-of select="
+                    if (string-length(text()) &gt; 0 and normalize-space(text()) = '') then
+                        ' (element contains empty spaces)'
+                    else
+                        ''"/>. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
@@ -373,17 +375,23 @@
         </rule>
     </pattern>
 
-    <!-- TODO: fix this assertion, probably a bad XPath
-    <!-\- Rule 131 (35): Allowed values in xml:lang -\->
-    <pattern id="epub_nordic_131">
-        <title>Rule 131</title>
+    <!-- Rule 131 (35): Allowed values in xml:lang -->
+    <pattern id="epub_nordic_131_b">
+        <title>Rule 131 a</title>
         <p></p>
         <rule context="*[@xml:lang]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="matches(@xml:lang, '^[a-z]{2,}(-[A-Z]{2,})?$')">[nordic131] xml:lang must match '^[a-z]{2,}(-[A-Z]{2,})?$'. <value-of select="$context"/></assert>
+            <assert test="matches(@xml:lang, '^[a-z]{2}(-[A-Z]{2,3})?$')">[nordic131a] xml:lang must must be either a "two-letter lower case" code or a "two-letter lower case + hyphen + two- or three-letter upper case" code. <value-of select="$context"/></assert>
         </rule>
     </pattern>
-    -->
+    <pattern id="epub_nordic_131_b">
+        <title>Rule 131 b</title>
+        <p></p>
+        <rule context="*[@lang]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="matches(@lang, '^[a-z]{2}(-[A-Z]{2,3})?$')">[nordic131b] lang must must be either a "two-letter lower case" code or a "two-letter lower case + hyphen + two- or three-letter upper case" code. <value-of select="$context"/></assert>
+        </rule>
+    </pattern>
 
     <pattern id="epub_nordic_135_a">
         <title>Rule 135a</title>
@@ -593,15 +601,11 @@
         <title>Rule 253a</title>
         <p>figures and captions</p>
         <rule context="html:figure">
-            <!--
-                The class "table" is undocumented to avoid unwanted use of that markup.
-                It should only be used by suppliers explicitly instructed to do so.
-            -->
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@class, '\s+') = ('image', 'image-series', 'table')"
-                >[nordic253a] &lt;figure&gt; elements must either have a class of "image", "image-series" or "table". <value-of select="$context"/></assert>
-            <report test="count((.[tokenize(@class, '\s+') = 'image'], .[tokenize(@class, '\s+') = 'image-series'], .[tokenize(@class, '\s+') = 'table'])) &gt; 1"
-                >[nordic253a] &lt;figure&gt; elements must either have a class of "image", "image-series" or "table". <value-of select="$context"/></report>
+            <assert test="tokenize(@epub:type, '\s+') = 'sidebar' or tokenize(@class, '\s+') = ('image', 'image-series')"
+                >[nordic253a] &lt;figure&gt; elements must either have an epub:type of "sidebar" or a class of "image" or "image-series". <value-of select="$context"/></assert>
+            <report test="count((.[tokenize(@epub:type, '\s+') = 'sidebar'], .[tokenize(@class, '\s+') = 'image'], .[tokenize(@class, '\s+') = 'image-series'])) &gt; 1"
+                >[nordic253a] &lt;figure&gt; elements must either have an epub:type of "sidebar" or a class of "image" or "image-series". <value-of select="$context"/></report>
             <assert test="count(html:figcaption) &lt;= 1">[nordic253a] There cannot be more than one &lt;figcaption&gt; in a single figure element. <value-of select="$context"/></assert>
         </rule>
     </pattern>
@@ -677,7 +681,7 @@
         <p>Text can't be direct child of div</p>
         <rule context="html:div">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="not(@epub:type = 'pagebreak') and text()[normalize-space(.)]">[nordic261] Text can't be placed directly inside div elements. Try wrapping it in a p element. <value-of select="concat('(', normalize-space(string-join(text(), ' ')), ')')"/> <value-of select="$context"/></report>
+            <report test="text()[normalize-space(.)]">[nordic261] Text can't be placed directly inside div elements. Try wrapping it in a p element. <value-of select="concat('(', normalize-space(string-join(text(), ' ')), ')')"/> <value-of select="$context"/></report>
         </rule>
     </pattern>
 
@@ -700,12 +704,21 @@
         </rule>
     </pattern>
 
-    <pattern id="epub_nordic_266">
-        <title>Rule 266</title>
+    <pattern id="epub_nordic_266_a">
+        <title>Rule 266a</title>
         <p></p>
         <rule context="html:*[*[tokenize(@epub:type, '\s+') = 'footnote']]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="self::html:aside">[nordic266] Footnotes must be wrapped in an "aside" element, but is currently wrapped in a <name/>. <value-of select="$context"/></assert>
+            <assert test="self::html:ol">[nordic266a] Footnotes must be wrapped in a "ol" element, but is currently wrapped in a <name/>. <value-of select="$context"/></assert>
+        </rule>
+    </pattern>
+
+    <pattern id="epub_nordic_266_b">
+        <title>Rule 266b</title>
+        <p></p>
+        <rule context="html:section[tokenize(@epub:type, '\s+') = 'footnotes']/html:ol/html:li | html:body[tokenize(@epub:type, '\s+') = 'footnotes']/html:ol/html:li">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="tokenize(@epub:type, '\s+') = 'footnote'">[nordic266b] List items inside a footnotes list must use epub:type="footnote". <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
@@ -753,7 +766,7 @@
     <pattern id="epub_nordic_269">
         <title>Rule 269</title>
         <p></p>
-        <rule context="html:body/html:section">
+        <rule context="html:body[not(html:header)]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="filename-regex" value="'^.*/[A-Za-z0-9_-]+-\d+-([a-z-]+)(-\d+)?\.xhtml$'"/>
             <let name="base-uri-type" value="
@@ -761,17 +774,9 @@
                         replace(base-uri(.), $filename-regex, '$1')
                     else
                         ()"/>
-            <let name="document-partitions" value="('cover', 'frontmatter', 'bodymatter', 'backmatter')"/>
-            <let name="document-divisions" value="('volume', 'part', 'chapter', 'division')"/>
-            <let name="values" value="(
-                for $t in tokenize(@role, '\s+') return tokenize(replace($t, '^doc-', ''), ':'),
-                for $t in tokenize(@epub:type, '\s+') return if ($t = ($document-partitions, $document-divisions)) then () else tokenize($t, ':'),
-                for $t in tokenize(@epub:type, '\s+') return if ($t = $document-divisions) then $t else (),
-                for $t in tokenize(@epub:type, '\s+') return if ($t = $document-partitions) then $t else ()
-            )"/>
             <assert test="
-                not(matches(base-uri(.), $filename-regex))
-                or $values[1] = $base-uri-type">[nordic269] The type used in the filename (<value-of select="$base-uri-type"/>) must be present on the section element, and be the most specific (<value-of select="$values[1]"/>). <value-of select="$context"/></assert>
+                    not(matches(base-uri(.), $filename-regex)) or (for $t in tokenize(@epub:type, '\s+')
+                    return tokenize($t, ':')[last()]) = $base-uri-type">[nordic269] The type used in the filename (<value-of select="$base-uri-type"/>) must be present on the body element. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
@@ -834,8 +839,8 @@
         <p></p>
         <rule context="html:meta">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="starts-with(@name, 'dc:') and not(@name = 'dc:title' or @name = 'dc:subject' or @name = 'dc:description' or @name = 'dc:type' or @name = 'dc:source' or @name = 'dc:relation' or @name = 'dc:coverage' or @name = 'dc:creator' or @name = 'dc:publisher' or @name = 'dc:publisher.original' or @name = 'dc:contributor' or @name = 'dc:rights' or @name = 'dc:date' or @name = 'dc:format' or @name = 'dc:identifier' or @name = 'dc:language')"
-                >[nordic280] Metadata with the dc prefix are only allowed for the 15 official Dublin Core metadata elements: dc:title, dc:subject, dc:description, dc:type, dc:source, dc:relation, dc:coverage, dc:creator, dc:publisher, dc:publisher.original, dc:contributor, dc:rights, dc:date, dc:format, dc:identifier and dc:language. <value-of select="$context"/></report>
+            <report test="starts-with(@name, 'dc:') and not(@name = 'dc:title' or @name = 'dc:subject' or @name = 'dc:description' or @name = 'dc:type' or @name = 'dc:source' or @name = 'dc:relation' or @name = 'dc:coverage' or @name = 'dc:creator' or @name = 'dc:publisher' or @name = 'dc:contributor' or @name = 'dc:rights' or @name = 'dc:date' or @name = 'dc:format' or @name = 'dc:identifier' or @name = 'dc:language')"
+                >[nordic280] Metadata with the dc prefix are only allowed for the 15 official Dublin Core metadata elements: dc:title, dc:subject, dc:description, dc:type, dc:source, dc:relation, dc:coverage, dc:creator, dc:publisher, dc:contributor, dc:rights, dc:date, dc:format, dc:identifier and dc:language. <value-of select="$context"/></report>
             <report test="starts-with(@name, 'DC:') or starts-with(@name, 'Dc:') or starts-with(@name, 'dC:')">[nordic280] The dc metadata prefix must be in lower case. <value-of select="$context"/></report>
         </rule>
     </pattern>
