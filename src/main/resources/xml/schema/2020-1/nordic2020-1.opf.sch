@@ -148,8 +148,11 @@
         <p></p>
         <rule context="opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-cover.xhtml')]/@id = @idref]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="@linear = 'no'">[opf10] Cover must be marked as secondary in the spine (i.e. set linear="no" on the itemref with idref="<value-of select="@idref"/>", which refers to the
-                cover)</assert>
+            <assert test="@linear = 'no'">[opf10] Cover must be marked as secondary in the spine (i.e. set linear="no" on the itemref with idref="<value-of select="@idref"/>", which refers to the cover)</assert>
+            <assert test="count(preceding-sibling::opf:itemref[not(@linear='no')]) = 0">[opf10] All preceeding documents to the cover must be marked as secondary in the spine (i.e. set linear="no")</assert>
+        </rule>
+        <rule context="opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'titlepage.xhtml')][1]/@id = @idref]">
+            <assert test="count(preceding-sibling::opf:itemref[not(@linear='no')]) = 0">[opf10] All preceeding documents to the titlepage or halftitlepage must be marked as secondary in the spine (i.e. set linear="no")</assert>
         </rule>
     </pattern>
 
@@ -184,7 +187,7 @@
                 declared in metadata, i.e.: "<value-of select="../../opf:metadata/dc:identifier/text()"/>".</assert>
 
             <assert test="$type = ($vocab-default, $vocab-aria-epub)">[opf12b_type] "<value-of select="$type"/>" is not a valid type. <value-of
-                    select="if (count(($vocab-default,$vocab-aria-epub)[starts-with(.,substring($type,1,3))])) then concat('Did you mean &quot;',(($vocab-default,$vocab-z3998)[starts-with(.,substring($type,1,3))])[1],'&quot;?') else ''"
+                    select="if (count(($vocab-default,$vocab-aria-epub)[starts-with(.,substring($type,1,3))])) then concat('Did you mean &quot;',(($vocab-default,$vocab-aria-epub)[starts-with(.,substring($type,1,3))])[1],'&quot;?') else ''"
                 /> The filename of content documents must end with a epub:type defined in either the EPUB3 Structural Semantics Vocabulary (http://www.idpf.org/epub/vocab/structure/#) or the
                 ARIA EPUB Digital Publishing Roles (https://www.w3.org/TR/dpub-aria-1.0/#roles).</assert>
 
