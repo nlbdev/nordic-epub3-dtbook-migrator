@@ -56,7 +56,7 @@
 
             <assert test="count(dc:language[not(@refines)]) = 1">[opf3c] exactly one dc:language <value-of select="if (dc:language[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"
                 /> must be present in the package document.</assert>
-            <assert test="count(dc:language[not(@refines)]) = 1 and matches(dc:language[not(@refines)]/text(), '^[a-z]{2}(-[A-Z]{2,3})?$')">[opf3c] the language code ("<value-of
+            <assert test="count(dc:language[not(@refines)]) = 1 and matches(dc:language[not(@refines)]/text(), '^[a-z]{2,3}(-[A-Z]{2,3})?$')">[opf3c] the language code ("<value-of
                     select="dc:language[not(@refines)]/text()"/>") must be either a "two-letter lower case" code or a "two-letter lower case + hyphen + two- or three-letter upper case" code.</assert>
             <!--<assert test="dc:language = ('no','nn-NO','nb-NO','sv','sv-FI','fi','da','en','de','de-CH','fr')" flag="warning">the language code should be one of: 'no' (Norwegian), 'nn-NO' (Norwegian
                 Nynorsk), 'nb-NO' (Norwegian Bokmål), 'sv' (Swedish), 'sv-FI' (Swedish (Finland)), 'fi' (Finnish), 'da' (Danish), 'en' (English), 'de' (German), 'de-CH' (German (Switzerland)), 'fr'
