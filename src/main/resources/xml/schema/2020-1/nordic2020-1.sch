@@ -375,17 +375,23 @@
         </rule>
     </pattern>
 
-    <!-- TODO: fix this assertion, probably a bad XPath
-    <!-\- Rule 131 (35): Allowed values in xml:lang -\->
-    <pattern id="epub_nordic_131">
-        <title>Rule 131</title>
+    <!-- Rule 131 (35): Allowed values in xml:lang -->
+    <pattern id="epub_nordic_131_a">
+        <title>Rule 131a</title>
         <p></p>
         <rule context="*[@xml:lang]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="matches(@xml:lang, '^[a-z]{2,}(-[A-Z]{2,})?$')">[nordic131] xml:lang must match '^[a-z]{2,}(-[A-Z]{2,})?$'. <value-of select="$context"/></assert>
+            <assert test="matches(@xml:lang, '^[a-z]{2}(-[A-Z]{2,3})?$')">[nordic131a] xml:lang must must be either a "two-letter lower case" code or a "two-letter lower case + hyphen + two- or three-letter upper case" code. <value-of select="$context"/></assert>
         </rule>
     </pattern>
-    -->
+    <pattern id="epub_nordic_131_b">
+        <title>Rule 131b</title>
+        <p></p>
+        <rule context="*[@lang]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="matches(@lang, '^[a-z]{2}(-[A-Z]{2,3})?$')">[nordic131b] lang must must be either a "two-letter lower case" code or a "two-letter lower case + hyphen + two- or three-letter upper case" code. <value-of select="$context"/></assert>
+        </rule>
+    </pattern>
 
     <pattern id="epub_nordic_135_a">
         <title>Rule 135a</title>
