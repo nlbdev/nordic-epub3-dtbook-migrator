@@ -1,23 +1,28 @@
-<?xml version='1.0' encoding='utf-8'?>
-<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" unique-identifier="pub-identifier" prefix="nordic: http://www.mtm.se/epub/ a11y: http://www.idpf.org/epub/vocab/package/a11y/# schema: http://schema.org/" version="3.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf"
+         xmlns:dc="http://purl.org/dc/elements/1.1/"
+         xmlns:dcterms="http://purl.org/dc/terms/"
+         unique-identifier="pub-identifier"
+         prefix="nordic: http://www.mtm.se/epub/ a11y: http://www.idpf.org/epub/vocab/package/a11y/# schema: http://schema.org/"
+         version="3.0">
     <metadata>
-    <dc:identifier id="pub-identifier">C00000</dc:identifier>
-    <dc:title>Valentin Haüy - the father of the education for the blind</dc:title>
-    <dc:creator>Beatrice Christensen Sköld</dc:creator>
-    <dc:language>en</dc:language>
-    <dc:source>urn:isbn:123456789</dc:source>
-    <dc:format>EPUB3</dc:format>
-    <dc:publisher>MTM</dc:publisher>
-    <dc:date>2006-03-23</dc:date>
-    <meta property="a11y:certifiedBy">Certifying Organization</meta>
-    <meta property="schema:audience">Adult</meta>
-    <meta property="dcterms:modified">2021-02-22T15:41:59Z</meta>
-    <meta name="dcterms:modified" content="2013-11-07T10:05:30Z"/>
-    <meta property="nordic:guidelines">2020-1</meta>
-    <meta name="nordic:guidelines" content="2020-1"/>
-    <meta property="nordic:supplier">MTM</meta>
-    <meta name="nordic:supplier" content="MTM"/>
-  </metadata>
+        <dc:identifier id="pub-identifier">C00000</dc:identifier>
+        <dc:title>Valentin Haüy - the father of the education for the blind</dc:title>
+        <dc:creator>Beatrice Christensen Sköld</dc:creator>
+        <dc:language>en</dc:language>
+        <dc:source>urn:isbn:123456789</dc:source>
+        <dc:format>EPUB3</dc:format>
+        <dc:publisher>MTM</dc:publisher>
+        <dc:date>2006-03-23</dc:date>
+        <meta property="a11y:certifiedBy">Certifying Organization</meta>
+        <meta property="schema:audience">Adult</meta>
+        <meta property="dcterms:modified">2013-11-07T10:05:30Z</meta>
+        <meta name="dcterms:modified" content="2013-11-07T10:05:30Z"/>
+        <meta property="nordic:guidelines">2020-1</meta>
+        <meta name="nordic:guidelines" content="2020-1"/>
+        <meta property="nordic:supplier">MTM</meta>
+        <meta name="nordic:supplier" content="MTM"/>
+    </metadata>
     <manifest>
         <item id="item_1" media-type="text/css" href="css/accessibility.css"/>
         <item id="item_2" media-type="application/x-font-opentype" href="css/fonts/opendyslexic/OpenDyslexic-Regular.otf"/>
