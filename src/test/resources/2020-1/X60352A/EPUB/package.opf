@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+ <package xml:lang="sv" xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" prefix="nordic: http://www.mtm.se/epub/" unique-identifier="pub-identifier" version="3.2">
+    <metadata>
+
+<dc:title>Om det nord-tschudiska spr&#xe5;ket</dc:title>
+<dc:language>sv</dc:language>
+<dc:identifier id="pub-identifier">X60352A</dc:identifier>
+<dc:source>urn:isbn:0000000000</dc:source>
+<dc:creator>L&#xf6;nnrot, Elias</dc:creator>
+<dc:format>EPUB3</dc:format>
+<dc:publisher>SPSM</dc:publisher>
+<dc:date>2021-02-19</dc:date>
+
+
+        <meta property="dcterms:modified">2021-02-23T10:08:31Z</meta>
+        <meta property="nordic:guidelines">2020-1</meta>
+        <meta property="nordic:supplier">PUAB</meta>
+        <meta property="schema:accessibilitySummary">Den h&#xe4;r publikationen &#xe4;r framst&#xe4;lld i enlighet med the Nordic Guidelines for the Production of Accessible EPUB 3, version 2020-1.</meta>
+        <meta property="schema:accessMode">textual</meta>
+        <meta property="schema:accessMode">visual</meta>
+        <meta property="schema:accessModeSufficient">textual,visual</meta>
+        <meta property="schema:accessModeSufficient">textual</meta>
+        <meta property="schema:accessibilityFeature">structuralNavigation</meta>
+        <meta property="schema:accessibilityFeature">alternativeText</meta>
+        <meta property="schema:accessibilityHazard">none</meta>
+		<meta property="a11y:certifiedBy">SPSM</meta>
+        <link rel="dcterms:conformsTo" href="https://format.mtm.se/nordic_epub/2020-1"/>
+    </metadata>
+    <manifest>
+        <item properties="cover-image" media-type="image/jpeg" id="item_1" href="images/cover.jpg"/>
+        <item id="item_2" media-type="image/jpeg" href="images/img001.jpg"/>
+        <item id="item_3" media-type="text/css" href="css/default.css"/>
+        <item media-type="application/xhtml+xml" id="item_10" href="X60352A-01-cover.xhtml"/>
+        <item id="item_11" media-type="application/x-dtbncx+xml" href="nav.ncx"/>
+        <item media-type="application/xhtml+xml" id="item_12" href="X60352A-02-titlepage.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_13" href="X60352A-03-colophon.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_14" href="X60352A-04-foreword.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_15" href="X60352A-05-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_16" href="X60352A-06-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_17" href="X60352A-07-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_18" href="X60352A-08-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_19" href="X60352A-09-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_20" href="X60352A-10-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_21" href="X60352A-11-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_22" href="X60352A-12-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_23" href="X60352A-13-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_24" href="X60352A-14-backmatter.xhtml"/>
+        <item properties="nav" id="item_25" media-type="application/xhtml+xml" href="nav.xhtml"/>
+    </manifest>
+    <spine toc="item_11">
+        <itemref idref="item_10" id="itemref_1" linear="no"/>
+        <itemref idref="item_12" id="itemref_2"/>
+        <itemref idref="item_13" id="itemref_3"/>
+        <itemref idref="item_14" id="itemref_4"/>
+        <itemref idref="item_15" id="itemref_5"/>
+        <itemref idref="item_16" id="itemref_6"/>
+        <itemref idref="item_17" id="itemref_7"/>
+        <itemref idref="item_18" id="itemref_8"/>
+        <itemref idref="item_19" id="itemref_9"/>
+        <itemref idref="item_20" id="itemref_10"/>
+        <itemref idref="item_21" id="itemref_11"/>
+        <itemref idref="item_22" id="itemref_12"/>
+        <itemref idref="item_23" id="itemref_13"/>
+        <itemref idref="item_24" id="itemref_14"/>
+    </spine>
+</package> 
