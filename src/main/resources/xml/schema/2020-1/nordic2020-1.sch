@@ -381,7 +381,7 @@
         <p></p>
         <rule context="*[@xml:lang]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="matches(@xml:lang, '^[a-z]{2,3}(-[A-Za-z0-9]+)*$')">[nordic131a] xml:lang must must be either a "two-letter lower case" code or a "two-letter lower case and groups of hyphen followed by numbers or letters" (i.e. zh-Hanz-UTF8) code. <value-of select="$context"/></assert>
+            <assert test="matches(@xml:lang, '^[a-z]{2,3}(-[A-Za-z0-9]+)*$')">[nordic131a] xml:lang must must be either a "two- or three-letter lower case" code or a "two- or three-letter lower case and groups of hyphen followed by numbers or letters" (i.e. zh-Hanz-UTF8) code. <value-of select="$context"/></assert>
         </rule>
     </pattern>
     <pattern id="epub_nordic_131_b">
@@ -389,7 +389,7 @@
         <p></p>
         <rule context="*[@lang]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="matches(@lang, '^[a-z]{2,3}(-[A-Za-z0-9]+)*$')">[nordic131b] lang must must be either a "two-letter lower case" code or a "two-letter lower case and groups of hyphen followed by numbers or letters" (i.e. zh-Hanz-UTF8) code. <value-of select="$context"/></assert>
+            <assert test="matches(@lang, '^[a-z]{2,3}(-[A-Za-z0-9]+)*$')">[nordic131b] lang must must be either a "two- or three-letter lower case" code or a "two- or three-letter lower case and groups of hyphen followed by numbers or letters" (i.e. zh-Hanz-UTF8) code. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
