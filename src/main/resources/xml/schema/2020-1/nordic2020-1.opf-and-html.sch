@@ -60,9 +60,9 @@
         <p>All books must have frontmatter and bodymatter</p>
         <rule context="html:html[not(preceding-sibling::html:html)]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="((.|following-sibling::html:html)/html:body/tokenize(@epub:type,'\s+')=('cover','frontmatter')) = true()">[nordic_opf_and_html_13a] There must be at least one frontmatter or
+            <assert test="((.|following-sibling::html:html)/html:body/html:section/tokenize(@epub:type,'\s+')=('cover','frontmatter')) = true()">[nordic_opf_and_html_13a] There must be at least one frontmatter or
                 cover document</assert>
-            <assert test="((.|following-sibling::html:html)/html:body/tokenize(@epub:type,'\s+')='bodymatter') = true()">[nordic_opf_and_html_13a] There must be at least one bodymatter
+            <assert test="((.|following-sibling::html:html)/html:body/html:section/tokenize(@epub:type,'\s+')='bodymatter') = true()">[nordic_opf_and_html_13a] There must be at least one bodymatter
                 document</assert>
         </rule>
     </pattern>
