@@ -2095,21 +2095,28 @@
             <attribute name="class">
                 <value>verse</value>
             </attribute>
-            <optional>
+            <zeroOrMore>
                 <ref name="bridgehead"/>
-            </optional>
+                <ref name="poem.author"/>
+            </zeroOrMore>
             <oneOrMore>
                 <ref name="poem.linegroup"/>
             </oneOrMore>
-            <optional>
-                <element name="p">
-                    <attribute name="class">
-                        <value>verse-author</value>
-                    </attribute>
-                </element>
-            </optional>
+            <zeroOrMore>
+                <ref name="bridgehead"/>
+                <ref name="poem.author"/>
+            </zeroOrMore>
         </element>
     </define>
+
+    <define name="poem.author">
+        <element name="p">
+            <attribute name="class">
+                <value>verse-author</value>
+            </attribute>
+        </element>
+    </define>
+
 
     <define name="poem.linegroup">
         <element name="p">
@@ -2126,11 +2133,11 @@
     <define name="poem.line">
         <element name="span">
             <attribute name="class">
-                <choice>
+                <oneOrMore>
                     <value>line</value>
                     <value>line_indent</value>
                     <value>line_longindent</value>
-                </choice>
+                </oneOrMore>
             </attribute>
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
