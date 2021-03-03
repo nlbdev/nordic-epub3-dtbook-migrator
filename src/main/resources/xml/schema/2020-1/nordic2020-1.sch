@@ -232,8 +232,9 @@
         <p></p>
         <rule context="html:img">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@src, '.')[last()] = ('jpg', 'png')">[nordic52] Images must have either the .jpg file extension or the .png file extension. <value-of select="$context"/></assert>
-            <report test="tokenize(@src, '.')[last()] = ('jpg', 'png') and string-length(@src) = 4">[nordic52] Images must have a base name, not just an extension. <value-of select="$context"/></report>
+            <let name="found" value="ends-with(@src, '.jpg') or ends-with(@src, '.png')" />
+            <assert test="$found">[nordic52] Images must have either the .jpg file extension or the .png file extension. <value-of select="$context"/></assert>
+            <report test="$found and string-length(@src) = 4">[nordic52] Images must have a base name, not just an extension. <value-of select="$context"/></report>
             <report test="not(matches(@src, '^images/[^/]+$'))">[nordic51] Images must be in the "images" folder (relative to the HTML file).</report>
             <assert test="string-length(translate(substring(@src, 1, string-length(@src) - 4), '-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/', '')) = 0">[nordic52] Image file names can only contain the characters a-z, A-Z, 0-9, underscore (_) or hyphen (-). <value-of select="$context"/></assert>
         </rule>
