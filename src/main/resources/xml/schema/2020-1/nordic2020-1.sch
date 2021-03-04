@@ -328,15 +328,10 @@
 
     <pattern id="epub_nordic_105">
         <title>Rule 105</title>
-        <p>Pagebreaks must have a page-* class and must not contain anything</p>
+        <p>Pagebreaks must have a correct class</p>
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="tokenize(@class, '\s+') = ('page-front', 'page-normal', 'page-special')">[nordic105] Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special' class. <value-of select="$context"/></assert>
-            <assert test="count(* | comment()) = 0 and string-length(string-join(text(), '')) = 0">[nordic105] Pagebreaks must not contain anything<value-of select="
-                    if (string-length(text()) &gt; 0 and normalize-space(text()) = '') then
-                        ' (element contains empty spaces)'
-                    else
-                        ''"/>. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
