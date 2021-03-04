@@ -2103,6 +2103,7 @@
                 <ref name="poem.linegroup"/>
             </oneOrMore>
             <zeroOrMore>
+                <ref name="poem.linegroup"/>
                 <ref name="bridgehead"/>
                 <ref name="poem.author"/>
             </zeroOrMore>
