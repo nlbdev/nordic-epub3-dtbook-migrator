@@ -331,6 +331,8 @@
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="tokenize(@class, '\s+') = ('page-front', 'page-normal', 'page-special')">[nordic105] Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special' class. <value-of select="$context"/></assert>
+            <assert test="count(node() except text()) = 0">[nordic105b] Pagebreaks must not contain anything other than a text node. <value-of select="$context"/></assert>
+            <assert test="normalize-space(.) = string(.)">[nordic105c] The text content of a pagebreak must not contain unneccessary whitespaces. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
