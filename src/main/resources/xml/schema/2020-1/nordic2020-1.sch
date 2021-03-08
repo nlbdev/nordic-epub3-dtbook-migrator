@@ -677,7 +677,7 @@
         <p>Text can't be direct child of div</p>
         <rule context="html:div">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="text()[normalize-space(.)]">[nordic261] Text can't be placed directly inside div elements. Try wrapping it in a p element. <value-of select="concat('(', normalize-space(string-join(text(), ' ')), ')')"/> <value-of select="$context"/></report>
+            <report test="not(@epub:type = 'pagebreak') and text()[normalize-space(.)]">[nordic261] Text can't be placed directly inside div elements. Try wrapping it in a p element. <value-of select="concat('(', normalize-space(string-join(text(), ' ')), ')')"/> <value-of select="$context"/></report>
         </rule>
     </pattern>
 
