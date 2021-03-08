@@ -4369,6 +4369,7 @@
                 <value>answer</value>
                 <value>answer_1</value>
                 <value>asciimath</value>
+                <value>backcover</value>
                 <value>bdo</value>
                 <value>box</value>
                 <value>bridgehead</value>
@@ -4382,6 +4383,7 @@
                 <value>emptyline</value>
                 <value>exercisenumber</value>
                 <value>exercisepart</value>
+                <value>fig-desc</value>
                 <value>frontcover</value>
                 <value>image</value>
                 <value>image-series</value>
@@ -4394,6 +4396,8 @@
                 <value>leftflap</value>
                 <value>lic</value>
                 <value>line</value>
+                <value>line_indent</value>
+                <value>line_longindent</value>
                 <value>linegroup</value>
                 <value>linenum</value>
                 <value>nonstandardpagination</value>
@@ -4415,7 +4419,9 @@
                 <value>truncation</value>
                 <value>render-required</value>
                 <value>render-optional</value>
-                
+                <value>verse</value>
+                <value>verse-author</value>
+
                 <!-- Text values -->
                 <a:documentation> Text values </a:documentation>
                 <value>bold</value>
