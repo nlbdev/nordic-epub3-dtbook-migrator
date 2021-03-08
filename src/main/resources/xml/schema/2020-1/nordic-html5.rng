@@ -2123,17 +2123,19 @@
     <define name="poem.line">
         <element name="span">
             <attribute name="class">
-                <oneOrMore>
-                    <value>line</value>
-                    <value>line_indent</value>
-                    <value>line_longindent</value>
-                </oneOrMore>
+                <list>
+                    <oneOrMore>
+                        <value>line</value>
+                        <value>line_indent</value>
+                        <value>line_longindent</value>
+                    </oneOrMore>
+                </list>
             </attribute>
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
             </zeroOrMore>
         </element>
-        <element name="br"></element>
+        <ref name="br" />
     </define>
 
     <define name="poem.linenum">
@@ -2830,7 +2832,7 @@
     <define name="figure.imggroup">
         <!--
         Use: figure provides a container for one or more <img> and associated <figcaption>(s).
-      -->
+        -->
         <a:documentation> Use: figure provides a container for one or more img and associated figcaption(s).</a:documentation>
         <element name="figure">
             <!-- HTML content model: figcaption? ( a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text) )* figcaption? -->
@@ -2879,6 +2881,21 @@
                                 </choice>
                             </zeroOrMore>
                         </element>
+                    </oneOrMore>
+                </group>
+                <group>
+                    <optional>
+                        <attribute name="class">
+                            <list>
+                                <ref name="classes"/>
+                            </list>
+                        </attribute>
+                    </optional>
+                    <optional>
+                        <ref name="caption.figure"/> <!-- figcaption -->
+                    </optional>
+                    <oneOrMore>
+                        <ref name="block"/>
                     </oneOrMore>
                 </group>
             </choice>
