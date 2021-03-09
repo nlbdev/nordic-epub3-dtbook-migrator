@@ -2887,7 +2887,7 @@
                     <optional>
                         <attribute name="class">
                             <list>
-                                <ref name="classes"/>
+                                <ref name="classes.without.images"/>
                             </list>
                         </attribute>
                     </optional>
@@ -4376,6 +4376,24 @@
     </define>
 
     <define name="classes">
+        <ref name="classes.without.images" />
+        <zeroOrMore>
+            <choice>
+                <value>image</value>
+                <value>image-series</value>
+            </choice>
+        </zeroOrMore>
+        <ref name="classes.without.images" />
+        <zeroOrMore>
+            <choice>
+                <value>image</value>
+                <value>image-series</value>
+            </choice>
+        </zeroOrMore>
+        <ref name="classes.without.images" />
+    </define>
+
+    <define name="classes.without.images">
         <zeroOrMore>
             <a:documentation> Common classes in use </a:documentation>
             <choice>
@@ -4402,8 +4420,6 @@
                 <value>exercisepart</value>
                 <value>fig-desc</value>
                 <value>frontcover</value>
-                <value>image</value>
-                <value>image-series</value>
                 <value>indented</value>
                 <value>initialism</value>
                 <value>isbn</value>
