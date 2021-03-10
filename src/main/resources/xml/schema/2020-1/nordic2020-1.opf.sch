@@ -25,7 +25,7 @@
         <p></p>
         <rule context="opf:package">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="@version = '3.0'">[opf2] the version attribute must be 3.0</assert>
+            <assert test="@version = '3.2'">[opf2] the version attribute must be 3.2</assert>
             <assert test="@unique-identifier = 'pub-identifier'">[opf2] on the package element; the unique-identifier-attribute must be present and equal 'pub-identifier'</assert>
             <assert test="namespace-uri-for-prefix('dc',.) = 'http://purl.org/dc/elements/1.1/'">[opf2] on the package element; the dublin core namespace (xmlns:dc="http://purl.org/dc/elements/1.1/")
                 must be declared on the package element</assert>
