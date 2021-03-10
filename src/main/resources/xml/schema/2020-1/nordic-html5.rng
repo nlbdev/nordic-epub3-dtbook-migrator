@@ -2887,7 +2887,7 @@
                     <optional>
                         <attribute name="class">
                             <list>
-                                <ref name="classes.without.images"/>
+                                <ref name="classes"/>
                             </list>
                         </attribute>
                     </optional>
@@ -4376,138 +4376,52 @@
     </define>
 
     <define name="classes">
-        <ref name="classes.without.images" />
+        <a:documentation>Allow all classes, except certain classes that have a special meaning.</a:documentation>
+        <a:documentation>Classes with a special meaning will be handled explicitly where relevant.</a:documentation>
         <zeroOrMore>
-            <choice>
-                <value>image</value>
-                <value>image-series</value>
-            </choice>
-        </zeroOrMore>
-        <ref name="classes.without.images" />
-        <zeroOrMore>
-            <choice>
-                <value>image</value>
-                <value>image-series</value>
-            </choice>
-        </zeroOrMore>
-        <ref name="classes.without.images" />
-    </define>
-
-    <define name="classes.without.images">
-        <zeroOrMore>
-            <a:documentation> Common classes in use </a:documentation>
-            <choice>
-                <!-- Common classes in use -->
-                <value>address</value>
-                <value>annoref</value>
-                <value>annotation</value>
-                <value>answer</value>
-                <value>answer_1</value>
-                <value>asciimath</value>
-                <value>backcover</value>
-                <value>bdo</value>
-                <value>box</value>
-                <value>bridgehead</value>
-                <value>byline</value>
-                <value>cite</value>
-                <value>colophon</value>
-                <value>cover</value>
-                <value>dateline</value>
-                <value>definition</value>
-                <value>docauthor</value>
-                <value>emptyline</value>
-                <value>exercisenumber</value>
-                <value>exercisepart</value>
-                <value>fig-desc</value>
-                <value>frontcover</value>
-                <value>indented</value>
-                <value>initialism</value>
-                <value>isbn</value>
-                <value>issn</value>
-                <value>jacketcopy</value>
-                <value>keyboard</value>
-                <value>leftflap</value>
-                <value>lic</value>
-                <value>line</value>
-                <value>line_indent</value>
-                <value>line_longindent</value>
-                <value>linegroup</value>
-                <value>linenum</value>
-                <value>nonstandardpagination</value>
-                <value>noteref</value>
-                <value>page-front</value>
-                <value>page-normal</value>
-                <value>page-special</value>
-                <value>part</value>
-                <value>poem</value>
-                <value>plain</value>
-                <value>prodnote</value>
-                <value>publisher</value>
-                <value>quote</value>
-                <value>rearcover</value>
-                <value>rightflap</value>
-                <value>separator</value>
-                <value>sidebar</value>
-                <value>title</value>
-                <value>truncation</value>
-                <value>render-required</value>
-                <value>render-optional</value>
-                <value>verse</value>
-                <value>verse-author</value>
-
-                <!-- Text values -->
-                <a:documentation> Text values </a:documentation>
-                <value>bold</value>
-                <value>italic</value>
-                <value>handwritten</value>
-                <value>crossed-out</value>
-                <value>underlined</value>
-                
-                <!-- Colored text values -->
-                <a:documentation> Colored text values </a:documentation>
-                <value>maroon</value>
-                <value>red</value>
-                <value>orange</value>
-                <value>yellow</value>
-                <value>olive</value>
-                <value>purple</value>
-                <value>fuchsia</value>
-                <value>white</value>
-                <value>lime</value>
-                <value>green</value>
-                <value>navy</value>
-                <value>blue</value>
-                <value>aqua</value>
-                <value>teal</value>
-                <value>silver</value>
-                <value>gray</value>
-                
-                <!-- Colored background values -->
-                <a:documentation> Colored background values </a:documentation>
-                <value>maroon-bg</value>
-                <value>red-bg</value>
-                <value>orange-bg</value>
-                <value>yellow-bg</value>
-                <value>olive-bg</value>
-                <value>purple-bg</value>
-                <value>fuchsia-bg</value>
-                <value>lime-bg</value>
-                <value>green-bg</value>
-                <value>navy-bg</value>
-                <value>blue-bg</value>
-                <value>aqua-bg</value>
-                <value>teal-bg</value>
-                <value>black-bg</value>
-                <value>silver-bg</value>
-                <value>gray-bg</value>
-                
-                <!-- allow all classes by default, the predefined classes above are just useful for autocompletion in editors -->
-                <a:documentation> allow all classes by default, the predefined classes above </a:documentation>
-                <a:documentation> are just useful for autocompletion in editors </a:documentation>
-                
-                <data type="string"/>
-            </choice>
+            <data type="string">
+                <except>
+                    <value>frontcover</value>
+                    <value>rearcover</value>
+                    <value>leftflap</value>
+                    <value>rightflap</value>
+                    <value>line</value>
+                    <value>linenum</value>
+                    <value>title</value>
+                    <value>prodnote</value>
+                    <value>sidebar</value>
+                    <value>annotation</value>
+                    <value>byline</value>
+                    <value>dateline</value>
+                    <value>linegroup</value>
+                    <value>verse</value>
+                    <value>verse-author</value>
+                    <value>linegroup</value>
+                    <value>line</value>
+                    <value>line_indent</value>
+                    <value>line_longindent</value>
+                    <value>linenum</value>
+                    <value>acronym</value>
+                    <value>page-front</value>
+                    <value>page-normal</value>
+                    <value>page-special</value>
+                    <value>noteref</value>
+                    <value>annoref</value>
+                    <value>image-series</value>
+                    <value>image</value>
+                    <value>emptyline</value>
+                    <value>separator</value>
+                    <value>title</value>
+                    <value>docauthor</value>
+                    <value>bridgehead</value>
+                    <value>lic</value>
+                    <value>row</value>
+                    <value>col</value>
+                    <value>rowgroup</value>
+                    <value>colgroup</value>
+                    <value>table-summary</value>
+                </except>
+            </data>
         </zeroOrMore>
     </define>
-    
 </grammar>
