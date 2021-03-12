@@ -50,8 +50,8 @@
             <assert test="parent::opf:package/@unique-identifier = dc:identifier/@id">[opf3a] the id of the dc:identifier must equal the value of the package elements unique-identifier
                 attribute</assert>
 
-            <let name="main-title-id" value="translate(opf:meta[text() = 'main' and @property = 'title-type']/@refines, '#', '')"/>
-            <assert test="count(dc:title[@id=$main-title-id]) = 1 or count(dc:title) = 1">[opf3b] exactly one dc:title must be present in the package document when no main title is specified.</assert>
+            <let name="main-title-id" value="opf:meta[text() = 'main' and @property = 'title-type']/translate(@refines, '#', '')"/>
+            <assert test="count(dc:title[@id=$main-title-id]) = 1 or count(dc:title) = 1">[opf3b] exactly one dc:title must be present in the package document when no title is uniquely defined as main.</assert>
             <assert test="string-length(normalize-space(dc:title[1]/text()))">[opf3b] the dc:title must not be empty.</assert>
 
             <assert test="count(dc:language[not(@refines)]) = 1">[opf3c] exactly one dc:language <value-of select="if (dc:language[@refines]) then '(without a &quot;refines&quot; attribute)' else ''"
