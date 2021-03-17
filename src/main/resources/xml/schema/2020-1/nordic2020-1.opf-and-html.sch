@@ -101,8 +101,8 @@
             context="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][tokenize(@class,'\s+')='page-normal']]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="preceding" value="preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'][1]"/>
-            <assert test="number(current()/@title) > number($preceding/@title)">[nordic_opf_and_html_23] pagebreak values must increase for pagebreaks with class="page-normal" (see pagebreak with
-                    title="<value-of select="@title"/>" in <value-of select="replace(base-uri(.),'^.*/','')"/> and compare with pagebreak with title="<value-of select="$preceding/@title"/> in
+            <assert test="number(current()/@aria-label) > number($preceding/@aria-label)">[nordic_opf_and_html_23] pagebreak values must increase for pagebreaks with class="page-normal" (see pagebreak with
+                aria-label="<value-of select="@aria-label"/>" in <value-of select="replace(base-uri(.),'^.*/','')"/> and compare with pagebreak with aria-label="<value-of select="$preceding/@aria-label"/> in
                     <value-of select="replace(base-uri($preceding),'^.*/','')"/>)</assert>
         </rule>
     </pattern>
@@ -112,8 +112,8 @@
         <p>Values of pagebreak must be unique for page-front</p>
         <rule context="html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="count(//html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front' and @title=current()/@title])=1">[nordic_opf_and_html_24] pagebreak values must
-                be unique for pagebreaks with class="page-front" (see pagebreak with title="<value-of select="@title"/>" in <value-of select="replace(base-uri(.),'^.*/','')"/>)</assert>
+            <assert test="count(//html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front' and @aria-label=current()/@aria-label])=1">[nordic_opf_and_html_24] pagebreak values must
+                be unique for pagebreaks with class="page-front" (see pagebreak with aria-label="<value-of select="@aria-label"/>" in <value-of select="replace(base-uri(.),'^.*/','')"/>)</assert>
         </rule>
     </pattern>
 

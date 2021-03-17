@@ -129,7 +129,7 @@
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak' and tokenize(@class, '\s+') = 'page-normal' and preceding::html:*[tokenize(@epub:type, '\s+') = 'pagebreak'][tokenize(@class, '\s+') = 'page-normal']]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="preceding" value="preceding::html:*[tokenize(@epub:type, '\s+') = 'pagebreak' and tokenize(@class, '\s+') = 'page-normal'][1]"/>
-            <assert test="number(current()/@title) &gt; number($preceding/@title)">[nordic23] pagebreak values must increase for pagebreaks with class="page-normal". <value-of select="concat('(see pagebreak with title=&quot;', @title, '&quot; and compare with pagebreak with title=&quot;', $preceding/@title, '&quot;)')"/> <value-of select="$context"/></assert>
+            <assert test="number(current()/@aria-label) &gt; number($preceding/@aria-label)">[nordic23] pagebreak values must increase for pagebreaks with class="page-normal". <value-of select="concat('(see pagebreak with aria-label=&quot;', @aria-label, '&quot; and compare with pagebreak with aria-label=&quot;', $preceding/@aria-label, '&quot;)')"/> <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
@@ -138,7 +138,7 @@
         <p>Values of pagebreak must be unique for page-front</p>
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak'][tokenize(@class, '\s+') = 'page-front']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="count(//html:*[tokenize(@epub:type, '\s+') = 'pagebreak' and tokenize(@class, '\s+') = 'page-front' and @title = current()/@title]) = 1">[nordic24] pagebreak values must be unique for pagebreaks with class="page-front". <value-of select="concat('(see pagebreak with title=&quot;', @title, '&quot;)')"/> <value-of select="$context"/></assert>
+            <assert test="count(//html:*[tokenize(@epub:type, '\s+') = 'pagebreak' and tokenize(@class, '\s+') = 'page-front' and @aria-label = current()/@aria-label]) = 1">[nordic24] pagebreak values must be unique for pagebreaks with class="page-front". <value-of select="concat('(see pagebreak with aria-label=&quot;', @aria-label, '&quot;)')"/> <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
@@ -232,8 +232,8 @@
         <p></p>
         <rule context="html:img">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@src, '.')[last()] = ('jpg', 'png')">[nordic52] Images must have either the .jpg file extension or the .png file extension. <value-of select="$context"/></assert>
-            <report test="tokenize(@src, '.')[last()] = ('jpg', 'png') and string-length(@src) = 4">[nordic52] Images must have a base name, not just an extension. <value-of select="$context"/></report>
+            <assert test="substring(@src, string-length(@src) - 2) = ('jpg', 'png')">[nordic52] Images must have either the .jpg file extension or the .png file extension. <value-of select="$context"/></assert>
+            <report test="substring(@src, string-length(@src) - 2) = ('jpg', 'png') and string-length(@src) = 4">[nordic52] Images must have a base name, not just an extension. <value-of select="$context"/></report>
             <report test="not(matches(@src, '^images/[^/]+$'))">[nordic51] Images must be in the "images" folder (relative to the HTML file).</report>
             <assert test="string-length(translate(substring(@src, 1, string-length(@src) - 4), '-_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/', '')) = 0">[nordic52] Image file names can only contain the characters a-z, A-Z, 0-9, underscore (_) or hyphen (-). <value-of select="$context"/></assert>
         </rule>
@@ -575,7 +575,7 @@
         <p>pagebreak</p>
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak' and text()]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="matches(@title, '.+')">[nordic225] The title attribute must be used to describe the page number. <value-of select="$context"/></assert>
+            <assert test="matches(@aria-label, '.+')">[nordic225] The aria-label attribute must be used to describe the page number. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
