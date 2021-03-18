@@ -220,7 +220,27 @@
             </list>
         </attribute>
     </define>
-    
+
+    <define name="attr.role">
+        <attribute name="role">
+            <list>
+                <ref name="roles"/>
+            </list>
+        </attribute>
+    </define>
+
+    <define name="attr.aria.label">
+        <attribute name="aria-label">
+            <ref name="Text"/>
+        </attribute>
+    </define>
+
+    <define name="attr.aria.labelledby">
+        <attribute name="aria-labelledby">
+            <ref name="Text"/>
+        </attribute>
+    </define>
+
     <define name="coreattrs.base">
         <optional>
             <ref name="attr.id"/> <!-- @id -->
@@ -230,6 +250,15 @@
         </optional>
         <optional>
             <ref name="attr.xmlspace"/> <!-- @xml:space -->
+        </optional>
+        <optional>
+            <ref name="attr.role"/> <!-- @role -->
+        </optional>
+        <optional>
+            <ref name="attr.aria.label"/> <!-- @aria-label -->
+        </optional>
+        <optional>
+            <ref name="attr.aria.labelledby"/> <!-- @aria-labelledby -->
         </optional>
     </define>
 
@@ -345,6 +374,15 @@
         </optional>
         <optional>
             <ref name="attr.xmlspace"/> <!-- @xml:space -->
+        </optional>
+        <optional>
+            <ref name="attr.role"/> <!-- @role -->
+        </optional>
+        <optional>
+            <ref name="attr.aria.label"/> <!-- @aria-label -->
+        </optional>
+        <optional>
+            <ref name="attr.aria.labelledby"/> <!-- @aria-labelledby -->
         </optional>
         <ref name="i18n"/> <!-- @xml:lang, @lang, @dir -->
         <!-- the showin attribute in DTBook maps to the following classes in HTML: showin-xxx, showin-xxp, showin-xlx, showin-xlp, showin-bxx, showin-bxp, showin-blx, showin-blp -->
@@ -664,21 +702,8 @@
             <!-- Strict content model: (h1 p)? (section | article) -->
             <choice>
                 <group>
-                    <a:documentation>single-page HTML.</a:documentation>
-                    <!-- single-page HTML -->
+                    <!-- content document -->
                     <ref name="attrs"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @class -->
-                    <element name="header">
-                        <a:documentation>h1</a:documentation>
-                        <ref name="doctitle.headline"/> <!-- h1 -->
-                        <optional>
-                            <a:documentation>p</a:documentation>
-                            <ref name="covertitle"/> <!-- p -->
-                        </optional>
-                        <zeroOrMore>
-                            <a:documentation>p</a:documentation>
-                            <ref name="docauthor"/> <!-- p -->
-                        </zeroOrMore>
-                    </element>
                     <oneOrMore>
                        <element name="section">
                            <choice>
@@ -2601,6 +2626,9 @@
         <a:documentation>   The title attribute must be used to describe the page number.</a:documentation>
         <element name="div">
             <ref name="attlist.pagebreak"/> <!-- @epub:type, @class, @id, @title, @xml:space, @xml:lang, @lang, @dir -->
+            <optional>
+                <ref name="Text"/>
+            </optional>
         </element>
     </define>
 
@@ -4361,6 +4389,52 @@
                 <value>question</value>
                 <value>referrer</value>
                 <value>true-false-problem</value>
+            </choice>
+        </zeroOrMore>
+    </define>
+
+    <define name="roles">
+        <zeroOrMore>
+            <choice>
+                <value>doc-abstract</value>
+                <value>doc-acknowledgements</value>
+                <value>doc-afterword</value>
+                <value>doc-appendix</value>
+                <value>doc-backlink</value>
+                <value>doc-biblioentry</value>
+                <value>doc-bibliography</value>
+                <value>doc-biblioref</value>
+                <value>doc-chapter</value>
+                <value>doc-colophon</value>
+                <value>doc-conclusion</value>
+                <value>doc-cover</value>
+                <value>doc-credit</value>
+                <value>doc-credits</value>
+                <value>doc-dedication</value>
+                <value>doc-endnote</value>
+                <value>doc-endnotes</value>
+                <value>doc-epigraph</value>
+                <value>doc-epilogue</value>
+                <value>doc-errata</value>
+                <value>doc-example</value>
+                <value>doc-footnote</value>
+                <value>doc-foreword</value>
+                <value>doc-glossary</value>
+                <value>doc-glossref</value>
+                <value>doc-index</value>
+                <value>doc-introduction</value>
+                <value>doc-noteref</value>
+                <value>doc-notice</value>
+                <value>doc-pagebreak</value>
+                <value>doc-pagelist</value>
+                <value>doc-part</value>
+                <value>doc-preface</value>
+                <value>doc-prologue</value>
+                <value>doc-pullquote</value>
+                <value>doc-qna</value>
+                <value>doc-subtitle</value>
+                <value>doc-tip</value>
+                <value>doc-toc</value>
             </choice>
         </zeroOrMore>
     </define>

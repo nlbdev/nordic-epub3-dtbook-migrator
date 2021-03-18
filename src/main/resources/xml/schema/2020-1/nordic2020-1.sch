@@ -331,11 +331,6 @@
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'pagebreak']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="tokenize(@class, '\s+') = ('page-front', 'page-normal', 'page-special')">[nordic105] Page breaks must have either a 'page-front', a 'page-normal' or a 'page-special' class. <value-of select="$context"/></assert>
-            <assert test="count(* | comment()) = 0 and string-length(string-join(text(), '')) = 0">[nordic105] Pagebreaks must not contain anything<value-of select="
-                    if (string-length(text()) &gt; 0 and normalize-space(text()) = '') then
-                        ' (element contains empty spaces)'
-                    else
-                        ''"/>. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
@@ -683,7 +678,7 @@
     <pattern id="epub_nordic_261">
         <title>Rule 261</title>
         <p>Text can't be direct child of div</p>
-        <rule context="html:div">
+        <rule context="html:div[not(tokenize(@epub:type, '\s+') = 'pagebreak')]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <report test="text()[normalize-space(.)]">[nordic261] Text can't be placed directly inside div elements. Try wrapping it in a p element. <value-of select="concat('(', normalize-space(string-join(text(), ' ')), ')')"/> <value-of select="$context"/></report>
         </rule>
