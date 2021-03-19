@@ -704,16 +704,14 @@
                 <group>
                     <!-- content document -->
                     <ref name="attrs"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @class -->
-                    <oneOrMore>
-                       <element name="section">
-                           <choice>
-                               <ref name="cover"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, section -->
-                               <ref name="frontmatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, div, h1, p, hr, ol, ul, dl, pre, blockquote, img, figure, section, span, table, address, aside, math, article -->
-                               <ref name="bodymatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, h1, p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math, article -->
-                               <ref name="backmatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, div, h1, p, hr, ol, ul, dl, pre, blockquote, img, figure, section, span, table, address, aside, math, article -->
-                           </choice>
-                       </element>
-                   </oneOrMore>
+                    <element name="section">
+                        <choice>
+                           <ref name="cover"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, section -->
+                           <ref name="frontmatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, div, h1, p, hr, ol, ul, dl, pre, blockquote, img, figure, section, span, table, address, aside, math, article -->
+                           <ref name="bodymatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, h1, p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math, article -->
+                           <ref name="backmatter"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, div, h1, p, hr, ol, ul, dl, pre, blockquote, img, figure, section, span, table, address, aside, math, article -->
+                        </choice>
+                    </element>
                 </group>
                 <group>
                     <!-- navigation document -->
