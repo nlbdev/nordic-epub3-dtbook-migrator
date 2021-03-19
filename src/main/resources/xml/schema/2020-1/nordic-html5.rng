@@ -2830,76 +2830,66 @@
     </define>
 
     <define name="figure.imggroup">
-        <!--
-        Use: figure provides a container for one or more <img> and associated <figcaption>(s).
-        -->
-        <a:documentation> Use: figure provides a container for one or more img and associated figcaption(s).</a:documentation>
+        <choice>
+            <ref name="figure.image"/>
+            <ref name="figure.image-series"/>
+        </choice>
+    </define>
+
+    <define name="figure.image">
+        <a:documentation>An image. The figure provides a container for the associated figcaption.</a:documentation>
         <element name="figure">
-            <!-- HTML content model: figcaption? ( a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text) )* figcaption? -->
-            <!-- Strict content model: figcaption? (aside | img | span)* figcaption? -->
-            <!-- STRICT NOTE: In HTML there can be at most one figcaption per figure, and it must be either the first or last child of the figure. As a result, we wrap each (img caption*)-group in figure elements. -->
-            <choice>
-                <group>
-                    <!-- A single image -->
-                    <ref name="attlist.figure.image"/> <!-- @class, @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
-                    <optional>
-                        <a:documentation> STRICT NOTE: In HTML there can be at most one figcaption per figure, and it must be either the first </a:documentation>
-                        <a:documentation>  or last child of the figure. As a result, we wrap each (img caption*)-group in figure elements.</a:documentation>
-                        <ref name="caption.figure"/> <!-- figcaption -->
-                    </optional>
-                    <ref name="img"/> <!-- img -->
-                    <zeroOrMore>
-                        <choice>
-                            <ref name="pagebreak.block"/> <!-- div -->
-                            <ref name="prodnote"/> <!-- aside -->
-                        </choice>
-                    </zeroOrMore>
-                </group>
-                <group>
-                    <!-- Image series -->
-                    <ref name="attlist.figure.image-series"/> <!-- @class, @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
-                    <optional>
-                        <ref name="caption.figure"/> <!-- figcaption -->
-                    </optional>
-                    <zeroOrMore>
-                        <choice>
-                            <ref name="pagebreak.block"/> <!-- div -->
-                            <ref name="prodnote"/> <!-- aside -->
-                        </choice>
-                    </zeroOrMore>
-                    <oneOrMore>
-                        <element name="figure">
-                            <ref name="attlist.figure.image"/> <!-- @class, @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
-                            <optional>
-                                <ref name="caption.figure"/> <!-- figcaption -->
-                            </optional>
-                            <ref name="img"/> <!-- img -->
-                            <zeroOrMore>
-                                <choice>
-                                    <ref name="pagebreak.block"/> <!-- div -->
-                                    <ref name="prodnote"/> <!-- aside -->
-                                </choice>
-                            </zeroOrMore>
-                        </element>
-                    </oneOrMore>
-                </group>
-                <group>
-                    <optional>
-                        <attribute name="class">
-                            <list>
-                                <ref name="classes"/>
-                            </list>
-                        </attribute>
-                    </optional>
-                    <optional>
-                        <ref name="caption.figure"/> <!-- figcaption -->
-                    </optional>
-                    <oneOrMore>
-                        <ref name="block"/>
-                    </oneOrMore>
-                </group>
-            </choice>
+            <ref name="attlist.figure.image"/> <!-- @class, @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @aria-describedby -->
+            <optional>
+                <ref name="caption.figure"/> <!-- figcaption -->
+            </optional>
+            <ref name="img"/> <!-- img -->
+            <zeroOrMore>
+                <choice>
+                    <ref name="fig-desc"/> <!-- aside -->
+                    <ref name="prodnote"/> <!-- aside -->
+                </choice>
+            </zeroOrMore>
         </element>
+    </define>
+
+    <define name="figure.image-series">
+        <a:documentation>An image series. The figure provides a container for multiple images and a figcaption(s) associated with the series itself.</a:documentation>
+        <element name="figure">
+            <!-- In HTML there can be at most one figcaption per figure, and it must be either the first or last child of the figure.
+                 As a result, we wrap each (img caption*)-group in nested figure elements. -->
+            <ref name="attlist.figure.image-series"/> <!-- @class, @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
+            <optional>
+                <ref name="caption.figure"/> <!-- figcaption -->
+            </optional>
+            <oneOrMore>
+                <zeroOrMore>
+                    <choice>
+                        <ref name="pagebreak.block"/> <!-- div -->
+                        <ref name="prodnote"/> <!-- aside -->
+                    </choice>
+                </zeroOrMore>
+                <ref name="figure.image"/>
+            </oneOrMore>
+        </element>
+    </define>
+
+    <define name="fig-desc">
+        <element name="aside">
+            <ref name="attlist.fig-desc"/>
+            <ref name="flow"/>
+        </element>
+    </define>
+
+    <define name="attlist.fig-desc" combine="interleave">
+        <attribute name="class">
+            <list>
+                <ref name="classes"/>
+                <value>fig-desc</value>
+                <ref name="classes"/>
+            </list>
+        </attribute>
+        <ref name="attrsrqd.noclass"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
     </define>
 
     <define name="attlist.figure.image-series" combine="interleave">
@@ -2921,6 +2911,11 @@
                 <ref name="classes"/>
             </list>
         </attribute>
+        <optional>
+            <attribute name="aria-describedby">
+                <data type="string"/>
+            </attribute>
+        </optional>
         <ref name="attrs.noclass"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
     </define>
     
