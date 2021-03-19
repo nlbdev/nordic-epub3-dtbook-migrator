@@ -4404,6 +4404,7 @@
                     <value>annoref</value>
                     <value>image-series</value>
                     <value>image</value>
+                    <value>fig-desc</value>
                     <value>emptyline</value>
                     <value>separator</value>
                     <value>title</value>
