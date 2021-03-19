@@ -241,6 +241,12 @@
         </attribute>
     </define>
 
+    <define name="attr.aria.describedby">
+        <attribute name="aria-describedby">
+            <ref name="Text"/>
+        </attribute>
+    </define>
+
     <define name="coreattrs.base">
         <optional>
             <ref name="attr.id"/> <!-- @id -->
@@ -259,6 +265,9 @@
         </optional>
         <optional>
             <ref name="attr.aria.labelledby"/> <!-- @aria-labelledby -->
+        </optional>
+        <optional>
+            <ref name="attr.aria.describedby"/> <!-- @aria-describedby -->
         </optional>
     </define>
 
@@ -384,6 +393,10 @@
         <optional>
             <ref name="attr.aria.labelledby"/> <!-- @aria-labelledby -->
         </optional>
+        <optional>
+            <ref name="attr.aria.describedby"/> <!-- @aria-describedby -->
+        </optional>
+
         <ref name="i18n"/> <!-- @xml:lang, @lang, @dir -->
         <!-- the showin attribute in DTBook maps to the following classes in HTML: showin-xxx, showin-xxp, showin-xlx, showin-xlp, showin-bxx, showin-bxp, showin-blx, showin-blp -->
     </define>
