@@ -2911,11 +2911,6 @@
                 <ref name="classes"/>
             </list>
         </attribute>
-        <optional>
-            <attribute name="aria-describedby">
-                <data type="string"/>
-            </attribute>
-        </optional>
         <ref name="attrs.noclass"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
     </define>
     
