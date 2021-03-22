@@ -891,4 +891,14 @@
         </rule>
     </pattern>
 
+    <pattern id="epub_nordic_291">
+        <title>Rule 290</title>
+        <p>Backmatter sections require specific roles</p>
+        <rule context="html:section[tokenize(@epub:type, '\s+') = 'backmatter']">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="tokenize(@role, '\s+') = ('doc-afterword', 'doc-appendix', 'doc-colophon', 'doc-conclusion', 'doc-dedication', 'doc-epigraph', 'doc-epilogue')">
+                [nordic291] Backmatter can only use roles (doc-afterword, doc-appendix, doc-colophon, doc-conclusion, doc-dedication, doc-epigraph, doc-epilogue) <value-of select="$context"/>
+            </assert>
+        </rule>
+    </pattern>
 </schema>
