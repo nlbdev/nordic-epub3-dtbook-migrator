@@ -887,7 +887,7 @@
         <p>Rearnotes should not be used. Use endnotes instead.</p>
         <rule context="*">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <report test="tokenize(@epub:type, '\s+') = ('rearnote', 'rearnotes')">[nordic290] Rearnotes are deprecated. Endnotes are required to be used instead. <value-of select="$context"/></report>
+            <assert test="tokenize(@epub:type, '\s+') = ('rearnote', 'rearnotes')">[nordic290] Rearnotes are deprecated. Endnotes are required to be used instead. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
