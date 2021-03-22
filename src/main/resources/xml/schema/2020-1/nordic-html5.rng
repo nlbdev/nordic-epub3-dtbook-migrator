@@ -716,7 +716,7 @@
             <choice>
                 <group>
                     <!-- content document -->
-                    <ref name="attrs"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @class -->
+                    <ref name="attrs.notype"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
                     <element name="section">
                         <choice>
                            <ref name="cover"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class, section -->
@@ -735,6 +735,13 @@
                             <attribute name="epub:type"/>
                             <optional>
                                 <attribute name="hidden"/>
+                            </optional>
+                            <ref name="attr.role"/>
+                            <optional>
+                                <ref name="attr.aria.label"/>
+                            </optional>
+                            <optional>
+                                <ref name="attr.aria.labelledby"/>
                             </optional>
                             <ref name="h1"/> <!-- h1 -->
                             <ref name="list"/> <!-- ol, ul -->
@@ -2230,7 +2237,10 @@
         
             "tabindex"=tabbing order.
       -->
-        <ref name="attrs"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @class -->
+        <ref name="attrs.notype"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @class -->
+        <optional>
+            <attribute name="epub:type" />
+        </optional>
         <optional>
             <attribute name="type">
                 <ref name="ContentType"/>
@@ -4408,7 +4418,7 @@
         <zeroOrMore>
             <choice>
                 <value>doc-abstract</value>
-                <value>doc-acknowledgements</value>
+                <value>doc-acknowledgments</value>
                 <value>doc-afterword</value>
                 <value>doc-appendix</value>
                 <value>doc-backlink</value>
@@ -4446,6 +4456,7 @@
                 <value>doc-subtitle</value>
                 <value>doc-tip</value>
                 <value>doc-toc</value>
+                <value>navigation</value>
             </choice>
         </zeroOrMore>
     </define>
