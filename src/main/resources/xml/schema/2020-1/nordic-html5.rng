@@ -766,7 +766,7 @@
                 <ref name="types"/>
             </list>
         </attribute>
-        <ref name="attrsrqd.notype"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
+        <ref name="attrs.notype"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
         <zeroOrMore>
             <element name="section">
                 <attribute name="class">
@@ -995,7 +995,7 @@
     </define>
 
     <define name="attlist.level1" combine="interleave">
-        <ref name="attrsrqd.notype"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
+        <ref name="attrs.notype"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
     </define>
     
     <define name="level1.only-headline">
@@ -1388,6 +1388,7 @@
 
     <define name="htmlinlinenoa">
         <choice>
+            <ref name="lic"/>
             <ref name="sent"/> <!-- span -->
             <ref name="w"/> <!-- span -->
             <ref name="pagebreak.inline"/> <!-- span -->
@@ -3085,13 +3086,6 @@
     </define>
 
     <define name="attlist.docauthor" combine="interleave">
-        <attribute name="epub:type">
-            <list>
-                <ref name="types"/>
-                <value>z3998:author</value>
-                <ref name="types"/>
-            </list>
-        </attribute>
         <attribute name="class">
             <list>
                 <ref name="classes"/>
@@ -3099,7 +3093,7 @@
                 <ref name="classes"/>
             </list>
         </attribute>
-        <ref name="attrs.base"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir -->
+        <ref name="attrs.noclass"/> <!-- @id, @epub:type, @title, @xml:space, @xml:lang, @lang, @dir -->
     </define>
     
     <define name="covertitle">
@@ -4473,7 +4467,6 @@
                     <value>rightflap</value>
                     <value>line</value>
                     <value>linenum</value>
-                    <value>title</value>
                     <value>prodnote</value>
                     <value>sidebar</value>
                     <value>annotation</value>
@@ -4498,7 +4491,6 @@
                     <value>fig-desc</value>
                     <value>emptyline</value>
                     <value>separator</value>
-                    <value>title</value>
                     <value>docauthor</value>
                     <value>bridgehead</value>
                     <value>lic</value>

@@ -518,7 +518,7 @@
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'footnote']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="(parent::html:section)">[nordic204a] 'footnote' must have a parent section. <value-of select="$context"/></assert>
-            <assert test="not(following-sibling::html:*[not(local-name()='aside' and @epub-type='footnote')])">[nordic204a] 'footnote' must be placed at the end of a section.</assert>
+            <assert test="not(following-sibling::html:*[not(local-name()='aside' and @epub:type='footnote')])">[nordic204a] 'footnote' must be placed at the end of a section.</assert>
         </rule>
     </pattern>
 
@@ -704,15 +704,6 @@
         </rule>
     </pattern>
 
-    <pattern id="epub_nordic_266">
-        <title>Rule 266</title>
-        <p></p>
-        <rule context="html:*[*[tokenize(@epub:type, '\s+') = 'footnote']]">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="self::html:aside">[nordic266] Footnotes must be wrapped in an "aside" element, but is currently wrapped in a <name/>. <value-of select="$context"/></assert>
-        </rule>
-    </pattern>
-
     <pattern id="epub_nordic_267_a">
         <title>Rule 267a</title>
         <p></p>
@@ -887,7 +878,7 @@
         <p>Rearnotes should not be used. Use endnotes instead.</p>
         <rule context="*">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@epub:type, '\s+') = ('rearnote', 'rearnotes')">[nordic290] Rearnotes are deprecated. Endnotes are required to be used instead. <value-of select="$context"/></assert>
+            <assert test="not(tokenize(@epub:type, '\s+') = ('rearnote', 'rearnotes'))">[nordic290] Rearnotes are deprecated. Endnotes are required to be used instead. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
@@ -896,8 +887,8 @@
         <p>Backmatter sections require specific roles</p>
         <rule context="html:section[tokenize(@epub:type, '\s+') = 'backmatter']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@role, '\s+') = ('doc-afterword', 'doc-appendix', 'doc-colophon', 'doc-conclusion', 'doc-dedication', 'doc-epigraph', 'doc-epilogue')">
-                [nordic291] Backmatter can only use roles (doc-afterword, doc-appendix, doc-colophon, doc-conclusion, doc-dedication, doc-epigraph, doc-epilogue) <value-of select="$context"/>
+            <assert test="tokenize(@role, '\s+') = ('doc-afterword', 'doc-appendix', 'doc-colophon', 'doc-conclusion', 'doc-dedication', 'doc-epigraph', 'doc-epilogue', 'doc-glossary', 'doc-index')">
+                [nordic291] Backmatter can only use roles (doc-afterword, doc-appendix, doc-colophon, doc-conclusion, doc-dedication, doc-epigraph, doc-epilogue, doc-glossary, doc-index) <value-of select="$context"/>
             </assert>
         </rule>
     </pattern>
