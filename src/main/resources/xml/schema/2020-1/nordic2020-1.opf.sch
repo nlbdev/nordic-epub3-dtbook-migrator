@@ -34,7 +34,8 @@
             <assert test="matches(@prefix, '(^|\s)a11y:\s+http://www.idpf.org/epub/vocab/package/a11y/#(\s|$)') or not(opf:meta[starts-with(@property, 'a11y:')])">[opf2] on the package element; the prefix attribute must declare the a11y metadata namespace using the correct URI (prefix="a11y:
                 http://www.idpf.org/epub/vocab/package/a11y/#")</assert>
         </rule>
-        <rule context="opf:meta[boolean(@property) and contains(@property, ':') and not(substring-before(@property, ':') = ('dc', 'dcterms'))]">
+
+        <rule context="opf:meta[boolean(@property) and contains(@property, ':') and not(substring-before(@property, ':') = ('dc', 'dcterms', 'a11y', 'schema', 'marc', 'media', 'onix', 'rendition', 'xsd'))]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="prefix" value="substring-before(@property, ':')"/>
             <assert test="matches(string(ancestor::opf:package[1]/@prefix[1]), concat('(^|\s)', $prefix, ':(\s|$)'))">[opf2] on the package element; the prefix attribute must declare the '<value-of select="$prefix"/>' prefix</assert>

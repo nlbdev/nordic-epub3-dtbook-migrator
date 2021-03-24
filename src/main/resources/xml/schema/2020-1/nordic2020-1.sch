@@ -518,7 +518,7 @@
         <rule context="html:*[tokenize(@epub:type, '\s+') = 'footnote']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="(parent::html:section)">[nordic204a] 'footnote' must have a parent section. <value-of select="$context"/></assert>
-            <assert test="not(following-sibling::html:*[not(local-name()='aside' and @epub:type='footnote')])">[nordic204a] 'footnote' must be placed at the end of a section.</assert>
+            <assert test="not(following-sibling::html:*[not(local-name()='aside' and tokenize(@epub:type, '\s+')='footnote')])">[nordic204a] 'footnote' must be placed at the end of a section.</assert>
         </rule>
     </pattern>
 
@@ -885,10 +885,10 @@
     <pattern id="epub_nordic_291">
         <title>Rule 290</title>
         <p>Backmatter sections require specific roles</p>
-        <rule context="html:section[tokenize(@epub:type, '\s+') = 'backmatter']">
+        <rule context="html:section[tokenize(@epub:type, '\s+') = 'backmatter' and @role]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@role, '\s+') = ('doc-afterword', 'doc-appendix', 'doc-colophon', 'doc-conclusion', 'doc-dedication', 'doc-epigraph', 'doc-epilogue', 'doc-glossary', 'doc-index')">
-                [nordic291] Backmatter can only use roles (doc-afterword, doc-appendix, doc-colophon, doc-conclusion, doc-dedication, doc-epigraph, doc-epilogue, doc-glossary, doc-index) <value-of select="$context"/>
+            <assert test="tokenize(@role, '\s+') = ('doc-afterword', 'doc-appendix', 'doc-bibliography', 'doc-colophon', 'doc-conclusion', 'doc-dedication', 'doc-endnotes', 'doc-epigraph', 'doc-epilogue', 'doc-glossary', 'doc-index')">
+                [nordic291] Backmatter can only use roles (doc-afterword, doc-appendix, doc-bibliography, doc-colophon, doc-conclusion, doc-dedication, doc-epigraph, doc-epilogue, doc-glossary, doc-index) <value-of select="$context"/>
             </assert>
         </rule>
     </pattern>
