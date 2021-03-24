@@ -106,7 +106,7 @@
 
 
             <p:variable name="basedir" select="if (/*/d:file[@media-type='application/epub+zip']) then $temp-dir else base-uri(/*)"/>
-            
+
             <p:choose>
                 <p:when test="$use-epubcheck = 'true'">
                     <p:choose name="epub3-validate.step.choose-zipped-or-not">
@@ -222,7 +222,7 @@
             <px:assert test-count-min="1" message="There must be a HTML file in the spine." error-code="NORDICDTBOOKEPUB005"/>
             <p:identity name="epub3-validate.step.html"/>
             <p:sink/>
-            
+
             <p:identity>
                 <p:input port="source">
                     <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
@@ -239,7 +239,7 @@
             <px:assert test-count-min="1" test-count-max="1" message="There is no navigation document with the filename 'nav.xhtml' in the EPUB" error-code="NORDICDTBOOKEPUB013"/>
             <p:identity name="epub3-validate.step.nav"/>
             <p:sink/>
-            
+
             <p:identity>
                 <p:input port="source">
                     <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
@@ -253,7 +253,7 @@
                     <p:pipe port="in-memory" step="epub3-validate.step.unzip"/>
                 </p:input>
             </px:fileset-load>
-            <px:assert test-count-min="1" test-count-max="1" message="There is no NCX with the filename 'nav.ncx' in the EPUB" error-code="NORDICDTBOOKEPUB014"/>
+            <px:assert test-count-min="0" test-count-max="1" message="There is no NCX with the filename 'nav.ncx' in the EPUB" error-code="NORDICDTBOOKEPUB014"/>
             <p:identity name="epub3-validate.step.ncx"/>
             <p:sink/>
 
@@ -662,37 +662,49 @@
             <p:identity name="epub3-validate.step.nav-references.validate"/>
             <p:sink/>
 
-            <p:group name="epub3-validate.step.group-nav-ncx">
-                <p:wrap-sequence wrapper="wrapper" name="epub3-validate.step.group-nav-ncx.wrap-wrapper">
-                    <p:input port="source">
-                        <p:pipe port="result" step="epub3-validate.step.nav"/>
-                        <p:pipe port="result" step="epub3-validate.step.ncx"/>
-                    </p:input>
-                </p:wrap-sequence>
-                <px:message severity="DEBUG" message="Validating against nordic2020-1.nav-ncx.sch: $1">
-                    <p:with-option name="param1" select="replace(base-uri(/*/*[last()]),'.*/','')"/>
-                </px:message>
-                <p:validate-with-schematron name="epub3-validate.step.group-nav-ncx.nav-ncx.validate.schematron" assert-valid="false">
-                    <p:input port="parameters">
-                        <p:empty/>
-                    </p:input>
-                    <p:input port="schema">
-                        <p:document href="../../../schema/2020-1/nordic2020-1.nav-ncx.sch"/>
-                    </p:input>
-                </p:validate-with-schematron>
-                <p:sink/>
-                <px:combine-validation-reports document-type="Nordic EPUB3 NCX and Navigation Document" name="epub3-validate.step.group-nav-ncx.combine-validation-reports">
-                    <p:input port="source">
-                        <p:pipe port="report" step="epub3-validate.step.group-nav-ncx.nav-ncx.validate.schematron"/>
-                    </p:input>
-                    <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
-                        <p:pipe port="result" step="epub3-validate.step.ncx"/>
-                    </p:with-option>
-                    <p:with-option name="document-path" select="base-uri(/*)">
-                        <p:pipe port="result" step="epub3-validate.step.ncx"/>
-                    </p:with-option>
-                </px:combine-validation-reports>
-            </p:group>
+            <p:choose name="epub3-validate.step.group-nav-ncx">
+                <p:xpath-context>
+                    <p:pipe port="fileset" step="epub3-validate.step.unzip"/>
+                </p:xpath-context>
+                <p:when test="/*/*[ends-with(@href,'nav.ncx')]">
+                    <p:wrap-sequence wrapper="wrapper" name="epub3-validate.step.group-nav-ncx.wrap-wrapper">
+                        <p:input port="source">
+                            <p:pipe port="result" step="epub3-validate.step.nav"/>
+                            <p:pipe port="result" step="epub3-validate.step.ncx"/>
+                        </p:input>
+                    </p:wrap-sequence>
+                    <px:message severity="DEBUG" message="Validating against nordic2020-1.nav-ncx.sch: $1">
+                        <p:with-option name="param1" select="replace(base-uri(/*/*[last()]),'.*/','')"/>
+                    </px:message>
+                    <p:validate-with-schematron name="epub3-validate.step.group-nav-ncx.nav-ncx.validate.schematron" assert-valid="false">
+                        <p:input port="parameters">
+                            <p:empty/>
+                        </p:input>
+                        <p:input port="schema">
+                            <p:document href="../../../schema/2020-1/nordic2020-1.nav-ncx.sch"/>
+                        </p:input>
+                    </p:validate-with-schematron>
+                    <p:sink/>
+                    <px:combine-validation-reports document-type="Nordic EPUB3 NCX and Navigation Document" name="epub3-validate.step.group-nav-ncx.combine-validation-reports">
+                        <p:input port="source">
+                            <p:pipe port="report" step="epub3-validate.step.group-nav-ncx.nav-ncx.validate.schematron"/>
+                        </p:input>
+                        <p:with-option name="document-name" select="replace(base-uri(/*),'.*/','')">
+                            <p:pipe port="result" step="epub3-validate.step.ncx"/>
+                        </p:with-option>
+                        <p:with-option name="document-path" select="base-uri(/*)">
+                            <p:pipe port="result" step="epub3-validate.step.ncx"/>
+                        </p:with-option>
+                    </px:combine-validation-reports>
+                </p:when>
+                <p:otherwise>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:identity>
+                </p:otherwise>
+            </p:choose>
             <p:identity name="epub3-validate.step.nav-ncx.validate"/>
             <p:sink/>
 
