@@ -85,10 +85,27 @@
             <ref name="sidebar"/> <!-- aside, figure -->
             <ref name="note"/> <!-- aside -->
             <ref name="annotation"/> <!-- aside -->
+            <ref name="general.aside"/> <!-- aside -->
         </choice>
         <!-- block elements unique to html without imggroup. -->
     </define>
-    
+
+    <define name="general.aside">
+        <element name="aside">
+            <!-- HTML content model: (a | abbr | address | article | aside | audio | b | bdi | bdo | blockquote | br | button | canvas | cite | code | data | datalist | del | details | dfn | dialog | div | dl | em | embed | fieldset | figure | footer | form | h1 | h2 | h3 | h4 | h5 | h6 | header | hr | i | iframe | img | input | ins | kbd | keygen | label | link | main | map | mark | math | menu | meta | meter | nav | noscript | object | ol | output | p | pre | progress | q | ruby | s | samp | script | section | select | small | span | strong | style | sub | sup | svg | table | template | textarea | time | u | ul | var | video | wbr | (text))* -->
+            <!-- Strict content model: (h1 | em | strong | dfn | code | samp | kbd | abbr | a | img | figure | br | q | sub | sup | span | bdo | p | ol | ul | dl | div | blockquote | table | address | (text))* -->
+            <ref name="attrs"/> <!-- @epub:type, @class, @id, @title, @xml:space, @xml:lang, @lang, @dir -->
+            <zeroOrMore>
+                <choice>
+                    <ref name="hd"/> <!-- h1, h2, h3, h4, h5, h6 -->
+                    <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo, p, hr, ol, ul, dl, pre, div, blockquote, section, table, address, aside, figure -->
+                    <ref name="pagebreak.block"/> <!-- div -->
+                </choice>
+            </zeroOrMore>
+            <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo, p, hr, ol, ul, dl, pre, div, blockquote, section, table, address, aside, figure -->
+        </element>
+    </define>
+
     <define name="inlineinblock">
         <a:documentation>inlines that may alternatively be in block elements.</a:documentation>
         <choice>
@@ -2158,8 +2175,10 @@
                 <value>linegroup</value>
             </attribute>
             <oneOrMore>
-                <ref name="poem.line"/>
-                <ref name="poem.linenum"/>
+                <choice>
+                    <ref name="poem.line"/>
+                    <ref name="poem.linenum"/>
+                </choice>
             </oneOrMore>
         </element>
     </define>
@@ -2169,9 +2188,11 @@
             <attribute name="class">
                 <list>
                     <oneOrMore>
-                        <value>line</value>
-                        <value>line_indent</value>
-                        <value>line_longindent</value>
+                        <choice>
+                            <value>line</value>
+                            <value>line_indent</value>
+                            <value>line_longindent</value>
+                        </choice>
                     </oneOrMore>
                 </list>
             </attribute>
@@ -2179,7 +2200,9 @@
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
             </zeroOrMore>
         </element>
-        <ref name="br" />
+        <optional>
+            <ref name="br" />
+        </optional>
     </define>
 
     <define name="poem.linenum">
@@ -4134,7 +4157,7 @@
                 <value>z3998:article</value>
                 <value>z3998:aside</value>
                 <value>z3998:attribution</value>
-                <!--<value>z3998:author</value>-->
+                <value>z3998:author</value>
                 <value>z3998:award</value>
                 <!--<value>z3998:backmatter</value>-->
                 <value>z3998:bcc</value>
