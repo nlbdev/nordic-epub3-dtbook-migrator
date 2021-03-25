@@ -1012,7 +1012,7 @@
     </define>
 
     <define name="attlist.level1" combine="interleave">
-        <ref name="attrs.notype"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
+        <ref name="attrsrqd.notype"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
     </define>
     
     <define name="level1.only-headline">
