@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html>
- <package xml:lang="sv" xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" prefix="nordic: http://www.mtm.se/epub/" unique-identifier="pub-identifier" version="3.2">
+ <package xml:lang="sv" xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" prefix="nordic: http://www.mtm.se/epub/" unique-identifier="pub-identifier" version="3.0">
     <metadata>
 
 <dc:title>Om det nord-tschudiska spr&#xe5;ket</dc:title>
