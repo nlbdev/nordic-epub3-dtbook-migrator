@@ -1571,6 +1571,7 @@
                     <ref name="inlinenoprodnote"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
                     <ref name="lic"/> <!-- span -->
                     <ref name="list"/> <!-- ol, ul -->
+                    <ref name="pagebreak.block"/> <!-- div -->
                 </choice>
             </zeroOrMore>
             <zeroOrMore>
@@ -2680,6 +2681,9 @@
     <define name="pagebreak.inline">
         <element name="span">
             <ref name="attlist.pagebreak"/> <!-- @epub:type, @class, @id, @title, @xml:space, @xml:lang, @lang, @dir -->
+            <optional>
+                <ref name="Text"/>
+            </optional>
         </element>
     </define>
 
