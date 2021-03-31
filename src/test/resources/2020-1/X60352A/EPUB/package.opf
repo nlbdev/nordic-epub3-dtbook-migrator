@@ -29,7 +29,7 @@
     </metadata>
     <manifest>
         <item properties="cover-image" media-type="image/jpeg" id="item_1" href="images/cover.jpg"/>
-        <item id="item_2" media-type="image/jpeg" href="images/img001.jpg"/>
+        <item id="item_2" media-type="image/jpeg" href="images/X60352A-001.jpg"/>
         <item id="item_3" media-type="text/css" href="css/default.css"/>
         <item media-type="application/xhtml+xml" id="item_10" href="X60352A-01-cover.xhtml"/>
         <item id="item_11" media-type="application/x-dtbncx+xml" href="nav.ncx"/>

@@ -390,7 +390,7 @@
             <navLabel>
                 <text>8</text>
             </navLabel>
-            <content src="X60352A-05-chapter.xhtml#Page_8"/>
+            <content src="X60352A-06-chapter.xhtml#Page_8"/>
         </pageTarget>
         <pageTarget id="pageTarget-63" playOrder="63" type="normal">
             <navLabel>
@@ -402,7 +402,7 @@
             <navLabel>
                 <text>10</text>
             </navLabel>
-            <content src="X60352A-07-chapter.xhtml#Page_10"/>
+            <content src="X60352A-08-chapter.xhtml#Page_10"/>
         </pageTarget>
         <pageTarget id="pageTarget-65" playOrder="65" type="normal">
             <navLabel>
@@ -414,19 +414,19 @@
             <navLabel>
                 <text>12</text>
             </navLabel>
-            <content src="X60352A-08-chapter.xhtml#Page_12"/>
+            <content src="X60352A-09-chapter.xhtml#Page_12"/>
         </pageTarget>
         <pageTarget id="pageTarget-67" playOrder="67" type="normal">
             <navLabel>
                 <text>13</text>
             </navLabel>
-            <content src="X60352A-09-chapter.xhtml#Page_13"/>
+            <content src="X60352A-10-chapter.xhtml#Page_13"/>
         </pageTarget>
         <pageTarget id="pageTarget-68" playOrder="68" type="normal">
             <navLabel>
                 <text>14</text>
             </navLabel>
-            <content src="X60352A-10-chapter.xhtml#Page_14"/>
+            <content src="X60352A-11-chapter.xhtml#Page_14"/>
         </pageTarget>
         <pageTarget id="pageTarget-69" playOrder="69" type="normal">
             <navLabel>
@@ -450,7 +450,7 @@
             <navLabel>
                 <text>18</text>
             </navLabel>
-            <content src="X60352A-11-chapter.xhtml#Page_18"/>
+            <content src="X60352A-12-chapter.xhtml#Page_18"/>
         </pageTarget>
         <pageTarget id="pageTarget-73" playOrder="73" type="normal">
             <navLabel>
@@ -480,7 +480,7 @@
             <navLabel>
                 <text>23</text>
             </navLabel>
-            <content src="X60352A-12-chapter.xhtml#Page_23"/>
+            <content src="X60352A-13-chapter.xhtml#Page_23"/>
         </pageTarget>
         <pageTarget id="pageTarget-78" playOrder="78" type="normal">
             <navLabel>
