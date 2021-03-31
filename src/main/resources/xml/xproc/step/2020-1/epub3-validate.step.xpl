@@ -617,7 +617,7 @@
                             <p:empty/>
                         </p:input>
                         <p:input port="stylesheet">
-                            <p:document href="../../../xslt/list-heading-and-pagebreak-references.xsl"/>
+                            <p:document href="../../../xslt/2020-1/list-heading-and-pagebreak-references.xsl"/>
                         </p:input>
                     </p:xslt>
                 </p:for-each>
