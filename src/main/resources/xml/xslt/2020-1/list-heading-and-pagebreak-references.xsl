@@ -29,7 +29,12 @@
             </xsl:if>
             <xsl:attribute name="data-heading-depth" select="substring-after(local-name(),'h')"/>
             <xsl:attribute name="data-sectioning-depth" select="count(ancestor::section | ancestor::article)"/>
-            <xsl:value-of select="normalize-space(string-join(.//text() except .//*[tokenize(@epub:type,'\s+') = 'noteref']//text(),''))"/>
+            <xsl:value-of select="
+                if (./span/@epub:type = 'title') then
+                    normalize-space(./span[tokenize(@epub:type,'\s+') = 'title']/text())
+                else
+                    normalize-space(string-join(.//text() except .//*[tokenize(@epub:type,'\s+') = 'noteref']//text(),''))
+            "/>
         </c:result>
     </xsl:template>
 
