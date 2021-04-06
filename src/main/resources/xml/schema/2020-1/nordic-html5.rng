@@ -2908,9 +2908,30 @@
 
     <define name="figure.imggroup">
         <choice>
+            <ref name="figure.table"/>
             <ref name="figure.image"/>
             <ref name="figure.image-series"/>
         </choice>
+    </define>
+
+    <define name="figure.table">
+        <a:documentation>An image. The figure provides a container for the associated figcaption.</a:documentation>
+        <element name="figure">
+            <ref name="attlist.figure.table"/> <!-- @class, @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @aria-describedby -->
+            <zeroOrMore>
+                <choice>
+                    <ref name="table-desc"/> <!-- aside -->
+                    <ref name="prodnote"/> <!-- aside -->
+                </choice>
+            </zeroOrMore>
+            <ref name="table"/> <!-- table -->
+            <zeroOrMore>
+                <choice>
+                    <ref name="table-desc"/> <!-- aside -->
+                    <ref name="prodnote"/> <!-- aside -->
+                </choice>
+            </zeroOrMore>
+        </element>
     </define>
 
     <define name="figure.image">
@@ -2969,6 +2990,24 @@
         <ref name="attrsrqd.noclass"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
     </define>
 
+    <define name="table-desc">
+        <element name="aside">
+            <ref name="attlist.table-desc"/>
+            <ref name="flow"/>
+        </element>
+    </define>
+
+    <define name="attlist.table-desc" combine="interleave">
+        <attribute name="class">
+            <list>
+                <ref name="classes"/>
+                <value>table-desc</value>
+                <ref name="classes"/>
+            </list>
+        </attribute>
+        <ref name="attrsrqd.noclass"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
+    </define>
+
     <define name="attlist.figure.image-series" combine="interleave">
         <attribute name="class">
             <list>
@@ -2990,7 +3029,18 @@
         </attribute>
         <ref name="attrs.noclass"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
     </define>
-    
+
+    <define name="attlist.figure.table" combine="interleave">
+        <attribute name="class">
+            <list>
+                <ref name="classes"/>
+                <value>table</value>
+                <ref name="classes"/>
+            </list>
+        </attribute>
+        <ref name="attrs.noclass"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type -->
+    </define>
+
     <define name="caption.figure">
         <element name="figcaption">
             <!-- STRICT NOTE: In DTBook, captions and images can appear in any order. In HTML5, the figcaption has to occur at the beginning or end of an imggroup. When transforming a DTBook with multiple captions in the same imggroup to HTML5, each caption will be wrapped in separate div elements inside the figcaption. If some images have captions and some don’t, then the empty captions should be represented as empty <div class=”caption”/> elements. This allows for proper conversion back to DTBook, as well as the ability to visually associate the captions and images using CSS. -->
