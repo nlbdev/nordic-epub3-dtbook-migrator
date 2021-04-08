@@ -1571,7 +1571,7 @@
                     <ref name="inlinenoprodnote"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
                     <ref name="lic"/> <!-- span -->
                     <ref name="list"/> <!-- ol, ul -->
-                    <ref name="pagebreak.block"/> <!-- div -->
+                    <ref name="pagebreak.inline"/> <!-- div -->
                 </choice>
             </zeroOrMore>
             <zeroOrMore>
