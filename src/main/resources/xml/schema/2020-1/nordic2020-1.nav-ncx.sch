@@ -138,11 +138,11 @@
         <p>navdoc references must all be unique</p>
         <rule context="html:a[ancestor::html:nav/tokenize(@epub:type,'\s+')='toc']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="not(@href = preceding::html:a/@href)">[nordic_nav_ncx_5] Two references in the navigation document can not point to the same location in the content. <value-of select="$context"/></assert>
+            <assert test="not(@href = preceding::html:a[ancestor::html:nav/tokenize(@epub:type,'\s+')='toc']/@href)">[nordic_nav_ncx_5] Two references in the toc of the navigation document can not point to the same location in the content. <value-of select="$context"/></assert>
         </rule>
         <rule context="html:a[ancestor::html:nav/tokenize(@epub:type,'\s+')='landmarks']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="not(@href = preceding::html:a/@href)">[nordic_nav_ncx_5] Two references in the navigation document can not point to the same location in the content. <value-of select="$context"/></assert>
+            <assert test="not(@href = preceding::html:a[ancestor::html:nav/tokenize(@epub:type,'\s+')='landmarks']/@href)">[nordic_nav_ncx_5] Two references among the landmarks in navigation document can not point to the same location in the content. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
