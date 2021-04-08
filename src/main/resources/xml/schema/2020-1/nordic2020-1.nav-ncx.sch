@@ -136,7 +136,11 @@
     <pattern>
         <title>nordic_nav_ncx_5</title>
         <p>navdoc references must all be unique</p>
-        <rule context="html:a">
+        <rule context="html:a[ancestor::html:nav/tokenize(@epub:type,'\s+')='toc']">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="not(@href = preceding-sibling::html:a/@href)">[nordic_nav_ncx_5] Two references in the navigation document can not point to the same location in the content. <value-of select="$context"/></assert>
+        </rule>
+        <rule context="html:a[ancestor::html:nav/tokenize(@epub:type,'\s+')='landmarks']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="not(@href = preceding-sibling::html:a/@href)">[nordic_nav_ncx_5] Two references in the navigation document can not point to the same location in the content. <value-of select="$context"/></assert>
         </rule>

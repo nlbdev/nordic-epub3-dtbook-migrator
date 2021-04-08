@@ -4340,7 +4340,7 @@
                 <value>z3998:presentation</value>
                 <value>z3998:primary</value>
                 <value>z3998:product</value>
-                <!--<value>z3998:production</value>-->
+                <value>z3998:production</value>
                 <!--<value>z3998:prologue</value>-->
                 <value>z3998:promotional-copy</value>
                 <value>z3998:published-works</value>
