@@ -115,7 +115,7 @@
             <let name="fragment" value="substring-after(@href,'#')"/>
             <let name="result-ref" value="/*/c:result/c:result[(@data-sectioning-id) = $fragment]"/>
 
-            <assert test="$result-ref">[nordic_nav_references_2a] All references from the navigation document must reference either a sectioning element in one of the content documents:
+            <assert test="$result-ref">[nordic_nav_references_2a] All references from the navigation document must reference a sectioning element in one of the content documents:
                     <value-of select="$context"/></assert>
             <report test="count($result-ref) &gt; 1">[nordic_nav_references_2a] All references from the navigation document must reference exactly one sectioning element in one of the
                 content documents, there are multiple sections matching the href="<value-of select="@href"/>" in <value-of select="$context"/>; <value-of
