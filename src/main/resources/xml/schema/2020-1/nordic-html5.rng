@@ -2144,19 +2144,26 @@
         <a:documentation>  Use: poem is a complete poem or fragment thereof.  </a:documentation>
         <element name="div">
             <attribute name="class">
-                <value>verse</value>
+                <choice>
+                    <value>verse</value>
+                    <value>line-by-line</value>
+                </choice>
             </attribute>
             <zeroOrMore>
-                <ref name="bridgehead"/>
-                <ref name="poem.author"/>
+                <choice>
+                    <ref name="bridgehead"/>
+                    <ref name="poem.author"/>
+                </choice>
             </zeroOrMore>
             <oneOrMore>
                 <ref name="poem.linegroup"/>
             </oneOrMore>
             <zeroOrMore>
-                <ref name="poem.linegroup"/>
-                <ref name="bridgehead"/>
-                <ref name="poem.author"/>
+                <choice>
+                    <ref name="poem.linegroup"/>
+                    <ref name="bridgehead"/>
+                    <ref name="poem.author"/>
+                </choice>
             </zeroOrMore>
         </element>
     </define>
@@ -2198,7 +2205,13 @@
                 </list>
             </attribute>
             <zeroOrMore>
+                <ref name="poem.linenum"/>
+            </zeroOrMore>
+            <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
+            </zeroOrMore>
+            <zeroOrMore>
+                <ref name="poem.linenum"/>
             </zeroOrMore>
         </element>
         <optional>
@@ -2211,6 +2224,7 @@
             <attribute name="class">
                 <value>linenum</value>
             </attribute>
+            <ref name="Text"/>
         </element>
     </define>
 
