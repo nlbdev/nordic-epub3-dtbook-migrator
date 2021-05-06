@@ -2143,6 +2143,7 @@
     <define name="poem">
         <a:documentation>  Use: poem is a complete poem or fragment thereof.  </a:documentation>
         <element name="div">
+            <ref name="attrs.base"/>
             <attribute name="class">
                 <choice>
                     <value>verse</value>
