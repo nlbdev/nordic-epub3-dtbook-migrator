@@ -2187,7 +2187,6 @@
             <oneOrMore>
                 <choice>
                     <ref name="poem.line"/>
-                    <ref name="poem.linenum"/>
                 </choice>
             </oneOrMore>
         </element>
