@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" xml:lang="de" prefix="nordic: http://www.mtm.se/epub/" unique-identifier="pub-identifier" version="3.0">
+    <metadata>
+    <dc:title id="title">FRIEDRICH NIETZSCHE IN SEINEN WERKEN</dc:title>
+    <dc:language>de</dc:language>
+    <dc:identifier id="pub-identifier">X50525A</dc:identifier>
+    <dc:source>Verlagsbuchhandlung Karl Konegen (Ernst Stülpnagel). Wien 1911.</dc:source>
+    <dc:creator>Andreas-Salomé, Lou</dc:creator>
+    <dc:format>application/epub+zip</dc:format>
+    <dc:publisher>SPSM</dc:publisher>
+    <dc:date>2021-03-07</dc:date>
+    <meta property="dcterms:modified">2021-05-10T12:23:19Z</meta>
+    <meta property="nordic:guidelines">2020-1</meta>
+    <meta property="nordic:supplier">PUAB</meta>
+    <meta property="schema:accessibilitySummary">Diese Veröffentlichung entspricht den Nordic Guidelines für die Herstellung von barrierefreiem EPUB 3, Version 2020-1.</meta>
+    <meta property="schema:accessMode">textual</meta>
+    <meta property="schema:accessMode">visual</meta>
+    <meta property="schema:accessModeSufficient">textual,visual</meta>
+    <meta property="schema:accessModeSufficient">textual</meta>
+    <meta property="schema:accessibilityFeature">structuralNavigation</meta>
+    <meta property="schema:accessibilityFeature">alternativeText</meta>
+    <meta property="schema:accessibilityHazard">none</meta>
+    <meta property="a11y:certifiedBy">SPSM</meta>
+    <link rel="dcterms:conformsTo" href="https://format.mtm.se/nordic_epub/2020-1"/>
+  </metadata>
+    <manifest>
+        <item properties="cover-image" media-type="image/jpeg" id="item_1" href="images/cover.jpg"/>
+        <item id="item_2" media-type="image/jpeg" href="images/X50525A-011.jpg"/>
+        <item id="item_3" media-type="image/jpeg" href="images/X50525A-012.jpg"/>
+        <item id="item_4" media-type="image/jpeg" href="images/X50525A-001.jpg"/>
+        <item id="item_5" media-type="image/jpeg" href="images/X50525A-002.jpg"/>
+        <item id="item_6" media-type="image/jpeg" href="images/X50525A-003.jpg"/>
+        <item id="item_7" media-type="image/jpeg" href="images/X50525A-004.jpg"/>
+        <item id="item_8" media-type="image/jpeg" href="images/X50525A-005.jpg"/>
+        <item id="item_9" media-type="image/jpeg" href="images/X50525A-006.jpg"/>
+        <item id="item_10" media-type="image/jpeg" href="images/X50525A-007.jpg"/>
+        <item id="item_11" media-type="image/jpeg" href="images/X50525A-008.jpg"/>
+        <item id="item_12" media-type="image/jpeg" href="images/X50525A-009.jpg"/>
+        <item id="item_13" media-type="image/jpeg" href="images/X50525A-010.jpg"/>
+        <item id="item_14" media-type="image/jpeg" href="images/X50525A-013.jpg"/>
+        <item id="item_15" media-type="text/css" href="css/default.css"/>
+        <item media-type="application/xhtml+xml" id="item_22" href="X50525A-01-cover.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_24" href="X50525A-02-titlepage.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_25" href="X50525A-03-colophon.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_26" href="X50525A-04-toc.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_27" href="X50525A-05-frontmatter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_28" href="X50525A-06-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_29" href="X50525A-07-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_30" href="X50525A-08-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_31" href="X50525A-09-backmatter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_32" href="X50525A-10-backmatter.xhtml"/>
+        <item properties="nav" id="item_33" media-type="application/xhtml+xml" href="nav.xhtml"/>
+    </manifest>
+    <spine>
+        <itemref idref="item_22" id="itemref_1" linear="no"/>
+        <itemref idref="item_24" id="itemref_2"/>
+        <itemref idref="item_25" id="itemref_3"/>
+        <itemref idref="item_26" id="itemref_4"/>
+        <itemref idref="item_27" id="itemref_5"/>
+        <itemref idref="item_28" id="itemref_6"/>
+        <itemref idref="item_29" id="itemref_7"/>
+        <itemref idref="item_30" id="itemref_8"/>
+        <itemref idref="item_31" id="itemref_9"/>
+        <itemref idref="item_32" id="itemref_10"/>
+    </spine>
+</package>

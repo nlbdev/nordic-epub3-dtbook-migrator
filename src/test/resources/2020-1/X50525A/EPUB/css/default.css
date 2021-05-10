@@ -1,0 +1,266 @@
+/* ----------------------------- STYLESHEET EPUB 3.0.1 ---------------------- */
+
+/* --- TEXT TO SPEECH SETTINGS --- */
+.initialism {
+   -epub-speak-as:spell-out;
+}
+				
+/* --- BODY - GENERAL STYLING --- */
+body {
+   font-family: calibri, arial, helvetica, verdana, sans-serif;
+   font-size: 170%;
+   line-height: 130%;
+   margin-left: 10%;
+   margin-right: 10%;
+}
+
+.underlined {text-decoration: underline;}
+
+/* --- HEADINGS --- */
+h1.title {
+   color: #000000;
+   font-family: arial, verdana, sans-serif;
+   font-size: 160%;
+   font-style: normal;
+   font-weight: bold;
+   margin-top: 5em;
+   margin-bottom: 2em;
+}
+h1 {
+   color: #000000;
+   font-size: 175%;
+   font-weight: bold;
+   margin-top: 3em;
+   margin-bottom: 1em;
+}
+h2 {
+   color: #000000;
+   font-size: 150%;
+   font-weight: normal;
+   margin-top: 2.5em;
+   margin-bottom: 1em;
+}
+h3 {
+   color: #000000;
+   font-size: 135%;
+   font-weight: normal;
+   margin-top: 2em;
+   margin-bottom: 1em;
+}
+h4 {
+   color: #000000;
+   font-size: 115%;
+   font-weight: bold;
+   margin-top: 1em;
+   margin-bottom: 0.5em;
+}
+h5 {
+   color: #000000;
+   font-size: 105%;
+   font-weight: bold;
+   margin-top: 1em;
+   margin-bottom: 0em;
+}
+h6 {
+   color: #000000;
+   font-size: 100%;
+   font-weight: bold;
+   margin-top: 0.5em;
+   margin-bottom: 0em;
+}
+
+/* --- DIV FRONTMATTER --- */
+*.docauthor {
+   font-size: 140%;
+   display: block;
+   font-family: arial, verdana, sans-serif;
+   font-weight: normal;
+   margin-top: 2em;
+}
+span.subtitle {
+   font-size: 50%;
+   display: block;
+   margin-top: 1em;
+}
+span.author {
+   font-size: 140%;
+   display: block;
+   font-family: arial, verdana, sans-serif;
+   font-weight: normal;
+   margin-top: 2em;
+}
+
+/* --- LINKS --- */
+
+* a {
+   color: #000000;
+   text-decoration: none;
+}
+a:hover, a:active, a:focus {
+   text-decoration: none;
+   color : #AA1111;
+   background-color: #FFFFCC;
+}
+
+/* --- BLOCKS --- */
+.sidebar, .text-box {
+   border: 2px solid #444444;
+   border-radius: 10px;
+   background-color: #E8FBFF;
+   margin-top: 1em;
+   margin-bottom: 1.5em;
+   padding-left: 1em;
+   padding-right: 1em;
+   padding-top: 0.5em;
+   padding-bottom: 0.5em;
+}
+aside.prodnote, aside.fig-desc, section.render-optional{
+   border: 1px solid #444444;
+   border-radius: 5px;
+   background-color: #F5F5F5;
+   margin-top: 1em;
+   margin-bottom: 1em;
+   padding: 1em;
+}
+
+/*  --- CONTEXT BREAKS --- */
+hr.emptyline {
+   width: 0px;
+   margin: 2em;
+   border: none;
+}
+hr.separator {
+   width: 1em;
+   margin-top: 2em;
+   margin-bottom: 2em;
+}
+
+/* --- ANSWER MARKINGS --- */
+span.answer, span.answer_1 {
+   background-color: #E5E5E5;
+   border: 1px solid white;
+}
+
+/* --- POEMS --- */
+div.verse {
+   margin-top: 2em;
+   margin-bottom: 2em;
+   margin-left: 2em;
+   font-family: 'times new roman';
+}
+span.line_indent {
+   margin-left: 1em;
+}
+span.line_longindent {
+   margin-left: 3em;
+}
+p.poem-title {
+   font-weight: bold;
+   font-size: 110%;
+}
+p.verse-author {
+   margin-left: 3em;
+   font-style: italic;
+}
+
+/* --- QUOTES --- */
+blockquote {
+   margin-top: 2em;
+   margin-bottom: 2em;
+   margin-left: 5em;
+   font-family: 'times new roman';
+   font-size: 90%;
+   font-style: italic;
+}
+blockquote p.quote-author {
+   font-family: calibri, arial, helvetica, verdana, sans-serif;
+   font-style: normal;
+   line-height: 50%;
+}
+
+/* --- LISTS --- */
+ol, ul {
+   margin-left: 0.5em;
+}
+
+ul.plain {
+   list-style-type: none;
+   margin-left: 0.5em;
+}
+
+li {margin-bottom: 0.5em;}
+
+ol.exercise-part {
+   list-style-type: none;
+}
+ol.exercise-part li:before {
+   content: counter(counter, lower-alpha) ") ";
+   margin-left: -1em;
+}
+ol.exercise-part li {
+   counter-increment: counter;
+}
+li p {
+   margin-top: 0;
+   margin-bottom: 0;
+}
+
+/* --- DEFINITION LIST --- */
+dl {
+   margin-top: 2em;
+   margin-bottom: 2em;
+}
+dl.box {
+   border: 2px solid #444444;
+   border-radius: 10px;
+   background-color: #FFFFE0;
+   margin-top: 1em;
+   margin-bottom: 1.5em;
+   padding-left: 1em;
+   padding-right: 1em;
+   padding-top: 0.5em;
+   padding-bottom: 1em;
+}
+dt {
+   margin-top: 0.5em; 
+   font-weight: bold;
+}
+dd {
+   font-weight: 200;
+}
+
+/* --- NOTES --- */
+div.notebody {font-size: 90%; border: 1px dotted gray; padding: 1em;}
+aside.notebody {font-size: 90%; border: 1px dotted gray; padding: 1em;}
+span.noteref, a.noteref {vertical-align: super; font-size : 80%; border : 1px solid rgb(255,0,0); }
+
+/* --- PAGE NUMBERS --- */
+.page-normal, .page-special, .page-front {display: block; text-align: right; margin-right: 2em; font-weight: bold; border-top: solid 1px #E5E5E5; padding-top: 2em; margin-top: 3em;}
+
+div.prodnote {border: 1px solid #A7A7A7; background-color: white; padding: 1em; margin-top:1em; margin-bottom:1em;}
+div.prodnote a {color: gray;}
+div.annotation {font-size: 90%; border: 1px dotted gray; padding: 1em;}
+
+/* --- INLINES --- */
+span.annoref, a.annoref {border-bottom : 1px dashed gray; }
+span.inline-code {font-family: courier, fixed, monospace;}
+acronym, abbr {border-bottom : 1px dashed rgb(255,0,0); }
+code {font-family: courier, fixed, monospace;}
+
+/* --- TABLES --- */
+table {border: 2px solid gray; padding: 1em; font-size: 80%; margin-top: 1.5em; margin-bottom: 2em;}
+th {border: 1px solid gray; font-weight: bold; padding: 0.5em}
+td {border: 1px solid gray; padding: 0.5em}
+
+/* --- IMAGES --- */
+img {border: none;}
+figcaption {display:block; margin-bottom: 1.5em; font-size: 90%; font-style: italic;}
+
+/* --- P CLASS --- */
+p.indented {text-indent: 3em;}
+p.precedingemptyline {margin-top: 3em;}
+p.precedingseparator {margin-top: 1.5em; padding-top: 1.5em; border-top: 3px dotted black;}
+
+/* --- VERTICAL PADDING OF CERTAIN ELEMENTS --- */
+dl + dl {margin-top: 1.5em; padding-top: 1em;}
+ul + ul, ul + ol, ol + ul {margin-top: 1.5em; }
