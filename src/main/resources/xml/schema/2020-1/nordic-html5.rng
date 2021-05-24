@@ -3109,6 +3109,9 @@
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
             </zeroOrMore>
         </element>
+        <optional>
+            <ref name="hr"/> <!-- hr -->
+        </optional>
         <!-- STRICT NOTE: In HTML, lists are not allowed inside paragraphs. -->
         <zeroOrMore>
             <choice>
