@@ -775,7 +775,7 @@
         <p></p>
         <rule context="html:p[tokenize(@epub:type, '\t+') = 'bridgehead']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="parent::html:section | parent::html:article | parent::html:div">[nordic270] Bridgehead is only allowed as a child of section, article and div. <value-of select="$context"/></assert>
+            <assert test="parent::html:section | parent::html:article | parent::html:div | parent::html:aside">[nordic270] Bridgehead is only allowed as a child of section, article, div and aside. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
