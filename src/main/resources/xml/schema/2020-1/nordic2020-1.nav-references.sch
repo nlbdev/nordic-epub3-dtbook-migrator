@@ -100,7 +100,7 @@
                 /> "<value-of select="@data-sectioning-element"/>" element<value-of select="if (@data-sectioning-id) then concat(' with id=&quot;', @data-sectioning-id,'&quot;') else ''"/> is
                     <value-of select="if (count($nav-ref)=0) then 'not referenced' else 'referenced multiple times'"/> from the navigation document.</assert>
 
-            <assert test="count($nav-ref) = 0 or not(@data-heading-id) or normalize-space(string-join(.//text(),'')) = normalize-space(string-join($nav-ref//text(),''))">[nordic_nav_references_1] The
+            <assert test="count($nav-ref) = 0 or normalize-space(string-join(.//text(),'')) = normalize-space(string-join($nav-ref//text(),''))">[nordic_nav_references_1] The
                 text for the heading in the navigation document ("<value-of select="normalize-space(string-join($nav-ref//text(),''))"/>") should match the headline in the content document ("<value-of
                     select="normalize-space(string-join(.//text(),''))"/>" at <value-of select="($heading-ref, $sectioning-ref)[1]"/>)</assert>
         </rule>

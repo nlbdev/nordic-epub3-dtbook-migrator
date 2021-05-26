@@ -47,6 +47,7 @@
                     <xsl:attribute name="data-sectioning-id" select="@id"/>
                 </xsl:if>
                 <xsl:attribute name="data-sectioning-depth" select="count(ancestor-or-self::section | ancestor-or-self::article)"/>
+                <xsl:value-of select="normalize-space(@aria-label)"/>
             </c:result>
         </xsl:if>
         <xsl:apply-templates/>
