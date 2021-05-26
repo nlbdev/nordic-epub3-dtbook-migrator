@@ -883,13 +883,22 @@
     </pattern>
 
     <pattern id="epub_nordic_291">
-        <title>Rule 290</title>
+        <title>Rule 291</title>
         <p>Backmatter sections require specific roles</p>
         <rule context="html:section[tokenize(@epub:type, '\s+') = 'backmatter' and @role]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="tokenize(@role, '\s+') = ('doc-afterword', 'doc-appendix', 'doc-bibliography', 'doc-colophon', 'doc-conclusion', 'doc-dedication', 'doc-endnotes', 'doc-epigraph', 'doc-epilogue', 'doc-glossary', 'doc-index')">
                 [nordic291] Backmatter can only use roles (doc-afterword, doc-appendix, doc-bibliography, doc-colophon, doc-conclusion, doc-dedication, doc-epigraph, doc-epilogue, doc-glossary, doc-index) <value-of select="$context"/>
             </assert>
+        </rule>
+    </pattern>
+
+    <pattern id="epub_nordic_292">
+        <title>Rule 292</title>
+        <p>Class sidebar is deprecated for asides</p>
+        <rule context="html:aside">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <report test="tokenize(@class, '\s+') = 'sidebar'">[nordic292] The aside attribute class is set to sidebar which is deprecated. <value-of select="$context"/></report>
         </rule>
     </pattern>
 </schema>
