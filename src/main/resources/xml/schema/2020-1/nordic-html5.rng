@@ -2184,11 +2184,11 @@
             <attribute name="class">
                 <value>linegroup</value>
             </attribute>
-            <oneOrMore>
-                <choice>
-                    <ref name="poem.line"/>
-                </choice>
-            </oneOrMore>
+            <ref name="poem.line"/>
+            <zeroOrMore>
+                <ref name="br" />
+                <ref name="poem.line"/>
+            </zeroOrMore>
         </element>
     </define>
 
@@ -2215,9 +2215,6 @@
                 <ref name="poem.linenum"/>
             </zeroOrMore>
         </element>
-        <optional>
-            <ref name="br" />
-        </optional>
     </define>
 
     <define name="poem.linenum">
