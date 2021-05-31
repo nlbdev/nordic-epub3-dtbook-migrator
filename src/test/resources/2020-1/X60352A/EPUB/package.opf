@@ -1,32 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html>
- <package xml:lang="sv" xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" prefix="nordic: http://www.mtm.se/epub/" unique-identifier="pub-identifier" version="3.0">
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" xml:lang="sv" prefix="nordic: http://www.mtm.se/epub/" unique-identifier="pub-identifier" version="3.0">
     <metadata>
-
-<dc:title>Om det nord-tschudiska spr&#xe5;ket</dc:title>
-<dc:language>sv</dc:language>
-<dc:identifier id="pub-identifier">X60352A</dc:identifier>
-<dc:source>urn:isbn:0000000000</dc:source>
-<dc:creator>L&#xf6;nnrot, Elias</dc:creator>
-<dc:format>EPUB3</dc:format>
-<dc:publisher>SPSM</dc:publisher>
-<dc:date>2021-02-19</dc:date>
-
-
-        <meta property="dcterms:modified">2021-02-23T10:08:31Z</meta>
-        <meta property="nordic:guidelines">2020-1</meta>
-        <meta property="nordic:supplier">PUAB</meta>
-        <meta property="schema:accessibilitySummary">Den h&#xe4;r publikationen &#xe4;r framst&#xe4;lld i enlighet med the Nordic Guidelines for the Production of Accessible EPUB 3, version 2020-1.</meta>
-        <meta property="schema:accessMode">textual</meta>
-        <meta property="schema:accessMode">visual</meta>
-        <meta property="schema:accessModeSufficient">textual,visual</meta>
-        <meta property="schema:accessModeSufficient">textual</meta>
-        <meta property="schema:accessibilityFeature">structuralNavigation</meta>
-        <meta property="schema:accessibilityFeature">alternativeText</meta>
-        <meta property="schema:accessibilityHazard">none</meta>
-		<meta property="a11y:certifiedBy">SPSM</meta>
-        <link rel="dcterms:conformsTo" href="https://format.mtm.se/nordic_epub/2020-1"/>
-    </metadata>
+    <dc:title>Om det nord-tschudiska språket</dc:title>
+    <dc:language>sv</dc:language>
+    <dc:identifier id="pub-identifier">X60352A</dc:identifier>
+    <dc:source>urn:isbn:0000000000</dc:source>
+    <dc:creator>Lönnrot, Elias</dc:creator>
+    <dc:format>EPUB3</dc:format>
+    <dc:publisher>SPSM</dc:publisher>
+    <dc:date>2021-02-19</dc:date>
+    <meta property="dcterms:modified">2021-05-31T14:33:48Z</meta>
+    <meta property="nordic:guidelines">2020-1</meta>
+    <meta property="nordic:supplier">PUAB</meta>
+    <meta property="schema:accessibilitySummary">Den här publikationen är framställd i enlighet med the Nordic Guidelines for the Production of Accessible EPUB 3, version 2020-1.</meta>
+    <meta property="schema:accessMode">textual</meta>
+    <meta property="schema:accessMode">visual</meta>
+    <meta property="schema:accessModeSufficient">textual,visual</meta>
+    <meta property="schema:accessModeSufficient">textual</meta>
+    <meta property="schema:accessibilityFeature">structuralNavigation</meta>
+    <meta property="schema:accessibilityFeature">alternativeText</meta>
+    <meta property="schema:accessibilityHazard">none</meta>
+    <meta property="a11y:certifiedBy">SPSM</meta>
+    <link rel="dcterms:conformsTo" href="https://format.mtm.se/nordic_epub/2020-1"/>
+  </metadata>
     <manifest>
         <item properties="cover-image" media-type="image/jpeg" id="item_1" href="images/cover.jpg"/>
         <item id="item_2" media-type="image/jpeg" href="images/X60352A-001.jpg"/>
@@ -64,4 +60,4 @@
         <itemref idref="item_23" id="itemref_13"/>
         <itemref idref="item_24" id="itemref_14"/>
     </spine>
-</package> 
+</package>
