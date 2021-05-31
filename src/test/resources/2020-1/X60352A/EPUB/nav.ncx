@@ -13,7 +13,7 @@
     </docTitle>
     <navMap>
         <navLabel>
-            <text>Inneh&#xe5;llsf&#xf6;rteckning</text>
+            <text>Inneh&#xe5;ll</text>
         </navLabel>
         <navPoint id="navPoint-1" playOrder="1">
             <navLabel>
@@ -342,7 +342,7 @@
     </navMap>
     <pageList>
         <navLabel>
-            <text>Lista &#xf6;ver sidor</text>
+            <text>Sidindelning</text>
         </navLabel>
         <pageTarget id="pageTarget-55" playOrder="55" type="normal">
             <navLabel>
