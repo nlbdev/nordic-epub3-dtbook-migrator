@@ -1874,14 +1874,14 @@
         <attribute name="epub:type">
             <list>
                 <ref name="types"/>
-                <value>sidebar</value>
+                <value>text-box</value>
                 <ref name="types"/>
             </list>
         </attribute>
         <attribute name="class">
             <list>
                 <ref name="classes"/>
-                <value>sidebar</value>
+                <value>text-box</value>
                 <ref name="classes"/>
             </list>
         </attribute>
@@ -4152,7 +4152,7 @@
                 <value>biblioentry</value>
                 <value>bibliography</value>
                 <!--<value>bodymatter</value>-->
-                <!--<value>bridgehead</value>-->
+                <value>bridgehead</value>
                 <!--<value>chapter</value>-->
                 <!--<value>colophon</value>-->
                 <value>concluding-sentence</value>
