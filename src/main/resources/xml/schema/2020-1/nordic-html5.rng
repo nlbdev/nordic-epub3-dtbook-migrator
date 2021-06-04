@@ -1871,13 +1871,6 @@
     </define>
 
     <define name="attlist.sidebar" combine="interleave">
-        <attribute name="epub:type">
-            <list>
-                <ref name="types"/>
-                <value>text-box</value>
-                <ref name="types"/>
-            </list>
-        </attribute>
         <attribute name="class">
             <list>
                 <ref name="classes"/>
