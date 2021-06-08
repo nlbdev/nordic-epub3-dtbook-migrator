@@ -9,7 +9,7 @@
     <dc:format>application/epub+zip</dc:format>
     <dc:publisher>SPSM</dc:publisher>
     <dc:date>2021-03-07</dc:date>
-    <meta property="dcterms:modified">2021-06-08T14:29:43Z</meta>
+    <meta property="dcterms:modified">2021-06-08T14:54:17Z</meta>
     <meta property="nordic:guidelines">2020-1</meta>
     <meta property="nordic:supplier">PUAB</meta>
     <meta property="schema:accessibilitySummary">Diese Veröffentlichung entspricht den Nordic Guidelines für die Herstellung von barrierefreiem EPUB 3, Version 2020-1.</meta>
@@ -47,20 +47,24 @@
         <item media-type="application/xhtml+xml" id="item_28" href="X50525A-06-chapter.xhtml"/>
         <item media-type="application/xhtml+xml" id="item_29" href="X50525A-07-chapter.xhtml"/>
         <item media-type="application/xhtml+xml" id="item_30" href="X50525A-08-chapter.xhtml"/>
-        <item media-type="application/xhtml+xml" id="item_31" href="X50525A-09-backmatter.xhtml"/>
-        <item media-type="application/xhtml+xml" id="item_32" href="X50525A-10-backmatter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_31" href="X50525A-11-backmatter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_32" href="X50525A-12-backmatter.xhtml"/>
         <item properties="nav" id="item_33" media-type="application/xhtml+xml" href="nav.xhtml"/>
+        <item id="item_added_part1" href="X50525A-09-part.xhtml" media-type="application/xhtml+xml"/>
+        <item id="item_added_chapter1" href="X50525A-10-chapter.xhtml" media-type="application/xhtml+xml"/>
     </manifest>
     <spine>
-        <itemref idref="item_22" id="itemref_1" linear="no"/>
-        <itemref idref="item_24" id="itemref_2"/>
-        <itemref idref="item_25" id="itemref_3"/>
-        <itemref idref="item_26" id="itemref_4"/>
-        <itemref idref="item_27" id="itemref_5"/>
-        <itemref idref="item_28" id="itemref_6"/>
-        <itemref idref="item_29" id="itemref_7"/>
-        <itemref idref="item_30" id="itemref_8"/>
-        <itemref idref="item_31" id="itemref_9"/>
-        <itemref idref="item_32" id="itemref_10"/>
-    </spine>
+        <itemref idref="item_22" linear="no"/>
+        <itemref idref="item_24"/>
+        <itemref idref="item_25"/>
+        <itemref idref="item_26"/>
+        <itemref idref="item_27"/>
+        <itemref idref="item_28"/>
+        <itemref idref="item_29"/>
+        <itemref idref="item_30"/>
+        <itemref idref="item_added_part1"/>
+        <itemref idref="item_added_chapter1"/>
+        <itemref idref="item_31"/>
+        <itemref idref="item_32"/>
+        </spine>
 </package>
