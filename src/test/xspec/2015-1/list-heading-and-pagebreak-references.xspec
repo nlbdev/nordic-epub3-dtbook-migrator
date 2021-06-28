@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../main/resources/xml/xslt/list-heading-and-pagebreak-references.xsl" xmlns:c="http://www.w3.org/ns/xproc-step">
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../main/resources/xml/xslt/2015-1/list-heading-and-pagebreak-references.xsl" xmlns:c="http://www.w3.org/ns/xproc-step">
 
     <x:scenario label="Some HTML files">
         <x:context>
