@@ -10,7 +10,7 @@
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:dcterms="http://purl.org/dc/terms/"
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-                xmlns:jhove="http://hul.harvard.edu/ois/xml/ns/jhove"
+                xmlns:jhove="http://schema.openpreservation.org/ois/xml/ns/jhove"
                 type="px:nordic-epub3-validate.step.2020-1"
                 name="main"
                 version="1.0">
