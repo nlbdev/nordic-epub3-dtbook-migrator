@@ -23,6 +23,12 @@
             <xsl:if test="$sectioning-element/@id">
                 <xsl:attribute name="data-sectioning-id" select="$sectioning-element/@id"/>
             </xsl:if>
+            <xsl:if test="//body/section/@epub:type">
+                <xsl:attribute name="data-document-epub-type" select="//body/section/@epub:type"/>
+            </xsl:if>
+            <xsl:if test="//body/section/@role">
+                <xsl:attribute name="data-document-role" select="//body/section/@role"/>
+            </xsl:if>
             <xsl:attribute name="data-heading-element" select="name()"/>
             <xsl:if test="@id">
                 <xsl:attribute name="data-heading-id" select="@id"/>
