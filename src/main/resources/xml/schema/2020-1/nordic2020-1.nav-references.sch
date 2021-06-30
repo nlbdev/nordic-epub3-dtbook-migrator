@@ -125,10 +125,18 @@
             <let name="document-in-nav" value="((preceding::html:a | self::*) intersect ancestor::html:nav//html:a)[substring-before(@href,'#') = $href][1]"/>
             <let name="document-in-nav-depth" value="count($document-in-nav/ancestor::html:li)"/>
             <let name="depth-in-nav" value="count(ancestor::html:li)"/>
+
+            <let name="result-chapter-epub" value="if ($result-ref-first[tokenize(@data-document-epub-type,'\s+')='chapter']) then 1 else 0"/>
+            <let name="result-chapter-role" value="if ($result-ref-first[@data-document-role='doc-chapter']) then 1 else 0"/>
+            <let name="result-after-part-epub" value="if ($result-ref-first/preceding-sibling::c:result[tokenize(@data-document-epub-type,'\s+')='part']) then 1 else 0"/>
+            <let name="result-after-part-role" value="if ($result-ref-first/preceding-sibling::c:result[@data-document-role='doc-part']) then 1 else 0"/>
+            <let name="result-chapter-after-part" value="if (($result-chapter-epub=1 and $result-after-part-epub=1) or ($result-chapter-role=1 and $result-after-part-role=1)) then 1 else 0"/>
+
             <let name="depth-in-content" value="$result-ref-first/xs:integer((@data-heading-depth, @data-sectioning-depth)[1])"/>
-            <assert test="not($result-ref-first) or $depth-in-nav = $depth-in-content + $document-in-nav-depth - 1">[nordic_nav_references_2b] The nesting of headlines in the content does not match the
+
+            <assert test="not($result-ref-first) or $depth-in-nav = $depth-in-content + $document-in-nav-depth - 1 - $result-chapter-after-part">[nordic_nav_references_2b] The nesting of headlines in the content does not match the
                 nesting of headlines in the navigation document. The toc item `<value-of select="$context"/>` in the navigation document is not nested at the correct
-                level. The referenced document (<value-of select="$href"/>) occurs in the navigation document at nesting depth <value-of select="$document-in-nav-depth"/> (<value-of
+                level. The referenced document (<value-of select="$href"/>) occurs in the navigation document at nesting depth <value-of select="$document-in-nav-depth - $result-chapter-after-part"/> (<value-of
                     select="if ($document-in-nav-depth = 1) then 'it is not contained inside other sections such as a part or a chapter'
                     else concat('it is contained inside ',string-join($document-in-nav/ancestor::html:li[1]/ancestor::html:li/concat('&quot;',(text(),*[not(local-name()=('ol','ul'))]/string-join(.//text(),''))[normalize-space()][1],'&quot;'),', which is contained inside'))"
                 />). The referenced headline (<value-of select="@href"/>) occurs in the navigation document at nesting depth <value-of select="$depth-in-nav"/> (<value-of
