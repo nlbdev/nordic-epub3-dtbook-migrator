@@ -623,7 +623,9 @@
                 </p:for-each>
                 <p:wrap-sequence wrapper="c:result" name="epub3-validate.step.group-nav-references.iterate-html.wrap-c-result"/>
                 <p:unwrap match="/*/*" name="epub3-validate.step.group-nav-references.iterate-html.unwrap-children"/>
-                <p:identity name="epub3-validate.step.group-nav-references.iterate-html.heading-references"/>
+                <p:identity name="epub3-validate.step.group-nav-references.iterate-html.heading-references">
+                    <p:log port="result" href="file:///tmp/test.xsl"/>
+                </p:identity>
 
                 <p:insert match="/*" position="first-child" name="epub3-validate.step.group-nav-references.iterate-html.insert-heading-references-into-nav">
                     <p:input port="source">
