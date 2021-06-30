@@ -20,7 +20,9 @@
     <pattern id="opf_nordic_2">
         <rule context="opf:package">
             <assert test="@version = '3.0'">[opf2] the version attribute must be 3.0</assert>
+            <!--
             <assert test="@unique-identifier = 'pub-identifier'">[opf2] on the package element; the unique-identifier-attribute must be present and equal 'pub-identifier'</assert>
+            -->
             <assert test="namespace-uri-for-prefix('dc',.) = 'http://purl.org/dc/elements/1.1/'">[opf2] on the package element; the dublin core namespace (xmlns:dc="http://purl.org/dc/elements/1.1/")
                 must be declared on the package element</assert>
             <assert test="matches(@prefix, '(^|\s)nordic:\s+http://www.mtm.se/epub/(\s|$)') or not(opf:meta[starts-with(@property, 'nordic:')])">[opf2] on the package element; the prefix attribute must declare the nordic metadata namespace using the correct namespace URI (prefix="nordic:
