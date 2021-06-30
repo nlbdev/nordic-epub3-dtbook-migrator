@@ -47,11 +47,12 @@
         <item media-type="application/xhtml+xml" id="item_28" href="X50525A-06-chapter.xhtml"/>
         <item media-type="application/xhtml+xml" id="item_29" href="X50525A-07-chapter.xhtml"/>
         <item media-type="application/xhtml+xml" id="item_30" href="X50525A-08-chapter.xhtml"/>
-        <item media-type="application/xhtml+xml" id="item_31" href="X50525A-11-backmatter.xhtml"/>
-        <item media-type="application/xhtml+xml" id="item_32" href="X50525A-12-backmatter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_added_part1" href="X50525A-09-part.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_added_part2" href="X50525A-10-part.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_added_chapter2" href="X50525A-11-chapter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_31" href="X50525A-12-backmatter.xhtml"/>
+        <item media-type="application/xhtml+xml" id="item_32" href="X50525A-13-backmatter.xhtml"/>
         <item properties="nav" id="item_33" media-type="application/xhtml+xml" href="nav.xhtml"/>
-        <item id="item_added_part1" href="X50525A-09-part.xhtml" media-type="application/xhtml+xml"/>
-        <item id="item_added_chapter1" href="X50525A-10-chapter.xhtml" media-type="application/xhtml+xml"/>
     </manifest>
     <spine>
         <itemref idref="item_22" linear="no"/>
@@ -63,7 +64,8 @@
         <itemref idref="item_29"/>
         <itemref idref="item_30"/>
         <itemref idref="item_added_part1"/>
-        <itemref idref="item_added_chapter1"/>
+        <itemref idref="item_added_part2"/>
+        <itemref idref="item_added_chapter2"/>
         <itemref idref="item_31"/>
         <itemref idref="item_32"/>
         </spine>
