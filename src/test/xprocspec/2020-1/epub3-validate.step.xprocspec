@@ -10,7 +10,7 @@
                xmlns:opf="http://www.idpf.org/2007/opf"
                script="../../../main/resources/xml/xproc/step/2020-1/epub3-validate.step.xpl">
 
-    <x:scenario label="Validating X50525A" focus="">
+    <x:scenario label="Validating X50525A">
         <x:call step="px:nordic-epub3-validate.step.2020-1">
             <x:input port="fileset.in">
                 <x:document type="inline" xml:base="../../resources/2020-1/X50525A/">
