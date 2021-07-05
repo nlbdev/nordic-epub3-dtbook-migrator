@@ -33,6 +33,7 @@
                         <d:file href="EPUB/X50525A-12-part.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/X50525A-13-backmatter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/X50525A-14-backmatter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+                        <d:file href="EPUB/X50525A-15-acknowledgments.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
                         <d:file href="EPUB/images/cover.jpg" media-type="image/jpeg"/>
                         <d:file href="EPUB/images/X50525A-001.jpg" media-type="image/jpeg"/>
                         <d:file href="EPUB/images/X50525A-002.jpg" media-type="image/jpeg"/>
@@ -68,6 +69,7 @@
                 <x:document href="../../resources/2020-1/X50525A/EPUB/X50525A-12-part.xhtml" type="file" method="xml"/>
                 <x:document href="../../resources/2020-1/X50525A/EPUB/X50525A-13-backmatter.xhtml" type="file" method="xml"/>
                 <x:document href="../../resources/2020-1/X50525A/EPUB/X50525A-14-backmatter.xhtml" type="file" method="xml"/>
+                <x:document href="../../resources/2020-1/X50525A/EPUB/X50525A-15-acknowledgments.xhtml" type="file" method="xml"/>
             </x:input>
             <x:input port="report.in"/>
             <x:option name="temp-dir" select="$temp-dir"/>
@@ -101,6 +103,7 @@
             <x:document href="../../resources/2020-1/X50525A/EPUB/X50525A-12-part.xhtml" type="file" method="xml"/>
             <x:document href="../../resources/2020-1/X50525A/EPUB/X50525A-13-backmatter.xhtml" type="file" method="xml"/>
             <x:document href="../../resources/2020-1/X50525A/EPUB/X50525A-14-backmatter.xhtml" type="file" method="xml"/>
+            <x:document href="../../resources/2020-1/X50525A/EPUB/X50525A-15-acknowledgments.xhtml" type="file" method="xml"/>
         </x:expect>
 
         <x:context label="report.out">
