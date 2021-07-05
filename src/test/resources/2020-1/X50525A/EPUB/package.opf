@@ -53,6 +53,7 @@
         <item media-type="application/xhtml+xml" id="item_added_part1" href="X50525A-12-part.xhtml"/>
         <item media-type="application/xhtml+xml" id="item_31" href="X50525A-13-backmatter.xhtml"/>
         <item media-type="application/xhtml+xml" id="item_32" href="X50525A-14-backmatter.xhtml"/>
+	<item media-type="application/xhtml+xml" id="item_34" href="X50525A-15-acknowledgments.xhtml"/>
         <item properties="nav" id="item_33" media-type="application/xhtml+xml" href="nav.xhtml"/>
     </manifest>
     <spine>
@@ -70,5 +71,6 @@
         <itemref idref="item_added_part1"/>
         <itemref idref="item_31"/>
         <itemref idref="item_32"/>
+	<itemref idref="item_34"/>
         </spine>
 </package>
