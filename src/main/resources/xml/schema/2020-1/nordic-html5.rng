@@ -2154,6 +2154,7 @@
             </oneOrMore>
             <zeroOrMore>
                 <choice>
+                    <ref name="pagebreak.block" />
                     <ref name="poem.linegroup"/>
                     <ref name="bridgehead"/>
                     <ref name="poem.author"/>
@@ -2179,11 +2180,25 @@
             </attribute>
             <ref name="poem.line"/>
             <zeroOrMore>
-                <ref name="br" />
-                <ref name="poem.line"/>
+                <choice>
+                    <ref name="poem.line.without.pagebreak" />
+                    <ref name="poem.line.with.pagebreak" />
+                </choice>
             </zeroOrMore>
         </element>
     </define>
+
+    <define name="poem.line.without.pagebreak">
+        <ref name="br" />
+        <ref name="poem.line"/>
+    </define>
+
+    <define name="poem.line.with.pagebreak">
+        <ref name="br" />
+        <ref name="pagebreak.inline" />
+        <ref name="poem.line"/>
+    </define>
+
 
     <define name="poem.line">
         <element name="span">
