@@ -1044,7 +1044,13 @@
     <define name="level2.content.noattrs">
         <choice>
             <group>
-                <ref name="h2"/> <!-- h2 -->
+                <choice>
+                    <ref name="h2"/> <!-- h2 -->
+                    <ref name="h3"/> <!-- h3 -->
+                    <ref name="h4"/> <!-- h4 -->
+                    <ref name="h5"/> <!-- h5 -->
+                    <ref name="h6"/> <!-- h6 -->
+                </choice>
                 <oneOrMore>
                     <choice>
                         <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->
@@ -1060,7 +1066,13 @@
                     </choice>
                 </oneOrMore>
                 <optional>
-                    <ref name="h2"/> <!-- h2 -->
+                    <choice>
+                        <ref name="h2"/> <!-- h2 -->
+                        <ref name="h3"/> <!-- h3 -->
+                        <ref name="h4"/> <!-- h4 -->
+                        <ref name="h5"/> <!-- h5 -->
+                        <ref name="h6"/> <!-- h6 -->
+                    </choice>
                     <oneOrMore>
                         <choice>
                             <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->
@@ -1104,7 +1116,12 @@
         <ref name="attlist.level3"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
         <choice>
             <group>
-                <ref name="h3"/> <!-- h3 -->
+                <choice>
+                    <ref name="h3"/> <!-- h3 -->
+                    <ref name="h4"/> <!-- h4 -->
+                    <ref name="h5"/> <!-- h5 -->
+                    <ref name="h6"/> <!-- h6 -->
+                </choice>
                 <oneOrMore>
                     <choice>
                         <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->
@@ -1120,7 +1137,12 @@
                     </choice>
                 </oneOrMore>
                 <optional>
-                    <ref name="h3"/> <!-- h3 -->
+                    <choice>
+                        <ref name="h3"/> <!-- h3 -->
+                        <ref name="h4"/> <!-- h4 -->
+                        <ref name="h5"/> <!-- h5 -->
+                        <ref name="h6"/> <!-- h6 -->
+                    </choice>
                     <oneOrMore>
                         <choice>
                             <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->
@@ -1164,7 +1186,11 @@
         <ref name="attlist.level4"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
         <choice>
             <group>
-                <ref name="h4"/> <!-- h4 -->
+                <choice>
+                    <ref name="h4"/> <!-- h4 -->
+                    <ref name="h5"/> <!-- h5 -->
+                    <ref name="h6"/> <!-- h6 -->
+                </choice>
                 <oneOrMore>
                     <choice>
                         <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->
@@ -1180,7 +1206,11 @@
                     </choice>
                 </oneOrMore>
                 <optional>
-                    <ref name="h4"/> <!-- h4 -->
+                    <choice>
+                        <ref name="h4"/> <!-- h4 -->
+                        <ref name="h5"/> <!-- h5 -->
+                        <ref name="h6"/> <!-- h6 -->
+                    </choice>
                     <oneOrMore>
                         <choice>
                             <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->
@@ -1224,7 +1254,10 @@
         <ref name="attlist.level5"/> <!-- @epub:type, @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
         <choice>
             <group>
-                <ref name="h5"/> <!-- h5 -->
+                <choice>
+                    <ref name="h5"/> <!-- h5 -->
+                    <ref name="h6"/> <!-- h6 -->
+                </choice>
                 <oneOrMore>
                     <choice>
                         <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->
@@ -1240,7 +1273,10 @@
                     </choice>
                 </oneOrMore>
                 <optional>
-                    <ref name="h5"/> <!-- h5 -->
+                    <choice>
+                        <ref name="h5"/> <!-- h5 -->
+                        <ref name="h6"/> <!-- h6 -->
+                    </choice>
                     <oneOrMore>
                         <choice>
                             <ref name="docblockorinline"/> <!-- p, hr, ol, ul, dl, pre, div, blockquote, img, figure, section, span, table, address, aside, math -->

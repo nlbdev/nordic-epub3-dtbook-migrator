@@ -144,7 +144,7 @@
                     else concat('it is contained inside ',string-join(ancestor::html:li[1]/ancestor::html:li/concat('&quot;',(text(),*/string-join(.//text(),''))[normalize-space()][1],'&quot;'),', which is contained inside'))"
                 />). The referenced headline (`&lt;<value-of select="$result-ref-first/@data-heading-element"/><value-of select="$result-ref-first/@data-heading-id/concat(' id=&quot;',.,'&quot;')"/>&gt;<value-of
                     select="$result-ref-first/text()"/>&lt;/<value-of select="$result-ref-first/@data-heading-element"/>&gt;) occurs in the content document <value-of select="$href"/> as a `<value-of
-                    select="$result-ref-first/@data-heading-element"/>` which implies that it should be referenced at nesting depth <value-of select="$depth-in-content + $document-in-nav-depth - 1"/> in the
+                    select="$result-ref-first/@data-heading-element"/>` which implies that it should be referenced at nesting depth <value-of select="$depth-in-content + $document-in-nav-depth - 1 - $result-chapter-after-part"/> in the
                 navigation document.</assert>
         </rule>
     </pattern>
