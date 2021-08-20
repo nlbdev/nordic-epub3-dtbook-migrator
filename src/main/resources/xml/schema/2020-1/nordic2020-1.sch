@@ -887,7 +887,7 @@
         <p>Backmatter sections require specific roles</p>
         <rule context="html:section[tokenize(@epub:type, '\s+') = 'backmatter' and @role]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="tokenize(@role, '\s+') = ('doc-acknowledgments', 'doc-afterword', 'doc-appendix', 'doc-bibliography', 'doc-colophon', 'doc-conclusion', 'doc-dedication', 'doc-endnotes', 'doc-epigraph', 'doc-epilogue', 'doc-glossary', 'doc-index')">
+            <assert test="tokenize(@role, '\s+') = ('doc-acknowledgments', 'doc-afterword', 'doc-appendix', 'doc-bibliography', 'doc-colophon', 'doc-conclusion', 'doc-dedication', 'doc-endnotes', 'doc-epigraph', 'doc-epilogue', 'doc-glossary', 'doc-index', 'doc-toc')">
                 [nordic291] Backmatter can only use roles (doc-acknowledgments, doc-afterword, doc-appendix, doc-bibliography, doc-colophon, doc-conclusion, doc-dedication, doc-epigraph, doc-epilogue, doc-glossary, doc-index) <value-of select="$context"/>
             </assert>
         </rule>
