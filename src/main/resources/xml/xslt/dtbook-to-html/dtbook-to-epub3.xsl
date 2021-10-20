@@ -1228,7 +1228,7 @@
         </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="dtbook:bridgehead">
+    <xsl:template match="dtbook:bridgehead | dtbook:p[f:classes(.) = 'bridgehead']">
         <p>
             <xsl:call-template name="f:attlist.bridgehead"/>
             <xsl:apply-templates select="node()"/>
