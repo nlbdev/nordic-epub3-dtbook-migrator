@@ -1041,6 +1041,11 @@
                 <!-- NOTE: if the image has multiple prodnotes or captions, only the first one will be referenced. -->
             </xsl:if>
         </xsl:if>
+        <xsl:for-each select="parent::dtbook:imggroup/following-sibling::*[1]">
+            <xsl:if test="local-name() = 'div' and f:classes(.) = 'details' and string(@id) != ''">
+                <xsl:attribute name="aria-details" select="@id"/>
+            </xsl:if>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="dtbook:imggroup">
@@ -1130,6 +1135,24 @@
         <xsl:call-template name="f:attrs">
             <xsl:with-param name="classes" select="if (count(dtbook:img) &gt; 1) then 'image-series' else 'image'" tunnel="yes"/>
         </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="dtbook:div[f:classes(.) = 'details']">
+        <details>
+            <xsl:call-template name="f:attrs">
+                <xsl:with-param name="except-classes" select="'details'" tunnel="yes"/>
+            </xsl:call-template>
+            <xsl:apply-templates select="node()" exclude-result-prefixes="#all"/>
+        </details>
+    </xsl:template>
+    
+    <xsl:template match="dtbook:p[f:classes(.) = 'summary']">
+        <summary>
+            <xsl:call-template name="f:attrs">
+                <xsl:with-param name="except-classes" select="'summary'" tunnel="yes"/>
+            </xsl:call-template>
+            <xsl:apply-templates select="node()" exclude-result-prefixes="#all"/>
+        </summary>
     </xsl:template>
 
     <xsl:template match="dtbook:p">
@@ -1797,7 +1820,7 @@
                 <xsl:variable name="sibling-implies-inline"
                     select="('em','strong','dfn','code','samp','kbd','cite','abbr','acronym','a','img','br','q','sub','sup','span','bdo','sent','w','annoref','noteref','lic')"/>
                 <xsl:variable name="parent-implies-inline"
-                    select="($sibling-implies-inline,'imggroup','pagenum','prodnote','line','linenum','address','title','author','byline','dateline','p','doctitle','docauthor','covertitle','h1','h2','h3','h4','h5','h6','bridgehead','dt')"/>
+                    select="($sibling-implies-inline,'imggroup','pagenum','prodnote','line','linenum','address','title','author','byline','dateline','p','doctitle','docauthor','covertitle','h1','h2','h3','h4','h5','h6','bridgehead','dt','summary')"/>
                 <xsl:sequence
                     select="if ($parent[self::dtbook:* and local-name()=$parent-implies-inline] or $parent/(text()[normalize-space()],dtbook:*[local-name()=$sibling-implies-inline])) then true() else false()"
                 />

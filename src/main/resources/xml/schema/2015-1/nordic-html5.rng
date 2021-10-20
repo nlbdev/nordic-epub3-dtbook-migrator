@@ -2607,6 +2607,12 @@
                 <ref name="Length"/>
             </attribute>
         </optional>
+        <optional>
+            <attribute name="aria-details">
+                <a:documentation>Should point to the details element that directly follows the image figure element</a:documentation>
+                <ref name="Text"/>
+            </attribute>
+        </optional>
     </define>
     <!--
     Use: figure provides a container for one or more <img> and associated <figcaption>(s).
@@ -2676,6 +2682,16 @@
             </choice>
             
         </element>
+        <optional>
+            <element name="details">
+                <ref name="attrsrqd"/>  <!-- attrsrqd instead of attrs because all details elements should have id attributes -->
+                <element name="summary">
+                    <ref name="attrs"/>
+                    <ref name="inline"/>
+                </element>
+                <ref name="flow"/>
+            </element>
+        </optional>
     </define>
     <define name="attlist.figure.image-series" combine="interleave">
         <attribute name="class">

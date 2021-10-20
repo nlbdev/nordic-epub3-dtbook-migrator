@@ -186,8 +186,8 @@
 
     <pattern id="epub_nordic_29a">
         <title>Rule 29a</title>
-        <p>No block elements in inline context (as child). Inline elements: a, abbr, bdo, code, dfn, em, kbd, q, samp, span, strong, sub, sup. Block elements: address, aside, blockquote, p, caption, div, dl, ul, ol, figure, table, h1, h2, h3, h4, h5, h6.</p>
-        <rule context="html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
+        <p>No block elements in inline context (as child). Inline elements: a, abbr, bdo, code, dfn, em, kbd, q, samp, span, strong, sub, sup. Block elements: address, aside, blockquote, p, caption, div, dl, ul, ol, figure, table, h1, h2, h3, h4, h5, h6, details, summary.</p>
+        <rule context="html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="inline-ancestor" value="ancestor::*[namespace-uri() = 'http://www.w3.org/1999/xhtml' and local-name() = ('a', 'abbr', 'bdo', 'code', 'dfn', 'em', 'kbd', 'q', 'samp', 'span', 'strong', 'sub', 'sup')][1]"/>
             <report test="count($inline-ancestor)">[nordic29] Block element <value-of select="$context"/> used in inline context. <value-of select="concat(
@@ -199,8 +199,8 @@
 
     <pattern id="epub_nordic_29b">
         <title>Rule 29b</title>
-        <p>No block elements in inline context (as sibling). Inline elements: a, abbr, bdo, code, dfn, em, kbd, q, samp, span, strong, sub, sup. Block elements: address, aside, blockquote, p, caption, div, dl, ul, ol, figure, table, h1, h2, h3, h4, h5, h6, section, article.</p>
-        <rule context="html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:section | html:article">
+        <p>No block elements in inline context (as sibling). Inline elements: a, abbr, bdo, code, dfn, em, kbd, q, samp, span, strong, sub, sup. Block elements: address, aside, blockquote, p, caption, div, dl, ul, ol, figure, table, h1, h2, h3, h4, h5, h6, details, summary, section, article.</p>
+        <rule context="html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary | html:section | html:article">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="inline-sibling-element" value="../*[namespace-uri() = 'http://www.w3.org/1999/xhtml' and local-name() = ('a', 'abbr', 'bdo', 'code', 'dfn', 'em', 'kbd', 'q', 'samp', 'span', 'strong', 'sub', 'sup')][1]"/>
             <let name="inline-sibling-text" value="../text()[normalize-space()][1]"/>
@@ -670,7 +670,7 @@
     <pattern id="epub_nordic_260_b">
         <title>Rule 260b</title>
         <p></p>
-        <rule context="html:figure[tokenize(@class, '\s+') = 'image-series']/html:*[not(self::html:figure[tokenize(@class, '\s+') = 'image'])]">
+        <rule context="html:figure[tokenize(@class, '\s+') = 'image-series']/html:*[not(self::html:figure[tokenize(@class, '\s+') = 'image'] | self::html:details)]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <report test="preceding-sibling::html:figure[tokenize(@class, '\s+') = 'image']">[nordic260b] Content is not allowed between or after image figure elements. <value-of select="$context"/></report>
         </rule>
@@ -899,6 +899,15 @@
         <rule context="html:aside">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <report test="tokenize(@class, '\s+') = 'sidebar'">[nordic292] The aside attribute class is set to sidebar which is deprecated. <value-of select="$context"/></report>
+        </rule>
+    </pattern>
+    
+    <pattern id="epub_nordic_293">
+        <title>Rule 293</title>
+        <p>details element with extended description must be correctly referenced from img element</p>
+        <rule context="html:details[preceding-sibling::*[1]/tokenize(@class, '\s+') = 'image']">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="preceding-sibling::*[1]/html:img/@aria-details = @id">The img element must correctly reference the details element with the aria-details attribute. <value-of select="concat(string(preceding-sibling::*[1]/html:img/@aria-details), ' != ', @id)"/> <value-of select="concat(' ', $context)"/></assert>
         </rule>
     </pattern>
 </schema>

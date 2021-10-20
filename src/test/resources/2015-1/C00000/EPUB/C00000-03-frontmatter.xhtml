@@ -190,6 +190,65 @@
                     </figure>
                 </figure>
             </div>
+            <div>
+                <!-- image with extended description, based on http://diagramcenter.org/best-practices-for-authoring-extended-descriptions.html -->
+                <figure class="image">
+                    <img id="image-tests-img-16" src="images/valentin.jpg" aria-details="image-tests-details-1" alt="image"/>
+                </figure>
+                <details id="image-tests-details-1">
+                    <summary>Expand / collapse Extended Description</summary>
+                    <div>
+                        <p class="bridgehead" epub:type="bridgehead">Overview</p>
+                        <p>The chart shows the website hits for the first quarter of 2014. It shows that Site 1 has more visitors
+                            than either of the other sites, but the number of visitors is decreasing. Site 2 has a fairly constant
+                            number of visitors, while for Site 3 page hits are increasing month on month.</p>
+                    </div>
+                    <div>
+                        <p class="bridgehead" epub:type="bridgehead">Data</p>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th scope="col">Period</th>
+                                    <th scope="col">Site 1</th>
+                                    <th scope="col">Site 2</th>
+                                    <th scope="col">Site 3</th>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Jan</th>
+                                    <td>135</td>
+                                    <td>112</td>
+                                    <td>92</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Feb</th>
+                                    <td>117</td>
+                                    <td>114</td>
+                                    <td>99</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Mar</th>
+                                    <td>96</td>
+                                    <td>111</td>
+                                    <td>126</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Qtr Total</th>
+                                    <td>348</td>
+                                    <td>337</td>
+                                    <td>308</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <p class="bridgehead" epub:type="bridgehead">Presentation</p>
+                        <p>The bar chart represents both the number of visitors per month for each website, and the total number
+                            of visitors per website for the entire quarter. Website visitors for each month are represented using
+                            columns lined up horizontally, with heights indicating the number of visitors. A fourth column is
+                            provided for each website with the accumulated site visitors for the quarter.</p>
+                    </div>
+                </details>
+            </div>
         </div>
         <p class="paragraphs can have many different classes">Paragraphs can have many different classes</p>
         <aside id="dtb6" class="prodnote" epub:type="z3998:production">
