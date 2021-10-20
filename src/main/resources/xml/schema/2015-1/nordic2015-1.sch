@@ -211,7 +211,7 @@
     <!-- Rule 29: No block elements in inline context -->
     <pattern id="epub_nordic_29a">
         <rule
-            context="html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6">
+            context="html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary">
             <let name="inline-ancestor"
                 value="ancestor::*[namespace-uri()='http://www.w3.org/1999/xhtml' and local-name()=('a','abbr','bdo','code','dfn','em','kbd','q','samp','span','strong','sub','sup')][1]"/>
             <report test="count($inline-ancestor)">[nordic29] Block element <value-of
@@ -223,7 +223,7 @@
     <!-- Rule 29: No block elements in inline context - continued -->
     <pattern id="epub_nordic_29b">
         <rule
-            context="html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:section | html:article">
+            context="html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary | html:section | html:article">
             <let name="inline-sibling-element"
                 value="../*[namespace-uri()='http://www.w3.org/1999/xhtml' and local-name()=('a','abbr','bdo','code','dfn','em','kbd','q','samp','span','strong','sub','sup')][1]"/>
             <let name="inline-sibling-text" value="../text()[normalize-space()][1]"/>
@@ -259,7 +259,8 @@
                                              self::html:*[tokenize(@class,' ')='linegroup']  or
                                              self::html:*[self::html:ul or self::html:ol]       or self::html:a[tokenize(@epub:type,' ')=('note','rearnote','endnote','footnote')]       or self::html:p        or
                                            self::html:*[tokenize(@epub:type,' ')='z3998:poem']       or self::html:*[(self::figure or self::aside) and tokenize(@epub:type,'s')='sidebar']    or self::html:table    or
-                                           self::html:*[matches(local-name(),'^h\d$') and tokenize(@class,' ')='title']]"
+                                           self::html:*[matches(local-name(),'^h\d$') and tokenize(@class,' ')='title'] or
+                                           self::html:details or self::html:summary]"
                 >[nordic29] Prodnote in inline context used as block element: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
@@ -874,7 +875,7 @@
     </pattern>
 
     <pattern id="epub_nordic_260_b">
-        <rule context="html:figure[tokenize(@class,'\s+')='image-series']/html:*[not(self::html:figure[tokenize(@class,'\s+')='image'])]">
+        <rule context="html:figure[tokenize(@class, '\s+') = 'image-series']/html:*[not(self::html:figure[tokenize(@class, '\s+') = 'image'] | self::html:details)]">
             <report test="preceding-sibling::html:figure[tokenize(@class,'\s+')='image']">[nordic260b] Content not allowed between or after image figure elements: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></report>
         </rule>
@@ -1164,5 +1165,13 @@
             <assert test="substring-before(name(), ':') = 'm'">[nordic283] When using MathML with a namespace prefix, that prefix must be 'm'. Not <value-of select="substring-before(name(), ':')"/></assert>
         </rule>
     </pattern>
-
+    
+    <pattern id="epub_nordic_293">
+        <title>Rule 293</title>
+        <p>details element with extended description must be correctly referenced from img element</p>
+        <rule context="html:details[preceding-sibling::*[1]/tokenize(@class, '\s+') = 'image']">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="preceding-sibling::*[1]/html:img/@aria-details = @id">The img element must correctly reference the details element with the aria-details attribute. <value-of select="concat(string(preceding-sibling::*[1]/html:img/@aria-details), ' != ', @id)"/> <value-of select="concat(' ', $context)"/></assert>
+        </rule>
+    </pattern>
 </schema>
