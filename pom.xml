@@ -188,9 +188,9 @@
                 <configuration>
                     <excludes>
 		      <!-- You can exclude further files from processing: -->
-                      <exclude>src/test/**/*.epub</exclude>
-                      <exclude>**/*.otf</exclude>
-                      <exclude>documentation/*.odg</exclude>
+                        <exclude>src/test/**/*.epub</exclude>
+                        <exclude>**/*.otf</exclude>
+                        <exclude>documentation/*.odg</exclude>
                     </excludes>
                 </configuration>
             </plugin>
