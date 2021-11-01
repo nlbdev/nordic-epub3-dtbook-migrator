@@ -12,35 +12,35 @@
 	    FIXME: use true modes instead of the xsl:apply-imports trick
 	-->
 
-	<xsl:import href="nordic-epub3-to-generic-dtbook.xsl"/>
-	<xsl:include href="../../../main/resources/xml/xslt/generic-to-nordic-dtbook.xsl"/>
+    <xsl:import href="nordic-epub3-to-generic-dtbook.xsl"/>
+    <xsl:include href="../../../main/resources/xml/xslt/generic-to-nordic-dtbook.xsl"/>
 
-	<xsl:template match="@*|node()" priority="1000">
-		<xsl:param name="my:mode" as="xs:string" tunnel="yes" select="'#default'"/>
-		<xsl:choose>
-			<xsl:when test="$my:mode=('nordic-to-generic-epub3','epub3-to-dtbook')">
-				<xsl:apply-imports/>
-			</xsl:when>
-			<xsl:when test="$my:mode='generic-to-nordic-dtbook'">
-				<xsl:next-match/>
-			</xsl:when>
-			<xsl:when test="$my:mode='#default'">
-				<xsl:variable name="epub3">
-					<xsl:apply-templates mode="nordic-to-generic-epub3" select="."/>
-				</xsl:variable>
-				<xsl:variable name="dtbook">
-					<xsl:apply-templates mode="epub3-to-dtbook" select="$epub3"/>
-				</xsl:variable>
+    <xsl:template match="@*|node()" priority="1000">
+        <xsl:param name="my:mode" as="xs:string" tunnel="yes" select="'#default'"/>
+        <xsl:choose>
+            <xsl:when test="$my:mode=('nordic-to-generic-epub3','epub3-to-dtbook')">
+                <xsl:apply-imports/>
+            </xsl:when>
+            <xsl:when test="$my:mode='generic-to-nordic-dtbook'">
+                <xsl:next-match/>
+            </xsl:when>
+            <xsl:when test="$my:mode='#default'">
+                <xsl:variable name="epub3">
+                    <xsl:apply-templates mode="nordic-to-generic-epub3" select="."/>
+                </xsl:variable>
+                <xsl:variable name="dtbook">
+                    <xsl:apply-templates mode="epub3-to-dtbook" select="$epub3"/>
+                </xsl:variable>
 				<_>
 					<_ class="generic-epub3">
-						<xsl:sequence select="$epub3"/>
-					</_>
+                <xsl:sequence select="$epub3"/>
+            </_>
 					<_ class="generic-dtbook">
-						<xsl:sequence select="$dtbook"/>
-					</_>
+            <xsl:sequence select="$dtbook"/>
+        </_>
 					<_ class="nordic-dtbook">
-						<xsl:apply-templates mode="generic-to-nordic-dtbook" select="$dtbook"/>
-					</_>
+        <xsl:apply-templates mode="generic-to-nordic-dtbook" select="$dtbook"/>
+    </_>
 				</_>
 			</xsl:when>
 			<xsl:otherwise>
