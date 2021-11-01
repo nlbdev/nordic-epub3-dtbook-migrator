@@ -179,7 +179,7 @@
                 <executions>
                     <execution>
                         <id>check</id>
-                        <phase>verify</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
