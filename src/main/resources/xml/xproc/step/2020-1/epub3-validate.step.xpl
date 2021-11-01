@@ -48,7 +48,7 @@
     <p:option name="temp-dir" required="true"/>
     <p:option name="check-images" select="'true'"/>
     <p:option name="use-epubcheck" required="false" select="'true'"/>
-    <p:option name="use-ace" required="false" select="'true'"/>  <!-- TODO: not implemented yet -->
+    <p:option name="use-ace" required="false" select="'true'"/>
 
     <p:import href="html-validate.step.xpl"/>
     <p:import href="../validation-status.xpl"/>
@@ -64,6 +64,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epubcheck-adapter/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/ace-adapter/library.xpl"/>
 
     <px:assert message="'fail-on-error' should be either 'true' or 'false'. was: '$1'. will default to 'true'.">
         <p:with-option name="param1" select="$fail-on-error"/>
@@ -84,6 +85,7 @@
             <p:output port="report.out" sequence="true">
                 <p:pipe port="report.in" step="main"/>
                 <p:pipe port="result" step="epub3-validate.step.epubcheck.validate"/>
+                <p:pipe port="result" step="epub3-validate.step.ace.validate"/>
                 <p:pipe port="result" step="epub3-validate.step.epub-filename.validate"/>
                 <p:pipe port="result" step="epub3-validate.step.xml-declaration.validate"/>
                 <p:pipe port="result" step="epub3-validate.step.opf.validate"/>
@@ -145,6 +147,42 @@
                 </p:otherwise>
             </p:choose>
             <p:identity name="epub3-validate.step.epubcheck.validate"/>
+            <p:sink/>
+            
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe port="fileset.in" step="main"/>
+                </p:input>
+            </p:identity>
+            <p:choose>
+                <p:when test="$use-ace= 'true'">
+                    <!-- ace-epub-path points to the EPUB if it its a zipped EPUB, or the root directory of the EPUB fileset if it is unzipped. It is assumed that the base URI of the fileset document is the root directory of the EPUB fileset. -->
+                    <p:variable name="ace-epub-path" select="if (count(/*/d:file[@media-type='application/epub+zip']) gt 0) then (/*/d:file[@media-type='application/epub+zip'])[1]/resolve-uri(@href,base-uri(.)) else concat(base-uri(/*), if (ends-with(base-uri(/*), '/')) then '' else '/')"/>
+                    <px:ace name="ace" px:message="Running Ace">
+                        <p:with-option name="epub" select="$ace-epub-path"/>
+                    </px:ace>
+                    <p:sink/> <!-- primary output is JSON => ignore -->
+                    <p:identity>
+                        <p:input port="source">
+                            <p:pipe port="html-report" step="ace"/>
+                        </p:input>
+                    </p:identity>
+                    <p:xslt name="epub3-validate.step.epubcheck-report-to-pipeline-report">
+                        <p:with-param name="document-path" select="$ace-epub-path"/>
+                        <p:input port="stylesheet">
+                            <p:document href="../../../xslt/ace-report-to-pipeline-report.xsl"/>
+                        </p:input>
+                    </p:xslt>
+                </p:when>
+                <p:otherwise>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:identity>
+                </p:otherwise>
+            </p:choose>
+            <p:identity name="epub3-validate.step.ace.validate"/>
             <p:sink/>
 
             <p:identity>
