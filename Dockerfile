@@ -8,9 +8,7 @@ ADD . /usr/src/nordic-epub3-dtbook-migrator
 WORKDIR /usr/src/nordic-epub3-dtbook-migrator
 RUN mv .mvn ~/.m2  # configure global maven settings.xml
 
-# TODO: remove -DskipTests when we have
-#       a working version of the 2020-1 validator.
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 RUN rm -f /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-doc.jar
 RUN rm -f /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-xprocdoc.jar
