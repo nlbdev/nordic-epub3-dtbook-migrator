@@ -29,7 +29,7 @@
         </p:documentation>
     </p:option>
     
-    <p:option name="use-ace" required="false" select="'true'" px:type="boolean">
+    <p:option name="use-ace" required="false" select="'false'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Validate with Ace by DAISY</h2>
             <p px:role="desc">Whether or not to run Ace by DAISY validation in addition to the nordic validation rules. Ace violations with a critical or serious severity will result in a validation error.</p>
