@@ -168,7 +168,6 @@
         <p>Each note must have a backlink</p>
         <rule context="html:*[tokenize(@epub:type, '\s+') = ('note', 'endnote', 'footnote')]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <!-- this is the single-HTML version of the rule; the multi-HTML version of this rule is in nordic2020-1.opf-and-html.sch -->
             <assert test="count(.//html:a[tokenize(@role, '\s+') = 'doc-backlink']) = 1">[nordic26c] Each note must have one &lt;a role="doc-backlink" ...&gt;. <value-of select="$context"/></assert>
         </rule>
     </pattern>

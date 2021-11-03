@@ -192,10 +192,9 @@
     <pattern id="nordic_opf_and_html_30_a">
         <title>Rule 30a</title>
         <p>Each noteref must have a backlink</p>
-        <rule context="html:*[tokenize(@epub:type,'\s+')=('noteref')]">
+        <rule context="html:a[tokenize(@epub:type,'\s+')=('noteref')]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2020-1.sch -->
-            <assert test="count(//html:a[tokenize(@role,'\s+')='doc-backlink' and substring-after(@href,'#') = current()/@id]) &gt;= 1">[nordic_opf_and_html_30a] The <value-of
+            <assert test="count(//html:a[tokenize(@role,'\s+')='doc-backlink' and substring-after(@href,'#') = current()/@id]) = 1">[nordic_opf_and_html_30a] The <value-of
                     select="(tokenize(@epub:type,'\s+')[.=('noteref')],'noteref')[1]"/><value-of select="if (@id) then concat(' with the id &quot;',@id,'&quot;') else ''"/> must have
                 at least one &lt;a role="doc-backlink" ...&gt; referencing it: <value-of select="$context"/> (in <value-of select="replace(base-uri(),'.*/','')"
                 />)</assert>
@@ -207,8 +206,7 @@
         <p>Each backlink must reference a noteref</p>
         <rule context="html:a[tokenize(@role,'\s+')='doc-backlink']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2020-1.sch -->
-            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('noteref') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic_opf_and_html_30b] The backlink
+            <assert test="count(//html:a[tokenize(@epub:type,'\s+')=('noteref') and @id = current()/substring-after(@href,'#')]) = 1">[nordic_opf_and_html_30b] The backlink
                 with the href "<value-of select="@href"/>" attribute must resolve to a noteref in the publication: <value-of select="$context"/> (in <value-of select="replace(base-uri(),'.*/','')"
                 />)</assert>
         </rule>
