@@ -172,7 +172,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.ec4j.maven</groupId>
                 <artifactId>editorconfig-maven-plugin</artifactId>
                 <version>0.1.1</version>
@@ -187,13 +187,13 @@
                 </executions>
                 <configuration>
                     <excludes>
-		      <!-- You can exclude further files from processing: -->
+		              <!-/- You can exclude further files from processing: -/->
                       <exclude>src/test/**/*.epub</exclude>
                       <exclude>**/*.otf</exclude>
                       <exclude>documentation/*.odg</exclude>
                     </excludes>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
     
