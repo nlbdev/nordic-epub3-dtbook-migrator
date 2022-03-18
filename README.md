@@ -67,11 +67,13 @@ The nordic migrator can be built with Maven,
 either directly (with for instance `mvn clean package`),
 or indirectly with Docker (with for instance `docker build .`).
 
+<!--
 To check the code conventions use a special Maven plugin: `mvn
 editorconfig:check`. The conventions are defined in `.editorconfig`
-which is picked up by most editors, see https://editorconfig.org/. You
+which is picked up by most editors, see <https://editorconfig.org/>. You
 can also fix the conventions in all files with `mvn
 editorconfig:format`.
+-->
 
 Releasing
 ---------
