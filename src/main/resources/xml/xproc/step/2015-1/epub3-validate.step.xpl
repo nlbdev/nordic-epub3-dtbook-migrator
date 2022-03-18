@@ -38,7 +38,7 @@
     <p:option name="check-images" select="'true'"/>
     <p:option name="organization-specific-validation" required="false" select="''"/>
     <p:option name="use-epubcheck" required="false" select="'true'"/>
-    <p:option name="use-ace" required="false" select="'true'"/>  <!-- TODO: not implemented yet -->
+    <!--<p:option name="use-ace" required="false" select="'true'"/>-->  <!-- TODO: not implemented yet -->
 
     <p:import href="html-validate.step.xpl"/>
     <p:import href="../validation-status.xpl"/>

@@ -44,12 +44,12 @@
         </p:documentation>
     </p:option>
     
-    <p:option name="use-ace" required="false" select="'true'" px:type="boolean">
+    <!--<p:option name="use-ace" required="false" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Validate with Ace by DAISY</h2>
             <p px:role="desc">Whether or not to run Ace by DAISY validation in addition to the nordic validation rules. Ace violations with a critical or serious severity will result in a validation error.</p>
         </p:documentation>
-    </p:option>
+    </p:option>-->
     
     <p:option name="indent" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -160,7 +160,7 @@
                 <p:with-option name="fail-on-error" select="$fail-on-error"/>
                 <p:with-option name="check-images" select="$check-images"/>
                 <p:with-option name="use-epubcheck" select="$use-epubcheck"/>
-                <p:with-option name="use-ace" select="$use-ace"/>
+                <!--<p:with-option name="use-ace" select="$use-ace"/>-->
                 <p:with-option name="temp-dir" select="concat(/*/text(),'validate/')">
                     <p:pipe port="normalized" step="temp-dir"/>
                 </p:with-option>
