@@ -36,65 +36,26 @@
         </div>
         <article class="markdown-body">
 	  <h1><a name="nordic-epub3dtbook-migrator" class="anchor" href="#nordic-epub3dtbook-migrator"><span class="octicon octicon-link"></span></a>About the tool</h1>
-
-<p>The main goal of the Nordic EPUB3/DTBook Migrator is to provide a EPUB3 to DTBook conversion tool
-for the libraries in the Nordic countries providing accessible litterature to
-visually impaired readers (<a href="https://www.nlb.no/">NLB</a>, <a href="https://mtm.se/">MTM</a>,
-<a href="https://www.spsm.se/">SPSM</a>,
-<a href="https://www.celia.fi/">Celia</a>, <a href="https://www.nota.nu/">Nota</a> and <a href="https://sbs.ch/">SBS</a>).
-The conversion will be implemented in XProc and XSLT and provided as a
-<a href="https://daisy.github.io/pipeline">DAISY Pipeline 2</a> script.
-This conversion will allow the organizations to continue to use their respective
-DTBook-based tools for production of Braille and Synthetic Speech,
-as long as those are necessary.</p>
-
-<p>This tool attempts to map EPUB3 to DTBook with as little loss as possible (a 1:1 mapping).</p>
-
-<p>While the EPUB3 will consist of multiple HTML files internally, an intermediate
-single-page HTML representation is useful for converting to and from DTBook.</p>
-
-<p>This project provides the following Pipeline 2 scripts:</p>
-
-<ul>
-<li>EPUB3 to DTBook</li>
-<li>EPUB3 to HTML</li>
-<li>EPUB3 Validator</li>
-<li>EPUB3 ASCIIMath to MathML</li>
-<li>HTML to EPUB3</li>
-<li>HTML to DTBook</li>
-<li>HTML Validator</li>
-<li>DTBook to EPUB3</li>
-<li>DTBook to HTML</li>
-<li>DTBook Validator</li>
-</ul>
-
-<p>The EPUB3 to DTBook script will be used to allow new EPUB3 files to be used
-with legacy DTBook-based systems.</p>
-
-<p>The DTBook to EPUB3 script allows legacy DTBooks to be upgraded to new
-EPUB3-based production systems.</p>
-
-<p>Scripts for converting to and from the intermediary single-HTML representation
-of the publications are also provided. These are useful either for debugging,
-or if a single-document HTML representation is needed as input to or output from
-a HTML-based production system.</p>
-
-<p>Validators for EPUB3, DTBook and single-document HTML files are provided.
-The EPUB3 validator allows us to check that new EPUB3 files are valid according
-to the nordic markup guidelines. The DTBook and HTML validators can be useful
-for DTBook- or HTML-based production systems.</p>
-
-<p>In the nordic markup guidelines, math is marked up using ASCIIMath.
-An experimental script for converting this ASCIIMath to MathML is provided.</p>
-
-<p>The grammar used in the EPUB3, HTML and DTBook files is a strict subset of EPUB3, HTML and DTBook,
-and is defined in the Nordic markup guidelines. Most DTBooks will work with these scripts,
-there are few limitations to the input DTBook grammar. There are more limitations to the HTML/EPUB3
-grammar however, because there must be a way to convert it to DTBook.
-Most notably, multimedia such as audio and video are currently not allowed in these EPUB3s.</p>
-
-
-	  
+	  <p>The Nordic EPUB3/DTBook Migrator is a tool for validating and converting <a href="https://format.mtm.se/nordic_epub/">Nordic Guidelines</a>-conforming EPUB 3, HTML and DTBook file sets. It is implemented as a <a href="https://daisy.github.io/pipeline">DAISY Pipeline 2</a> script and is being used for the production of accessible literature by the (mostly) Nordic organizations <a href="https://www.celia.fi/">Celia</a>, <a href="https://www.dedicon.nl/">Dedicon</a>, <a href="https://hbs.is/">HBS</a>, <a href="https://mtm.se">MTM</a>, <a href="https://www.nlb.no/">NLB</a>, <a href="https://nota.dk/">Nota</a>, <a href="https://www.sbs.ch/">SBS</a>, <a href="https://www.spsm.se/">SPSM</a>, and <a href="http://statped.no/">Statped</a>.</p>
+	  <p>The tool supports EPUB 3-only workflows, where primarily validation is needed, or EPUB 3--DTBook workflows, where the primary production is carried out in EPUB 3 but including a conversion to DTBook, allowing the organization to use the output in legacy DTBook-based tools, e.g. TTS or Braille production tools. The tool's conversion capabilities work in both directions, so it can also be used to upgrade legacy DTBook file sets to EPUB 3.</p>
+	  <p>The Nordic EPUB3/DTBook Migrator is closely related to the development of the <a href="https://format.mtm.se/nordic_epub/">Nordic Guidelines</a>, a joint application of EPUB 3 and DTBook formats for the production of accessible content at the Nordic organizations. Currently, only validation is supported for files conforming to the <a href="https://format.mtm.se/nordic_epub/2020-1/">2020-1</a> version of the guidelines. For <a href="https://format.mtm.se/nordic_epub/2015-1/">2015-1</a>-conforming files, conversion between e.g. EPUB 3 and DTBook is also supported.</p>
+	  <p>This project provides the following Pipeline 2 scripts:</p>
+	  <ul>
+	    <li>EPUB3 Validator</li>
+	    <li>EPUB3 to DTBook (2015-1 guidelines only)</li>
+	    <li>EPUB3 to HTML (2015-1 guidelines only)</li
+	    <li>EPUB3 ASCIIMath to MathML (2015-1 guidelines only)</li>
+	    <li>HTML to EPUB3 (2015-1 guidelines only)</li>
+	    <li>HTML to DTBook (2015-1 guidelines only)</li>
+	    <li>HTML Validator (2015-1 guidelines only)</li>
+	    <li>DTBook to EPUB3 (2015-1 guidelines only)</li>
+	    <li>DTBook to HTML (2015-1 guidelines only)</li>
+	    <li>DTBook Validator (2015-1 guidelines only)</li>
+	  </ul>
+	  <h2>Additional notes</h2>
+	  <p>Scripts for converting to and from the intermediary single-HTML representation of the publications are also provided. These are useful either for debugging, or if a single-document HTML representation is needed as input to or output from a HTML-based production system.</p>
+	  <p>In the 2015-1 Nordic Guidelines, math is marked up using ASCIIMath. An experimental script for converting this ASCIIMath to MathML is provided.</p>
+	  <p>The grammar used in the EPUB 3, HTML and DTBook files -- the Nordic Guidelines -- is a strict subset of EPUB 3, HTML and DTBook. Most DTBooks will work with these scripts. There are few limitations to the input DTBook grammar. There are more limitations to the HTML/EPUB 3 grammar however, because there must be a way to convert it to DTBook. Most notably, multimedia such as audio and video are currently not allowed in these EPUB 3s.</p>
             <h1><a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
             <p><strong>Latest version: 1.4.6</strong></p>
             <p>If you want to install the tool using some other mechanism than those describe below, then you can download the JAR file from
