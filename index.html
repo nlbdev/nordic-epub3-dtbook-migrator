@@ -35,33 +35,7 @@
         <span class="blc"></span><span class="trc"></span>
         </div>
         <article class="markdown-body">
-            <h1><a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
-            <p><strong>Latest version: 1.4.6</strong></p>
-            <p>If you want to install the tool using some other mechanism than those describe below, then you can download the JAR file from
-                <a href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.daisy.pipeline.modules%22%20AND%20a%3A%22nordic-epub3-dtbook-migrator%22">Maven Central</a>,
-                or from the <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/releases">GitHub Release page</a>.
-                The GitHub Release page also contains a description of changes for each release. However, using either
-                the Pipeline 2 Updater or running the nordic migrator using Docker is recommended.</p>
-            
-            <h2>Using the Pipeline 2 Updater</h2>
-            <p>Note that as of Pipeline 2 v1.13, the minimum required version of Java is 11. It is recommended to install Java from <a href="https://adoptopenjdk.net">https://adoptopenjdk.net</a>.</p>
-            <ol>
-                <li>Download and install Pipeline 2 v1.13 by following the <a href="https://daisy.github.io/pipeline/Get-Help/User-Guide/Installation/">DAISY Pipeline 2 installation guide</a>.</li>
-                <li>Use the <a href="https://daisy.github.io/pipeline/Get-Help/User-Guide/Installation/#updater">updater mechanism as described in the installation guide</a>,
-                    but using the following URL as the <code>"service"</code>:<br/>
-                    <code>"https://nlbdev.github.com/nordic-epub3-dtbook-migrator/releases/"</code></li>
-            </ol>
-            
-            <h2>Using Docker</h2>
-            <p>The nordic migrator is published as <code>nlbdev/nordic-epub3-dtbook-migrator</code>, tagged with release versions.</p>
-            <p>Example of how to run the Nordic EPUB3/DTBook Migrator with docker:</p>
-            <pre><code>docker run --network=host --rm -it nlbdev/nordic-epub3-dtbook-migrator:1.4.6</code></pre>
-            
-            <p>After starting the nordic migrator, you could also start the Pipeline 2 Web UI on the same system like this, if you don't have any other interface (starts on <a href="http://localhost:9000/">http://localhost:9000/</a>):</p>
-            <pre><code>docker run --network=host --rm -it daisyorg/pipeline-webui:v2.7.0</code></pre>
-            
-
-<h1><a name="nordic-epub3dtbook-migrator" class="anchor" href="#nordic-epub3dtbook-migrator"><span class="octicon octicon-link"></span></a>About the tool</h1>
+	  <h1><a name="nordic-epub3dtbook-migrator" class="anchor" href="#nordic-epub3dtbook-migrator"><span class="octicon octicon-link"></span></a>About the tool</h1>
 
 <p>The main goal of the Nordic EPUB3/DTBook Migrator is to provide a EPUB3 to DTBook conversion tool
 for the libraries in the Nordic countries providing accessible litterature to
@@ -119,7 +93,35 @@ there are few limitations to the input DTBook grammar. There are more limitation
 grammar however, because there must be a way to convert it to DTBook.
 Most notably, multimedia such as audio and video are currently not allowed in these EPUB3s.</p>
 
-<h2>Resources</h2>
+
+	  
+            <h1><a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
+            <p><strong>Latest version: 1.4.6</strong></p>
+            <p>If you want to install the tool using some other mechanism than those describe below, then you can download the JAR file from
+                <a href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.daisy.pipeline.modules%22%20AND%20a%3A%22nordic-epub3-dtbook-migrator%22">Maven Central</a>,
+                or from the <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/releases">GitHub Release page</a>.
+                The GitHub Release page also contains a description of changes for each release. However, using either
+                the Pipeline 2 Updater or running the nordic migrator using Docker is recommended.</p>
+            
+            <h2>Using the Pipeline 2 Updater</h2>
+            <p>Note that as of Pipeline 2 v1.13, the minimum required version of Java is 11. It is recommended to install Java from <a href="https://adoptopenjdk.net">https://adoptopenjdk.net</a>.</p>
+            <ol>
+                <li>Download and install Pipeline 2 v1.13 by following the <a href="https://daisy.github.io/pipeline/Get-Help/User-Guide/Installation/">DAISY Pipeline 2 installation guide</a>.</li>
+                <li>Use the <a href="https://daisy.github.io/pipeline/Get-Help/User-Guide/Installation/#updater">updater mechanism as described in the installation guide</a>,
+                    but using the following URL as the <code>"service"</code>:<br/>
+                    <code>"https://nlbdev.github.com/nordic-epub3-dtbook-migrator/releases/"</code></li>
+            </ol>
+            
+            <h2>Using Docker</h2>
+            <p>The nordic migrator is published as <code>nlbdev/nordic-epub3-dtbook-migrator</code>, tagged with release versions.</p>
+            <p>Example of how to run the Nordic EPUB3/DTBook Migrator with docker:</p>
+            <pre><code>docker run --network=host --rm -it nlbdev/nordic-epub3-dtbook-migrator:1.4.6</code></pre>
+            
+            <p>After starting the nordic migrator, you could also start the Pipeline 2 Web UI on the same system like this, if you don't have any other interface (starts on <a href="http://localhost:9000/">http://localhost:9000/</a>):</p>
+            <pre><code>docker run --network=host --rm -it daisyorg/pipeline-webui:v2.7.0</code></pre>
+            
+
+<h1><a name="resources" class="anchor" href="#resources"><span class="octicon octicon-link"></span></a>Resources</h1>
 <ul>
   <li><a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/">Issue tracker (GitHub; report issues here)</a></li>
   <li><del><a href="v1.9-builds/index.html">Old builds for Pipeline 2 v1.9</a></del> (outdated)</li>
