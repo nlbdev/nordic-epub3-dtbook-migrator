@@ -124,6 +124,8 @@ Add your Github credentials to your local `~/.m2/settings.xml` (you should use a
   </server>
 ```
 
+The convention has been to release from a feature branch or dedicated release branch, and then merge into the master branch in a merge commit.
+
 Prepare the release:
 
 ```bash
@@ -147,16 +149,21 @@ HEAD        [maven-release-plugin] prepare for next development iteration
 tag: vX.X.X [maven-release-plugin] prepare release vX.X.X
 ```
 
+Then, you can publish the release artifacts using:
 
+```bash
+mvn release:perform
+```
 
+Also, remember to push the tag upstream:
 
-### As a maven artifact:
+```
+git push origin vX.X.X
+```
 
-- `mvn release:prepare`
-- `mvn release:perform`
-- Release artifacts from https://oss.sonatype.org/index.html
+The project is set up so that the branch `mvn-repo` is used as a maven repository. Artifacts will be published to that branch.
 
-If you want to use this project as a maven package, add this repository to your project:
+If you want to use nordic migrator as a maven package in another project; add this repository to your project:
 
 ```xml
     <repository>
@@ -170,10 +177,11 @@ If you want to use this project as a maven package, add this repository to your 
 ```
 
 
-### As a docker image:
+### Docker images:
 
-- commits tagged with a version are built and tagged automatically
-- the tip of the master branch is built as `:latest`
+Commits tagged with a version are built and tagged automatically on Docker Hub. The tag is created automatically by `mvn release:prepare`, and when you push the git tag to Github with `git push origin vX.X.X`, a webhook will tell Docker Hub to build a new image.
+
+All commits on the master branch will be built on Docker Hub. The latest commit will be available as `:latest`.
 
 
 ## References
