@@ -1,0 +1,21 @@
+# EditorConfig: maintain consistent coding styles for multiple
+# developers working on the same project across various editors and
+# IDEs, see https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# Set default charset and 4 space indentation for all xml, xslt, xpl,
+# xprocspec and xspec files
+[*.{xml,xpl,xsl,xprocspec,xspec}]
+charset = utf-8
+indent_style = space
+indent_size = 4
+
+
+

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               script="../../../../main/resources/xml/xproc/step/2015-1/dtbook-to-html/dtbook-to-html.xpl">
+    
+    <x:scenario label="px:dtbook-to-html">
+        <x:call step="px:dtbook-to-html">
+            <x:input port="source.fileset">
+                <x:document type="inline" xml:base="resources/DTBook/">
+                    <d:fileset>
+                        <d:file href="C00000.xml" media-type="application/x-dtbook+xml"/>
+                        <d:file href="valentin.jpg" media-type="image/jpeg"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="source.in-memory">
+                <x:document type="file" href="resources/DTBook/C00000.xml"/>
+            </x:input>
+            <x:option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
+        </x:call>
+
+        <x:context label="the dtbook">
+            <x:document type="port" port="result.in-memory"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one output document" min="1" max="1"/>
+        <x:expect type="xpath" label="The output document (the intermediary HTML) should have a base URI with filename C00000.xhtml" test="tokenize(/*/base-uri(.),'/')[last()]"
+            equals="'C00000.xhtml'"/>
+        <x:expect type="xpath" label="The output document (the intermediary HTML) should have a base URI pointing to the temp-dir directory" test="/*/base-uri(.)"
+            equals="concat($temp-dir,'output-dir/C00000.xhtml')"/>
+
+        <x:context label="the fileset">
+            <x:document type="port" port="result.fileset"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one fileset document" min="1" max="1"/>
+        <x:expect type="xpath" label="The fileset should have a xml:base attribute pointing to the output-dir" test="/*/@xml:base" equals="concat($temp-dir,'output-dir/')"/>
+        <x:expect type="xpath" label="There should be a file with href='valentin.jpg'" test="//d:file[@href='valentin.jpg']"/>
+        <x:expect type="xpath" label="There should be a file with href='C00000.xhtml'" test="//d:file[@href='C00000.xhtml']"/>
+        <x:expect type="xpath" label="There should be exactly 2 files in the fileset" test="count(//d:file)" equals="2"/>
+
+        <x:context label="the HTML metadata">
+            <x:document type="port" port="result.in-memory" select="/html:html/html:head"/>
+        </x:context>
+        <x:expect label="there must be HTML head elements" type="count" min="1"/>
+        
+    </x:scenario>
+
+</x:description>

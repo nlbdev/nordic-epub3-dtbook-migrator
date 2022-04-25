@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
     type="px:nordic-epub3-asciimath-to-mathml" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:pxp="http://exproc.org/proposed/steps" xpath-version="2.0"
-    xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:html="http://www.w3.org/1999/xhtml">
+    xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:opf="http://www.idpf.org/2007/opf">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Nordic EPUB3 ASCIIMath to MathML</h1>
@@ -29,6 +29,7 @@
     </p:option>
 
     <p:import href="step/epub3-asciimath-to-mathml.step.xpl"/>
+    <p:import href="step/determine-guidelines-version.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
@@ -58,32 +59,57 @@
     <px:message message="Unzipping EPUB" name="epub3-asciimath-to-mathml.message.epub-unzipped"/>
     <p:sink/>
     
-    <px:fileset-unzip name="epub3-asciimath-to-mathml.unzip" cx:depends-on="epub3-asciimath-to-mathml.message.epub-unzipped" load-to-memory="false" store-to-disk="true">
+    <px:nordic-determine-guidelines-version name="guidelines-version">
         <p:with-option name="href" select="/*/text()">
             <p:pipe port="normalized" step="epub"/>
         </p:with-option>
-        <p:with-option name="unzipped-basedir" select="concat(/*/text(),'epub/')">
-            <p:pipe port="normalized" step="temp-dir"/>
-        </p:with-option>
-    </px:fileset-unzip>
+    </px:nordic-determine-guidelines-version>
+    <px:message message="Guidelines version: $1">
+        <p:with-option name="param1" select="/*/text()"/>
+    </px:message>
     <p:sink/>
-    <px:mediatype-detect name="epub3-asciimath-to-mathml.mediatype-detect">
-        <p:input port="source">
-            <p:pipe port="fileset" step="epub3-asciimath-to-mathml.unzip"/>
-        </p:input>
-    </px:mediatype-detect>
-
-    <px:message message="Converting from ASCIIMath to MathML"/>
-    <px:nordic-epub3-asciimath-to-mathml.step name="epub3-asciimath-to-mathml.convert" fail-on-error="true"/>
-
-    <px:message message="Zipping EPUB"/>
-    <px:epub3-store name="epub3-asciimath-to-mathml.store">
-        <p:with-option name="href" select="concat(/*/text(),replace($epub,'.*/',''))">
-            <p:pipe port="normalized" step="output-dir"/>
-        </p:with-option>
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="epub3-asciimath-to-mathml.convert"/>
-        </p:input>
-    </px:epub3-store>
+    
+    <p:choose name="guidelines-version.choose">
+        <p:xpath-context>
+            <p:pipe port="result" step="guidelines-version"/>
+        </p:xpath-context>
+        <p:when test="/*/text() = '2015-1'">
+            <px:fileset-unzip name="epub3-asciimath-to-mathml.unzip" cx:depends-on="epub3-asciimath-to-mathml.message.epub-unzipped" load-to-memory="false" store-to-disk="true">
+                <p:with-option name="href" select="/*/text()">
+                    <p:pipe port="normalized" step="epub"/>
+                </p:with-option>
+                <p:with-option name="unzipped-basedir" select="concat(/*/text(),'epub/')">
+                    <p:pipe port="normalized" step="temp-dir"/>
+                </p:with-option>
+            </px:fileset-unzip>
+            <p:sink/>
+            <px:mediatype-detect name="epub3-asciimath-to-mathml.mediatype-detect">
+                <p:input port="source">
+                    <p:pipe port="fileset" step="epub3-asciimath-to-mathml.unzip"/>
+                </p:input>
+            </px:mediatype-detect>
+            
+            <px:message message="Converting from ASCIIMath to MathML"/>
+            <px:nordic-epub3-asciimath-to-mathml.step name="epub3-asciimath-to-mathml.convert" fail-on-error="true"/>
+            
+            <px:message message="Zipping EPUB"/>
+            <px:epub3-store name="epub3-asciimath-to-mathml.store">
+                <p:with-option name="href" select="concat(/*/text(),replace($epub,'.*/',''))">
+                    <p:pipe port="normalized" step="output-dir"/>
+                </p:with-option>
+                <p:input port="in-memory.in">
+                    <p:pipe port="in-memory.out" step="epub3-asciimath-to-mathml.convert"/>
+                </p:input>
+            </px:epub3-store>
+            
+        </p:when>
+        <p:otherwise>
+            <px:message message="Unknown guidelines version">
+                <p:input port="source">
+                    <p:empty/>
+                </p:input>
+            </px:message>
+        </p:otherwise>
+    </p:choose>
 
 </p:declare-step>
