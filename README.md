@@ -76,6 +76,18 @@ Most notably, multimedia such as audio and video are currently not allowed in th
 
 ## Building
 
+Install dependencies:
+
+```bash
+sudo apt install git maven gpg
+```
+
+Clone the repository:
+
+```bash
+git clone https://github.com/nlbdev/nordic-epub3-dtbook-migrator.git
+```
+
 The nordic migrator can be built with Maven,
 either directly (with for instance `mvn clean package`),
 or indirectly with Docker (with for instance `docker build .`).
@@ -93,7 +105,40 @@ editorconfig:format`.
 
 ## Releasing
 
-A brief overview.
+First, make sure you have a GPG key:
+https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
+
+And also make sure that you have set your GPG key as default in `~/.gnupg/gpg.conf`:
+
+```
+default-key ABCDEF123
+```
+
+Prepare the release:
+
+```bash
+mvn release:prepare
+```
+
+You will be asked:
+- *What is the release version (…)?*
+    - use semantic versioning to choose the version number. For bugfixes and similar, the default is fine: a bumped patch version number
+- *What is SCM release tag or label (…)?*
+    - the tags we use are a "v" followed by the release version; this is also what is suggested by default
+- *What is the new development version (…)?*
+    - just use the default here, which is the release version with a bumped patch version and a "-SNAPSHOT" suffix
+
+At this point, Maven will update the version in the POM and run all the tests. This will take a few minutes.
+
+If you look in the git log when it's done, you'll find:
+
+```
+HEAD        [maven-release-plugin] prepare for next development iteration
+tag: vX.X.X [maven-release-plugin] prepare release vX.X.X
+```
+
+
+
 
 ### As a maven artifact:
 
@@ -108,4 +153,4 @@ A brief overview.
 
 ## References
 
-See [the project homepage](http://nlbdev.github.io/nordic-epub3-dtbook-migrator/) for more information.
+See [the project homepage](http://nlbdev.github.io/nordic-epub3-dtbook-migrator/) for more information.
