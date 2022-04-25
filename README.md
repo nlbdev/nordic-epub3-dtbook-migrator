@@ -114,6 +114,16 @@ And also make sure that you have set your GPG key as default in `~/.gnupg/gpg.co
 default-key ABCDEF123
 ```
 
+Add your Github credentials to your local `~/.m2/settings.xml` (you should use a personal access token as the password):
+
+```xml
+  <server>
+    <id>github</id>
+    <username><!-- your github username here --></username>
+    <password><!-- your personal access token here --></password>
+  </server>
+```
+
 Prepare the release:
 
 ```bash
@@ -146,10 +156,25 @@ tag: vX.X.X [maven-release-plugin] prepare release vX.X.X
 - `mvn release:perform`
 - Release artifacts from https://oss.sonatype.org/index.html
 
+If you want to use this project as a maven package, add this repository to your project:
+
+```xml
+    <repository>
+        <id>nordic-epub3-dtbook-migrator-mvn-repo</id>
+        <url>https://github.com/nlbdev/nordic-epub3-dtbook-migrator/raw/mvn-repo/</url>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+        </snapshots>
+    </repository>
+```
+
+
 ### As a docker image:
 
 - commits tagged with a version are built and tagged automatically
 - the tip of the master branch is built as `:latest`
+
 
 ## References
 
