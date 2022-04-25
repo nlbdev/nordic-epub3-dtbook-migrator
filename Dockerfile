@@ -6,7 +6,7 @@
 FROM maven:3.6-jdk-11 as builder
 ADD . /usr/src/nordic-epub3-dtbook-migrator
 WORKDIR /usr/src/nordic-epub3-dtbook-migrator
-RUN mv .mvn ~/.m2  # configure global maven settings.xml
+RUN mv .m2-for-docker ~/.m2  # configure global maven settings.xml
 
 RUN mvn clean package
 
