@@ -14,7 +14,7 @@ RUN rm -f /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migra
 RUN rm -f /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-xprocdoc.jar
 
 # then use the build artifacts to create an image where the pipeline is installed
-FROM daisyorg/pipeline-assembly:v1.14.4
+FROM daisyorg/pipeline-assembly:v1.14.1
 LABEL maintainer="Norwegian library of talking books and braille (http://www.nlb.no/)"
 COPY --from=builder /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*.jar /opt/daisy-pipeline2/system/common/
 ENV PIPELINE2_WS_LOCALFS=false \
