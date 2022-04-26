@@ -22,7 +22,7 @@ single-page HTML representation is useful for converting to and from DTBook.
 
 ## 2020
 
-A revision of the guidelines were started in 2020. The participating organisations are
+A revision of the guidelines was started in 2020. The participating organisations are
 [Celia](https://www.celia.fi/), [Dedicon](https://www.dedicon.nl/), [HBS](https://hbs.is/),
 [MTM](https://mtm.se), [NLB](https://www.nlb.no/), [Nota](https://nota.dk/),
 [SBS](https://www.sbs.ch/), [SPSM](https://www.spsm.se/), and [Statped](http://statped.no/).
@@ -46,7 +46,7 @@ This project provides the following Pipeline 2 scripts:
 - DTBook to HTML
 - DTBook Validator
 
-The only script that currently supports the 2020-1 guidelines are
+The only script that currently supports the 2020-1 guidelines is
 the EPUB3 Validator script.
 
 The EPUB3 to DTBook script allows new EPUB3 files to be used
@@ -88,7 +88,7 @@ Clone the repository:
 git clone https://github.com/nlbdev/nordic-epub3-dtbook-migrator.git
 ```
 
-The nordic migrator can be built with Maven,
+The Nordic Migrator can be built with Maven,
 either directly (with for instance `mvn clean package`),
 or indirectly with Docker (with for instance `docker build .`).
 
