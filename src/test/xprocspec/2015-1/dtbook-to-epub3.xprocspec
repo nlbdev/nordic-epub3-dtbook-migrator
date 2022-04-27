@@ -57,33 +57,37 @@
         <x:expect label="there must be a OPF" type="count" min="1"/>
         <x:expect label="must be pretty-printed (test 1: all whitespace-only text nodes must contain a linebreak)" type="xpath" test="count(//text()[normalize-space()='' and not(contains(.,'&#x0a;'))])" equals="0"/>
         <x:expect label="must be pretty-printed (test 2: all tags must be separated by a text node)" type="xpath" test="count(/*//*[not(preceding-sibling::node()[1][self::text()]) or not(following-sibling::node()[1][self::text()])]/concat('/',string-join(ancestor-or-self::*/concat(name(),'[',count(preceding::*)+1,']'),'/'),'&#x0a;'))" equals="0"/>
+        <x:expect label="the prefix attribute must be as expected" type="xpath" test="string(/*/@prefix)"
+                  equals="'nordic: http://www.mtm.se/epub/ a11y: http://www.idpf.org/epub/vocab/package/a11y/# schema: http://schema.org/'"/>
+        
+        <x:context label="the OPF">
+            <x:document type="file" href="temp-dir/validate-epub/EPUB/package.opf" base-uri="temp-dir"/>
+        </x:context>
         <x:expect label="the metadata must be as expected" type="custom"
                   href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
             <x:document type="inline">
                 <metadata xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">
                     <dc:title>Valentin Haüy - the father of the education for the blind</dc:title>
-                    <dc:identifier id="pub-identifier">C00000</dc:identifier>
-                    <dc:language id="language_1">en</dc:language>
-                    <dc:format id="format">EPUB3</dc:format>
-                    <dc:creator id="creator_1">Beatrice Christensen Sköld</dc:creator>
-                    <dc:source id="source_1">urn:isbn:123456789</dc:source>
-                    <dc:publisher id="publisher_1">MTM</dc:publisher>
-                    <dc:date id="date_1">2006-03-23</dc:date>
+                    <dc:identifier id="pub-identifier2">C00000</dc:identifier>
+                    <dc:language id="language_12">en</dc:language>
                     <meta property="dcterms:modified">2019-08-13T15:54:22Z</meta>
                     <meta name="dcterms:modified" content="2019-08-13T15:54:22Z"/>
-                    <meta property="nordic:guidelines" id="meta_4">2015-1</meta>
+                    <dc:format id="format2">EPUB3</dc:format>
+                    <dc:creator id="creator_12">Beatrice Christensen Sköld</dc:creator>
+                    <dc:source id="source_12">urn:isbn:123456789</dc:source>
+                    <dc:publisher id="publisher_12">MTM</dc:publisher>
+                    <dc:date id="date_12">2006-03-23</dc:date>
+                    <meta property="nordic:guidelines" id="meta_42">2015-1</meta>
                     <meta name="nordic:guidelines" content="2015-1"/>
-                    <meta property="nordic:supplier" id="meta_5">MTM</meta>
+                    <meta property="nordic:supplier" id="meta_52">MTM</meta>
                     <meta name="nordic:supplier" content="MTM"/>
-                    <meta property="a11y:certifiedBy" id="meta_11">Certifying Organization</meta>
+                    <meta property="a11y:certifiedBy" id="meta_112">Certifying Organization</meta>
                     <meta name="a11y:certifiedBy" content="Certifying Organization"/>
-                    <meta property="schema:audience" id="meta_12">Adult</meta>
+                    <meta property="schema:audience" id="meta_122">Adult</meta>
                     <meta name="schema:audience" content="Adult"/>
                 </metadata>
             </x:document>
         </x:expect>
-        <x:expect label="the prefix attribute must be as expected" type="xpath" test="string(/*/@prefix)"
-                  equals="'nordic: http://www.mtm.se/epub/ a11y: http://www.idpf.org/epub/vocab/package/a11y/# schema: http://schema.org/'"/>
         
         <x:context label="the NCX metadata">
             <x:document type="file" href="temp-dir/validate-epub/EPUB/nav.ncx" base-uri="temp-dir" select="/ncx:ncx/ncx:head"/>
