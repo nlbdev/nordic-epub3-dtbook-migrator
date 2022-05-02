@@ -97,6 +97,16 @@ a:hover {
   outline: 0;
 }
 
+
+/**
+ * Fix h1 links
+ */
+
+h1 a, h1 a:hover {
+    color: black;
+    text-decoration: none;
+}
+
 /* Text-level semantics
    ========================================================================== */
 
