@@ -57,17 +57,49 @@
 	  <p>In the 2015-1 Nordic Guidelines, math is marked up using ASCIIMath. An experimental script for converting this ASCIIMath to MathML is provided.</p>
 	  <p>The grammar used in the EPUB 3, HTML and DTBook files—the Nordic Guidelines—is a strict subset of EPUB 3, HTML and DTBook. Most DTBooks will work with these scripts. There are few limitations to the input DTBook grammar. There are more limitations to the HTML/EPUB 3 grammar however, because there must be a way to convert it to DTBook. Most notably, multimedia such as audio and video are currently not allowed in these EPUB 3s.</p>
           <h1><a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
-          <p><strong>Latest version: 1.5.0</strong></p>
+          <p><strong>Latest version: 1.5.2 (note, Docker-only version!)</strong></p>
 	  <p>There are several ways to run the Nordic Migrator. Below, we outline the process for installing and running the Nordic Migrator in two ways, using Docker or using the DAISY Pipeline 2 Updater. Running the Nordic Migrator with Docker is strongly recommended.</p>
           <p>If you want to install the tool using some other mechanism than Docker or the Pipeline 2 Updater method, the JAR file is available from the <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/tree/mvn-repo/org/daisy/pipeline/modules/nordic-epub3-dtbook-migrator">Maven repository on GitHub</a>,or from the <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/releases">GitHub Release page</a>. The GitHub Release page also contains a description of changes for each release.</p>
                     
-          <h2>Using Docker</h2>
+          <h2>Using Docker (recommended)</h2>
           <p>The Nordic Migrator is published as <code>nlbdev/nordic-epub3-dtbook-migrator</code>, tagged with release versions.</p>
-          <p>Example of how to run the Nordic EPUB3/DTBook Migrator with docker:</p>
-          <pre><code>docker run --network=host --rm -it nlbdev/nordic-epub3-dtbook-migrator:1.5.0</code></pre>
+          <p>Example of how to run the Nordic EPUB3/DTBook Migrator with Docker:</p>
+          <pre><kbd>docker run --network=host --rm -it nlbdev/nordic-epub3-dtbook-migrator:1.5.2</kbd></pre>
           
           <p>After starting the Nordic Migrator, you could also start the Pipeline 2 Web UI on the same system like this, if you don't have any other interface (starts on <a href="http://localhost:9000/">http://localhost:9000/</a>):</p>
-          <pre><code>docker run --network=host --rm -it daisyorg/pipeline-webui:v2.7.1</code></pre>
+          <pre><kbd>docker run --network=host --rm -it daisyorg/pipeline-webui:v2.7.1</kbd></pre>
+
+	  <h3>Using docker-compose</h3>
+	  <p>A slightly more elaborate method of running the validator in Docker is using <a href="https://docs.docker.com/compose/"><kbd>docker-compose</kbd></a>.</p>
+	  <p>Suggested <code>docker-compose.yml</code> file:</p>
+	  <pre>
+<code>services:
+   pipeline:
+      image: nlbdev/nordic-epub3-dtbook-migrator:1.5.2
+      environment:
+         PIPELINE2_WS_HOST: "0.0.0.0"
+         PIPELINE2_WS_AUTHENTICATION: "false"
+      volumes:
+         - "pipeline-data:/opt/daisy-pipeline2/data"
+      webui:
+	image: daisyorg/pipeline-webui:v2.7.1
+	environment:
+	   DAISY_PIPELINE2_URL: http://pipeline:8181/ws
+	ports:
+	   - "9000:9000"
+        volumes:
+           - "webui-data:/opt/daisy-pipeline2-webui/data"
+        depends_on:
+           pipeline:
+              condition: service_healthy
+volumes:
+   pipeline-data:
+   webui-data:</code>
+	  </pre>
+	  <p>The two containers can now be started jointly with the following suggested command (replace the path with your docker-compose.yml location):</p>
+	  <pre><kbd>docker-compose -f [path to docker-compose.yml] up --force-recreate -d</kbd></pre>
+	  <p>The web UI service should now be up and running on <a href="http://localhost:9000/">http://localhost:9000/</a>, which you can access from a browser to manage Nordic Migrator jobs (e.g. validation).</p>
+	  <p><strong>Please note that adding e.g. <code>restart: always</code> to the .yml config file will restart the containers after Docker or system restart. However, on Windows, the web UI container will not be successfully resumed after system restart this way. So either exit Docker Desktop before system shutdown, or initiate the containers afresh with the command above. There are many ways of setting up Docker services, please refer to the <a href="https://docs.docker.com/">Docker documentation</a> to learn more.</strong></p>
           <h2>Using the Pipeline 2 Updater</h2>
           <p>Note that as of Pipeline 2 v1.13, the minimum required version of Java is 11. It is recommended to install Java from <a href="https://adoptopenjdk.net">https://adoptopenjdk.net</a>.</p>
           <ol>
@@ -94,7 +126,7 @@
 	    </ul>
 	    <h2>Tool user guides</h2>
 	    <ul>
-	      <li><a href="guide/index.html">Nordic EPUB3/DTBook Migrator User Guide (web interface)</a></li>
+	      <li><a href="guide/index.html">Nordic EPUB3/DTBook Migrator User Guide (web interface)</a> <strong>Please note: The book categories mentioned at the end are outdated and not applicable to present/coming contracts with the Nordic Agencies</strong></li>
 	      <li><a href="https://daisy.github.io/pipeline/Get-Help/User-Guide/">DAISY Pipeline 2 User Guide</a></li>
 	    </ul>
         </article>
