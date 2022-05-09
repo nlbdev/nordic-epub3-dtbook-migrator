@@ -67,7 +67,7 @@
           <h2>Using Docker (recommended)</h2>
           <p>The Nordic Migrator is published as <code>nlbdev/nordic-epub3-dtbook-migrator</code>, tagged with release versions.</p>
           <p>Example of how to run the Nordic EPUB3/DTBook Migrator with Docker:</p>
-          <pre><kbd>docker run --network=host --rm -it nlbdev/nordic-epub3-dtbook-migrator:1.5.2</kbd></pre>
+          <pre><kbd>docker run --network=host --env PIPELINE2_WS_LOCALFS=false --rm -it nlbdev/nordic-epub3-dtbook-migrator:1.5.2</kbd></pre>
           
           <p>After starting the Nordic Migrator, you could also start the Pipeline 2 Web UI on the same system like this, if you don't have any other interface (starts on <a href="http://localhost:9000/">http://localhost:9000/</a>):</p>
           <pre><kbd>docker run --network=host --rm -it daisyorg/pipeline-webui:v2.7.1</kbd></pre>
