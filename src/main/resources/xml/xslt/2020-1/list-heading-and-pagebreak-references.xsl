@@ -59,7 +59,7 @@
         <xsl:apply-templates/>
     </xsl:template>
 
-    <xsl:template match="*[role='doc-pagebreak']">
+    <xsl:template match="*[@role='doc-pagebreak']">
         <c:result>
             <xsl:attribute name="xml:base" select="base-uri(.)"/>
             <xsl:attribute name="data-pagebreak-element" select="name()"/>
