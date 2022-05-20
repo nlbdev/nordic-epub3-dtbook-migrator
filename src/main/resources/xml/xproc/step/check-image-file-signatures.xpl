@@ -20,7 +20,7 @@
 
     <p:for-each name="check-image-file-signatures.iterate-images">
         <p:iteration-source select="/*/d:file[starts-with(@media-type,'image/')]"/>
-        <p:variable name="href" select="resolve-uri(/*/(@original-href,@href)[1], base-uri())"/>
+        <p:variable name="href" select="string(resolve-uri(/*/(@original-href,@href)[1], base-uri()))"/>
         <p:variable name="type" select="string(/*/@media-type)"/>
 
         <px:message severity="DEBUG" message="Checking file signature for image: $1">

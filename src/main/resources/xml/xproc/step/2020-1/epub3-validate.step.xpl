@@ -105,7 +105,7 @@
 
 
 
-            <p:variable name="basedir" select="if (/*/d:file[@media-type='application/epub+zip']) then $temp-dir else base-uri(/*)"/>
+            <p:variable name="basedir" select="if (/*/d:file[@media-type='application/epub+zip']) then $temp-dir else string(base-uri(/*))"/>
 
             <p:choose>
                 <p:when test="$use-epubcheck = 'true'">
@@ -386,7 +386,7 @@
                         <p:pipe port="result" step="epub3-validate.step.group-xml-declaration.iterate-files.xml"/>
                         <p:pipe port="result" step="epub3-validate.step.group-xml-declaration.iterate-files.doctype"/>
                     </p:output>
-                    <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
+                    <p:variable name="href" select="string(resolve-uri(/*/@href,base-uri(/*)))"/>
 
                     <!-- XML declaration -->
                     <p:try name="epub3-validate.step.group-xml-declaration.iterate-files.try">

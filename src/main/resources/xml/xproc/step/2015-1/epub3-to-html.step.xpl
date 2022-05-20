@@ -114,7 +114,7 @@
                 <p:output port="result">
                     <p:pipe port="result" step="epub3-to-html.step.nav-with-spine-bodies.nav-with-spine-bodies"/>
                 </p:output>
-                <p:variable name="nav-href" select="resolve-uri(/*/@href,base-uri(/*))"/>
+                <p:variable name="nav-href" select="string(resolve-uri(/*/@href,base-uri(/*)))"/>
                 <px:message message="Loading Navigation Document: $1">
                     <p:with-option name="param1" select="$nav-href"/>
                 </px:message>

@@ -147,7 +147,7 @@
             </px:fileset-load>
             <px:assert test-count-min="1" test-count-max="1" message="There must be exactly one Package Document in the EPUB." error-code="NORDICDTBOOKEPUB011"/>
             <p:viewport match="/opf:package/opf:manifest/opf:item" name="epub3-asciimath-to-mathml.step.viewport-opf-items">
-                <p:variable name="item-uri" select="resolve-uri(@href,base-uri(/*))"/>
+                <p:variable name="item-uri" select="string(resolve-uri(@href,base-uri(/*)))"/>
                 <p:choose name="epub3-asciimath-to-mathml.step.viewport-opf-items.choose-if-contains-mathml">
                     <p:xpath-context>
                         <p:pipe port="result" step="epub3-asciimath-to-mathml.step.xhtml-documents-with-mathml"/>

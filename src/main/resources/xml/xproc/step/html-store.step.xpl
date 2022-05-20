@@ -101,7 +101,7 @@
                 </p:input>
             </p:identity>
             <p:viewport match="d:file[@media-type='application/xhtml+xml']" name="html-store.step.viewport-doctype">
-                <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
+                <p:variable name="href" select="string(resolve-uri(/*/@href,base-uri(/*)))"/>
                 <p:variable name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
                 <px:set-doctype name="html-store.step.viewport-doctype.set-doctype">
                     <p:with-option name="doctype" select="$doctype"/>
@@ -115,7 +115,7 @@
                 </p:add-attribute>
             </p:viewport>
             <p:viewport match="d:file[ends-with(@media-type,'+xml') or ends-with(@media-type,'/xml')]" name="html-store.step.store.xml-declaration">
-                <p:variable name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
+                <p:variable name="href" select="string(resolve-uri(/*/@href,base-uri(/*)))"/>
                 <p:variable name="xml-declaration" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'"/>
                 <px:set-xml-declaration name="html-store.step.set-xml-declaration">
                     <p:with-option name="xml-declaration" select="$xml-declaration"/>
