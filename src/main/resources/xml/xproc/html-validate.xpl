@@ -127,7 +127,7 @@
                     <px:fileset-join name="html-validate.html-load.fileset">
                         <p:input port="source">
                             <p:pipe port="result" step="html-validate.html-fileset.no-resources"/>
-                            <p:pipe port="fileset.out" step="html-validate.html-load.resource-fileset"/>
+                            <p:pipe port="result" step="html-validate.html-load.resource-fileset"/>
                         </p:input>
                     </px:fileset-join>
                     

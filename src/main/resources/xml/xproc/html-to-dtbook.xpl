@@ -171,7 +171,7 @@
                     <px:fileset-join name="html-to-dtbook.html-load.fileset">
                         <p:input port="source">
                             <p:pipe port="result" step="html-to-dtbook.html-fileset.no-resources"/>
-                            <p:pipe port="fileset.out" step="html-to-dtbook.html-load.resource-fileset"/>
+                            <p:pipe port="result" step="html-to-dtbook.html-load.resource-fileset"/>
                         </p:input>
                     </px:fileset-join>
                     

@@ -180,7 +180,7 @@
                     <px:fileset-join name="html-to-epub3.html-load.fileset">
                         <p:input port="source">
                             <p:pipe port="result" step="html-to-epub3.html-fileset.no-resources"/>
-                            <p:pipe port="fileset.out" step="html-to-epub3.html-load.resource-fileset"/>
+                            <p:pipe port="result" step="html-to-epub3.html-load.resource-fileset"/>
                         </p:input>
                     </px:fileset-join>
                     
