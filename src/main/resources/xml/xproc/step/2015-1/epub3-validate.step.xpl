@@ -288,7 +288,7 @@
                     <p:variable name="opf-identifier" select="/opf:package/opf:metadata/dc:identifier[not(@refines)][1]/text()">
                         <p:pipe port="result" step="epub3-validate.step.opf"/>
                     </p:variable>
-                    <p:variable name="epub-filename" select="(/*/d:file[@media-type='application/epub+zip'])[1]/@href">
+                    <p:variable name="epub-filename" select="string((/*/d:file[@media-type='application/epub+zip'])[1]/@href)">
                         <p:pipe port="fileset.in" step="main"/>
                     </p:variable>
                     <p:variable name="error-count" select="if ($epub-filename = concat($opf-identifier,'.epub')) then 0 else 1"/>
