@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    type="px:nordic-check-image-file-signatures" name="main" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                type="px:nordic-check-image-file-signatures"
+                name="main"
+                version="1.0">
 
     <p:input port="source">
         <p:documentation>Input fileset (only files with media-type="image/*" will be processed)</p:documentation>
@@ -16,7 +21,7 @@
     <p:for-each name="check-image-file-signatures.iterate-images">
         <p:iteration-source select="/*/d:file[starts-with(@media-type,'image/')]"/>
         <p:variable name="href" select="resolve-uri(/*/(@original-href,@href)[1], base-uri())"/>
-        <p:variable name="type" select="/*/@media-type"/>
+        <p:variable name="type" select="string(/*/@media-type)"/>
 
         <px:message severity="DEBUG" message="Checking file signature for image: $1">
             <p:with-option name="param1" select="replace($href,'.*/','')"/>
