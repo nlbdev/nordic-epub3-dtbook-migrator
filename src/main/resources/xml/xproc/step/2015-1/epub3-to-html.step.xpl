@@ -270,12 +270,21 @@
                 name="epub3-to-html.step.delete-unneccessary-xml-lang-and-lang"/>
             <px:nordic-update-epub-prefixes/>
             <p:identity name="epub3-to-html.step.in-memory"/>
-
-            <px:html-to-fileset name="epub3-to-html.step.single-html-to-fileset">
-                <p:input port="source">
+            
+            <px:fileset-create name="epub3-to-html.step.create-html-fileset">
+                <p:with-option name="base" select="replace(base-uri(/*),'[^/]+$','')"/>
+            </px:fileset-create>
+            <px:fileset-add-entry media-type="application/xhtml+xml" name="epub3-to-html.step.add-html-to-fileset">
+                <p:with-option name="href" select="replace(base-uri(/*),'.*/','')">
+                    <p:pipe port="result" step="epub3-to-html.step.in-memory"/>
+                </p:with-option>
+            </px:fileset-add-entry>
+            <px:html-load name="epub3-to-html.step.single-html-to-fileset">
+                <p:input port="source.in-memory">
                     <p:pipe port="result" step="epub3-to-html.step.in-memory"/>
                 </p:input>
-            </px:html-to-fileset>
+            </px:html-load>
+            
             <p:delete match="//d:file[preceding-sibling::d:file/resolve-uri(@href,base-uri(.))=resolve-uri(@href,base-uri(.))]" name="epub3-to-html.step.remove-duplicate-fileset-entries"/>
             <px:fileset-add-entry media-type="application/xhtml+xml" name="epub3-to-html.step.add-single-html-to-fileset">
                 <p:with-option name="href" select="base-uri(/*)">

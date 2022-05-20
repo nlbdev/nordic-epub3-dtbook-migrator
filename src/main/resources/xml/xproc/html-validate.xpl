@@ -108,29 +108,20 @@
                 </p:xpath-context>
                 <p:when test="/*/@result='ok'">
                     <p:output port="fileset.out" primary="true">
-                        <p:pipe port="result" step="html-validate.html-load.fileset"/>
+                        <p:pipe port="result.fileset" step="html-validate.html-load.html-load"/>
                     </p:output>
                     <p:output port="in-memory.out" sequence="true">
-                        <p:pipe port="result" step="html-validate.html-load.load"/>
+                        <p:pipe port="result.in-memory" step="html-validate.html-load.html-load"/>
                     </p:output>
                     <p:output port="report.out" sequence="true">
                         <p:empty/>
                     </p:output>
                     
-                    <p:load name="html-validate.html-load.load">
-                        <p:with-option name="href" select="/*/text()">
-                            <p:pipe port="normalized" step="html"/>
-                        </p:with-option>
-                    </p:load>
-                    
-                    <px:html-to-fileset name="html-validate.html-load.resource-fileset"/>
-                    <px:fileset-join name="html-validate.html-load.fileset">
-                        <p:input port="source">
+                    <px:html-load name="html-validate.html-load.html-load">
+                        <p:input port="source.fileset">
                             <p:pipe port="result" step="html-validate.html-fileset.no-resources"/>
-                            <p:pipe port="result" step="html-validate.html-load.resource-fileset"/>
                         </p:input>
-                    </px:fileset-join>
-                    
+                    </px:html-load>
                 </p:when>
                 <p:otherwise>
                     <p:output port="fileset.out" sequence="true" primary="true">
