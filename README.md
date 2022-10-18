@@ -1,6 +1,14 @@
 Nordic EPUB3/DTBook Migrator
 ============================
 
+## Project status
+
+The current focus is on:
+- finalizing and releasing an official version for validating EPUBs according to the 2020-1 guidelines
+- removing the dependency on Pipeline 2
+
+See more details for the current development phase here: https://github.com/nlbdev/nordic-epub3-dtbook-migrator/issues/522
+
 ## 2015
 
 The first goal of this project was to provide a EPUB3 to DTBook conversion tool
