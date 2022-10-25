@@ -1,0 +1,2 @@
+* * * * * /root/cron_job.sh 2>&1 >> /tmp/cron.log
+# There must be another line here.

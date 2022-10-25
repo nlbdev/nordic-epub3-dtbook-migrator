@@ -1,0 +1,20 @@
+DirectoryIndex index.php index.html
+Options +FollowSymLinks
+RewriteEngine on
+
+php_value upload_max_filesize 3G
+php_value post_max_size 3G
+
+RewriteRule .* - [E=noabort:1]
+RewriteRule .* - [E=noconntimeout:1]
+
+# redirect all api calls to /api/index.php
+RewriteRule ^v1/((?!index\.php$).+)$ api_v1/index.php [L,NC]
+
+# If the request is a file, folder or symlink that exists, serve it up
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# otherwise, serve your index.html app
+RewriteRule ^(.+)$ index.html [L]

@@ -1,0 +1,126 @@
+openapi: "3.0.2"
+info:
+  title: "NordicValidator"
+  description: "A docker image to validate epub and dtbook"
+  version: '1.0'
+paths:
+  /v1/Validation/:
+    post:
+      summary: "Validates a single file and returns the report as part of the response."
+      description: ""
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                config:
+                  $ref: "#/components/schemas/Config"
+                file:
+                  type: string
+                  format: binary
+          application/json:
+            schema:
+              type: object
+              properties:
+                config:
+                  $ref: "#/components/schemas/Config"
+                downloadFilePath:
+                  type: string
+                  description: "Path to epub file stored on OneDrive."
+      responses:
+        200:
+          description: "The request was processed successfully. Note, this does not reflect the validation status."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Response"
+        400:
+          description: "Not found. Returned when file is missing in the request."
+  /v1/ValidationBatch/:
+    post:
+      summary: "Creates a validation job for a batch of files and returns the job id."
+      description: ""
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config:
+                  $ref: "#/components/schemas/Config"
+                downloadFilePaths:
+                  type: array
+                  description: "An array of paths to epub files stored on OneDrive."
+                  items:
+                    type: string
+      responses:
+        200:
+          description: "A batch job was created successfully."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  batch_id:
+                    type: string
+                    description: "The unique id for the created job."
+        404:
+          description: "Not found. Returned if one of the specified epub files can't be found on OneDrive."
+  /v1/ValidationBatch/{batch_id}:
+    get:
+      summary: "Retrieves the validation result code and report for an existing job"
+      description: ""
+      parameters:
+        - name: batch_id
+          in: path
+          description: "The unique job id returned by the endpoint /v1/ValidationBatch/"
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "OK. Result file found and returned."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Response"
+        404:
+          description: "Not found. No result file found for the given job id."
+components:
+  schemas:
+    Config:
+      type: object
+      properties:
+        schema:
+          type: string
+          description: "The Nordic EPUB guidelines to use for validation."
+          enum:
+            - 2020-1
+            - 2015-1
+        uploadFilePath:
+          type: string
+          description: "Path to output html report on OneDrive."
+    Response:
+      type: object
+      properties:
+        uploadFilePath:
+          type: string
+          description: "The file that has been validated"
+        datetime:
+          type: string
+          description: "Date and time of validation"
+        book:
+          type: string
+          description: "Title of the book"
+        schema:
+          type: string
+          description: "The schema used for validation, the same as given in Config."
+        report:
+          type: string
+          format: application/json
+          description: "Validation report in json format."
