@@ -24,7 +24,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $entityBody = file_get_contents('php://input');
             $json = json_decode($entityBody);
-            $localFile = getFileFromOneDrive($json->downloadFilePath);
+
+            if (!empty($_ENV["LOCAL_PATH"])) {
+                if (!file_exists($_ENV["LOCAL_PATH"] . '/' . $json->downloadFilePath)) {
+                    notFound(404, $_ENV["LOCAL_PATH"] . '/' . $json->downloadFilePath);
+                }
+                $localFile = getFileFromLocalPath($_ENV["LOCAL_PATH"] . '/' . $json->downloadFilePath, true);
+            } else {
+                $checkResult = checkFiles([$json->downloadFilePath]);
+                if ($checkResult !== true) {
+                    notFound(404, $checkResult);
+                }
+                $localFile = getFileFromOneDrive($json->downloadFilePath, true);
+            }
+
             $response = validateFile($localFile, $json->config, $json->downloadFilePath);
 
             header('Content-Type: application/json; charset=utf-8');

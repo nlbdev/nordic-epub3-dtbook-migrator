@@ -43,6 +43,9 @@ public class NordicValidator {
     private static final Option ARG_THREADS = new Option("t", "threads", true, "Number of threads to use for validation (default 3)");
     private static final Option ARG_OUTPUT_HTML = new Option("h", "output-html", true, "Output an HTML report");
     private static final Option ARG_OUTPUT_JSON = new Option("j", "output-json", true, "Output validation information as JSON");
+    private static final Option ARG_NO_EPUBCHECK = new Option("", "no-epubcheck", false, "Don't validate with EPUBCheck");
+    private static final Option ARG_NO_ACE = new Option("", "no-ace", false, "Don't validate with Ace");
+
 
     private static void printHelp(Options options) {
         HelpFormatter formatter = new HelpFormatter();
@@ -77,6 +80,8 @@ public class NordicValidator {
             options.addOption(ARG_OUTPUT_HTML);
             options.addOption(ARG_OUTPUT_JSON);
             options.addOption(ARG_ORIGINAL_FILE);
+            options.addOption(ARG_NO_EPUBCHECK);
+            options.addOption(ARG_NO_ACE);
 
             CommandLine cmd = null;
             try {
@@ -114,8 +119,13 @@ public class NordicValidator {
             EPUBFiles epubFiles = getEPUBFiles(zipFile, threads, guideline);
 
             Instant epubValidate = Instant.now();
-            epubFiles.validateWithAce(new File(inputFile));
-            epubFiles.validateWithEpubCheck(new File(inputFile));
+            if (!cmd.hasOption(ARG_NO_ACE.getLongOpt())) {
+                epubFiles.validateWithAce(new File(inputFile));
+            }
+            if (!cmd.hasOption(ARG_NO_EPUBCHECK.getLongOpt())) {
+                epubFiles.validateWithEpubCheck(new File(inputFile));
+            }
+
             epubFiles.validate();
             printDuration("EPUB Validate", epubValidate, Instant.now());
             epubFiles.cleanUp();
