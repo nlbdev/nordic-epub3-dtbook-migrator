@@ -3672,17 +3672,6 @@
                 </list>
             </attribute>
         </optional>
-        <optional>
-            <attribute name="role">
-                <list>
-                    <ref name="roles"/>
-                    <optional>
-                        <value>doc-endnotes</value>
-                    </optional>
-                    <ref name="roles"/>
-                </list>
-            </attribute>
-        </optional>
         <ref name="attrs.notype"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @class -->
     </define>
     
