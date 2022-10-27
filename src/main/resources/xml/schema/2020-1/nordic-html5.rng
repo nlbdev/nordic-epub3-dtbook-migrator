@@ -275,9 +275,6 @@
             <ref name="attr.xmlspace"/> <!-- @xml:space -->
         </optional>
         <optional>
-            <ref name="attr.role"/> <!-- @role -->
-        </optional>
-        <optional>
             <ref name="attr.aria.label"/> <!-- @aria-label -->
         </optional>
         <optional>
@@ -288,10 +285,26 @@
         </optional>
     </define>
 
+    <define name="coreattrs.norole">
+        <ref name="coreattrs.base"/> <!-- @id, @title, @xml:space -->
+        <optional>
+            <ref name="attr.class"/> <!-- @class -->
+        </optional>
+        <optional>
+            <ref name="attr.role"/> <!-- @role -->
+        </optional>
+        <optional>
+            <ref name="attr.type"/> <!-- @epub:type -->
+        </optional>
+    </define>
+
     <define name="coreattrs.notype">
         <ref name="coreattrs.base"/> <!-- @id, @title, @xml:space -->
         <optional>
             <ref name="attr.class"/> <!-- @class -->
+        </optional>
+        <optional>
+            <ref name="attr.role"/> <!-- @role -->
         </optional>
     </define>
 
@@ -299,6 +312,9 @@
         <ref name="coreattrs.base"/> <!-- @id, @title, @xml:space -->
         <optional>
             <ref name="attr.type"/> <!-- @epub:type -->
+        </optional>
+        <optional>
+            <ref name="attr.role"/> <!-- @role -->
         </optional>
     </define>
 
@@ -318,6 +334,9 @@
         </optional>
         <optional>
             <ref name="attr.class"/> <!-- @class -->
+        </optional>
+        <optional>
+            <ref name="attr.role"/> <!-- @role -->
         </optional>
     </define>
     
@@ -2805,6 +2824,13 @@
                 <ref name="types"/>
             </list>
         </attribute>
+        <attribute name="role">
+            <list>
+                <ref name="roles"/>
+                <value>doc-noteref</value>
+                <ref name="roles"/>
+            </list>
+        </attribute>
         <attribute name="class">
             <list>
                 <ref name="classes"/>
@@ -3643,6 +3669,17 @@
                         <value>endnotes</value>
                     </optional>
                     <ref name="types"/>
+                </list>
+            </attribute>
+        </optional>
+        <optional>
+            <attribute name="role">
+                <list>
+                    <ref name="roles"/>
+                    <optional>
+                        <value>doc-endnotes</value>
+                    </optional>
+                    <ref name="roles"/>
                 </list>
             </attribute>
         </optional>
