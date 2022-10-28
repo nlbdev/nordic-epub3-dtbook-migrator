@@ -38,13 +38,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class NordicValidator {
     private static final Logger logger = Logger.getLogger(NordicValidator.class.getName());
 
-    private static final Option ARG_ORIGINAL_FILE = new Option("", "original-file", true, "The original filename");
+    private static final Option ARG_ORIGINAL_FILE = new Option(null, "original-file", true, "The original filename");
     private static final Option ARG_SCHEMA = new Option("s", "schema", true, "Schema to validate against. (default 2020-1)");
     private static final Option ARG_THREADS = new Option("t", "threads", true, "Number of threads to use for validation (default 3)");
     private static final Option ARG_OUTPUT_HTML = new Option("h", "output-html", true, "Output an HTML report");
     private static final Option ARG_OUTPUT_JSON = new Option("j", "output-json", true, "Output validation information as JSON");
-    private static final Option ARG_NO_EPUBCHECK = new Option("", "no-epubcheck", false, "Don't validate with EPUBCheck");
-    private static final Option ARG_NO_ACE = new Option("", "no-ace", false, "Don't validate with Ace");
+    private static final Option ARG_NO_EPUBCHECK = new Option(null, "no-epubcheck", false, "Don't validate with EPUBCheck");
+    private static final Option ARG_NO_ACE = new Option(null, "no-ace", false, "Don't validate with Ace");
 
 
     private static void printHelp(Options options) {
