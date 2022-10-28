@@ -2444,7 +2444,12 @@
         <element name="code">
             <ref name="attlist.code"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @class -->
             <zeroOrMore>
-                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
+                <zeroOrMore>
+                    <choice>
+                        <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
+                        <ref name="hr"/>
+                    </choice>
+                </zeroOrMore>
             </zeroOrMore>
         </element>
     </define>
