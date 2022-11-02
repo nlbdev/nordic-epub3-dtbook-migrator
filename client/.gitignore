@@ -1,7 +1,6 @@
 /schxslt/**/*
 /.idea
 *.iml
-/*.xml
 /*.obfl
 /*.xhtml
 /*.rng
