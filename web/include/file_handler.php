@@ -142,14 +142,22 @@ function validateFile($localFile, $reportConfiguration, $remoteFilename) {
     $response->schema = '2020-1';
     $response->report = '';
 
+	$flags = '';
+	if ($reportConfiguration !== null && $reportConfiguration->no_epubcheck) {
+		$flags = ' --no-epubcheck';
+	}
+	if ($reportConfiguration !== null && $reportConfiguration->no_ace) {
+		$flags = ' --no-ace';
+	}
+
     $tempJsonReport = tempnam(sys_get_temp_dir(), 'validation-report-json-');
     $tempHtmlReport = tempnam(sys_get_temp_dir(), 'validation-report-html-');
     $validatorPath = realpath(__DIR__.'/../bin/NordicValidator.jar');
-    $cmd = '/usr/bin/java -Xmx3g -jar '.escapeshellarg($validatorPath).
-           ' '.escapeshellarg($localFile).
-           ' --output-json '.escapeshellarg($tempJsonReport).
-           ' --output-html '.escapeshellarg($tempHtmlReport).
-           ' --original-file '.escapeshellarg(basename($remoteFilename));
+    $cmd = '/usr/bin/java -Xmx3g -jar '.escapeshellarg($validatorPath) .
+           ' ' . escapeshellarg($localFile) . $flags .
+           ' --output-json ' . escapeshellarg($tempJsonReport) .
+           ' --output-html ' . escapeshellarg($tempHtmlReport) .
+           ' --original-file ' . escapeshellarg(basename($remoteFilename));
     if ($reportConfiguration !== null) {
         switch ($reportConfiguration->schema) {
             case '2020-1':
