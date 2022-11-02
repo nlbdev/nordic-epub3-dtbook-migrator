@@ -385,12 +385,18 @@
         <optional>
             <ref name="attr.class"/> <!-- @class -->
         </optional>
+        <optional>
+            <ref name="attr.role"/> <!-- @role -->
+        </optional>
     </define>
 
     <define name="attrs.noclass">
         <ref name="attrs.base"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir -->
         <optional>
             <ref name="attr.type"/> <!-- @epub:type -->
+        </optional>
+        <optional>
+            <ref name="attr.role"/> <!-- @role -->
         </optional>
     </define>
 
@@ -409,6 +415,9 @@
         </optional>
         <optional>
             <ref name="attr.class"/> <!-- @class -->
+        </optional>
+        <optional>
+            <ref name="attr.role"/> <!-- @role -->
         </optional>
     </define>
     
