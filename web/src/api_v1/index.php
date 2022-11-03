@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 notFound(400);
             }
 
-            $response = validateFile($localFile, $json->config, $_FILES['file']['name']);
+            $response = validateFile($localFile, $json, $_FILES['file']['name']);
 
             header('Content-Type: application/json; charset=utf-8');
             echo json_encode($response);

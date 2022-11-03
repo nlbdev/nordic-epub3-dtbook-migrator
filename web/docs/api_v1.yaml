@@ -96,6 +96,12 @@ components:
     Config:
       type: object
       properties:
+        noEPUBCheck:
+          type: boolean
+          description: "Enable if EPUBCheck should not validate the document."
+        noACE:
+          type: boolean
+          description: "Enable if ACE should not validate the document."
         schema:
           type: string
           description: "The Nordic EPUB guidelines to use for validation."

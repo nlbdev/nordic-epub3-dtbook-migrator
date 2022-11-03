@@ -9,6 +9,23 @@ function oneDriveLogin(OneDriveClient $client) {
     );
 }
 
+function getFileFromLocalPath($filename, $background = false) {
+    $localFile = tempnam(sys_get_temp_dir(), 'LOCAL_EPUB');
+
+    copy($filename, $localFile);
+
+    $temp_file = tempnam(sys_get_temp_dir(), 'EPUB');
+    unlink($temp_file);
+    system("mkdir -p $temp_file");
+
+    $result = array();
+    exec("unzip -d $temp_file $localFile", $result, $returnval);
+
+    system("rm -rf ".escapeshellarg($localFile));
+
+    return $temp_file;
+}
+
 function getFileFromOneDrive($filename, $background = false) {
     $localFile = tempnam(sys_get_temp_dir(), pathinfo($filename)['filename']);
 
@@ -81,6 +98,41 @@ function putFileOnOneDrive(string $localFile, string $remoteFile, bool $overwrit
     return $success;
 }
 
+function checkLocalFiles($localPath, $filenames) {
+    foreach($filenames as $filename) {
+        if (!file_exists($localPath . '/' . $filename)) {
+            return "File missing: " . $filename;
+        }
+    }
+    return true;
+}
+
+function checkFiles($filenames) {
+    $oneDriveClient = new OneDriveClient();
+    if (!$oneDriveClient->login(
+        $_ENV['ONEDRIVE_USERACCOUNT'],
+        $_ENV['ONEDRIVE_APP_ID'] . '|' . $_ENV['ONEDRIVE_TENANT'],
+        $_ENV['ONEDRIVE_SECRET']
+    )) {
+        echo "- Could not login.\n";
+        die();
+    }
+    $remoteDir = $_ENV['ONEDRIVE_PATH'];
+    if (!$oneDriveClient->changeDir($remoteDir)) {
+        echo "- Could not change dir to '{$remoteDir}'.\n";
+    }
+
+    foreach($filenames as $filename) {
+        if (!$oneDriveClient->hasFile($filename)) {
+            $oneDriveClient->logout();
+            return "File missing: " . $filename;
+        }
+    }
+    $oneDriveClient->logout();
+
+    return true;
+}
+
 function getFileFromUpload($filedata) {
     $localFile = tempnam(sys_get_temp_dir(), 'LOCAL_EPUB');
 
@@ -143,10 +195,10 @@ function validateFile($localFile, $reportConfiguration, $remoteFilename) {
     $response->report = '';
 
 	$flags = '';
-	if ($reportConfiguration !== null && $reportConfiguration->no_epubcheck) {
+	if ($reportConfiguration !== null && $reportConfiguration->noEPUBCheck) {
 		$flags = ' --no-epubcheck';
 	}
-	if ($reportConfiguration !== null && $reportConfiguration->no_ace) {
+	if ($reportConfiguration !== null && $reportConfiguration->noACE) {
 		$flags = ' --no-ace';
 	}
 
