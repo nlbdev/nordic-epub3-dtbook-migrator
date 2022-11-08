@@ -2445,11 +2445,7 @@
         <element name="code">
             <ref name="attlist.code"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @class -->
             <zeroOrMore>
-                <zeroOrMore>
-                    <choice>
-                        <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
-                    </choice>
-                </zeroOrMore>
+                <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
             </zeroOrMore>
         </element>
     </define>
@@ -3162,18 +3158,12 @@
     <define name="p">
         <!-- Use: p contains a paragraph, which may contain subsidiary lists -->
         <a:documentation> Use: p contains a paragraph. In HTML, lists are not allowed inside paragraphs. </a:documentation>
-        <optional>
-            <ref name="hr"/> <!-- hr -->
-        </optional>
         <element name="p">
             <ref name="attlist.p"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir, @epub:type, @class -->
             <zeroOrMore>
                 <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
             </zeroOrMore>
         </element>
-        <optional>
-            <ref name="hr"/> <!-- hr -->
-        </optional>
         <!-- STRICT NOTE: In HTML, lists are not allowed inside paragraphs. -->
         <zeroOrMore>
             <choice>
