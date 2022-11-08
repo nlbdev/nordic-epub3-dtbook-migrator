@@ -139,6 +139,7 @@
             <ref name="line"/> <!-- p -->
             <ref name="htmlblocknoimggroup"/> <!-- p, aside, figure -->
             <ref name="math"/> <!-- math -->
+            <ref name="hr"/> <!-- hr -->
         </choice>
     </define>
     
@@ -2447,7 +2448,6 @@
                 <zeroOrMore>
                     <choice>
                         <ref name="inline"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo -->
-                        <ref name="hr"/>
                     </choice>
                 </zeroOrMore>
             </zeroOrMore>
