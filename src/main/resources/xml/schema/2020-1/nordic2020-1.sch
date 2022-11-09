@@ -163,6 +163,15 @@
         </rule>
     </pattern>
 
+    <pattern id="epub_nordic_26_c">
+        <title>Rule 26c</title>
+        <p>Each note must have a backlink</p>
+        <rule context="html:*[tokenize(@epub:type, '\s+') = ('note', 'endnote', 'footnote')]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="count(.//html:a[tokenize(@role, '\s+') = 'doc-backlink']) = 1">[nordic26c] Each note must have one &lt;a role="doc-backlink" ...&gt;. <value-of select="$context"/></assert>
+        </rule>
+    </pattern>
+
     <!-- Rule 27a:  -->
     <pattern id="epub_nordic_27_a">
         <title>Rule 27a</title>

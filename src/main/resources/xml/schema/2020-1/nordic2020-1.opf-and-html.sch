@@ -144,7 +144,7 @@
 
     <pattern id="nordic_opf_and_html_27_a">
         <title>Rule 27a</title>
-        <p>Each note must have a noteref</p>
+        <p>Each annotation must have a annoref</p>
         <rule context="html:*[tokenize(@epub:type,'\s+')=('annotation')]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
@@ -156,7 +156,7 @@
 
     <pattern id="nordic_opf_and_html_27_b">
         <title>Rule 27b</title>
-        <p>Each noteref must reference a note</p>
+        <p>Each annoref must reference a annotation</p>
         <rule context="html:a[tokenize(@epub:type,'\s+')='annoref']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
@@ -185,6 +185,30 @@
             <assert test="@content = /*/opf:package/opf:metadata/dc:identifier[not(@refines)]/text()">[nordic_opf_and_html_29] The HTML meta element in <value-of select="replace(base-uri(.),'.*/','')"
                 /> with dc:identifier must have as content the same as the OPF publication dc:identifier. The OPF dc:identifier is "<value-of
                     select="/*/opf:package/opf:metadata/dc:identifier[not(@refines)]/text()"/>" while the HTML dc:identifier is "<value-of select="@content"/>".</assert>
+        </rule>
+    </pattern>
+
+
+    <pattern id="nordic_opf_and_html_30_a">
+        <title>Rule 30a</title>
+        <p>Each noteref must have a backlink</p>
+        <rule context="html:a[tokenize(@epub:type,'\s+')=('noteref')]">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="count(//html:a[tokenize(@role,'\s+')='doc-backlink' and substring-after(@href,'#') = current()/@id]) = 1">[nordic_opf_and_html_30a] The <value-of
+                    select="(tokenize(@epub:type,'\s+')[.=('noteref')],'noteref')[1]"/><value-of select="if (@id) then concat(' with the id &quot;',@id,'&quot;') else ''"/> must have
+                exactly one &lt;a role="doc-backlink" ...&gt; referencing it: <value-of select="$context"/> (in <value-of select="replace(base-uri(),'.*/','')"
+                />)</assert>
+        </rule>
+    </pattern>
+
+    <pattern id="nordic_opf_and_html_30_b">
+        <title>Rule 30b</title>
+        <p>Each backlink must reference a noteref</p>
+        <rule context="html:a[tokenize(@role,'\s+')='doc-backlink']">
+            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
+            <assert test="count(//html:a[tokenize(@epub:type,'\s+')=('noteref') and @id = current()/substring-after(@href,'#')]) = 1">[nordic_opf_and_html_30b] The backlink
+                with the href "<value-of select="@href"/>" attribute must resolve to exactly one noteref in the publication: <value-of select="$context"/> (in <value-of select="replace(base-uri(),'.*/','')"
+                />)</assert>
         </rule>
     </pattern>
 
