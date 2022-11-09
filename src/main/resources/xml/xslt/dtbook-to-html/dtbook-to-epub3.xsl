@@ -537,19 +537,19 @@
     </xsl:template>
 
     <xsl:template match="dtbook:prodnote | dtbook:div[f:classes(.) = ('prodnote','production')]">
-      <xsl:element name="{if (parent::*[tokenize(@class,'\s+')=('cover','jacketcopy')]) then 'section'
+        <xsl:element name="{if (parent::*[tokenize(@class,'\s+')=('cover','jacketcopy')]) then 'section'
                           else 'aside'}">
-        <xsl:call-template name="f:attlist.prodnote"/>
-        <xsl:apply-templates select="node() | text()"/>
-      </xsl:element>
+            <xsl:call-template name="f:attlist.prodnote"/>
+            <xsl:apply-templates select="node() | text()"/>
+        </xsl:element>
     </xsl:template>
 
     <!-- Render inline prodnotes as spans -->
     <xsl:template match="dtbook:prodnote[f:is-inline(./parent::dtbook:*) and not(./parent::dtbook:imggroup)]">
-      <span>
-        <xsl:call-template name="f:attlist.prodnote"/>
-        <xsl:apply-templates select="node() | text()"/>
-      </span>
+        <span>
+            <xsl:call-template name="f:attlist.prodnote"/>
+            <xsl:apply-templates select="node() | text()"/>
+        </span>
     </xsl:template>
 
     <xsl:template name="f:attlist.prodnote">
