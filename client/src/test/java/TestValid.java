@@ -6,6 +6,7 @@ import org.daisy.validator.ValidateFile;
 import org.daisy.validator.report.Issue;
 import org.daisy.validator.schemas.Guideline;
 import org.daisy.validator.schemas.Guideline2020;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -21,6 +22,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.tree.ExpandVetoException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -137,7 +139,7 @@ public class TestValid {
             fixStr += navData.substring(matcher.start());
             return fixStr;
         } else {
-            System.out.println("Head tag not found.");
+            System.out.println("DID NOT FIND HEAD TAG.");
         }
         return navData;
     }
@@ -224,18 +226,16 @@ public class TestValid {
         assertEquals(0, issues.size());
     }
 
-
-    @Test
-    public void testRelaxNGContentChapter() throws Exception {
+    public void verifyRelaxDoc(String doc) throws Exception {
         Guideline guideline = new Guideline2020();
 
-        EPUBFiles epubFiles = new EPUBFiles("EPUB/C00000-04-chapter.xhtml", "");
+        EPUBFiles epubFiles = new EPUBFiles(doc, "");
         epubFiles.unpackSchemaDir(guideline.getSchemaPath());
         epubFiles.unpackSchemaDir("mathml3");
 
         ValidateFile vf = new ValidateFile(
                 new File("src/test/resources/valid2020"),
-                "EPUB/C00000-04-chapter.xhtml",
+                doc,
                 new File(epubFiles.getSchemaDir(), guideline.getSchema(Guideline.XHTML).getFilename())
         );
         Set<Issue> issues = new HashSet<>();
@@ -246,6 +246,27 @@ public class TestValid {
         }
 
         assertEquals(0, issues.size());
+    }
+
+    @Test
+    public void testRelaxNGContentChapter() throws Exception {
+        verifyRelaxDoc("EPUB/C00000-04-chapter.xhtml");
+    }
+
+    @Test
+    public void testRelaxNote() throws Exception {
+        verifyRelaxDoc("EPUB/C00000-07-rearnotes.xhtml");
+    }
+
+    @Test
+    public void testX50525() throws Exception {
+        verifyRelaxDoc("EPUB/X50525A-06-chapter.xhtml");
+    }
+
+    @Test
+    public void testX60352() throws Exception {
+        verifyRelaxDoc("EPUB/X60352A-01-cover.xhtml");
+        verifyRelaxDoc("EPUB/X60352A-02-titlepage.xhtml");
     }
 
 

@@ -18,14 +18,14 @@
                     xmlns:skos="http://www.w3.org/2004/02/skos/core#">
       <dct:creator>
          <dct:Agent>
-            <skos:prefLabel>SchXslt/1.6.2 SAXON/9.2.0.6</skos:prefLabel>
+            <skos:prefLabel>SchXslt/1.9.4 SAXON/9.2.0.6</skos:prefLabel>
             <schxslt.compile.typed-variables xmlns="https://doi.org/10.5281/zenodo.1495494#">true</schxslt.compile.typed-variables>
          </dct:Agent>
       </dct:creator>
-      <dct:created>2022-10-18T12:59:45.199+02:00</dct:created>
+      <dct:created>2022-11-11T09:09:55.509+01:00</dct:created>
    </rdf:Description>
    <xsl:output indent="yes"/>
-   <xsl:template match="/">
+   <xsl:template match="root()">
       <xsl:variable name="metadata" as="element()?">
          <svrl:metadata xmlns:dct="http://purl.org/dc/terms/"
                         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
@@ -33,15 +33,8 @@
             <dct:creator>
                <dct:Agent>
                   <skos:prefLabel>
-                     <xsl:variable name="prefix" as="xs:string?"
-                                   select="if (doc-available('')) then in-scope-prefixes(document('')/*[1])[namespace-uri-for-prefix(., document('')/*[1]) eq 'http://www.w3.org/1999/XSL/Transform'][1] else ()"/>
-                     <xsl:choose>
-                        <xsl:when test="empty($prefix)">Unknown</xsl:when>
-                        <xsl:otherwise>
-                           <xsl:value-of separator="/"
-                                         select="(system-property(concat($prefix, ':product-name')), system-property(concat($prefix,':product-version')))"/>
-                        </xsl:otherwise>
-                     </xsl:choose>
+                     <xsl:value-of separator="/"
+                                   select="(system-property('xsl:product-name'), system-property('xsl:product-version'))"/>
                   </skos:prefLabel>
                </dct:Agent>
             </dct:creator>
@@ -52,11 +45,11 @@
                <rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/">
                   <dct:creator>
                      <dct:Agent>
-                        <skos:prefLabel>SchXslt/1.6.2 SAXON/9.2.0.6</skos:prefLabel>
+                        <skos:prefLabel>SchXslt/1.9.4 SAXON/9.2.0.6</skos:prefLabel>
                         <schxslt.compile.typed-variables xmlns="https://doi.org/10.5281/zenodo.1495494#">true</schxslt.compile.typed-variables>
                      </dct:Agent>
                   </dct:creator>
-                  <dct:created>2022-10-18T12:59:45.199+02:00</dct:created>
+                  <dct:created>2022-11-11T09:09:55.509+01:00</dct:created>
                </rdf:Description>
             </dct:source>
          </svrl:metadata>
@@ -68,9 +61,11 @@
       </xsl:variable>
       <xsl:variable name="schxslt:report" as="node()*">
          <xsl:sequence select="$metadata"/>
-         <xsl:for-each select="$report/schxslt:pattern">
-            <xsl:sequence select="node()"/>
-            <xsl:sequence select="$report/schxslt:rule[@pattern = current()/@id]/node()"/>
+         <xsl:for-each select="$report/schxslt:document">
+            <xsl:for-each select="schxslt:pattern">
+               <xsl:sequence select="node()"/>
+               <xsl:sequence select="../schxslt:rule[@pattern = current()/@id]/node()"/>
+            </xsl:for-each>
          </xsl:for-each>
       </xsl:variable>
       <svrl:schematron-output xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
@@ -87,1222 +82,1233 @@
       </svrl:schematron-output>
    </xsl:template>
    <xsl:template match="text() | @*" mode="#all" priority="-10"/>
+   <xsl:template match="/" mode="#all" priority="-10">
+      <xsl:apply-templates mode="#current" select="node()"/>
+   </xsl:template>
    <xsl:template match="*" mode="#all" priority="-10">
       <xsl:apply-templates mode="#current" select="@*"/>
       <xsl:apply-templates mode="#current" select="node()"/>
    </xsl:template>
    <xsl:template name="d7e23">
-      <schxslt:pattern id="d7e23">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_7">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e42">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_8">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e54">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_9">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e66">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_10">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e96">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_11">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e107">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_12">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e118">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_13_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e135">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_13_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e145">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_13_c">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e154">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_13_d">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e165">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_14">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e175">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_15">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e201">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_20">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e214">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_21">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e227">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_23">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e245">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_24">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e258">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_26_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e272">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_26_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e289">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_27_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e303">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_27_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e319">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_29a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e337">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_29b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e362">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_29c">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e374">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_40">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e392">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_50_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e404">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_5152">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e427">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_59">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e440">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_63">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e452">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_64">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e463">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_93">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e482">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_96_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e498">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_96_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e511">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_101">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e523">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_102">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e540">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_104">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e553">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_105">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e571">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_110">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e584">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_116">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e596">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_120">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e609">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_121">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e622">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_123">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e634">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_124">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e648">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_125">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e665">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_126">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e677">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_127">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e693">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_128_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e739">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_128_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e749">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_128_c">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e758">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_128_d">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e769">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_130">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e780">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_131">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e794">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_135_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e812">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_140">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e839">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_142">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e852">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_143_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e862">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_143_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e874">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_200">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e885">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_201">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e897">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_202">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e920">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_203_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e941">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_203_c">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e970">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_203_d">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e998">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_204_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1010">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_204_c">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1026">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_204_d">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1042">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_208">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1064">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_211">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1087">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_215">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1110">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_224">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1123">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_225">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1135">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_247">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1146">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_248">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1160">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_251">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1172">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_253_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1190">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_253_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1204">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_253_c">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1221">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_254">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1234">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_255">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1246">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_256">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1261">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_257">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1273">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_258">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1285">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_259">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1302">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_260_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1312">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_260_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1324">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_261">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1336">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_263">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1348">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_264">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1362">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_265">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1376">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_266_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1388">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_266_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1398">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_267_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1419">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_267_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1439">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_268">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1470">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_269">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1486">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_270">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1500">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_273">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1515">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_273b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1527">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_274">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1539">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_275">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1552">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_276">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1570">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_277">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1586">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_278">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1607">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_279a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1617">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_279b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1629">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_280">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1645">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_281">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1658">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_282">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1676">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_283">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
-      <schxslt:pattern id="d7e1686">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="epub_nordic_293">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e23" select="/"/>
+      <schxslt:document>
+         <schxslt:pattern id="d7e23">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_7"
+                                    id="epub_nordic_7">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e42">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_8"
+                                    id="epub_nordic_8">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e54">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_9"
+                                    id="epub_nordic_9">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e66">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_10"
+                                    id="epub_nordic_10">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e96">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_11"
+                                    id="epub_nordic_11">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e107">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_12"
+                                    id="epub_nordic_12">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e118">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_13_a"
+                                    id="epub_nordic_13_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e135">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_13_b"
+                                    id="epub_nordic_13_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e145">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_13_c"
+                                    id="epub_nordic_13_c">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e154">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_13_d"
+                                    id="epub_nordic_13_d">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e165">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_14"
+                                    id="epub_nordic_14">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e175">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_15"
+                                    id="epub_nordic_15">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e201">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_20"
+                                    id="epub_nordic_20">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e214">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_21"
+                                    id="epub_nordic_21">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e227">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_23"
+                                    id="epub_nordic_23">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e245">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_24"
+                                    id="epub_nordic_24">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e258">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_26_a"
+                                    id="epub_nordic_26_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e272">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_26_b"
+                                    id="epub_nordic_26_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e289">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_27_a"
+                                    id="epub_nordic_27_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e303">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_27_b"
+                                    id="epub_nordic_27_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e319">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_29a"
+                                    id="epub_nordic_29a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e337">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_29b"
+                                    id="epub_nordic_29b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e362">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_29c"
+                                    id="epub_nordic_29c">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e374">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_40"
+                                    id="epub_nordic_40">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e392">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_50_a"
+                                    id="epub_nordic_50_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e404">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_5152"
+                                    id="epub_nordic_5152">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e427">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_59"
+                                    id="epub_nordic_59">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e440">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_63"
+                                    id="epub_nordic_63">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e452">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_64"
+                                    id="epub_nordic_64">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e463">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_93"
+                                    id="epub_nordic_93">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e482">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_96_a"
+                                    id="epub_nordic_96_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e498">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_96_b"
+                                    id="epub_nordic_96_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e511">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_101"
+                                    id="epub_nordic_101">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e523">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_102"
+                                    id="epub_nordic_102">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e540">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_104"
+                                    id="epub_nordic_104">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e553">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_105"
+                                    id="epub_nordic_105">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e571">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_110"
+                                    id="epub_nordic_110">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e584">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_116"
+                                    id="epub_nordic_116">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e596">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_120"
+                                    id="epub_nordic_120">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e609">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_121"
+                                    id="epub_nordic_121">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e622">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_123"
+                                    id="epub_nordic_123">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e634">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_124"
+                                    id="epub_nordic_124">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e648">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_125"
+                                    id="epub_nordic_125">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e665">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_126"
+                                    id="epub_nordic_126">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e677">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_127"
+                                    id="epub_nordic_127">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e693">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_128_a"
+                                    id="epub_nordic_128_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e739">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_128_b"
+                                    id="epub_nordic_128_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e749">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_128_c"
+                                    id="epub_nordic_128_c">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e758">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_128_d"
+                                    id="epub_nordic_128_d">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e769">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_130"
+                                    id="epub_nordic_130">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e780">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_131"
+                                    id="epub_nordic_131">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e794">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_135_a"
+                                    id="epub_nordic_135_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e812">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_140"
+                                    id="epub_nordic_140">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e839">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_142"
+                                    id="epub_nordic_142">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e852">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_143_a"
+                                    id="epub_nordic_143_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e862">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_143_b"
+                                    id="epub_nordic_143_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e874">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_200"
+                                    id="epub_nordic_200">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e885">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_201"
+                                    id="epub_nordic_201">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e897">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_202"
+                                    id="epub_nordic_202">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e920">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_203_a"
+                                    id="epub_nordic_203_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e941">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_203_c"
+                                    id="epub_nordic_203_c">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e970">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_203_d"
+                                    id="epub_nordic_203_d">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e998">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_204_a"
+                                    id="epub_nordic_204_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1010">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_204_c"
+                                    id="epub_nordic_204_c">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1026">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_204_d"
+                                    id="epub_nordic_204_d">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1042">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_208"
+                                    id="epub_nordic_208">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1064">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_211"
+                                    id="epub_nordic_211">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1087">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_215"
+                                    id="epub_nordic_215">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1110">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_224"
+                                    id="epub_nordic_224">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1123">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_225"
+                                    id="epub_nordic_225">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1135">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_247"
+                                    id="epub_nordic_247">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1146">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_248"
+                                    id="epub_nordic_248">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1160">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_251"
+                                    id="epub_nordic_251">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1172">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_253_a"
+                                    id="epub_nordic_253_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1190">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_253_b"
+                                    id="epub_nordic_253_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1204">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_253_c"
+                                    id="epub_nordic_253_c">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1221">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_254"
+                                    id="epub_nordic_254">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1234">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_255"
+                                    id="epub_nordic_255">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1246">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_256"
+                                    id="epub_nordic_256">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1261">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_257"
+                                    id="epub_nordic_257">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1273">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_258"
+                                    id="epub_nordic_258">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1285">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_259"
+                                    id="epub_nordic_259">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1302">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_260_a"
+                                    id="epub_nordic_260_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1312">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_260_b"
+                                    id="epub_nordic_260_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1324">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_261"
+                                    id="epub_nordic_261">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1336">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_263"
+                                    id="epub_nordic_263">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1348">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_264"
+                                    id="epub_nordic_264">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1362">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_265"
+                                    id="epub_nordic_265">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1376">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_266_a"
+                                    id="epub_nordic_266_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1388">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_266_b"
+                                    id="epub_nordic_266_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1398">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_267_a"
+                                    id="epub_nordic_267_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1419">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_267_b"
+                                    id="epub_nordic_267_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1439">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_268"
+                                    id="epub_nordic_268">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1470">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_269"
+                                    id="epub_nordic_269">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1486">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_270"
+                                    id="epub_nordic_270">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1500">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_273"
+                                    id="epub_nordic_273">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1515">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_273b"
+                                    id="epub_nordic_273b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1527">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_274"
+                                    id="epub_nordic_274">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1539">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_275"
+                                    id="epub_nordic_275">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1552">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_276"
+                                    id="epub_nordic_276">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1570">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_277"
+                                    id="epub_nordic_277">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1586">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_278"
+                                    id="epub_nordic_278">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1607">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_279a"
+                                    id="epub_nordic_279a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1617">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_279b"
+                                    id="epub_nordic_279b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1629">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_280"
+                                    id="epub_nordic_280">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1645">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_281"
+                                    id="epub_nordic_281">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1658">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_282"
+                                    id="epub_nordic_282">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1676">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="epub_nordic_283"
+                                    id="epub_nordic_283">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e1686">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 293" id="epub_nordic_293">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <xsl:apply-templates mode="d7e23" select="root()"/>
+      </schxslt:document>
    </xsl:template>
    <xsl:template match="html:p" priority="114" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e23">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e23']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:p" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e23']">
+            <schxslt:rule pattern="d7e23">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:p" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:p</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e23">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:p</xsl:attribute>
                </svrl:fired-rule>
@@ -1320,27 +1326,33 @@
                 not allowed inside paragraphs.</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e23')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e23')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front']"
                  priority="113"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e42">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e42']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e42']">
+            <schxslt:rule pattern="d7e42">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e42">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-front']</xsl:attribute>
                </svrl:fired-rule>
@@ -1352,25 +1364,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e42')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e42')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*" priority="112" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e54">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e54']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e54']">
+            <schxslt:rule pattern="d7e54">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e54">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*</xsl:attribute>
                </svrl:fired-rule>
@@ -1381,26 +1399,32 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e54')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e54')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:head[following-sibling::html:body/html:header]" priority="111"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e66">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e66']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:head[following-sibling::html:body/html:header]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e66']">
+            <schxslt:rule pattern="d7e66">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:head[following-sibling::html:body/html:header]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:head[following-sibling::html:body/html:header]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e66">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:head[following-sibling::html:body/html:header]</xsl:attribute>
                </svrl:fired-rule>
@@ -1429,25 +1453,31 @@
                      <svrl:text>[nordic10] Meta dc:publisher must occur exactly once</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e66')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e66')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:html" priority="110" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e96">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e96']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:html" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e96']">
+            <schxslt:rule pattern="d7e96">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:html" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:html</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e96">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:html</xsl:attribute>
                </svrl:fired-rule>
@@ -1457,25 +1487,31 @@
                      <svrl:text>[nordic11] &lt;html&gt; element must have an xml:lang attribute</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e96')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e96')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body/html:header" priority="109" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e107">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e107']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body/html:header" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e107']">
+            <schxslt:rule pattern="d7e107">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body/html:header" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body/html:header</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e107">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body/html:header</xsl:attribute>
                </svrl:fired-rule>
@@ -1486,25 +1522,31 @@
                 /html/body/header/h1).</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e107')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e107')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[html:header]" priority="108" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e118">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e118']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[html:header]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e118']">
+            <schxslt:rule pattern="d7e118">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[html:header]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[html:header]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e118">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[html:header]</xsl:attribute>
                </svrl:fired-rule>
@@ -1528,27 +1570,33 @@
                 backmatter as epub:type on its body element</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e118')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e118')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[self::html:section or self::html:article][ancestor::html:body[html:header] and not(parent::html:body) and not(parent::html:section[tokenize(@epub:type,'\s+')='part'])]"
                  priority="107"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e135">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e135']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:section or self::html:article][ancestor::html:body[html:header] and not(parent::html:body) and not(parent::html:section[tokenize(@epub:type,'\s+')='part'])]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e135']">
+            <schxslt:rule pattern="d7e135">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:section or self::html:article][ancestor::html:body[html:header] and not(parent::html:body) and not(parent::html:section[tokenize(@epub:type,'\s+')='part'])]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:section or self::html:article][ancestor::html:body[html:header] and not(parent::html:body) and not(parent::html:section[tokenize(@epub:type,'\s+')='part'])]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e135">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:section or self::html:article][ancestor::html:body[html:header] and not(parent::html:body) and not(parent::html:section[tokenize(@epub:type,'\s+')='part'])]</xsl:attribute>
                </svrl:fired-rule>
@@ -1559,25 +1607,31 @@
                 bodymatter or backmatter on any of its sectioning elements other than the top-level elements that has body as its parent</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e135')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e135')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[not(html:header|html:nav)]" priority="106" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e145">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e145']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[not(html:header|html:nav)]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e145']">
+            <schxslt:rule pattern="d7e145">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[not(html:header|html:nav)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[not(html:header|html:nav)]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e145">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[not(html:header|html:nav)]</xsl:attribute>
                </svrl:fired-rule>
@@ -1588,27 +1642,33 @@
                 epub:type on its body element.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e145')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e145')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[self::html:section or self::html:article][ancestor::html:body[not(html:header|html:nav)]]"
                  priority="105"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e154">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e154']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:section or self::html:article][ancestor::html:body[not(html:header|html:nav)]]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e154']">
+            <schxslt:rule pattern="d7e154">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:section or self::html:article][ancestor::html:body[not(html:header|html:nav)]]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:section or self::html:article][ancestor::html:body[not(html:header|html:nav)]]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e154">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:section or self::html:article][ancestor::html:body[not(html:header|html:nav)]]</xsl:attribute>
                </svrl:fired-rule>
@@ -1619,27 +1679,33 @@
                 backmatter on any of its sectioning elements (they are only allowed on the body element).</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e154')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e154')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section[not(tokenize(@epub:type,'\t+')=('z3998:poem','z3998:verse'))]|html:article]"
                  priority="104"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e165">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e165']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section[not(tokenize(@epub:type,'\t+')=('z3998:poem','z3998:verse'))]|html:article]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e165']">
+            <schxslt:rule pattern="d7e165">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section[not(tokenize(@epub:type,'\t+')=('z3998:poem','z3998:verse'))]|html:article]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section[not(tokenize(@epub:type,'\t+')=('z3998:poem','z3998:verse'))]|html:article]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e165">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:body[not(html:header)] or self::html:section or self::html:article][not(tokenize(@epub:type,'\s+')='cover')][html:section[not(tokenize(@epub:type,'\t+')=('z3998:poem','z3998:verse'))]|html:article]</xsl:attribute>
                </svrl:fired-rule>
@@ -1651,27 +1717,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e165')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e165')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[html:header]/html:*[self::html:section or self::html:article]"
                  priority="103"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e175">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e175']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[html:header]/html:*[self::html:section or self::html:article]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e175']">
+            <schxslt:rule pattern="d7e175">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[html:header]/html:*[self::html:section or self::html:article]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[html:header]/html:*[self::html:section or self::html:article]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e175">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[html:header]/html:*[self::html:section or self::html:article]</xsl:attribute>
                </svrl:fired-rule>
@@ -1695,25 +1767,31 @@
                 Bodymatter must not be preceded by backmatter (<xsl:value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&#34;',$a,'&#34;'),''),'&gt;')"/>)</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e175')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e175')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:figure" priority="102" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e201">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e201']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e201']">
+            <schxslt:rule pattern="d7e201">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e201">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure</xsl:attribute>
                </svrl:fired-rule>
@@ -1723,25 +1801,31 @@
                      <svrl:text>[nordic20] Image series are not allowed in inline context (<xsl:value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&#34;',$a,'&#34;'),''),'&gt;')"/>)</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e201')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e201')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:table" priority="101" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e214">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e214']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:table" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e214']">
+            <schxslt:rule pattern="d7e214">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:table" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:table</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e214">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:table</xsl:attribute>
                </svrl:fired-rule>
@@ -1751,13 +1835,13 @@
                      <svrl:text>[nordic21] Nested tables are not allowed (<xsl:value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&#34;',$a,'&#34;'),''),'&gt;')"/>)</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e214')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e214')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][tokenize(@class,'\s+')='page-normal']]"
                  priority="100"
@@ -1765,15 +1849,21 @@
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="preceding"
                     select="preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'][1]"/>
-      <schxslt:rule pattern="d7e227">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e227']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][tokenize(@class,'\s+')='page-normal']]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e227']">
+            <schxslt:rule pattern="d7e227">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][tokenize(@class,'\s+')='page-normal']]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][tokenize(@class,'\s+')='page-normal']]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e227">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak'][tokenize(@class,'\s+')='page-normal']]</xsl:attribute>
                </svrl:fired-rule>
@@ -1783,27 +1873,33 @@
                      <svrl:text>[nordic23] pagebreak values must increase for pagebreaks with class="page-normal" (see pagebreak with title="<xsl:value-of select="@title"/>" and compare with pagebreak with title="<xsl:value-of select="$preceding/@title"/>")</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e227')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e227')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front']"
                  priority="99"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e245">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e245']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e245']">
+            <schxslt:rule pattern="d7e245">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e245">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak'][tokenize(@class,' ')='page-front']</xsl:attribute>
                </svrl:fired-rule>
@@ -1814,27 +1910,33 @@
                 pagebreaks with class="page-front" (see pagebreak with title="<xsl:value-of select="@title"/>")</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e245')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e245')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')=('note','rearnote','endnote','footnote')]"
                  priority="98"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e258">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e258']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')=('note','rearnote','endnote','footnote')]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e258']">
+            <schxslt:rule pattern="d7e258">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')=('note','rearnote','endnote','footnote')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')=('note','rearnote','endnote','footnote')]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e258">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')=('note','rearnote','endnote','footnote')]</xsl:attribute>
                </svrl:fired-rule>
@@ -1846,27 +1948,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e258')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e258')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='noteref']"
                  priority="97"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e272">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e272']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='noteref']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e272']">
+            <schxslt:rule pattern="d7e272">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='noteref']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='noteref']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e272">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='noteref']</xsl:attribute>
                </svrl:fired-rule>
@@ -1878,27 +1986,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e272')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e272')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[ancestor::html:body[html:header] and tokenize(@epub:type,' ')='annotation']"
                  priority="96"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e289">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e289']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[ancestor::html:body[html:header] and tokenize(@epub:type,' ')='annotation']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e289']">
+            <schxslt:rule pattern="d7e289">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[ancestor::html:body[html:header] and tokenize(@epub:type,' ')='annotation']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[ancestor::html:body[html:header] and tokenize(@epub:type,' ')='annotation']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e289">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[ancestor::html:body[html:header] and tokenize(@epub:type,' ')='annotation']</xsl:attribute>
                </svrl:fired-rule>
@@ -1910,27 +2024,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e289')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e289')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='annoref']"
                  priority="95"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e303">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e303']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='annoref']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e303']">
+            <schxslt:rule pattern="d7e303">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='annoref']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='annoref']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e303">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[ancestor::html:body[html:header] and tokenize(@epub:type,'\s+')='annoref']</xsl:attribute>
                </svrl:fired-rule>
@@ -1941,13 +2061,13 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e303')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e303')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary"
                  priority="94"
@@ -1955,15 +2075,21 @@
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="inline-ancestor"
                     select="ancestor::*[namespace-uri()='http://www.w3.org/1999/xhtml' and local-name()=('a','abbr','bdo','code','dfn','em','kbd','q','samp','span','strong','sub','sup')][1]"/>
-      <schxslt:rule pattern="d7e319">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e319']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e319']">
+            <schxslt:rule pattern="d7e319">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e319">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary</xsl:attribute>
                </svrl:fired-rule>
@@ -1974,13 +2100,13 @@
                     <xsl:value-of select="concat('&lt;',$inline-ancestor/name(),string-join(for $a in ($inline-ancestor/@*) return concat(' ',$a/name(),'=&#34;',$a,'&#34;'),''),'&gt;')"/>)</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e319')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e319')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary | html:section | html:article"
                  priority="93"
@@ -1989,15 +2115,21 @@
       <xsl:variable name="inline-sibling-element"
                     select="../*[namespace-uri()='http://www.w3.org/1999/xhtml' and local-name()=('a','abbr','bdo','code','dfn','em','kbd','q','samp','span','strong','sub','sup')][1]"/>
       <xsl:variable name="inline-sibling-text" select="../text()[normalize-space()][1]"/>
-      <schxslt:rule pattern="d7e337">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e337']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary | html:section | html:article" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e337']">
+            <schxslt:rule pattern="d7e337">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary | html:section | html:article" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary | html:section | html:article</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e337">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:address | html:aside | html:blockquote | html:p | html:caption | html:div | html:dl | html:ul | html:ol | html:figure | html:table | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:details | html:summary | html:section | html:article</xsl:attribute>
                </svrl:fired-rule>
@@ -2014,27 +2146,33 @@
                      <svrl:text>[nordic29] Block element <xsl:value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&#34;',$a,'&#34;'),''),'&gt;')"/> as sibling to text content (<xsl:value-of select="if (string-length(normalize-space($inline-sibling-text)) &lt; 100) then normalize-space($inline-sibling-text) else concat(substring(normalize-space($inline-sibling-text),1,100),' (...)')"/>)</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e337')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e337')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='z3998:production'][ancestor::html:a        or ancestor::html:abbr    or ancestor::html:a[tokenize(@epub:type,' ')='annoref']   or                                      ancestor::html:bdo      or ancestor::html:code       or ancestor::html:dfn        or ancestor::html:em        or                                      ancestor::html:kbd      or ancestor::html:p[tokenize(@class,' ')='linenum']    or ancestor::html:a[tokenize(@epub:type,' ')='noteref']    or                                      ancestor::html:q        or ancestor::html:samp       or ancestor::html:span[tokenize(@epub:type,' ')='z3998:sentence']       or ancestor::html:span      or                                      ancestor::html:strong   or ancestor::html:sub        or ancestor::html:sup        or ancestor::html:span[tokenize(@epub:type,' ')='z3998:word']         or                                      ancestor::html:address  or ancestor::html:*[tokenize(@epub:type,' ')='z3998:author' and not(parent::html:header[parent::html:body])]     or ancestor::html:p[tokenize(@epub:type,' ')='bridgehead'] or ancestor::html:*[tokenize(@class,' ')='byline']    or                                      ancestor::html:cite     or ancestor::html:*[tokenize(@epub:type,' ')='covertitle'] or ancestor::html:*[tokenize(@class,' ')='dateline']   or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author'] or                                      ancestor::html:h1[tokenize(@epub:type,' ')='fulltitle'] or ancestor::html:dt         or ancestor::html:h1         or ancestor::html:h2        or                                      ancestor::html:h3       or ancestor::html:h4         or ancestor::html:h5         or ancestor::html:h6        or                                      ancestor::html:p[tokenize(@class,' ')='line']       or ancestor::html:p]"
                  priority="92"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e362">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e362']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='z3998:production'][ancestor::html:a or ancestor::html:abbr or ancestor::html:a[tokenize(@epub:type,' ')='annoref'] or ancestor::html:bdo or ancestor::html:code or ancestor::html:dfn or ancestor::html:em or ancestor::html:kbd or ancestor::html:p[tokenize(@class,' ')='linenum'] or ancestor::html:a[tokenize(@epub:type,' ')='noteref'] or ancestor::html:q or ancestor::html:samp or ancestor::html:span[tokenize(@epub:type,' ')='z3998:sentence'] or ancestor::html:span or ancestor::html:strong or ancestor::html:sub or ancestor::html:sup or ancestor::html:span[tokenize(@epub:type,' ')='z3998:word'] or ancestor::html:address or ancestor::html:*[tokenize(@epub:type,' ')='z3998:author' and not(parent::html:header[parent::html:body])] or ancestor::html:p[tokenize(@epub:type,' ')='bridgehead'] or ancestor::html:*[tokenize(@class,' ')='byline'] or ancestor::html:cite or ancestor::html:*[tokenize(@epub:type,' ')='covertitle'] or ancestor::html:*[tokenize(@class,' ')='dateline'] or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author'] or ancestor::html:h1[tokenize(@epub:type,' ')='fulltitle'] or ancestor::html:dt or ancestor::html:h1 or ancestor::html:h2 or ancestor::html:h3 or ancestor::html:h4 or ancestor::html:h5 or ancestor::html:h6 or ancestor::html:p[tokenize(@class,' ')='line'] or ancestor::html:p]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e362']">
+            <schxslt:rule pattern="d7e362">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='z3998:production'][ancestor::html:a or ancestor::html:abbr or ancestor::html:a[tokenize(@epub:type,' ')='annoref'] or ancestor::html:bdo or ancestor::html:code or ancestor::html:dfn or ancestor::html:em or ancestor::html:kbd or ancestor::html:p[tokenize(@class,' ')='linenum'] or ancestor::html:a[tokenize(@epub:type,' ')='noteref'] or ancestor::html:q or ancestor::html:samp or ancestor::html:span[tokenize(@epub:type,' ')='z3998:sentence'] or ancestor::html:span or ancestor::html:strong or ancestor::html:sub or ancestor::html:sup or ancestor::html:span[tokenize(@epub:type,' ')='z3998:word'] or ancestor::html:address or ancestor::html:*[tokenize(@epub:type,' ')='z3998:author' and not(parent::html:header[parent::html:body])] or ancestor::html:p[tokenize(@epub:type,' ')='bridgehead'] or ancestor::html:*[tokenize(@class,' ')='byline'] or ancestor::html:cite or ancestor::html:*[tokenize(@epub:type,' ')='covertitle'] or ancestor::html:*[tokenize(@class,' ')='dateline'] or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author'] or ancestor::html:h1[tokenize(@epub:type,' ')='fulltitle'] or ancestor::html:dt or ancestor::html:h1 or ancestor::html:h2 or ancestor::html:h3 or ancestor::html:h4 or ancestor::html:h5 or ancestor::html:h6 or ancestor::html:p[tokenize(@class,' ')='line'] or ancestor::html:p]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='z3998:production'][ancestor::html:a        or ancestor::html:abbr    or ancestor::html:a[tokenize(@epub:type,' ')='annoref']   or                                      ancestor::html:bdo      or ancestor::html:code       or ancestor::html:dfn        or ancestor::html:em        or                                      ancestor::html:kbd      or ancestor::html:p[tokenize(@class,' ')='linenum']    or ancestor::html:a[tokenize(@epub:type,' ')='noteref']    or                                      ancestor::html:q        or ancestor::html:samp       or ancestor::html:span[tokenize(@epub:type,' ')='z3998:sentence']       or ancestor::html:span      or                                      ancestor::html:strong   or ancestor::html:sub        or ancestor::html:sup        or ancestor::html:span[tokenize(@epub:type,' ')='z3998:word']         or                                      ancestor::html:address  or ancestor::html:*[tokenize(@epub:type,' ')='z3998:author' and not(parent::html:header[parent::html:body])]     or ancestor::html:p[tokenize(@epub:type,' ')='bridgehead'] or ancestor::html:*[tokenize(@class,' ')='byline']    or                                      ancestor::html:cite     or ancestor::html:*[tokenize(@epub:type,' ')='covertitle'] or ancestor::html:*[tokenize(@class,' ')='dateline']   or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author'] or                                      ancestor::html:h1[tokenize(@epub:type,' ')='fulltitle'] or ancestor::html:dt         or ancestor::html:h1         or ancestor::html:h2        or                                      ancestor::html:h3       or ancestor::html:h4         or ancestor::html:h5         or ancestor::html:h6        or                                      ancestor::html:p[tokenize(@class,' ')='line']       or ancestor::html:p]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e362">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='z3998:production'][ancestor::html:a        or ancestor::html:abbr    or ancestor::html:a[tokenize(@epub:type,' ')='annoref']   or                                      ancestor::html:bdo      or ancestor::html:code       or ancestor::html:dfn        or ancestor::html:em        or                                      ancestor::html:kbd      or ancestor::html:p[tokenize(@class,' ')='linenum']    or ancestor::html:a[tokenize(@epub:type,' ')='noteref']    or                                      ancestor::html:q        or ancestor::html:samp       or ancestor::html:span[tokenize(@epub:type,' ')='z3998:sentence']       or ancestor::html:span      or                                      ancestor::html:strong   or ancestor::html:sub        or ancestor::html:sup        or ancestor::html:span[tokenize(@epub:type,' ')='z3998:word']         or                                      ancestor::html:address  or ancestor::html:*[tokenize(@epub:type,' ')='z3998:author' and not(parent::html:header[parent::html:body])]     or ancestor::html:p[tokenize(@epub:type,' ')='bridgehead'] or ancestor::html:*[tokenize(@class,' ')='byline']    or                                      ancestor::html:cite     or ancestor::html:*[tokenize(@epub:type,' ')='covertitle'] or ancestor::html:*[tokenize(@class,' ')='dateline']   or ancestor::html:p[parent::html:header[parent::html:body] and tokenize(@epub:type,' ')='z3998:author'] or                                      ancestor::html:h1[tokenize(@epub:type,' ')='fulltitle'] or ancestor::html:dt         or ancestor::html:h1         or ancestor::html:h2        or                                      ancestor::html:h3       or ancestor::html:h4         or ancestor::html:h5         or ancestor::html:h6        or                                      ancestor::html:p[tokenize(@class,' ')='line']       or ancestor::html:p]</xsl:attribute>
                </svrl:fired-rule>
@@ -2045,13 +2183,13 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e362')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e362')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and count(preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'])]"
                  priority="91"
@@ -2059,15 +2197,21 @@
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="preceding-pagebreak"
                     select="preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'][1]"/>
-      <schxslt:rule pattern="d7e374">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e374']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and count(preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'])]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e374']">
+            <schxslt:rule pattern="d7e374">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and count(preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'])]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and count(preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'])]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e374">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal' and count(preceding::html:*[tokenize(@epub:type,'\s+')='pagebreak' and tokenize(@class,'\s+')='page-normal'])]</xsl:attribute>
                </svrl:fired-rule>
@@ -2078,27 +2222,33 @@
                 with pagebreak with title="<xsl:value-of select="$preceding-pagebreak/@title"/>")</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e374')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e374')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:img[parent::html:figure/tokenize(@class,'\s+')='image']"
                  priority="90"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e392">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e392']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:img[parent::html:figure/tokenize(@class,'\s+')='image']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e392']">
+            <schxslt:rule pattern="d7e392">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:img[parent::html:figure/tokenize(@class,'\s+')='image']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:img[parent::html:figure/tokenize(@class,'\s+')='image']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e392">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:img[parent::html:figure/tokenize(@class,'\s+')='image']</xsl:attribute>
                </svrl:fired-rule>
@@ -2109,25 +2259,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e392')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e392')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:img" priority="89" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e404">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e404']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:img" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e404']">
+            <schxslt:rule pattern="d7e404">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:img" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:img</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e404">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:img</xsl:attribute>
                </svrl:fired-rule>
@@ -2159,26 +2315,32 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e404')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e404')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:dl/html:*[tokenize(@epub:type,' ')='pagebreak']" priority="88"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e427">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e427']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:dl/html:*[tokenize(@epub:type,' ')='pagebreak']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e427']">
+            <schxslt:rule pattern="d7e427">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:dl/html:*[tokenize(@epub:type,' ')='pagebreak']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:dl/html:*[tokenize(@epub:type,' ')='pagebreak']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e427">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:dl/html:*[tokenize(@epub:type,' ')='pagebreak']</xsl:attribute>
                </svrl:fired-rule>
@@ -2189,25 +2351,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e427')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e427')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:a[tokenize(@epub:type,' ')='noteref']" priority="87" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e440">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e440']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[tokenize(@epub:type,' ')='noteref']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e440']">
+            <schxslt:rule pattern="d7e440">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[tokenize(@epub:type,' ')='noteref']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[tokenize(@epub:type,' ')='noteref']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e440">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[tokenize(@epub:type,' ')='noteref']</xsl:attribute>
                </svrl:fired-rule>
@@ -2218,25 +2386,31 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e440')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e440')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:a[tokenize(@epub:type,' ')='annoref']" priority="86" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e452">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e452']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[tokenize(@epub:type,' ')='annoref']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e452']">
+            <schxslt:rule pattern="d7e452">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[tokenize(@epub:type,' ')='annoref']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[tokenize(@epub:type,' ')='annoref']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e452">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[tokenize(@epub:type,' ')='annoref']</xsl:attribute>
                </svrl:fired-rule>
@@ -2246,27 +2420,33 @@
                      <svrl:text>[nordic64] Only annotation references within the same publication are allowed</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e452')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e452')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]"
                  priority="85"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e463">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e463']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e463']">
+            <schxslt:rule pattern="d7e463">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e463">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]</xsl:attribute>
                </svrl:fired-rule>
@@ -2282,26 +2462,32 @@
                      <svrl:text>[nordic93] element <xsl:value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&#34;',$a,'&#34;'),''),'&gt;')"/> may not have trailing whitespace</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e463')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e463')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='z3998:production']" priority="84"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e482">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e482']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='z3998:production']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e482']">
+            <schxslt:rule pattern="d7e482">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='z3998:production']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='z3998:production']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e482">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='z3998:production']</xsl:attribute>
                </svrl:fired-rule>
@@ -2320,26 +2506,32 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e482')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e482')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:figure[tokenize(@class,'\s+')='image-series']" priority="83"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e498">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e498']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image-series']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e498']">
+            <schxslt:rule pattern="d7e498">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image-series']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image-series']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e498">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image-series']</xsl:attribute>
                </svrl:fired-rule>
@@ -2350,26 +2542,32 @@
                 image series figures use the class "image-series". Maybe this inner figure should be using the "image" class?</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e498')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e498')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:figure[tokenize(@class,'\s+')='image-series']" priority="82"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e511">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e511']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image-series']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e511']">
+            <schxslt:rule pattern="d7e511">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image-series']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image-series']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e511">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image-series']</xsl:attribute>
                </svrl:fired-rule>
@@ -2380,25 +2578,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e511')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e511')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:figure[tokenize(@class,'\s+')='image']" priority="81" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e523">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e523']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e523']">
+            <schxslt:rule pattern="d7e523">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e523">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image']</xsl:attribute>
                </svrl:fired-rule>
@@ -2417,26 +2621,32 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e523')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e523')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6" priority="80"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e540">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e540']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e540']">
+            <schxslt:rule pattern="d7e540">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e540">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6</xsl:attribute>
                </svrl:fired-rule>
@@ -2447,25 +2657,31 @@
                 may not be empty</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e540')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e540')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='pagebreak']" priority="79" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e553">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e553']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e553']">
+            <schxslt:rule pattern="d7e553">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e553">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak']</xsl:attribute>
                </svrl:fired-rule>
@@ -2484,25 +2700,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e553')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e553')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='pagebreak']" priority="78" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e571">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e571']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e571']">
+            <schxslt:rule pattern="d7e571">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e571">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak']</xsl:attribute>
                </svrl:fired-rule>
@@ -2514,25 +2736,31 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e571')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e571')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='pagebreak']" priority="77" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e584">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e584']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e584']">
+            <schxslt:rule pattern="d7e584">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e584">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak']</xsl:attribute>
                </svrl:fired-rule>
@@ -2543,27 +2771,33 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e584')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e584')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]"
                  priority="76"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e596">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e596']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e596']">
+            <schxslt:rule pattern="d7e596">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e596">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6]</xsl:attribute>
                </svrl:fired-rule>
@@ -2573,27 +2807,33 @@
                      <svrl:text>[nordic120] Only pagebreaks are allowed before the heading <xsl:value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&#34;',$a,'&#34;'),''),'&gt;',string-join(.//text(),' '),'&lt;/',name(),'&gt;')"/>.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e596')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e596')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:table]"
                  priority="75"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e609">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e609']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:table]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e609']">
+            <schxslt:rule pattern="d7e609">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:table]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:table]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e609">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:table]</xsl:attribute>
                </svrl:fired-rule>
@@ -2604,25 +2844,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e609')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e609')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body | html:section | html:article" priority="74" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e622">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e622']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body | html:section | html:article" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e622']">
+            <schxslt:rule pattern="d7e622">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body | html:section | html:article" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body | html:section | html:article</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e622">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body | html:section | html:article</xsl:attribute>
                </svrl:fired-rule>
@@ -2634,25 +2880,31 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e622')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e622')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[html:nav]" priority="73" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e634">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e634']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[html:nav]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e634']">
+            <schxslt:rule pattern="d7e634">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[html:nav]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[html:nav]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e634">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[html:nav]</xsl:attribute>
                </svrl:fired-rule>
@@ -2670,25 +2922,31 @@
                 epub:type="page-list"&gt; in the navigation document. No pagebreaks are referenced from within this &lt;nav&gt; page list.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e634')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e634')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:img" priority="72" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e648">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e648']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:img" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e648']">
+            <schxslt:rule pattern="d7e648">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:img" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:img</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e648">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:img</xsl:attribute>
                </svrl:fired-rule>
@@ -2706,25 +2964,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e648')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e648')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='pagebreak']" priority="71" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e665">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e665']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e665']">
+            <schxslt:rule pattern="d7e665">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e665">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak']</xsl:attribute>
                </svrl:fired-rule>
@@ -2735,27 +2999,33 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e665')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e665')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:section[tokenize(@epub:type,'\s+')='toc'] | html:body[tokenize(@epub:type,'\s+')='toc']"
                  priority="70"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e677">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e677']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:section[tokenize(@epub:type,'\s+')='toc'] | html:body[tokenize(@epub:type,'\s+')='toc']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e677']">
+            <schxslt:rule pattern="d7e677">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:section[tokenize(@epub:type,'\s+')='toc'] | html:body[tokenize(@epub:type,'\s+')='toc']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:section[tokenize(@epub:type,'\s+')='toc'] | html:body[tokenize(@epub:type,'\s+')='toc']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e677">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:section[tokenize(@epub:type,'\s+')='toc'] | html:body[tokenize(@epub:type,'\s+')='toc']</xsl:attribute>
                </svrl:fired-rule>
@@ -2773,13 +3043,13 @@
                 bodymatter or cover.</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e677')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e677')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:meta[boolean(@name) and contains(@name, ':') and not(substring-before(@name, ':') = ('epub', 'dc', 'dcterms', 'marc', 'media', 'onix', 'xsd'))]"
                  priority="69"
@@ -2788,15 +3058,21 @@
       <xsl:variable name="prefix" select="substring-before(@name, ':')"/>
       <xsl:variable name="namespace"
                     select="if ($prefix = 'nordic') then 'http://www.mtm.se/epub/' else                                          if ($prefix = 'z3998') then 'http://www.daisy.org/z3998/2012/vocab/structure/#' else                                          if ($prefix = 'a11y') then 'http://www.idpf.org/epub/vocab/package/a11y/#' else                                          if ($prefix = 'msv') then 'http://www.idpf.org/epub/vocab/structure/magazine/#' else                                          if ($prefix = 'prism') then 'http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm#' else                                          ''"/>
-      <schxslt:rule pattern="d7e693">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e693']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:meta[boolean(@name) and contains(@name, ':') and not(substring-before(@name, ':') = ('epub', 'dc', 'dcterms', 'marc', 'media', 'onix', 'xsd'))]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e693']">
+            <schxslt:rule pattern="d7e693">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:meta[boolean(@name) and contains(@name, ':') and not(substring-before(@name, ':') = ('epub', 'dc', 'dcterms', 'marc', 'media', 'onix', 'xsd'))]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:meta[boolean(@name) and contains(@name, ':') and not(substring-before(@name, ':') = ('epub', 'dc', 'dcterms', 'marc', 'media', 'onix', 'xsd'))]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e693">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:meta[boolean(@name) and contains(@name, ':') and not(substring-before(@name, ':') = ('epub', 'dc', 'dcterms', 'marc', 'media', 'onix', 'xsd'))]</xsl:attribute>
                </svrl:fired-rule>
@@ -2812,13 +3088,13 @@
                      <svrl:text>[nordic128e] in the epub:prefix attribute on the html element: the namespace for the '<xsl:value-of select="$prefix"/>' prefix must be '<xsl:value-of select="$namespace"/>'</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e693')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e693')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="*[@epub:type]" priority="68" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
@@ -2826,15 +3102,21 @@
                     select="distinct-values(for $t in (tokenize(@epub:type,'\s+')) return if (contains($t,':') and not(substring-before($t, ':') = ('epub', 'dc', 'dcterms', 'marc', 'media', 'onix', 'xsd'))) then substring-before($t, ':') else ())"/>
       <xsl:variable name="prefixes-with-namespace"
                     select="for $prefix in $prefixes return (                                                             if ($prefix = 'nordic') then concat($prefix, ': ', 'http://www.mtm.se/epub/') else                                                             if ($prefix = 'z3998') then concat($prefix, ': ', 'http://www.daisy.org/z3998/2012/vocab/structure/#') else                                                             if ($prefix = 'a11y') then concat($prefix, ': ', 'http://www.idpf.org/epub/vocab/package/a11y/#') else                                                             if ($prefix = 'msv') then concat($prefix, ': ', 'http://www.idpf.org/epub/vocab/structure/magazine/#') else                                                             if ($prefix = 'prism') then concat($prefix, ': ', 'http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm#') else                                                             ())"/>
-      <schxslt:rule pattern="d7e693">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e693']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "*[@epub:type]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e693']">
+            <schxslt:rule pattern="d7e693">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "*[@epub:type]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">*[@epub:type]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e693">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">*[@epub:type]</xsl:attribute>
                </svrl:fired-rule>
@@ -2858,25 +3140,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e693')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e693')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:head[//html:body/html:header]" priority="67" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e739">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e739']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:head[//html:body/html:header]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e739']">
+            <schxslt:rule pattern="d7e739">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:head[//html:body/html:header]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:head[//html:body/html:header]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e739">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:head[//html:body/html:header]</xsl:attribute>
                </svrl:fired-rule>
@@ -2886,27 +3174,33 @@
                      <svrl:text>[nordic128b] nordic:guidelines metadata must occur once.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e739')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e739')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:meta[//html:body/html:header][@name='nordic:guidelines']"
                  priority="66"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e749">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e749']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:meta[//html:body/html:header][@name='nordic:guidelines']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e749']">
+            <schxslt:rule pattern="d7e749">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:meta[//html:body/html:header][@name='nordic:guidelines']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:meta[//html:body/html:header][@name='nordic:guidelines']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e749">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:meta[//html:body/html:header][@name='nordic:guidelines']</xsl:attribute>
                </svrl:fired-rule>
@@ -2916,25 +3210,31 @@
                      <svrl:text>[nordic128c] nordic:guidelines metadata value must be 2015-1.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e749')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e749')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:head[//html:body/html:header]" priority="65" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e758">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e758']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:head[//html:body/html:header]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e758']">
+            <schxslt:rule pattern="d7e758">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:head[//html:body/html:header]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:head[//html:body/html:header]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e758">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:head[//html:body/html:header]</xsl:attribute>
                </svrl:fired-rule>
@@ -2944,25 +3244,31 @@
                      <svrl:text>[nordic128d] nordic:supplier metadata must occur once.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e758')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e758')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:meta[@name='dc:language']" priority="64" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e769">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e769']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:meta[@name='dc:language']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e769']">
+            <schxslt:rule pattern="d7e769">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:meta[@name='dc:language']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:meta[@name='dc:language']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e769">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:meta[@name='dc:language']</xsl:attribute>
                </svrl:fired-rule>
@@ -2972,25 +3278,31 @@
                      <svrl:text>[nordic130] dc:language metadata must equal the root element xml:lang</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e769')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e769')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="*[@xml:lang]" priority="63" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e780">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e780']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "*[@xml:lang]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e780']">
+            <schxslt:rule pattern="d7e780">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "*[@xml:lang]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">*[@xml:lang]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e780">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">*[@xml:lang]</xsl:attribute>
                </svrl:fired-rule>
@@ -3000,27 +3312,33 @@
                      <svrl:text>[nordic131] xml:lang must match '^[a-z]+(-[A-Z][A-Z]+)?$' (<xsl:value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&#34;',$a,'&#34;'),''),'&gt;')"/>)</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e780')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e780')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='z3998:poem'] | html:*[tokenize(@epub:type,'\s+')='z3998:verse' and not(ancestor::html:*/tokenize(@epub:type,'\s+')='z3998:poem')]"
                  priority="62"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e794">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e794']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='z3998:poem'] | html:*[tokenize(@epub:type,'\s+')='z3998:verse' and not(ancestor::html:*/tokenize(@epub:type,'\s+')='z3998:poem')]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e794']">
+            <schxslt:rule pattern="d7e794">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='z3998:poem'] | html:*[tokenize(@epub:type,'\s+')='z3998:verse' and not(ancestor::html:*/tokenize(@epub:type,'\s+')='z3998:poem')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='z3998:poem'] | html:*[tokenize(@epub:type,'\s+')='z3998:verse' and not(ancestor::html:*/tokenize(@epub:type,'\s+')='z3998:poem')]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e794">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='z3998:poem'] | html:*[tokenize(@epub:type,'\s+')='z3998:verse' and not(ancestor::html:*/tokenize(@epub:type,'\s+')='z3998:poem')]</xsl:attribute>
                </svrl:fired-rule>
@@ -3038,27 +3356,33 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e794')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e794')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[tokenize(@epub:type,'\s+')='cover'] | html:section[tokenize(@epub:type,'\s+')='cover']"
                  priority="61"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e812">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e812']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='cover'] | html:section[tokenize(@epub:type,'\s+')='cover']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e812']">
+            <schxslt:rule pattern="d7e812">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='cover'] | html:section[tokenize(@epub:type,'\s+')='cover']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='cover'] | html:section[tokenize(@epub:type,'\s+')='cover']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e812">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='cover'] | html:section[tokenize(@epub:type,'\s+')='cover']</xsl:attribute>
                </svrl:fired-rule>
@@ -3100,27 +3424,33 @@
                      <svrl:text>[nordic140] Too many sections with class="rightflap" in cover</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e812')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e812')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:section[@class='nonstandardpagination']]"
                  priority="60"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e839">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e839']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:section[@class='nonstandardpagination']]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e839']">
+            <schxslt:rule pattern="d7e839">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:section[@class='nonstandardpagination']]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:section[@class='nonstandardpagination']]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e839">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak'][ancestor::html:section[@class='nonstandardpagination']]</xsl:attribute>
                </svrl:fired-rule>
@@ -3131,27 +3461,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e839')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e839')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:ul or parent::html:ol]"
                  priority="59"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e852">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e852']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:ul or parent::html:ol]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e852']">
+            <schxslt:rule pattern="d7e852">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:ul or parent::html:ol]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:ul or parent::html:ol]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e852">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:ul or parent::html:ol]</xsl:attribute>
                </svrl:fired-rule>
@@ -3162,27 +3498,33 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e852')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e852')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:li]"
                  priority="58"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e862">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e862']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:li]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e862']">
+            <schxslt:rule pattern="d7e862">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:li]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:li]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e862">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak'][parent::html:li]</xsl:attribute>
                </svrl:fired-rule>
@@ -3194,25 +3536,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e862')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e862')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:title" priority="57" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e874">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e874']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:title" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e874']">
+            <schxslt:rule pattern="d7e874">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:title" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:title</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e874">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:title</xsl:attribute>
                </svrl:fired-rule>
@@ -3222,25 +3570,31 @@
                      <svrl:text>[nordic200] The title element must not be empty.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e874')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e874')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='cover']" priority="56" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e885">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e885']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='cover']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e885']">
+            <schxslt:rule pattern="d7e885">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='cover']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='cover']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e885">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='cover']</xsl:attribute>
                </svrl:fired-rule>
@@ -3250,13 +3604,13 @@
                      <svrl:text>[nordic201] cover is not allowed in frontmatter, bodymatter or backmatter.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e885')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e885')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='frontmatter']" priority="55"
                  mode="d7e23">
@@ -3264,15 +3618,21 @@
       <xsl:variable name="always-allowed-types"
                     select="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',                 'z3998:biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue',                 'errata','z3998:filmography','footnotes','foreword','glossary','dictionary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',                 'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',                 'z3998:publisher-address','qna','rearnotes','endnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
       <xsl:variable name="allowed-types" select="($always-allowed-types, 'titlepage')"/>
-      <schxslt:rule pattern="d7e897">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e897']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='frontmatter']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e897']">
+            <schxslt:rule pattern="d7e897">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='frontmatter']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='frontmatter']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e897">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='frontmatter']</xsl:attribute>
                </svrl:fired-rule>
@@ -3284,26 +3644,32 @@
                 of the following types: <xsl:value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<xsl:value-of select="$allowed-types[last()]"/>'.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e897')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e897')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='rearnote']" priority="54"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e920">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e920']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='rearnote']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e920']">
+            <schxslt:rule pattern="d7e920">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='rearnote']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='rearnote']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e920">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='rearnote']</xsl:attribute>
                </svrl:fired-rule>
@@ -3314,25 +3680,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e920')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e920')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='endnote']" priority="53" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e920">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e920']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='endnote']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e920']">
+            <schxslt:rule pattern="d7e920">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='endnote']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='endnote']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e920">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='endnote']</xsl:attribute>
                </svrl:fired-rule>
@@ -3343,27 +3715,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e920')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e920')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[tokenize(@epub:type,'\s+')='rearnotes'] | html:section[tokenize(@epub:type,'\s+')='rearnotes']"
                  priority="52"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e941">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e941']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='rearnotes'] | html:section[tokenize(@epub:type,'\s+')='rearnotes']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e941']">
+            <schxslt:rule pattern="d7e941">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='rearnotes'] | html:section[tokenize(@epub:type,'\s+')='rearnotes']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='rearnotes'] | html:section[tokenize(@epub:type,'\s+')='rearnotes']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e941">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='rearnotes'] | html:section[tokenize(@epub:type,'\s+')='rearnotes']</xsl:attribute>
                </svrl:fired-rule>
@@ -3381,27 +3759,33 @@
                 elements.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e941')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e941')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[tokenize(@epub:type,'\s+')='endnotes'] | html:section[tokenize(@epub:type,'\s+')='endnotes']"
                  priority="51"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e941">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e941']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='endnotes'] | html:section[tokenize(@epub:type,'\s+')='endnotes']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e941']">
+            <schxslt:rule pattern="d7e941">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='endnotes'] | html:section[tokenize(@epub:type,'\s+')='endnotes']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='endnotes'] | html:section[tokenize(@epub:type,'\s+')='endnotes']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e941">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='endnotes'] | html:section[tokenize(@epub:type,'\s+')='endnotes']</xsl:attribute>
                </svrl:fired-rule>
@@ -3419,26 +3803,32 @@
                 elements.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e941')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e941')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='rearnote']" priority="50"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e970">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e970']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='rearnote']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e970']">
+            <schxslt:rule pattern="d7e970">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='rearnote']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='rearnote']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e970">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='rearnote']</xsl:attribute>
                </svrl:fired-rule>
@@ -3456,25 +3846,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e970')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e970')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='endnote']" priority="49" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e970">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e970']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='endnote']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e970']">
+            <schxslt:rule pattern="d7e970">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='endnote']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='endnote']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e970">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='endnote']</xsl:attribute>
                </svrl:fired-rule>
@@ -3492,26 +3888,32 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e970')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e970')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='footnote']" priority="48"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e998">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e998']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='footnote']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e998']">
+            <schxslt:rule pattern="d7e998">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='footnote']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='footnote']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e998">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='footnote']</xsl:attribute>
                </svrl:fired-rule>
@@ -3522,27 +3924,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e998')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e998')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[tokenize(@epub:type,'\s+')='footnotes'] | html:section[tokenize(@epub:type,'\s+')='footnotes']"
                  priority="47"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1010">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1010']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='footnotes'] | html:section[tokenize(@epub:type,'\s+')='footnotes']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1010']">
+            <schxslt:rule pattern="d7e1010">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='footnotes'] | html:section[tokenize(@epub:type,'\s+')='footnotes']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='footnotes'] | html:section[tokenize(@epub:type,'\s+')='footnotes']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1010">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='footnotes'] | html:section[tokenize(@epub:type,'\s+')='footnotes']</xsl:attribute>
                </svrl:fired-rule>
@@ -3560,26 +3968,32 @@
                 elements.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1010')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1010')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='footnote']" priority="46"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1026">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1026']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='footnote']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1026']">
+            <schxslt:rule pattern="d7e1026">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='footnote']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='footnote']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1026">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='footnote']</xsl:attribute>
                </svrl:fired-rule>
@@ -3597,13 +4011,13 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1026')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1026')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='bodymatter']" priority="45"
                  mode="d7e23">
@@ -3611,15 +4025,21 @@
       <xsl:variable name="always-allowed-types"
                     select="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',                 'z3998:biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue',                 'errata','z3998:filmography','footnotes','foreword','glossary','dictionary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',                 'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',                 'z3998:publisher-address','qna','rearnotes','endnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
       <xsl:variable name="allowed-types" select="($always-allowed-types, 'part')"/>
-      <schxslt:rule pattern="d7e1042">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1042']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='bodymatter']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1042']">
+            <schxslt:rule pattern="d7e1042">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='bodymatter']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='bodymatter']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1042">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='bodymatter']</xsl:attribute>
                </svrl:fired-rule>
@@ -3630,13 +4050,13 @@
                 bodymatter. Elements with the type "bodymatter" must also have one of the types <xsl:value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<xsl:value-of select="$allowed-types[last()]"/>'.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1042')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1042')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[self::html:section or self::html:article][parent::html:*[tokenize(@epub:type,' ')=('part','volume')]]"
                  priority="44"
@@ -3647,15 +4067,21 @@
       <xsl:variable name="document-components"
                     select="('z3998:pgroup','z3998:example','z3998:epigraph','z3998:annotation','z3998:introductory-note','z3998:commentary','z3998:clarification','z3998:correction','z3998:alteration','z3998:presentation',                 'z3998:production','z3998:attribution','z3998:author','z3998:editor','z3998:general-editor','z3998:commentator','z3998:translator','z3998:republisher','z3998:structure','z3998:geographic',                 'z3998:postal','z3998:email','z3998:ftp','z3998:http','z3998:ip','z3998:aside','z3998:sidebar','z3998:practice','z3998:notice','z3998:warning','z3998:marginalia','z3998:help','z3998:drama',                 'z3998:scene','z3998:stage-direction','z3998:dramatis-personae','z3998:persona','z3998:actor','z3998:role-description','z3998:speech','z3998:diary','z3998:diary-entry','z3998:figure','z3998:plate',                 'z3998:gallery','z3998:letter','z3998:sender','z3998:recipient','z3998:salutation','z3998:valediction','z3998:postscript','z3998:email-message','z3998:to','z3998:from','z3998:cc','z3998:bcc',                 'z3998:subject','z3998:collection','z3998:orderedlist','z3998:unorderedlist','z3998:abbreviations','z3998:timeline','z3998:note','z3998:footnotes','z3998:footnote','z3998:rearnote','z3998:rearnotes',                 'z3998:verse','z3998:poem','z3998:song','z3998:hymn','z3998:lyrics')"/>
       <xsl:variable name="allowed-types" select="($always-allowed-types, $document-components)"/>
-      <schxslt:rule pattern="d7e1064">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1064']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:section or self::html:article][parent::html:*[tokenize(@epub:type,' ')=('part','volume')]]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1064']">
+            <schxslt:rule pattern="d7e1064">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[self::html:section or self::html:article][parent::html:*[tokenize(@epub:type,' ')=('part','volume')]]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:section or self::html:article][parent::html:*[tokenize(@epub:type,' ')=('part','volume')]]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1064">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[self::html:section or self::html:article][parent::html:*[tokenize(@epub:type,' ')=('part','volume')]]</xsl:attribute>
                </svrl:fired-rule>
@@ -3666,13 +4092,13 @@
                 type in a part. Sections inside a part must also have one of the types <xsl:value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<xsl:value-of select="$allowed-types[last()]"/>'.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1064')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1064')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='backmatter']" priority="43"
                  mode="d7e23">
@@ -3680,15 +4106,21 @@
       <xsl:variable name="always-allowed-types"
                     select="('abstract','acknowledgments','afterword','answers','appendix','assessment','assessments','bibliography',                 'z3998:biographical-note','case-study','chapter','colophon','conclusion','contributors','copyright-page','credits','dedication','z3998:discography','division','z3998:editorial-note','epigraph','epilogue',                 'errata','z3998:filmography','footnotes','foreword','glossary','dictionary','z3998:grant-acknowledgment','halftitlepage','imprimatur','imprint','index','index-group','index-headnotes','index-legend','introduction',                 'keywords','landmarks','loa','loi','lot','lov','notice','other-credits','page-list','practices','preamble','preface','prologue','z3998:promotional-copy','z3998:published-works',                 'z3998:publisher-address','qna','rearnotes','endnotes','revision-history','z3998:section','seriespage','subchapter','z3998:subsection','toc','toc-brief','z3998:translator-note','volume')"/>
       <xsl:variable name="allowed-types" select="($always-allowed-types)"/>
-      <schxslt:rule pattern="d7e1087">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1087']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='backmatter']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1087']">
+            <schxslt:rule pattern="d7e1087">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='backmatter']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='backmatter']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1087">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='backmatter']</xsl:attribute>
                </svrl:fired-rule>
@@ -3700,25 +4132,31 @@
                 following types: <xsl:value-of select="string-join($allowed-types[position() != last()],''', ''')"/> or '<xsl:value-of select="$allowed-types[last()]"/>'.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1087')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1087')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:span[tokenize(@class,' ')='linenum']" priority="42" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1110">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1110']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:span[tokenize(@class,' ')='linenum']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1110']">
+            <schxslt:rule pattern="d7e1110">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:span[tokenize(@class,' ')='linenum']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:span[tokenize(@class,' ')='linenum']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1110">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:span[tokenize(@class,' ')='linenum']</xsl:attribute>
                </svrl:fired-rule>
@@ -3729,26 +4167,32 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1110')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1110')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,' ')='pagebreak' and text()]" priority="41"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1123">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1123']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak' and text()]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1123']">
+            <schxslt:rule pattern="d7e1123">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,' ')='pagebreak' and text()]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak' and text()]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1123">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,' ')='pagebreak' and text()]</xsl:attribute>
                </svrl:fired-rule>
@@ -3759,25 +4203,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1123')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1123')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body/html:header/html:h1" priority="40" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1135">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1135']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body/html:header/html:h1" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1135']">
+            <schxslt:rule pattern="d7e1135">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body/html:header/html:h1" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body/html:header/html:h1</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1135">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body/html:header/html:h1</xsl:attribute>
                </svrl:fired-rule>
@@ -3787,26 +4237,32 @@
                      <svrl:text>[nordic247] The first headline in the html:body/html:header element must have the 'fulltitle' epub:type.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1135')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1135')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body/html:header/html:*[not(self::html:h1)]" priority="39"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1146">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1146']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body/html:header/html:*[not(self::html:h1)]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1146']">
+            <schxslt:rule pattern="d7e1146">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body/html:header/html:*[not(self::html:h1)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body/html:header/html:*[not(self::html:h1)]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1146">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body/html:header/html:*[not(self::html:h1)]</xsl:attribute>
                </svrl:fired-rule>
@@ -3816,25 +4272,31 @@
                      <svrl:text>[nordic248] The only allowed element inside html/header besides "h1" is "p".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1146')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1146')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:span[tokenize(@class,' ')='lic']" priority="38" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1160">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1160']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:span[tokenize(@class,' ')='lic']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1160']">
+            <schxslt:rule pattern="d7e1160">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:span[tokenize(@class,' ')='lic']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:span[tokenize(@class,' ')='lic']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1160">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:span[tokenize(@class,' ')='lic']</xsl:attribute>
                </svrl:fired-rule>
@@ -3846,25 +4308,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1160')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1160')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:figure" priority="37" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1172">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1172']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1172']">
+            <schxslt:rule pattern="d7e1172">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1172">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure</xsl:attribute>
                </svrl:fired-rule>
@@ -3891,25 +4359,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1172')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1172')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:figure[tokenize(@class,'\s+')='image']" priority="36" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1190">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1190']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1190']">
+            <schxslt:rule pattern="d7e1190">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1190">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image']</xsl:attribute>
                </svrl:fired-rule>
@@ -3927,26 +4401,32 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1190')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1190')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:figure[tokenize(@class,'\s+')='image-series']" priority="35"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1204">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1204']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image-series']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1204']">
+            <schxslt:rule pattern="d7e1204">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image-series']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image-series']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1204">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image-series']</xsl:attribute>
                </svrl:fired-rule>
@@ -3964,25 +4444,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1204')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1204')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:aside" priority="34" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1221">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1221']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:aside" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1221']">
+            <schxslt:rule pattern="d7e1221">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:aside" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:aside</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1221">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:aside</xsl:attribute>
                </svrl:fired-rule>
@@ -3993,25 +4479,31 @@
                 z3998:production, sidebar, note, annotation, epigraph (<xsl:value-of select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&#34;',$a,'&#34;'),''),'&gt;')"/>)</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1221')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1221')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:abbr" priority="33" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1234">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1234']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:abbr" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1234']">
+            <schxslt:rule pattern="d7e1234">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:abbr" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:abbr</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1234">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:abbr</xsl:attribute>
                </svrl:fired-rule>
@@ -4024,27 +4516,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1234')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1234')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0] | html:section[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0]"
                  priority="32"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1246">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1246']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0] | html:section[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1246']">
+            <schxslt:rule pattern="d7e1246">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0] | html:section[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0] | html:section[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1246">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0] | html:section[ancestor-or-self::*/tokenize(@epub:type,'\s+') = 'bodymatter' and count(* except (html:h1 | *[tokenize(@epub:type,'\s+')='pagebreak'])) = 0]</xsl:attribute>
                </svrl:fired-rule>
@@ -4056,25 +4554,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1246')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1246')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="*[@xml:lang or @lang]" priority="31" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1261">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1261']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "*[@xml:lang or @lang]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1261']">
+            <schxslt:rule pattern="d7e1261">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "*[@xml:lang or @lang]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">*[@xml:lang or @lang]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1261">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">*[@xml:lang or @lang]</xsl:attribute>
                </svrl:fired-rule>
@@ -4085,27 +4589,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1261')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1261')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:div[../html:body and tokenize(@epub:type,'\s')='pagebreak']"
                  priority="30"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1273">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1273']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:div[../html:body and tokenize(@epub:type,'\s')='pagebreak']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1273']">
+            <schxslt:rule pattern="d7e1273">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:div[../html:body and tokenize(@epub:type,'\s')='pagebreak']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:div[../html:body and tokenize(@epub:type,'\s')='pagebreak']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1273">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:div[../html:body and tokenize(@epub:type,'\s')='pagebreak']</xsl:attribute>
                </svrl:fired-rule>
@@ -4116,26 +4626,32 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1273')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1273')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@epub:type,'\s+')='pagebreak']" priority="29"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1285">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1285']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='pagebreak']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1285']">
+            <schxslt:rule pattern="d7e1285">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@epub:type,'\s+')='pagebreak']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='pagebreak']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1285">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@epub:type,'\s+')='pagebreak']</xsl:attribute>
                </svrl:fired-rule>
@@ -4153,25 +4669,31 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1285')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1285')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:figure[tokenize(@class,'\s+')='image']" priority="28" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1302">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1302']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1302']">
+            <schxslt:rule pattern="d7e1302">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class,'\s+')='image']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1302">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class,'\s+')='image']</xsl:attribute>
                </svrl:fired-rule>
@@ -4182,27 +4704,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1302')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1302')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:figure[tokenize(@class, '\s+') = 'image-series']/html:*[not(self::html:figure[tokenize(@class, '\s+') = 'image'] | self::html:details)]"
                  priority="27"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1312">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1312']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class, '\s+') = 'image-series']/html:*[not(self::html:figure[tokenize(@class, '\s+') = 'image'] | self::html:details)]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1312']">
+            <schxslt:rule pattern="d7e1312">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:figure[tokenize(@class, '\s+') = 'image-series']/html:*[not(self::html:figure[tokenize(@class, '\s+') = 'image'] | self::html:details)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class, '\s+') = 'image-series']/html:*[not(self::html:figure[tokenize(@class, '\s+') = 'image'] | self::html:details)]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1312">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:figure[tokenize(@class, '\s+') = 'image-series']/html:*[not(self::html:figure[tokenize(@class, '\s+') = 'image'] | self::html:details)]</xsl:attribute>
                </svrl:fired-rule>
@@ -4213,25 +4741,31 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1312')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1312')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:div" priority="26" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1324">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1324']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:div" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1324']">
+            <schxslt:rule pattern="d7e1324">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:div" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:div</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1324">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:div</xsl:attribute>
                </svrl:fired-rule>
@@ -4242,27 +4776,33 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1324')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1324')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[tokenize(@epub:type,'\s+')='titlepage'] | html:section[tokenize(@epub:type,'\s+')='titlepage']"
                  priority="25"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1336">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1336']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='titlepage'] | html:section[tokenize(@epub:type,'\s+')='titlepage']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1336']">
+            <schxslt:rule pattern="d7e1336">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='titlepage'] | html:section[tokenize(@epub:type,'\s+')='titlepage']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='titlepage'] | html:section[tokenize(@epub:type,'\s+')='titlepage']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1336">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='titlepage'] | html:section[tokenize(@epub:type,'\s+')='titlepage']</xsl:attribute>
                </svrl:fired-rule>
@@ -4272,27 +4812,33 @@
                      <svrl:text>[nordic263] the titlepage must have a headline (and the headline must have epub:type="fulltitle" and class="title")</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1336')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1336')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')] | html:section[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')]"
                  priority="24"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1348">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1348']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')] | html:section[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1348']">
+            <schxslt:rule pattern="d7e1348">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')] | html:section[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')] | html:section[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1348">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')] | html:section[tokenize(@epub:type,'\s+')='titlepage']/html:*[matches(local-name(),'h\d')]</xsl:attribute>
                </svrl:fired-rule>
@@ -4310,25 +4856,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1348')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1348')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[tokenize(@class,'\s+')='linegroup']" priority="23" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1362">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1362']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@class,'\s+')='linegroup']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1362']">
+            <schxslt:rule pattern="d7e1362">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[tokenize(@class,'\s+')='linegroup']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@class,'\s+')='linegroup']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1362">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[tokenize(@class,'\s+')='linegroup']</xsl:attribute>
                </svrl:fired-rule>
@@ -4346,26 +4898,32 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1362')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1362')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[*[tokenize(@epub:type,'\s+')='footnote']]" priority="22"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1376">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1376']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[*[tokenize(@epub:type,'\s+')='footnote']]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1376']">
+            <schxslt:rule pattern="d7e1376">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[*[tokenize(@epub:type,'\s+')='footnote']]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[*[tokenize(@epub:type,'\s+')='footnote']]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1376">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[*[tokenize(@epub:type,'\s+')='footnote']]</xsl:attribute>
                </svrl:fired-rule>
@@ -4376,27 +4934,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1376')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1376')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:section[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li"
                  priority="21"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1388">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1388']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:section[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1388']">
+            <schxslt:rule pattern="d7e1388">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:section[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:section[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1388">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:section[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='footnotes']/html:ol/html:li</xsl:attribute>
                </svrl:fired-rule>
@@ -4407,26 +4971,32 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1388')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1388')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[*[tokenize(@epub:type,'\s+')='rearnote']]" priority="20"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1398">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1398']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[*[tokenize(@epub:type,'\s+')='rearnote']]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1398']">
+            <schxslt:rule pattern="d7e1398">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[*[tokenize(@epub:type,'\s+')='rearnote']]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[*[tokenize(@epub:type,'\s+')='rearnote']]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1398">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[*[tokenize(@epub:type,'\s+')='rearnote']]</xsl:attribute>
                </svrl:fired-rule>
@@ -4437,26 +5007,32 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1398')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1398')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:*[*[tokenize(@epub:type,'\s+')='endnote']]" priority="19"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1398">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1398']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[*[tokenize(@epub:type,'\s+')='endnote']]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1398']">
+            <schxslt:rule pattern="d7e1398">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:*[*[tokenize(@epub:type,'\s+')='endnote']]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[*[tokenize(@epub:type,'\s+')='endnote']]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1398">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:*[*[tokenize(@epub:type,'\s+')='endnote']]</xsl:attribute>
                </svrl:fired-rule>
@@ -4467,27 +5043,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1398')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1398')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:section[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li"
                  priority="18"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1419">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1419']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:section[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1419']">
+            <schxslt:rule pattern="d7e1419">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:section[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:section[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1419">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:section[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='rearnotes']/html:ol/html:li</xsl:attribute>
                </svrl:fired-rule>
@@ -4498,27 +5080,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1419')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1419')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:section[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li"
                  priority="17"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1419">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1419']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:section[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1419']">
+            <schxslt:rule pattern="d7e1419">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:section[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:section[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1419">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:section[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li | html:body[tokenize(@epub:type,'\s+')='endnotes']/html:ol/html:li</xsl:attribute>
                </svrl:fired-rule>
@@ -4529,13 +5117,13 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1419')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1419')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6" priority="16"
                  mode="d7e23">
@@ -4548,15 +5136,21 @@
                     select="$sectioning-element//*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:figure][ancestor::*[self::html:section or self::html:article or self::html:aside or self::html:nav or self::html:body][1] intersect $sectioning-element]"/>
       <xsl:variable name="child-sectioning-element-with-wrong-level"
                     select="$child-sectioning-elements[count(html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6) != 0 and (html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6)/xs:integer(replace(name(),'.*(\d)$','$1')) != min((6, $this-level + 1))][1]"/>
-      <schxslt:rule pattern="d7e1439">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1439']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1439']">
+            <schxslt:rule pattern="d7e1439">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1439">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6</xsl:attribute>
                </svrl:fired-rule>
@@ -4569,13 +5163,13 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1439')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1439')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:body[not(html:header)]" priority="15" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
@@ -4583,15 +5177,21 @@
                     select="'^.*/[A-Za-z0-9_-]+-\d+-([a-z-]+)(-\d+)?\.xhtml$'"/>
       <xsl:variable name="base-uri-type"
                     select="if (matches(base-uri(.), $filename-regex)) then replace(base-uri(.), $filename-regex, '$1') else ()"/>
-      <schxslt:rule pattern="d7e1470">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1470']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[not(html:header)]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1470']">
+            <schxslt:rule pattern="d7e1470">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:body[not(html:header)]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[not(html:header)]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1470">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:body[not(html:header)]</xsl:attribute>
                </svrl:fired-rule>
@@ -4603,26 +5203,32 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1470')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1470')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:p[tokenize(@epub:type,'\t+')='bridgehead']" priority="14"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1486">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1486']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:p[tokenize(@epub:type,'\t+')='bridgehead']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1486']">
+            <schxslt:rule pattern="d7e1486">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:p[tokenize(@epub:type,'\t+')='bridgehead']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:p[tokenize(@epub:type,'\t+')='bridgehead']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1486">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:p[tokenize(@epub:type,'\t+')='bridgehead']</xsl:attribute>
                </svrl:fired-rule>
@@ -4633,25 +5239,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1486')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1486')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:a[starts-with(@href, '#')]" priority="13" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1500">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1500']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[starts-with(@href, '#')]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1500']">
+            <schxslt:rule pattern="d7e1500">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[starts-with(@href, '#')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[starts-with(@href, '#')]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1500">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[starts-with(@href, '#')]</xsl:attribute>
                </svrl:fired-rule>
@@ -4662,26 +5274,32 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1500')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1500')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:a[not(matches(@href, '^([a-z]+:/+|mailto:|tel:)'))]" priority="12"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1515">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1515']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[not(matches(@href, '^([a-z]+:/+|mailto:|tel:)'))]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1515']">
+            <schxslt:rule pattern="d7e1515">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a[not(matches(@href, '^([a-z]+:/+|mailto:|tel:)'))]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[not(matches(@href, '^([a-z]+:/+|mailto:|tel:)'))]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1515">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a[not(matches(@href, '^([a-z]+:/+|mailto:|tel:)'))]</xsl:attribute>
                </svrl:fired-rule>
@@ -4692,25 +5310,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1515')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1515')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:th[@headers] | html:td[@headers]" priority="11" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1527">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1527']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:th[@headers] | html:td[@headers]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1527']">
+            <schxslt:rule pattern="d7e1527">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:th[@headers] | html:td[@headers]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:th[@headers] | html:td[@headers]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1527">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:th[@headers] | html:td[@headers]</xsl:attribute>
                </svrl:fired-rule>
@@ -4721,26 +5345,32 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1527')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1527')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:img[@longdesc and ancestor::html:body[html:header]]" priority="10"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1539">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1539']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:img[@longdesc and ancestor::html:body[html:header]]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1539']">
+            <schxslt:rule pattern="d7e1539">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:img[@longdesc and ancestor::html:body[html:header]]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:img[@longdesc and ancestor::html:body[html:header]]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1539">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:img[@longdesc and ancestor::html:body[html:header]]</xsl:attribute>
                </svrl:fired-rule>
@@ -4751,25 +5381,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1539')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1539')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:a" priority="9" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1552">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1552']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1552']">
+            <schxslt:rule pattern="d7e1552">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:a" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1552">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:a</xsl:attribute>
                </svrl:fired-rule>
@@ -4787,25 +5423,31 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1552')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1552')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:img" priority="8" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1570">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1570']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:img" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1570']">
+            <schxslt:rule pattern="d7e1570">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:img" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:img</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1570">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:img</xsl:attribute>
                </svrl:fired-rule>
@@ -4823,25 +5465,31 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1570')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1570')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:table" priority="7" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1586">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1586']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:table" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1586']">
+            <schxslt:rule pattern="d7e1586">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:table" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:table</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1586">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:table</xsl:attribute>
                </svrl:fired-rule>
@@ -4866,27 +5514,33 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1586')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1586')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:ul | html:ol[matches(@style,'list-style-type:\s*none;')]"
                  priority="6"
                  mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1607">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1607']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:ul | html:ol[matches(@style,'list-style-type:\s*none;')]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1607']">
+            <schxslt:rule pattern="d7e1607">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:ul | html:ol[matches(@style,'list-style-type:\s*none;')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:ul | html:ol[matches(@style,'list-style-type:\s*none;')]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1607">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:ul | html:ol[matches(@style,'list-style-type:\s*none;')]</xsl:attribute>
                </svrl:fired-rule>
@@ -4897,25 +5551,31 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1607')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1607')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:ol[@start]" priority="5" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1617">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1617']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:ol[@start]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1617']">
+            <schxslt:rule pattern="d7e1617">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:ol[@start]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:ol[@start]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1617">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:ol[@start]</xsl:attribute>
                </svrl:fired-rule>
@@ -4926,25 +5586,31 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1617')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1617')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:meta" priority="4" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1629">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1629']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:meta" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1629']">
+            <schxslt:rule pattern="d7e1629">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:meta" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:meta</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1629">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:meta</xsl:attribute>
                </svrl:fired-rule>
@@ -4962,25 +5628,31 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1629')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1629')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:col | html:colgroup" priority="3" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1645">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1645']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:col | html:colgroup" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1645']">
+            <schxslt:rule pattern="d7e1645">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:col | html:colgroup" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:col | html:colgroup</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1645">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:col | html:colgroup</xsl:attribute>
                </svrl:fired-rule>
@@ -4991,25 +5663,31 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1645')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1645')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:td | html:th" priority="2" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1658">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1658']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:td | html:th" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1658']">
+            <schxslt:rule pattern="d7e1658">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:td | html:th" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:td | html:th</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1658">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:td | html:th</xsl:attribute>
                </svrl:fired-rule>
@@ -5035,25 +5713,31 @@
                      </svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1658')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1658')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="m:*[contains(name(), ':')]" priority="1" mode="d7e23">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e1676">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1676']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "m:*[contains(name(), ':')]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1676']">
+            <schxslt:rule pattern="d7e1676">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "m:*[contains(name(), ':')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">m:*[contains(name(), ':')]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1676">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">m:*[contains(name(), ':')]</xsl:attribute>
                </svrl:fired-rule>
@@ -5064,13 +5748,13 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1676')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1676')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="html:details[preceding-sibling::*[1]/tokenize(@class, '\s+') = 'image']"
                  priority="0"
@@ -5078,15 +5762,21 @@
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e1686">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e1686']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:details[preceding-sibling::*[1]/tokenize(@class, '\s+') = 'image']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e1686']">
+            <schxslt:rule pattern="d7e1686">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "html:details[preceding-sibling::*[1]/tokenize(@class, '\s+') = 'image']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:details[preceding-sibling::*[1]/tokenize(@class, '\s+') = 'image']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e1686">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">html:details[preceding-sibling::*[1]/tokenize(@class, '\s+') = 'image']</xsl:attribute>
                </svrl:fired-rule>
@@ -5098,13 +5788,13 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e1686')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e1686')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:function name="schxslt:location" as="xs:string">
       <xsl:param name="node" as="node()"/>

@@ -180,40 +180,46 @@
                     <text>Rearmatter</text>
                 </navLabel>
                 <content src="C00000-07-rearnotes.xhtml#rearnotes_body"/>
+				<navPoint id="navPoint-27" playOrder="27">
+					<navLabel>
+						<text>End notes</text>
+					</navLabel>
+					<content src="C00000-07-rearnotes.xhtml#endnote_section"/>
+				</navPoint>
             </navPoint>
         </navPoint>
-        <navPoint id="navPoint-27" playOrder="27">
+        <navPoint id="navPoint-28" playOrder="28">
             <navLabel>
                 <text>4. The importance of Haüy in the education of the blind in Sweden and elsewhere extra long title extra long title extra long title extra long title</text>
             </navLabel>
             <content src="C00000-08-chapter.xhtml#d910e3694"/>
         </navPoint>
-        <navPoint id="navPoint-28" playOrder="28">
+        <navPoint id="navPoint-29" playOrder="29">
             <navLabel>
                 <text>Poem test</text>
             </navLabel>
             <content src="C00000-09-part.xhtml#poem-part"/>
-            <navPoint id="navPoint-29" playOrder="29">
+            <navPoint id="navPoint-30" playOrder="30">
                 <navLabel>
                     <text>Poem headline</text>
                 </navLabel>
                 <content src="C00000-09-part.xhtml#poem1"/>
-				<navPoint id="navPoint-29" playOrder="29">
+				<navPoint id="navPoint-31" playOrder="31">
 					<navLabel>
 						<text>Section level 3</text>
 					</navLabel>
 					<content src="C00000-09-part.xhtml#poem3"/>
-					<navPoint id="navPoint-29" playOrder="29">
+					<navPoint id="navPoint-32" playOrder="32">
 						<navLabel>
 							<text>Section level 4</text>
 						</navLabel>
 						<content src="C00000-09-part.xhtml#poem4"/>
-						<navPoint id="navPoint-29" playOrder="29">
+						<navPoint id="navPoint-33" playOrder="33">
 							<navLabel>
 								<text>Section level 5</text>
 							</navLabel>
 							<content src="C00000-09-part.xhtml#poem5"/>
-							<navPoint id="navPoint-29" playOrder="29">
+							<navPoint id="navPoint-34" playOrder="34">
 								<navLabel>
 									<text>Section level 6</text>
 								</navLabel>

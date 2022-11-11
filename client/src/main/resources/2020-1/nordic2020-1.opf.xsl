@@ -16,14 +16,14 @@
                     xmlns:skos="http://www.w3.org/2004/02/skos/core#">
       <dct:creator>
          <dct:Agent>
-            <skos:prefLabel>SchXslt/1.6.2 SAXON/9.2.0.6</skos:prefLabel>
+            <skos:prefLabel>SchXslt/1.9.4 SAXON/9.2.0.6</skos:prefLabel>
             <schxslt.compile.typed-variables xmlns="https://doi.org/10.5281/zenodo.1495494#">true</schxslt.compile.typed-variables>
          </dct:Agent>
       </dct:creator>
-      <dct:created>2022-10-18T12:59:51.923+02:00</dct:created>
+      <dct:created>2022-11-11T09:09:57.86+01:00</dct:created>
    </rdf:Description>
    <xsl:output indent="yes"/>
-   <xsl:template match="/">
+   <xsl:template match="root()">
       <xsl:variable name="metadata" as="element()?">
          <svrl:metadata xmlns:dct="http://purl.org/dc/terms/"
                         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
@@ -31,15 +31,8 @@
             <dct:creator>
                <dct:Agent>
                   <skos:prefLabel>
-                     <xsl:variable name="prefix" as="xs:string?"
-                                   select="if (doc-available('')) then in-scope-prefixes(document('')/*[1])[namespace-uri-for-prefix(., document('')/*[1]) eq 'http://www.w3.org/1999/XSL/Transform'][1] else ()"/>
-                     <xsl:choose>
-                        <xsl:when test="empty($prefix)">Unknown</xsl:when>
-                        <xsl:otherwise>
-                           <xsl:value-of separator="/"
-                                         select="(system-property(concat($prefix, ':product-name')), system-property(concat($prefix,':product-version')))"/>
-                        </xsl:otherwise>
-                     </xsl:choose>
+                     <xsl:value-of separator="/"
+                                   select="(system-property('xsl:product-name'), system-property('xsl:product-version'))"/>
                   </skos:prefLabel>
                </dct:Agent>
             </dct:creator>
@@ -50,11 +43,11 @@
                <rdf:Description>
                   <dct:creator>
                      <dct:Agent>
-                        <skos:prefLabel>SchXslt/1.6.2 SAXON/9.2.0.6</skos:prefLabel>
+                        <skos:prefLabel>SchXslt/1.9.4 SAXON/9.2.0.6</skos:prefLabel>
                         <schxslt.compile.typed-variables xmlns="https://doi.org/10.5281/zenodo.1495494#">true</schxslt.compile.typed-variables>
                      </dct:Agent>
                   </dct:creator>
-                  <dct:created>2022-10-18T12:59:51.923+02:00</dct:created>
+                  <dct:created>2022-11-11T09:09:57.86+01:00</dct:created>
                </rdf:Description>
             </dct:source>
          </svrl:metadata>
@@ -66,9 +59,11 @@
       </xsl:variable>
       <xsl:variable name="schxslt:report" as="node()*">
          <xsl:sequence select="$metadata"/>
-         <xsl:for-each select="$report/schxslt:pattern">
-            <xsl:sequence select="node()"/>
-            <xsl:sequence select="$report/schxslt:rule[@pattern = current()/@id]/node()"/>
+         <xsl:for-each select="$report/schxslt:document">
+            <xsl:for-each select="schxslt:pattern">
+               <xsl:sequence select="node()"/>
+               <xsl:sequence select="../schxslt:rule[@pattern = current()/@id]/node()"/>
+            </xsl:for-each>
          </xsl:for-each>
       </xsl:variable>
       <svrl:schematron-output xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
@@ -82,190 +77,187 @@
       </svrl:schematron-output>
    </xsl:template>
    <xsl:template match="text() | @*" mode="#all" priority="-10"/>
+   <xsl:template match="/" mode="#all" priority="-10">
+      <xsl:apply-templates mode="#current" select="node()"/>
+   </xsl:template>
    <xsl:template match="*" mode="#all" priority="-10">
       <xsl:apply-templates mode="#current" select="@*"/>
       <xsl:apply-templates mode="#current" select="node()"/>
    </xsl:template>
    <xsl:template name="d7e17">
-      <schxslt:pattern id="d7e17">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_1">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e39">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_2">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e80">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_3">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e170">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_5_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e188">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_6">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e210">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_7">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e228">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_8">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e248">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_9">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e268">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_10">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e295">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_12_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e313">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_12_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e378">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_13">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e395">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_14">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e415">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_15_a">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
-      <schxslt:pattern id="d7e432">
-         <xsl:if test="exists(base-uri(/))">
-            <xsl:attribute name="documents" select="base-uri(/)"/>
-         </xsl:if>
-         <xsl:for-each select="/">
-            <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" id="opf_nordic_15_b">
-               <xsl:attribute name="documents" select="base-uri(.)"/>
-            </svrl:active-pattern>
-         </xsl:for-each>
-      </schxslt:pattern>
-      <xsl:apply-templates mode="d7e17" select="/"/>
+      <schxslt:document>
+         <schxslt:pattern id="d7e17">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 1" id="opf_nordic_1">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e39">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 2" id="opf_nordic_2">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e80">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 3" id="opf_nordic_3">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e170">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 5b" id="opf_nordic_5_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e188">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 6" id="opf_nordic_6">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e210">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 7" id="opf_nordic_7">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e228">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 8" id="opf_nordic_8">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e248">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 9" id="opf_nordic_9">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e268">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 10" id="opf_nordic_10">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e295">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 12a" id="opf_nordic_12_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e313">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 12b" id="opf_nordic_12_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e378">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 13" id="opf_nordic_13">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e395">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 14" id="opf_nordic_14">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e415">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 15a" id="opf_nordic_15_a">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <schxslt:pattern id="d7e432">
+            <xsl:if test="exists(base-uri(root()))">
+               <xsl:attribute name="documents" select="base-uri(root())"/>
+            </xsl:if>
+            <xsl:for-each select="root()">
+               <svrl:active-pattern xmlns:svrl="http://purl.oclc.org/dsdl/svrl" name="Rule 15b" id="opf_nordic_15_b">
+                  <xsl:attribute name="documents" select="base-uri(.)"/>
+               </svrl:active-pattern>
+            </xsl:for-each>
+         </schxslt:pattern>
+         <xsl:apply-templates mode="d7e17" select="root()"/>
+      </schxslt:document>
    </xsl:template>
    <xsl:template match="/*" priority="16" mode="d7e17">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e17">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e17']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "/*" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e17']">
+            <schxslt:rule pattern="d7e17">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "/*" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">/*</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e17">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">/*</xsl:attribute>
                </svrl:fired-rule>
@@ -287,27 +279,33 @@
                      <svrl:text>[opf1] the OPF must be contained in a folder named EPUB</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e17')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e17')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:package" priority="15" mode="d7e17">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e39">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e39']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:package" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e39']">
+            <schxslt:rule pattern="d7e39">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:package" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:package</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e39">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:package</xsl:attribute>
                </svrl:fired-rule>
@@ -344,13 +342,13 @@
                 http://www.idpf.org/epub/vocab/package/a11y/#")</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e39')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e39')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:meta[boolean(@property) and contains(@property, ':') and not(substring-before(@property, ':') = ('dc', 'dcterms', 'a11y', 'schema', 'marc', 'media', 'onix', 'rendition', 'xsd'))]"
                  priority="14"
@@ -359,15 +357,21 @@
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
       <xsl:variable name="prefix" select="substring-before(@property, ':')"/>
-      <schxslt:rule pattern="d7e39">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e39']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:meta[boolean(@property) and contains(@property, ':') and not(substring-before(@property, ':') = ('dc', 'dcterms', 'a11y', 'schema', 'marc', 'media', 'onix', 'rendition', 'xsd'))]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e39']">
+            <schxslt:rule pattern="d7e39">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:meta[boolean(@property) and contains(@property, ':') and not(substring-before(@property, ':') = ('dc', 'dcterms', 'a11y', 'schema', 'marc', 'media', 'onix', 'rendition', 'xsd'))]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:meta[boolean(@property) and contains(@property, ':') and not(substring-before(@property, ':') = ('dc', 'dcterms', 'a11y', 'schema', 'marc', 'media', 'onix', 'rendition', 'xsd'))]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e39">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:meta[boolean(@property) and contains(@property, ':') and not(substring-before(@property, ':') = ('dc', 'dcterms', 'a11y', 'schema', 'marc', 'media', 'onix', 'rendition', 'xsd'))]</xsl:attribute>
                </svrl:fired-rule>
@@ -377,13 +381,13 @@
                      <svrl:text>[opf2] on the package element; the prefix attribute must declare the '<xsl:value-of select="$prefix"/>' prefix</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e39')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e39')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:metadata" priority="13" mode="d7e17">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
@@ -391,15 +395,21 @@
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
       <xsl:variable name="main-title-id"
                     select="opf:meta[text() = 'main' and @property = 'title-type']/translate(@refines, '#', '')"/>
-      <schxslt:rule pattern="d7e80">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e80']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:metadata" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e80']">
+            <schxslt:rule pattern="d7e80">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:metadata" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:metadata</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e80">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:metadata</xsl:attribute>
                </svrl:fired-rule>
@@ -506,28 +516,34 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e80')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e80')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:item[@media-type='application/x-dtbncx+xml']" priority="12"
                  mode="d7e17">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e170">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e170']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/x-dtbncx+xml']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e170']">
+            <schxslt:rule pattern="d7e170">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/x-dtbncx+xml']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/x-dtbncx+xml']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e170">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/x-dtbncx+xml']</xsl:attribute>
                </svrl:fired-rule>
@@ -537,13 +553,13 @@
                      <svrl:text>[opf5b] the NCX must be located in the same directory as the package document, and must be named "nav.ncx" (not "<xsl:value-of select="@href"/>")</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e170')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e170')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:spine" priority="11" mode="d7e17">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
@@ -551,15 +567,21 @@
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
       <xsl:variable name="toc-doc"
                     select="/opf:package/opf:manifest/opf:item[@media-type='application/x-dtbncx+xml']"/>
-      <schxslt:rule pattern="d7e188">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e188']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:spine" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e188']">
+            <schxslt:rule pattern="d7e188">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:spine" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:spine</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e188">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:spine</xsl:attribute>
                </svrl:fired-rule>
@@ -575,13 +597,13 @@
                      <svrl:text>[opf6] the toc attribute must refer to the nav.ncx item in the manifest</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e188')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e188')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:item[@media-type='application/xhtml+xml' and tokenize(@properties,'\s+')='nav']"
                  priority="10"
@@ -589,15 +611,21 @@
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e210">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e210']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/xhtml+xml' and tokenize(@properties,'\s+')='nav']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e210']">
+            <schxslt:rule pattern="d7e210">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/xhtml+xml' and tokenize(@properties,'\s+')='nav']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/xhtml+xml' and tokenize(@properties,'\s+')='nav']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e210">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/xhtml+xml' and tokenize(@properties,'\s+')='nav']</xsl:attribute>
                </svrl:fired-rule>
@@ -607,27 +635,33 @@
                      <svrl:text>[opf7] the Navigation Document must be located in the same directory as the package document, and must be named 'nav.xhtml' (not "<xsl:value-of select="@href"/>")</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e210')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e210')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:item[starts-with(@media-type,'image/')]" priority="9" mode="d7e17">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e228">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e228']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[starts-with(@media-type,'image/')]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e228']">
+            <schxslt:rule pattern="d7e228">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[starts-with(@media-type,'image/')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[starts-with(@media-type,'image/')]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e228">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[starts-with(@media-type,'image/')]</xsl:attribute>
                </svrl:fired-rule>
@@ -638,13 +672,13 @@
                     "<xsl:value-of select="replace(@href,'.*/','')"/>" is located in "<xsl:value-of select="replace(@href,'[^/]+$','')"/>".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e228')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e228')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:item[@media-type='application/xhtml+xml' and not(tokenize(@properties,'\s+')='nav')]"
                  priority="8"
@@ -652,15 +686,21 @@
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e248">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e248']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/xhtml+xml' and not(tokenize(@properties,'\s+')='nav')]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e248']">
+            <schxslt:rule pattern="d7e248">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/xhtml+xml' and not(tokenize(@properties,'\s+')='nav')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/xhtml+xml' and not(tokenize(@properties,'\s+')='nav')]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e248">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/xhtml+xml' and not(tokenize(@properties,'\s+')='nav')]</xsl:attribute>
                </svrl:fired-rule>
@@ -670,13 +710,13 @@
                      <svrl:text>[opf9] all content files must be located in the same directory as the package document. The content file file "<xsl:value-of select="replace(@href,'.*/','')"/>" is located in "<xsl:value-of select="replace(@href,'[^/]+$','')"/>".</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e248')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e248')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-cover.xhtml')]/@id = @idref]"
                  priority="7"
@@ -684,15 +724,21 @@
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e268">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e268']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-cover.xhtml')]/@id = @idref]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e268']">
+            <schxslt:rule pattern="d7e268">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-cover.xhtml')]/@id = @idref]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-cover.xhtml')]/@id = @idref]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e268">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'-cover.xhtml')]/@id = @idref]</xsl:attribute>
                </svrl:fired-rule>
@@ -708,27 +754,33 @@
                      <svrl:text>[opf10] All preceeding documents to the cover must be marked as secondary in the spine (i.e. set linear="no")</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e268')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e268')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'titlepage.xhtml')][1]/@id = @idref]"
                  priority="6"
                  mode="d7e17">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
-      <schxslt:rule pattern="d7e268">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e268']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'titlepage.xhtml')][1]/@id = @idref]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e268']">
+            <schxslt:rule pattern="d7e268">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'titlepage.xhtml')][1]/@id = @idref]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'titlepage.xhtml')][1]/@id = @idref]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e268">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:itemref[../../opf:manifest/opf:item[@media-type='application/xhtml+xml' and ends-with(@href,'titlepage.xhtml')][1]/@id = @idref]</xsl:attribute>
                </svrl:fired-rule>
@@ -738,13 +790,13 @@
                      <svrl:text>[opf10] All preceeding documents to the titlepage or halftitlepage must be marked as secondary in the spine (i.e. set linear="no")</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e268')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e268')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav')]"
                  priority="5"
@@ -752,15 +804,21 @@
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e295">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e295']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav')]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e295']">
+            <schxslt:rule pattern="d7e295">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav')]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e295">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav')]</xsl:attribute>
                </svrl:fired-rule>
@@ -774,13 +832,13 @@
                 the same role or epub:type apart. For instance: "DTB123-13-chapter-7.xhtml".</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e295')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e295')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')]"
                  priority="4"
@@ -800,15 +858,21 @@
                     select="('cover','frontmatter','bodymatter','backmatter','volume','part','chapter','subchapter','division','abstract','foreword','preface','prologue','introduction','preamble','conclusion','epilogue','afterword','epigraph','toc','toc-brief','landmarks','loa','loi','lot','lov','appendix','colophon','credits','keywords','index','index-headnotes','index-legend','index-group','index-entry-list','index-entry','index-term','index-editor-note','index-locator','index-locator-list','index-locator-range','index-xref-preferred','index-xref-related','index-term-category','index-term-categories','glossary','glossterm','glossdef','bibliography','biblioentry','titlepage','halftitlepage','copyright-page','seriespage','acknowledgments','imprint','imprimatur','contributors','other-credits','errata','dedication','revision-history','case-study','help','marginalia','notice','pullquote','sidebar','warning','halftitle','fulltitle','covertitle','title','subtitle','label','ordinal','bridgehead','learning-objective','learning-objectives','learning-outcome','learning-outcomes','learning-resource','learning-resources','learning-standard','learning-standards','answer','answers','assessment','assessments','feedback','fill-in-the-blank-problem','general-problem','qna','match-problem','multiple-choice-problem','practice','practices','question','true-false-problem','panel','panel-group','balloon','text-area','sound-area','annotation','note','footnote','rearnote','footnotes','rearnotes','annoref','biblioref','glossref','noteref','referrer','credit','keyword','topic-sentence','concluding-sentence','pagebreak','page-list','table','table-row','table-cell','list','list-item','figure')"/>
       <xsl:variable name="vocab-aria-epub"
                     select="('abstract', 'acknowledgments', 'afterword', 'appendix', 'backlink', 'biblioentry', 'bibliography', 'biblioref', 'chapter', 'colophon', 'conclusion', 'cover', 'credit', 'credits', 'dedication', 'endnote', 'endnotes', 'epigraph', 'epilogue', 'errata', 'example', 'footnote', 'foreword', 'glossary', 'glossref', 'index', 'introduction', 'noteref', 'notice', 'pagebreak', 'pagelist', 'part', 'preface', 'prologue', 'pullquote', 'qna', 'subtitle', 'tip', 'toc')"/>
-      <schxslt:rule pattern="d7e313">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e313']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')]" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e313']">
+            <schxslt:rule pattern="d7e313">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')]" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')]</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e313">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/xhtml+xml' and not(@href='nav.xhtml' or tokenize(@properties,'\s+')='nav') and matches(@href,'^[A-Za-z0-9_-]+-\d+-[a-z-]+(-\d+)?\.xhtml$')]</xsl:attribute>
                </svrl:fired-rule>
@@ -853,13 +917,13 @@
                 should refer to &lt;item id="<xsl:value-of select="@id"/>" href="<xsl:value-of select="@href"/>"&gt;.</svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e313')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e313')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:item[@media-type='application/xhtml+xml' and @href='nav.xhtml']"
                  priority="3"
@@ -867,15 +931,21 @@
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e378">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e378']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/xhtml+xml' and @href='nav.xhtml']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e378']">
+            <schxslt:rule pattern="d7e378">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[@media-type='application/xhtml+xml' and @href='nav.xhtml']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/xhtml+xml' and @href='nav.xhtml']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e378">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[@media-type='application/xhtml+xml' and @href='nav.xhtml']</xsl:attribute>
                </svrl:fired-rule>
@@ -886,28 +956,34 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e378')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e378')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:itemref" priority="2" mode="d7e17">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
       <xsl:variable name="itemref" select="."/>
-      <schxslt:rule pattern="d7e395">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e395']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:itemref" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e395']">
+            <schxslt:rule pattern="d7e395">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:itemref" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:itemref</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e395">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:itemref</xsl:attribute>
                </svrl:fired-rule>
@@ -918,28 +994,34 @@
                 (itemref with idref="<xsl:value-of select="@idref"/>").</svrl:text>
                   </svrl:successful-report>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e395')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e395')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:item[substring-after(@href,'/') = 'cover.jpg']" priority="1"
                  mode="d7e17">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e415">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e415']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[substring-after(@href,'/') = 'cover.jpg']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e415']">
+            <schxslt:rule pattern="d7e415">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[substring-after(@href,'/') = 'cover.jpg']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[substring-after(@href,'/') = 'cover.jpg']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e415">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[substring-after(@href,'/') = 'cover.jpg']</xsl:attribute>
                </svrl:fired-rule>
@@ -950,28 +1032,34 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e415')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e415')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:template match="opf:item[tokenize(@properties,'\s+') = 'cover-image']" priority="0"
                  mode="d7e17">
       <xsl:param name="schxslt:patterns-matched" as="xs:string*"/>
       <xsl:variable name="context"
                     select="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&#34;', $a, '&#34;'), ''), '&gt;)')"/>
-      <schxslt:rule pattern="d7e432">
-         <xsl:choose>
-            <xsl:when test="$schxslt:patterns-matched[. = 'd7e432']">
-               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[tokenize(@properties,'\s+') = 'cover-image']" shadowed by preceeding rule</xsl:comment>
+      <xsl:choose>
+         <xsl:when test="$schxslt:patterns-matched[. = 'd7e432']">
+            <schxslt:rule pattern="d7e432">
+               <xsl:comment xmlns:svrl="http://purl.oclc.org/dsdl/svrl">WARNING: Rule for context "opf:item[tokenize(@properties,'\s+') = 'cover-image']" shadowed by preceding rule</xsl:comment>
                <svrl:suppressed-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[tokenize(@properties,'\s+') = 'cover-image']</xsl:attribute>
                </svrl:suppressed-rule>
-            </xsl:when>
-            <xsl:otherwise>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="$schxslt:patterns-matched"/>
+            </xsl:next-match>
+         </xsl:when>
+         <xsl:otherwise>
+            <schxslt:rule pattern="d7e432">
                <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
                   <xsl:attribute name="context">opf:item[tokenize(@properties,'\s+') = 'cover-image']</xsl:attribute>
                </svrl:fired-rule>
@@ -982,13 +1070,13 @@
                      </svrl:text>
                   </svrl:failed-assert>
                </xsl:if>
-            </xsl:otherwise>
-         </xsl:choose>
-      </schxslt:rule>
-      <xsl:next-match>
-         <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
-                         select="($schxslt:patterns-matched, 'd7e432')"/>
-      </xsl:next-match>
+            </schxslt:rule>
+            <xsl:next-match>
+               <xsl:with-param name="schxslt:patterns-matched" as="xs:string*"
+                               select="($schxslt:patterns-matched, 'd7e432')"/>
+            </xsl:next-match>
+         </xsl:otherwise>
+      </xsl:choose>
    </xsl:template>
    <xsl:function name="schxslt:location" as="xs:string">
       <xsl:param name="node" as="node()"/>
