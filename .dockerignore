@@ -4,6 +4,7 @@
 .dockerignore
 Dockerfile
 
+client/schxslt/**/*
 target/
 src/test/xspec/*.html
 src/test/xspec/xspec/*

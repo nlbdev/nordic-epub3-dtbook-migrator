@@ -1,0 +1,17 @@
+/schxslt/**/*
+/.idea
+*.iml
+/*.obfl
+/*.xhtml
+/*.rng
+/*.xsl
+/*.zip
+/*.epub
+/*.json
+/*.html
+/*.xsd
+/*.pef
+target
+/jing*
+/trang*
+/mathml3
