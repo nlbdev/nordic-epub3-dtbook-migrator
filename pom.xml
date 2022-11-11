@@ -49,7 +49,18 @@
         <developerConnection>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
-    
+
+    <repositories>
+        <repository>
+            <id>internal-repository</id>
+            <url>https://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>restlet</id>
+            <url>https://maven.restlet.talend.com/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!--
             for XProcScriptService
