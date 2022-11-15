@@ -4,6 +4,9 @@ SCHXSLT_PATH=schxslt
 MIGRATOR_PATH=..
 SCHEMA_PATH=$MIGRATOR_PATH/src/main/resources/xml/schema
 
+mkdir -p src/main/resources/2015-1
+mkdir -p src/main/resources/2020-1
+
 #cp $SCHEMA_PATH/2015-1/nordic-html5.rng src/main/resources/2015-1
 #sed -i 's/http:\/\/www.daisy.org\/pipeline\/modules\/mathml-utils\/mathml3.rng/mathml3.rng/' src/main/resources/2020-1/nordic-html5.rng
 #sed -i 's/<define name="annotation">/<define name="annotation" combine="choice">/' src/main/resources/2020-1/nordic-html5.rng
