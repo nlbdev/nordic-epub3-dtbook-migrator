@@ -639,6 +639,18 @@
         </rule>
     </pattern>
 
+    <pattern id="epub_nordic_253_d">
+        <title>Rule 253d</title>
+        <p>Extracted text needs to have a reference of the image the text have been extracted from.</p>
+        <rule context="html:figure[tokenize(@class, '\s+') = 'image']">
+            <let name="figdesc-id" value=".//html:aside[tokenize(@class, '\s+') = 'fig-desc']/@id" />
+            <let name="aria-id" value=".//html:img/@aria-describedby" />
+            <assert test="count(.//html:aside[tokenize(@class, '\s+') = 'fig-desc']) = 0 or $figdesc-id = $aria-id">
+                [nordic253d] Images must reference the extracted text. <value-of select="$figdesc-id"/> != <value-of select="$aria-id"/>
+            </assert>
+        </rule>
+    </pattern>
+
     <pattern id="epub_nordic_256">
         <title>Rule 256</title>
         <p>HTML documents with only a heading</p>
