@@ -46,9 +46,13 @@ RUN apt -y autoremove
 
 RUN rm /etc/apt/preferences.d/no-debian-php
 
-RUN apt -y install openjdk-11-jre libgbm-dev libxkbcommon-x11-0 libgtk-3-0 \
+RUN apt -y install openjdk-11-jre libgbm-dev libxkbcommon-x11-0 libgtk-3-0 locales \
         php7.4 libzip-dev unzip cron tzdata sudo locales gcc wget python3 && rm -rf /var/cache/apk/*
 RUN docker-php-ext-install zip
+
+RUN sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen
+
+RUN locale-gen
 
 RUN wget https://nodejs.org/dist/v16.18.0/node-v16.18.0-linux-x64.tar.xz
 RUN mkdir -p /usr/local/lib/nodejs && tar -xJf node-v16.18.0-linux-x64.tar.xz -C /usr/local/lib/nodejs && rm node-v16.18.0-linux-x64.tar.xz
@@ -70,7 +74,7 @@ RUN chmod +x /root/cron_job.sh
 ADD web/prepare_env.sh /root/prepare_env.sh
 RUN chmod +x /root/prepare_env.sh
 
-RUN sed -i 's/^exec /\n\n\/root\/prepare_env.sh\n\nservice cron start\n\nexec /' /usr/local/bin/apache2-foreground
+RUN sed -i 's/^exec /\n\n\/root\/prepare_env.sh\n\nexport LANG=en_US.UTF-8\n\nservice cron start\n\nexec /' /usr/local/bin/apache2-foreground
 
 ADD web/bin/ /var/www/bin/
 ADD web/include/ /var/www/include/
