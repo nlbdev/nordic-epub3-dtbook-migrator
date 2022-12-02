@@ -57,6 +57,9 @@ RUN locale-gen
 RUN wget https://nodejs.org/dist/v16.18.0/node-v16.18.0-linux-x64.tar.xz
 RUN mkdir -p /usr/local/lib/nodejs && tar -xJf node-v16.18.0-linux-x64.tar.xz -C /usr/local/lib/nodejs && rm node-v16.18.0-linux-x64.tar.xz
 ENV PATH "/usr/local/lib/nodejs/node-v16.18.0-linux-x64/bin:$PATH"
+ENV LC_ALL "en_US.UTF-8"
+ENV LANG "en_US.UTF-8"
+ENV LANGUAGE "en_US.UTF-8"
 RUN npm install npm@8.12.2 --location=global
 RUN npm install multer@1.4.5-lts.1
 RUN npm install @daisy/ace --location=global
