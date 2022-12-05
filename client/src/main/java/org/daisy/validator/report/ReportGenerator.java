@@ -42,12 +42,7 @@ public class ReportGenerator {
 
         String errorStatus = "SUCCESS";
         if (issueList.size() > 0) {
-            for (Issue i : issueList) {
-                if (i.getErrorLevel() > Issue.ERROR_WARN) {
-                    errorStatus = "FAIL";
-                    break;
-                }
-            }
+            errorStatus = "FAIL";
         }
 
         report.put("status", errorStatus);

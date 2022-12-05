@@ -192,10 +192,8 @@ public class EPUBFiles {
         BufferedWriter bw;
         if (ncxFile == null || zipFile.getEntry(ncxFile) == null) {
             ncxFile = ncxFile == null ? "nav.ncx" : ncxFile;
-            errorList.add(new Issue("", "File missing", ncxFile, Guideline.NAV_NCX, Issue.ERROR_WARN));
         } else if (navFile == null || zipFile.getEntry(navFile) == null) {
             navFile = navFile == null ? "nav.xhtml" : navFile;
-            errorList.add(new Issue("", "File missing", navFile, Guideline.NAV_NCX, Issue.ERROR_WARN));
             errorList.add(new Issue("", "File missing", navFile, Guideline.NAV_REFERENCES, Issue.ERROR_WARN));
         } else {
             fos = new FileOutputStream(new File(epubDir, EPUB_REFERENCE_NAV_NCX_FILE));
