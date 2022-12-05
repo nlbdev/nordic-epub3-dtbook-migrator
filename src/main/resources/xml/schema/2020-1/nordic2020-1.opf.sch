@@ -94,26 +94,6 @@
         </rule>
     </pattern>
 
-    <pattern id="opf_nordic_5_b">
-        <title>Rule 5b</title>
-        <p></p>
-        <rule context="opf:item[@media-type='application/x-dtbncx+xml']">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="@href = 'nav.ncx'">[opf5b] the NCX must be located in the same directory as the package document, and must be named "nav.ncx" (not "<value-of select="@href"/>")</assert>
-        </rule>
-    </pattern>
-
-    <pattern id="opf_nordic_6">
-        <title>Rule 6</title>
-        <p></p>
-        <rule context="opf:spine">
-            <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <let name="toc-doc" value="/opf:package/opf:manifest/opf:item[@media-type='application/x-dtbncx+xml']"/>
-            <assert test="not($toc-doc) or @toc">[opf6] the toc attribute must be present</assert>
-            <assert test="not($toc-doc) or $toc-doc/@id = @toc">[opf6] the toc attribute must refer to the nav.ncx item in the manifest</assert>
-        </rule>
-    </pattern>
-
     <pattern id="opf_nordic_7">
         <title>Rule 7</title>
         <p></p>

@@ -88,14 +88,8 @@ public class ReportGenerator {
         String guidelineName = guideline == null ? "Unknown" : guideline.getGuidelineName();
         text = text.replace("[GUIDELINE]", guidelineName);
 
-        int issueCount = 0;
-        for (Issue i : issues) {
-            issueCount += i.getErrorLevel() == Issue.ERROR_ERROR ? 1 : 0;
-            issueCount += i.getErrorLevel() == Issue.ERROR_FATAL ? 1 : 0;
-        }
-
-        String issueClass = issueCount > 0 ? "error" : "success";
-        text = text.replace("[ISSUES_FOUND]", String.format("<p class='%s'>%d issues found.</p>", issueClass, issueCount));
+        String issueClass = issues.size() > 0 ? "error" : "success";
+        text = text.replace("[ISSUES_FOUND]", String.format("<p class='%s'>%d issues found.</p>", issueClass, issues.size()));
 
         Map<String, List<Issue>> issuePerFile = sortByFile(issues);
         String report = "";
