@@ -108,7 +108,9 @@ public class TestValid {
             "C00000-09-part.xhtml",
             "C00000-10-chapter.xhtml",
             "C00000-11-conclusion.xhtml",
-            "C00000-12-toc.xhtml"
+            "C00000-12-toc.xhtml",
+            "C00000-13-part.xhtml",
+            "C00000-14-chapter.xhtml"
         );
 
         for (String filename : list) {

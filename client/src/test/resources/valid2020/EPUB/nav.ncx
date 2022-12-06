@@ -175,19 +175,19 @@
                 </navLabel>
                 <content src="C00000-06-chapter.xhtml#d910e3633"/>
             </navPoint>
-            <navPoint id="navPoint-26" playOrder="26">
-                <navLabel>
-                    <text>Rearmatter</text>
-                </navLabel>
-                <content src="C00000-07-rearnotes.xhtml#rearnotes_body"/>
-				<navPoint id="navPoint-27" playOrder="27">
-					<navLabel>
-						<text>End notes</text>
-					</navLabel>
-					<content src="C00000-07-rearnotes.xhtml#endnote_section"/>
-				</navPoint>
-            </navPoint>
         </navPoint>
+		<navPoint id="navPoint-26" playOrder="26">
+			<navLabel>
+				<text>Rearmatter</text>
+			</navLabel>
+			<content src="C00000-07-rearnotes.xhtml#rearnotes_body"/>
+			<navPoint id="navPoint-27" playOrder="27">
+				<navLabel>
+					<text>End notes</text>
+				</navLabel>
+				<content src="C00000-07-rearnotes.xhtml#endnote_section"/>
+			</navPoint>
+		</navPoint>
         <navPoint id="navPoint-28" playOrder="28">
             <navLabel>
                 <text>4. The importance of Haüy in the education of the blind in Sweden and elsewhere extra long title extra long title extra long title extra long title</text>
@@ -290,6 +290,18 @@
 				</navPoint>
             </navPoint>
         </navPoint>
+		<navPoint id="navPoint-16" playOrder="16">
+			<navLabel>
+				<text>Part title</text>
+			</navLabel>
+			<content src="C00000-13-part.xhtml#test-part"/>
+            <navPoint id="navPoint-16" playOrder="16">
+                <navLabel>
+                    <text>Chapter title</text>
+                </navLabel>
+                <content src="C00000-14-chapter.xhtml#test-chapter"/>
+            </navPoint>
+		</navPoint>
     </navMap>
     <pageList>
         <navLabel>
@@ -547,5 +559,6 @@
             </navLabel>
             <content src="C00000-12-toc.xhtml#page-164"/>
         </pageTarget>
+
     </pageList>
 </ncx>
