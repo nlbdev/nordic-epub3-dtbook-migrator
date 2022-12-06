@@ -55,18 +55,18 @@
                 <text>1. Research questions</text>
             </navLabel>
             <content src="C00000-04-chapter.xhtml#d910e694"/>
-			<navPoint id="navPoint-7" playOrder="7">
-				<navLabel>
-					<text>A chapter without heading.</text>
-				</navLabel>
-				<content src="C00000-04-chapter.xhtml#d6e157"/>
-				<navPoint id="navPoint-7" playOrder="7">
-					<navLabel>
-						<text>Some chapter</text>
-					</navLabel>
-					<content src="C00000-04-chapter.xhtml#d6e160"/>
-				</navPoint>
-			</navPoint>
+            <navPoint id="navPoint-7" playOrder="7">
+                <navLabel>
+                    <text>A chapter without heading.</text>
+                </navLabel>
+                <content src="C00000-04-chapter.xhtml#d6e157"/>
+                <navPoint id="navPoint-7" playOrder="7">
+                    <navLabel>
+                        <text>Some chapter</text>
+                    </navLabel>
+                    <content src="C00000-04-chapter.xhtml#d6e160"/>
+                </navPoint>
+            </navPoint>
         </navPoint>
         <navPoint id="navPoint-8" playOrder="8">
             <navLabel>
@@ -176,18 +176,18 @@
                 <content src="C00000-06-chapter.xhtml#d910e3633"/>
             </navPoint>
         </navPoint>
-		<navPoint id="navPoint-26" playOrder="26">
-			<navLabel>
-				<text>Rearmatter</text>
-			</navLabel>
-			<content src="C00000-07-rearnotes.xhtml#rearnotes_body"/>
-			<navPoint id="navPoint-27" playOrder="27">
-				<navLabel>
-					<text>End notes</text>
-				</navLabel>
-				<content src="C00000-07-rearnotes.xhtml#endnote_section"/>
-			</navPoint>
-		</navPoint>
+        <navPoint id="navPoint-26" playOrder="26">
+            <navLabel>
+                <text>Rearmatter</text>
+            </navLabel>
+            <content src="C00000-07-rearnotes.xhtml#rearnotes_body"/>
+            <navPoint id="navPoint-27" playOrder="27">
+                <navLabel>
+                    <text>End notes</text>
+                </navLabel>
+                <content src="C00000-07-rearnotes.xhtml#endnote_section"/>
+            </navPoint>
+        </navPoint>
         <navPoint id="navPoint-28" playOrder="28">
             <navLabel>
                 <text>4. The importance of Haüy in the education of the blind in Sweden and elsewhere extra long title extra long title extra long title extra long title</text>
@@ -204,30 +204,30 @@
                     <text>Poem headline</text>
                 </navLabel>
                 <content src="C00000-09-part.xhtml#poem1"/>
-				<navPoint id="navPoint-31" playOrder="31">
-					<navLabel>
-						<text>Section level 3</text>
-					</navLabel>
-					<content src="C00000-09-part.xhtml#poem3"/>
-					<navPoint id="navPoint-32" playOrder="32">
-						<navLabel>
-							<text>Section level 4</text>
-						</navLabel>
-						<content src="C00000-09-part.xhtml#poem4"/>
-						<navPoint id="navPoint-33" playOrder="33">
-							<navLabel>
-								<text>Section level 5</text>
-							</navLabel>
-							<content src="C00000-09-part.xhtml#poem5"/>
-							<navPoint id="navPoint-34" playOrder="34">
-								<navLabel>
-									<text>Section level 6</text>
-								</navLabel>
-								<content src="C00000-09-part.xhtml#poem6"/>
-							</navPoint>
-						</navPoint>
-					</navPoint>
-				</navPoint>
+                <navPoint id="navPoint-31" playOrder="31">
+                    <navLabel>
+                        <text>Section level 3</text>
+                    </navLabel>
+                    <content src="C00000-09-part.xhtml#poem3"/>
+                    <navPoint id="navPoint-32" playOrder="32">
+                        <navLabel>
+                            <text>Section level 4</text>
+                        </navLabel>
+                        <content src="C00000-09-part.xhtml#poem4"/>
+                        <navPoint id="navPoint-33" playOrder="33">
+                            <navLabel>
+                                <text>Section level 5</text>
+                            </navLabel>
+                            <content src="C00000-09-part.xhtml#poem5"/>
+                            <navPoint id="navPoint-34" playOrder="34">
+                                <navLabel>
+                                    <text>Section level 6</text>
+                                </navLabel>
+                                <content src="C00000-09-part.xhtml#poem6"/>
+                            </navPoint>
+                        </navPoint>
+                    </navPoint>
+                </navPoint>
             </navPoint>
             <navPoint id="navPoint-30" playOrder="30">
                 <navLabel>
@@ -252,56 +252,56 @@
                     <text>START: FULL LICENSE</text>
                 </navLabel>
                 <content src="C00000-12-toc.xhtml#level2_8"/>
-				<navPoint id="navPoint-33" playOrder="33">
-					<navLabel>
-						<text>Section 1. General Terms of Use and Redistributing Project Gutenberg-tm electronic works</text>
-					</navLabel>
-					<content src="C00000-12-toc.xhtml#level3_4"/>
-					<navPoint id="navPoint-33" playOrder="33">
-						<navLabel>
-							<text>1.F.</text>
-						</navLabel>
-						<content src="C00000-12-toc.xhtml#level4_1"/>
-					</navPoint>
-				</navPoint>
-				<navPoint id="navPoint-33" playOrder="33">
-					<navLabel>
-						<text>Section 2. Information about the Mission of Project Gutenberg-tm</text>
-					</navLabel>
-					<content src="C00000-12-toc.xhtml#level3_5"/>
-				</navPoint>
-				<navPoint id="navPoint-33" playOrder="33">
-					<navLabel>
-						<text>Section 3. Information about the Project Gutenberg Literary Archive Foundation</text>
-					</navLabel>
-					<content src="C00000-12-toc.xhtml#level3_6"/>
-				</navPoint>
-				<navPoint id="navPoint-33" playOrder="33">
-					<navLabel>
-						<text>Section 4. Information about Donations to the Project Gutenberg Literary Archive Foundation</text>
-					</navLabel>
-					<content src="C00000-12-toc.xhtml#level3_7"/>
-				</navPoint>
-				<navPoint id="navPoint-33" playOrder="33">
-					<navLabel>
-						<text>Section 5. General Information About Project Gutenberg-tm electronic works.</text>
-					</navLabel>
-					<content src="C00000-12-toc.xhtml#level3_8"/>
-				</navPoint>
+                <navPoint id="navPoint-33" playOrder="33">
+                    <navLabel>
+                        <text>Section 1. General Terms of Use and Redistributing Project Gutenberg-tm electronic works</text>
+                    </navLabel>
+                    <content src="C00000-12-toc.xhtml#level3_4"/>
+                    <navPoint id="navPoint-33" playOrder="33">
+                        <navLabel>
+                            <text>1.F.</text>
+                        </navLabel>
+                        <content src="C00000-12-toc.xhtml#level4_1"/>
+                    </navPoint>
+                </navPoint>
+                <navPoint id="navPoint-33" playOrder="33">
+                    <navLabel>
+                        <text>Section 2. Information about the Mission of Project Gutenberg-tm</text>
+                    </navLabel>
+                    <content src="C00000-12-toc.xhtml#level3_5"/>
+                </navPoint>
+                <navPoint id="navPoint-33" playOrder="33">
+                    <navLabel>
+                        <text>Section 3. Information about the Project Gutenberg Literary Archive Foundation</text>
+                    </navLabel>
+                    <content src="C00000-12-toc.xhtml#level3_6"/>
+                </navPoint>
+                <navPoint id="navPoint-33" playOrder="33">
+                    <navLabel>
+                        <text>Section 4. Information about Donations to the Project Gutenberg Literary Archive Foundation</text>
+                    </navLabel>
+                    <content src="C00000-12-toc.xhtml#level3_7"/>
+                </navPoint>
+                <navPoint id="navPoint-33" playOrder="33">
+                    <navLabel>
+                        <text>Section 5. General Information About Project Gutenberg-tm electronic works.</text>
+                    </navLabel>
+                    <content src="C00000-12-toc.xhtml#level3_8"/>
+                </navPoint>
             </navPoint>
         </navPoint>
-		<navPoint id="navPoint-16" playOrder="16">
-			<navLabel>
-				<text>Part title</text>
-			</navLabel>
-			<content src="C00000-13-part.xhtml#test-part"/>
+        <navPoint id="navPoint-16" playOrder="16">
+            <navLabel>
+                <text>Part title</text>
+            </navLabel>
+            <content src="C00000-13-part.xhtml#test-part"/>
             <navPoint id="navPoint-16" playOrder="16">
                 <navLabel>
                     <text>Chapter title</text>
                 </navLabel>
                 <content src="C00000-14-chapter.xhtml#test-chapter"/>
             </navPoint>
-		</navPoint>
+        </navPoint>
     </navMap>
     <pageList>
         <navLabel>
