@@ -146,10 +146,11 @@
     <define name="blocknoimggroup">
         <a:documentation>common non-head elements for use with sectioning elements.</a:documentation>
         <choice>
-            <ref name="p"/> <!-- p, hr, ol, ul, dl -->
+            <ref name="p"/> <!-- p, ol, ul, dl -->
             <ref name="pre"/> <!-- pre -->
             <ref name="list"/> <!-- ol, ul -->
             <ref name="dl"/> <!-- dl -->
+            <ref name="hr"/> <!-- hr -->
             <ref name="div"/> <!-- div -->
             <ref name="blockquote"/> <!-- blockquote -->
             <ref name="poem"/> <!-- section -->
