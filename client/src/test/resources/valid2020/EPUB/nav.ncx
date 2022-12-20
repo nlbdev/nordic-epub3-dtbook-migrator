@@ -301,6 +301,12 @@
                 </navLabel>
                 <content src="C00000-14-chapter.xhtml#test-chapter"/>
             </navPoint>
+            <navPoint id="navPoint-17" playOrder="17">
+                <navLabel>
+                    <text>Chapter title in aria label</text>
+                </navLabel>
+                <content src="C00000-15-chapter.xhtml#test-chapter-aria-label"/>
+            </navPoint>
         </navPoint>
     </navMap>
     <pageList>
