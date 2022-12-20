@@ -125,9 +125,9 @@
             <let name="document-in-nav" value="((preceding::html:a | self::*) intersect ancestor::html:nav//html:a)[substring-before(@href,'#') = $href][1]"/>
             <let name="document-in-nav-depth" value="count($document-in-nav/ancestor::html:li)"/>
             <let name="depth-in-nav" value="count(ancestor::html:li)"/>
-            <let name="depth-in-content" value="$result-ref-first/xs:integer((@data-heading-depth, @data-sectioning-depth)[1])"/>
+            <let name="depth-in-content" value="$result-ref-first/xs:integer(@data-heading-depth)"/>
 
-            <assert test="not($result-ref-first) or $depth-in-nav = $depth-in-content">[nordic_nav_references_2b] The nesting of headlines in the content does not match the
+            <assert test="not(@data-heading-depth) or not($result-ref-first) or $depth-in-nav = $depth-in-content">[nordic_nav_references_2b] The nesting of headlines in the content does not match the
                 nesting of headlines in the navigation document. The toc item `<value-of select="$context"/>` in the navigation document is not nested at the correct
                 level. The referenced document (<value-of select="$href"/>) occurs in the navigation document at nesting depth <value-of select="$document-in-nav-depth"/> (<value-of
                     select="if ($document-in-nav-depth = 1) then 'it is not contained inside other sections such as a part or a chapter'
