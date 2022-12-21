@@ -308,6 +308,18 @@
                 <content src="C00000-15-chapter.xhtml#test-chapter-aria-label"/>
             </navPoint>
         </navPoint>
+        <navPoint id="navPoint-18" playOrder="18">
+            <navLabel>
+                <text>Part with only aria-label</text>
+            </navLabel>
+            <content src="C00000-16-part.xhtml#test-part-without-header"/>
+            <navPoint id="navPoint-19" playOrder="19">
+                <navLabel>
+                    <text>This is the chapter in the part without a header</text>
+                </navLabel>
+                <content src="C00000-17-chapter.xhtml#section-with-part-without-heading"/>
+            </navPoint>
+        </navPoint>
     </navMap>
     <pageList>
         <navLabel>

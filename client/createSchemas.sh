@@ -3,6 +3,7 @@
 SCHXSLT_PATH=schxslt
 MIGRATOR_PATH=..
 SCHEMA_PATH=$MIGRATOR_PATH/src/main/resources/xml/schema
+XSLT_PATH=$MIGRATOR_PATH/src/main/resources/xml/xslt
 
 mkdir -p src/main/resources/2015-1
 mkdir -p src/main/resources/2020-1
@@ -31,3 +32,8 @@ saxon9-xslt -s:$SCHEMA_PATH/2020-1/nordic2020-1.opf-and-html.sch -o:src/main/res
 saxon9-xslt -s:$SCHEMA_PATH/2020-1/nordic2020-1.opf.sch -o:src/main/resources/2020-1/nordic2020-1.opf.xsl -xsl:$SCHXSLT_PATH/2.0/compile-for-svrl.xsl
 saxon9-xslt -s:$SCHEMA_PATH/2020-1/nordic2020-1.sch -o:src/main/resources/2020-1/nordic2020-1.xsl -xsl:$SCHXSLT_PATH/2.0/compile-for-svrl.xsl
 
+
+mkdir -p src/main/resources/xslt/2015-1
+mkdir -p src/main/resources/xslt/2020-1
+cp $XSLT_PATH/2015-1/list-heading-and-pagebreak-references.xsl src/main/resources/xslt/2015-1
+cp $XSLT_PATH/2020-1/list-heading-and-pagebreak-references.xsl src/main/resources/xslt/2020-1

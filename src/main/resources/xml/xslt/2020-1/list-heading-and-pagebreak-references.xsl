@@ -23,6 +23,14 @@
             <xsl:if test="$sectioning-element/@id">
                 <xsl:attribute name="data-sectioning-id" select="$sectioning-element/@id"/>
             </xsl:if>
+            <xsl:choose>
+                <xsl:when test="tokenize(//body/section/@epub:type,'\s+') = 'part'">
+                    <xsl:attribute name="data-section-type" select="'part'"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="data-section-type" select="'chapter'"/>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:if test="//body/section/@epub:type">
                 <xsl:attribute name="data-document-epub-type" select="//body/section/@epub:type"/>
             </xsl:if>
@@ -49,6 +57,20 @@
             <c:result>
                 <xsl:attribute name="xml:base" select="base-uri(.)"/>
                 <xsl:attribute name="data-sectioning-element" select="name()"/>
+                <xsl:choose>
+                    <xsl:when test="tokenize(@epub:type,'\s+') = 'part'">
+                        <xsl:attribute name="data-section-type" select="'part'"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="data-section-type" select="'chapter'"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:if test="@epub:type">
+                    <xsl:attribute name="data-document-epub-type" select="@epub:type"/>
+                </xsl:if>
+                <xsl:if test="@role">
+                    <xsl:attribute name="data-document-role" select="@role"/>
+                </xsl:if>
                 <xsl:if test="@id">
                     <xsl:attribute name="data-sectioning-id" select="@id"/>
                 </xsl:if>
