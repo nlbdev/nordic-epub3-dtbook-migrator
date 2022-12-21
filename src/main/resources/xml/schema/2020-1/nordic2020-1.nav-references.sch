@@ -127,8 +127,12 @@
             <let name="depth-in-nav" value="count(ancestor::html:li)"/>
 
             <let name="data-part-depth"
-                 value="if ($result-ref-first/preceding-sibling::c:result[@data-heading-element='h1'][1]/
-                  tokenize(@data-document-epub-type, '\s+') = 'part' or @data-document-role = 'doc-part') then 1 else 0" />
+                 value="
+                     if ($result-ref-first[@data-section-type = 'chapter'] and
+                     $result-ref-first/preceding-sibling::c:result[@data-section-type = 'part'][1]/
+                     @data-sectioning-depth = 1) then 1 else 0
+                 " />
+
             <let name="data-sectioning-depth"  value="$result-ref-first/xs:integer(@data-sectioning-depth) + $data-part-depth"/>
             <let name="depth-in-content" value="$result-ref-first/xs:integer((@data-heading-depth, $data-sectioning-depth)[1])"/>
 
