@@ -624,8 +624,7 @@
         <p></p>
         <rule context="html:figure[tokenize(@class, '\s+') = 'image']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="count(.//html:img) = 1">[nordic253b] Image figures must contain exactly one img. <value-of select="$context"/></assert>
-            <assert test="count(html:img) = 1">[nordic253b] The img in image figures must be a direct child of the figure. <value-of select="$context"/></assert>
+            <assert test="count(html:img) = 1">[nordic253b] There must be exactly one img as a direct child of the figure element. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
