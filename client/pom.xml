@@ -4,7 +4,7 @@
 
     <groupId>org.daisy.validator</groupId>
     <artifactId>NordicValidator</artifactId>
-    <version>0.6.0</version>
+    <version>0.6.1-SNAPSHOT</version>
 
     <properties>
         <!-- Compiler properties -->
@@ -21,7 +21,7 @@
         <connection>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</connection>
         <developerConnection>scm:git:git@github.com:nlbdev/nordic-epub3-dtbook-migrator.git</developerConnection>
         <url>https://github.com/nlbdev/nordic-epub3-dtbook-migrator</url>
-        <tag>0.6.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <dependencies>
