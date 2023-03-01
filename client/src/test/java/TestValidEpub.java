@@ -6,7 +6,6 @@ import org.daisy.validator.ValidateFile;
 import org.daisy.validator.report.Issue;
 import org.daisy.validator.schemas.Guideline;
 import org.daisy.validator.schemas.Guideline2020;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -22,7 +21,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.tree.ExpandVetoException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -34,7 +32,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class TestValid {
+public class TestValidEpub {
     @Test
     public void testOPF() throws Exception {
         Guideline guideline = new Guideline2020();
@@ -234,9 +232,8 @@ public class TestValid {
     public void verifyRelaxDoc(String doc) throws Exception {
         Guideline guideline = new Guideline2020();
 
-        EPUBFiles epubFiles = new EPUBFiles(doc, "");
-        epubFiles.unpackSchemaDir(guideline.getSchemaPath());
-        epubFiles.unpackSchemaDir("mathml3");
+        EPUBFiles epubFiles = new EPUBFiles(doc, "", guideline);
+        epubFiles.unpackSchemas();
 
         ValidateFile vf = new ValidateFile(
                 new File("src/test/resources/valid2020"),
@@ -249,6 +246,8 @@ public class TestValid {
         for(Issue i : issues) {
             System.out.println(i.getDescription());
         }
+
+        epubFiles.cleanUp();
 
         assertEquals(0, issues.size());
     }

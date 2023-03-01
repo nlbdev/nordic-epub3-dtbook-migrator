@@ -16,6 +16,7 @@ import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
+import org.daisy.validator.schemas.GuidelinePEF;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -94,57 +95,30 @@ public class NordicValidator {
                 exitWithError("Input file required", options);
             }
 
-            String inputFile = cmd.getArgList().get(0);
-            ZipFile zipFile = new ZipFile(inputFile);
-
             Guideline guideline = null;
-            if (
-                cmd.hasOption(ARG_SCHEMA.getLongOpt()) &&
-                "2015-1".equals(cmd.getOptionValue(ARG_SCHEMA.getLongOpt()))
-            ) {
-                guideline = new Guideline2015();
-            }
-            if (
-                cmd.hasOption(ARG_SCHEMA.getLongOpt()) &&
-                "2020-1".equals(cmd.getOptionValue(ARG_SCHEMA.getLongOpt()))
-            ) {
-                guideline = new Guideline2020();
-            }
-
-            int threads = 3;
-            if (cmd.hasOption(ARG_THREADS.getLongOpt())) {
-                threads = Integer.parseInt(cmd.getOptionValue(ARG_THREADS.getLongOpt()));
-            }
-
-            EPUBFiles epubFiles = getEPUBFiles(zipFile, threads, guideline);
-
-            Instant epubValidate = Instant.now();
-            if (!cmd.hasOption(ARG_NO_ACE.getLongOpt())) {
-                epubFiles.validateWithAce(new File(inputFile));
-            }
-            if (!cmd.hasOption(ARG_NO_EPUBCHECK.getLongOpt())) {
-                epubFiles.validateWithEpubCheck(new File(inputFile));
-            }
-
-            epubFiles.validate();
-            printDuration("EPUB Validate", epubValidate, Instant.now());
-            epubFiles.cleanUp();
-
-            Set<Issue> errorList = epubFiles.getErrorList();
-
             List<Issue> issueList = new ArrayList<>();
-            issueList.addAll(errorList);
+
+            String inputFile = cmd.getArgList().get(0);
+            if (inputFile.endsWith(".pef")) {
+                guideline = new GuidelinePEF();
+                issueList.addAll(validatePEF(guideline, inputFile));
+            } else if (inputFile.endsWith(".epub")) {
+                EPUBFiles epubFiles = validateEPUBFile(cmd, inputFile);
+                Set<Issue> errorList = epubFiles.getErrorList();
+                issueList.addAll(errorList);
+                guideline = epubFiles.getGuideline();
+            }
 
             if (cmd.hasOption(ARG_ORIGINAL_FILE.getLongOpt())) {
                 inputFile = cmd.getOptionValue(ARG_ORIGINAL_FILE.getLongOpt());
             }
             if (cmd.hasOption(ARG_OUTPUT_HTML.getLongOpt())) {
                 ReportGenerator rg = new ReportGenerator();
-                rg.generateHTMLReport(epubFiles.getGuideline(), inputFile, cmd.getOptionValue(ARG_OUTPUT_HTML.getLongOpt()), issueList);
+                rg.generateHTMLReport(guideline, inputFile, cmd.getOptionValue(ARG_OUTPUT_HTML.getLongOpt()), issueList);
             }
             if (cmd.hasOption(ARG_OUTPUT_JSON.getLongOpt())) {
                 ReportGenerator rg = new ReportGenerator();
-                rg.generateJSONReport(epubFiles.getGuideline(), inputFile, cmd.getOptionValue(ARG_OUTPUT_JSON.getLongOpt()), issueList);
+                rg.generateJSONReport(guideline, inputFile, cmd.getOptionValue(ARG_OUTPUT_JSON.getLongOpt()), issueList);
             }
 
             if (!cmd.hasOption(ARG_OUTPUT_HTML.getLongOpt()) && !cmd.hasOption(ARG_OUTPUT_JSON.getLongOpt())) {
@@ -158,7 +132,7 @@ public class NordicValidator {
                 }
             }
 
-            if (errorList.size() > 0) {
+            if (issueList.size() > 0) {
                 System.exit(1);
             }
             System.exit(0);
@@ -166,6 +140,57 @@ public class NordicValidator {
             logger.fatal(e.getMessage(), e);
             System.exit(1);
         }
+    }
+
+    private static List<Issue> validatePEF(Guideline guideline, String inputFile) throws Exception {
+        File input = new File(inputFile);
+        File schemaDir = Util.createTempDirectory();
+        Util.unpackSchemaDir(guideline.getSchemaPath(), schemaDir);
+        ValidateFile validateFile = new ValidateFile(
+                input.getParentFile(),
+                input.getName(),
+                new File(schemaDir, guideline.getSchema(Guideline.XHTML).getFilename())
+        );
+        Util.deleteDirectory(schemaDir);
+        return validateFile.call();
+    }
+
+    private static EPUBFiles validateEPUBFile(CommandLine cmd, String inputFile) throws Exception {
+        ZipFile zipFile = new ZipFile(inputFile);
+
+        Guideline guideline = null;
+        if (
+            cmd.hasOption(ARG_SCHEMA.getLongOpt()) &&
+            "2015-1".equals(cmd.getOptionValue(ARG_SCHEMA.getLongOpt()))
+        ) {
+            guideline = new Guideline2015();
+        }
+        if (
+            cmd.hasOption(ARG_SCHEMA.getLongOpt()) &&
+            "2020-1".equals(cmd.getOptionValue(ARG_SCHEMA.getLongOpt()))
+        ) {
+            guideline = new Guideline2020();
+        }
+
+        int threads = 3;
+        if (cmd.hasOption(ARG_THREADS.getLongOpt())) {
+            threads = Integer.parseInt(cmd.getOptionValue(ARG_THREADS.getLongOpt()));
+        }
+
+        EPUBFiles epubFiles = getEPUBFiles(zipFile, threads, guideline);
+
+        Instant epubValidate = Instant.now();
+        if (!cmd.hasOption(ARG_NO_ACE.getLongOpt())) {
+            epubFiles.validateWithAce(new File(inputFile));
+        }
+        if (!cmd.hasOption(ARG_NO_EPUBCHECK.getLongOpt())) {
+            epubFiles.validateWithEpubCheck(new File(inputFile));
+        }
+
+        epubFiles.validate();
+        printDuration("EPUB Validate", epubValidate, Instant.now());
+        epubFiles.cleanUp();
+        return epubFiles;
     }
 
     private static void printDuration(String label, Instant before, Instant after) {

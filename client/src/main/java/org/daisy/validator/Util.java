@@ -1,5 +1,7 @@
 package org.daisy.validator;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,11 +10,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Util {
+    private static final Logger logger = Logger.getLogger(Util.class.getName());
+
     public static String readStreamText(InputStream is) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
@@ -79,5 +87,44 @@ public class Util {
             f.delete();
         }
         outputDir.deleteOnExit();
+    }
+
+
+    public static void unpackSchemaDir(String schemaResource, File schemaDir) throws Exception {
+        final File jarFile = new File(Util.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+
+        if(jarFile.isFile()) {  // Run with JAR file
+            final JarFile jar = new JarFile(jarFile);
+            final Enumeration<JarEntry> entries = jar.entries();
+            while(entries.hasMoreElements()) {
+                final String name = entries.nextElement().getName();
+                if (name.startsWith(schemaResource + "/")) {
+                    Util.writeFile(
+                            new File(schemaDir, new File(name).getName()),
+                            EPUBFiles.class.getResourceAsStream(
+                                    "/" + schemaResource + "/" + new File(name).getName()
+                            )
+                    );
+                }
+            }
+            jar.close();
+        } else {
+            final URL url = EPUBFiles.class.getResource("/" + schemaResource);
+            if (url != null) {
+                try {
+                    final File apps = new File(url.toURI());
+                    for (File app : apps.listFiles()) {
+                        Util.writeFile(
+                                new File(schemaDir, app.getName()),
+                                EPUBFiles.class.getResourceAsStream(
+                                        "/" + schemaResource + "/" + app.getName()
+                                )
+                        );
+                    }
+                } catch (URISyntaxException ex) {
+                    logger.fatal(ex.getMessage(), ex);
+                }
+            }
+        }
     }
 }

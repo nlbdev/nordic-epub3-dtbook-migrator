@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Guideline {
+    public static final String PEF = "pef";
     public static final String CONTENT_FILES = "content_files_schema";
     public static final String NAV_NCX = "nav_ncx";
     public static final String NAV_REFERENCES = "nav_references";

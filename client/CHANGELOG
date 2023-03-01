@@ -1,3 +1,16 @@
+Version 0.6.0
+
+* Adding PEF validation support.
+* Change to handle images within captions.
+* Change to check everything depending on type instead of heading.
+* Change to update the section depth instead of ignoring the heading level when we don't have an
+    implicit one in the document.
+* Handle the case when you have chapters that only have an aria label and no heading.
+* EPUBCheck 5.0.0
+* Adding HR into the allowed blocks so we can have HR in sidebars.
+* Fixing issue with parts and chapters being in different files.
+* Fixing locale issue with running validator.
+
 Version 0.5.20
 
 * More handling of incorrect EPUB packages.

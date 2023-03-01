@@ -52,7 +52,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 public class EPUBFiles {
-    private static final Logger logger = Logger.getLogger(Logger.class.getName());
+    private static final Logger logger = Logger.getLogger(EPUBFiles.class.getName());
 
     private static final String EPUB_REFERENCE_NAV_NCX_FILE = "nordic-nav-ncx.xml";
     private static final String EPUB_OBF_AND_HTML_FILE = "nordic-obf-and-html.xml";
@@ -78,9 +78,13 @@ public class EPUBFiles {
     private final Guideline guideline;
 
     public EPUBFiles(String filename, String issue) throws Exception {
+        this(filename, issue, null);
+    }
+
+    public EPUBFiles(String filename, String issue, Guideline guideline) throws Exception {
         executor = null;
         completionService = null;
-        guideline = null;
+        this.guideline = guideline;
         errorList.add(new Issue("", issue, filename, Guideline.EPUB, Issue.ERROR_FATAL));
     }
 
@@ -242,8 +246,12 @@ public class EPUBFiles {
             writer.close();
         }
 
-        unpackSchemaDir(guideline.getSchemaPath());
-        unpackSchemaDir("mathml3");
+        unpackSchemas();
+    }
+
+    public void unpackSchemas() throws Exception {
+        Util.unpackSchemaDir(guideline.getSchemaPath(), schemaDir);
+        Util.unpackSchemaDir("mathml3", schemaDir);
     }
 
     private static String insertBeforeHeader(String navData, String htmlData) {
@@ -258,44 +266,6 @@ public class EPUBFiles {
             logger.fatal("Head tag not found.");
         }
         return navData;
-    }
-
-    public void unpackSchemaDir(String schemaResource) throws Exception {
-        final File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
-
-        if(jarFile.isFile()) {  // Run with JAR file
-            final JarFile jar = new JarFile(jarFile);
-            final Enumeration<JarEntry> entries = jar.entries();
-            while(entries.hasMoreElements()) {
-                final String name = entries.nextElement().getName();
-                if (name.startsWith(schemaResource + "/")) {
-                    Util.writeFile(
-                        new File(schemaDir, new File(name).getName()),
-                        EPUBFiles.class.getResourceAsStream(
-                            "/" + schemaResource + "/" + new File(name).getName()
-                        )
-                    );
-                }
-            }
-            jar.close();
-        } else {
-            final URL url = EPUBFiles.class.getResource("/" + schemaResource);
-            if (url != null) {
-                try {
-                    final File apps = new File(url.toURI());
-                    for (File app : apps.listFiles()) {
-                        Util.writeFile(
-                            new File(schemaDir, app.getName()),
-                            EPUBFiles.class.getResourceAsStream(
-                                "/" + schemaResource + "/" + app.getName()
-                            )
-                        );
-                    }
-                } catch (URISyntaxException ex) {
-                    logger.fatal(ex.getMessage(), ex);
-                }
-            }
-        }
     }
 
     public XsltTransformer getTransformer(String filename) throws Exception {
