@@ -27,8 +27,11 @@
                 <xsl:when test="tokenize(//body/section/@epub:type,'\s+') = 'part'">
                     <xsl:attribute name="data-section-type" select="'part'"/>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="tokenize(//body/section/@epub:type,'\s+') = 'chapter'">
                     <xsl:attribute name="data-section-type" select="'chapter'"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="data-section-type" select="'other'"/>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:if test="//body/section/@epub:type">
@@ -61,8 +64,11 @@
                     <xsl:when test="tokenize(@epub:type,'\s+') = 'part'">
                         <xsl:attribute name="data-section-type" select="'part'"/>
                     </xsl:when>
-                    <xsl:otherwise>
+                    <xsl:when test="tokenize(@epub:type,'\s+') = 'chapter'">
                         <xsl:attribute name="data-section-type" select="'chapter'"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="data-section-type" select="'other'"/>
                     </xsl:otherwise>
                 </xsl:choose>
                 <xsl:if test="@epub:type">
