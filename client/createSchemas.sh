@@ -37,8 +37,3 @@ mkdir -p src/main/resources/xslt/2015-1
 mkdir -p src/main/resources/xslt/2020-1
 cp $XSLT_PATH/2015-1/list-heading-and-pagebreak-references.xsl src/main/resources/xslt/2015-1
 cp $XSLT_PATH/2020-1/list-heading-and-pagebreak-references.xsl src/main/resources/xslt/2020-1
-
-
-mkdir -p src/main/resources/dtbook/compiled
-saxon11-xslt -s:src/main/resources/dtbook/sch/dtbook.mathml.nimas.sch -o:src/main/resources/dtbook/compiled/dtbook.mathml.nimas.xsl -xsl:$SCHXSLT_PATH/src/main/resources/content/transpile.xsl
-saxon11-xslt -s:src/main/resources/dtbook/sch/dtbook.mathml.sch -o:src/main/resources/dtbook/compiled/dtbook.mathml.xsl -xsl:$SCHXSLT_PATH/src/main/resources/content/transpile.xsl
