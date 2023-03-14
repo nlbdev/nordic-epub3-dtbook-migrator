@@ -10,23 +10,23 @@ Create a new version of the tooling with the current schema you
 need to one dependency to convert the schema files to xslt.
 More over you need to download and install saxon-xslt.
 
-#### Download schxslt
+#### Checkout schxslt
 
-Download the latest release of `schxslt` and unpack it to the directory
+Clone the latest release of `schxslt` and into the directory
 `client/schxslt`.
 
-https://github.com/schxslt/schxslt/releases
+git clone https://github.com/schxslt/SchXslt2-Core .
 
 #### Installing saxon-xslt
 
 First you need to download the package from the site or find it in your distribution.
 
-https://www.saxonica.com/download/download_page.xml
+https://github.com/Saxonica/Saxon-HE/tree/main/11/Java
 
-Currently we use version 9 to run our conversion of the schema. Saxon is embedded in the executable
+Currently we use version 11 to run our conversion of the schema. Saxon is embedded in the executable
 so this is only needed during the build process.
 
-The executable the script is looking for is `saxon9-xslt`
+The executable the script is looking for is `saxon11-xslt`
 
 #### Update nordic guideline rules
 
