@@ -41,15 +41,13 @@
     <ns prefix="epub" uri="http://www.idpf.org/2007/ops"/>
     <ns prefix="nordic" uri="http://www.mtm.se/epub/"/>
 
-    <let name="ids" value="//xs:string(@id)"/>
-
     <pattern id="opf_and_html_nordic_1">
         <title>Rule 1</title>
         <p></p>
         <rule context="*[@id]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <let name="id" value="@id"/>
-            <assert test="count($ids[.=$id]) = 1">[nordic_opf_and_html_1] id attributes must be unique; <value-of select="@id"/> in <value-of select="replace(base-uri(.),'^.*/','')"/> also exists
+            <assert test="count(//*[@id=$id]) = 1">[nordic_opf_and_html_1] id attributes must be unique; <value-of select="@id"/> in <value-of select="replace(base-uri(.),'^.*/','')"/> also exists
                 in <value-of select="(//*[@id=$id] except .)/replace(base-uri(.),'^.*/','')"/></assert>
         </rule>
     </pattern>

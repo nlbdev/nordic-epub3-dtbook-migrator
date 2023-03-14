@@ -18,17 +18,15 @@
     <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
     <ns prefix="epub" uri="http://www.idpf.org/2007/ops"/>
     <ns prefix="nordic" uri="http://www.mtm.se/epub/"/>
-    
-    <let name="ids" value="//xs:string(@id)"/>
 
     <pattern id="opf_and_html_nordic_1">
         <rule context="*[@id]">
             <let name="id" value="@id"/>
-            <assert test="count($ids[.=$id]) = 1">[nordic_opf_and_html_1] id attributes must be unique; <value-of select="@id"/> in <value-of select="replace(base-uri(.),'^.*/','')"/> also exists
+            <assert test="count(//*[@id=$id]) = 1">[nordic_opf_and_html_1] id attributes must be unique; <value-of select="@id"/> in <value-of select="replace(base-uri(.),'^.*/','')"/> also exists
                 in <value-of select="(//*[@id=$id] except .)/replace(base-uri(.),'^.*/','')"/></assert>
         </rule>
     </pattern>
-    
+
     <!-- Rule 13: All books must have frontmatter and bodymatter -->
     <pattern id="nordic_opf_and_html_13_a">
         <!-- see also nordic2015-1.sch for single-document version -->
