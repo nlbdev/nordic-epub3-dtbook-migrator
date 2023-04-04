@@ -383,11 +383,11 @@ public class EPUBFiles {
     }
 
     private void validateContent(File transformer, File validator) throws Exception {
-        validateFile(navFile, validator);
+        validateFile(navFile, validator, Guideline.XHTML);
         transformFile(navFile, transformer, Guideline.CONTENT_FILES, false);
 
         for (String filename : contentFiles) {
-            validateFile(filename, validator);
+            validateFile(filename, validator, Guideline.XHTML);
             transformFile(filename, transformer, Guideline.CONTENT_FILES, false);
         }
     }
@@ -412,9 +412,9 @@ public class EPUBFiles {
         }
     }
 
-    private void validateFile(String filename, File validator) throws Exception {
+    private void validateFile(String filename, File validator, String validatorType) throws Exception {
         if(completionService == null) return;
-        completionService.submit(new ValidateFile(epubDir, filename, validator));
+        completionService.submit(new ValidateFile(epubDir, filename, validator, validatorType));
         submittedWork++;
     }
 
