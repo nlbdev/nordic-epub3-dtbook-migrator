@@ -64,7 +64,7 @@ public class ACEValidator implements Callable<List<Issue>> {
              process = Runtime.getRuntime().exec(cmd);
         }
         int count = 0;
-        while(process.isAlive() && count < 10 * 60) {
+        while(process.isAlive() && count < 60 * 60) {
             Thread.sleep(1000);
             count++;
         }

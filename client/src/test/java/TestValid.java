@@ -241,7 +241,8 @@ public class TestValid {
         ValidateFile vf = new ValidateFile(
                 new File("src/test/resources/valid2020"),
                 doc,
-                new File(epubFiles.getSchemaDir(), guideline.getSchema(Guideline.XHTML).getFilename())
+                new File(epubFiles.getSchemaDir(), guideline.getSchema(Guideline.XHTML).getFilename()),
+                Guideline.XHTML
         );
         Set<Issue> issues = new HashSet<>();
         issues.addAll(vf.call());
