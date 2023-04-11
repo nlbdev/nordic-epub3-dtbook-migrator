@@ -432,6 +432,9 @@ public class EPUBFiles {
     }
 
     public Guideline getGuideline() {
+        if (this.guideline == null) {
+            return new Guideline2015();
+        }
         return this.guideline;
     }
 
