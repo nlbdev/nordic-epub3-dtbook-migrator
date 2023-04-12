@@ -18,6 +18,7 @@ public class Guideline2015 extends Guideline {
         schemaMap.put(EPUB, new Schema("", "Nordic EPUB3", "General EPUB requirements"));
         schemaMap.put(EPUBCHECK, new Schema("", "EPUBCheck EPUB3", "Validating with EPUBCheck " + EpubCheck.version()));
         schemaMap.put(ACE, new Schema("", "DAISY Accessibility Checker for EPUB", "Validating with ACE " + ACEValidator.getVersion()));
+        schemaMap.put(SMIL, new Schema("", "Synchronized Multimedia Integration Language document", ""));
     }
 
     @Override
