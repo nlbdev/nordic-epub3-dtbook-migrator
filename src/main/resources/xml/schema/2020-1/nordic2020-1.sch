@@ -10,6 +10,17 @@
     <ns prefix="msv" uri="http://www.idpf.org/epub/vocab/structure/magazine/#"/>
     <ns prefix="prism" uri="http://www.prismstandard.org/specifications/3.0/PRISM_CV_Spec_3.0.htm#"/>
 
+    <pattern id="epub_nordic_1">
+        <title>Rule 1</title>
+        <p>Only allow one charset, identifier, title and viewport</p>
+        <rule context="html:head">
+            <assert test="count(html:meta[@charset='UTF-8'])=1">[nordic01] charset seems not to be in head exactly once</assert>
+            <assert test="count(html:meta[@name='dc:identifier'])=1">[nordic01] dc:identifier seems not to be in head exactly once</assert>
+            <assert test="count(html:title)=1">[nordic01] title seems not to be in head exactly once</assert>
+            <assert test="count(html:meta[@name='viewport'])=1">[nordic01] viewport seems not to be in head exactly once</assert>
+        </rule>
+    </pattern>
+
     <pattern id="epub_nordic_8">
         <title>Rule 8</title>
         <p>Only allow pagebreak w/page-front in frontmatter</p>
