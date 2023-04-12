@@ -88,6 +88,13 @@ public class Util {
             "(ntp=)?(\\d{1,2}:)?(\\d{1,2}:)?(\\d+)(\\.\\d+)?(ms|h|min|s)?"
     );
 
+    public static String getRelativeFilename(String currentfile, String link) throws IOException {
+        String parentPath = new File(currentfile).getParentFile().getAbsolutePath();
+        String linkPath = new File(new File(currentfile).getParent(), link).getCanonicalPath();
+        parentPath = parentPath.substring(0, parentPath.length() - new File(currentfile).getParent().length());
+        return linkPath.substring(parentPath.length());
+    }
+
     public static final long parseMilliSeconds(String s) {
 
         Matcher m = milliPattern.matcher(s);
