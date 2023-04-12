@@ -15,7 +15,7 @@
             <ref name="flow"/> <!-- em, strong, dfn, code, samp, kbd, span, abbr, math, a, img, br, q, sub, sup, bdo, p, hr, ol, ul, dl, pre, div, blockquote, section, table, address, aside, figure -->
         </define>
     </include>
-    
+
     <start>
         <a:documentation>The root element.</a:documentation>
         <ref name="html"/> <!-- html -->
@@ -534,9 +534,56 @@
     </define>
     
     <a:documentation>Document Head Metadata</a:documentation>
-    
+
+    <define name="head.charset">
+        <element name="meta">
+            <a:documentation>&lt;meta&gt; indicates metadata about the book. An empty
+                element that may appear repeatedly only in &lt;head&gt;.</a:documentation>
+            <a:documentation>&lt;meta&gt; is the container for the Dublin Core attributes.</a:documentation>
+            <attribute name="charset">
+                <value>UTF-8</value>
+            </attribute>
+        </element>
+    </define>
+    <define name="head.title">
+        <element name="title">
+            <a:documentation>&lt;title&gt; is required and defines the title of a document.</a:documentation>
+            <text/>
+        </element>
+    </define>
+    <define name="head.identifier">
+        <element name="meta">
+            <a:documentation>&lt;meta&gt; indicates metadata about the book. An empty
+                element that may appear repeatedly only in &lt;head&gt;.</a:documentation>
+            <a:documentation>&lt;meta&gt; is the container for the Dublin Core attributes.</a:documentation>
+            <attribute name="name">
+                <value>dc:identifier</value>
+            </attribute>
+            <attribute name="content">
+                <text/>
+            </attribute>
+        </element>
+    </define>
+    <define name="head.viewport">
+        <element name="meta">
+            <a:documentation>&lt;meta&gt; indicates metadata about the book. An empty
+                element that may appear repeatedly only in &lt;head&gt;.</a:documentation>
+            <a:documentation>&lt;meta&gt; is the container for the Dublin Core attributes.</a:documentation>
+            <attribute name="name">
+                <value>viewport</value>
+            </attribute>
+            <attribute name="content">
+                <value>width=device-width</value>
+            </attribute>
+        </element>
+    </define>
+
     <define name="headmisc">
         <choice>
+            <ref name="head.charset"/> <!-- head.charset -->
+            <ref name="head.identifier"/> <!-- head.identifier -->
+            <ref name="head.title"/> <!-- head.title -->
+            <ref name="head.viewport"/> <!-- head.viewport -->
             <ref name="meta"/> <!-- meta -->
             <ref name="link"/> <!-- link -->
             <ref name="style"/> <!-- style -->
@@ -558,43 +605,9 @@
             <!-- HTML content model: title & base? & (link | meta | noscript | script | style | template)* -->
             <!-- Strict content model: meta[charset] title meta[name=viewport] meta[name=nordic:guidelines] (meta | link)* link[rel=profile]? -->
             <ref name="attlist.head"/> <!-- @xml:lang, @lang, @dir -->
-            <element name="meta">
-                <a:documentation>&lt;meta&gt; indicates metadata about the book. An empty
-                    element that may appear repeatedly only in &lt;head&gt;.</a:documentation>
-                <a:documentation>&lt;meta&gt; is the container for the Dublin Core attributes.</a:documentation>
-                <attribute name="charset">
-                    <value>UTF-8</value>
-                </attribute>
-            </element>
-            <element name="title">
-                <a:documentation>&lt;title&gt; is required and defines the title of a document.</a:documentation>
-                <text/>
-            </element>
-            <element name="meta">
-                <a:documentation>&lt;meta&gt; indicates metadata about the book. An empty
-                    element that may appear repeatedly only in &lt;head&gt;.</a:documentation>
-                <a:documentation>&lt;meta&gt; is the container for the Dublin Core attributes.</a:documentation>
-                <attribute name="name">
-                    <value>dc:identifier</value>
-                </attribute>
-                <attribute name="content">
-                    <text/>
-                </attribute>
-            </element>
-            <element name="meta">
-                <a:documentation>&lt;meta&gt; indicates metadata about the book. An empty
-                    element that may appear repeatedly only in &lt;head&gt;.</a:documentation>
-                <a:documentation>&lt;meta&gt; is the container for the Dublin Core attributes.</a:documentation>
-                <attribute name="name">
-                    <value>viewport</value>
-                </attribute>
-                <attribute name="content">
-                    <value>width=device-width</value>
-                </attribute>
-            </element>
-            <zeroOrMore>
+            <oneOrMore>
                 <ref name="headmisc"/> <!-- meta, link, style, script -->
-            </zeroOrMore>
+            </oneOrMore>
         </element>
     </define>
     
