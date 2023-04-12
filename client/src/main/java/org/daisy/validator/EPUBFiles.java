@@ -463,7 +463,7 @@ public class EPUBFiles {
         NodeList nodeList = (NodeList) xPathExpRel.evaluate(xmlDocument, XPathConstants.NODESET);
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node n  = nodeList.item(i);
-            String filename = getRelativeFilename(file, n.getNodeValue());
+            String filename = Util.getRelativeFilename(file, n.getNodeValue());
             uris[0].add(new Issue(
                     filename,
                     "[" +Guideline.XHTML + "] The reference " + filename + " points to a id in the target resource that does not exist.",
@@ -483,14 +483,6 @@ public class EPUBFiles {
 
         return uris;
     }
-
-    private String getRelativeFilename(String currentfile, String link) throws IOException {
-        String parentPath = new File(currentfile).getParentFile().getAbsolutePath();
-        String linkPath = new File(new File(currentfile).getParent(), link).getCanonicalPath();
-        parentPath = parentPath.substring(0, parentPath.length() - new File(currentfile).getParent().length());
-        return linkPath.substring(parentPath.length());
-    }
-
 
     private void validateAudio() throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -537,7 +529,7 @@ public class EPUBFiles {
                 continue;
             }
 
-            String filename = getRelativeFilename(packageOBF, el.getAttribute("href"));
+            String filename = Util.getRelativeFilename(packageOBF, el.getAttribute("href"));
 
             Document smilDocument = null;
             try {
@@ -604,7 +596,7 @@ public class EPUBFiles {
                 ending = Util.parseMilliSeconds(el.getAttribute("clip-end"));
             }
 
-            String filename = getRelativeFilename(smilFile, el.getAttribute("src"));
+            String filename = Util.getRelativeFilename(smilFile, el.getAttribute("src"));
 
             if (beginning > audioFiles.get(filename)) {
                 createSmilError(
