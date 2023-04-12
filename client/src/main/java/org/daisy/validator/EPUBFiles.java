@@ -13,12 +13,16 @@ import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
@@ -28,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +47,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioSystem;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
@@ -50,6 +57,11 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 public class EPUBFiles {
     private static final Logger logger = Logger.getLogger(Logger.class.getName());
@@ -68,7 +80,11 @@ public class EPUBFiles {
     private String packageOBF;
     private String ncxFile;
     private String navFile;
+    private List<String> smilFiles = new ArrayList<>();
     private List<String> contentFiles = new ArrayList<>();
+    private List<String> otherFiles = new ArrayList<>();
+    private Map<String, Long> audioFiles = new HashMap<>();
+
     private Set<Issue> errorList = new HashSet<>();
     private final ExecutorService executor;
     private final CompletionService<List<Issue>> completionService;
@@ -172,7 +188,6 @@ public class EPUBFiles {
                 continue;
             }
 
-            if (!"application/xhtml+xml".equals(item.getAttribute("media-type"))) continue;
 
             if (item.hasAttribute("properties") && "nav".equals(item.getAttribute("properties"))) {
                 navFile = filePath;
@@ -180,7 +195,19 @@ public class EPUBFiles {
             }
 
             if (zipFile.getEntry(filePath) != null) {
-                contentFiles.add(filePath);
+                if ("application/xhtml+xml".equals(item.getAttribute("media-type"))) {
+                    contentFiles.add(filePath);
+                } else if ("application/smil+xml".equals(item.getAttribute("media-type"))) {
+                    smilFiles.add(filePath);
+                } else {
+                    if (filePath.endsWith(".mp3") || filePath.endsWith(".mp2") || filePath.endsWith(".wav")) {
+                        AudioFileFormat audioFormat = AudioSystem.getAudioFileFormat(new File(epubDir, filePath));
+                        long frames = audioFormat.getFrameLength();
+                        long durationInMilliSeconds = Math.round((frames * 1000) / audioFormat.getFormat().getFrameRate());
+                        audioFiles.put(filePath, durationInMilliSeconds);
+                    }
+                    otherFiles.add(filePath);
+                }
             } else {
                 errorList.add(new Issue("", "File missing", filePath, Guideline.OPF, Issue.ERROR_ERROR));
             }
@@ -343,6 +370,8 @@ public class EPUBFiles {
             false
         );
 
+        validateLinks();
+
         int received = 0;
         boolean errors = false;
         while(received < submittedWork && !errors) {
@@ -356,6 +385,260 @@ public class EPUBFiles {
             }
         }
         executor.shutdownNow();
+    }
+
+    private void validateLinks() throws Exception {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        String expRel = "//*/@href | //*/@src | //*/@cite | //*/@longdesc | //object/@data | //form/@action | //head/@profile";
+        String expId = "//*[@id]";
+        XPathExpression xPathExpRel = xPath.compile(expRel);
+        XPathExpression xPathExpId = xPath.compile(expId);
+
+        Set<Issue> uris = new HashSet<>();
+        Set<String> ids = new HashSet<>();
+
+        List[] res = findLinks(db, xPathExpRel, xPathExpId, navFile);
+        uris.addAll(res[0]);
+        ids.addAll(res[1]);
+        res = findLinks(db, xPathExpRel, xPathExpId, packageOBF);
+        uris.addAll(res[0]);
+        ids.addAll(res[1]);
+        for (String contentFile : contentFiles) {
+            res = findLinks(db, xPathExpRel, xPathExpId, contentFile);
+            uris.addAll(res[0]);
+            ids.addAll(res[1]);
+        }
+        for (String contentFile : smilFiles) {
+            res = findLinks(db, xPathExpRel, xPathExpId, contentFile);
+            uris.addAll(res[0]);
+            ids.addAll(res[1]);
+        }
+
+        for (Issue uri : uris) {
+            if (
+                navFile.equals(uri.getLocation()) ||
+                packageOBF.equals(uri.getLocation())
+            ) {
+                continue;
+            }
+            if (contentFiles.contains(uri.getLocation())) {
+                continue;
+            }
+            if (smilFiles.contains(uri.getLocation())) {
+                continue;
+            }
+            if (otherFiles.contains(uri.getLocation())) {
+                continue;
+            }
+            if (ids.contains(uri.getLocation())) {
+                continue;
+            }
+
+            errorList.add(uri);
+        }
+
+        validateAudio();
+    }
+
+    private List<String>[] findLinks(DocumentBuilder builder, XPathExpression xPathExpRel, XPathExpression xPathExpId, String file) throws SAXException, IOException, XPathExpressionException {
+        List[] uris = new List[2];
+        uris[0] = new ArrayList<>();
+        uris[1] = new ArrayList<>();
+        Document xmlDocument = null;
+        try {
+            xmlDocument = builder.parse(new File(epubDir, file));
+        } catch (SAXParseException saxEx) {
+            String lineIn = String.format("(Line: %05d Column: %05d) ", saxEx.getLineNumber(), saxEx.getColumnNumber());
+            errorList.add(
+                    new Issue("", "[" + Guideline.XHTML + "] " + lineIn + saxEx.getMessage(),
+                            file,
+                            Guideline.XHTML,
+                            Issue.ERROR_ERROR
+                    ));
+            return uris;
+        }
+
+        NodeList nodeList = (NodeList) xPathExpRel.evaluate(xmlDocument, XPathConstants.NODESET);
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node n  = nodeList.item(i);
+            String filename = getRelativeFilename(file, n.getNodeValue());
+            uris[0].add(new Issue(
+                    filename,
+                    "[" +Guideline.XHTML + "] The reference " + filename + " points to a id in the target resource that does not exist.",
+                    file,
+                    Guideline.XHTML,
+                    Issue.ERROR_ERROR
+            ));
+        }
+
+        nodeList = (NodeList) xPathExpId.evaluate(xmlDocument, XPathConstants.NODESET);
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Element n = (Element) nodeList.item(i);
+            if (n.hasAttribute("id")) {
+                uris[1].add(file + "#" + n.getAttribute("id"));
+            }
+        }
+
+        return uris;
+    }
+
+    private String getRelativeFilename(String currentfile, String link) throws IOException {
+        String parentPath = new File(currentfile).getParentFile().getAbsolutePath();
+        String linkPath = new File(new File(currentfile).getParent(), link).getCanonicalPath();
+        parentPath = parentPath.substring(0, parentPath.length() - new File(currentfile).getParent().length());
+        return linkPath.substring(parentPath.length());
+    }
+
+
+    private void validateAudio() throws Exception {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        XPath xPath = XPathFactory.newInstance().newXPath();
+        XPathExpression xPathExpMediaDuration = xPath.compile("//meta[@property='media:duration']");
+
+        Document xmlDocument = null;
+        try {
+            xmlDocument = db.parse(new File(epubDir, packageOBF));
+        } catch (SAXParseException saxEx) {
+            String lineIn = String.format("(Line: %05d Column: %05d) ", saxEx.getLineNumber(), saxEx.getColumnNumber());
+            errorList.add(
+                    new Issue("", "[" + Guideline.OPF + "] " + lineIn + saxEx.getMessage(),
+                            packageOBF,
+                            Guideline.OPF,
+                            Issue.ERROR_ERROR
+                    ));
+            return;
+        }
+
+        NodeList nodeList = (NodeList) xPathExpMediaDuration.evaluate(xmlDocument, XPathConstants.NODESET);
+        Map<String, Long> smilFiles = new HashMap<>();
+        long totalTime = 0;
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Element el = (Element)nodeList.item(i);
+            if (el.hasAttribute("refines")) {
+                smilFiles.put(el.getAttribute("refines"), Util.parseMilliSeconds(el.getTextContent()));
+            } else {
+                totalTime = Util.parseMilliSeconds(el.getTextContent());
+            }
+        }
+
+        XPathExpression xPathExpAudio = xPath.compile(
+                "//audio[@clip-begin] | //audio[@clip-end] | //audio[@clipBegin] | //audio[@clipEnd]"
+        );
+
+        long elapsedTime = 0;
+        XPathExpression xPathExpSmilFiles = xPath.compile("//item[@media-type='application/smil+xml']");
+        nodeList = (NodeList) xPathExpSmilFiles.evaluate(xmlDocument, XPathConstants.NODESET);
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Element el = (Element)nodeList.item(i);
+            if (!smilFiles.containsKey("#" + el.getAttribute("id"))) {
+                continue;
+            }
+
+            String filename = getRelativeFilename(packageOBF, el.getAttribute("href"));
+
+            Document smilDocument = null;
+            try {
+                smilDocument = db.parse(new File(epubDir, filename));
+            } catch (SAXParseException saxEx) {
+                String lineIn = String.format("(Line: %05d Column: %05d) ", saxEx.getLineNumber(), saxEx.getColumnNumber());
+                errorList.add(
+                        new Issue("", "[" + Guideline.XHTML + "] " + lineIn + saxEx.getMessage(),
+                                packageOBF,
+                                Guideline.XHTML,
+                                Issue.ERROR_ERROR
+                        ));
+                continue;
+            }
+
+            elapsedTime = validateSmilFile(
+                smilDocument,
+                filename,
+                xPathExpAudio,
+                elapsedTime,
+                smilFiles.get("#" + el.getAttribute("id"))
+            );
+        }
+
+        if (Math.abs(elapsedTime - totalTime) > 500) {
+            errorList.add(new Issue(
+                    "",
+                    "[" +Guideline.XHTML + "] Total time in metadata " + Util.formatTime(totalTime) +
+                            " does not equal total elapsed time " + Util.formatTime(elapsedTime),
+                    packageOBF,
+                    Guideline.SMIL,
+                    Issue.ERROR_ERROR
+            ));
+        }
+    }
+
+    private long validateSmilFile(
+        Document smilDocument,
+        String smilFile,
+        XPathExpression xPathExpAudio,
+        long elapsedTime,
+        long timeInThisSmil
+    ) throws Exception {
+        long timeInThisSmilFile = 0;
+
+        NodeList nodeList = (NodeList) xPathExpAudio.evaluate(smilDocument, XPathConstants.NODESET);
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Element el = (Element) nodeList.item(i);
+            long beginning = 0;
+            long ending = 0;
+            if (el.hasAttribute("clipBegin") || el.hasAttribute("clipEnd")) {
+                if (!el.hasAttribute("clipBegin") || !el.hasAttribute("clipEnd")) {
+                    createSmilError(smilFile, "Missing clip beginning or end at " + el.getAttribute("src"));
+                    continue;
+                }
+                beginning = Util.parseMilliSeconds(el.getAttribute("clipBegin"));
+                ending = Util.parseMilliSeconds(el.getAttribute("clipEnd"));
+            } else {
+                if (!el.hasAttribute("clip-begin") || !el.hasAttribute("clip-end")) {
+                    createSmilError(smilFile, "Missing clip beginning or end at " + el.getAttribute("src"));
+                    continue;
+                }
+                beginning = Util.parseMilliSeconds(el.getAttribute("clip-begin"));
+                ending = Util.parseMilliSeconds(el.getAttribute("clip-end"));
+            }
+
+            String filename = getRelativeFilename(smilFile, el.getAttribute("src"));
+
+            if (beginning > audioFiles.get(filename)) {
+                createSmilError(
+                    smilFile,
+                    "Beginning of clip " + el.getAttribute("id") + " is not in audio " + el.getAttribute("src")
+                );
+            }
+            if (ending > audioFiles.get(filename)) {
+                createSmilError(
+                    smilFile,
+                    "Ending of clip " + el.getAttribute("id") + " is not in audio " + el.getAttribute("src")
+                );
+            }
+            timeInThisSmilFile += ending - beginning;
+        }
+
+        if (Math.abs(timeInThisSmil - timeInThisSmilFile) > 500) {
+            createSmilError(smilFile,
+                    "Total time in this smil file " + Util.formatTime(timeInThisSmilFile) +
+                            " does not match the time in metadata " + Util.formatTime(timeInThisSmil)
+            );
+        }
+
+        return elapsedTime + timeInThisSmilFile;
+    }
+
+    private void createSmilError(String smilFile, String msg) {
+        errorList.add(new Issue(
+                "",
+                "[" +Guideline.SMIL + "] " + msg,
+                smilFile,
+                Guideline.SMIL,
+                Issue.ERROR_ERROR
+        ));
     }
 
     private String createData() throws Exception {

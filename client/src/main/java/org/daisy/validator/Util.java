@@ -9,6 +9,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,5 +82,52 @@ public class Util {
             f.delete();
         }
         outputDir.deleteOnExit();
+    }
+
+    private static final Pattern milliPattern = Pattern.compile(
+            "(ntp=)?(\\d{1,2}:)?(\\d{1,2}:)?(\\d+)(\\.\\d+)?(ms|h|min|s)?"
+    );
+
+    public static final long parseMilliSeconds(String s) {
+
+        Matcher m = milliPattern.matcher(s);
+        if (m.find()) {
+            double val = 0;
+
+            if (m.group(2) != null) {
+                val += Long.parseLong(m.group(2).substring(0, m.group(2).length() - 1)) * 3600;
+            }
+            if (m.group(3) != null) {
+                val += Long.parseLong(m.group(3).substring(0, m.group(3).length() - 1)) * 60;
+            }
+            if (m.group(4) != null) {
+                val += Long.parseLong(m.group(4));
+            }
+            if (m.group(5) != null) {
+                val += Double.parseDouble(m.group(5));
+            }
+
+            if (m.group(6) != null) {
+                if ("h".equals(m.group(6))) {
+                    val *= 3600 * 1000;
+                } else if ("min".equals(m.group(6))) {
+                    val *= 60 * 1000;
+                } else if ("ms".equals(m.group(6))) {
+                } else {
+                    val *= 1000;
+                }
+            } else {
+                val *= 1000;
+            }
+
+            return Math.round(val);
+        }
+        return 0;
+    }
+
+    public static String formatTime(long time) {
+        Instant inst = Instant.ofEpochMilli(time);
+        LocalTime localTime = LocalTime.ofInstant(inst, ZoneId.of("UTC"));
+        return localTime.toString();
     }
 }
