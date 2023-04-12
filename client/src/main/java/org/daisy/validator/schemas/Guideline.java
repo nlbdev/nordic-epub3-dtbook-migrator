@@ -15,6 +15,7 @@ public abstract class Guideline {
     public static final String EPUB = "epub";
     public static final String EPUBCHECK = "epubcheck";
     public static final String ACE = "ace";
+    public static final String SMIL = "smil";
 
     protected Map<String, Schema> schemaMap = new HashMap<>();
 
