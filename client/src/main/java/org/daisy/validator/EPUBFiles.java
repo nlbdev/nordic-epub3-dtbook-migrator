@@ -325,15 +325,6 @@ public class EPUBFiles {
         }
     }
 
-    public XsltTransformer getTransformer(String filename) throws Exception {
-        InputStream in = EPUBFiles.class.getResourceAsStream(filename);
-
-        Processor processor = new Processor(false);
-        XsltCompiler compiler = processor.newXsltCompiler();
-        XsltExecutable xslt = compiler.compile(new StreamSource(in));
-        return xslt.load();
-    }
-
     public void validate() throws Exception {
         if(guideline == null) return;
         validateContent(
@@ -370,7 +361,7 @@ public class EPUBFiles {
             false
         );
 
-        validateLinks();
+        validateAudio();
 
         int received = 0;
         boolean errors = false;
@@ -385,107 +376,6 @@ public class EPUBFiles {
             }
         }
         executor.shutdownNow();
-    }
-
-    private void validateLinks() throws Exception {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        XPath xPath = XPathFactory.newInstance().newXPath();
-        String expRel = "//*/@href | //*/@src | //*/@cite | //*/@longdesc | //object/@data | //form/@action | //head/@profile";
-        String expId = "//*[@id]";
-        XPathExpression xPathExpRel = xPath.compile(expRel);
-        XPathExpression xPathExpId = xPath.compile(expId);
-
-        Set<Issue> uris = new HashSet<>();
-        Set<String> ids = new HashSet<>();
-
-        List[] res = findLinks(db, xPathExpRel, xPathExpId, navFile);
-        uris.addAll(res[0]);
-        ids.addAll(res[1]);
-        res = findLinks(db, xPathExpRel, xPathExpId, packageOBF);
-        uris.addAll(res[0]);
-        ids.addAll(res[1]);
-        for (String contentFile : contentFiles) {
-            res = findLinks(db, xPathExpRel, xPathExpId, contentFile);
-            uris.addAll(res[0]);
-            ids.addAll(res[1]);
-        }
-        for (String contentFile : smilFiles) {
-            res = findLinks(db, xPathExpRel, xPathExpId, contentFile);
-            uris.addAll(res[0]);
-            ids.addAll(res[1]);
-        }
-
-        for (Issue uri : uris) {
-            if (
-                navFile.equals(uri.getLocation()) ||
-                packageOBF.equals(uri.getLocation())
-            ) {
-                continue;
-            }
-            if (contentFiles.contains(uri.getLocation())) {
-                continue;
-            }
-            if (smilFiles.contains(uri.getLocation())) {
-                continue;
-            }
-            if (otherFiles.contains(uri.getLocation())) {
-                continue;
-            }
-            if (ids.contains(uri.getLocation())) {
-                continue;
-            }
-
-            errorList.add(uri);
-        }
-
-        validateAudio();
-    }
-
-    private List<String>[] findLinks(DocumentBuilder builder, XPathExpression xPathExpRel, XPathExpression xPathExpId, String file) throws SAXException, IOException, XPathExpressionException {
-        List[] uris = new List[2];
-        uris[0] = new ArrayList<>();
-        uris[1] = new ArrayList<>();
-        Document xmlDocument = null;
-        try {
-            xmlDocument = builder.parse(new File(epubDir, file));
-        } catch (SAXParseException saxEx) {
-            String lineIn = String.format("(Line: %05d Column: %05d) ", saxEx.getLineNumber(), saxEx.getColumnNumber());
-            errorList.add(
-                    new Issue("", "[" + Guideline.XHTML + "] " + lineIn + saxEx.getMessage(),
-                            file,
-                            Guideline.XHTML,
-                            Issue.ERROR_ERROR
-                    ));
-            return uris;
-        }
-
-        NodeList nodeList = (NodeList) xPathExpRel.evaluate(xmlDocument, XPathConstants.NODESET);
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node n  = nodeList.item(i);
-            if (n.getNodeValue().contains(":")) {
-                // Ignore web addresses, email addresses and similar links. Filnames should rarely contain ":".
-                continue;
-            }
-            String filename = Util.getRelativeFilename(file, n.getNodeValue());
-            uris[0].add(new Issue(
-                    filename,
-                    "[" +Guideline.XHTML + "] The reference " + filename + " points to a id in the target resource that does not exist.",
-                    file,
-                    Guideline.XHTML,
-                    Issue.ERROR_ERROR
-            ));
-        }
-
-        nodeList = (NodeList) xPathExpId.evaluate(xmlDocument, XPathConstants.NODESET);
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Element n = (Element) nodeList.item(i);
-            if (n.hasAttribute("id")) {
-                uris[1].add(file + "#" + n.getAttribute("id"));
-            }
-        }
-
-        return uris;
     }
 
     private void validateAudio() throws Exception {
