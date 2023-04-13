@@ -463,6 +463,10 @@ public class EPUBFiles {
         NodeList nodeList = (NodeList) xPathExpRel.evaluate(xmlDocument, XPathConstants.NODESET);
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node n  = nodeList.item(i);
+            if (n.getNodeValue().contains(":")) {
+                // Ignore web addresses, email addresses and similar links. Filnames should rarely contain ":".
+                continue;
+            }
             String filename = Util.getRelativeFilename(file, n.getNodeValue());
             uris[0].add(new Issue(
                     filename,
