@@ -82,7 +82,6 @@ public class EPUBFiles {
     private String navFile;
     private List<String> smilFiles = new ArrayList<>();
     private List<String> contentFiles = new ArrayList<>();
-    private List<String> otherFiles = new ArrayList<>();
     private Map<String, Long> audioFiles = new HashMap<>();
 
     private Set<Issue> errorList = new HashSet<>();
@@ -206,7 +205,6 @@ public class EPUBFiles {
                         long durationInMilliSeconds = Math.round((frames * 1000) / audioFormat.getFormat().getFrameRate());
                         audioFiles.put(filePath, durationInMilliSeconds);
                     }
-                    otherFiles.add(filePath);
                 }
             } else {
                 errorList.add(new Issue("", "File missing", filePath, Guideline.OPF, Issue.ERROR_ERROR));
