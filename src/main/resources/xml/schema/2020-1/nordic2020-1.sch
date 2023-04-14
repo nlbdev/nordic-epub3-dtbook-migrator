@@ -14,10 +14,10 @@
         <title>Rule 1</title>
         <p>Only allow one charset, identifier, title and viewport</p>
         <rule context="html:head">
-            <assert test="count(html:meta[@charset='UTF-8'])=1">[nordic01] charset seems not to be in head exactly once</assert>
-            <assert test="count(html:meta[@name='dc:identifier'])=1">[nordic01] dc:identifier seems not to be in head exactly once</assert>
-            <assert test="count(html:title)=1">[nordic01] title seems not to be in head exactly once</assert>
-            <assert test="count(html:meta[@name='viewport'])=1">[nordic01] viewport seems not to be in head exactly once</assert>
+            <assert test="count(html:meta[@charset='UTF-8'])=1">[nordic01] charset must be in head exactly once</assert>
+            <assert test="count(html:meta[@name='dc:identifier'])=1">[nordic01] dc:identifier must be in head exactly once</assert>
+            <assert test="count(html:title)=1">[nordic01] title must be in head exactly once</assert>
+            <assert test="count(html:meta[@name='viewport'])=1">[nordic01] viewport must be in head exactly once</assert>
         </rule>
     </pattern>
 
