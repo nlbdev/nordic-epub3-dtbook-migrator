@@ -1,5 +1,6 @@
 import org.daisy.validator.EPUBFiles;
 import org.daisy.validator.NordicValidator;
+import org.daisy.validator.report.Issue;
 import org.junit.Test;
 
 import java.io.File;
@@ -16,6 +17,11 @@ public class TestMediaOverlay {
         epubFiles.validateWithEpubCheck(tmpFile);
         epubFiles.validate();
         epubFiles.cleanUp();
+
+        for (Issue i : epubFiles.getErrorList()) {
+            System.out.println(i.getDescription() + " (" + i.getFilename() + ")");
+        }
+
         assertTrue(
             "Verify that a correct epub with media overlay don't generate any errors",
             epubFiles.getErrorList().size() == 0

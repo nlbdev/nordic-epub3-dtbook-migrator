@@ -21,7 +21,9 @@ public class NordicReportImpl extends DefaultReportImpl {
     @Override
     public void message(Message message, EPUBLocation location, Object... args) {
         String fileName = PathUtil.removeWorkingDirectory(location.getPath());
-        String lineIn = "Line: " + location.getLine() + " Col: " + location.getColumn() + " ";
+        String lineIn = message.getSeverity().name();
+        lineIn += "(" + message.getID() + "): ";
+        lineIn += "Line: " + location.getLine() + " Col: " + location.getColumn() + " ";
 
         Severity severity = message.getSeverity();
         int errorCode = Issue.ERROR_WARN;
