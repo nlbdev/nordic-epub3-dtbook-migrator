@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf"
+         xmlns:dc="http://purl.org/dc/elements/1.1/"
+         xmlns:epub="http://www.idpf.org/2007/ops"
+         prefix="nordic: http://www.mtm.se/epub/"
+         version="3.0"
+         xml:lang="en"
+         unique-identifier="pub-identifier">
+   <metadata>
+      <dc:title id="maintitle">How to test a cover png file</dc:title>
+      <meta refines="#maintitle" property="title-type">main</meta>
+      <dc:language>en</dc:language>
+      <dc:identifier id="pub-identifier">nordic_epub_2020_1_cover_png</dc:identifier>
+      <dc:source>urn:isbn:0000-0000</dc:source>
+      <dc:creator>Daniel Persson</dc:creator>
+      <dc:format>application/epub+zip</dc:format>
+      <dc:publisher>MTM</dc:publisher>
+      <dc:date>2022-05-31</dc:date>
+      <meta property="dcterms:modified">2023-04-24T08:07:42Z</meta>
+      <meta name="dcterms:modified" content="2023-04-24T08:07:42Z"/>
+      <meta property="nordic:guidelines">2020-1</meta>
+      <meta name="nordic:guidelines" content="2020-1"/>
+      <meta property="nordic:supplier">Textalk AB</meta>
+      <meta name="nordic:supplier" content="Textalk AB"/>
+      <meta property="schema:accessibilitySummary">This publication conforms to the Nordic Guidelines for the Production of Accessible EPUB 3, version 2020-1.</meta>
+      <meta property="schema:accessMode">textual</meta>
+      <meta property="schema:accessMode">visual</meta>
+      <meta property="schema:accessModeSufficient">textual,visual</meta>
+      <meta property="schema:accessModeSufficient">textual</meta>
+      <meta property="schema:accessibilityFeature">structuralNavigation</meta>
+      <meta property="schema:accessibilityFeature">alternativeText</meta>
+      <meta property="schema:accessibilityHazard">none</meta>
+      <meta property="a11y:certifiedBy">MTM</meta>
+      <link rel="dcterms:conformsTo"
+            href="https://format.mtm.se/nordic_epub/2020-1"/>
+   </metadata>
+   <manifest>
+      <item href="css/epub.css" id="css" media-type="text/css"/>
+      <item href="nav.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+      <item href="nav.xhtml"
+            id="nav"
+            media-type="application/xhtml+xml"
+            properties="nav"/>
+      <item href="images/cover.png"
+            id="coverimg"
+            media-type="image/png"
+            properties="cover-image"/>
+   </manifest>
+   <spine toc="ncx" page-progression-direction="ltr">
+      <itemref idref="cover" linear="no"/>
+   </spine>
+</package>
