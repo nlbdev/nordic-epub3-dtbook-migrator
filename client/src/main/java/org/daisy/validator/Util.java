@@ -101,8 +101,11 @@ public class Util {
         if (m.find()) {
             double val = 0;
 
-            if (m.group(2) != null) {
+            if (m.group(2) != null && m.group(3) != null) {
                 val += Long.parseLong(m.group(2).substring(0, m.group(2).length() - 1)) * 3600;
+            }
+            if (m.group(2) != null && m.group(3) == null) {
+                val += Long.parseLong(m.group(2).substring(0, m.group(2).length() - 1)) * 60;
             }
             if (m.group(3) != null) {
                 val += Long.parseLong(m.group(3).substring(0, m.group(3).length() - 1)) * 60;
