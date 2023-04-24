@@ -6,6 +6,8 @@ import org.daisy.validator.ValidateFile;
 import org.daisy.validator.report.Issue;
 import org.daisy.validator.schemas.Guideline;
 import org.daisy.validator.schemas.Guideline2020;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -68,11 +70,23 @@ public class TestValid {
         Set<Issue> issues = new HashSet<>();
         issues.addAll(tf.call());
 
-        for(Issue i : issues) {
+        for (Issue i : issues) {
             System.out.println(i.getDescription());
         }
 
         assertEquals(0, issues.size());
+    }
+
+    @Test
+    public void testDocType() throws Exception {
+        Assert.assertFalse(
+            "Check that we can not find a doctype in file",
+            Util.checkIfContainsDoctype(new FileInputStream("src/test/resources/without-doctype.xhtml"))
+        );
+        Assert.assertTrue(
+            "Check that we can find a doctype in file",
+            Util.checkIfContainsDoctype(new FileInputStream("src/test/resources/with-doctype.xhtml"))
+        );
     }
 
     @Test

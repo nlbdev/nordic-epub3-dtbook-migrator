@@ -12,11 +12,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.net.URISyntaxException;
@@ -440,7 +442,7 @@ public class EPUBFiles {
         if (Math.abs(elapsedTime - totalTime) > 500) {
             errorList.add(new Issue(
                     "",
-                    "[" +Guideline.XHTML + "] Total time in metadata " + Util.formatTime(totalTime) +
+                    "[" +Guideline.SMIL + "] Total time in metadata " + Util.formatTime(totalTime) +
                             " does not equal total elapsed time " + Util.formatTime(elapsedTime),
                     packageOPF,
                     Guideline.SMIL,
@@ -545,6 +547,15 @@ public class EPUBFiles {
         transformFile(navFile, transformer, Guideline.CONTENT_FILES, false);
 
         for (String filename : contentFiles) {
+            if (!Util.checkIfContainsDoctype(new FileInputStream(new File(epubDir, filename)))) {
+                errorList.add(new Issue(
+                    "",
+                    "[" +Guideline.XHTML + "] <!DOCTYPE html> must be present in " + filename,
+                    filename,
+                    Guideline.XHTML,
+                    Issue.ERROR_ERROR
+                ));
+            }
             validateFile(filename, validator, Guideline.XHTML);
             transformFile(filename, transformer, Guideline.CONTENT_FILES, false);
         }
