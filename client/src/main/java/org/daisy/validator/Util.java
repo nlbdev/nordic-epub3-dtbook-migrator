@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -93,6 +94,19 @@ public class Util {
         String linkPath = new File(new File(currentfile).getParent(), link).getCanonicalPath();
         parentPath = parentPath.substring(0, parentPath.length() - new File(currentfile).getParent().length());
         return linkPath.substring(parentPath.length());
+    }
+
+    public static boolean checkIfContainsDoctype(InputStream inputStream) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        String fileContent = "";
+        while ((line = br.readLine()) != null) {
+            fileContent += line;
+            if (fileContent.contains("<!DOCTYPE html>")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static final long parseMilliSeconds(String s) {
