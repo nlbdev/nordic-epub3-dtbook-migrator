@@ -6,7 +6,6 @@ import org.daisy.validator.ValidateFile;
 import org.daisy.validator.report.Issue;
 import org.daisy.validator.schemas.Guideline;
 import org.daisy.validator.schemas.Guideline2020;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -22,7 +21,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.tree.ExpandVetoException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -45,6 +43,27 @@ public class TestValid {
             new File("src/main/resources/2020-1", guideline.getSchema(Guideline.OPF).getFilename()),
             Guideline.OPF,
             false
+        );
+        Set<Issue> issues = new HashSet<>();
+        issues.addAll(tf.call());
+
+        for(Issue i : issues) {
+            System.out.println(i.getDescription());
+        }
+
+        assertEquals(0, issues.size());
+    }
+
+    @Test
+    public void testCoverPNG_OPF() throws Exception {
+        Guideline guideline = new Guideline2020();
+
+        TransformFile tf = new TransformFile(
+                new File("src/test/resources/coverpng"),
+                "EPUB/package.opf",
+                new File("src/main/resources/2020-1", guideline.getSchema(Guideline.OPF).getFilename()),
+                Guideline.OPF,
+                false
         );
         Set<Issue> issues = new HashSet<>();
         issues.addAll(tf.call());

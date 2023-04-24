@@ -239,7 +239,7 @@
     <pattern id="opf_nordic_15_a">
         <title>Rule 15a</title>
         <p></p>
-        <rule context="opf:item[substring-after(@href,'/') = 'cover.jpg']">
+        <rule context="opf:item[substring-after(@href,'/') = ('cover.jpg', 'cover.png')]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <assert test="tokenize(@properties,'\s+') = 'cover-image'">[opf15a] The cover image must have a properties attribute containing the value 'cover-image': <value-of select="$context"/></assert>
         </rule>
@@ -250,7 +250,7 @@
         <p></p>
         <rule context="opf:item[tokenize(@properties,'\s+') = 'cover-image']">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="substring-after(@href,'/') = 'cover.jpg'">[opf15b] The image with property value 'cover-image' must have the filename 'cover.jpg': <value-of select="$context"/></assert>
+            <assert test="substring-after(@href,'/') = ('cover.jpg', 'cover.png')">[opf15b] The image with property value 'cover-image' must have the filename 'cover.jpg' or 'cover.png': <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
