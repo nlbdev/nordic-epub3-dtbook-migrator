@@ -6,23 +6,16 @@ import org.daisy.validator.report.Issue;
 import org.daisy.validator.schemas.Guideline;
 import org.daisy.validator.schemas.Guideline2015;
 import org.daisy.validator.schemas.Guideline2020;
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.XsltCompiler;
-import net.sf.saxon.s9api.XsltExecutable;
-import net.sf.saxon.s9api.XsltTransformer;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
@@ -32,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -60,24 +52,23 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 public class EPUBFiles {
     private static final Logger logger = Logger.getLogger(Logger.class.getName());
 
     private static final String EPUB_REFERENCE_NAV_NCX_FILE = "nordic-nav-ncx.xml";
-    private static final String EPUB_OBF_AND_HTML_FILE = "nordic-obf-and-html.xml";
+    private static final String EPUB_OPF_AND_HTML_FILE = "nordic-opf-and-html.xml";
     private static final String EPUB_NAV_AND_LINKS_FILE = "nordic-nav-and-links.xml";
 
     public static final Map<String, String> SPECIAL_NAMES_MAP = new HashMap<>();
     static {
         SPECIAL_NAMES_MAP.put(EPUB_REFERENCE_NAV_NCX_FILE, "EPUB/nav.xhtml and EPUB/nav.ncx");
-        SPECIAL_NAMES_MAP.put(EPUB_OBF_AND_HTML_FILE, "EPUB/package.obf and content files");
+        SPECIAL_NAMES_MAP.put(EPUB_OPF_AND_HTML_FILE, "EPUB/package.opf and content files");
         SPECIAL_NAMES_MAP.put(EPUB_NAV_AND_LINKS_FILE, "EPUB/nav.xhtml and content files");
     }
 
-    private String packageOBF;
+    private String packageOPF;
     private String ncxFile;
     private String navFile;
     private List<String> smilFiles = new ArrayList<>();
@@ -100,7 +91,7 @@ public class EPUBFiles {
     }
 
     public EPUBFiles(String rootFile, int threads, ZipFile zipFile, Guideline guideline) throws Exception {
-        this.packageOBF = rootFile;
+        this.packageOPF = rootFile;
         ZipEntry packageEntry = zipFile.getEntry(rootFile);
 
         if (packageEntry == null) {
@@ -211,7 +202,7 @@ public class EPUBFiles {
             }
         }
 
-        Util.writeFile(new File(epubDir, packageOBF), zipFile.getInputStream(packageEntry));
+        Util.writeFile(new File(epubDir, packageOPF), zipFile.getInputStream(packageEntry));
 
         FileOutputStream fos;
         BufferedWriter bw;
@@ -237,13 +228,13 @@ public class EPUBFiles {
             bw.close();
         }
 
-        fos = new FileOutputStream(new File(epubDir, EPUB_OBF_AND_HTML_FILE));
+        fos = new FileOutputStream(new File(epubDir, EPUB_OPF_AND_HTML_FILE));
         bw = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
         bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         bw.newLine();
         bw.write("<wrapper xmlns:html=\"http://www.w3.org/1999/xhtml\" xmlns:opf=\"http://www.idpf.org/2007/opf\">");
         bw.newLine();
-        Util.appendXML(bw, zipFile.getInputStream(zipFile.getEntry(packageOBF)));
+        Util.appendXML(bw, zipFile.getInputStream(zipFile.getEntry(packageOPF)));
         bw.newLine();
         for (String contentFile : contentFiles) {
             Util.appendXML(bw, zipFile.getInputStream(zipFile.getEntry(contentFile)));
@@ -347,13 +338,13 @@ public class EPUBFiles {
             );
         }
         transformFile(
-            EPUB_OBF_AND_HTML_FILE,
+            EPUB_OPF_AND_HTML_FILE,
             new File(schemaDir, guideline.getSchema(Guideline.OPF_AND_HTML).getFilename()),
             Guideline.OPF_AND_HTML,
             false
         );
         transformFile(
-            packageOBF,
+            packageOPF,
             new File(schemaDir, guideline.getSchema(Guideline.OPF).getFilename()),
             Guideline.OPF,
             false
@@ -384,12 +375,12 @@ public class EPUBFiles {
 
         Document xmlDocument = null;
         try {
-            xmlDocument = db.parse(new File(epubDir, packageOBF));
+            xmlDocument = db.parse(new File(epubDir, packageOPF));
         } catch (SAXParseException saxEx) {
             String lineIn = String.format("(Line: %05d Column: %05d) ", saxEx.getLineNumber(), saxEx.getColumnNumber());
             errorList.add(
                     new Issue("", "[" + Guideline.OPF + "] " + lineIn + saxEx.getMessage(),
-                            packageOBF,
+                            packageOPF,
                             Guideline.OPF,
                             Issue.ERROR_ERROR
                     ));
@@ -421,7 +412,7 @@ public class EPUBFiles {
                 continue;
             }
 
-            String filename = Util.getRelativeFilename(packageOBF, el.getAttribute("href"));
+            String filename = Util.getRelativeFilename(packageOPF, el.getAttribute("href"));
 
             Document smilDocument = null;
             try {
@@ -430,7 +421,7 @@ public class EPUBFiles {
                 String lineIn = String.format("(Line: %05d Column: %05d) ", saxEx.getLineNumber(), saxEx.getColumnNumber());
                 errorList.add(
                         new Issue("", "[" + Guideline.XHTML + "] " + lineIn + saxEx.getMessage(),
-                                packageOBF,
+                                packageOPF,
                                 Guideline.XHTML,
                                 Issue.ERROR_ERROR
                         ));
@@ -451,7 +442,7 @@ public class EPUBFiles {
                     "",
                     "[" +Guideline.XHTML + "] Total time in metadata " + Util.formatTime(totalTime) +
                             " does not equal total elapsed time " + Util.formatTime(elapsedTime),
-                    packageOBF,
+                    packageOPF,
                     Guideline.SMIL,
                     Issue.ERROR_ERROR
             ));
