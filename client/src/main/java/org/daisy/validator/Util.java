@@ -102,6 +102,9 @@ public class Util {
         String fileContent = "";
         while ((line = br.readLine()) != null) {
             fileContent += line;
+            if (fileContent.matches(".*<[a-zA-Z].*")) {
+                return false;
+            }
             if (fileContent.contains("<!DOCTYPE html>")) {
                 return true;
             }
