@@ -55,6 +55,71 @@ public class TestValid {
     }
 
     @Test
+    public void testOPFAndHTML() throws Exception {
+        File tmpFile = File.createTempFile("TestOPFAndHTML", ".xml");
+        FileOutputStream fos = new FileOutputStream(tmpFile);
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos, "UTF-8"));
+        bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        bw.newLine();
+        bw.write("<wrapper xmlns:html=\"http://www.w3.org/1999/xhtml\" xmlns:opf=\"http://www.idpf.org/2007/opf\">");
+        bw.newLine();
+        Util.appendXML(bw,
+            new FileInputStream(new File("src/test/resources/valid2020", "EPUB/package.opf"))
+        );
+        bw.newLine();
+
+        List<String> list = List.of(
+                "C00000-01-cover.xhtml",
+                "C00000-02-toc.xhtml",
+                "C00000-03-frontmatter.xhtml",
+                "C00000-04-chapter.xhtml",
+                "C00000-05-chapter.xhtml",
+                "C00000-06-chapter.xhtml",
+                "C00000-07-rearnotes.xhtml",
+                "C00000-08-chapter.xhtml",
+                "C00000-09-part.xhtml",
+                "C00000-10-chapter.xhtml",
+                "C00000-11-conclusion.xhtml",
+                "C00000-12-toc.xhtml",
+                "C00000-13-part.xhtml",
+                "C00000-14-chapter.xhtml",
+                "C00000-15-chapter.xhtml",
+                "C00000-16-part.xhtml",
+                "C00000-17-chapter.xhtml"
+        );
+
+        for (String contentFile : list) {
+            Util.appendXML(bw,
+                new FileInputStream(new File("src/test/resources/valid2020/EPUB", contentFile))
+            );
+            bw.newLine();
+            bw.flush();
+        }
+        bw.write("</wrapper>");
+        bw.flush();
+        bw.close();
+
+        Guideline guideline = new Guideline2020();
+
+        TransformFile tf = new TransformFile(
+                tmpFile.getParentFile(),
+                tmpFile.getName(),
+                new File("src/main/resources/2020-1", guideline.getSchema(Guideline.OPF_AND_HTML).getFilename()),
+                Guideline.OPF_AND_HTML,
+                false
+        );
+        Set<Issue> issues = new HashSet<>();
+        issues.addAll(tf.call());
+
+        for(Issue i : issues) {
+            System.out.println(i.getDescription());
+        }
+
+        assertEquals(0, issues.size());
+
+    }
+
+    @Test
     public void testCoverPNG_OPF() throws Exception {
         Guideline guideline = new Guideline2020();
 
