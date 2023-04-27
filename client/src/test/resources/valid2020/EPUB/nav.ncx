@@ -329,25 +329,25 @@
             <navLabel>
                 <text>iii</text>
             </navLabel>
-            <content src="C00000-02-toc.xhtml#page_3"/>
+            <content src="C00000-02-toc.xhtml#page_front_3"/>
         </pageTarget>
         <pageTarget id="pageTarget-35" playOrder="35" type="normal">
             <navLabel>
                 <text>iv</text>
             </navLabel>
-            <content src="C00000-03-frontmatter.xhtml#page_4"/>
+            <content src="C00000-03-frontmatter.xhtml#page_front_4"/>
         </pageTarget>
         <pageTarget id="pageTarget-35" playOrder="35" type="normal">
             <navLabel>
                 <text>vii</text>
             </navLabel>
-            <content src="C00000-03-frontmatter.xhtml#page-vii"/>
+            <content src="C00000-03-frontmatter.xhtml#page_front_7"/>
         </pageTarget>
         <pageTarget id="pageTarget-35" playOrder="35" type="normal">
             <navLabel>
                 <text>viii</text>
             </navLabel>
-            <content src="C00000-03-frontmatter.xhtml#page-viii"/>
+            <content src="C00000-03-frontmatter.xhtml#page_front_8"/>
         </pageTarget>
         <pageTarget id="pageTarget-36" playOrder="36" type="normal">
             <navLabel>
