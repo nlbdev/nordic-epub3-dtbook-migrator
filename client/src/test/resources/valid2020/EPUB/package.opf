@@ -10,7 +10,7 @@
         <dc:identifier id="pub-identifier">C00000</dc:identifier>
         <dc:title id="mymaintitle">Valentin Haüy</dc:title>
         <meta refines="#mymaintitle" property="title-type">main</meta>
-        <dc:title id="mysubtitle"> - the father of the education for the blind</dc:title>
+        <dc:title id="mysubtitle">the father of the education for the blind</dc:title>
         <meta refines="#mysubtitle" property="title-type">subtitle</meta>
         <dc:creator>Beatrice Christensen Sköld</dc:creator>
         <dc:language>en</dc:language>
