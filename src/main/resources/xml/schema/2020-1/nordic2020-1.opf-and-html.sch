@@ -170,7 +170,7 @@
         <p>The HTML title element must be the same as the OPF publication dc:title</p>
         <rule context="html:title">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <let name="fulltitle" value="//opf:package/opf:metadata/dc:title[1]/text()"/>
+            <let name="fulltitle" value="//opf:package/opf:metadata/dc:title[not(@refines) and position()=1]/text()"/>
             <assert test="text() = $fulltitle">[nordic_opf_and_html_28] The HTML title element in <value-of select="replace(base-uri(.),'.*/','')"/>
                 must contain the same text as the dc:title element in the OPF metadata. The HTML title element contains "<value-of select="."/>" while the dc:title element in the OPF contains
                     "<value-of select="$fulltitle"/>".</assert>
