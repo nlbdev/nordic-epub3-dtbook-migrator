@@ -135,7 +135,7 @@
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
             <!-- this is the multi-HTML version of the rule; the single-HTML version of this rule is in nordic2015-1.sch -->
 
-        <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('note','endnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic_opf_and_html_26b] The note
+            <assert test="count(//html:*[tokenize(@epub:type,'\s+')=('note','endnote','footnote') and @id = current()/substring-after(@href,'#')]) &gt;= 1">[nordic_opf_and_html_26b] The note
                 reference with the href "<value-of select="@href"/>" attribute must resolve to a note, endnote or footnote in the publication: <value-of select="$context"/> (in <value-of select="replace(base-uri(),'.*/','')"
                 />)</assert>
         </rule>
