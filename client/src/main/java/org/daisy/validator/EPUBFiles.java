@@ -608,4 +608,8 @@ public class EPUBFiles {
     public File getSchemaDir() {
         return schemaDir;
     }
+
+    public File getEpubDir() {
+        return epubDir;
+    }
 }
