@@ -614,4 +614,8 @@ public class EPUBFiles {
     public File getEpubDir() {
         return epubDir;
     }
+
+    public String getPackageFile() {
+        return this.packageOBF;
+    }
 }
