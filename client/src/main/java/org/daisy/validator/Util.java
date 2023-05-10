@@ -90,9 +90,12 @@ public class Util {
     );
 
     public static String getRelativeFilename(String currentfile, String link) throws IOException {
+        if (new File(currentfile).getParentFile() == null) {
+            return link;
+        }
         String parentPath = new File(currentfile).getParentFile().getAbsolutePath();
-        String linkPath = new File(new File(currentfile).getParent(), link).getCanonicalPath();
         parentPath = parentPath.substring(0, parentPath.length() - new File(currentfile).getParent().length());
+        String linkPath = new File(new File(currentfile).getParent(), link).getCanonicalPath();
         return linkPath.substring(parentPath.length());
     }
 
