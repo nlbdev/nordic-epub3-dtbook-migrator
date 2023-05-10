@@ -616,6 +616,6 @@ public class EPUBFiles {
     }
 
     public String getPackageFile() {
-        return this.packageOBF;
+        return this.packageOPF;
     }
 }
