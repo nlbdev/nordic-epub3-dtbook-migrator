@@ -2229,7 +2229,10 @@
                 </choice>
             </zeroOrMore>
             <oneOrMore>
-                <ref name="poem.linegroup"/>
+                <choice>
+                    <ref name="poem.linegroup"/>
+                    <ref name="hr"/>
+                </choice>
             </oneOrMore>
             <zeroOrMore>
                 <choice>
