@@ -21,6 +21,9 @@ import java.util.concurrent.Callable;
 
 public class ACEValidator implements Callable<List<Issue>> {
     private static final Logger logger = Logger.getLogger(ACEValidator.class.getName());
+    private static final List<String> ALLOWED_RULES = List.of(
+        "wcag2a", "wcag2aa", "wcag2aaa", "wcag21a", "wcag21aa", "wcag22aa"
+    );
 
     private static String version = null;
     private File epubFile;
@@ -113,15 +116,53 @@ public class ACEValidator implements Callable<List<Issue>> {
     private static List<Issue> parseAssertions(String fileName, JSONArray assertions) {
         List<Issue> errorList = new ArrayList<>();
 
+        assertionLoop:
         for(Object assertObj : assertions) {
             JSONObject issue = (JSONObject) assertObj;
+
+            if (!issue.containsKey("earl:test")) continue;
+            JSONObject test = (JSONObject) issue.get("earl:test");
+
+            if (!test.containsKey("rulesetTags")) continue;
+            JSONArray rulesetTags = (JSONArray) test.get("rulesetTags");
+
+            boolean foundAllowedRule = false;
+            String ruleSets = "";
+            for (Object rule : rulesetTags) {
+                if (!ruleSets.isBlank()) {
+                    ruleSets += ", ";
+                }
+                String ruleStr = (String) rule;
+                if (ALLOWED_RULES.contains(ruleStr)) {
+                    foundAllowedRule = true;
+                }
+                ruleSets += ruleStr;
+            }
+
+            if (!foundAllowedRule) {
+                continue assertionLoop;
+            }
 
             if (!issue.containsKey("earl:result")) continue;
             JSONObject resultTag = (JSONObject) issue.get("earl:result");
 
+            String location = "";
+            if (resultTag.containsKey("earl:pointer")) {
+                JSONObject pointer = (JSONObject) resultTag.get("earl:pointer");
+                if (pointer.containsKey("cfi")) {
+                   JSONArray cfi = (JSONArray) pointer.get("cfi");
+                    for (Object point : cfi) {
+                        if (!location.isBlank()) {
+                            location += ", ";
+                        }
+                        String locationStr = (String) point;
+                        location += locationStr;
+                    }
+                }
+            }
+
             if (!resultTag.containsKey("dct:description")) continue;
             String description = (String) resultTag.get("dct:description");
-
             if (resultTag.containsKey("html")) {
                 String html = (String) resultTag.get("html");
                 html = html.replaceAll("<!--##-->", "\n");
@@ -129,7 +170,7 @@ public class ACEValidator implements Callable<List<Issue>> {
             }
 
             errorList.add(new Issue(
-                "", "[" +Guideline.ACE + "] " + description, fileName, Guideline.ACE, Issue.ERROR_ERROR
+                location, "[" +Guideline.ACE + "] " + description + "\n\n(" +ruleSets + ")", fileName, Guideline.ACE, Issue.ERROR_ERROR
             ));
         }
         return errorList;
@@ -150,5 +191,13 @@ public class ACEValidator implements Callable<List<Issue>> {
 
     public static boolean isAvailable() {
         return version != null;
+    }
+
+    public static void main(String[] args) {
+        List<Issue> list = validate(new File("/home/danielp/daisywork/epub/color_contrast.epub"));
+        for (Issue i : list) {
+            System.out.println(i.getLocation());
+            System.out.println(i.getDescription());
+        }
     }
 }

@@ -194,7 +194,8 @@ public class EPUBFiles {
                 } else {
                     if (filePath.endsWith(".mp3") || filePath.endsWith(".mp2") || filePath.endsWith(".wav")) {
                         AudioFileFormat audioFormat = AudioSystem.getAudioFileFormat(new File(epubDir, filePath));
-                        long frames = audioFormat.getFrameLength();
+                        // Audio can be longer then the last frame upto another, so therefor +1.
+                        long frames = audioFormat.getFrameLength() + 1;
                         long durationInMilliSeconds = Math.round((frames * 1000) / audioFormat.getFormat().getFrameRate());
                         audioFiles.put(filePath, durationInMilliSeconds);
                     }
@@ -486,13 +487,17 @@ public class EPUBFiles {
             if (beginning > audioFiles.get(filename)) {
                 createSmilError(
                     smilFile,
-                    "Beginning of clip " + el.getAttribute("id") + " is not in audio " + el.getAttribute("src")
+                    "Beginning of clip " + el.getAttribute("id") + " (" +
+                    Util.formatTime(beginning) + ") is not in audio " + el.getAttribute("src") + " (" +
+                    Util.formatTime(audioFiles.get(filename)) + ")"
                 );
             }
             if (ending > audioFiles.get(filename)) {
                 createSmilError(
                     smilFile,
-                    "Ending of clip " + el.getAttribute("id") + " is not in audio " + el.getAttribute("src")
+                    "Ending of clip " + el.getAttribute("id") + " (" +
+                    Util.formatTime(ending) + ") is not in audio " + el.getAttribute("src") + " (" +
+                    Util.formatTime(audioFiles.get(filename)) + ")"
                 );
             }
             timeInThisSmilFile += ending - beginning;
