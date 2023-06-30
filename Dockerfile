@@ -1,6 +1,6 @@
 FROM maven:3.8.6-eclipse-temurin-11 as builder
 RUN apt update
-RUN apt install -y unzip
+RUN apt install -y unzip git
 RUN mkdir -p /opt
 WORKDIR /opt
 RUN mkdir -p client
@@ -12,16 +12,15 @@ RUN curl -O -J -L https://sourceforge.net/projects/saxon/files/Saxon-HE/11/Java/
 RUN unzip SaxonHE11-4J.zip
 RUN ls /opt
 
-WORKDIR /opt/client
+WORKDIR /opt/client/schxslt
 
 # install schxslt
-RUN wget https://github.com/schxslt/schxslt/releases/download/v1.9.4/schxslt-1.9.4-xslt-only.zip \
-    && unzip schxslt-*.zip -d schxslt \
-    && mv schxslt/schxslt-*/* schxslt \
-    && rm schxslt-*.zip
+RUN git clone https://github.com/schxslt/SchXslt2-Core .
 
-ADD web/saxon9-xslt /usr/local/bin
-RUN chmod +x /usr/local/bin/saxon9-xslt
+WORKDIR /opt/client
+
+ADD web/saxon11-xslt /usr/local/bin
+RUN chmod +x /usr/local/bin/saxon11-xslt
 RUN ./createSchemas.sh
 RUN mvn package
 
@@ -60,7 +59,7 @@ ENV PATH "/usr/local/lib/nodejs/node-v16.18.0-linux-x64/bin:$PATH"
 ENV LC_ALL "en_US.UTF-8"
 ENV LANG "en_US.UTF-8"
 ENV LANGUAGE "en_US.UTF-8"
-RUN npm install npm@8.12.2 --location=global
+RUN npm install npm@9.5.1 --location=global
 RUN npm install multer@1.4.5-lts.1
 RUN npm install @daisy/ace --location=global
 
