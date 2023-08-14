@@ -2289,9 +2289,11 @@
                             <value>line</value>
                             <value>line_indent</value>
                             <value>line_longindent</value>
-                            <value>sentence</value>
                         </choice>
                     </oneOrMore>
+                    <optional>
+                        <value>sentence</value>
+                    </optional>
                 </list>
             </attribute>
             <zeroOrMore>
