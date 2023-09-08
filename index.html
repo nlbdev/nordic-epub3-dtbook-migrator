@@ -70,7 +70,7 @@
           <p>Example of starting the Docker container as a service:</p>
           <pre><kbd>docker run --publish 8080:80 nlbdev/nordic-epub3-dtbook-migrator</kbd></pre>
 	  <p>Example of validating an EPUB using the API and curl:</p>
-	  <pre><kbd># TODO!</kbd></pre>
+	  <pre><kbd>curl -s -F config='{"noEPUBCheck":false,"noACE":false,"schema":"2020-1"}' -F file=@X60352A.epub http://localhost:8080/v1/Validation</kbd></pre>
 	  <h1><a name="installation-1" class="anchor" href="#installation-1"><span class="octicon octicon-link"></span></a>Last Pipeline 2 based version: 1.5.2</h1>
 	  <p>Note that earlier 1.x versions supported normal Pipeline 2 installation and the Pipeline 2 updater mechanism. However, 1.5.2 does only run as a Docker container.</p>
           <p>If you want to install the tool using some other mechanism than Docker, the JAR file is available from the <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/tree/mvn-repo/org/daisy/pipeline/modules/nordic-epub3-dtbook-migrator">Maven repository on GitHub</a>, or from the <a href="https://github.com/nlbdev/nordic-epub3-dtbook-migrator/releases">GitHub Release page</a>. The GitHub Release page also contains a description of changes for each release.</p>
