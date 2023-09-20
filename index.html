@@ -63,9 +63,9 @@
           <p>The 2.x versions of nordic-epub3-dtbook-migrator can only be run through Docker. But it has both a command line interface, and an API.</p>
           <h2>Command line interface</h2>
           <p>Example of running the command line interface:</p>
-          <pre><kbd>docker run --rm -it -v "$(pwd)":"$(pwd)" -w "$(pwd)" nlbdev/nordic-epub3-dtbook-migrato java -jar /var/www/bin/NordicValidator.jar</kbd></pre>
+          <pre><kbd>docker run --rm -it -v "$(pwd)":"$(pwd)" -w "$(pwd)" nlbdev/nordic-epub3-dtbook-migrator java -jar /var/www/bin/NordicValidator.jar</kbd></pre>
           <p>Example of validating an EPUB from the command line::</p>
-          <pre><kbd>docker run --rm -it -v "$(pwd)":"$(pwd)" -w "$(pwd)" nlbdev/nordic-epub3-dtbook-migrato java -jar /var/www/bin/NordicValidator.jar X60352A.epub</kbd></pre>
+          <pre><kbd>docker run --rm -it -v "$(pwd)":"$(pwd)" -w "$(pwd)" nlbdev/nordic-epub3-dtbook-migrator java -jar /var/www/bin/NordicValidator.jar X60352A.epub</kbd></pre>
           <h2>REST API</h2>
           <p>Example of starting the Docker container as a service:</p>
           <pre><kbd>docker run --publish 8080:80 nlbdev/nordic-epub3-dtbook-migrator</kbd></pre>
