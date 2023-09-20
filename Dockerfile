@@ -94,7 +94,7 @@ RUN npm install npm@9.5.1 --location=global
 # trunk-ignore(hadolint/DL3059)
 RUN npm install multer@1.4.5-lts.1
 # trunk-ignore(hadolint/DL3059)
-RUN npm install @daisy/ace@1.3.2 --location=global
+RUN npm install @daisy/ace@1.2.7 --location=global
 ENV ACE_PATH "/usr/local/lib/nodejs/node-v16.18.0-linux-x64/bin/ace"
 
 RUN cp /usr/share/zoneinfo/Europe/Stockholm /etc/localtime && \
