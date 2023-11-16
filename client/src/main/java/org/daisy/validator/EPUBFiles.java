@@ -1,5 +1,6 @@
 package org.daisy.validator;
 
+import net.sf.saxon.trans.XPathException;
 import org.daisy.validator.ace.ACEValidator;
 import org.daisy.validator.epubcheck.EPUBCheckValidator;
 import org.daisy.validator.report.Issue;
@@ -362,8 +363,28 @@ public class EPUBFiles {
             try {
                 errorList.addAll(resultFuture.get());
                 received++;
-            } catch(Exception e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                Throwable saxEx = e;
+                if (saxEx.getCause() instanceof XPathException) {
+                    saxEx = saxEx.getCause();
+                }
+                if (saxEx.getCause() instanceof SAXParseException) {
+                    saxEx = saxEx.getCause();
+                }
+                if (saxEx instanceof SAXParseException) {
+                    SAXParseException saxExp = (SAXParseException) saxEx;
+                    String lineIn = String.format("(Line: %05d Column: %05d) ", saxExp.getLineNumber(), saxExp.getColumnNumber());
+                    errorList.add(
+                            new Issue("", "[" + Guideline.XHTML + "] " + lineIn + saxExp.getMessage(),
+                                    packageOPF,
+                                    Guideline.OPF,
+                                    Issue.ERROR_ERROR
+                            ));
+                    e.printStackTrace();
+                } else {
+                    errorList.add(new Issue("", e.getMessage(), packageOPF, Guideline.EPUB, Issue.ERROR_FATAL));
+                    e.printStackTrace();
+                }
                 errors = true;
             }
         }

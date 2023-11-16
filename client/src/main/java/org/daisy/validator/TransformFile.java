@@ -1,5 +1,6 @@
 package org.daisy.validator;
 
+import net.sf.saxon.trans.XPathException;
 import org.daisy.validator.report.Issue;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.lib.FeatureKeys;
@@ -9,10 +10,12 @@ import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.Xslt30Transformer;
 import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
+import org.daisy.validator.schemas.Guideline;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXParseException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -78,17 +81,49 @@ public class TransformFile implements Callable<List<Issue>> {
         try {
             transformer.applyTemplates(source, serializer);
         } catch (SaxonApiException sae) {
-            errorList.add(
-                new Issue(
-                    "",
-                    "Line: " + sae.getLineNumber() + " " + sae.getMessage(),
+            sae.printStackTrace();
+            Throwable saxEx = sae;
+            if (saxEx.getCause() instanceof XPathException) {
+                saxEx = saxEx.getCause();
+            }
+            if (saxEx.getCause() instanceof SAXParseException) {
+                saxEx = saxEx.getCause();
+            }
+            if (saxEx instanceof SAXParseException) {
+                SAXParseException saxExp = (SAXParseException) saxEx;
+                String lineIn = String.format("(Line: %05d Column: %05d) ", saxExp.getLineNumber(), saxExp.getColumnNumber());
+                errorList.add(
+                new Issue("", "[" + schemaType + "] " + lineIn + saxExp.getMessage(),
                     filename,
                     schemaType,
                     Issue.ERROR_ERROR
-                )
-            );
+                ));
+            } else {
+                errorList.add(
+                    new Issue(
+                        "",
+                        "Line: " + sae.getLineNumber() + " " + sae.getMessage(),
+                        filename,
+                        schemaType,
+                        Issue.ERROR_ERROR
+                    )
+                );
+            }
+            return errorList;
         } catch (Exception e) {
+            if (e.getCause() instanceof SAXParseException) {
+                SAXParseException saxEx = (SAXParseException) e.getCause();
+                String lineIn = String.format("(Line: %05d Column: %05d) ", saxEx.getLineNumber(), saxEx.getColumnNumber());
+                errorList.add(
+                    new Issue("", "[" + Guideline.XHTML + "] " + lineIn + saxEx.getMessage(),
+                        filename,
+                        Guideline.OPF,
+                        Issue.ERROR_ERROR
+                    ));
+                e.printStackTrace();
+            }
             errorList.add(new Issue("", e.getMessage(), filename, schemaType, Issue.ERROR_ERROR));
+            return errorList;
         }
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
