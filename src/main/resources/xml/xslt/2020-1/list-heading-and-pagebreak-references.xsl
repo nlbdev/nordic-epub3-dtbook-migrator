@@ -48,7 +48,7 @@
             <xsl:attribute name="data-sectioning-depth" select="count(ancestor::section | ancestor::article)"/>
             <xsl:value-of select="
                 if (./span/@epub:type = 'title') then
-                    normalize-space(./span[tokenize(@epub:type,'\s+') = 'title']/text())
+                    normalize-space(string-join(./span[tokenize(@epub:type,'\s+') = 'title']//text()))
                 else
                     normalize-space(string-join(.//text() except .//*[tokenize(@epub:type,'\s+') = 'noteref']//text(),''))
             "/>
