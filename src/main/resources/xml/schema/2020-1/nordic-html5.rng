@@ -2215,7 +2215,7 @@
     <define name="poem">
         <a:documentation>  Use: poem is a complete poem or fragment thereof.  </a:documentation>
         <element name="div">
-            <ref name="attrs.base"/>
+            <ref name="attrs.base"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir -->
             <attribute name="class">
                 <choice>
                     <value>verse</value>
@@ -2248,6 +2248,7 @@
             <attribute name="class">
                 <value>verse-author</value>
             </attribute>
+            <ref name="attrs.base"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir -->
             <ref name="Text"/>
         </element>
     </define>
@@ -2258,6 +2259,7 @@
             <attribute name="class">
                 <value>linegroup</value>
             </attribute>
+            <ref name="attrs.base"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir -->
             <ref name="poem.line"/>
             <zeroOrMore>
                 <choice>
@@ -2293,6 +2295,7 @@
                     </oneOrMore>
                 </list>
             </attribute>
+            <ref name="attrs.base"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir -->
             <zeroOrMore>
                 <ref name="poem.linenum"/>
             </zeroOrMore>
@@ -2310,6 +2313,7 @@
             <attribute name="class">
                 <value>linenum</value>
             </attribute>
+            <ref name="attrs.base"/> <!-- @id, @title, @xml:space, @xml:lang, @lang, @dir -->
             <ref name="Text"/>
         </element>
     </define>
