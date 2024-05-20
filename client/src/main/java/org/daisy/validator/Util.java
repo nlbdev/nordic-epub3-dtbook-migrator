@@ -86,7 +86,7 @@ public class Util {
     }
 
     private static final Pattern milliPattern = Pattern.compile(
-            "(ntp=)?(\\d{1,2}:)?(\\d{1,2}:)?(\\d+)(\\.\\d+)?(ms|h|min|s)?"
+            "(ntp=)?(\\d{1,3}:)?(\\d{1,2}:)?(\\d+)(\\.\\d+)?(ms|h|min|s)?"
     );
 
     public static String getRelativeFilename(String currentfile, String link) throws IOException {
