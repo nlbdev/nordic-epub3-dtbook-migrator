@@ -505,6 +505,10 @@ public class EPUBFiles {
 
             String filename = Util.getRelativeFilename(smilFile, el.getAttribute("src"));
 
+            if (!audioFiles.containsKey(filename)) {
+                createSmilError(smilFile, "Audio file is missing: " + filename);
+                continue;
+            }
             if (beginning > audioFiles.get(filename)) {
                 createSmilError(
                     smilFile,
