@@ -12,7 +12,7 @@ insert_final_newline = true
 
 # Set default charset and 4 space indentation for all xml, xslt, xpl,
 # xprocspec and xspec files
-[*.{xml,xpl,xsl,xprocspec,xspec}]
+[*.{xml,xpl,xsl,xprocspec,xspec,py}]
 charset = utf-8
 indent_style = space
 indent_size = 4

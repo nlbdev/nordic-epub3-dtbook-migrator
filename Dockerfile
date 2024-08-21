@@ -1,33 +1,25 @@
-# Use a multistage build to first build the migrator using maven. Then
-# copy the artifacts into a final image which exposes the port and
-# starts the pipeline.
+FROM python:3.11
 
-# Build the pipeline first
-FROM maven:3.6-jdk-11 as builder
-ADD . /usr/src/nordic-epub3-dtbook-migrator
-WORKDIR /usr/src/nordic-epub3-dtbook-migrator
-RUN mv .m2-for-docker ~/.m2  # configure global maven settings.xml
+# Install Java
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y default-jre=2:1.17-74 \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN mvn clean package
+# Install Saxon
+RUN mkdir -p /opt/saxon \
+    && wget --progress=dot:giga "https://search.maven.org/remotecontent?filepath=net/sf/saxon/Saxon-HE/9.9.0-2/Saxon-HE-9.9.0-2.jar" -O /opt/saxon/saxon.jar
 
-RUN rm -f /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-doc.jar
-RUN rm -f /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*-xprocdoc.jar
+# Create app directory
+WORKDIR /usr/src/app
 
-# then use the build artifacts to create an image where the pipeline is installed
-FROM daisyorg/pipeline-assembly:v1.14.3
-LABEL maintainer="Norwegian library of talking books and braille (http://www.nlb.no/)"
-COPY --from=builder /usr/src/nordic-epub3-dtbook-migrator/target/nordic-epub3-dtbook-migrator-*.jar /opt/daisy-pipeline2/system/common/
-ENV PIPELINE2_WS_LOCALFS=false \
-    PIPELINE2_WS_AUTHENTICATION=false \
-    PIPELINE2_WS_AUTHENTICATION_KEY=clientid \
-    PIPELINE2_WS_AUTHENTICATION_SECRET=sekret
-EXPOSE 8181
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# for the healthcheck use PIPELINE2_HOST if defined. Otherwise use localhost
-RUN apt-get update && \
-    apt-get install -y curl && \
-    rm -rf /var/lib/apt/lists/*
-HEALTHCHECK --interval=30s --timeout=10s --start-period=1m CMD http_proxy="" https_proxy="" HTTP_PROXY="" HTTPS_PROXY="" curl --fail http://${PIPELINE2_WS_HOST-localhost}:${PIPELINE2_WS_PORT:-8181}/${PIPELINE2_WS_PATH:-ws}/alive || exit 1
+# Install application
+COPY src/ ./
 
-ADD docker-entrypoint.sh /opt/daisy-pipeline2/docker-entrypoint.sh
-ENTRYPOINT ["/opt/daisy-pipeline2/docker-entrypoint.sh"]
+# Run tests
+RUN python run.py test
+
+CMD python run.py
