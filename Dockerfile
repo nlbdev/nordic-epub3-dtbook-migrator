@@ -5,9 +5,12 @@ RUN apt-get update \
     && apt-get install --no-install-recommends -y default-jre=2:1.17-74 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Saxon
-RUN mkdir -p /opt/saxon \
-    && wget --progress=dot:giga "https://search.maven.org/remotecontent?filepath=net/sf/saxon/Saxon-HE/9.9.0-2/Saxon-HE-9.9.0-2.jar" -O /opt/saxon/saxon.jar
+# Install Epubcheck
+ADD https://github.com/w3c/epubcheck/releases/download/v5.1.0/epubcheck-5.1.0.zip /opt/epubcheck.zip
+RUN unzip /opt/epubcheck.zip -d /opt && \
+    rm /opt/epubcheck.zip && \
+    mv /opt/epubcheck-* /opt/epubcheck
+ENV EPUBCHECK_HOME=/opt/epubcheck
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -22,4 +25,4 @@ COPY src/ ./
 # Run tests
 RUN python run.py test
 
-CMD python run.py
+ENTRYPOINT [ "python", "run.py" ]
