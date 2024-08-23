@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+CWD="$(pwd)"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "${DIR}"
 
@@ -25,7 +26,9 @@ if [[ "${SOURCE}" = "" ]]; then
     echo "Usage: $0 <source>"
     exit 1
 fi
+cd "${CWD}"
 SOURCE="$(realpath "${SOURCE}")"
+cd "${DIR}"
 if [[ ! -e "${SOURCE}" ]]; then
     echo "Source not found: ${SOURCE}"
     exit 1
@@ -41,7 +44,9 @@ else
     # use "target" as the output directory if not specified
     TARGET="${DIR}/target"
 fi
+cd "${CWD}"
 TARGET="$(realpath "${TARGET}")"
+cd "${DIR}"
 mkdir -p "${TARGET}"
 
 set -x
