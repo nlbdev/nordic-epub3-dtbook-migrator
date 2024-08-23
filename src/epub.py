@@ -14,7 +14,7 @@ from lxml import etree as ElementTree
 namespaces = {"opf": "http://www.idpf.org/2007/opf", "epub": "http://www.idpf.org/2007/ops", "html": "http://www.w3.org/1999/xhtml"}
 
 
-def epub_as_file(source: str) -> tempfile._TemporaryFileWrapper | str | None:
+def epub_as_file(source: str) -> tempfile._TemporaryFileWrapper | str:
     """Return the EPUB as a temporary file
 
     Args:
@@ -26,8 +26,7 @@ def epub_as_file(source: str) -> tempfile._TemporaryFileWrapper | str | None:
 
     if os.path.isfile(source):
         if not is_epub(source):
-            logging.error(f"{source} is a file but it is not an EPUB file")
-            return None
+            raise ValueError(f"{source} is a file but it is not an EPUB file")
         else:
             return source
 
@@ -56,7 +55,7 @@ def epub_as_file(source: str) -> tempfile._TemporaryFileWrapper | str | None:
     return temp_obj_file
 
 
-def epub_as_directory(source: str) -> tempfile.TemporaryDirectory | str | None:
+def epub_as_directory(source: str) -> tempfile.TemporaryDirectory | str:
     """Return the EPUB as a temporary directory
 
     Args:
@@ -67,8 +66,7 @@ def epub_as_directory(source: str) -> tempfile.TemporaryDirectory | str | None:
     """
     if os.path.isdir(source):
         if not is_epub(source):
-            logging.error(f"{source} is a directory but it is not a EPUB fileset")
-            return None
+            raise ValueError(f"{source} is a directory but it is not a EPUB fileset")
         else:
             logging.info(f"{source} is a directory")
             return source

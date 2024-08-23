@@ -128,7 +128,7 @@ def convert(source: str, target: str, fix_heading_levels: bool, add_header_eleme
 
     # If the input is a file, convert it to a directory
     epub_dir_obj = epub.epub_as_directory(source)
-    epub_dir = epub_dir_obj.name if isinstance(epub_dir_obj, tempfile._TemporaryFileWrapper) else source
+    epub_dir: str = epub_dir_obj if isinstance(epub_dir_obj, str) else epub_dir_obj.name
 
     logging.info("Listing spine items…")
     spine = epub.get_spine(epub_dir)
@@ -189,7 +189,7 @@ def convert(source: str, target: str, fix_heading_levels: bool, add_header_eleme
 
     # we zip the EPUB before validating it since epubcheck works better that way
     result_as_file_obj = epub.epub_as_file(target_dir)
-    result_as_file = result_as_file_obj.name if isinstance(result_as_file_obj, tempfile._TemporaryFileWrapper) else result_as_file_obj
+    result_as_file = result_as_file_obj if isinstance(result_as_file_obj, str) else result_as_file_obj.name
     shutil.copy(result_as_file, target_file)
     if result_as_file and not epub.epubcheck(target_file):
         logging.error("Validation failed")
@@ -362,7 +362,7 @@ def create_updated_package_document(epub_dir: str, spine: list[dict[str, str | i
                         opf_file.write(f'<item id="{item_id}" media-type="application/xhtml+xml" href="{identifier}.xhtml"')
                         if properties:
                             opf_file.write(' properties="' + " ".join(properties) + '"')
-                        opf_file.write(f'/>\n')
+                        opf_file.write('/>\n')
                         spine_ids.append(item_id)
                 else:
                     opf_file.write(indentation_text * indentation_depth)
