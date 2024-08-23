@@ -45,7 +45,7 @@ set +e
 docker run "${RM}" "${IT}" --network host \
     -v "${SOURCE}:/source:ro" \
     -v "${TARGET}:/target" \
-    "${BUILD_ID}" /source /target/result "$@"
+    "${BUILD_ID}" /source /target "$@"
 set -e
 
 echo "Fixing permissions for target directory…"

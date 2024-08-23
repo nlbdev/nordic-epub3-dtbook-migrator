@@ -115,8 +115,8 @@ def convert(source: str, target: str, fix_heading_levels: bool, add_header_eleme
     if not os.path.exists(source):
         logging.error(f"Input '{source}' does not exist")
         sys.exit(1)
-    if os.path.exists(target):
-        logging.error(f"Output '{target}' already exists")
+    if os.path.exists(target) and not os.path.isdir(target):
+        logging.error(f"Output '{target}' already exists and is not a directory")
         sys.exit(1)
     if not success:
         logging.error("Aborting due to errors")
@@ -152,6 +152,15 @@ def convert(source: str, target: str, fix_heading_levels: bool, add_header_eleme
     title = titles[0]
 
     target_dir = os.path.join(target, identifier)
+    target_file = os.path.join(target, f"{identifier}.epub")
+
+    if os.path.exists(target_dir):
+        logging.error(f"Output directory '{target_dir}' already exists")
+        sys.exit(1)
+    if os.path.exists(target_file):
+        logging.error(f"Output file '{target_file}' already exists")
+        sys.exit(1)
+
     logging.info(f"Copying files to target/{identifier}/…")
     os.makedirs(target_dir, exist_ok=True)
     for root, _, files in os.walk(epub_dir):
@@ -179,7 +188,6 @@ def convert(source: str, target: str, fix_heading_levels: bool, add_header_eleme
         shutil.copy(updated_opf_obj.name, os.path.join(target_dir, "EPUB/package.opf"))
 
     # we zip the EPUB before validating it since epubcheck works better that way
-    target_file = os.path.join(target, f"{identifier}.epub")
     result_as_file_obj = epub.epub_as_file(target_dir)
     result_as_file = result_as_file_obj.name if isinstance(result_as_file_obj, tempfile._TemporaryFileWrapper) else result_as_file_obj
     shutil.copy(result_as_file, target_file)
