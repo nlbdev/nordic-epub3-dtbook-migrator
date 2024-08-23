@@ -4,6 +4,8 @@
 .dockerignore
 Dockerfile
 
+.*
+
 target/
 src/test/xspec/*.html
 src/test/xspec/xspec/*
