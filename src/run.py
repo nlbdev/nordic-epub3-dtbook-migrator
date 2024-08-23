@@ -278,7 +278,7 @@ def create_single_html(epub_dir: str, spine: list[dict[str, str | int]], title: 
                     if not depth.isnumeric():
                         logging.error(f"Could not parse heading level from '{text}'")
                     else:
-                        depth = str(int(depth) + root_level - 1)
+                        depth = str(max(1, min(6, int(depth) + root_level - 1)))
                     single_html_file.write(f"<{'/' if end else ''}h{depth}{rest}")
 
                 elif not fix_heading_levels and content_type == ContentType.HEADING:
