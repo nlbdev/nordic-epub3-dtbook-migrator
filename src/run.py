@@ -25,10 +25,23 @@ def main() -> None:
     target = sys.argv[2] if len(sys.argv) >= 3 else ""
 
     if len(sys.argv) < 3 or not source or not target:
-        logging.error("Usage: run.py <source> <target>")
+        logging.error("Usage: run.py <source> <target> [options]")
+        logging.error("Options:")
+        logging.error("  --fix-heading-levels=true|false (default: true)")
+        logging.error("  --add-header-element=true|false (default: true)")
         sys.exit(1)
 
-    convert(source, target, fix_heading_levels=True, add_header_element=True)
+    fix_heading_levels = True
+    add_header_element = True
+    for arg in sys.argv[3:]:
+        if arg.startswith("--fix-heading-levels="):
+            fix_heading_levels = arg.split("=", 1)[1].lower() == "true"
+        elif arg.startswith("--add-header-element="):
+            add_header_element = arg.split("=", 1)[1].lower() == "true"
+        else:
+            logging.error(f"Unknown option: {arg}")
+
+    convert(source, target, fix_heading_levels=fix_heading_levels, add_header_element=add_header_element)
 
 
 # declare literal type of strings for content types
