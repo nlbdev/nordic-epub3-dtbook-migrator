@@ -13,10 +13,10 @@ Requirements:
 Usage:
 
 ```
-./run.sh <source> [options]
+./run.sh <source> [target] [options]
 ```
 
-The target directory is automatically set to the `target/` directory. Its contents will be deleted before each conversion.
+`target` defaults to the `target/` directory if it's not specified.
 
 
 ## Running with Python

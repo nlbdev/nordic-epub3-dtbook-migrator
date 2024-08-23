@@ -20,24 +20,28 @@ IT="-it"
 
 # first argument is the source EPUB (file or directory)
 SOURCE="$1"
+shift
 if [[ "${SOURCE}" = "" ]]; then
     echo "Usage: $0 <source>"
     exit 1
 fi
 SOURCE="$(realpath "${SOURCE}")"
-shift
-
-# use "target" as the output directory
-TARGET="${DIR}/target"
 if [[ ! -e "${SOURCE}" ]]; then
     echo "Source not found: ${SOURCE}"
     exit 1
 fi
-if [[ -d "${TARGET}" ]]; then
-    echo "target directory already exists, fixing permissions before deleting it…"
-    sudo chown -R jostein:jostein "${DIR}/target"
-    rm "${TARGET}" -rf
+
+# first argument is the source EPUB (file or directory)
+
+# if $1 does not start with a hyphen, it is the target directory
+if [[ "${1}" != -* ]]; then
+    TARGET="$1"
+    shift
+else
+    # use "target" as the output directory if not specified
+    TARGET="${DIR}/target"
 fi
+TARGET="$(realpath "${TARGET}")"
 mkdir -p "${TARGET}"
 
 set -x
