@@ -112,6 +112,9 @@ def iterate_content_file_line(current_type: ContentType, line: str) -> Generator
 def convert(source: str, target: str, fix_heading_levels: bool, add_header_element: bool) -> None:
     success = True
 
+    source = os.path.abspath(source)
+    target = os.path.abspath(target)
+
     if not os.path.exists(source):
         logging.error(f"Input '{source}' does not exist")
         sys.exit(1)
