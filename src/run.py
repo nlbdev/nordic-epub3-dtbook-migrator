@@ -274,7 +274,6 @@ def create_single_html(epub_dir: str, spine: list[dict[str, str | int]], title: 
                     else:
                         # end tag </hX>
                         depth, rest = text[3], text[4:]
-                    logging.debug(f"{text} is a {'start' if not end else 'end'} tag with depth {depth}")
                     if not depth.isnumeric():
                         logging.error(f"Could not parse heading level from '{text}'")
                     else:
