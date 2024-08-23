@@ -13,3 +13,4 @@ pom.xml.next
 dependency-reduced-pom.xml
 buildNumber.properties
 *~
+__pycache__
