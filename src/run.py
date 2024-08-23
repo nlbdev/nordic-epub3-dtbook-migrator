@@ -418,8 +418,8 @@ def create_updated_package_document(epub_dir: str, spine: list[dict[str, str | i
                 opf_file.write(indentation_text * indentation_depth + tag + "\n")
 
             # update indentation depth
-            if tag.startswith("<?"):
-                pass  # don't change indentation depth for XML processing instructions
+            if tag.startswith("<?") or tag.startswith("<!"):
+                pass  # don't change indentation depth for XML processing instructions or comments
             elif tag.startswith("</"):
                 indentation_depth -= 1
             elif not tag.endswith("/>"):
