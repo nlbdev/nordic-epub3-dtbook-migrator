@@ -86,8 +86,8 @@ def iterate_content_file_line(current_type: ContentType, line: str) -> Generator
 
         yield from iterate_content_file_line(current_type, after_link_tag)
 
-    # find headlines
-    elif current_type == ContentType.CONTENT and re.match(r"<h[1-6]", line):
+    # find headline start tags
+    elif current_type == ContentType.CONTENT and re.match(r".*<h[1-6]", line):
         parts = line.split("<h")
         yield from iterate_content_file_line(current_type, parts[0])
 
@@ -97,6 +97,20 @@ def iterate_content_file_line(current_type: ContentType, line: str) -> Generator
                 yield ContentType.HEADING, f"<h{tag}>"
             else:
                 yield current_type, f"<h{tag}>"
+
+            yield from iterate_content_file_line(current_type, rest)
+
+    # find headline end tags
+    elif current_type == ContentType.CONTENT and re.match(r".*</h[1-6]", line):
+        parts = line.split("</h")
+        yield from iterate_content_file_line(current_type, parts[0])
+
+        for part in parts[1:]:
+            tag, rest = part.split(">", 1)
+            if tag[0].isnumeric():
+                yield ContentType.HEADING, f"</h{tag}>"
+            else:
+                yield current_type, f"</h{tag}>"
 
             yield from iterate_content_file_line(current_type, rest)
 
@@ -253,12 +267,19 @@ def create_single_html(epub_dir: str, spine: list[dict[str, str | int]], title: 
                     single_html_file.write(text.replace("<body", "<section"))
 
                 elif fix_heading_levels and content_type == ContentType.HEADING:
-                    depth, rest = text[2], text[3:]
+                    end = text[1] == "/"
+                    if not end:
+                        # start tag <hX>
+                        depth, rest = text[2], text[3:]
+                    else:
+                        # end tag </hX>
+                        depth, rest = text[3], text[4:]
+                    logging.debug(f"{text} is a {'start' if not end else 'end'} tag with depth {depth}")
                     if not depth.isnumeric():
                         logging.error(f"Could not parse heading level from '{text}'")
                     else:
                         depth = str(int(depth) + root_level - 1)
-                    single_html_file.write(f"<h{depth}{rest}")
+                    single_html_file.write(f"<{'/' if end else ''}h{depth}{rest}")
 
                 elif not fix_heading_levels and content_type == ContentType.HEADING:
                     single_html_file.write(text)
