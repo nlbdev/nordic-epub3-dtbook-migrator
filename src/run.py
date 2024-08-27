@@ -5,7 +5,7 @@ import sys
 import os
 import logging
 import tempfile
-from typing import Generator
+from typing import Generator, Union, List, Dict, Tuple
 import re
 import epub
 import shutil
@@ -55,7 +55,7 @@ class ContentType(enum.Enum):
     TAIL = "tail"
 
 
-def iterate_content_file(source: str) -> Generator[tuple[ContentType, str], None, None]:
+def iterate_content_file(source: str) -> Generator[Tuple[ContentType, str], None, None]:
     with open(source, 'r', encoding="utf-8") as content_file:
         current_type: ContentType = ContentType.HEAD
         line: str
@@ -65,7 +65,7 @@ def iterate_content_file(source: str) -> Generator[tuple[ContentType, str], None
                 yield line_type, line
 
 
-def iterate_content_file_line(current_type: ContentType, line: str) -> Generator[tuple[ContentType, str], None, None]:
+def iterate_content_file_line(current_type: ContentType, line: str) -> Generator[Tuple[ContentType, str], None, None]:
     # find the body opening tag
     if current_type == ContentType.HEAD and "<body" in line:
         before_body, body_tag = line.split("<body", 1)
@@ -228,7 +228,7 @@ def convert(source: str, target: str, fix_heading_levels: bool, add_header_eleme
     logging.info("Conversion successful")
 
 
-def create_single_html(epub_dir: str, spine: list[dict[str, str | int]], title: str, authors: list[str], fix_heading_levels: bool, add_header_element: bool) -> tempfile._TemporaryFileWrapper:
+def create_single_html(epub_dir: str, spine: List[Dict[str, Union[str, int]]], title: str, authors: List[str], fix_heading_levels: bool, add_header_element: bool) -> tempfile._TemporaryFileWrapper:
     single_html_obj = tempfile.NamedTemporaryFile()
     with open(single_html_obj.name, 'w', encoding="utf-8") as single_html_file:
         # Get the head content from the first spine item
@@ -312,7 +312,7 @@ def create_single_html(epub_dir: str, spine: list[dict[str, str | int]], title: 
     return single_html_obj
 
 
-def get_content_file_properties(path: str) -> list[str]:
+def get_content_file_properties(path: str) -> List[str]:
     properties = []
     with open(path, "r", encoding="utf-8") as f:
         for line in f:
@@ -337,7 +337,7 @@ def get_content_file_properties(path: str) -> list[str]:
     return list(set(properties))
 
 
-def create_updated_navigation_document(epub_dir: str, spine: list[dict[str, str | int]], identifier: str) -> tempfile._TemporaryFileWrapper:
+def create_updated_navigation_document(epub_dir: str, spine: List[Dict[str, Union[str, int]]], identifier: str) -> tempfile._TemporaryFileWrapper:
     nav_path = os.path.join(epub_dir, epub.get_nav_path(epub_dir) or "EPUB/nav.xhtml")
     nav_obj = tempfile.NamedTemporaryFile()
     with open(nav_obj.name, "w", encoding="utf-8") as nav_file:
@@ -362,7 +362,7 @@ def create_updated_navigation_document(epub_dir: str, spine: list[dict[str, str 
     return nav_obj
 
 
-def create_updated_package_document(epub_dir: str, spine: list[dict[str, str | int]], identifier: str, properties: list[str]) -> tempfile._TemporaryFileWrapper:
+def create_updated_package_document(epub_dir: str, spine: List[Dict[str, Union[str, int]]], identifier: str, properties: List[str]) -> tempfile._TemporaryFileWrapper:
     opf_path = os.path.join(epub_dir, epub.get_opf_path(epub_dir) or "EPUB/package.opf")
     path = os.path.join(epub_dir, opf_path)
     source_opf = ""
@@ -382,7 +382,7 @@ def create_updated_package_document(epub_dir: str, spine: list[dict[str, str | i
 
         indentation_depth = 1  # start at 1 since we start at the manifest tag
         indentation_text = "    "
-        spine_ids: list[str] = []
+        spine_ids: List[str] = []
         for tag in source_opf_tags:
             if tag.startswith("<item "):
                 item_href = re.sub(r'.*href="(.*?)".*', r"\1", tag)

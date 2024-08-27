@@ -7,14 +7,14 @@ import tempfile
 import zipfile
 import logging
 import subprocess
-import traceback
 
+from typing import Union, List, Dict
 from lxml import etree as ElementTree
 
 namespaces = {"opf": "http://www.idpf.org/2007/opf", "epub": "http://www.idpf.org/2007/ops", "html": "http://www.w3.org/1999/xhtml"}
 
 
-def epub_as_file(source: str) -> tempfile._TemporaryFileWrapper | str:
+def epub_as_file(source: str) -> Union[tempfile._TemporaryFileWrapper, str]:
     """Return the EPUB as a temporary file
 
     Args:
@@ -55,7 +55,7 @@ def epub_as_file(source: str) -> tempfile._TemporaryFileWrapper | str:
     return temp_obj_file
 
 
-def epub_as_directory(source: str) -> tempfile.TemporaryDirectory | str:
+def epub_as_directory(source: str) -> Union[tempfile.TemporaryDirectory, str]:
     """Return the EPUB as a temporary directory
 
     Args:
@@ -126,7 +126,7 @@ def is_epub(source: str) -> bool:
     return True
 
 
-def get_opf_path(source: str) -> str | None:
+def get_opf_path(source: str) -> Union[str, None]:
     container = None
 
     if os.path.isdir(source):
@@ -147,7 +147,7 @@ def get_opf_path(source: str) -> str | None:
     return str(opf) if opf else None
 
 
-def get_opf_package_element(source: str) -> ElementTree._Element | None:
+def get_opf_package_element(source: str) -> Union[ElementTree._Element, None]:
     opf_path = get_opf_path(source)
 
     if not opf_path:
@@ -166,7 +166,7 @@ def get_opf_package_element(source: str) -> ElementTree._Element | None:
         return None
 
 
-def get_nav_path(source: str) -> str | None:
+def get_nav_path(source: str) -> Union[str, None]:
     opf_path = get_opf_path(source)
     opf = get_opf_package_element(source)
 
@@ -184,7 +184,7 @@ def get_nav_path(source: str) -> str | None:
     return None
 
 
-def get_nav_toc(source: str) -> list[dict[str, str | int]]:
+def get_nav_toc(source: str) -> List[Dict[str, Union[str, int]]]:
     nav_path = get_nav_path(source)
 
     if not nav_path:
@@ -207,13 +207,13 @@ def get_nav_toc(source: str) -> list[dict[str, str | int]]:
         return []
 
     # tokenize(@epub:type, '\\s+')='toc' not supported by lxml, so we use contains(…) instead. As long as there's no weird epub:type values, this will work.
-    nav_elements: list[ElementTree._Element] = document.xpath("//html:nav[contains(@epub:type, 'toc')]", namespaces=namespaces)  # type: ignore
+    nav_elements: List[ElementTree._Element] = document.xpath("//html:nav[contains(@epub:type, 'toc')]", namespaces=namespaces)  # type: ignore
     nav_element = nav_elements[0] if nav_elements else None
     if nav_element is None:
         logging.error(f"Could not find the TOC nav element in {source}")
         return []
 
-    result: list[dict[str, str | int]] = []
+    result: List[Dict[str, Union[str, int]]] = []
     list_item: ElementTree._Element
     for list_item in nav_element.xpath("html:ol/html:li", namespaces=namespaces):  # type: ignore
         result.extend(parse_nav_toc_list_item(list_item, 1, nav_relpath))
@@ -221,8 +221,8 @@ def get_nav_toc(source: str) -> list[dict[str, str | int]]:
     return result
 
 
-def parse_nav_toc_list_item(list_item: ElementTree._Element, level: int, nav_relpath: str) -> list[dict[str, str | int]]:
-    links: list[ElementTree._Element] = list_item.xpath("html:a", namespaces=namespaces)  # type: ignore
+def parse_nav_toc_list_item(list_item: ElementTree._Element, level: int, nav_relpath: str) -> List[Dict[str, Union[str, int]]]:
+    links: List[ElementTree._Element] = list_item.xpath("html:a", namespaces=namespaces)  # type: ignore
     href = links[0].attrib.get("href", "") if len(links) else ""
     href = href.split("#")[0]
     href = os.path.join(nav_relpath, href)
@@ -231,7 +231,7 @@ def parse_nav_toc_list_item(list_item: ElementTree._Element, level: int, nav_rel
         title = " ".join(links[0].xpath("html:a//text() | html:span//text()", namespaces=namespaces))  # type: ignore
     title = title.strip()
 
-    result: list[dict[str, str | int]] = [{"level": level, "title": title, "href": href}]
+    result: List[Dict[str, Union[str, int]]] = [{"level": level, "title": title, "href": href}]
 
     sub_list_item: ElementTree._Element
     for sub_list_item in list_item.xpath("html:ol/html:li", namespaces=namespaces):  # type: ignore
@@ -240,7 +240,7 @@ def parse_nav_toc_list_item(list_item: ElementTree._Element, level: int, nav_rel
     return result
 
 
-def get_spine(source: str) -> list[dict[str, str | int]]:
+def get_spine(source: str) -> List[Dict[str, Union[str, int]]]:
     opf_path = get_opf_path(source)
     opf = get_opf_package_element(source)
     nav = get_nav_toc(source)
@@ -256,19 +256,20 @@ def get_spine(source: str) -> list[dict[str, str | int]]:
 
     opf_relpath = os.path.dirname(opf_path)
     # opf_path relative to the source
-    root_levels: dict[str, int] = {}
+    root_levels: Dict[str, int] = {}
     for toc_item in nav:
         if toc_item["href"] not in root_levels:
             root_levels[str(toc_item["href"])] = int(toc_item["level"])
 
-    itemrefs: list[ElementTree._Element] = opf.xpath("//opf:spine/opf:itemref", namespaces=namespaces)  # type: ignore
+    itemrefs: List[ElementTree._Element] = opf.xpath("//opf:spine/opf:itemref", namespaces=namespaces)  # type: ignore
     spine_items = []
     for itemref in itemrefs:
         idref = itemref.attrib.get("idref", "")
-        items: list[ElementTree._Element] = opf.xpath(f"//opf:manifest/opf:item[@id = '{idref}']", namespaces=namespaces)  # type: ignore
+        items: List[ElementTree._Element] = opf.xpath(f"//opf:manifest/opf:item[@id = '{idref}']", namespaces=namespaces)  # type: ignore
         # combine all attributes from the itemref and the item elements into a single dictionary
-        attributes: dict[str, str | int] = {str(key): str(itemref.attrib[key]) for key in itemref.attrib}  # use dict comprehension to make the attributes into a dict
-        attributes = attributes | {str(key): str(items[0].attrib[key]) for key in items[0].attrib}
+        attributes: Dict[str, Union[str, int]] = {str(key): str(itemref.attrib[key]) for key in itemref.attrib}  # use dict comprehension to make the attributes into a dict
+        for key in items[0].attrib:
+            attributes[str(key)] = str(items[0].attrib[key])
         attributes["href"] = os.path.join(opf_relpath, str(attributes["href"]))
         if attributes["href"] not in root_levels:
             logging.debug(f'{attributes["href"]} not in {root_levels}')
@@ -279,14 +280,14 @@ def get_spine(source: str) -> list[dict[str, str | int]]:
     return spine_items
 
 
-def get_metadata(source: str) -> dict[str, list[str]]:
+def get_metadata(source: str) -> Dict[str, List[str]]:
     """Read OPF metadata"""
     opf = get_opf_package_element(source)
 
     if opf is None:
         return {}
 
-    metadata: dict[str, list[str]] = {}
+    metadata: Dict[str, List[str]] = {}
     opf_metadata = opf.findall('{http://www.idpf.org/2007/opf}metadata')[0]
     for meta_element in opf_metadata.findall("*"):
         if "refines" in meta_element.attrib:
@@ -316,7 +317,7 @@ def epubcheck(path: str) -> bool:
 
     logging.debug("Running Epubcheck")
 
-    process: subprocess.CompletedProcess | subprocess.CalledProcessError
+    process: Union[subprocess.CompletedProcess, subprocess.CalledProcessError]
     try:
         process = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False, cwd=epubcheck_home, timeout=600, check=True)
     except subprocess.CalledProcessError as e:
