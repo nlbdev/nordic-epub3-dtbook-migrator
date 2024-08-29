@@ -23,7 +23,7 @@ Usage:
 
 Requirements:
 
-- Python 3.11+ (might work with earlier versions of Python 3, but it is only tested with 3.11)
+- Python 3.7+ (might work with Python 3.6 and 3.5 but it is not tested)
 - Epubcheck (environment variable `EPUBCHECK_HOME` must point to the directory containing `epubcheck.jar`)
 
 Usage:

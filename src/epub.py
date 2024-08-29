@@ -311,7 +311,8 @@ def epubcheck(path: str) -> bool:
 
     epubcheck_home = os.getenv("EPUBCHECK_HOME")
     if not epubcheck_home:
-        raise EnvironmentError("The environment variable EPUBCHECK_HOME is not set")
+        logging.error("The environment variable EPUBCHECK_HOME is not set, using default: /opt/epubcheck")
+        epubcheck_home = "/opt/epubcheck"
 
     command = ["java", "-Xss4096k", "-jar", f"{epubcheck_home}/epubcheck.jar", *options, path]
 
