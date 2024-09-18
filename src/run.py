@@ -316,7 +316,11 @@ def get_content_file_properties(path: str) -> List[str]:
     properties = []
     with open(path, "r", encoding="utf-8") as f:
         for line in f:
-            if "<math" in line or "<m:math" in line or "<math:math" in line:
+            if "<m:math" in line or "<math:math" in line or re.match(r".*<math[^>]xmlns=\"[^\"]*MathML", line):
+                # NOTE: math elements without a namespace does not count as MathML here, see:
+                # https://github.com/w3c/epubcheck/blob/55aad60015ac644a04f7e2648d9969f80d5922b6/src/main/java/com/adobe/epubcheck/ops/OPSHandler30.java#L947
+                # compare with:
+                # https://github.com/w3c/epubcheck/blob/55aad60015ac644a04f7e2648d9969f80d5922b6/src/main/java/com/adobe/epubcheck/ops/OPSHandler30.java#L418
                 properties.append("mathml")
 
             if ("<script" in line or "<form" in line or "<button" in line or "<fieldset" in line or "<input" in line or
