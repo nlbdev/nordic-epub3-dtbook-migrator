@@ -117,7 +117,7 @@ def iterate_content_file_line(current_type: ContentType, line: str) -> Generator
     # find href attributes
     # NOTE: We don't move images, so no need to handle @src, @altimg or object/@data.
     #       Also, we ignore @xlink:href for now as we don't use it.
-    elif current_type == ContentType.CONTENT and ' href="' in line:
+    elif current_type == ContentType.CONTENT and re.match(r'.* href="[^"]*".*', line):
         before_href, href = line.split(' href="', 1)
         href, after_href = href.split('"', 1)
         href = f'href="{href}"'
