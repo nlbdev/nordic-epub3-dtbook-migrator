@@ -993,7 +993,7 @@
     <!-- Imported from Pipeline 1 DTBook validator and adapted to EPUB3 -->
     <pattern id="epub_nordic_273">
         <rule context="html:a[starts-with(@href, '#')]">
-            <assert test="count(//html:*[@id=substring(current()/@href, 2)])=1">[nordic273] Internal link ("<value-of select="@href"/>") does not resolve: <value-of
+            <assert test="count((//html:*, //m:*)[@id=substring(current()/@href, 2)])=1">[nordic273] Internal link ("<value-of select="@href"/>") does not resolve: <value-of
                     select="concat('&lt;',name(),string-join(for $a in (@*) return concat(' ',$a/name(),'=&quot;',$a,'&quot;'),''),'&gt;')"/></assert>
         </rule>
     </pattern>
