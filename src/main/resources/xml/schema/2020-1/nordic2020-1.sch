@@ -816,7 +816,7 @@
         <p></p>
         <rule context="html:a[starts-with(@href, '#')]">
             <let name="context" value="concat('(&lt;', name(), string-join(for $a in (@*) return concat(' ', $a/name(), '=&quot;', $a, '&quot;'), ''), '&gt;)')"/>
-            <assert test="count(//html:*[@id = substring(current()/@href, 2)]) = 1">[nordic273] Internal link <value-of select="concat('(&quot;', @href, '&quot;)')"/> does not resolve. <value-of select="$context"/></assert>
+            <assert test="count((//html:*, //m:*)[@id = substring(current()/@href, 2)]) = 1">[nordic273] Internal link <value-of select="concat('(&quot;', @href, '&quot;)')"/> does not resolve. <value-of select="$context"/></assert>
         </rule>
     </pattern>
 
