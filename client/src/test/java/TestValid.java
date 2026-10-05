@@ -5,9 +5,9 @@ import org.daisy.validator.Util;
 import org.daisy.validator.ValidateFile;
 import org.daisy.validator.report.Issue;
 import org.daisy.validator.schemas.Guideline;
+import org.daisy.validator.schemas.Guideline2015;
 import org.daisy.validator.schemas.Guideline2020;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -288,7 +288,28 @@ public class TestValid {
     }
 
     @Test
-    public void testContentChapter() throws Exception {
+    public void testContentChapter2015() throws Exception {
+        Guideline guideline = new Guideline2015();
+
+        TransformFile tf = new TransformFile(
+                new File("src/test/resources/valid2015"),
+                "EPUB/C00000-04-chapter.xhtml",
+                new File("src/main/resources/2015-1", guideline.getSchema(Guideline.CONTENT_FILES).getFilename()),
+                Guideline.CONTENT_FILES,
+                false
+        );
+        Set<Issue> issues = new HashSet<>();
+        issues.addAll(tf.call());
+
+        for(Issue i : issues) {
+            System.out.println(i.getDescription());
+        }
+
+        assertEquals(0, issues.size());
+    }
+
+    @Test
+    public void testContentChapter2020() throws Exception {
         Guideline guideline = new Guideline2020();
 
         TransformFile tf = new TransformFile(
@@ -307,6 +328,7 @@ public class TestValid {
 
         assertEquals(0, issues.size());
     }
+
 
     @Test
     public void testContentBackmatter() throws Exception {
@@ -329,7 +351,7 @@ public class TestValid {
         assertEquals(0, issues.size());
     }
 
-    public void verifyRelaxDoc(String doc) throws Exception {
+    public void verifyRelaxDoc2020(String doc) throws Exception {
         Guideline guideline = new Guideline2020();
 
         EPUBFiles epubFiles = new EPUBFiles(doc, "");
@@ -352,25 +374,54 @@ public class TestValid {
         assertEquals(0, issues.size());
     }
 
+
+    public void verifyRelaxDoc2015(String doc) throws Exception {
+        Guideline guideline = new Guideline2015();
+
+        EPUBFiles epubFiles = new EPUBFiles(doc, "");
+        epubFiles.unpackSchemaDir(guideline.getSchemaPath());
+        epubFiles.unpackSchemaDir("mathml3");
+
+        ValidateFile vf = new ValidateFile(
+                new File("src/test/resources/valid2015"),
+                doc,
+                new File(epubFiles.getSchemaDir(), guideline.getSchema(Guideline.XHTML).getFilename()),
+                Guideline.XHTML
+        );
+        Set<Issue> issues = new HashSet<>();
+        issues.addAll(vf.call());
+
+        for(Issue i : issues) {
+            System.out.println(i.getDescription());
+        }
+
+        assertEquals(0, issues.size());
+    }
+
+    @Test
+    public void testRelaxNGContent2015() throws Exception {
+        verifyRelaxDoc2015("EPUB/C00000-04-chapter.xhtml");
+    }
+
     @Test
     public void testRelaxNGContentChapter() throws Exception {
-        verifyRelaxDoc("EPUB/C00000-04-chapter.xhtml");
+        verifyRelaxDoc2020("EPUB/C00000-04-chapter.xhtml");
     }
 
     @Test
     public void testRelaxNote() throws Exception {
-        verifyRelaxDoc("EPUB/C00000-07-rearnotes.xhtml");
+        verifyRelaxDoc2020("EPUB/C00000-07-rearnotes.xhtml");
     }
 
     @Test
     public void testX50525() throws Exception {
-        verifyRelaxDoc("EPUB/X50525A-06-chapter.xhtml");
+        verifyRelaxDoc2020("EPUB/X50525A-06-chapter.xhtml");
     }
 
     @Test
     public void testX60352() throws Exception {
-        verifyRelaxDoc("EPUB/X60352A-01-cover.xhtml");
-        verifyRelaxDoc("EPUB/X60352A-02-titlepage.xhtml");
+        verifyRelaxDoc2020("EPUB/X60352A-01-cover.xhtml");
+        verifyRelaxDoc2020("EPUB/X60352A-02-titlepage.xhtml");
     }
 
 
